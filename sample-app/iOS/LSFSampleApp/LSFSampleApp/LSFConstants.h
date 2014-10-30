@@ -46,6 +46,9 @@
 @property (nonatomic, strong) UIColor *uniformPowerGreen;
 @property (nonatomic, strong) UIColor *midstatePowerOrange;
 @property (nonatomic) unsigned int UI_DELAY;
+@property (nonatomic, strong) NSMutableAttributedString *SOURCE_CODE_TEXT;
+@property (nonatomic, strong) NSMutableAttributedString *TEAM_TEXT;
+@property (nonatomic, strong) NSMutableAttributedString *NOTICE_TEXT;
 
 +(LSFConstants *)getConstants;
 -(unsigned int)scaleLampStateValue: (unsigned int)value withMax: (unsigned int)max;

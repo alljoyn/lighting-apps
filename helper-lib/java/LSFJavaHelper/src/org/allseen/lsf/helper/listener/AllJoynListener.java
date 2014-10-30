@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--  
+/*
  * Copyright (c) 2014, AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
@@ -13,16 +12,13 @@
  *    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
  *    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- -->
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/textFragmentText"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/margin_h"
-    android:layout_marginRight="@dimen/margin_h"
-    android:bufferType="spannable"
-    android:paddingBottom="@dimen/margin_v"
-    android:paddingTop="@dimen/margin_v"
-    android:textSize="@dimen/font_size_2" >
+ */
+package org.allseen.lsf.helper.listener;
 
-</TextView>
+/**
+ * <b>WARNING: This class is not intended to be used by clients, and its interface may change
+ * in subsequent releases of the SDK</b>.
+ */
+public interface AllJoynListener {
+    public void onAllJoynInitialized();
+}

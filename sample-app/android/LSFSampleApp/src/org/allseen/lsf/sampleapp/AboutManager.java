@@ -54,27 +54,41 @@ public class AboutManager implements AnnouncementHandler {
         this.handler = handler;
     }
 
-    public void initializeClient(BusAttachment bus) {
-        // Add match to receive sessionless signals
-        bus.addMatch("sessionless='t',type='error'");
+    public void start(BusAttachment bus) {
+        if (aboutService == null) {
+            // Add match to receive sessionless signals
+            bus.addMatch("sessionless='t',type='error'");
 
-        aboutService = AboutServiceImpl.getInstance();
+            aboutService = AboutServiceImpl.getInstance();
 
-        try {
-            aboutService.startAboutClient(bus);
-            Log.d(SampleAppActivity.TAG, "AboutClient started");
-        } catch (Exception e) {
-            Log.e(SampleAppActivity.TAG, "Exception caught when starting AboutService client: " + e.getMessage());
+            try {
+                aboutService.startAboutClient(bus);
+                Log.d(SampleAppActivity.TAG, "AboutClient started");
+            } catch (Exception e) {
+                Log.e(SampleAppActivity.TAG, "Exception caught when starting AboutService client: " + e.getMessage());
+            }
         }
 
-        aboutService.addAnnouncementHandler(this, AboutManager.LAMP_SERVICE_INTERFACE_NAMES);
-        aboutService.addAnnouncementHandler(this, AboutManager.CONTROLLER_SERVICE_INTERFACE_NAMES);
+        if (aboutService != null) {
+            aboutService.addAnnouncementHandler(this, AboutManager.LAMP_SERVICE_INTERFACE_NAMES);
+            aboutService.addAnnouncementHandler(this, AboutManager.CONTROLLER_SERVICE_INTERFACE_NAMES);
+        } else {
+            Log.d(SampleAppActivity.TAG, "start(): start failed");
+        }
+    }
+
+    public void stop() {
+        if (aboutService != null) {
+            aboutService.removeAnnouncementHandler(this, AboutManager.LAMP_SERVICE_INTERFACE_NAMES);
+            aboutService.removeAnnouncementHandler(this, AboutManager.CONTROLLER_SERVICE_INTERFACE_NAMES);
+        } else {
+            Log.d(SampleAppActivity.TAG, "stop(): not started");
+        }
     }
 
     public void destroy() {
         if (aboutService != null) {
-            aboutService.removeAnnouncementHandler(this, AboutManager.LAMP_SERVICE_INTERFACE_NAMES);
-            aboutService.removeAnnouncementHandler(this, AboutManager.CONTROLLER_SERVICE_INTERFACE_NAMES);
+            stop();
 
             try {
                 aboutService.stopAboutClient();

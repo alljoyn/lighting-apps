@@ -16,6 +16,8 @@
 package org.allseen.lsf.sampleapp;
 
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,7 +30,14 @@ public class TextFragment extends PageFrameChildFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_text, container, false);
 
-        ((TextView) view.findViewById(R.id.textFragmentText)).setText(key);
+        TextView textView = (TextView) view.findViewById(R.id.textFragmentText);
+
+        if (key.contains("href=")) {
+            textView.setText(Html.fromHtml(key));
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
+        } else {
+            textView.setText(key);
+        }
 
         return view;
     }

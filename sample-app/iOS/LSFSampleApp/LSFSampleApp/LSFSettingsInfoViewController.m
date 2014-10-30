@@ -15,6 +15,7 @@
  ******************************************************************************/
 
 #import "LSFSettingsInfoViewController.h"
+#import "LSFConstants.h"
 
 @interface LSFSettingsInfoViewController ()
 
@@ -22,10 +23,26 @@
 
 @implementation LSFSettingsInfoViewController
 
+@synthesize infoTextView = _infoTextView;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.infoTextView setText:self.inputText];
+
+    LSFConstants *constants = [LSFConstants getConstants];
+
+    if ([self.inputText isEqualToString: @"SourceCode"])
+    {
+        self.infoTextView.attributedText = constants.SOURCE_CODE_TEXT;
+    }
+    else if ([self.inputText isEqualToString: @"Team"])
+    {
+        self.infoTextView.attributedText = constants.TEAM_TEXT;
+    }
+    else if ([self.inputText isEqualToString: @"Notice"])
+    {
+        self.infoTextView.attributedText = constants.NOTICE_TEXT;
+    }
 }
 
 - (void)didReceiveMemoryWarning

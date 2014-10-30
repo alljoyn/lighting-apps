@@ -343,7 +343,7 @@
     unsigned int scaledSaturation = [constants scaleLampStateValue: (uint32_t)self.saturationSlider.value withMax: 100];
     unsigned int scaledColorTemp = [constants scaleColorTemp: (uint32_t)self.colorTempSlider.value];
 
-    LSFLampState *state = [[LSFLampState alloc] initWithOnOff: YES brightness: scaledBrightness hue: scaledHue saturation: scaledSaturation colorTemp: scaledColorTemp];
+    LSFLampState *state = [[LSFLampState alloc] initWithOnOff: (scaledBrightness == 0 ? NO : YES) brightness: scaledBrightness hue: scaledHue saturation: scaledSaturation colorTemp: scaledColorTemp];
 
     LSFPresetModelContainer *container = [LSFPresetModelContainer getPresetModelContainer];
     NSArray *presets = [container.presetContainer allValues];

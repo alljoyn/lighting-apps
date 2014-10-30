@@ -22,11 +22,13 @@ import org.allseen.lsf.NativeLibraryLoader;
 import org.allseen.lsf.PresetManager;
 import org.allseen.lsf.SceneManager;
 import org.allseen.lsf.helper.callback.HelperControllerClientCallback;
+import org.allseen.lsf.helper.callback.HelperControllerServiceManagerCallback;
 import org.allseen.lsf.helper.callback.HelperGroupManagerCallback;
 import org.allseen.lsf.helper.callback.HelperLampManagerCallback;
 import org.allseen.lsf.helper.callback.HelperMasterSceneManagerCallback;
 import org.allseen.lsf.helper.callback.HelperPresetManagerCallback;
 import org.allseen.lsf.helper.callback.HelperSceneManagerCallback;
+import org.allseen.lsf.helper.listener.AllJoynListener;
 import org.allseen.lsf.helper.listener.ControllerAdapter;
 import org.allseen.lsf.helper.model.ControllerDataModel;
 
@@ -49,6 +51,7 @@ public class LightingSystemManager {
 
     //TODO-FIX add get...() methods for these
     public final HelperControllerClientCallback controllerClientCB;
+    public final HelperControllerServiceManagerCallback controllerServiceManagerCB;
     public final HelperLampManagerCallback lampManagerCB;
     public final HelperGroupManagerCallback groupManagerCB;
     public final HelperPresetManagerCallback presetManagerCB;
@@ -66,6 +69,7 @@ public class LightingSystemManager {
         this.handler = handler;
 
         controllerClientCB = new HelperControllerClientCallback(this);
+        controllerServiceManagerCB = new HelperControllerServiceManagerCallback(this);
         lampManagerCB = new HelperLampManagerCallback(this);
         groupManagerCB = new HelperGroupManagerCallback(this);
         presetManagerCB = new HelperPresetManagerCallback(this);
@@ -88,17 +92,27 @@ public class LightingSystemManager {
         AllJoynManager.init(
                 fragmentManager,
                 controllerClientCB,
+                controllerServiceManagerCB,
                 lampManagerCB,
                 groupManagerCB,
                 presetManagerCB,
                 sceneManagerCB,
                 masterSceneManagerCB,
-                aboutManager);
+                aboutManager,
+                new AllJoynListener() {
+                    @Override
+                    public void onAllJoynInitialized() {
+                        //TODO-FIX: We're supposed to make sure the network is available
+                        //          before calling start() here
+                        AllJoynManager.start(handler);
+                    }
+                });
 
 //TODO-IMPL            garbageCollector.start();
     }
 
     public void stop(FragmentManager fragmentManager) {
+        AllJoynManager.stop(handler);
         AllJoynManager.destroy(fragmentManager);
     }
 

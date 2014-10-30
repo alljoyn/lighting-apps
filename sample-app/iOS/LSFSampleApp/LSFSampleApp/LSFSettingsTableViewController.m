@@ -74,13 +74,13 @@
     switch (indexPath.section)
     {
         case 1:
-            [self performSegueWithIdentifier: @"ScenesSettingInfo" sender: cell]; //reuseIdentifier = eulaInfoCell
-            break;
-        case 2:
             [self performSegueWithIdentifier: @"ScenesSettingInfo" sender: cell]; //reuseIdentifier = sourceCodeInfoCell
             break;
-        case 3:
+        case 2:
             [self performSegueWithIdentifier: @"ScenesSettingInfo" sender: cell]; //reuseIdentifier = teamInfoCell
+            break;
+        case 3:
+            [self performSegueWithIdentifier: @"ScenesSettingInfo" sender: cell]; //reuseIdentifier = noticeInfoCell
             break;
         default:
             break;
@@ -96,21 +96,20 @@
     {
         NSString *cellIdentifier = [(UITableViewCell*)sender reuseIdentifier];
         LSFSettingsInfoViewController *ssivc = [segue destinationViewController];
-
-        if ([cellIdentifier isEqualToString:@"eulaInfoCell"])
-        {
-            ssivc.title = @"EULA";
-            ssivc.inputText = cellIdentifier; //TODO - forward the proper text per cellIdentifier
-        }
-        else if ([cellIdentifier isEqualToString:@"sourceCodeInfoCell"])
+        if ([cellIdentifier isEqualToString:@"sourceCodeInfoCell"])
         {
             ssivc.title = @"Source Code";
-            ssivc.inputText = cellIdentifier; //TODO - forward the proper text per cellIdentifier
+            ssivc.inputText = @"SourceCode";
         }
         else if ([cellIdentifier isEqualToString:@"teamInfoCell"])
         {
             ssivc.title = @"Team";
-            ssivc.inputText = cellIdentifier; //TODO - forward the proper text per cellIdentifier
+            ssivc.inputText = @"Team";
+        }
+        else if ([cellIdentifier isEqualToString:@"noticeInfoCell"])
+        {
+            ssivc.title = @"Notice";
+            ssivc.inputText = @"Notice";
         }
 
     }

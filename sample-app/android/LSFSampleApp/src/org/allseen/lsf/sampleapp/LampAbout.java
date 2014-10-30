@@ -67,14 +67,6 @@ public class LampAbout {
         if (announcedData != null) {
             aboutPeer = peer;
             aboutPort = port;
-
-            aboutDeviceID = AboutManager.getStringFromAnnouncedData(AboutKeys.ABOUT_DEVICE_ID, announcedData, dataNotFound);
-            aboutAppID = AboutManager.getByteArrayHexStringFromAnnouncedData(AboutKeys.ABOUT_APP_ID, announcedData, dataNotFound);
-            aboutDeviceName = AboutManager.getStringFromAnnouncedData(AboutKeys.ABOUT_DEVICE_NAME, announcedData, dataNotFound);
-            aboutDefaultLanguage = AboutManager.getStringFromAnnouncedData(AboutKeys.ABOUT_DEFAULT_LANGUAGE, announcedData, dataNotFound);
-            aboutAppName = AboutManager.getStringFromAnnouncedData(AboutKeys.ABOUT_APP_NAME, announcedData, dataNotFound);
-            aboutManufacturer = AboutManager.getStringFromAnnouncedData(AboutKeys.ABOUT_MANUFACTURER, announcedData, dataNotFound);
-            aboutModelNumber = AboutManager.getStringFromAnnouncedData(AboutKeys.ABOUT_MODEL_NUMBER, announcedData, dataNotFound);
         }
     }
 
@@ -82,6 +74,13 @@ public class LampAbout {
         if (queriedData != null) {
             aboutQuery = true;
 
+            aboutDeviceID = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_DEVICE_ID, queriedData, dataNotFound);
+            aboutAppID = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_APP_ID, queriedData, dataNotFound);
+            aboutDeviceName = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_DEVICE_NAME, queriedData, dataNotFound);
+            aboutDefaultLanguage = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_DEFAULT_LANGUAGE, queriedData, dataNotFound);
+            aboutAppName = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_APP_NAME, queriedData, dataNotFound);
+            aboutManufacturer = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_MANUFACTURER, queriedData, dataNotFound);
+            aboutModelNumber = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_MODEL_NUMBER, queriedData, dataNotFound);
             aboutDescription = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_DESCRIPTION, queriedData, dataNotFound);
             aboutDateOfManufacture = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_DATE_OF_MANUFACTURE, queriedData, dataNotFound);
             aboutSoftwareVersion = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_SOFTWARE_VERSION, queriedData, dataNotFound);

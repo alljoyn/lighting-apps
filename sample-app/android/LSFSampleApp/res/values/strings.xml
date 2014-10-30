@@ -192,9 +192,11 @@
     <string name="loading_controller">Searching for controller service&#8230;</string>
     <string name="loading_lamps">Searching for lamps&#8230;</string>
     <string name="create_scenes">To create a scene from the current lamp settings, tap the + button above.</string>
-    <string name="eula">End User License Agreement</string>
     <string name="source_code">Source Code</string>
+    <string name="source_code_text"><![CDATA[<a href="https://wiki.allseenalliance.org/tsc/connected_lighting">AllSeen Alliance Lighting Working Group</a>]]></string>
     <string name="team">Team</string>
+    <string name="team_text"><![CDATA[<a href="https://wiki.allseenalliance.org/tsc/connected_lighting">AllSeen Alliance Lighting Working Group</a>]]></string>
+    <string name="notice">Notice File</string>
     <string name="version">Version</string>
     <string name="mixing_lamp_types">Mixing Lamp Types</string>
     <string name="mixing_lamp_types_message_group">Warning! You are creating a group that contains lamps of different types. Some properties may not be supported for all lamps in the group.\n\nFor example, you may add both color and white lamps to a group. The Sample App will allow you to set the color for the group, but this won\'t have any effect on the white lamps.</string>

@@ -441,14 +441,20 @@
     //Get Lamp State
     if (!self.startPropertiesSwitch.on)
     {
-        //NSLog(@"Switch for start properties is off, using start state");
-
         unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)self.brightnessSlider.value withMax: 100];
         unsigned int scaledHue = [constants scaleLampStateValue: (uint32_t)self.hueSlider.value withMax: 360];
         unsigned int scaledSaturation = [constants scaleLampStateValue: (uint32_t)self.saturationSlider.value withMax: 100];
         unsigned int scaledColorTemp = [constants scaleColorTemp: (uint32_t)self.colorTempSlider.value];
 
-        self.pedm.state.onOff = YES;
+        if (scaledBrightness == 0)
+        {
+            self.pedm.state.onOff = NO;
+        }
+        else
+        {
+            self.pedm.state.onOff = YES;
+        }
+
         self.pedm.state.brightness = scaledBrightness;
         self.pedm.state.hue = scaledHue;
         self.pedm.state.saturation = scaledSaturation;
@@ -465,6 +471,15 @@
     unsigned int scaledEndHue = [constants scaleLampStateValue: (uint32_t)self.endHueSlider.value withMax: 360];
     unsigned int scaledEndSaturation = [constants scaleLampStateValue: (uint32_t)self.endSaturationSlider.value withMax: 100];
     unsigned int scaledEndColorTemp = [constants scaleColorTemp: (uint32_t)self.endColorTempSlider.value];
+
+    if (scaledEndBrightness == 0)
+    {
+        self.pedm.endState.onOff = NO;
+    }
+    else
+    {
+        self.pedm.endState.onOff = YES;
+    }
 
     self.pedm.endState.brightness = scaledEndBrightness;
     self.pedm.endState.hue = scaledEndHue;
@@ -661,7 +676,7 @@
     unsigned int scaledSaturation = [constants scaleLampStateValue: (uint32_t)self.endSaturationSlider.value withMax: 100];
     unsigned int scaledColorTemp = [constants scaleColorTemp: (uint32_t)self.endColorTempSlider.value];
 
-    return [[LSFLampState alloc] initWithOnOff: YES brightness: scaledBrightness hue: scaledHue saturation: scaledSaturation colorTemp: scaledColorTemp];
+    return [[LSFLampState alloc] initWithOnOff: (scaledBrightness == 0 ? NO : YES) brightness: scaledBrightness hue: scaledHue saturation: scaledSaturation colorTemp: scaledColorTemp];
 }
 
 /*
@@ -677,7 +692,7 @@
     unsigned int startScaledSaturation = [constants scaleLampStateValue: (uint32_t)self.saturationSlider.value withMax: 100];
     unsigned int startScaledColorTemp = [constants scaleColorTemp: (uint32_t)self.colorTempSlider.value];
 
-    LSFLampState* startScaledLampState = [[LSFLampState alloc] initWithOnOff: YES brightness:startScaledBrightness hue:startScaledHue saturation:startScaledSaturation colorTemp:startScaledColorTemp];
+    LSFLampState* startScaledLampState = [[LSFLampState alloc] initWithOnOff: (startScaledBrightness == 0 ? NO : YES) brightness:startScaledBrightness hue:startScaledHue saturation:startScaledSaturation colorTemp:startScaledColorTemp];
 
     //Get end Lamp State
     unsigned int endScaledBrightness = [constants scaleLampStateValue: (uint32_t)self.endBrightnessSlider.value withMax: 100];
@@ -685,7 +700,7 @@
     unsigned int endScaledSaturation = [constants scaleLampStateValue: (uint32_t)self.endSaturationSlider.value withMax: 100];
     unsigned int endScaledColorTemp = [constants scaleColorTemp: (uint32_t)self.endColorTempSlider.value];
 
-    LSFLampState* endScaledLampState = [[LSFLampState alloc] initWithOnOff: YES brightness:endScaledBrightness hue:endScaledHue saturation:endScaledSaturation colorTemp:endScaledColorTemp];
+    LSFLampState* endScaledLampState = [[LSFLampState alloc] initWithOnOff: (endScaledBrightness == 0 ? NO : YES) brightness:endScaledBrightness hue:endScaledHue saturation:endScaledSaturation colorTemp:endScaledColorTemp];
 
     if ([segue.destinationViewController isKindOfClass:[LSFSceneElementEffectPropertiesViewController class]])
     {

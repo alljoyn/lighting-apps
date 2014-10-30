@@ -32,9 +32,9 @@ public class SettingsFragment extends PageFrameChildFragment implements OnClickL
         view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         view.findViewById(R.id.settingsRowController).setOnClickListener(this);
-        view.findViewById(R.id.settingsRowEULA).setOnClickListener(this);
         view.findViewById(R.id.settingsRowSource).setOnClickListener(this);
         view.findViewById(R.id.settingsRowTeam).setOnClickListener(this);
+        view.findViewById(R.id.settingsRowNotice).setOnClickListener(this);
 
         String version = this.getString(R.string.version) + " ";
         try {
@@ -73,24 +73,24 @@ public class SettingsFragment extends PageFrameChildFragment implements OnClickL
 
         if (clickedID == R.id.settingsRowController) {
             //TODO implement controller name change
-        } else if (clickedID == R.id.settingsRowEULA) {
-            onEulaClick();
         } else if (clickedID == R.id.settingsRowSource) {
             onSourceClick();
         } else if (clickedID == R.id.settingsRowTeam) {
             onTeamClick();
+        } else if (clickedID == R.id.settingsRowNotice) {
+            onNoticeClick();
         }
     }
 
-    protected void onEulaClick() {
-        parent.showTextChildFragment("dummy eula");
+    protected void onNoticeClick() {
+        parent.showTextChildFragment(getResources().getString(R.string.notice_text));
     }
 
     protected void onSourceClick() {
-        parent.showTextChildFragment("dummy source");
+        parent.showTextChildFragment(getResources().getString(R.string.source_code_text));
     }
 
     protected void  onTeamClick() {
-        parent.showTextChildFragment("dummy team");
+        parent.showTextChildFragment(getResources().getString(R.string.team_text));
     }
 }

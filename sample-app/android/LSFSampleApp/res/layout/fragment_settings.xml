@@ -102,32 +102,6 @@
         layout="@layout/view_divider_row" />
 
     <TableRow
-        android:id="@+id/settingsRowEULA"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true" >
-
-        <TextView
-            android:id="@+id/settingsLabelEULA"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="@dimen/margin_h"
-            android:layout_marginRight="@dimen/margin_h"
-            android:layout_marginTop="5dp"
-            android:scrollHorizontally="true"
-            android:singleLine="true"
-            android:text="@string/eula"
-            android:textColor="@color/detail_text_dark"
-            android:textSize="@dimen/font_size_1" />
-
-    </TableRow>
-
-    <include
-        android:id="@+id/settingsDivider3"
-        layout="@layout/view_divider_row" />
-
-    <TableRow
         android:id="@+id/settingsRowSource"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -150,7 +124,7 @@
     </TableRow>
 
     <include
-        android:id="@+id/settingsDivider4"
+        android:id="@+id/settingsDivider3"
         layout="@layout/view_divider_row" />
 
     <TableRow
@@ -170,6 +144,32 @@
             android:scrollHorizontally="true"
             android:singleLine="true"
             android:text="@string/team"
+            android:textColor="@color/detail_text_dark"
+            android:textSize="@dimen/font_size_1" />
+
+    </TableRow>
+
+    <include
+        android:id="@+id/settingsDivider4"
+        layout="@layout/view_divider_row" />
+
+    <TableRow
+        android:id="@+id/settingsRowNotice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true" >
+
+        <TextView
+            android:id="@+id/settingsLabelNotice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="@dimen/margin_h"
+            android:layout_marginRight="@dimen/margin_h"
+            android:layout_marginTop="5dp"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="@string/notice"
             android:textColor="@color/detail_text_dark"
             android:textSize="@dimen/font_size_1" />
 

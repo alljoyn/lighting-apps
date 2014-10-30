@@ -179,6 +179,15 @@
     unsigned int scaledSaturation = [constants scaleLampStateValue: (uint32_t)self.saturationSlider.value withMax: 100];
     unsigned int scaledColorTemp = [constants scaleColorTemp: (uint32_t)self.colorTempSlider.value];
 
+    if (scaledBrightness == 0)
+    {
+        self.nedm.state.onOff = NO;
+    }
+    else
+    {
+        self.nedm.state.onOff = YES;
+    }
+
     self.nedm.state.brightness = scaledBrightness;
     self.nedm.state.hue = scaledHue;
     self.nedm.state.saturation = scaledSaturation;
@@ -207,6 +216,11 @@
         unsigned int scaledHue = [constants scaleLampStateValue: (uint32_t)self.hueSlider.value withMax: 360];
         unsigned int scaledSaturation = [constants scaleLampStateValue: (uint32_t)self.saturationSlider.value withMax: 100];
         unsigned int scaledColorTemp = [constants scaleColorTemp: (uint32_t)self.colorTempSlider.value];
+
+        if (scaledBrightness == 0)
+        {
+            self.nedm.state.onOff = NO;
+        }
 
         LSFLampState* scaledLampState = [[LSFLampState alloc] initWithOnOff: self.nedm.state.onOff brightness:scaledBrightness hue:scaledHue saturation:scaledSaturation colorTemp:scaledColorTemp];
 

@@ -118,44 +118,50 @@ public class AllJoynManager {
     }
 
     public static void start() {
-        if (!controllerStarted) {
-            Log.d(AllJoynManager.TAG, "AllJoynManager.start()");
+        activity.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (controllerClient != null) {
+                    if (!controllerStarted) {
+                        ControllerClientStatus status = controllerClient.start();
 
-            controllerStarted = true;
+                        if (status.equals(ControllerClientStatus.OK)) {
+                            Log.d(AllJoynManager.TAG, "AllJoynManager.start(): succeeded");
 
-            activity.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (controllerClient != null) {
-                        if (controllerClient.start().equals(ControllerClientStatus.ERR_RETRY)) {
+                            aboutManager.start(AllJoynManager.bus);
+
+                            controllerStarted = true;
+                        } else {
                             Log.d(AllJoynManager.TAG, "AllJoynManager.start(): reposting");
+
                             activity.handler.postDelayed(this, 5000);
                         }
-                    } else {
-                        Log.d(AllJoynManager.TAG, "AllJoynManager.start(): no controller client");
                     }
+                } else {
+                    Log.w(AllJoynManager.TAG, "AllJoynManager.start(): no controller client");
                 }
-            });
-        }
+            }
+        });
     }
 
     public static void stop() {
-        if (controllerStarted) {
-            Log.d(AllJoynManager.TAG, "AllJoynManager.stop()");
+        activity.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (controllerClient != null) {
+                    if (controllerStarted) {
+                        Log.d(AllJoynManager.TAG, "AllJoynManager.stop(): succeeded");
 
-            controllerStarted = false;
-
-            activity.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (controllerClient != null) {
                         controllerClient.stop();
-                    } else {
-                        Log.d(AllJoynManager.TAG, "AllJoynManager.stop(): no controller client");
+                        aboutManager.stop();
+
+                        controllerStarted = false;
                     }
+                } else {
+                    Log.w(AllJoynManager.TAG, "AllJoynManager.stop(): no controller client");
                 }
-            });
-        }
+            }
+        });
     }
 
     public static void destroy(final FragmentManager fragmentManager) {
@@ -293,7 +299,7 @@ public class AllJoynManager {
             AllJoynManager.sceneManager = alljoynManagerFragment.sceneManager;
             AllJoynManager.masterSceneManager = alljoynManagerFragment.masterSceneManager;
 
-            aboutManager.initializeClient(AllJoynManager.bus);
+            aboutManager.start(AllJoynManager.bus);
 
             AllJoynManager.alljoynSemaphore.release();
 
