@@ -47,6 +47,8 @@
 @synthesize SOURCE_CODE_TEXT = _SOURCE_CODE_TEXT;
 @synthesize TEAM_TEXT = _TEAM_TEXT;
 @synthesize NOTICE_TEXT = _NOTICE_TEXT;
+@synthesize MIN_COLOR_TEMP = _MIN_COLOR_TEMP;
+@synthesize MAX_COLOR_TEMP = _MAX_COLOR_TEMP;
 
 +(LSFConstants *)getConstants
 {
@@ -124,6 +126,9 @@
 
         self.NOTICE_TEXT = [[NSMutableAttributedString alloc] initWithString: @"Copyright (c) 2014, AllSeen Alliance. All rights reserved.\n\nPermission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE."];
         [self.NOTICE_TEXT addAttribute: NSFontAttributeName value: [UIFont fontWithName: @"Helvetica Neue" size: 18.0f] range: NSMakeRange(0, self.NOTICE_TEXT.length)];
+
+        self.MIN_COLOR_TEMP = 1000.0;
+        self.MAX_COLOR_TEMP = 20000.0;
     }
     
     return self;
@@ -141,13 +146,13 @@
 
 -(unsigned int)scaleColorTemp: (unsigned int)value
 {
-    unsigned int scaledColorTemp = round(4294967295.0 * (((double)value - 2700.0) / 6300.0));
+    unsigned int scaledColorTemp = round(4294967295.0 * (((double)value - self.MIN_COLOR_TEMP) / (self.MAX_COLOR_TEMP - self.MIN_COLOR_TEMP)));
     return scaledColorTemp;
 }
 
 -(unsigned int)unscaleColorTemp: (unsigned int)value
 {
-    unsigned int unscaledColorTemp = round(2700 * (1 - ((double)value / 4294967295.0)) + (9000 * ((double)value / 4294967295.0)));
+    unsigned int unscaledColorTemp = round(self.MIN_COLOR_TEMP * (1 - ((double)value / 4294967295.0)) + (self.MAX_COLOR_TEMP * ((double)value / 4294967295.0)));
     return unscaledColorTemp;
 }
 

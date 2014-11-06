@@ -23,6 +23,7 @@
 #import "LSFLampModel.h"
 #import "LSFGroupModel.h"
 #import "LSFEnums.h"
+#import "LSFConstants.h"
 
 @interface LSFScenesModifyMembersTableViewController ()
 
@@ -32,6 +33,7 @@
 -(void)sceneNotificationReceived: (NSNotification *)notification;
 -(void)deleteScenesWithIDs: (NSArray *)sceneIDs andNames: (NSArray *)sceneNames;
 -(void)cancelButtonPressed;
+-(void)getColorTempMinMax;
 
 @end
 
@@ -210,6 +212,8 @@
     self.sceneElement.members = lampGroup;
     self.sceneElement.capability = capabilityData;
 
+    [self getColorTempMinMax];
+
     if ([self.sceneElement isKindOfClass: [LSFNoEffectDataModel class]])
     {
         [self performSegueWithIdentifier: @"ModifyNoEffect" sender: nil];
@@ -251,6 +255,62 @@
     {
         [self processSelectedRows];
     }
+}
+
+-(void)getColorTempMinMax
+{
+    int colorTempGroupMin = -1;
+    int colorTempGroupMax = -1;
+
+    LSFLampModelContainer *lampContainer = [LSFLampModelContainer getLampModelContainer];
+    NSMutableDictionary *lamps = lampContainer.lampContainer;
+
+    for (NSString *lampID in self.sceneElement.members.lamps)
+    {
+        LSFLampModel *lampModel = [lamps valueForKey: lampID];
+
+        int colorTempLampMin = lampModel.lampDetails.minTemperature;
+        int colorTempLampMax = lampModel.lampDetails.maxTemperature;
+
+        if ((colorTempGroupMin == -1) || (colorTempGroupMin > colorTempLampMin))
+        {
+            colorTempGroupMin = colorTempLampMin;
+        }
+
+        if ((colorTempGroupMax == -1) || (colorTempGroupMax < colorTempLampMax))
+        {
+            colorTempGroupMax = colorTempLampMax;
+        }
+    }
+
+    LSFGroupModelContainer *groupContainer = [LSFGroupModelContainer getGroupModelContainer];
+    NSMutableDictionary *groups = groupContainer.groupContainer;
+
+    for (NSString *groupID in self.sceneElement.members.lampGroups)
+    {
+        LSFGroupModel *groupModel = [groups valueForKey: groupID];
+
+        for (NSString *lampID in groupModel.lamps)
+        {
+            LSFLampModel *lampModel = [lamps valueForKey: lampID];
+
+            int colorTempLampMin = lampModel.lampDetails.minTemperature;
+            int colorTempLampMax = lampModel.lampDetails.maxTemperature;
+
+            if ((colorTempGroupMin == -1) || (colorTempGroupMin > colorTempLampMin))
+            {
+                colorTempGroupMin = colorTempLampMin;
+            }
+
+            if ((colorTempGroupMax == -1) || (colorTempGroupMax < colorTempLampMax))
+            {
+                colorTempGroupMax = colorTempLampMax;
+            }
+        }
+    }
+
+    self.sceneElement.colorTempMin = colorTempGroupMin != -1 ? colorTempGroupMin : ([LSFConstants getConstants]).MIN_COLOR_TEMP;
+    self.sceneElement.colorTempMax = colorTempGroupMax != -1 ? colorTempGroupMax : ([LSFConstants getConstants]).MAX_COLOR_TEMP;
 }
 
 /*

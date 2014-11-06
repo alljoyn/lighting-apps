@@ -18,6 +18,7 @@ package org.allseen.lsf.sampleapp;
 import java.util.Map;
 
 import org.allseen.lsf.LampState;
+import org.allseen.lsf.PresetManager;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -61,6 +62,8 @@ public abstract class DimmableItemPresetsFragment extends SelectableItemTableFra
         for (PresetDataModel presetModel : activity.presetModels.values()) {
             updateSelectableItemRow(inflater, root, presetModel.id, presetModel.tag, R.drawable.nav_more_menu_icon, presetModel.getName(), false);
         }
+
+        view.findViewById(R.id.selectHeader).setVisibility(activity.presetModels.size() < PresetManager.MAX_PRESETS ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -68,6 +71,14 @@ public abstract class DimmableItemPresetsFragment extends SelectableItemTableFra
         allowApply = false;
         super.updateTableRows();
         allowApply = true;
+    }
+
+    @Override
+    public void removeElement(String id) {
+        super.removeElement(id);
+
+        SampleAppActivity activity = (SampleAppActivity)getActivity();
+        view.findViewById(R.id.selectHeader).setVisibility(activity.presetModels.size() < PresetManager.MAX_PRESETS ? View.VISIBLE : View.GONE);
     }
 
     @Override

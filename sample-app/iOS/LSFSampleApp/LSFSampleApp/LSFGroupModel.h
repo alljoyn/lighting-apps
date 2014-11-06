@@ -27,6 +27,8 @@
 @property (nonatomic, strong) NSSet *groups;
 @property (nonatomic) int duplicates;
 @property (nonatomic) unsigned int delay;
+@property (nonatomic) unsigned int groupColorTempMin;
+@property (nonatomic) unsigned int groupColorTempMax;
 
 -(id)initWithGroupID: (NSString *)groupID;
 

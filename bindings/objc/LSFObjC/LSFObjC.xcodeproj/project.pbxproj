@@ -85,6 +85,7 @@
 		877184FB18E342980085D153 /* LSFLampParameters.mm in Sources */ = {isa = PBXBuildFile; fileRef = 877184FA18E342980085D153 /* LSFLampParameters.mm */; };
 		8771850018E4B3400085D153 /* LSFLampDetailsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 877184FF18E4B3400085D153 /* LSFLampDetailsTest.mm */; };
 		8771850618E4BC7A0085D153 /* LSFUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8771850518E4BC7A0085D153 /* LSFUtils.mm */; };
+		8774B2101A07EE8000EE42E9 /* Rank.cc in Sources */ = {isa = PBXBuildFile; fileRef = 8774B20F1A07EE8000EE42E9 /* Rank.cc */; };
 		877725BE198820D500390287 /* liballjoyn_about_cpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87443CC2195B826F008EEF36 /* liballjoyn_about_cpp.a */; };
 		877725BF198820D500390287 /* libAllJoynFramework_iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87443CC3195B826F008EEF36 /* libAllJoynFramework_iOS.a */; };
 		878EC57118E88A0F0023C1B7 /* LSFLampManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 878EC57018E88A0F0023C1B7 /* LSFLampManager.mm */; };
@@ -276,6 +277,8 @@
 		877184FF18E4B3400085D153 /* LSFLampDetailsTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFLampDetailsTest.mm; sourceTree = "<group>"; };
 		8771850418E4BC7A0085D153 /* LSFUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFUtils.h; sourceTree = "<group>"; };
 		8771850518E4BC7A0085D153 /* LSFUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFUtils.mm; sourceTree = "<group>"; };
+		8774B20E1A07EE7000EE42E9 /* Rank.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rank.h; path = ../../../../../../service_framework/standard_core_library/common/inc/Rank.h; sourceTree = "<group>"; };
+		8774B20F1A07EE8000EE42E9 /* Rank.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rank.cc; path = ../../../../../../service_framework/standard_core_library/common/src/Rank.cc; sourceTree = "<group>"; };
 		878EC56F18E88A0F0023C1B7 /* LSFLampManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFLampManager.h; sourceTree = "<group>"; };
 		878EC57018E88A0F0023C1B7 /* LSFLampManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFLampManager.mm; sourceTree = "<group>"; };
 		878EC57218E8912D0023C1B7 /* LSFLampGroupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFLampGroupManager.h; sourceTree = "<group>"; };
@@ -513,6 +516,10 @@
 				8707A017193F7C550007490F /* LampManager.cc */,
 				8707A000193F7BB40007490F /* LampResponseCodes.h */,
 				8707A001193F7BB40007490F /* LampValues.h */,
+				8707A004193F7BCF0007490F /* LSFResponseCodes.h */,
+				8707A00F193F7C260007490F /* LSFResponseCodes.cc */,
+				8707A005193F7BCF0007490F /* LSFTypes.h */,
+				8707A010193F7C260007490F /* LSFTypes.cc */,
 				8707A00B193F7BEA0007490F /* Manager.h */,
 				8707A018193F7C550007490F /* Manager.cc */,
 				8707A00C193F7BEA0007490F /* MasterSceneManager.h */,
@@ -521,12 +528,10 @@
 				873A5E9B1940DEC500D5B736 /* Mutex.cc */,
 				8707A00D193F7BEA0007490F /* PresetManager.h */,
 				8707A01A193F7C550007490F /* PresetManager.cc */,
+				8774B20E1A07EE7000EE42E9 /* Rank.h */,
+				8774B20F1A07EE8000EE42E9 /* Rank.cc */,
 				8707A00E193F7BEA0007490F /* SceneManager.h */,
 				8707A01B193F7C550007490F /* SceneManager.cc */,
-				8707A004193F7BCF0007490F /* LSFResponseCodes.h */,
-				8707A00F193F7C260007490F /* LSFResponseCodes.cc */,
-				8707A005193F7BCF0007490F /* LSFTypes.h */,
-				8707A010193F7C260007490F /* LSFTypes.cc */,
 			);
 			name = LightingServiceFramework;
 			sourceTree = "<group>";
@@ -749,6 +754,7 @@
 				8719C95D18DCB1F00011CD45 /* LSFObject.m in Sources */,
 				871F208618D2274300784E84 /* LSFLampGroupManagerCallback.mm in Sources */,
 				879A3FE41970ACAD0082B204 /* LSFStatePulseEffect.mm in Sources */,
+				8774B2101A07EE8000EE42E9 /* Rank.cc in Sources */,
 				878EC57418E8912D0023C1B7 /* LSFLampGroupManager.mm in Sources */,
 				8771850618E4BC7A0085D153 /* LSFUtils.mm in Sources */,
 				879A3FDD1970A3DA0082B204 /* LSFPresetTransitionEffect.mm in Sources */,

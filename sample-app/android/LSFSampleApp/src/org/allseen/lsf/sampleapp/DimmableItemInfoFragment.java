@@ -19,7 +19,6 @@ import java.util.Map;
 
 import org.allseen.lsf.LampState;
 
-import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -70,7 +69,7 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         presetsButton.setOnClickListener(this);
 
         // state adapter
-        stateAdapter = new LampStateViewAdapter(stateView, itemID, this);
+        stateAdapter = new LampStateViewAdapter(stateView, itemID, getColorTempMin(), getColorTempSpan(), this);
 
         return view;
     }
@@ -98,7 +97,7 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         } else if (seekBarID == R.id.stateSliderSaturation) {
             ((SampleAppActivity)getActivity()).setSaturation(itemType, seekBar.getTag().toString(), seekBar.getProgress());
         } else if (seekBarID == R.id.stateSliderColorTemp) {
-            ((SampleAppActivity)getActivity()).setColorTemp(itemType, seekBar.getTag().toString(), seekBar.getProgress() + DimmableItemScaleConverter.VIEW_COLORTEMP_MIN);
+            ((SampleAppActivity)getActivity()).setColorTemp(itemType, seekBar.getTag().toString(), seekBar.getProgress() + getColorTempMin());
         }
     }
 
@@ -157,5 +156,7 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
     }
 
     protected abstract int getLayoutID();
+    protected abstract int getColorTempMin();
+    protected abstract int getColorTempSpan();
     protected abstract void onHeaderClick();
 }

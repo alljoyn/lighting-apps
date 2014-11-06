@@ -156,21 +156,31 @@ static void NetworkStatusCallback(SCNetworkReachabilityRef target, SCNetworkReac
         {
             NSLog(@"Current Wi-Fi SSID is nil just calling stop");
             [self stopController];
+
+            self.isWifiConnected = NO;
+            self.lastKnownSSID = [[LSFConstants getConstants] currentWifiSSID];
+
+            [[NSNotificationCenter defaultCenter] postNotificationName: @"WifiNotification" object: self];
         }
         else
         {
             if (![self.lastKnownSSID isEqualToString: [[LSFConstants getConstants] currentWifiSSID]])
             {
                 NSLog(@"SSID has changed. Resetting Controller.");
-                //[self stopController];
+
+                if (self.isWifiConnected)
+                {
+                    [self stopController];
+                }
+
                 [self startController];
+
+                self.isWifiConnected = YES;
+                self.lastKnownSSID = [[LSFConstants getConstants] currentWifiSSID];
+
+                [[NSNotificationCenter defaultCenter] postNotificationName: @"WifiNotification" object: self];
             }
         }
-
-        self.isWifiConnected = YES;
-        self.lastKnownSSID = [[LSFConstants getConstants] currentWifiSSID];
-
-        [[NSNotificationCenter defaultCenter] postNotificationName: @"WifiNotification" object: self];
     }
 }
 

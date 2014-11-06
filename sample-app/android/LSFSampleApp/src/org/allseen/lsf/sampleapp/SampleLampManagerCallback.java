@@ -114,8 +114,8 @@ public class SampleLampManagerCallback extends LampManagerCallback {
 
     @Override
     public void getLampDetailsReplyCB(ResponseCode responseCode, String lampID, LampDetails lampDetails) {
+        Log.d(SampleAppActivity.TAG, "Got lamp details reply " + lampID);
         if (responseCode.equals(ResponseCode.OK)) {
-            Log.d(SampleAppActivity.TAG, "Got lamp details reply " + lampID + ": " +  lampDetails);
             postUpdateLampDetails(lampID, lampDetails);
         } else {
             postGetLampDetails(lampID, RETRY_DELAY);
@@ -127,8 +127,8 @@ public class SampleLampManagerCallback extends LampManagerCallback {
 
     @Override
     public void getLampParametersReplyCB(ResponseCode responseCode, String lampID, LampParameters lampParameters) {
+        Log.d(SampleAppActivity.TAG, "Got lamp parameters reply " + lampID);
         if (responseCode.equals(ResponseCode.OK)) {
-            Log.d(SampleAppActivity.TAG, "Got lamp parameters reply " + lampID + ": " +  lampParameters);
             postUpdateLampParameters(lampID, lampParameters);
         } else {
             postGetLampParameters(lampID, RETRY_DELAY);
@@ -417,7 +417,7 @@ public class SampleLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postUpdateLampParameters(final String lampID, final LampParameters lampParams) {
-        Log.d(SampleAppActivity.TAG, "Updating lamp params " + lampID + ": " +  lampParams);
+        Log.d(SampleAppActivity.TAG, "Updating lamp params " + lampID);
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -444,7 +444,7 @@ public class SampleLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postUpdateLampDetails(final String lampID, final LampDetails lampDetails) {
-        Log.d(SampleAppActivity.TAG, "Updating lamp details " + lampID + ": " +  lampDetails);
+        Log.d(SampleAppActivity.TAG, "Updating lamp details " + lampID);
         handler.post(new Runnable() {
             @Override
             public void run() {

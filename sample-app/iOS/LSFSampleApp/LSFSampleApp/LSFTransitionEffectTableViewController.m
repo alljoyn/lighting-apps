@@ -72,6 +72,8 @@
 
         unsigned int colorTemp = [constants unscaleColorTemp: self.tedm.state.colorTemp];
         self.colorTempSlider.value = colorTemp;
+        self.colorTempSlider.minimumValue = self.tedm.colorTempMin;
+        self.colorTempSlider.maximumValue = self.tedm.colorTempMax;
         self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", colorTemp];
 
         [self checkSaturationValue:self.tedm.state];

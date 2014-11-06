@@ -28,7 +28,10 @@ import java.util.Map;
 import java.util.Queue;
 
 import org.allseen.lsf.LampGroup;
+import org.allseen.lsf.LampGroupManager;
+import org.allseen.lsf.MasterSceneManager;
 import org.allseen.lsf.ResponseCode;
+import org.allseen.lsf.SceneManager;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
@@ -110,6 +113,9 @@ public class SampleAppActivity extends FragmentActivity implements ActionBar.Tab
 
     public LampGroup pendingBasicSceneElementMembers;
     public CapabilityData pendingBasicSceneElementCapability;
+    public boolean pendingBasicSceneElementMembersHaveEffects;
+    public int pendingBasicSceneElementMembersMinColorTemp;
+    public int pendingBasicSceneElementMembersMaxColorTemp;
 
     public NoEffectDataModel pendingNoEffectModel;
     public TransitionEffectDataModel pendingTransitionEffectModel;
@@ -262,6 +268,23 @@ public class SampleAppActivity extends FragmentActivity implements ActionBar.Tab
         }, filter);
     }
 
+    private boolean actionBarHasAdd() {
+        boolean hasAdd = false;
+        int tabIndex = viewPager.getCurrentItem();
+
+        if (tabIndex != 0) {
+            if (tabIndex == 1) {
+                // Groups tab
+                hasAdd = (groupModels.size() < LampGroupManager.MAX_LAMP_GROUPS);
+            } else if (tabIndex == 2) {
+                // Scenes tab
+                hasAdd = (basicSceneModels.size() < SceneManager.MAX_SCENES) || (masterSceneModels.size() < MasterSceneManager.MAX_MASTER_SCENES);
+            }
+        }
+
+        return hasAdd;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -273,7 +296,7 @@ public class SampleAppActivity extends FragmentActivity implements ActionBar.Tab
         settingsActionMenuItem  = menu.findItem(R.id.action_settings);
 
         if (pageFrameParent == null) {
-            updateActionBar(viewPager.getCurrentItem() != 0, false, false, true);
+            updateActionBar(actionBarHasAdd(), false, false, true);
         }
 
         return true;
@@ -342,7 +365,7 @@ public class SampleAppActivity extends FragmentActivity implements ActionBar.Tab
         // the ViewPager.
         viewPager.setCurrentItem(tab.getPosition());
 
-        updateActionBar(tab.getPosition() != 0, false, false, true);
+        updateActionBar(actionBarHasAdd(), false, false, true);
     }
 
     @Override
@@ -801,6 +824,8 @@ public class SampleAppActivity extends FragmentActivity implements ActionBar.Tab
 
         PopupMenu popup = new PopupMenu(this, anchor);
         popup.inflate(R.menu.scene_add);
+        popup.getMenu().findItem(R.id.scene_add_basic).setEnabled(basicSceneModels.size() < SceneManager.MAX_SCENES);
+        popup.getMenu().findItem(R.id.scene_add_master).setEnabled(masterSceneModels.size() < MasterSceneManager.MAX_MASTER_SCENES);
         popup.setOnMenuItemClickListener(this);
         popup.show();
     }
@@ -921,7 +946,7 @@ public class SampleAppActivity extends FragmentActivity implements ActionBar.Tab
     }
 
     public void resetActionBar() {
-        updateActionBar(null, true, viewPager.getCurrentItem() != 0, false, false, true);
+        updateActionBar(null, true, actionBarHasAdd(), false, false, true);
     }
 
     public void updateActionBar(int titleID, boolean tabs, boolean add, boolean next, boolean done, boolean settings) {
@@ -1176,6 +1201,7 @@ public class SampleAppActivity extends FragmentActivity implements ActionBar.Tab
     }
 
     public void setTabTitles() {
+        Log.d(SampleAppActivity.TAG, "setTabTitles()");
         ActionBar actionBar = getActionBar();
         for (int i = 0; i < actionBar.getTabCount(); i++) {
             actionBar.getTabAt(i).setText(getPageTitle(i));

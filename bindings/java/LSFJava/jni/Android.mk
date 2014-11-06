@@ -104,6 +104,7 @@ LOCAL_SRC_FILES  := $(MY_LSF_STD_CLIENT_SRC)/ControllerClient.cc \
 					$(MY_LSF_STD_COMMON_SRC)/LSFSemaphore.cc \
                     $(MY_LSF_STD_COMMON_SRC)/LSFTypes.cc \
                     $(MY_LSF_STD_COMMON_SRC)/Mutex.cc \
+                    $(MY_LSF_STD_COMMON_SRC)/Rank.cc \
                     $(MY_LSF_STD_COMMON_SRC)/Thread.cc \
 					JByteArray.cpp \
 					JControllerClient.cpp \

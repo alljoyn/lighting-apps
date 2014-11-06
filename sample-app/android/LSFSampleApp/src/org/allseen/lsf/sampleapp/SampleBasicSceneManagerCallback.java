@@ -52,11 +52,11 @@ public class SampleBasicSceneManagerCallback extends SceneManagerCallback {
 
     @Override
     public void getSceneNameReplyCB(ResponseCode responseCode, String sceneID, String language, String sceneName) {
+        Log.d(SampleAppActivity.TAG, "getSceneNameReplyCB() " + sceneID + ", " +  sceneName);
         if (!responseCode.equals(ResponseCode.OK)) {
             activity.showErrorResponseCode(responseCode, "getSceneNameReplyCB");
         }
 
-        Log.d(SampleAppActivity.TAG, "getSceneNameReplyCB(): " + sceneName);
         postUpdateSceneName(sceneID, sceneName);
     }
 
@@ -95,12 +95,10 @@ public class SampleBasicSceneManagerCallback extends SceneManagerCallback {
 
     @Override
     public void createSceneReplyCB(ResponseCode responseCode, String sceneID) {
+        Log.d(SampleAppActivity.TAG, "createSceneReplyCB(): " + sceneID);
         if (!responseCode.equals(ResponseCode.OK)) {
             activity.showErrorResponseCode(responseCode, "createSceneReplyCB");
         }
-
-        Log.d(SampleAppActivity.TAG, "createSceneReplyCB(): " + sceneID);
-        postProcessBasicSceneID(sceneID);
     }
 
     @Override
@@ -143,11 +141,11 @@ public class SampleBasicSceneManagerCallback extends SceneManagerCallback {
 
     @Override
     public void getSceneReplyCB(ResponseCode responseCode, String sceneID, Scene scene) {
+        Log.d(SampleAppActivity.TAG, "getSceneReplyCB(): " + sceneID);
         if (!responseCode.equals(ResponseCode.OK)) {
             activity.showErrorResponseCode(responseCode, "getSceneReplyCB");
         }
 
-        Log.d(SampleAppActivity.TAG, "getSceneReplyCB(): " + sceneID + ": " +  scene);
         postUpdateBasicScene(sceneID, scene);
     }
 
@@ -200,7 +198,7 @@ public class SampleBasicSceneManagerCallback extends SceneManagerCallback {
     }
 
     protected void postUpdateBasicScene(final String sceneID, final Scene scene) {
-        Log.d(SampleAppActivity.TAG, "postUpdateBasicScene " + sceneID + ": " +  scene);
+        Log.d(SampleAppActivity.TAG, "postUpdateBasicScene() " + sceneID);
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -247,6 +245,10 @@ public class SampleBasicSceneManagerCallback extends SceneManagerCallback {
 
                     if (tableFragment != null) {
                         tableFragment.removeElement(sceneID);
+
+                        if (tableFragment.isVisible()) {
+                            activity.resetActionBar();
+                        }
                     }
 
                     if ((infoFragment != null) && (infoFragment.key.equals(sceneID))) {
@@ -274,6 +276,10 @@ public class SampleBasicSceneManagerCallback extends SceneManagerCallback {
 
             if (basicSceneTableFragment != null && sceneID != null) {
                 basicSceneTableFragment.addElement(sceneID);
+
+                if (basicSceneTableFragment.isVisible()) {
+                    activity.resetActionBar();
+                }
             }
 
             if (!scenesPageFragment.isMasterMode()) {

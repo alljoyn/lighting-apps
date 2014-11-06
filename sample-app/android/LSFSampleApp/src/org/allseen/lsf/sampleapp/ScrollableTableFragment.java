@@ -71,9 +71,10 @@ public class ScrollableTableFragment extends PageFrameChildFragment {
     }
 
     public void removeElement(String id) {
+        final SampleAppActivity activity = (SampleAppActivity)getActivity();
         final TableRow row = (TableRow) table.findViewWithTag(id);
         if (row != null) {
-            getActivity().runOnUiThread(new Runnable() {
+            activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     table.removeView(row);
@@ -81,6 +82,7 @@ public class ScrollableTableFragment extends PageFrameChildFragment {
                 }
             });
         }
-        ((SampleAppActivity)getActivity()).setTabTitles();
+
+        activity.setTabTitles();
     }
 }

@@ -52,11 +52,11 @@ public class SampleMasterSceneManagerCallback extends MasterSceneManagerCallback
 
     @Override
     public void getMasterSceneNameReplyCB(ResponseCode responseCode, String masterSceneID, String language, String masterSceneName) {
+        Log.d(SampleAppActivity.TAG, "getMasterSceneNameReplyCB() " + masterSceneID + ", " +  masterSceneName);
         if (!responseCode.equals(ResponseCode.OK)) {
             activity.showErrorResponseCode(responseCode, "getMasterSceneNameReplyCB");
         }
 
-        Log.d(SampleAppActivity.TAG, "getMasterSceneNameReplyCB(): " + masterSceneName);
         postUpdateMasterSceneName(masterSceneID, masterSceneName);
     }
 
@@ -95,12 +95,10 @@ public class SampleMasterSceneManagerCallback extends MasterSceneManagerCallback
 
     @Override
     public void createMasterSceneReplyCB(ResponseCode responseCode, String masterSceneID) {
+        Log.d(SampleAppActivity.TAG, "createMasterSceneReplyCB(): " + masterSceneID);
         if (!responseCode.equals(ResponseCode.OK)) {
             activity.showErrorResponseCode(responseCode, "createMasterSceneReplyCB");
         }
-
-        Log.d(SampleAppActivity.TAG, "createMasterSceneReplyCB(): " + masterSceneID);
-        postProcessMasterSceneID(masterSceneID);
     }
 
     @Override
@@ -143,11 +141,11 @@ public class SampleMasterSceneManagerCallback extends MasterSceneManagerCallback
 
     @Override
     public void getMasterSceneReplyCB(ResponseCode responseCode, String masterSceneID, MasterScene masterScene) {
+        Log.d(SampleAppActivity.TAG, "getMasterSceneReplyCB(): " + masterSceneID);
         if (!responseCode.equals(ResponseCode.OK)) {
             activity.showErrorResponseCode(responseCode, "getMasterSceneReplyCB");
         }
 
-        Log.d(SampleAppActivity.TAG, "getMasterSceneReplyCB(): " + masterSceneID + ": " +  masterScene);
         postUpdateMasterScene(masterSceneID, masterScene);
     }
 
@@ -200,7 +198,7 @@ public class SampleMasterSceneManagerCallback extends MasterSceneManagerCallback
     }
 
     protected void postUpdateMasterScene(final String masterSceneID, final MasterScene masterScene) {
-        Log.d(SampleAppActivity.TAG, "postUpdateMasterScene " + masterSceneID + ": " +  masterScene);
+        Log.d(SampleAppActivity.TAG, "postUpdateMasterScene() " + masterSceneID);
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -247,6 +245,10 @@ public class SampleMasterSceneManagerCallback extends MasterSceneManagerCallback
 
                     if (tableFragment != null) {
                         tableFragment.removeElement(masterSceneID);
+
+                        if (tableFragment.isVisible()) {
+                            activity.resetActionBar();
+                        }
                     }
 
                     if ((infoFragment != null) && (infoFragment.key.equals(masterSceneID))) {
@@ -268,6 +270,10 @@ public class SampleMasterSceneManagerCallback extends MasterSceneManagerCallback
 
                     if (scenesTableFragment != null) {
                         scenesTableFragment.addElement(masterSceneID);
+
+                        if (scenesTableFragment.isVisible()) {
+                            activity.resetActionBar();
+                        }
                     }
 
                     if (scenesPageFragment.isMasterMode()) {

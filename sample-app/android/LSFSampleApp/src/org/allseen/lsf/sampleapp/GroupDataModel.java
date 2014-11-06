@@ -29,6 +29,8 @@ public class GroupDataModel extends DimmableItemDataModel {
     private Set<String> lamps;
     private Set<String> groups;
     public int duplicates;
+    public int viewColorTempMin;
+    public int viewColorTempMax;
 
     public GroupDataModel() {
         this("");
@@ -42,6 +44,9 @@ public class GroupDataModel extends DimmableItemDataModel {
         super(groupID, prefix, defaultName);
 
         members = new LampGroup();
+
+        viewColorTempMin = DimmableItemScaleConverter.VIEW_COLORTEMP_MIN;
+        viewColorTempMax = DimmableItemScaleConverter.VIEW_COLORTEMP_MAX;
     }
 
     public GroupDataModel(GroupDataModel other) {
@@ -51,6 +56,8 @@ public class GroupDataModel extends DimmableItemDataModel {
         this.lamps = new HashSet<String>(other.lamps);
         this.groups = new HashSet<String>(other.groups);
         this.duplicates = other.duplicates;
+        this.viewColorTempMax = other.viewColorTempMax;
+        this.viewColorTempMin = other.viewColorTempMin;
     }
 
     public void setLamps(Set<String> lamps) {

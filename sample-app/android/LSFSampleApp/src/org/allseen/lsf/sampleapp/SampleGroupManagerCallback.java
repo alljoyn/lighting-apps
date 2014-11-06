@@ -18,6 +18,7 @@ package org.allseen.lsf.sampleapp;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.allseen.lsf.LampDetails;
 import org.allseen.lsf.LampGroup;
 import org.allseen.lsf.LampGroupManagerCallback;
 import org.allseen.lsf.ResponseCode;
@@ -304,6 +305,8 @@ public class SampleGroupManagerCallback extends LampGroupManagerCallback {
                 CapabilityData capability = new CapabilityData();
                 int countOn = 0;
                 int countOff = 0;
+                int viewColorTempGroupMin = -1;
+                int viewColorTempGroupMax = -1;
 
                 averageHue.reset();
                 averageSaturation.reset();
@@ -333,6 +336,18 @@ public class SampleGroupManagerCallback extends LampGroupManagerCallback {
 
                         if (lampModel.getDetails().hasVariableColorTemp()) {
                             averageColorTemp.add(lampModel.state.getColorTemp());
+
+                            LampDetails lampDetails = lampModel.getDetails();
+                            int viewColorTempLampMin = lampDetails.getMinTemperature();
+                            int viewColorTempLampMax = lampDetails.getMaxTemperature();
+
+                            if (viewColorTempGroupMin == -1 || viewColorTempGroupMin > viewColorTempLampMin) {
+                                viewColorTempGroupMin = viewColorTempLampMin;
+                            }
+
+                            if (viewColorTempGroupMax == -1 || viewColorTempGroupMax < viewColorTempLampMax) {
+                                viewColorTempGroupMax = viewColorTempLampMax;
+                            }
                         }
                     } else {
                         Log.d(SampleAppActivity.TAG, "missing lamp: " + lampID);
@@ -352,6 +367,9 @@ public class SampleGroupManagerCallback extends LampGroupManagerCallback {
                 groupModel.uniformity.saturation = averageSaturation.isUniform();
                 groupModel.uniformity.brightness = averageBrightness.isUniform();
                 groupModel.uniformity.colorTemp = averageColorTemp.isUniform();
+
+                groupModel.viewColorTempMin = viewColorTempGroupMin != -1 ? viewColorTempGroupMin : DimmableItemScaleConverter.VIEW_COLORTEMP_MIN;
+                groupModel.viewColorTempMax = viewColorTempGroupMax != -1 ? viewColorTempGroupMax : DimmableItemScaleConverter.VIEW_COLORTEMP_MAX;
 
                 Log.d(SampleAppActivity.TAG, "updating group " + groupModel.getName() + " - " + groupModel.getCapability().toString());
             }
@@ -376,6 +394,10 @@ public class SampleGroupManagerCallback extends LampGroupManagerCallback {
 
                     if (tableFragment != null) {
                         tableFragment.removeElement(groupID);
+
+                        if (tableFragment.isVisible()) {
+                            activity.resetActionBar();
+                        }
                     }
 
                     if ((infoFragment != null) && (infoFragment.key.equals(groupID))) {
@@ -401,6 +423,10 @@ public class SampleGroupManagerCallback extends LampGroupManagerCallback {
 
                         if (tableFragment != null) {
                             tableFragment.addElement(groupID);
+
+                            if (tableFragment.isVisible()) {
+                                activity.resetActionBar();
+                            }
                         }
 
                         GroupInfoFragment infoFragment = (GroupInfoFragment)pageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);

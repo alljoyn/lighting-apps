@@ -48,7 +48,7 @@
 -(void)saturationSliderTapped: (UIGestureRecognizer *)gr;
 -(void)colorTempSliderTapped: (UIGestureRecognizer *)gr;
 -(BOOL)checkIfLampState: (LSFLampState *) state matchesPreset: (LSFPresetModel *)data;
--(void)showAlertDialog;
+-(void)showAlertDialog: (NSString *)text;
 -(void)setTimestampAndDelay;
 -(void)postDelayedGroupRefresh;
 
@@ -363,6 +363,8 @@
             [self performSelectorOnMainThread:@selector(updateNotSupportedLabel) withObject:nil waitUntilDone:NO];
         }
 
+        self.colorTempSlider.minimumValue = self.groupModel.groupColorTempMin;
+        self.colorTempSlider.maximumValue = self.groupModel.groupColorTempMax;
         self.hasVariableColorTemp = YES;
     }
     else
@@ -608,7 +610,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.selectionStyle = UITableViewCellSelectionStyleBlue;
             
-            [self showAlertDialog];
+            [self showAlertDialog: @"name"];
             return NO;
         }
         else
@@ -624,7 +626,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.selectionStyle = UITableViewCellSelectionStyleBlue;
             
-            [self showAlertDialog];
+            [self showAlertDialog: @"members"];
             return NO;
         }
         else
@@ -683,11 +685,12 @@
         LSFConstants *constants = [LSFConstants getConstants];
         LSFLampGroupManager *lampGroupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
         unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)value withMax: 100];
-        if ((self.groupModel.state.onOff == NO) && (scaledBrightness > 0))
+        [lampGroupManager transitionLampGroupID: self.groupModel.theID brightnessField: scaledBrightness];
+
+        if (self.groupModel.state.brightness == 0)
         {
             [lampGroupManager transitionLampGroupID: self.groupModel.theID onOffField: YES];
         }
-        [lampGroupManager transitionLampGroupID: self.groupModel.theID brightnessField: scaledBrightness];
     });
 
     //Post delayed task to refresh group
@@ -800,10 +803,10 @@
     return returnValue;
 }
 
--(void)showAlertDialog
+-(void)showAlertDialog: (NSString *)text
 {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Error"
-                                                    message: @"Cannot change the name of the \"All Lamps\" group"
+                                                    message: [NSString stringWithFormat: @"Cannot change the %@ of the \"All Lamps\" group", text]
                                                    delegate: nil
                                           cancelButtonTitle: @"OK"
                                           otherButtonTitles: nil];
@@ -820,11 +823,12 @@
     dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
         LSFLampGroupManager *lampGroupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
         unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)((UISlider *)sender).value withMax: 100];
-        if ((self.groupModel.state.onOff == NO) && (scaledBrightness > 0))
+        [lampGroupManager transitionLampGroupID: self.groupModel.theID brightnessField: scaledBrightness];
+
+        if (self.groupModel.state.brightness == 0)
         {
             [lampGroupManager transitionLampGroupID: self.groupModel.theID onOffField: YES];
         }
-        [lampGroupManager transitionLampGroupID: self.groupModel.theID brightnessField: scaledBrightness];
     });
 
     //Post delayed task to refresh group

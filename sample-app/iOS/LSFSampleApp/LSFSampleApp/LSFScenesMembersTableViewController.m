@@ -23,6 +23,7 @@
 #import "LSFSceneElementDataModel.h"
 #import "LSFNoEffectTableViewController.h"
 #import "LSFEnums.h"
+#import "LSFConstants.h"
 
 @interface LSFScenesMembersTableViewController ()
 
@@ -34,6 +35,7 @@
 -(void)deleteScenesWithIDs: (NSArray *)sceneIDs andNames: (NSArray *)sceneNames;
 -(void)cancelButtonPressed;
 -(BOOL)checkIfEffectsAreSupported;
+-(void)getColorTempMinMax;
 -(NSArray *)sortLampsGroupsData: (NSArray *)data;
 
 
@@ -226,6 +228,8 @@
     self.sceneElement = [[LSFSceneElementDataModel alloc] initWithEffectType: Unknown andName: @""];
     self.sceneElement.members = lampGroup;
     self.sceneElement.capability = capabilityData;
+
+    [self getColorTempMinMax];
 }
 
 /*
@@ -271,7 +275,6 @@
 
     for (NSString *lampID in self.sceneElement.members.lamps)
     {
-        NSLog(@"Checking LampID: %@", lampID);
         LSFLampModel *lampModel = [lamps valueForKey: lampID];
 
         if (lampModel.lampDetails.hasEffects)
@@ -285,12 +288,10 @@
 
     for (NSString *groupID in self.sceneElement.members.lampGroups)
     {
-        NSLog(@"Checking GroupID: %@", groupID);
         LSFGroupModel *groupModel = [groups valueForKey: groupID];
 
         for (NSString *lampID in groupModel.lamps)
         {
-            NSLog(@"Checking LampID: %@ within GroupID: %@", lampID, groupID);
             LSFLampModel *lampModel = [lamps valueForKey: lampID];
 
             if (lampModel.lampDetails.hasEffects)
@@ -303,12 +304,67 @@
     return NO;
 }
 
+-(void)getColorTempMinMax
+{
+    int colorTempGroupMin = -1;
+    int colorTempGroupMax = -1;
+
+    LSFLampModelContainer *lampContainer = [LSFLampModelContainer getLampModelContainer];
+    NSMutableDictionary *lamps = lampContainer.lampContainer;
+
+    for (NSString *lampID in self.sceneElement.members.lamps)
+    {
+        LSFLampModel *lampModel = [lamps valueForKey: lampID];
+
+        int colorTempLampMin = lampModel.lampDetails.minTemperature;
+        int colorTempLampMax = lampModel.lampDetails.maxTemperature;
+
+        if ((colorTempGroupMin == -1) || (colorTempGroupMin > colorTempLampMin))
+        {
+            colorTempGroupMin = colorTempLampMin;
+        }
+
+        if ((colorTempGroupMax == -1) || (colorTempGroupMax < colorTempLampMax))
+        {
+            colorTempGroupMax = colorTempLampMax;
+        }
+    }
+
+    LSFGroupModelContainer *groupContainer = [LSFGroupModelContainer getGroupModelContainer];
+    NSMutableDictionary *groups = groupContainer.groupContainer;
+
+    for (NSString *groupID in self.sceneElement.members.lampGroups)
+    {
+        LSFGroupModel *groupModel = [groups valueForKey: groupID];
+
+        for (NSString *lampID in groupModel.lamps)
+        {
+            LSFLampModel *lampModel = [lamps valueForKey: lampID];
+
+            int colorTempLampMin = lampModel.lampDetails.minTemperature;
+            int colorTempLampMax = lampModel.lampDetails.maxTemperature;
+
+            if ((colorTempGroupMin == -1) || (colorTempGroupMin > colorTempLampMin))
+            {
+                colorTempGroupMin = colorTempLampMin;
+            }
+
+            if ((colorTempGroupMax == -1) || (colorTempGroupMax < colorTempLampMax))
+            {
+                colorTempGroupMax = colorTempLampMax;
+            }
+        }
+    }
+
+    self.sceneElement.colorTempMin = colorTempGroupMin != -1 ? colorTempGroupMin : ([LSFConstants getConstants]).MIN_COLOR_TEMP;
+    self.sceneElement.colorTempMax = colorTempGroupMax != -1 ? colorTempGroupMax : ([LSFConstants getConstants]).MAX_COLOR_TEMP;
+}
+
 -(NSArray *)sortLampsGroupsData: (NSArray *)data
 {
     NSSortDescriptor *sortDesc = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES comparator:^NSComparisonResult(id obj1, id obj2) {
         return [(NSString *)obj1 compare:(NSString *)obj2 options:NSCaseInsensitiveSearch];
     }];
-
 
     return [data sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDesc]];
 }
@@ -329,6 +385,8 @@
         LSFNoEffectDataModel *nedm = [[LSFNoEffectDataModel alloc] init];
         nedm.members = self.sceneElement.members;
         nedm.capability = self.sceneElement.capability;
+        nedm.colorTempMin = self.sceneElement.colorTempMin;
+        nedm.colorTempMax = self.sceneElement.colorTempMax;
 
         LSFNoEffectTableViewController *netvc = [segue destinationViewController];
         netvc.sceneModel = self.sceneModel;

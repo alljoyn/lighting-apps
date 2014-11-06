@@ -128,6 +128,8 @@
 
         unsigned int colorTemp = [constants unscaleColorTemp: self.pedm.state.colorTemp];
         self.colorTempSlider.value = colorTemp;
+        self.colorTempSlider.minimumValue = self.pedm.colorTempMin;
+        self.colorTempSlider.maximumValue = self.pedm.colorTempMax;
         self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", colorTemp];
 
         [self checkSaturationValueForStartState];
@@ -146,6 +148,8 @@
 
         unsigned int endColorTemp = [constants unscaleColorTemp: self.pedm.endState.colorTemp];
         self.endColorTempSlider.value = endColorTemp;
+        self.endColorTempSlider.minimumValue = self.pedm.colorTempMin;
+        self.endColorTempSlider.maximumValue = self.pedm.colorTempMax;
         self.endColorTempLabel.text = [NSString stringWithFormat: @"%iK", endColorTemp];
 
         [self checkSaturationValueForEndState];

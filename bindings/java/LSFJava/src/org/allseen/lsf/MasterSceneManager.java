@@ -16,6 +16,8 @@
 package org.allseen.lsf;
 
 public class MasterSceneManager extends BaseNativeClassWrapper {
+    public static final int MAX_MASTER_SCENES = 100;
+
     public MasterSceneManager(ControllerClient controller, MasterSceneManagerCallback callback) {
          createNativeObject(controller, callback);
     }

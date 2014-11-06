@@ -63,7 +63,7 @@
     LSFLampModelContainer *container = [LSFLampModelContainer getLampModelContainer];
     NSMutableDictionary *lamps = container.lampContainer;
     LSFLampModel *model = [lamps valueForKey: self.lampID];
-    
+
     if (model != nil && model.state.onOff)
     {
         dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
@@ -74,7 +74,7 @@
     else
     {
         LSFConstants *constants = [LSFConstants getConstants];
-        
+
         dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
             LSFLampManager *lampManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampManager;
 
@@ -94,9 +94,18 @@
     LSFConstants *constants = [LSFConstants getConstants];
 
     dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
+        LSFLampModelContainer *container = [LSFLampModelContainer getLampModelContainer];
+        NSMutableDictionary *lamps = container.lampContainer;
+        LSFLampModel *model = [lamps valueForKey: self.lampID];
+
         LSFLampManager *lampManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampManager;
         unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)sender.value withMax: 100];
         [lampManager transitionLampID: self.lampID brightnessField: scaledBrightness];
+
+        if (model.state.brightness == 0)
+        {
+            [lampManager transitionLampID: self.lampID onOffField: YES];
+        }
     });
 }
 
@@ -116,24 +125,32 @@
 -(void)sliderTapped: (UIGestureRecognizer *)gr
 {
     UISlider *s = (UISlider *)gr.view;
-    
+
     if (s.highlighted)
     {
         //tap on thumb, let slider deal with it
         return;
     }
-    
+
     CGPoint pt = [gr locationInView: s];
     CGFloat percentage = pt.x / s.bounds.size.width;
     CGFloat delta = percentage * (s.maximumValue - s.minimumValue);
     CGFloat value = round(s.minimumValue + delta);
-    
+
     dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
+        LSFLampModelContainer *container = [LSFLampModelContainer getLampModelContainer];
+        NSMutableDictionary *lamps = container.lampContainer;
+        LSFLampModel *model = [lamps valueForKey: self.lampID];
         LSFConstants *constants = [LSFConstants getConstants];
 
         LSFLampManager *lampManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampManager;
         unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)value withMax: 100];
         [lampManager transitionLampID: self.lampID brightnessField: scaledBrightness];
+
+        if (model.state.brightness == 0)
+        {
+            [lampManager transitionLampID: self.lampID onOffField: YES];
+        }
     });
 }
 

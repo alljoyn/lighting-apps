@@ -67,6 +67,8 @@ public class LampAbout {
         if (announcedData != null) {
             aboutPeer = peer;
             aboutPort = port;
+
+            aboutAppID = AboutManager.getByteArrayHexStringFromAnnouncedData(AboutKeys.ABOUT_APP_ID, announcedData, dataNotFound);
         }
     }
 
@@ -75,7 +77,6 @@ public class LampAbout {
             aboutQuery = true;
 
             aboutDeviceID = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_DEVICE_ID, queriedData, dataNotFound);
-            aboutAppID = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_APP_ID, queriedData, dataNotFound);
             aboutDeviceName = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_DEVICE_NAME, queriedData, dataNotFound);
             aboutDefaultLanguage = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_DEFAULT_LANGUAGE, queriedData, dataNotFound);
             aboutAppName = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_APP_NAME, queriedData, dataNotFound);

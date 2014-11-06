@@ -32,9 +32,11 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
     public final SeekBar saturationSeekBar;
     public final SeekBar tempSeekBar;
 
+    private final int viewColorTempMin;
+    private final int viewColorTempSpan;
     private CapabilityData capability;
 
-    public LampStateViewAdapter(View stateView, String tag, DimmableItemInfoFragment parentFragment) {
+    public LampStateViewAdapter(View stateView, String tag, int colorTempMin, int colorTempSpan, DimmableItemInfoFragment parentFragment) {
         this.stateView = stateView;
         this.parentFragment = parentFragment;
 
@@ -60,12 +62,14 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
         stateView.findViewById(R.id.stateControlSaturation).setOnClickListener(this);
 
         tempSeekBar = (SeekBar) stateView.findViewById(R.id.stateSliderColorTemp);
-        tempSeekBar.setMax(DimmableItemScaleConverter.VIEW_COLORTEMP_SPAN);
+        tempSeekBar.setMax(colorTempSpan);
         tempSeekBar.setTag(tag);
         tempSeekBar.setSaveEnabled(false);
         tempSeekBar.setOnSeekBarChangeListener(this);
         stateView.findViewById(R.id.stateControlColorTemp).setOnClickListener(this);
 
+        viewColorTempMin = colorTempMin;
+        viewColorTempSpan = colorTempSpan;
         capability = new CapabilityData();
     }
 
@@ -174,7 +178,7 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
         if (capability.temp >= CapabilityData.SOME) {
             int viewColorTemp = DimmableItemScaleConverter.convertColorTempModelToView(modelColorTemp);
 
-            tempSeekBar.setProgress(viewColorTemp - DimmableItemScaleConverter.VIEW_COLORTEMP_MIN);
+            tempSeekBar.setProgress(viewColorTemp - viewColorTempMin);
             tempSeekBar.setThumb(parentFragment.getResources().getDrawable(uniformColorTemp ? R.drawable.slider_thumb_normal : R.drawable.slider_thumb_midstate));
 
             parentFragment.setTextViewValue(stateView, R.id.stateTextColorTemp, viewColorTemp, R.string.units_kelvin);
@@ -237,7 +241,7 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
             } else if (seekBarID == R.id.stateSliderSaturation) {
                 parentFragment.setTextViewValue(stateView, R.id.stateTextSaturation, progress, R.string.units_percent);
             } else if (seekBarID == R.id.stateSliderColorTemp) {
-                parentFragment.setTextViewValue(stateView, R.id.stateTextColorTemp, progress + DimmableItemScaleConverter.VIEW_COLORTEMP_MIN, R.string.units_kelvin);
+                parentFragment.setTextViewValue(stateView, R.id.stateTextColorTemp, progress + viewColorTempMin, R.string.units_kelvin);
             }
         }
     }
@@ -245,7 +249,7 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
     @Override
     public void onClick(View v) {
         int viewID = v.getId();
-        
+
         if (viewID == R.id.stateControlBrightness) {
             if (capability.dimmable <= CapabilityData.NONE) {
             	((SampleAppActivity)parentFragment.getActivity()).showToast(R.string.no_support_dimmable);
@@ -267,8 +271,8 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
             	((SampleAppActivity)parentFragment.getActivity()).showToast(R.string.saturation_disable_temp);
             }
         }
-    }  
+    }
 }
 
-  
+
 

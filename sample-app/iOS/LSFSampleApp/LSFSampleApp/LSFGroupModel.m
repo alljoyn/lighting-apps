@@ -15,6 +15,7 @@
  ******************************************************************************/
 
 #import "LSFGroupModel.h"
+#import "LSFConstants.h"
 
 @interface LSFGroupModel()
 
@@ -27,6 +28,8 @@
 @synthesize groups = _groups;
 @synthesize duplicates = _duplicates;
 @synthesize delay = _delay;
+@synthesize groupColorTempMin = _groupColorTempMin;
+@synthesize groupColorTempMax = _groupColorTempMax;
 
 -(id)initWithGroupID: (NSString *)groupID
 {
@@ -35,6 +38,8 @@
     if (self)
     {
         self.members = [[LSFLampGroup alloc] init];
+        self.groupColorTempMin = ([LSFConstants getConstants]).MIN_COLOR_TEMP;
+        self.groupColorTempMax = ([LSFConstants getConstants]).MAX_COLOR_TEMP;
     }
     
     return self;

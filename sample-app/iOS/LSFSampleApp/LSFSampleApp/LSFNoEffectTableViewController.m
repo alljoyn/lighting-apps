@@ -73,6 +73,8 @@
 
         unsigned int colorTemp = [constants unscaleColorTemp: self.nedm.state.colorTemp];
         self.colorTempSlider.value = colorTemp;
+        self.colorTempSlider.minimumValue = self.nedm.colorTempMin;
+        self.colorTempSlider.maximumValue = self.nedm.colorTempMax;
         self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", colorTemp];
 
         [self checkSaturationValue:self.nedm.state];
@@ -204,7 +206,7 @@
     [self dismissViewControllerAnimated: YES completion: nil];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString: @"ScenePresets"])
     {

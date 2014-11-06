@@ -218,6 +218,7 @@
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
             LSFPresetModel *data = [self.presetDataSorted objectAtIndex: [indexPath row]];
 
+            self.lampState.onOff = data.state.onOff;
             self.lampState.brightness = data.state.brightness;
             self.lampState.hue = data.state.hue;
             self.lampState.saturation = data.state.saturation;

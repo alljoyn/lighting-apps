@@ -259,6 +259,10 @@ public class SamplePresetManagerCallback extends PresetManagerCallback {
         handler.post(new Runnable() {
             @Override
             public void run() {
+                updatePresetFragment(LampsPageFragment.TAG);
+                updatePresetFragment(GroupsPageFragment.TAG);
+                updatePresetFragment(ScenesPageFragment.TAG);
+
                 updateInfoFragment(LampsPageFragment.TAG, PageFrameParentFragment.CHILD_TAG_INFO);
                 updateInfoFragment(GroupsPageFragment.TAG, PageFrameParentFragment.CHILD_TAG_INFO);
                 updateInfoFragment(ScenesPageFragment.TAG, ScenesPageFragment.CHILD_TAG_CONSTANT_EFFECT);
@@ -266,6 +270,23 @@ public class SamplePresetManagerCallback extends PresetManagerCallback {
                 updateInfoFragment(ScenesPageFragment.TAG, ScenesPageFragment.CHILD_TAG_PULSE_EFFECT);
             }
         });
+    }
+
+    private void updatePresetFragment(String pageFragmentTag) {
+        Fragment pageFragment = fragmentManager.findFragmentByTag(pageFragmentTag);
+
+        if (pageFragment != null) {
+            FragmentManager childManager = pageFragment.getChildFragmentManager();
+            DimmableItemPresetsFragment presetFragment = (DimmableItemPresetsFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_PRESETS);
+
+            updatePresetFragment(presetFragment);
+        }
+    }
+
+    private void updatePresetFragment(DimmableItemPresetsFragment presetFragment) {
+        if (presetFragment != null) {
+            presetFragment.onUpdateView();
+        }
     }
 
     private void removePreset(String pageFragmentTag, String presetID) {

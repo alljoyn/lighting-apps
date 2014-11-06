@@ -93,6 +93,22 @@ public class GroupInfoFragment extends DimmableItemInfoFragment {
     }
 
     @Override
+    protected int getColorTempMin() {
+        SampleAppActivity activity = (SampleAppActivity)getActivity();
+        GroupDataModel groupModel = activity.groupModels.get(key);
+
+        return groupModel != null ? groupModel.viewColorTempMin : DimmableItemScaleConverter.VIEW_COLORTEMP_MIN;
+    }
+
+    @Override
+    protected int getColorTempSpan() {
+        SampleAppActivity activity = (SampleAppActivity)getActivity();
+        GroupDataModel groupModel = activity.groupModels.get(key);
+
+        return groupModel != null ? groupModel.viewColorTempMax - groupModel.viewColorTempMin : DimmableItemScaleConverter.VIEW_COLORTEMP_SPAN;
+    }
+
+    @Override
     protected void onHeaderClick() {
         if (!AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(key)) {
             SampleAppActivity activity = (SampleAppActivity)getActivity();

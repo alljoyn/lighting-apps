@@ -16,6 +16,8 @@
 package org.allseen.lsf;
 
 public class LampGroupManager extends BaseNativeClassWrapper {
+    public static final int MAX_LAMP_GROUPS = 100;
+
     public LampGroupManager(ControllerClient controller, LampGroupManagerCallback callback) {
            createNativeObject(controller, callback);
     }

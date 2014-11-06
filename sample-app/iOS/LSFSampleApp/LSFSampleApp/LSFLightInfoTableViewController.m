@@ -257,6 +257,8 @@
             self.colorTempSliderButton.enabled = NO;
         }
 
+        self.colorTempSlider.minimumValue = self.lampModel.lampDetails.minTemperature;
+        self.colorTempSlider.maximumValue = self.lampModel.lampDetails.maxTemperature;
         self.hasVariableColorTemp = YES;
     }
     else
@@ -477,6 +479,11 @@
         LSFLampManager *lampManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampManager;
         unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)value withMax: 100];
         [lampManager transitionLampID: self.lampID brightnessField: scaledBrightness];
+
+        if (self.lampModel.state.brightness == 0)
+        {
+            [lampManager transitionLampID: self.lampID onOffField: YES];
+        }
     });
 }
 
@@ -575,6 +582,11 @@
         LSFLampManager *lampManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampManager;
         unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)((UISlider *)sender).value withMax: 100];
         [lampManager transitionLampID: self.lampID brightnessField: scaledBrightness];
+
+        if (self.lampModel.state.brightness == 0)
+        {
+            [lampManager transitionLampID: self.lampID onOffField: YES];
+        }
     });
 }
 

@@ -32,9 +32,12 @@ public abstract class BasicSceneElementInfoFragment extends DimmableItemInfoFrag
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = super.onCreateView(inflater, container, savedInstanceState);
         SampleAppActivity activity = (SampleAppActivity)getActivity();
         BasicSceneElementDataModel pendingModel = getPendingSceneElementDataModel();
+
+        setInitialColorTemp(pendingModel, DimmableItemScaleConverter.convertColorTempViewToModel(activity.pendingBasicSceneElementMembersMinColorTemp));
+
+        View root = super.onCreateView(inflater, container, savedInstanceState);
 
         if (pendingModel.presetID != null && !pendingModel.presetID.equals(PresetPulseEffect.PRESET_ID_CURRENT_STATE)) {
             PresetDataModel presetModel = activity.presetModels.get(pendingModel.presetID);
@@ -87,7 +90,7 @@ public abstract class BasicSceneElementInfoFragment extends DimmableItemInfoFrag
         } else if (seekBarID == R.id.stateSliderSaturation) {
             pendingState.setSaturation(DimmableItemScaleConverter.convertSaturationViewToModel(seekBarProgress));
         } else if (seekBarID == R.id.stateSliderColorTemp) {
-            pendingState.setColorTemp(DimmableItemScaleConverter.convertColorTempViewToModel(seekBarProgress + DimmableItemScaleConverter.VIEW_COLORTEMP_MIN));
+            pendingState.setColorTemp(DimmableItemScaleConverter.convertColorTempViewToModel(seekBarProgress + getColorTempMin()));
         }
 
         updatePresetFields(pendingState, getLampStateViewAdapter(seekBarTag));
@@ -143,6 +146,24 @@ public abstract class BasicSceneElementInfoFragment extends DimmableItemInfoFrag
         activity.pendingPulseEffectModel = null;
 
         parent.popBackStack(PageFrameParentFragment.CHILD_TAG_INFO);
+    }
+
+    @Override
+    protected int getColorTempMin() {
+        SampleAppActivity activity = (SampleAppActivity)getActivity();
+
+        return activity.pendingBasicSceneElementMembersMinColorTemp;
+    }
+
+    @Override
+    protected int getColorTempSpan() {
+        SampleAppActivity activity = (SampleAppActivity)getActivity();
+
+        return activity.pendingBasicSceneElementMembersMaxColorTemp - activity.pendingBasicSceneElementMembersMinColorTemp;
+    }
+
+    protected void setInitialColorTemp(BasicSceneElementDataModel pendingModel, long modelColorTemp) {
+        pendingModel.state.setColorTemp(modelColorTemp);
     }
 
     protected abstract BasicSceneElementDataModel getPendingSceneElementDataModel();

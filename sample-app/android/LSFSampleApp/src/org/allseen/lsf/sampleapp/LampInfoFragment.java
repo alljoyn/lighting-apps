@@ -15,6 +15,7 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import org.allseen.lsf.LampDetails;
 import org.allseen.lsf.LampParameters;
 
 import android.os.Bundle;
@@ -75,6 +76,24 @@ public class LampInfoFragment extends DimmableItemInfoFragment {
     @Override
     protected int getLayoutID() {
         return R.layout.fragment_lamp_info;
+    }
+
+    @Override
+    protected int getColorTempMin() {
+        SampleAppActivity activity = (SampleAppActivity)getActivity();
+        LampDataModel lampModel = activity.lampModels.get(key);
+        LampDetails lampDetails = lampModel != null ? lampModel.getDetails() : EmptyLampDetails.instance;
+
+        return lampDetails.getMinTemperature();
+    }
+
+    @Override
+    protected int getColorTempSpan() {
+        SampleAppActivity activity = (SampleAppActivity)getActivity();
+        LampDataModel lampModel = activity.lampModels.get(key);
+        LampDetails lampDetails = lampModel != null ? lampModel.getDetails() : EmptyLampDetails.instance;
+
+        return lampDetails.getMaxTemperature() - lampDetails.getMinTemperature();
     }
 
     @Override

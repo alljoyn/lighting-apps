@@ -22,6 +22,8 @@ static int nextID = 1;
 
 @synthesize type = _type;
 @synthesize members = _members;
+@synthesize colorTempMin = _colorTempMin;
+@synthesize colorTempMax = _colorTempMax;
 
 -(id)initWithEffectType: (EffectType)type andName: (NSString *)name
 {
@@ -39,6 +41,9 @@ static int nextID = 1;
         self.capability.dimmable = ALL;
         self.capability.color = ALL;
         self.capability.temp = ALL;
+
+        self.colorTempMin = -1;
+        self.colorTempMax = -1;
     }
 
     return self;

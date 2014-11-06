@@ -56,6 +56,8 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Undo the changes that were made when the app entered the background.
+
+    [[LSFWifiMonitor getWifiMonitor] checkCurrentStatus];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application

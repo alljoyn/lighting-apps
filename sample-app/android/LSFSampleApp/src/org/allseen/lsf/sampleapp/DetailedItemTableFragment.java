@@ -134,18 +134,4 @@ public abstract class DetailedItemTableFragment extends ScrollableTableFragment 
     }
 
     public abstract void addElement(String id);
-
-    @Override
-    public void removeElement(String id) {
-        final TableRow row = (TableRow) table.findViewWithTag(id);
-        if (row != null) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    table.removeView(row);
-                    table.postInvalidate();
-                }
-            });
-        }
-    }
 }

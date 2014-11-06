@@ -59,9 +59,9 @@ public class EmptyLampDetails extends LampDetails {
     @Override
     public int getMaxLumens()               { return 0; }
     @Override
-    public int getMinTemperature()          { return 0; }
+    public int getMinTemperature()          { return DimmableItemScaleConverter.VIEW_COLORTEMP_MIN; }
     @Override
-    public int getMaxTemperature()          { return 0; }
+    public int getMaxTemperature()          { return DimmableItemScaleConverter.VIEW_COLORTEMP_MAX; }
     @Override
     public int getColorRenderingIndex()     { return 0; }
     @Override

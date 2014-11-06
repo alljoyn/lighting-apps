@@ -49,6 +49,8 @@
 @property (nonatomic, strong) NSMutableAttributedString *SOURCE_CODE_TEXT;
 @property (nonatomic, strong) NSMutableAttributedString *TEAM_TEXT;
 @property (nonatomic, strong) NSMutableAttributedString *NOTICE_TEXT;
+@property (nonatomic) double MIN_COLOR_TEMP;
+@property (nonatomic) double MAX_COLOR_TEMP;
 
 +(LSFConstants *)getConstants;
 -(unsigned int)scaleLampStateValue: (unsigned int)value withMax: (unsigned int)max;

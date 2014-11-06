@@ -208,6 +208,8 @@
         LSFNoEffectDataModel *nedm = [[LSFNoEffectDataModel alloc] init];
         nedm.members = self.sceneElement.members;
         nedm.capability = self.sceneElement.capability;
+        nedm.colorTempMin = self.sceneElement.colorTempMin;
+        nedm.colorTempMax = self.sceneElement.colorTempMax;
 
         LSFNoEffectTableViewController *netvc = [segue destinationViewController];
         netvc.sceneModel = self.sceneModel;
@@ -219,6 +221,8 @@
         LSFTransitionEffectDataModel *tedm = [[LSFTransitionEffectDataModel alloc] init];
         tedm.members = self.sceneElement.members;
         tedm.capability = self.sceneElement.capability;
+        tedm.colorTempMin = self.sceneElement.colorTempMin;
+        tedm.colorTempMax = self.sceneElement.colorTempMax;
 
         LSFTransitionEffectTableViewController *tetvc = [segue destinationViewController];
         tetvc.sceneModel = self.sceneModel;
@@ -230,6 +234,8 @@
         LSFPulseEffectDataModel *pedm = [[LSFPulseEffectDataModel alloc] init];
         pedm.members = self.sceneElement.members;
         pedm.capability = self.sceneElement.capability;
+        pedm.colorTempMin = self.sceneElement.colorTempMin;
+        pedm.colorTempMax = self.sceneElement.colorTempMax;
 
         LSFPulseEffectTableViewController *petvc = [segue destinationViewController];
         petvc.sceneModel = self.sceneModel;

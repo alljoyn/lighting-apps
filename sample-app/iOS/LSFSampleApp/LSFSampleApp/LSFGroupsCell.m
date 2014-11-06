@@ -96,9 +96,18 @@
     LSFConstants *constants = [LSFConstants getConstants];
         
     dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
+        LSFGroupModelContainer *container = [LSFGroupModelContainer getGroupModelContainer];
+        NSMutableDictionary *groups = container.groupContainer;
+        LSFGroupModel *model = [groups valueForKey: self.groupID];
+
         LSFLampGroupManager *groupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
         unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)sender.value withMax: 100];
         [groupManager transitionLampGroupID: self.groupID brightnessField: scaledBrightness];
+
+        if (model.state.brightness == 0)
+        {
+            [groupManager transitionLampGroupID: self.groupID onOffField: YES];
+        }
     });
 
     [self setTimestampAndDelay];
@@ -136,11 +145,19 @@
     self.brightnessSlider.value = newBrightness;
     
     dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
+        LSFGroupModelContainer *container = [LSFGroupModelContainer getGroupModelContainer];
+        NSMutableDictionary *groups = container.groupContainer;
+        LSFGroupModel *model = [groups valueForKey: self.groupID];
         LSFConstants *constants = [LSFConstants getConstants];
 
         LSFLampGroupManager *groupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
         unsigned int scaledBrightness = [constants scaleLampStateValue: newBrightness withMax: 100];
         [groupManager transitionLampGroupID: self.groupID brightnessField: scaledBrightness];
+
+        if (model.state.brightness == 0)
+        {
+            [groupManager transitionLampGroupID: self.groupID onOffField: YES];
+        }
     });
 
     [self setTimestampAndDelay];

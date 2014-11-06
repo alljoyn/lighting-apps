@@ -424,20 +424,12 @@
 -(void)postUpdateLampGroupState: (LSFGroupModel *)groupModel
 {
     NSMutableDictionary *lamps = ((LSFLampModelContainer *)[LSFLampModelContainer getLampModelContainer]).lampContainer;
-    
-//    BOOL powerOn = NO;
-//    uint64_t brightness = 0;
-//    uint64_t hue = 0;
-//    uint64_t saturation = 0;
-//    uint64_t colorTemp = 0;
-//    
-//    uint64_t countDim = 0;
-//    uint64_t countColor = 0;
-//    uint64_t countTemp = 0;
 
     LSFCapabilityData *capability = [[LSFCapabilityData alloc] init];
     int countOn = 0;
     int countOff = 0;
+    int colorTempGroupMin = -1;
+    int colorTempGroupMax = -1;
 
     [self.averageBrightness reset];
     [self.averageHue reset];
@@ -475,6 +467,19 @@
             if (lampModel.lampDetails.variableColorTemp)
             {
                 [self.averageColorTemp add: lampModel.state.colorTemp];
+
+                int colorTempLampMin = lampModel.lampDetails.minTemperature;
+                int colorTempLampMax = lampModel.lampDetails.maxTemperature;
+
+                if ((colorTempGroupMin == -1) || (colorTempGroupMin > colorTempLampMin))
+                {
+                    colorTempGroupMin = colorTempLampMin;
+                }
+
+                if ((colorTempGroupMax == -1) || (colorTempGroupMax < colorTempLampMax))
+                {
+                    colorTempGroupMax = colorTempLampMax;
+                }
             }
         }
         else
@@ -497,12 +502,17 @@
     groupModel.uniformity.saturation = [self.averageSaturation isUniform];
     groupModel.uniformity.colorTemp = [self.averageColorTemp isUniform];
 
+    groupModel.groupColorTempMin = colorTempGroupMin != -1 ? colorTempGroupMin : ([LSFConstants getConstants]).MIN_COLOR_TEMP;
+    groupModel.groupColorTempMax = colorTempGroupMax != -1 ? colorTempGroupMax : ([LSFConstants getConstants]).MAX_COLOR_TEMP;
+
 //    NSLog(@"Group Model State - %@", groupModel.name);
 //    NSLog(@"OnOff = %@, Uniformity = %@", groupModel.state.onOff ? @"On" : @"Off", groupModel.uniformity.power ? @"True" : @"False");
 //    NSLog(@"Brightness = %u, Uniformity = %@", groupModel.state.brightness, groupModel.uniformity.brightness ? @"True" : @"False");
 //    NSLog(@"Hue = %u, Uniformity = %@", groupModel.state.hue, groupModel.uniformity.hue ? @"True" : @"False");
 //    NSLog(@"Saturation = %u, Uniformity = %@", groupModel.state.saturation, groupModel.uniformity.saturation ? @"True" : @"False");
 //    NSLog(@"Color Temp = %u, Uniformity = %@", groupModel.state.colorTemp, groupModel.uniformity.colorTemp ? @"True" : @"False");
+//    NSLog(@"Color Temp Group Min = %u", groupModel.groupColorTempMin);
+//    NSLog(@"Color Temp Group Max = %u", groupModel.groupColorTempMax);
 
     [self updateGroupWithID: groupModel.theID andCallbackOperation: GroupStateUpdated];
 }

@@ -22,6 +22,8 @@
 
 @property (nonatomic) EffectType type;
 @property (nonatomic, strong) LSFLampGroup *members;
+@property (nonatomic) unsigned int colorTempMin;
+@property (nonatomic) unsigned int colorTempMax;
 
 -(id)initWithEffectType: (EffectType)type andName: (NSString *)name;
 

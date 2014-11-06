@@ -15,7 +15,6 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -64,6 +63,67 @@ public class BasicSceneSelectMembersFragment extends SelectMembersFragment {
     protected void processSelection(SampleAppActivity activity, List<String> lampIDs, List<String> groupIDs, List<String> sceneIDs) {
         activity.pendingBasicSceneElementMembers.setLamps(lampIDs.toArray(new String[lampIDs.size()]));
         activity.pendingBasicSceneElementMembers.setLampGroups(groupIDs.toArray(new String[groupIDs.size()]));
+
+        activity.pendingBasicSceneElementMembersHaveEffects = false;
+        activity.pendingBasicSceneElementMembersMinColorTemp = -1;
+        activity.pendingBasicSceneElementMembersMaxColorTemp = -1;
+
+        processGroupSelection(activity, groupIDs);
+        processLampSelection(activity, lampIDs);
+
+        if (activity.pendingBasicSceneElementMembersMinColorTemp == -1) {
+            activity.pendingBasicSceneElementMembersMinColorTemp = DimmableItemScaleConverter.VIEW_COLORTEMP_MIN;
+        }
+
+        if (activity.pendingBasicSceneElementMembersMaxColorTemp == -1) {
+            activity.pendingBasicSceneElementMembersMaxColorTemp = DimmableItemScaleConverter.VIEW_COLORTEMP_MAX;
+        }
+    }
+
+    protected void processGroupSelection(SampleAppActivity activity, List<String> groupIDs) {
+        if (groupIDs.size() > 0) {
+            for (Iterator<String> it = groupIDs.iterator(); it.hasNext();) {
+                processLampSelection(activity, it.next());
+            }
+        }
+    }
+
+    protected void processLampSelection(SampleAppActivity activity, String groupID) {
+        GroupDataModel groupModel = activity.groupModels.get(groupID);
+
+        if (groupModel != null) {
+            processLampSelection(activity, groupModel.getLamps());
+        }
+    }
+
+    protected void processLampSelection(SampleAppActivity activity, Collection<String> lampIDs) {
+        if (lampIDs.size() > 0) {
+            for (Iterator<String> it = lampIDs.iterator(); it.hasNext();) {
+                LampDataModel lampModel = activity.lampModels.get(it.next());
+
+                if (lampModel != null) {
+                    LampDetails lampDetails = lampModel.getDetails();
+
+                    if (lampDetails != null) {
+                        boolean lampHasEffects = lampDetails.hasEffects();
+                        int lampMinTemperature = lampDetails.getMinTemperature();
+                        int lampMaxTemperature = lampDetails.getMaxTemperature();
+
+                        if (lampHasEffects) {
+                            activity.pendingBasicSceneElementMembersHaveEffects = true;
+                        }
+
+                        if (lampMinTemperature < activity.pendingBasicSceneElementMembersMinColorTemp || activity.pendingBasicSceneElementMembersMinColorTemp == -1) {
+                            activity.pendingBasicSceneElementMembersMinColorTemp = lampMinTemperature;
+                        }
+
+                        if (lampMaxTemperature < activity.pendingBasicSceneElementMembersMaxColorTemp || activity.pendingBasicSceneElementMembersMaxColorTemp == -1) {
+                            activity.pendingBasicSceneElementMembersMaxColorTemp = lampMaxTemperature;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -71,7 +131,7 @@ public class BasicSceneSelectMembersFragment extends SelectMembersFragment {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
 
         if (processSelection()) {
-            if (anyMemberHasEffects(activity)) {
+            if (activity.pendingBasicSceneElementMembersHaveEffects) {
                 if (activity.pendingNoEffectModel != null) {
                     showNoEffectChildFragment(activity);
                 } else if (activity.pendingTransitionEffectModel != null) {
@@ -128,52 +188,5 @@ public class BasicSceneSelectMembersFragment extends SelectMembersFragment {
     @Override
     protected int getMixedSelectionPositiveButtonID() {
         return R.string.create_scene;
-    }
-
-    protected boolean anyMemberHasEffects(SampleAppActivity activity) {
-        return
-            anyLampHasEffects(activity, Arrays.asList(activity.pendingBasicSceneElementMembers.getLamps())) ||
-            anyGroupHasEffects(activity, Arrays.asList(activity.pendingBasicSceneElementMembers.getLampGroups()));
-    }
-
-    protected boolean anyGroupHasEffects(SampleAppActivity activity, Collection<String> groupIDs) {
-        boolean hasEffects = false;
-
-        if (groupIDs.size() > 0) {
-            for (Iterator<String> it = groupIDs.iterator(); !hasEffects && it.hasNext();) {
-                hasEffects = anyLampHasEffects(activity, it.next());
-            }
-        }
-
-        return hasEffects;
-    }
-
-    protected boolean anyLampHasEffects(SampleAppActivity activity, String groupID) {
-        boolean hasEffects = false;
-        GroupDataModel groupModel = activity.groupModels.get(groupID);
-
-        if (groupModel != null) {
-            hasEffects = anyLampHasEffects(activity, groupModel.getLamps());
-        }
-
-        return hasEffects;
-    }
-
-    protected boolean anyLampHasEffects(SampleAppActivity activity, Collection<String> lampIDs) {
-        boolean hasEffects = false;
-
-        if (lampIDs.size() > 0) {
-            for (Iterator<String> it = lampIDs.iterator(); !hasEffects && it.hasNext();) {
-                LampDataModel lampModel = activity.lampModels.get(it.next());
-
-                if (lampModel != null) {
-                    LampDetails lampDetails = lampModel.getDetails();
-
-                    hasEffects = lampDetails != null ? lampDetails.hasEffects() : false;
-                }
-            }
-        }
-
-        return hasEffects;
     }
 }

@@ -16,6 +16,8 @@
 package org.allseen.lsf;
 
 public class PresetManager extends BaseNativeClassWrapper {
+    public static final int MAX_PRESETS = 100;
+
     public PresetManager(ControllerClient controller, PresetManagerCallback callback) {
          createNativeObject(controller, callback);
     }
