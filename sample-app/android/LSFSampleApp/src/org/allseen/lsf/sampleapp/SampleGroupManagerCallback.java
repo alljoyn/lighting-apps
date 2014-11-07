@@ -395,7 +395,7 @@ public class SampleGroupManagerCallback extends LampGroupManagerCallback {
                     if (tableFragment != null) {
                         tableFragment.removeElement(groupID);
 
-                        if (tableFragment.isVisible()) {
+                        if (activity.isSwipeable()) {
                             activity.resetActionBar();
                         }
                     }
@@ -424,7 +424,7 @@ public class SampleGroupManagerCallback extends LampGroupManagerCallback {
                         if (tableFragment != null) {
                             tableFragment.addElement(groupID);
 
-                            if (tableFragment.isVisible()) {
+                            if (activity.isSwipeable()) {
                                 activity.resetActionBar();
                             }
                         }

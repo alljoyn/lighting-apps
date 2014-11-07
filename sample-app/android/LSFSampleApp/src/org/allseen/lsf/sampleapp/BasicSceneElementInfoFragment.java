@@ -35,7 +35,7 @@ public abstract class BasicSceneElementInfoFragment extends DimmableItemInfoFrag
         SampleAppActivity activity = (SampleAppActivity)getActivity();
         BasicSceneElementDataModel pendingModel = getPendingSceneElementDataModel();
 
-        setInitialColorTemp(pendingModel, DimmableItemScaleConverter.convertColorTempViewToModel(activity.pendingBasicSceneElementMembersMinColorTemp));
+        checkInitialColorTemp(pendingModel, DimmableItemScaleConverter.convertColorTempViewToModel(activity.pendingBasicSceneElementMembersMinColorTemp));
 
         View root = super.onCreateView(inflater, container, savedInstanceState);
 
@@ -82,6 +82,8 @@ public abstract class BasicSceneElementInfoFragment extends DimmableItemInfoFrag
         int seekBarProgress = seekBar.getProgress();
         Object seekBarTag = seekBar.getTag();
         LampState pendingState = getPendingSceneElementState(seekBarTag);
+        CapabilityData capability = getPendingSceneElementDataModel().capability;
+        int colorTempMin = getColorTempMin();
 
         if (seekBarID == R.id.stateSliderBrightness) {
             pendingState.setBrightness(DimmableItemScaleConverter.convertBrightnessViewToModel(seekBarProgress));
@@ -90,13 +92,13 @@ public abstract class BasicSceneElementInfoFragment extends DimmableItemInfoFrag
         } else if (seekBarID == R.id.stateSliderSaturation) {
             pendingState.setSaturation(DimmableItemScaleConverter.convertSaturationViewToModel(seekBarProgress));
         } else if (seekBarID == R.id.stateSliderColorTemp) {
-            pendingState.setColorTemp(DimmableItemScaleConverter.convertColorTempViewToModel(seekBarProgress + getColorTempMin()));
+            pendingState.setColorTemp(DimmableItemScaleConverter.convertColorTempViewToModel(seekBarProgress + colorTempMin));
         }
 
         updatePresetFields(pendingState, getLampStateViewAdapter(seekBarTag));
         updatePresetID(getMatchingPreset(pendingState), seekBarTag);
 
-        setColorIndicator(getLampStateViewAdapter(seekBarTag).stateView, pendingState);
+        setColorIndicator(getLampStateViewAdapter(seekBarTag).stateView, pendingState, capability, colorTempMin);
     }
 
     @Override
@@ -162,8 +164,10 @@ public abstract class BasicSceneElementInfoFragment extends DimmableItemInfoFrag
         return activity.pendingBasicSceneElementMembersMaxColorTemp - activity.pendingBasicSceneElementMembersMinColorTemp;
     }
 
-    protected void setInitialColorTemp(BasicSceneElementDataModel pendingModel, long modelColorTemp) {
-        pendingModel.state.setColorTemp(modelColorTemp);
+    protected void checkInitialColorTemp(BasicSceneElementDataModel pendingModel, long modelColorTempMin) {
+        if (pendingModel.state.getColorTemp() < modelColorTempMin) {
+            pendingModel.state.setColorTemp(modelColorTempMin);
+        }
     }
 
     protected abstract BasicSceneElementDataModel getPendingSceneElementDataModel();

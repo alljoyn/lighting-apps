@@ -15,16 +15,22 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import org.allseen.lsf.LampDetails;
+import org.allseen.lsf.LampState;
+
 import android.graphics.Color;
 
 public class DimmableItemScaleConverter {
     public static final long UINT32_MAX = 0xffffffffL;
     public static final int VIEW_HUE_MIN = 0;
-    public static final int VIEW_HUE_SPAN = 360;
+    public static final int VIEW_HUE_MAX = 360;
+    public static final int VIEW_HUE_SPAN = VIEW_HUE_MAX - VIEW_HUE_MIN;
     public static final int VIEW_SATURATION_MIN = 0;
-    public static final int VIEW_SATURATION_SPAN = 100;
+    public static final int VIEW_SATURATION_MAX = 100;
+    public static final int VIEW_SATURATION_SPAN = VIEW_SATURATION_MAX - VIEW_SATURATION_MIN;
     public static final int VIEW_BRIGHTNESS_MIN = 0;
-    public static final int VIEW_BRIGHTNESS_SPAN = 100;
+    public static final int VIEW_BRIGHTNESS_MAX = 100;
+    public static final int VIEW_BRIGHTNESS_SPAN = VIEW_BRIGHTNESS_MAX - VIEW_BRIGHTNESS_MIN;
     public static final int VIEW_COLORTEMP_MIN = 1000;
     public static final int VIEW_COLORTEMP_MAX = 20000;
     public static final int VIEW_COLORTEMP_SPAN = VIEW_COLORTEMP_MAX - VIEW_COLORTEMP_MIN;
@@ -69,6 +75,54 @@ public class DimmableItemScaleConverter {
         return Math.round(((double)(viewValue - min) / (double)span) * UINT32_MAX);
     }
 
+    public static int getColor(LampState state, CapabilityData capability, LampDetails details) {
+        return getColor(state, capability, details != null ? details.getMinTemperature() : VIEW_COLORTEMP_MIN);
+    }
+
+    public static int getColor(LampState state, CapabilityData capability, int colorTempMin) {
+        int viewHue;
+        int viewSaturation;
+        int viewBrightness;
+        int viewColorTemp;
+
+        if (capability == null || capability.color > CapabilityData.NONE) {
+            // Type 4 (full color)
+            viewHue = convertHueModelToView(state.getHue());
+            viewSaturation = convertSaturationModelToView(state.getSaturation());
+            viewBrightness = convertBrightnessModelToView(state.getBrightness());
+            viewColorTemp = convertColorTempModelToView(state.getColorTemp());
+        } else if (capability.temp > CapabilityData.NONE) {
+            // Type 3 (on/off, dim, color temp)
+            viewHue = VIEW_HUE_MIN;
+            viewSaturation = VIEW_SATURATION_MIN;
+            viewBrightness = convertBrightnessModelToView(state.getBrightness());
+            viewColorTemp = convertColorTempModelToView(state.getColorTemp());
+        } else if (capability.dimmable > CapabilityData.NONE) {
+            // Type 2 (on/off, dim)
+            viewHue = VIEW_HUE_MIN;
+            viewSaturation = VIEW_SATURATION_MIN;
+            viewBrightness = convertBrightnessModelToView(state.getBrightness());
+            viewColorTemp = colorTempMin;
+        } else {
+            // Type 1 (on/off)
+            viewHue = VIEW_HUE_MIN;
+            viewSaturation = VIEW_SATURATION_MIN;
+            viewBrightness = VIEW_BRIGHTNESS_MAX;
+            viewColorTemp = colorTempMin;
+        }
+
+        int color;
+        float[] hsv = {viewHue, (float) (viewSaturation / 100.0), (float) (viewBrightness / 100.0)};
+
+        if ((viewColorTemp >= VIEW_COLORTEMP_MIN) && (viewColorTemp <= VIEW_COLORTEMP_MAX)) {
+            color = ColorTempToColorConverter.convert(viewColorTemp, hsv);
+        } else {
+            color = Color.HSVToColor(hsv);
+        }
+
+        return color;
+    }
+
     public static class ColorTempToColorConverter {
 
     	public static int convert(int intTmpKelvin, float[] hsv) {
@@ -77,11 +131,11 @@ public class DimmableItemScaleConverter {
     		double green = 0f;
     		double blue = 0f;
 
-    		if (intTmpKelvin < 1000) {
-    			intTmpKelvin = 1000;
-    		} else if (intTmpKelvin > 40000) {
-    			intTmpKelvin = 40000;
-    		}
+            if (intTmpKelvin < DimmableItemScaleConverter.VIEW_COLORTEMP_MIN) {
+                intTmpKelvin = DimmableItemScaleConverter.VIEW_COLORTEMP_MIN;
+            } else if (intTmpKelvin > DimmableItemScaleConverter.VIEW_COLORTEMP_MAX) {
+                intTmpKelvin = DimmableItemScaleConverter.VIEW_COLORTEMP_MAX;
+            }
 
     		double tmpKelvin = intTmpKelvin/100f;
 

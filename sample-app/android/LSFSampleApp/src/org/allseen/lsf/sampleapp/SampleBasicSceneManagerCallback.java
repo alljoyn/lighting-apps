@@ -246,7 +246,7 @@ public class SampleBasicSceneManagerCallback extends SceneManagerCallback {
                     if (tableFragment != null) {
                         tableFragment.removeElement(sceneID);
 
-                        if (tableFragment.isVisible()) {
+                        if (activity.isSwipeable()) {
                             activity.resetActionBar();
                         }
                     }
@@ -277,7 +277,7 @@ public class SampleBasicSceneManagerCallback extends SceneManagerCallback {
             if (basicSceneTableFragment != null && sceneID != null) {
                 basicSceneTableFragment.addElement(sceneID);
 
-                if (basicSceneTableFragment.isVisible()) {
+                if (activity.isSwipeable()) {
                     activity.resetActionBar();
                 }
             }

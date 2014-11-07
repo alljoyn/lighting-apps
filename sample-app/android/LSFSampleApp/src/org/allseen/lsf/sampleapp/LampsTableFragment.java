@@ -15,9 +15,6 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.LampState;
-
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -63,8 +60,17 @@ public class LampsTableFragment extends DimmableItemTableFragment {
     public void addElement(String id) {
         LampDataModel lampModel = ((SampleAppActivity) getActivity()).lampModels.get(id);
         if (lampModel != null) {
-            insertDimmableItemRow(getActivity(), lampModel.id, lampModel.tag, lampModel.state.getOnOff(), lampModel.uniformity.power, lampModel.getName(),
-                    lampModel.state.getBrightness(), true, getColor(lampModel.state), lampModel.capability.dimmable >= CapabilityData.SOME);
+            insertDimmableItemRow(
+                getActivity(),
+                lampModel.id,
+                lampModel.tag,
+                lampModel.state.getOnOff(),
+                lampModel.uniformity.power,
+                lampModel.getName(),
+                lampModel.state.getBrightness(),
+                true,
+                DimmableItemScaleConverter.getColor(lampModel.state, lampModel.capability, lampModel.getDetails()),
+                lampModel.capability.dimmable >= CapabilityData.SOME);
             updateLoading();
         }
     }
@@ -86,17 +92,5 @@ public class LampsTableFragment extends DimmableItemTableFragment {
             ((TextView) loadingView.findViewById(R.id.loadingText2)).setText(getActivity().getText(R.string.loading_lamps));
 
         }
-    }
-
-    protected int getColor(LampState lampState) {
-        int viewHue = DimmableItemScaleConverter.convertHueModelToView(lampState.getHue());
-        int viewSaturation = DimmableItemScaleConverter.convertSaturationModelToView(lampState.getSaturation());
-        int viewBrightness = DimmableItemScaleConverter.convertBrightnessModelToView(lampState.getBrightness());
-        int viewColorTemp = DimmableItemScaleConverter.convertColorTempModelToView(lampState.getColorTemp());
-        
-        return DimmableItemScaleConverter.ColorTempToColorConverter.convert(viewColorTemp,
-        		new float[] { viewHue,
-                (float) (viewSaturation / 100.0),
-                (float) (viewBrightness / 100.0) });
     }
 }

@@ -97,7 +97,7 @@ public class PulseEffectFragment extends BasicSceneElementInfoFragment implement
         // state adapter
         stateAdapter2 = new LampStateViewAdapter(view.findViewById(R.id.infoStateRow2), STATE2_ITEM_TAG, getColorTempMin(), getColorTempSpan(), this);
 
-        setColorIndicator(view.findViewById(R.id.infoStateRow2), pulseEffectModel.endState);
+        setColorIndicator(view.findViewById(R.id.infoStateRow2), pulseEffectModel.endState, pulseEffectModel.capability, getColorTempMin());
         updateInfoFields(pulseEffectModel);
 
         View currentStateRow = view.findViewById(R.id.infoStateRow).findViewById(R.id.startWithCurrentStateRow);
@@ -211,10 +211,12 @@ public class PulseEffectFragment extends BasicSceneElementInfoFragment implement
     }
 
     @Override
-    protected void setInitialColorTemp(BasicSceneElementDataModel pendingModel, long modelColorTemp) {
-        super.setInitialColorTemp(pendingModel, modelColorTemp);
+    protected void checkInitialColorTemp(BasicSceneElementDataModel pendingModel, long modelColorTempMin) {
+        super.checkInitialColorTemp(pendingModel, modelColorTempMin);
 
-        ((PulseEffectDataModel)pendingModel).endState.setColorTemp(modelColorTemp);
+        if (((PulseEffectDataModel)pendingModel).endState.getColorTemp() < modelColorTempMin) {
+            ((PulseEffectDataModel)pendingModel).endState.setColorTemp(modelColorTempMin);
+        }
     }
 
     @Override

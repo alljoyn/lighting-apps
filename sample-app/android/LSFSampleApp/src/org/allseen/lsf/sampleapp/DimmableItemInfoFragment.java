@@ -119,7 +119,7 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
             // presets button
             updatePresetFields(itemModel);
 
-            setColorIndicator(stateAdapter.stateView, itemModel.state);
+            setColorIndicator(stateAdapter.stateView, itemModel.state, itemModel.capability, getColorTempMin());
         }
     }
 
@@ -135,24 +135,10 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         itemAdapter.setPreset(Util.createPresetNamesString((SampleAppActivity)getActivity(), itemState));
     }
 
-    public static int getColor(LampState lampState) {
-        if (lampState != null) {
-            int viewHue = DimmableItemScaleConverter.convertHueModelToView(lampState.getHue());
-            int viewSaturation = DimmableItemScaleConverter.convertSaturationModelToView(lampState.getSaturation());
-            int viewBrightness = DimmableItemScaleConverter.convertBrightnessModelToView(lampState.getBrightness());
-            int viewColorTemp = DimmableItemScaleConverter.convertColorTempModelToView(lampState.getColorTemp());
+    public void setColorIndicator(View parentStateView, LampState lampState, CapabilityData capability, int minColorTemp) {
+        int color = lampState != null ? DimmableItemScaleConverter.getColor(lampState, capability, minColorTemp) : defaultIndicatorColor;
 
-            return DimmableItemScaleConverter.ColorTempToColorConverter.convert(viewColorTemp,
-            		new float[] { viewHue,
-                    (float) (viewSaturation / 100.0),
-                    (float) (viewBrightness / 100.0) });
-        } else {
-            return defaultIndicatorColor;
-        }
-    }
-
-    public void setColorIndicator(View parentStateView, LampState lampState) {
-        parentStateView.findViewById(R.id.stateRowColorIndicator).getBackground().setColorFilter(getColor(lampState), Mode.MULTIPLY);
+        parentStateView.findViewById(R.id.stateRowColorIndicator).getBackground().setColorFilter(color, Mode.MULTIPLY);
     }
 
     protected abstract int getLayoutID();

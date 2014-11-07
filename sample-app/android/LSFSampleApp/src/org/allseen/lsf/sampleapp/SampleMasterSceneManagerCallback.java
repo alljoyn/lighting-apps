@@ -246,7 +246,7 @@ public class SampleMasterSceneManagerCallback extends MasterSceneManagerCallback
                     if (tableFragment != null) {
                         tableFragment.removeElement(masterSceneID);
 
-                        if (tableFragment.isVisible()) {
+                        if (activity.isSwipeable()) {
                             activity.resetActionBar();
                         }
                     }
@@ -271,7 +271,7 @@ public class SampleMasterSceneManagerCallback extends MasterSceneManagerCallback
                     if (scenesTableFragment != null) {
                         scenesTableFragment.addElement(masterSceneID);
 
-                        if (scenesTableFragment.isVisible()) {
+                        if (activity.isSwipeable()) {
                             activity.resetActionBar();
                         }
                     }
