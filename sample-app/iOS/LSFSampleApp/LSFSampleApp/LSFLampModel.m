@@ -36,4 +36,10 @@
     return self;
 }
 
+-(void)setLampDetails: (LSFLampDetails *)lampDetails
+{
+    _lampDetails = lampDetails;
+    self.capability = [[LSFCapabilityData alloc] initWithDimmable: self.lampDetails.dimmable color: self.lampDetails.color andTemp: self.lampDetails.variableColorTemp];
+}
+
 @end

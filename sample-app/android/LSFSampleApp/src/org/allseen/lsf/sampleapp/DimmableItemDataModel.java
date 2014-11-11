@@ -60,22 +60,12 @@ public class DimmableItemDataModel extends ItemDataModel {
         boolean result = false;
 
         if (thatState != null) {
-            // See if we are comparing full color (hsv) or color temp (ct) values
-            boolean modeHSV = this.state.getSaturation() != 0;
-
-            if (modeHSV) {
-                result =
-                    this.state.getHue() == thatState.getHue() &&
-                    this.state.getSaturation() == thatState.getSaturation() &&
-                    this.state.getBrightness() == thatState.getBrightness() &&
-                    this.state.getOnOff() == thatState.getOnOff();
-            } else {
-                result =
-                    this.state.getSaturation() == thatState.getSaturation() &&
-                    this.state.getBrightness() == thatState.getBrightness() &&
-                    this.state.getColorTemp() == thatState.getColorTemp() &&
-                    this.state.getOnOff() == thatState.getOnOff();
-            }
+            result =
+                this.state.getHue() == thatState.getHue() &&
+                this.state.getSaturation() == thatState.getSaturation() &&
+                this.state.getBrightness() == thatState.getBrightness() &&
+                this.state.getColorTemp() == thatState.getColorTemp() &&
+                this.state.getOnOff() == thatState.getOnOff();
         }
 
         return result;

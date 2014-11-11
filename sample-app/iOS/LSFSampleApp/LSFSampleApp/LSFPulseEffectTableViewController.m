@@ -102,6 +102,21 @@
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneNotificationReceived:) name: @"SceneNotification" object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(presetNotificationReceived:) name: @"PresetNotification" object: nil];
 
+    NSLog(@"LSFPulseEffectTableViewController - viewWillAppear() executing");
+    NSLog(@"Power = %@", self.pedm.state.onOff ? @"On" : @"Off");
+    NSLog(@"Brightness = %u", self.pedm.state.brightness);
+    NSLog(@"Hue = %u", self.pedm.state.hue);
+    NSLog(@"Saturation = %u", self.pedm.state.saturation);
+    NSLog(@"Color Temp = %u", self.pedm.state.colorTemp);
+    NSLog(@"End Power = %@", self.pedm.endState.onOff ? @"On" : @"Off");
+    NSLog(@"End Brightness = %u", self.pedm.endState.brightness);
+    NSLog(@"End Hue = %u", self.pedm.endState.hue);
+    NSLog(@"End Saturation = %u", self.pedm.endState.saturation);
+    NSLog(@"End Color Temp = %u", self.pedm.endState.colorTemp);
+    NSLog(@"Capability = [%@, %@, %@]", self.pedm.capability.dimmable ? @"Dimmable" : @"Not Dimmable", self.pedm.capability.color ? @"Color" : @"No Color", self.pedm.capability.temp ? @"Variable Color Temp" : @"No Variable Color Temp");
+    NSLog(@"Color Temp Min = %u", self.pedm.colorTempMin);
+    NSLog(@"Color Temp Max = %u", self.pedm.colorTempMax);
+
     LSFConstants *constants = [LSFConstants getConstants];
 
     if (self.pedm != nil)
@@ -114,43 +129,177 @@
         self.periodLabel.text = [NSString stringWithFormat: @"%@ seconds", [fmt stringFromNumber: [NSNumber numberWithDouble: ((double)self.pedm.period / 1000.0)]]];
         self.numPulsesLabel.text = [NSString stringWithFormat: @"%u", self.pedm.numPulses];
 
-        unsigned int brightness = [constants unscaleLampStateValue: self.pedm.state.brightness withMax: 100];
-        self.brightnessSlider.value = brightness;
-        self.brightnessLabel.text = [NSString stringWithFormat: @"%u%%", brightness];
+        if (self.pedm.capability.dimmable >= SOME)
+        {
+            unsigned int brightness = [constants unscaleLampStateValue: self.pedm.state.brightness withMax: 100];
+            self.brightnessSlider.value = brightness;
+            self.brightnessSlider.enabled = YES;
+            self.brightnessLabel.text = [NSString stringWithFormat: @"%u%%", brightness];
+            self.brightnessSliderButton.enabled = NO;
+        }
+        else
+        {
+            self.brightnessSlider.value = 0;
+            self.brightnessSlider.enabled = NO;
+            self.brightnessLabel.text = @"N/A";
+            self.brightnessSliderButton.enabled = YES;
+        }
 
-        unsigned int hue = [constants unscaleLampStateValue: self.pedm.state.hue withMax: 360];
-        self.hueSlider.value = hue;
-        self.hueLabel.text = [NSString stringWithFormat: @"%u°", hue];
+        if (self.pedm.capability.color >= SOME)
+        {
+            unsigned int hue = [constants unscaleLampStateValue: self.pedm.state.hue withMax: 360];
+            self.hueSlider.value = hue;
 
-        unsigned int saturation = [constants unscaleLampStateValue: self.pedm.state.saturation withMax: 100];
-        self.saturationSlider.value = saturation;
-        self.saturationLabel.text = [NSString stringWithFormat: @"%u%%", saturation];
+            if (self.pedm.state.saturation == 0)
+            {
+                self.hueSlider.enabled = NO;
+                self.hueLabel.text = @"N/A";
+                self.hueSliderButton.enabled = YES;
+            }
+            else
+            {
+                self.hueSlider.enabled = YES;
+                self.hueLabel.text = [NSString stringWithFormat: @"%u°", hue];
+                self.hueSliderButton.enabled = NO;
+            }
 
-        unsigned int colorTemp = [constants unscaleColorTemp: self.pedm.state.colorTemp];
-        self.colorTempSlider.value = colorTemp;
-        self.colorTempSlider.minimumValue = self.pedm.colorTempMin;
-        self.colorTempSlider.maximumValue = self.pedm.colorTempMax;
-        self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", colorTemp];
+            unsigned int saturation = [constants unscaleLampStateValue: self.pedm.state.saturation withMax: 100];
+            self.saturationSlider.value = saturation;
+            self.saturationSlider.enabled = YES;
+            self.saturationLabel.text = [NSString stringWithFormat: @"%u%%", saturation];
+            self.saturationSliderButton.enabled = NO;
+        }
+        else
+        {
+            self.hueSlider.value = 0;
+            self.hueSlider.enabled = NO;
+            self.hueLabel.text = @"N/A";
+            self.hueSliderButton.enabled = YES;
+
+            self.saturationSlider.value = 0;
+            self.saturationSlider.enabled = NO;
+            self.saturationLabel.text = @"N/A";
+            self.saturationSliderButton.enabled = YES;
+        }
+
+        if (self.pedm.capability.temp >= SOME)
+        {
+            if (self.pedm.state.saturation == 100)
+            {
+                self.colorTempSlider.value = [constants unscaleColorTemp: self.pedm.state.colorTemp];
+                self.colorTempSlider.enabled = NO;
+                self.colorTempLabel.text = @"N/A";
+                self.colorTempSliderButton.enabled = YES;
+            }
+            else
+            {
+                self.colorTempSlider.value = [constants unscaleColorTemp: self.pedm.state.colorTemp];
+                self.colorTempSlider.enabled = YES;
+                self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", [constants unscaleColorTemp: self.pedm.state.colorTemp]];
+                self.colorTempSliderButton.enabled = NO;
+            }
+
+            self.colorTempSlider.minimumValue = self.pedm.colorTempMin;
+            self.colorTempSlider.maximumValue = self.pedm.colorTempMax;
+        }
+        else
+        {
+            unsigned int colorTemp = self.pedm.colorTempMin;
+            self.colorTempSlider.value = colorTemp;
+            self.colorTempSlider.enabled = NO;
+            self.colorTempLabel.text = @"N/A";
+            self.colorTempSlider.minimumValue = self.pedm.colorTempMin;
+            self.colorTempSlider.maximumValue = self.pedm.colorTempMax;
+            //NSLog(@"Color Temp Slider - Min = %i; Max = %i", (int)self.colorTempSlider.minimumValue, (int)self.colorTempSlider.maximumValue);
+            self.colorTempSliderButton.enabled = YES;
+        }
 
         [self checkSaturationValueForStartState];
 
-        unsigned int endBrightness = [constants unscaleLampStateValue: self.pedm.endState.brightness withMax: 100];
-        self.endBrightnessSlider.value = endBrightness;
-        self.endBrightnessLabel.text = [NSString stringWithFormat: @"%u%%", endBrightness];
+        if (self.pedm.capability.dimmable >= SOME)
+        {
+            unsigned int endBrightness = [constants unscaleLampStateValue: self.pedm.endState.brightness withMax: 100];
+            self.endBrightnessSlider.value = endBrightness;
+            self.endBrightnessSlider.enabled = YES;
+            self.endBrightnessLabel.text = [NSString stringWithFormat: @"%u%%", endBrightness];
+            self.endBrightnessButton.enabled = NO;
+        }
+        else
+        {
+            self.endBrightnessSlider.value = 0;
+            self.endBrightnessSlider.enabled = NO;
+            self.endBrightnessLabel.text = @"N/A";
+            self.endBrightnessButton.enabled = YES;
+        }
 
-        unsigned int endHue = [constants unscaleLampStateValue: self.pedm.endState.hue withMax: 360];
-        self.endHueSlider.value = endHue;
-        self.endHueLabel.text = [NSString stringWithFormat: @"%u°", endHue];
+        if (self.pedm.capability.color >= SOME)
+        {
+            unsigned int endHue = [constants unscaleLampStateValue: self.pedm.endState.hue withMax: 360];
+            self.endHueSlider.value = endHue;
 
-        unsigned int endSaturation = [constants unscaleLampStateValue: self.pedm.endState.saturation withMax: 100];
-        self.endSaturationSlider.value = endSaturation;
-        self.endSaturationLabel.text = [NSString stringWithFormat: @"%u%%", endSaturation];
+            if (self.pedm.endState.saturation == 0)
+            {
+                self.endHueSlider.enabled = NO;
+                self.endHueLabel.text = @"N/A";
+                self.endHueButton.enabled = YES;
+            }
+            else
+            {
+                self.endHueSlider.enabled = YES;
+                self.endHueLabel.text = [NSString stringWithFormat: @"%u°", endHue];
+                self.endHueButton.enabled = NO;
+            }
 
-        unsigned int endColorTemp = [constants unscaleColorTemp: self.pedm.endState.colorTemp];
-        self.endColorTempSlider.value = endColorTemp;
-        self.endColorTempSlider.minimumValue = self.pedm.colorTempMin;
-        self.endColorTempSlider.maximumValue = self.pedm.colorTempMax;
-        self.endColorTempLabel.text = [NSString stringWithFormat: @"%iK", endColorTemp];
+            unsigned int endSaturation = [constants unscaleLampStateValue: self.pedm.endState.saturation withMax: 100];
+            self.endSaturationSlider.value = endSaturation;
+            self.endSaturationSlider.enabled = YES;
+            self.endSaturationLabel.text = [NSString stringWithFormat: @"%u%%", endSaturation];
+            self.endSaturationButton.enabled = NO;
+        }
+        else
+        {
+            self.endHueSlider.value = 0;
+            self.endHueSlider.enabled = NO;
+            self.endHueLabel.text = @"N/A";
+            self.endHueButton.enabled = YES;
+
+            self.endSaturationSlider.value = 0;
+            self.endSaturationSlider.enabled = NO;
+            self.endSaturationLabel.text = @"N/A";
+            self.endSaturationButton.enabled = YES;
+        }
+
+        if (self.pedm.capability.temp >= SOME)
+        {
+            if (self.pedm.endState.saturation == 100)
+            {
+                self.endColorTempSlider.value = [constants unscaleColorTemp: self.pedm.endState.colorTemp];
+                self.endColorTempSlider.enabled = NO;
+                self.endColorTempLabel.text = @"N/A";
+                self.endColorTempButton.enabled = YES;
+            }
+            else
+            {
+                self.endColorTempSlider.value = [constants unscaleColorTemp: self.pedm.endState.colorTemp];
+                self.endColorTempSlider.enabled = YES;
+                self.endColorTempLabel.text = [NSString stringWithFormat: @"%iK", [constants unscaleColorTemp: self.pedm.endState.colorTemp]];
+                self.endColorTempButton.enabled = NO;
+            }
+
+            self.endColorTempSlider.minimumValue = self.pedm.colorTempMin;
+            self.endColorTempSlider.maximumValue = self.pedm.colorTempMax;
+        }
+        else
+        {
+            unsigned int colorTemp = self.pedm.colorTempMin;
+            self.endColorTempSlider.value = colorTemp;
+            self.endColorTempSlider.enabled = NO;
+            self.endColorTempLabel.text = @"N/A";
+            self.endColorTempSlider.minimumValue = self.pedm.colorTempMin;
+            self.endColorTempSlider.maximumValue = self.pedm.colorTempMax;
+            //NSLog(@"Color Temp Slider - Min = %i; Max = %i", (int)self.colorTempSlider.minimumValue, (int)self.colorTempSlider.maximumValue);
+            self.endColorTempButton.enabled = YES;
+        }
 
         [self checkSaturationValueForEndState];
     }
@@ -162,7 +311,7 @@
 
     LSFLampState *lStartState = [[LSFLampState alloc] initWithOnOff: self.pedm.state.onOff brightness: brightness hue: hue saturation: saturation colorTemp:colorTemp];
 
-    [LSFUtilityFunctions colorIndicatorSetup: self.colorIndicatorImage dataState: lStartState];
+    [LSFUtilityFunctions colorIndicatorSetup: self.colorIndicatorImage withDataState: lStartState andCapabilityData: self.pedm.capability];
 
     brightness = [constants unscaleLampStateValue: self.pedm.endState.brightness withMax: 100];
     hue = [constants unscaleLampStateValue: self.pedm.endState.hue withMax: 360];
@@ -170,7 +319,7 @@
     colorTemp = [constants unscaleColorTemp: self.pedm.endState.colorTemp];
 
     LSFLampState *lEndState = [[LSFLampState alloc] initWithOnOff: YES brightness: brightness hue: hue saturation: saturation colorTemp: colorTemp];
-    [LSFUtilityFunctions colorIndicatorSetup: self.endColorIndicatorImage dataState: lEndState];
+    [LSFUtilityFunctions colorIndicatorSetup: self.endColorIndicatorImage withDataState: lEndState andCapabilityData: self.pedm.capability];
 
     [self presetButtonSetup: self.presetButton state: self.pedm.state];
     [self presetButtonSetup: self.endPresetButton state: self.pedm.endState];
@@ -365,20 +514,52 @@
     }
     else
     {
-        self.brightnessSlider.enabled = YES;
-        self.hueSlider.enabled = YES;
-        self.saturationSlider.enabled = YES;
-        self.colorTempSlider.enabled = YES;
+        if (self.pedm.capability.dimmable >= SOME)
+        {
+            self.brightnessSlider.enabled = YES;
+            self.brightnessLabel.text = [NSString stringWithFormat: @"%i%%", (uint32_t)self.brightnessSlider.value];
+            self.brightnessSliderButton.enabled = NO;
+        }
+        else
+        {
+            self.brightnessSlider.enabled = NO;
+            self.brightnessLabel.text = @"N/A";
+            self.brightnessSliderButton.enabled = YES;
+        }
 
-        self.brightnessLabel.text = [NSString stringWithFormat: @"%i%%", (uint32_t)self.brightnessSlider.value];
-        self.hueLabel.text = [NSString stringWithFormat: @"%i°", (uint32_t)self.hueSlider.value];
-        self.saturationLabel.text = [NSString stringWithFormat: @"%i%%", (uint32_t)self.saturationSlider.value];
-        self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", (uint32_t)self.colorTempSlider.value];
+        if (self.pedm.capability.color >= SOME)
+        {
+            self.hueSlider.enabled = YES;
+            self.hueLabel.text = [NSString stringWithFormat: @"%i°", (uint32_t)self.hueSlider.value];
+            self.hueSliderButton.enabled = NO;
 
-        self.brightnessSliderButton.enabled = NO;
-        self.hueSliderButton.enabled = NO;
-        self.saturationSliderButton.enabled = NO;
-        self.colorTempSliderButton.enabled = NO;
+            self.saturationSlider.enabled = YES;
+            self.saturationLabel.text = [NSString stringWithFormat: @"%i%%", (uint32_t)self.saturationSlider.value];
+            self.saturationSliderButton.enabled = NO;
+        }
+        else
+        {
+            self.hueSlider.enabled = NO;
+            self.hueLabel.text = @"N/A";
+            self.hueSliderButton.enabled = YES;
+
+            self.saturationSlider.enabled = NO;
+            self.saturationLabel.text = @"N/A";
+            self.saturationSliderButton.enabled = YES;
+        }
+
+        if (self.pedm.capability.temp >= SOME)
+        {
+            self.colorTempSlider.enabled = YES;
+            self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", (uint32_t)self.colorTempSlider.value];
+            self.colorTempSliderButton.enabled = NO;
+        }
+        else
+        {
+            self.colorTempSlider.enabled = NO;
+            self.colorTempLabel.text = @"N/A";
+            self.colorTempSliderButton.enabled = YES;
+        }
 
         [self checkSaturationValueForStartState];
     }
@@ -386,15 +567,82 @@
 
 -(IBAction)startBrightnessSliderTouchedWhileDisabled: (UIButton *)sender
 {
-    if (self.startPropertiesSwitch.on) {
+    if (self.startPropertiesSwitch.on)
+    {
         [self showWarning];
+    }
+    else
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Error" message: @"This Lamp is not able to change its brightness." delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil];
+        [alert show];
     }
 }
 
 -(IBAction)startHueSliderTouchedWhileDisabled: (UIButton *)sender
 {
-    if (self.startPropertiesSwitch.on) {
+    if (self.startPropertiesSwitch.on)
+    {
         [self showWarning];
+    }
+    else
+    {
+        if (self.pedm.capability.color == NONE)
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Error" message: @"This Lamp is not able to change its hue." delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil];
+            [alert show];
+        }
+        else
+        {
+            [self showHueAlert];
+        }
+    }
+}
+
+-(IBAction)startSaturationSliderTouchedWhileDisabled: (UIButton *)sender
+{
+    if (self.startPropertiesSwitch.on)
+    {
+        [self showWarning];
+    }
+    else
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Error" message: @"This Lamp is not able to change its saturation." delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil];
+        [alert show];
+    }
+}
+
+-(IBAction)startColorTempSliderTouchedWhileDisabled: (UIButton *)sender
+{
+    if (self.startPropertiesSwitch.on)
+    {
+        [self showWarning];
+    }
+    else
+    {
+        if (self.pedm.capability.color == NONE)
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Error" message: @"This Lamp is not able to change its color temp." delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil];
+            [alert show];
+        }
+        else
+        {
+            [self showColorTempAlert];
+        }
+    }
+}
+
+-(IBAction)endBrightnessSliderTouchedWhileDisabled: (UIButton *)sender
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Error" message: @"This Lamp is not able to change its brightness." delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil];
+    [alert show];
+}
+
+-(IBAction)endHueSliderTouchedWhileDisabled: (UIButton *)sender
+{
+    if (self.pedm.capability.color == NONE)
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Error" message: @"This Lamp is not able to change its hue." delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil];
+        [alert show];
     }
     else
     {
@@ -402,40 +650,23 @@
     }
 }
 
--(IBAction)startSaturationSliderTouchedWhileDisabled: (UIButton *)sender
+-(IBAction)endSaturationSliderTouchedWhileDisabled: (UIButton *)sender
 {
-    if (self.startPropertiesSwitch.on) {
-        [self showWarning];
-    }
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Error" message: @"This Lamp is not able to change its saturation." delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil];
+    [alert show];
 }
 
--(IBAction)startColorTempSliderTouchedWhileDisabled: (UIButton *)sender
+-(IBAction)endColorTempSliderTouchedWhileDisabled: (UIButton *)sender
 {
-    if (self.startPropertiesSwitch.on) {
-        [self showWarning];
+    if (self.pedm.capability.color == NONE)
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Error" message: @"This Lamp is not able to change its color temp." delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil];
+        [alert show];
     }
     else
     {
         [self showColorTempAlert];
     }
-}
-
--(IBAction)endBrightnessSliderTouchedWhileDisabled: (UIButton *)sender
-{
-}
-
--(IBAction)endHueSliderTouchedWhileDisabled: (UIButton *)sender
-{
-    [self showHueAlert];
-}
-
--(IBAction)endSaturationSliderTouchedWhileDisabled: (UIButton *)sender
-{
-}
-
--(IBAction)endColorTempSliderTouchedWhileDisabled: (UIButton *)sender
-{
-    [self showColorTempAlert];
 }
 
 -(IBAction)doneButtonPressed: (id)sender
@@ -466,8 +697,6 @@
     }
     else
     {
-        //NSLog(@"Switch for start properties is on, not using start state");
-
         self.pedm.state = [[LSFLampState alloc] init];
     }
 
@@ -502,12 +731,21 @@
 }
 
 /*
+ * Override public function from LSFEffectTableViewController
+ */
+-(void)updateColorIndicator
+{
+    LSFLampState *lstate = [[LSFLampState alloc] initWithOnOff:YES brightness: self.brightnessSlider.value hue: self.hueSlider.value saturation: self.saturationSlider.value colorTemp: self.colorTempSlider.value];
+    [LSFUtilityFunctions colorIndicatorSetup: self.colorIndicatorImage withDataState: lstate andCapabilityData: self.pedm.capability];
+}
+
+/*
  * Private functions
  */
 -(void)updateEndColorIndicator
 {
     LSFLampState *lstate = [[LSFLampState alloc] initWithOnOff: YES brightness: self.endBrightnessSlider.value hue: self.endHueSlider.value saturation: self.endSaturationSlider.value colorTemp: self.endColorTempSlider.value];
-    [LSFUtilityFunctions colorIndicatorSetup: self.endColorIndicatorImage dataState: lstate];
+    [LSFUtilityFunctions colorIndicatorSetup: self.endColorIndicatorImage withDataState: lstate andCapabilityData: self.pedm.capability];
 }
 
 -(void)endBrightnessSliderTapped: (UIGestureRecognizer *)gr
@@ -752,61 +990,71 @@
 {
     LSFConstants *constants = [LSFConstants getConstants];
 
-    if (self.saturationSlider.value == 0)
+    if (self.pedm.capability.color >= SOME && self.pedm.capability.temp >= SOME)
     {
-        self.hueSlider.enabled = NO;
-        self.hueLabel.text = @"N/A";
-        self.hueSliderButton.enabled = YES;
-    }
-    else
-    {
-        self.hueSlider.enabled = YES;
-        self.hueSliderButton.enabled = NO;
-        unsigned int hue = [constants unscaleLampStateValue: self.hueSlider.value withMax: 360];
-        self.hueLabel.text = [NSString stringWithFormat: @"%i°", hue];
-    }
+        if (self.saturationSlider.value == 0)
+        {
+            self.hueSlider.enabled = NO;
+            self.hueLabel.text = @"N/A";
+            self.hueSliderButton.enabled = YES;
+        }
+        else
+        {
+            self.hueSlider.enabled = YES;
+            self.hueSliderButton.enabled = NO;
+            unsigned int hue = [constants unscaleLampStateValue: self.pedm.state.hue withMax: 360];
+            self.hueLabel.text = [NSString stringWithFormat: @"%i°", hue];
+        }
 
-    if (self.saturationSlider.value == 100)
-    {
-        self.colorTempSlider.enabled = NO;
-        self.colorTempLabel.text = @"N/A";
-        self.colorTempSliderButton.enabled = YES;
-    }
-    else
-    {
-        self.colorTempSlider.enabled = YES;
-        self.colorTempSliderButton.enabled = NO;
-        unsigned int colorTemp = [constants unscaleColorTemp: self.colorTempSlider.value];
-        self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", colorTemp];
+        if (self.saturationSlider.value == 100)
+        {
+            self.colorTempSlider.enabled = NO;
+            self.colorTempLabel.text = @"N/A";
+            self.colorTempSliderButton.enabled = YES;
+        }
+        else
+        {
+            self.colorTempSlider.enabled = YES;
+            self.colorTempSliderButton.enabled = NO;
+            unsigned int colorTemp = [constants unscaleColorTemp: self.pedm.state.colorTemp];
+            self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", colorTemp];
+        }
     }
 }
 
 -(void)checkSaturationValueForEndState
 {
-    if (self.endSaturationSlider.value == 0)
-    {
-        self.endHueSlider.enabled = NO;
-        self.endHueLabel.text = @"N/A";
-        self.endHueButton.enabled = YES;
-    }
-    else
-    {
-        self.endHueSlider.enabled = YES;
-        self.endHueButton.enabled = NO;
-        self.endHueLabel.text = [NSString stringWithFormat: @"%i°",  (uint32_t)self.endHueSlider.value];
-    }
+    LSFConstants *constants = [LSFConstants getConstants];
 
-    if (self.endSaturationSlider.value == 100)
+    if (self.pedm.capability.color >= SOME && self.pedm.capability.temp >= SOME)
     {
-        self.endColorTempSlider.enabled = NO;
-        self.endColorTempLabel.text = @"N/A";
-        self.endColorTempButton.enabled = YES;
-    }
-    else
-    {
-        self.endColorTempSlider.enabled = YES;
-        self.endColorTempButton.enabled = NO;
-        self.endColorTempLabel.text = [NSString stringWithFormat: @"%iK", (uint32_t)self.endColorTempSlider.value];
+        if (self.endSaturationSlider.value == 0)
+        {
+            self.endHueSlider.enabled = NO;
+            self.endHueLabel.text = @"N/A";
+            self.endHueButton.enabled = YES;
+        }
+        else
+        {
+            self.endHueSlider.enabled = YES;
+            self.endHueButton.enabled = NO;
+            unsigned int endHue = [constants unscaleLampStateValue: self.pedm.endState.hue withMax: 360];
+            self.endHueLabel.text = [NSString stringWithFormat: @"%i°", endHue];
+        }
+
+        if (self.endSaturationSlider.value == 100)
+        {
+            self.endColorTempSlider.enabled = NO;
+            self.endColorTempLabel.text = @"N/A";
+            self.endColorTempButton.enabled = YES;
+        }
+        else
+        {
+            self.endColorTempSlider.enabled = YES;
+            self.endColorTempButton.enabled = NO;
+            unsigned int endColorTemp = [constants unscaleColorTemp: self.pedm.state.colorTemp];
+            self.endColorTempLabel.text = [NSString stringWithFormat: @"%iK", endColorTemp];
+        }
     }
 }
 

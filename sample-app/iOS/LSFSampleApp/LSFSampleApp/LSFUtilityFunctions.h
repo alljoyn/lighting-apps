@@ -16,12 +16,14 @@
 
 #import <Foundation/Foundation.h>
 #import "LSFSceneElementDataModel.h"
+#import "LSFCapabilityData.h"
+#import "LSFLampDetails.h"
 
 @interface LSFUtilityFunctions : NSObject
 
 +(BOOL)checkNameLength: (NSString *)name entity: (NSString *)entity;
 +(BOOL)checkWhiteSpaces: (NSString *)name entity: (NSString *)entity;
 +(NSString *)buildSectionTitleString: (LSFSceneElementDataModel *)sceneElement;
-+(void)colorIndicatorSetup: (UIImageView*)colorIndicatorImage dataState: (LSFLampState*) dataState;
++(void)colorIndicatorSetup: (UIImageView *)colorIndicatorImage withDataState: (LSFLampState *) dataState andCapabilityData: (LSFCapabilityData *)capablity;
 
 @end

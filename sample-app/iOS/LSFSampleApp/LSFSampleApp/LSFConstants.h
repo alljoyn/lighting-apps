@@ -49,6 +49,12 @@
 @property (nonatomic, strong) NSMutableAttributedString *SOURCE_CODE_TEXT;
 @property (nonatomic, strong) NSMutableAttributedString *TEAM_TEXT;
 @property (nonatomic, strong) NSMutableAttributedString *NOTICE_TEXT;
+@property (nonatomic) double MIN_BRIGHTNESS;
+@property (nonatomic) double MAX_BRIGHTNESS;
+@property (nonatomic) double MIN_HUE;
+@property (nonatomic) double MAX_HUE;
+@property (nonatomic) double MIN_SATURATION;
+@property (nonatomic) double MAX_SATURATION;
 @property (nonatomic) double MIN_COLOR_TEMP;
 @property (nonatomic) double MAX_COLOR_TEMP;
 

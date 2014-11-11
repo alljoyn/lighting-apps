@@ -119,7 +119,7 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
             // presets button
             updatePresetFields(itemModel);
 
-            setColorIndicator(stateAdapter.stateView, itemModel.state, itemModel.capability, getColorTempMin());
+            setColorIndicator(stateAdapter.stateView, itemModel.state, itemModel.capability, getColorTempDefault());
         }
     }
 
@@ -135,8 +135,8 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         itemAdapter.setPreset(Util.createPresetNamesString((SampleAppActivity)getActivity(), itemState));
     }
 
-    public void setColorIndicator(View parentStateView, LampState lampState, CapabilityData capability, int minColorTemp) {
-        int color = lampState != null ? DimmableItemScaleConverter.getColor(lampState, capability, minColorTemp) : defaultIndicatorColor;
+    public void setColorIndicator(View parentStateView, LampState lampState, CapabilityData capability, long modelColorTempDefault) {
+        int color = lampState != null ? DimmableItemScaleConverter.getColor(lampState, capability, modelColorTempDefault) : defaultIndicatorColor;
 
         parentStateView.findViewById(R.id.stateRowColorIndicator).getBackground().setColorFilter(color, Mode.MULTIPLY);
     }
@@ -144,5 +144,6 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
     protected abstract int getLayoutID();
     protected abstract int getColorTempMin();
     protected abstract int getColorTempSpan();
+    protected abstract long getColorTempDefault();
     protected abstract void onHeaderClick();
 }

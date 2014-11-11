@@ -68,6 +68,8 @@ public class BasicSceneSelectMembersFragment extends SelectMembersFragment {
         activity.pendingBasicSceneElementMembersMinColorTemp = -1;
         activity.pendingBasicSceneElementMembersMaxColorTemp = -1;
 
+        activity.pendingBasicSceneElementColorTempAverager.reset();
+
         processGroupSelection(activity, groupIDs);
         processLampSelection(activity, lampIDs);
 
@@ -106,19 +108,30 @@ public class BasicSceneSelectMembersFragment extends SelectMembersFragment {
 
                     if (lampDetails != null) {
                         boolean lampHasEffects = lampDetails.hasEffects();
+                        boolean lampHasVariableColorTemp = lampDetails.hasVariableColorTemp();
                         int lampMinTemperature = lampDetails.getMinTemperature();
-                        int lampMaxTemperature = lampDetails.getMaxTemperature();
+                        int lampMaxTemperature = lampHasVariableColorTemp ? lampDetails.getMaxTemperature() : lampMinTemperature;
+                        boolean lampValidColorTempMin = lampMinTemperature >= DimmableItemScaleConverter.VIEW_COLORTEMP_MIN && lampMinTemperature <= DimmableItemScaleConverter.VIEW_COLORTEMP_MAX;
+                        boolean lampValidColorTempMax = lampMaxTemperature >= DimmableItemScaleConverter.VIEW_COLORTEMP_MIN && lampMaxTemperature <= DimmableItemScaleConverter.VIEW_COLORTEMP_MAX;
 
                         if (lampHasEffects) {
                             activity.pendingBasicSceneElementMembersHaveEffects = true;
                         }
 
-                        if (lampMinTemperature < activity.pendingBasicSceneElementMembersMinColorTemp || activity.pendingBasicSceneElementMembersMinColorTemp == -1) {
-                            activity.pendingBasicSceneElementMembersMinColorTemp = lampMinTemperature;
+                        if (lampHasVariableColorTemp) {
+                            activity.pendingBasicSceneElementColorTempAverager.add(lampModel.state.getColorTemp());
+                        } else if (lampValidColorTempMin) {
+                            activity.pendingBasicSceneElementColorTempAverager.add(DimmableItemScaleConverter.convertColorTempViewToModel(lampMinTemperature));
                         }
 
-                        if (lampMaxTemperature < activity.pendingBasicSceneElementMembersMaxColorTemp || activity.pendingBasicSceneElementMembersMaxColorTemp == -1) {
-                            activity.pendingBasicSceneElementMembersMaxColorTemp = lampMaxTemperature;
+                        if (lampValidColorTempMin && lampValidColorTempMax) {
+                            if (lampMinTemperature < activity.pendingBasicSceneElementMembersMinColorTemp || activity.pendingBasicSceneElementMembersMinColorTemp == -1) {
+                                activity.pendingBasicSceneElementMembersMinColorTemp = lampMinTemperature;
+                            }
+
+                            if (lampMaxTemperature < activity.pendingBasicSceneElementMembersMaxColorTemp || activity.pendingBasicSceneElementMembersMaxColorTemp == -1) {
+                                activity.pendingBasicSceneElementMembersMaxColorTemp = lampMaxTemperature;
+                            }
                         }
                     }
                 }

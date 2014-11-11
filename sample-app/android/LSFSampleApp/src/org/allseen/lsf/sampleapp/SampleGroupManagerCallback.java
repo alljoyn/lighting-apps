@@ -317,6 +317,8 @@ public class SampleGroupManagerCallback extends LampGroupManagerCallback {
                     LampDataModel lampModel = activity.lampModels.get(lampID);
 
                     if (lampModel != null) {
+                        LampDetails lampDetails = lampModel.getDetails();
+
                         capability.includeData(lampModel.getCapability());
 
                         if ( lampModel.state.getOnOff()) {
@@ -325,22 +327,28 @@ public class SampleGroupManagerCallback extends LampGroupManagerCallback {
                             countOff++;
                         }
 
-                        if (lampModel.getDetails().hasColor()) {
+                        if (lampDetails.hasColor()) {
                             averageHue.add(lampModel.state.getHue());
                             averageSaturation.add(lampModel.state.getSaturation());
                         }
 
-                        if (lampModel.getDetails().isDimmable()) {
+                        if (lampDetails.isDimmable()) {
                             averageBrightness.add(lampModel.state.getBrightness());
                         }
 
-                        if (lampModel.getDetails().hasVariableColorTemp()) {
+                        boolean hasVariableColorTemp = lampDetails.hasVariableColorTemp();
+                        int viewColorTempLampMin = lampDetails.getMinTemperature();
+                        int viewColorTempLampMax = hasVariableColorTemp ? lampDetails.getMaxTemperature() : viewColorTempLampMin;
+                        boolean validColorTempLampMin = viewColorTempLampMin >= DimmableItemScaleConverter.VIEW_COLORTEMP_MIN && viewColorTempLampMin <= DimmableItemScaleConverter.VIEW_COLORTEMP_MAX;
+                        boolean validColorTempLampMax = viewColorTempLampMax >= DimmableItemScaleConverter.VIEW_COLORTEMP_MIN && viewColorTempLampMax <= DimmableItemScaleConverter.VIEW_COLORTEMP_MAX;
+
+                        if (hasVariableColorTemp) {
                             averageColorTemp.add(lampModel.state.getColorTemp());
+                        } else if (validColorTempLampMin) {
+                            averageColorTemp.add(DimmableItemScaleConverter.convertColorTempViewToModel(viewColorTempLampMin));
+                        }
 
-                            LampDetails lampDetails = lampModel.getDetails();
-                            int viewColorTempLampMin = lampDetails.getMinTemperature();
-                            int viewColorTempLampMax = lampDetails.getMaxTemperature();
-
+                        if (validColorTempLampMin && validColorTempLampMax) {
                             if (viewColorTempGroupMin == -1 || viewColorTempGroupMin > viewColorTempLampMin) {
                                 viewColorTempGroupMin = viewColorTempLampMin;
                             }

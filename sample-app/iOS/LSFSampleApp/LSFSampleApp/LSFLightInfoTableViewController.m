@@ -270,54 +270,46 @@
         self.hasVariableColorTemp = NO;
     }
 
-    if (!self.isDimmable || !self.hasColor || !self.hasVariableColorTemp)
+    self.presetButton.enabled = YES;
+
+    LSFPresetModelContainer *container = [LSFPresetModelContainer getPresetModelContainer];
+    NSArray *presets = [container.presetContainer allValues];
+
+    NSMutableArray *presetsArray = [[NSMutableArray alloc] init];
+    BOOL presetMatched = NO;
+    for (LSFPresetModel *data in presets)
     {
-        [self.presetButton setTitle: @"Save New Preset" forState: UIControlStateNormal];
-        self.presetButton.enabled = NO;
+        BOOL matchesPreset = [self checkIfLampState: self.lampModel.state matchesPreset: data];
+
+        if (matchesPreset)
+        {
+            [presetsArray addObject: data.name];
+            presetMatched = YES;
+        }
+    }
+
+    if (presetMatched)
+    {
+        NSArray *sortedArray = [presetsArray sortedArrayUsingSelector: @selector(localizedCaseInsensitiveCompare:)];
+        NSMutableString *presetsMatched = [[NSMutableString alloc] init];
+
+        for (NSString *presetName in sortedArray)
+        {
+            [presetsMatched appendString: [NSString stringWithFormat:@"%@, ", presetName]];
+        }
+
+        [presetsMatched deleteCharactersInRange: NSMakeRange(presetsMatched.length - 2, 2)];
+        [self.presetButton setTitle: presetsMatched forState: UIControlStateNormal];
     }
     else
     {
-        self.presetButton.enabled = YES;
-
-        LSFPresetModelContainer *container = [LSFPresetModelContainer getPresetModelContainer];
-        NSArray *presets = [container.presetContainer allValues];
-
-        NSMutableArray *presetsArray = [[NSMutableArray alloc] init];
-        BOOL presetMatched = NO;
-        for (LSFPresetModel *data in presets)
-        {
-            BOOL matchesPreset = [self checkIfLampState: self.lampModel.state matchesPreset: data];
-
-            if (matchesPreset)
-            {
-                [presetsArray addObject: data.name];
-                presetMatched = YES;
-            }
-        }
-
-        if (presetMatched)
-        {
-            NSArray *sortedArray = [presetsArray sortedArrayUsingSelector: @selector(localizedCaseInsensitiveCompare:)];
-            NSMutableString *presetsMatched = [[NSMutableString alloc] init];
-
-            for (NSString *presetName in sortedArray)
-            {
-                [presetsMatched appendString: [NSString stringWithFormat:@"%@, ", presetName]];
-            }
-
-            [presetsMatched deleteCharactersInRange: NSMakeRange(presetsMatched.length - 2, 2)];
-            [self.presetButton setTitle: presetsMatched forState: UIControlStateNormal];
-        }
-        else
-        {
-            [self.presetButton setTitle: @"Save New Preset" forState: UIControlStateNormal];
-        }
+        [self.presetButton setTitle: @"Save New Preset" forState: UIControlStateNormal];
     }
 
     self.lumensLabel.text = [NSString stringWithFormat: @"%i", self.lampModel.lampParameters.lumens];
     self.energyUsageLabel.text = [NSString stringWithFormat: @"%i mW", self.lampModel.lampParameters.energyUsageMilliwatts];
 
-    [LSFUtilityFunctions colorIndicatorSetup: self.colorIndicatorImage dataState: self.lampModel.state];
+    [LSFUtilityFunctions colorIndicatorSetup: self.colorIndicatorImage withDataState: self.lampModel.state andCapabilityData: self.lampModel.capability];
 }
 
 -(void)deleteLampWithID: (NSString *)lampID andName: (NSString *)lampName

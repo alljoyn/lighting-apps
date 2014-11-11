@@ -109,6 +109,14 @@ public class GroupInfoFragment extends DimmableItemInfoFragment {
     }
 
     @Override
+    protected long getColorTempDefault() {
+        SampleAppActivity activity = (SampleAppActivity)getActivity();
+        GroupDataModel groupModel = activity.groupModels.get(key);
+
+        return groupModel.state.getColorTemp();
+    }
+
+    @Override
     protected void onHeaderClick() {
         if (!AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(key)) {
             SampleAppActivity activity = (SampleAppActivity)getActivity();

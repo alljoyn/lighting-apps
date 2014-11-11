@@ -238,8 +238,7 @@
  */
 -(void)updateColorIndicator
 {
-    LSFLampState *lstate = [[LSFLampState alloc] initWithOnOff:YES brightness: self.brightnessSlider.value hue: self.hueSlider.value saturation: self.saturationSlider.value colorTemp: self.colorTempSlider.value];
-    [LSFUtilityFunctions colorIndicatorSetup: self.colorIndicatorImage dataState: lstate];
+    // Function should be overriden by subclass
 }
 
 -(void)brightnessSliderTapped: (UIGestureRecognizer *)gr

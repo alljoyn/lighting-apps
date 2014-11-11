@@ -1359,6 +1359,16 @@
                                                         <action selector="endBrightnessSliderValueChanged:" destination="2BT-af-xA1" eventType="valueChanged" id="JcH-BZ-1PD"/>
                                                     </connections>
                                                 </slider>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TFO-u1-zE3">
+                                                    <rect key="frame" x="23" y="75" width="234" height="31"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="endBrightnessSliderTouchedWhileDisabled:" destination="2BT-af-xA1" eventType="touchUpInside" id="PUm-zY-TQ3"/>
+                                                    </connections>
+                                                </button>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CY7-Aa-P42">
                                                     <rect key="frame" x="254" y="80" width="46" height="19"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1382,6 +1392,16 @@
                                                         <action selector="endHueSliderValueChanged:" destination="2BT-af-xA1" eventType="valueChanged" id="6f4-fZ-Njp"/>
                                                     </connections>
                                                 </slider>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wIb-sV-5sL">
+                                                    <rect key="frame" x="23" y="137" width="234" height="31"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="endHueSliderTouchedWhileDisabled:" destination="2BT-af-xA1" eventType="touchUpInside" id="9S1-oH-9Zw"/>
+                                                    </connections>
+                                                </button>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0°" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pig-cb-LcL">
                                                     <rect key="frame" x="254" y="142" width="46" height="19"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1405,6 +1425,16 @@
                                                         <action selector="endSaturationSliderValueChanged:" destination="2BT-af-xA1" eventType="valueChanged" id="ERB-zd-Ewb"/>
                                                     </connections>
                                                 </slider>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IG9-2p-ryX">
+                                                    <rect key="frame" x="23" y="199" width="234" height="31"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="endSaturationSliderTouchedWhileDisabled:" destination="2BT-af-xA1" eventType="touchUpInside" id="3Bx-uk-Byp"/>
+                                                    </connections>
+                                                </button>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mUN-I5-pnp">
                                                     <rect key="frame" x="254" y="204" width="46" height="19"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1428,46 +1458,6 @@
                                                         <action selector="endColorTempSliderValueChanged:" destination="2BT-af-xA1" eventType="valueChanged" id="aor-od-RtE"/>
                                                     </connections>
                                                 </slider>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="1000K" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jlx-GC-Lvd">
-                                                    <rect key="frame" x="254" y="266" width="46" height="19"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="13"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="49V-NJ-AL5">
-                                                    <rect key="frame" x="16" y="20" width="14" height="14"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TFO-u1-zE3">
-                                                    <rect key="frame" x="23" y="75" width="234" height="31"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal">
-                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="endBrightnessSliderTouchedWhileDisabled:" destination="2BT-af-xA1" eventType="touchUpInside" id="PUm-zY-TQ3"/>
-                                                    </connections>
-                                                </button>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wIb-sV-5sL">
-                                                    <rect key="frame" x="23" y="137" width="234" height="31"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal">
-                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="endHueSliderTouchedWhileDisabled:" destination="2BT-af-xA1" eventType="touchUpInside" id="9S1-oH-9Zw"/>
-                                                    </connections>
-                                                </button>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IG9-2p-ryX">
-                                                    <rect key="frame" x="23" y="199" width="234" height="31"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal">
-                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="endSaturationSliderTouchedWhileDisabled:" destination="2BT-af-xA1" eventType="touchUpInside" id="3Bx-uk-Byp"/>
-                                                    </connections>
-                                                </button>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lpl-c5-RfO">
                                                     <rect key="frame" x="23" y="261" width="234" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1478,6 +1468,16 @@
                                                         <action selector="endColorTempSliderTouchedWhileDisabled:" destination="2BT-af-xA1" eventType="touchUpInside" id="t56-1F-ax5"/>
                                                     </connections>
                                                 </button>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="1000K" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jlx-GC-Lvd">
+                                                    <rect key="frame" x="254" y="266" width="46" height="19"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="13"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="49V-NJ-AL5">
+                                                    <rect key="frame" x="16" y="20" width="14" height="14"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -3434,13 +3434,13 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="ltU-V7-SyT"/>
         <segue reference="xLS-9b-3A3"/>
         <segue reference="YsG-z3-l2q"/>
         <segue reference="Ocb-c1-RuW"/>
+        <segue reference="2tf-0r-rkN"/>
         <segue reference="zhd-RS-pCT"/>
         <segue reference="8b0-0b-tLQ"/>
-        <segue reference="kho-Ns-2J0"/>
         <segue reference="5Cs-tm-3Qf"/>
+        <segue reference="ltU-V7-SyT"/>
     </inferredMetricsTieBreakers>
 </document>

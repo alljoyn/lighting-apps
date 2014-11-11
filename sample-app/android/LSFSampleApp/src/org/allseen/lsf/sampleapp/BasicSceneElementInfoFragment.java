@@ -98,7 +98,7 @@ public abstract class BasicSceneElementInfoFragment extends DimmableItemInfoFrag
         updatePresetFields(pendingState, getLampStateViewAdapter(seekBarTag));
         updatePresetID(getMatchingPreset(pendingState), seekBarTag);
 
-        setColorIndicator(getLampStateViewAdapter(seekBarTag).stateView, pendingState, capability, colorTempMin);
+        setColorIndicator(getLampStateViewAdapter(seekBarTag).stateView, pendingState, capability, getColorTempDefault());
     }
 
     @Override
@@ -162,6 +162,13 @@ public abstract class BasicSceneElementInfoFragment extends DimmableItemInfoFrag
         SampleAppActivity activity = (SampleAppActivity)getActivity();
 
         return activity.pendingBasicSceneElementMembersMaxColorTemp - activity.pendingBasicSceneElementMembersMinColorTemp;
+    }
+
+    @Override
+    protected long getColorTempDefault() {
+        SampleAppActivity activity = (SampleAppActivity)getActivity();
+
+        return activity.pendingBasicSceneElementColorTempAverager.getAverage();
     }
 
     protected void checkInitialColorTemp(BasicSceneElementDataModel pendingModel, long modelColorTempMin) {

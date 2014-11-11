@@ -464,22 +464,21 @@
                 [self.averageSaturation add: lampModel.state.saturation];
             }
 
-            if (lampModel.lampDetails.variableColorTemp)
+            //Average the color temp and figure out the min/max
+            NSLog(@"Adding %u to the color temp averager", lampModel.state.colorTemp);
+            [self.averageColorTemp add: lampModel.state.colorTemp];
+
+            int colorTempLampMin = lampModel.lampDetails.minTemperature;
+            int colorTempLampMax = lampModel.lampDetails.maxTemperature;
+
+            if ((colorTempGroupMin == -1) || (colorTempGroupMin > colorTempLampMin))
             {
-                [self.averageColorTemp add: lampModel.state.colorTemp];
+                colorTempGroupMin = colorTempLampMin;
+            }
 
-                int colorTempLampMin = lampModel.lampDetails.minTemperature;
-                int colorTempLampMax = lampModel.lampDetails.maxTemperature;
-
-                if ((colorTempGroupMin == -1) || (colorTempGroupMin > colorTempLampMin))
-                {
-                    colorTempGroupMin = colorTempLampMin;
-                }
-
-                if ((colorTempGroupMax == -1) || (colorTempGroupMax < colorTempLampMax))
-                {
-                    colorTempGroupMax = colorTempLampMax;
-                }
+            if ((colorTempGroupMax == -1) || (colorTempGroupMax < colorTempLampMax))
+            {
+                colorTempGroupMax = colorTempLampMax;
             }
         }
         else
@@ -502,8 +501,8 @@
     groupModel.uniformity.saturation = [self.averageSaturation isUniform];
     groupModel.uniformity.colorTemp = [self.averageColorTemp isUniform];
 
-    groupModel.groupColorTempMin = colorTempGroupMin != -1 ? colorTempGroupMin : ([LSFConstants getConstants]).MIN_COLOR_TEMP;
-    groupModel.groupColorTempMax = colorTempGroupMax != -1 ? colorTempGroupMax : ([LSFConstants getConstants]).MAX_COLOR_TEMP;
+    groupModel.groupColorTempMin = (colorTempGroupMin != -1 || (colorTempGroupMin >= ([LSFConstants getConstants]).MIN_COLOR_TEMP && colorTempGroupMin <= ([LSFConstants getConstants]).MAX_COLOR_TEMP)) ? colorTempGroupMin : ([LSFConstants getConstants]).MIN_COLOR_TEMP;
+    groupModel.groupColorTempMax = (colorTempGroupMax != -1 || (colorTempGroupMax >= ([LSFConstants getConstants]).MIN_COLOR_TEMP && colorTempGroupMax <= ([LSFConstants getConstants]).MAX_COLOR_TEMP)) ? colorTempGroupMax : ([LSFConstants getConstants]).MAX_COLOR_TEMP;
 
 //    NSLog(@"Group Model State - %@", groupModel.name);
 //    NSLog(@"OnOff = %@, Uniformity = %@", groupModel.state.onOff ? @"On" : @"Off", groupModel.uniformity.power ? @"True" : @"False");

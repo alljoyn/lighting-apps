@@ -359,6 +359,7 @@ public class SampleLampManagerCallback extends LampManagerCallback {
                 if (lampModel != null) {
                     Log.d(SampleAppActivity.TAG, "Removing lamp " + lampModel.id);
                     activity.lampModels.remove(lampID);
+                    activity.lampIDs.remove(lampID);
 
                     Fragment pageFragment = activity.getSupportFragmentManager().findFragmentByTag(LampsPageFragment.TAG);
 

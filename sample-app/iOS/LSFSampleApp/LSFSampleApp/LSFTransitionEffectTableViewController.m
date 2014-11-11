@@ -54,29 +54,104 @@
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneNotificationReceived:) name: @"SceneNotification" object: nil];
 
+    NSLog(@"LSFTransitionEffectTableViewController - viewWillAppear() executing");
+    NSLog(@"Power = %@", self.tedm.state.onOff ? @"On" : @"Off");
+    NSLog(@"Brightness = %u", self.tedm.state.brightness);
+    NSLog(@"Hue = %u", self.tedm.state.hue);
+    NSLog(@"Saturation = %u", self.tedm.state.saturation);
+    NSLog(@"Color Temp = %u", self.tedm.state.colorTemp);
+    NSLog(@"Capability = [%@, %@, %@]", self.tedm.capability.dimmable ? @"Dimmable" : @"Not Dimmable", self.tedm.capability.color ? @"Color" : @"No Color", self.tedm.capability.temp ? @"Variable Color Temp" : @"No Variable Color Temp");
+    NSLog(@"Color Temp Min = %u", self.tedm.colorTempMin);
+    NSLog(@"Color Temp Max = %u", self.tedm.colorTempMax);
+
     LSFConstants *constants = [LSFConstants getConstants];
 
     if (self.tedm != nil)
     {
-        unsigned int brightness = [constants unscaleLampStateValue: self.tedm.state.brightness withMax: 100];
-        self.brightnessSlider.value = brightness;
-        self.brightnessLabel.text = [NSString stringWithFormat: @"%u%%", brightness];
+        if (self.tedm.capability.dimmable >= SOME)
+        {
+            unsigned int brightness = [constants unscaleLampStateValue: self.tedm.state.brightness withMax: 100];
+            self.brightnessSlider.value = brightness;
+            self.brightnessSlider.enabled = YES;
+            self.brightnessLabel.text = [NSString stringWithFormat: @"%u%%", brightness];
+            self.brightnessSliderButton.enabled = NO;
+        }
+        else
+        {
+            self.brightnessSlider.value = 0;
+            self.brightnessSlider.enabled = NO;
+            self.brightnessLabel.text = @"N/A";
+            self.brightnessSliderButton.enabled = YES;
+        }
 
-        unsigned int hue = [constants unscaleLampStateValue: self.tedm.state.hue withMax: 360];
-        self.hueSlider.value = hue;
-        self.hueLabel.text = [NSString stringWithFormat: @"%u°", hue];
+        if (self.tedm.capability.color >= SOME)
+        {
+            unsigned int hue = [constants unscaleLampStateValue: self.tedm.state.hue withMax: 360];
+            self.hueSlider.value = hue;
 
-        unsigned int saturation = [constants unscaleLampStateValue: self.tedm.state.saturation withMax: 100];
-        self.saturationSlider.value = saturation;
-        self.saturationLabel.text = [NSString stringWithFormat: @"%u%%", saturation];
+            if (self.tedm.state.saturation == 0)
+            {
+                self.hueSlider.enabled = NO;
+                self.hueLabel.text = @"N/A";
+                self.hueSliderButton.enabled = YES;
+            }
+            else
+            {
+                self.hueSlider.enabled = YES;
+                self.hueLabel.text = [NSString stringWithFormat: @"%u°", hue];
+                self.hueSliderButton.enabled = NO;
+            }
 
-        unsigned int colorTemp = [constants unscaleColorTemp: self.tedm.state.colorTemp];
-        self.colorTempSlider.value = colorTemp;
-        self.colorTempSlider.minimumValue = self.tedm.colorTempMin;
-        self.colorTempSlider.maximumValue = self.tedm.colorTempMax;
-        self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", colorTemp];
+            unsigned int saturation = [constants unscaleLampStateValue: self.tedm.state.saturation withMax: 100];
+            self.saturationSlider.value = saturation;
+            self.saturationSlider.enabled = YES;
+            self.saturationLabel.text = [NSString stringWithFormat: @"%u%%", saturation];
+            self.saturationSliderButton.enabled = NO;
+        }
+        else
+        {
+            self.hueSlider.value = 0;
+            self.hueSlider.enabled = NO;
+            self.hueLabel.text = @"N/A";
+            self.hueSliderButton.enabled = YES;
 
-        [self checkSaturationValue:self.tedm.state];
+            self.saturationSlider.value = 0;
+            self.saturationSlider.enabled = NO;
+            self.saturationLabel.text = @"N/A";
+            self.saturationSliderButton.enabled = YES;
+        }
+
+        if (self.tedm.capability.temp >= SOME)
+        {
+            if (self.tedm.state.saturation == 100)
+            {
+                self.colorTempSlider.value = [constants unscaleColorTemp: self.tedm.state.colorTemp];
+                self.colorTempSlider.enabled = NO;
+                self.colorTempLabel.text = @"N/A";
+                self.colorTempSliderButton.enabled = YES;
+            }
+            else
+            {
+                self.colorTempSlider.value = [constants unscaleColorTemp: self.tedm.state.colorTemp];
+                self.colorTempSlider.enabled = YES;
+                self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", [constants unscaleColorTemp: self.tedm.state.colorTemp]];
+                self.colorTempSliderButton.enabled = NO;
+            }
+
+            self.colorTempSlider.minimumValue = self.tedm.colorTempMin;
+            self.colorTempSlider.maximumValue = self.tedm.colorTempMax;
+        }
+        else
+        {
+            unsigned int colorTemp = self.tedm.colorTempMin;
+            self.colorTempSlider.value = colorTemp;
+            self.colorTempSlider.enabled = NO;
+            self.colorTempLabel.text = @"N/A";
+            self.colorTempSlider.minimumValue = self.tedm.colorTempMin;
+            self.colorTempSlider.maximumValue = self.tedm.colorTempMax;
+            //NSLog(@"Color Temp Slider - Min = %i; Max = %i", (int)self.colorTempSlider.minimumValue, (int)self.colorTempSlider.maximumValue);
+            self.colorTempSliderButton.enabled = YES;
+        }
     }
 
     NSNumberFormatter *fmt = [[NSNumberFormatter alloc] init];
@@ -84,7 +159,7 @@
     self.durationLabel.text = [NSString stringWithFormat: @"%@ seconds", [fmt stringFromNumber: [NSNumber numberWithDouble: ((double)self.tedm.duration / 1000.0)]]];
 
     LSFLampState *lstate = [[LSFLampState alloc] initWithOnOff:YES brightness: self.brightnessSlider.value hue: self.hueSlider.value saturation: self.saturationSlider.value colorTemp: self.colorTempSlider.value];
-    [LSFUtilityFunctions colorIndicatorSetup: self.colorIndicatorImage dataState: lstate];
+    [LSFUtilityFunctions colorIndicatorSetup: self.colorIndicatorImage withDataState: lstate andCapabilityData: self.tedm.capability];
 
     [self presetButtonSetup: self.tedm.state];
 }
@@ -183,16 +258,25 @@
     unsigned int scaledSaturation = [constants scaleLampStateValue: (uint32_t)self.saturationSlider.value withMax: 100];
     unsigned int scaledColorTemp = [constants scaleColorTemp: (uint32_t)self.colorTempSlider.value];
 
-    if (scaledBrightness == 0)
+    if (self.tedm.capability.dimmable == NONE && self.tedm.capability.color == NONE && self.tedm.capability.temp == NONE)
     {
-        self.tedm.state.onOff = NO;
+        self.tedm.state.onOff = YES;
+        self.tedm.state.brightness = [constants scaleLampStateValue: 100 withMax: 100];
     }
     else
     {
-        self.tedm.state.onOff = YES;
+        if (scaledBrightness == 0)
+        {
+            self.tedm.state.onOff = NO;
+        }
+        else
+        {
+            self.tedm.state.onOff = YES;
+        }
+
+        self.tedm.state.brightness = scaledBrightness;
     }
 
-    self.tedm.state.brightness = scaledBrightness;
     self.tedm.state.hue = scaledHue;
     self.tedm.state.saturation = scaledSaturation;
     self.tedm.state.colorTemp = scaledColorTemp;
@@ -280,36 +364,46 @@
 
     return returnValue;
 }
--(void)checkSaturationValue:(LSFLampState *)state
+
+/*
+ * Override public function from LSFEffectTableViewController
+ */
+-(void)updateColorIndicator
 {
-    LSFConstants *constants = [LSFConstants getConstants];
-
-    if (state.saturation == 0)
-    {
-        self.hueSlider.enabled = NO;
-        self.hueLabel.text = @"N/A";
-        self.hueSliderButton.enabled = YES;
-    }
-    else
-    {
-        self.hueSlider.enabled = YES;
-        self.hueSliderButton.enabled = NO;
-        unsigned int hue = [constants unscaleLampStateValue: state.hue withMax: 360];
-        self.hueLabel.text = [NSString stringWithFormat: @"%i°", hue];
-    }
-
-    if (state.saturation == 100)
-    {
-        self.colorTempSlider.enabled = NO;
-        self.colorTempLabel.text = @"N/A";
-        self.colorTempSliderButton.enabled = YES;
-    }
-    else
-    {
-        self.colorTempSlider.enabled = YES;
-        self.colorTempSliderButton.enabled = NO;
-        unsigned int colorTemp = [constants unscaleColorTemp: state.colorTemp];
-        self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", colorTemp];
-    }
+    LSFLampState *lstate = [[LSFLampState alloc] initWithOnOff:YES brightness: self.brightnessSlider.value hue: self.hueSlider.value saturation: self.saturationSlider.value colorTemp: self.colorTempSlider.value];
+    [LSFUtilityFunctions colorIndicatorSetup: self.colorIndicatorImage withDataState: lstate andCapabilityData: self.tedm.capability];
 }
+
+-(IBAction)hueSliderTouchedWhileDisabled: (UIButton *)sender
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Error" message: @"" delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil];
+
+    if (self.tedm.capability.color == NONE)
+    {
+        alert.message = @"This Lamp is not able to change its hue.";
+    }
+    else
+    {
+        alert.message = @"Hue has no effect when saturation is zero. Set saturation to greater than zero to enable the hue slider.";
+    }
+
+    [alert show];
+}
+
+-(IBAction)colorTempSliderTouchedWhileDisabled: (UIButton *)sender
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Error" message: @"" delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil];
+
+    if (self.tedm.capability.color == NONE)
+    {
+        alert.message = @"This Lamp is not able to change its color temp.";
+    }
+    else
+    {
+        alert.message = @"Color temperature has no effect when saturation is 100%. Set saturation to less than 100% to enable the color temperature slider.";
+    }
+
+    [alert show];
+}
+
 @end

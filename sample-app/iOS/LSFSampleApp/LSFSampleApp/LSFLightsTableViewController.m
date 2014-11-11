@@ -305,7 +305,7 @@
     cell.lampID = data.theID;
     cell.nameLabel.text = data.name;
 
-    [LSFUtilityFunctions colorIndicatorSetup: cell.colorIndicatorImage dataState: data.state];
+    [LSFUtilityFunctions colorIndicatorSetup: cell.colorIndicatorImage withDataState: data.state andCapabilityData: data.capability];
 
     if (data.lampDetails.dimmable)
     {

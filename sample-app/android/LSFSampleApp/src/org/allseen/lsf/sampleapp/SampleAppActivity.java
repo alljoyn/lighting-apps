@@ -113,6 +113,7 @@ public class SampleAppActivity extends FragmentActivity implements ActionBar.Tab
 
     public LampGroup pendingBasicSceneElementMembers;
     public CapabilityData pendingBasicSceneElementCapability;
+    public ColorAverager pendingBasicSceneElementColorTempAverager = new ColorAverager();
     public boolean pendingBasicSceneElementMembersHaveEffects;
     public int pendingBasicSceneElementMembersMinColorTemp;
     public int pendingBasicSceneElementMembersMaxColorTemp;
@@ -521,16 +522,14 @@ public class SampleAppActivity extends FragmentActivity implements ActionBar.Tab
     }
 
     public void clearModels() {
-        lampIDs.clear();
         commands.clear();
         lampAbouts.clear();
-        lampModels.clear();
-        groupModels.clear();
-        presetModels.clear();
-        basicSceneModels.clear();
-        masterSceneModels.clear();
 
-        setTabTitles();
+        lampManagerCB.lampsLostCB(lampModels.keySet().toArray(new String[lampModels.size()]));
+        groupManagerCB.lampGroupsDeletedCB(groupModels.keySet().toArray(new String[groupModels.size()]));
+        presetManagerCB.presetsDeletedCB(presetModels.keySet().toArray(new String[presetModels.size()]));
+        sceneManagerCB.scenesDeletedCB(basicSceneModels.keySet().toArray(new String[basicSceneModels.size()]));
+        masterSceneManagerCB.masterScenesDeletedCB(masterSceneModels.keySet().toArray(new String[masterSceneModels.size()]));
     }
 
     public void showErrorResponseCode(Enum code, String source) {

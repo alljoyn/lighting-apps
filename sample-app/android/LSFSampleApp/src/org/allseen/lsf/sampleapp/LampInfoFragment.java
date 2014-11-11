@@ -97,6 +97,11 @@ public class LampInfoFragment extends DimmableItemInfoFragment {
     }
 
     @Override
+    protected long getColorTempDefault() {
+        return DimmableItemScaleConverter.convertColorTempViewToModel(getColorTempMin());
+    }
+
+    @Override
     protected void onHeaderClick() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
         LampDataModel lampModel = activity.lampModels.get(key);

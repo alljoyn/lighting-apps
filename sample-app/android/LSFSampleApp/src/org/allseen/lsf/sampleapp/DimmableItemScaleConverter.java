@@ -76,10 +76,16 @@ public class DimmableItemScaleConverter {
     }
 
     public static int getColor(LampState state, CapabilityData capability, LampDetails details) {
-        return getColor(state, capability, details != null ? details.getMinTemperature() : VIEW_COLORTEMP_MIN);
+        int viewColorTempDefault = details != null ? details.getMinTemperature() : VIEW_COLORTEMP_MIN;
+
+        if (viewColorTempDefault < VIEW_COLORTEMP_MIN || viewColorTempDefault > VIEW_COLORTEMP_MAX) {
+            viewColorTempDefault = VIEW_COLORTEMP_MIN;
+        }
+
+        return getColor(state, capability, convertColorTempViewToModel(viewColorTempDefault));
     }
 
-    public static int getColor(LampState state, CapabilityData capability, int colorTempMin) {
+    public static int getColor(LampState state, CapabilityData capability, long modelColorTempDefault) {
         int viewHue;
         int viewSaturation;
         int viewBrightness;
@@ -102,13 +108,13 @@ public class DimmableItemScaleConverter {
             viewHue = VIEW_HUE_MIN;
             viewSaturation = VIEW_SATURATION_MIN;
             viewBrightness = convertBrightnessModelToView(state.getBrightness());
-            viewColorTemp = colorTempMin;
+            viewColorTemp = convertColorTempModelToView(modelColorTempDefault);
         } else {
             // Type 1 (on/off)
             viewHue = VIEW_HUE_MIN;
             viewSaturation = VIEW_SATURATION_MIN;
             viewBrightness = VIEW_BRIGHTNESS_MAX;
-            viewColorTemp = colorTempMin;
+            viewColorTemp = convertColorTempModelToView(modelColorTempDefault);
         }
 
         int color;

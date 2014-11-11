@@ -20,6 +20,7 @@
 #import "LSFGroupModelContainer.h"
 #import "LSFLampModel.h"
 #import "LSFGroupModel.h"
+#import "LSFConstants.h"
 
 @implementation LSFUtilityFunctions
 
@@ -100,8 +101,7 @@
     return [NSString stringWithString: titleString];
 }
 
-
-+(void)colorIndicatorSetup: (UIImageView*)colorIndicatorImage dataState: (LSFLampState*) dataState
++(void)colorIndicatorSetup: (UIImageView*)colorIndicatorImage withDataState: (LSFLampState*) dataState andCapabilityData: (LSFCapabilityData *)capablity
 {
     CAShapeLayer *circleShape = [CAShapeLayer layer];
     [circleShape setPosition:CGPointMake([colorIndicatorImage bounds].size.width/2.0f, [colorIndicatorImage bounds].size.height/2.0f)];
@@ -109,15 +109,50 @@
     [circleShape setPath:[[UIBezierPath bezierPathWithRoundedRect:CGRectMake(0.0f, 0.0f, 10.0f, 10.0f) cornerRadius:10.0f]  CGPath]];
     [circleShape setLineWidth:0.3f];
     [circleShape setStrokeColor:[[UIColor colorWithRed:0.49 green:0.49 blue:0.49 alpha:1] CGColor]]; // #7d7d7d
-    UIColor* fillColor = [self calcFillColor: dataState];
+    UIColor* fillColor = [self calcFillColor: dataState withCapability: capablity];
     [circleShape setFillColor: [fillColor CGColor]];
     [[colorIndicatorImage layer] addSublayer:circleShape];
 }
 
-+(UIColor*)calcFillColor: (LSFLampState*) dataState
++(UIColor*)calcFillColor: (LSFLampState*) dataState withCapability: (LSFCapabilityData *)capability
 {
+    CGFloat brightness, hue, saturation, colorTemp;
+
+    if (capability == nil || capability.color > NONE)
+    {
+        //Type 4 (on/off, dimmable, full color, color temp)
+        brightness = (CGFloat)dataState.brightness;
+        hue = (CGFloat)dataState.hue;
+        saturation = (CGFloat)dataState.saturation;
+        colorTemp = (CGFloat)dataState.colorTemp;
+    }
+    else if (capability.temp > NONE)
+    {
+        //Type 3 (on/off, dimmable, color temp)
+        brightness = (CGFloat)dataState.brightness;
+        hue = ([LSFConstants getConstants]).MIN_HUE;
+        saturation = ([LSFConstants getConstants]).MIN_SATURATION;
+        colorTemp = (CGFloat)dataState.colorTemp;
+    }
+    else if (capability.dimmable > NONE)
+    {
+        //Type 2 (on/off, dimmable)
+        brightness = (CGFloat)dataState.brightness;
+        hue = ([LSFConstants getConstants]).MIN_HUE;
+        saturation = ([LSFConstants getConstants]).MIN_SATURATION;
+        colorTemp = (CGFloat)dataState.colorTemp;
+    }
+    else
+    {
+        //Type 1 (on/off)
+        brightness = ([LSFConstants getConstants]).MAX_BRIGHTNESS;
+        hue = ([LSFConstants getConstants]).MIN_HUE;
+        saturation = ([LSFConstants getConstants]).MIN_SATURATION;
+        colorTemp = (CGFloat)dataState.colorTemp;
+    }
+
     //Create original color using hue, saturation, brightness
-    UIColor* colorToFill = [UIColor colorWithHue: ((CGFloat)(dataState.hue) / 360) saturation: ((CGFloat)(dataState.saturation) / 100) brightness: ((CGFloat)(dataState.brightness) / 100) alpha: 1.000];
+    UIColor* colorToFill = [UIColor colorWithHue: (hue / 360) saturation: (saturation / 100) brightness: (brightness / 100) alpha: 1.000];
 
     //Convert the original color to RGB format
     CGFloat colorToFillRed, colorToFillGreen, colorToFillBlue, colorToFillAlpha;
@@ -129,7 +164,7 @@
     colorToFillBlue *= 255;
 
     //Convert colorTemp to RGB format
-    UIColor* colorTempRGB = [self convertColorTempToRGB: dataState.colorTemp];
+    UIColor* colorTempRGB = [self convertColorTempToRGB: colorTemp];
     CGFloat colorTempRed, colorTempGreen, colorTempBlue, colorTempAlpha;
     [colorTempRGB getRed:&colorTempRed green:&colorTempGreen blue:&colorTempBlue alpha:&colorTempAlpha];
 

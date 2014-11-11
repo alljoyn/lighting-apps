@@ -377,51 +377,52 @@
         self.colorTempAsterisk.hidden = YES;
     }
 
-    if (!self.isDimmable && !self.hasColor && !self.hasVariableColorTemp)
+    self.presetButton.enabled = YES;
+
+    LSFPresetModelContainer *presetContainer = [LSFPresetModelContainer getPresetModelContainer];
+    NSArray *presets = [presetContainer.presetContainer allValues];
+
+    NSMutableArray *presetsArray = [[NSMutableArray alloc] init];
+    BOOL presetMatched = NO;
+    for (LSFPresetModel *data in presets)
     {
-        [self.presetButton setTitle: @"Save New Preset" forState: UIControlStateNormal];
-        self.presetButton.enabled = NO;
+        BOOL matchesPreset = [self checkIfLampState: self.groupModel.state matchesPreset: data];
+
+        if (matchesPreset)
+        {
+            [presetsArray addObject: data.name];
+            presetMatched = YES;
+        }
+    }
+
+    if (presetMatched)
+    {
+        NSArray *sortedArray = [presetsArray sortedArrayUsingSelector: @selector(localizedCaseInsensitiveCompare:)];
+        NSMutableString *presetsMatched = [[NSMutableString alloc] init];
+
+        for (NSString *presetName in sortedArray)
+        {
+            [presetsMatched appendString: [NSString stringWithFormat:@"%@, ", presetName]];
+        }
+
+        [presetsMatched deleteCharactersInRange: NSMakeRange(presetsMatched.length - 2, 2)];
+        [self.presetButton setTitle: presetsMatched forState: UIControlStateNormal];
     }
     else
     {
-        self.presetButton.enabled = YES;
-
-        LSFPresetModelContainer *presetContainer = [LSFPresetModelContainer getPresetModelContainer];
-        NSArray *presets = [presetContainer.presetContainer allValues];
-
-        NSMutableArray *presetsArray = [[NSMutableArray alloc] init];
-        BOOL presetMatched = NO;
-        for (LSFPresetModel *data in presets)
-        {
-            BOOL matchesPreset = [self checkIfLampState: self.groupModel.state matchesPreset: data];
-
-            if (matchesPreset)
-            {
-                [presetsArray addObject: data.name];
-                presetMatched = YES;
-            }
-        }
-
-        if (presetMatched)
-        {
-            NSArray *sortedArray = [presetsArray sortedArrayUsingSelector: @selector(localizedCaseInsensitiveCompare:)];
-            NSMutableString *presetsMatched = [[NSMutableString alloc] init];
-
-            for (NSString *presetName in sortedArray)
-            {
-                [presetsMatched appendString: [NSString stringWithFormat:@"%@, ", presetName]];
-            }
-
-            [presetsMatched deleteCharactersInRange: NSMakeRange(presetsMatched.length - 2, 2)];
-            [self.presetButton setTitle: presetsMatched forState: UIControlStateNormal];
-        }
-        else
-        {
-            [self.presetButton setTitle: @"Save New Preset" forState: UIControlStateNormal];
-        }
+        [self.presetButton setTitle: @"Save New Preset" forState: UIControlStateNormal];
     }
 
-    [LSFUtilityFunctions colorIndicatorSetup: self.colorIndicatorImage dataState: self.groupModel.state];
+    NSLog(@"LSFGroupInfoTableViewController - reloadGroupWithID() executing");
+    NSLog(@"Power = %@", self.groupModel.state.onOff ? @"On" : @"Off");
+    NSLog(@"Brightness = %u", self.groupModel.state.brightness);
+    NSLog(@"Hue = %u", self.groupModel.state.hue);
+    NSLog(@"Saturation = %u", self.groupModel.state.saturation);
+    NSLog(@"Color Temp = %u", self.groupModel.state.colorTemp);
+    NSLog(@"Capability = [%@, %@, %@]", self.groupModel.capability.dimmable ? @"Dimmable" : @"Not Dimmable", self.groupModel.capability.color ? @"Color" : @"No Color", self.groupModel.capability.temp ? @"Variable Color Temp" : @"No Variable Color Temp");
+    NSLog(@"Color Temp Min = %u", self.groupModel.groupColorTempMin);
+    NSLog(@"Color Temp Max = %u", self.groupModel.groupColorTempMax);
+    [LSFUtilityFunctions colorIndicatorSetup: self.colorIndicatorImage withDataState: self.groupModel.state andCapabilityData: self.groupModel.capability];
 }
 
 -(void)deleteGroupsWithIDs: (NSArray *)groupIDs andNames: (NSArray *)groupNames
