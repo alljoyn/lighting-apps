@@ -265,15 +265,16 @@
     }
     else
     {
-        if (scaledBrightness == 0)
-        {
-            self.tedm.state.onOff = NO;
-        }
-        else
-        {
-            self.tedm.state.onOff = YES;
-        }
+//        if (scaledBrightness == 0)
+//        {
+//            self.tedm.state.onOff = NO;
+//        }
+//        else
+//        {
+//            self.tedm.state.onOff = YES;
+//        }
 
+        self.tedm.state.onOff = YES;
         self.tedm.state.brightness = scaledBrightness;
     }
 

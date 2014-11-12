@@ -30,6 +30,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    NSLog(@"LSFAppDelegate - applicationDidFinishLaunchingWithOptions()");
+
     [LSFAllJoynManager getAllJoynManager];
     [LSFLampModelContainer getLampModelContainer];
     [LSFGroupModelContainer getGroupModelContainer];
@@ -45,29 +47,32 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    // Called when the apps state will change to inactive. Use this method to pause the app.
+    NSLog(@"LSFAppDelegate - applicationWillResignActive()");
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // If your app supports background execution, use this method to release shared resources and save any data.
+    NSLog(@"LSFAppDelegate - applicationDidEnterBackground()");
+
+    //Close app when it enters the background
+    exit(0);
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    // Undo the changes that were made when the app entered the background.
+    NSLog(@"LSFAppDelegate - applicationWillEnterForeground()");
 
     [[LSFWifiMonitor getWifiMonitor] checkCurrentStatus];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    // Restart tasks that were stopped when the app entered the background and refresh the UI.
+    NSLog(@"LSFAppDelegate - applicationDidBecomeActive()");
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    // Implement when app is about to terminate and save data, if needed.
+    NSLog(@"LSFAppDelegate - applicationWillTerminate()");
 }
 
 @end
