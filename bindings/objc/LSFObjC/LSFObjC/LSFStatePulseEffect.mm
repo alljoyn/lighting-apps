@@ -117,7 +117,10 @@
 
 -(LSFLampState *)fromLampState
 {
-    return [[LSFLampState alloc] initWithOnOff: self.statePulseEffect->fromState.onOff brightness: self.statePulseEffect->fromState.brightness hue: self.statePulseEffect->fromState.hue saturation: self.statePulseEffect->fromState.saturation colorTemp: self.statePulseEffect->fromState.colorTemp];
+    LSFLampState *fromState = [[LSFLampState alloc] initWithOnOff: self.statePulseEffect->fromState.onOff brightness: self.statePulseEffect->fromState.brightness hue: self.statePulseEffect->fromState.hue saturation: self.statePulseEffect->fromState.saturation colorTemp: self.statePulseEffect->fromState.colorTemp];
+    fromState.isNull = self.statePulseEffect->fromState.nullState;
+
+    return fromState;
 }
 
 -(void)setToLampState: (LSFLampState *)toLampState

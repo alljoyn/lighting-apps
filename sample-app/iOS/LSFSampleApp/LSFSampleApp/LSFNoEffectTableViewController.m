@@ -263,15 +263,16 @@
     }
     else
     {
-        if (scaledBrightness == 0)
-        {
-            self.nedm.state.onOff = NO;
-        }
-        else
-        {
-            self.nedm.state.onOff = YES;
-        }
+//        if (scaledBrightness == 0)
+//        {
+//            self.nedm.state.onOff = NO;
+//        }
+//        else
+//        {
+//            self.nedm.state.onOff = YES;
+//        }
 
+        self.nedm.state.onOff = YES;
         self.nedm.state.brightness = scaledBrightness;
     }
 

@@ -243,7 +243,9 @@
         pedm.members.lamps = spe.lamps;
         pedm.members.lampGroups = spe.lampGroups;
         pedm.state = spe.fromLampState;
+        pedm.state.isNull = spe.fromLampState.isNull;
         pedm.endState = spe.toLampState;
+        pedm.endState.isNull = NO;
         pedm.period = spe.period;
         pedm.duration = spe.duration;
         pedm.numPulses = spe.numPulses;

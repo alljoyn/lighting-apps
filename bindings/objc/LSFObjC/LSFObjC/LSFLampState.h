@@ -23,6 +23,7 @@
 @property (nonatomic) unsigned int hue;
 @property (nonatomic) unsigned int saturation;
 @property (nonatomic) unsigned int colorTemp;
+@property (nonatomic) BOOL isNull;
 
 -(id)init;
 -(id)initWithOnOff: (BOOL)onOff brightness: (unsigned int)brightness hue: (unsigned int)hue saturation: (unsigned int)saturation colorTemp: (unsigned int)colorTemp;

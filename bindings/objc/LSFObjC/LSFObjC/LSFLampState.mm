@@ -110,6 +110,16 @@
     return self.lampState->colorTemp;
 }
 
+-(void)setIsNull: (BOOL)isNull
+{
+    self.lampState->nullState = isNull;
+}
+
+-(BOOL)isNull
+{
+    return self.lampState->nullState;
+}
+
 /*
  * Accessor for the internal C++ API object this objective-c class encapsulates
  */

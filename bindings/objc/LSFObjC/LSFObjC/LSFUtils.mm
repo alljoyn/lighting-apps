@@ -140,7 +140,10 @@
         NSArray *lampGroupIDs = [self convertStringListToNSArray: (*iter).lampGroups];
         
         LSFLampState *fromState = [[LSFLampState alloc] initWithOnOff: (*iter).fromState.onOff brightness: (*iter).fromState.brightness hue: (*iter).fromState.hue saturation: (*iter).fromState.saturation colorTemp: (*iter).fromState.colorTemp];
+        fromState.isNull = (*iter).fromState.nullState;
+
         LSFLampState *toState = [[LSFLampState alloc] initWithOnOff: (*iter).toState.onOff brightness: (*iter).toState.brightness hue: (*iter).toState.hue saturation: (*iter).toState.saturation colorTemp: (*iter).toState.colorTemp];
+        toState.isNull = (*iter).toState.nullState;
         
         LSFStatePulseEffect *spe = [[LSFStatePulseEffect alloc] initWithLampIDs: lampIDs lampGroupIDs: lampGroupIDs fromState: fromState toState: toState period: (*iter).pulsePeriod duration: (*iter).pulseDuration andNumPulses: (*iter).numPulses];
         
