@@ -614,8 +614,8 @@
 		878CC02C18FDCFF8005C3E46 /* ModelClasses */ = {
 			isa = PBXGroup;
 			children = (
-				1999FB7619D18EB7000F3F94 /* LSFLampAnnouncementData.m */,
 				1999FB7719D18EB7000F3F94 /* LSFLampAnnouncementData.h */,
+				1999FB7619D18EB7000F3F94 /* LSFLampAnnouncementData.m */,
 				87A9C2991996DFA500A6AC2A /* LSFControllerModel.h */,
 				87A9C29A1996DFA500A6AC2A /* LSFControllerModel.m */,
 				876E5EAE19900D5B0046F9C7 /* LSFDataModel.h */,
