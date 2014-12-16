@@ -17,6 +17,10 @@
 #import <Foundation/Foundation.h>
 #import "LSFGroupModel.h"
 
+/**
+ * @warning *Note:* This class is not intended to be used by clients, and its interface may change
+ * in subsequent releases of the SDK.
+ */
 @interface LSFGroupsFlattener : NSObject
 
 @property (nonatomic, strong) NSMutableSet *lampIDSet;

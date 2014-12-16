@@ -20,6 +20,10 @@
 #import "LSFAboutData.h"
 #import "LSFDataModel.h"
 
+/**
+ * @warning *Note:* This class is not intended to be used by clients, and its interface may change
+ * in subsequent releases of the SDK.
+ */
 @interface LSFLampModel : LSFDataModel
 
 @property (nonatomic, strong) LSFLampDetails *lampDetails;

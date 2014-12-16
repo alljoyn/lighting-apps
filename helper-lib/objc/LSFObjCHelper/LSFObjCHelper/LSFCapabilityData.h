@@ -21,6 +21,10 @@
 #define SOME 1
 #define ALL 2
 
+/**
+ * @warning *Note:* This class is not intended to be used by clients, and its interface may change
+ * in subsequent releases of the SDK.
+ */
 @interface LSFCapabilityData : NSObject
 
 @property (nonatomic) int dimmable;

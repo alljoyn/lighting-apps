@@ -16,6 +16,10 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ * @warning *Note:* This class is not intended to be used by clients, and its interface may change
+ * in subsequent releases of the SDK.
+ */
 @interface LSFDispatchQueue : NSObject
 
 @property (nonatomic, strong) dispatch_queue_t queue;

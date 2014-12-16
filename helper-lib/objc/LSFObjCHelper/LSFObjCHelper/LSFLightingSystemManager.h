@@ -28,6 +28,10 @@
 #import "LSFSceneManager.h"
 #import "LSFMasterSceneManager.h"
 
+/**
+ * @warning *Note:* This class is not intended to be used by clients, and its interface may change
+ * in subsequent releases of the SDK.
+ */
 @interface LSFLightingSystemManager : NSObject
 
 @property (nonatomic, strong) NSString *DEFAULT_LANGUAGE;

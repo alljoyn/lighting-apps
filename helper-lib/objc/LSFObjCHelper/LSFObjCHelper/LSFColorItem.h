@@ -17,6 +17,12 @@
 #import "LSFLightingItem.h"
 #import "LSFDataModel.h"
 
+/**
+ * Base class for Lighting items that support color.
+ *
+ * @warning *Note:* This class is not intended to be used by clients, and its interface may change
+ * in subsequent releases of the SDK.
+ */
 @interface LSFColorItem : LSFLightingItem
 
 -(void)turnOn;

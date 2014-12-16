@@ -17,6 +17,10 @@
 #import <Foundation/Foundation.h>
 #import "LSFMasterSceneManagerCallbackDelegate.h"
 
+/**
+ * @warning *Note:* This class is not intended to be used by clients, and its interface may change
+ * in subsequent releases of the SDK.
+ */
 @interface LSFHelperMasterSceneManagerCallback : NSObject <LSFMasterSceneManagerCallbackDelegate>
 
 -(id)init;

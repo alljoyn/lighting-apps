@@ -17,6 +17,12 @@
 #import "LSFLightingItem.h"
 #import "LSFMasterSceneDataModel.h"
 
+/**
+ * An LSFLightingMasterScene object represents a collection of scene definitions in a lighting system.
+ *
+ * @warning *Note:* This class is not intended to be used by clients, and its interface may change
+ * in subsequent releases of the SDK.
+ */
 @interface LSFLightingMasterScene : LSFLightingItem
 
 -(id)initWithMasterSceneID: (NSString *)masterSceneID;

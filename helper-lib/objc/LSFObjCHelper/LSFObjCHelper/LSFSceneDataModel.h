@@ -20,6 +20,10 @@
 #import "LSFPulseEffectDataModel.h"
 #import "LSFScene.h"
 
+/**
+ * @warning *Note:* This class is not intended to be used by clients, and its interface may change
+ * in subsequent releases of the SDK.
+ */
 @interface LSFSceneDataModel : LSFModel
 
 @property (nonatomic, strong) NSMutableArray *noEffects;

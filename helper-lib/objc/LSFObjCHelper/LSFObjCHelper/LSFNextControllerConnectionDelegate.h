@@ -16,8 +16,17 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ * The LSFNextControllerConnectionDelegate is required if the developer wishes
+ * to be notified when a connection to the Lighting controller has been established.
+ */
 @protocol LSFNextControllerConnectionDelegate <NSObject>
 
+/** @name Required Methods */
+
+/**
+ * Triggered when a connection to the Lighting controller has been established.
+ */
 -(void)onNextControllerConnection;
 
 @end

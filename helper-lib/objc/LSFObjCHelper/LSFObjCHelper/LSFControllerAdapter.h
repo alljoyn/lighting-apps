@@ -18,6 +18,10 @@
 #import "LSFControllerListener.h"
 #import "LSFNextControllerConnectionDelegate.h"
 
+/**
+ * @warning *Note:* This class is not intended to be used by clients, and its interface may change
+ * in subsequent releases of the SDK.
+ */
 @interface LSFControllerAdapter : NSObject <LSFControllerListener>
 
 @property (nonatomic, weak) id<LSFNextControllerConnectionDelegate> delegate;

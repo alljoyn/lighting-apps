@@ -17,6 +17,12 @@
 #import <Foundation/Foundation.h>
 #import "LSFModel.h"
 
+/**
+ * Base class for items in the Lighting System.
+ *
+ * @warning *Note:* This class is not intended to be used by clients, and its interface may change
+ * in subsequent releases of the SDK.
+ */
 @interface LSFLightingItem : NSObject
 
 @property (nonatomic, strong, readonly) NSString *name;

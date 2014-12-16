@@ -19,6 +19,12 @@
 #import "LSFGroup.h"
 #import "LSFPresetModel.h"
 
+/**
+ * An LSFPreset object represents a predefined color state in a lighting system.
+ *
+ * @warning *Note:* This class is not intended to be used by clients, and its interface may change
+ * in subsequent releases of the SDK.
+ */
 @interface LSFPreset : LSFLightingItem
 
 -(id)initWithPresetID: (NSString *)presetID;

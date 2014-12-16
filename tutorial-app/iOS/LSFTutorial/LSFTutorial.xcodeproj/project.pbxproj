@@ -483,7 +483,6 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"\"$(LSF_OBJC_HELPER_HOME)/LSFObjCHelper\"",
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
 					"\"$(ALLJOYN_HOME)/services/about/cpp/inc\"",
@@ -493,6 +492,7 @@
 					"\"$(LSF_HOME)/standard_core_library/common/inc\"",
 					"\"$(LSF_HOME)/common/inc\"",
 					"\"$(APPS_HOME)/apps/bindings/objc/LSFObjC/LSFObjC\"",
+					"\"$(APPS_HOME)/apps/helper-lib/objc/LSFObjCHelper/LSFObjCHelper\"",
 				);
 				INFOPLIST_FILE = "LSFTutorial/LSFTutorial-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -540,7 +540,6 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"\"$(LSF_OBJC_HELPER_HOME)/LSFObjCHelper\"",
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
 					"\"$(ALLJOYN_HOME)/services/about/cpp/inc\"",
@@ -550,6 +549,7 @@
 					"\"$(LSF_HOME)/standard_core_library/common/inc\"",
 					"\"$(LSF_HOME)/common/inc\"",
 					"\"$(APPS_HOME)/apps/bindings/objc/LSFObjC/LSFObjC\"",
+					"\"$(APPS_HOME)/apps/helper-lib/objc/LSFObjCHelper/LSFObjCHelper\"",
 				);
 				INFOPLIST_FILE = "LSFTutorial/LSFTutorial-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;

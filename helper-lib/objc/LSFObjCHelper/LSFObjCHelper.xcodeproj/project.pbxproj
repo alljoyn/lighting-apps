@@ -6,6 +6,20 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		874D987D1A3B989600E1DDFC /* API Documentation */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 874D98811A3B989600E1DDFC /* Build configuration list for PBXAggregateTarget "API Documentation" */;
+			buildPhases = (
+				874D98821A3B98AF00E1DDFC /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = "API Documentation";
+			productName = "API Documentation";
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		872B4CC51A2CF25B0019E9F1 /* LSFHelperControllerClientCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 872B4CB81A2CF25B0019E9F1 /* LSFHelperControllerClientCallback.m */; };
 		872B4CC61A2CF25B0019E9F1 /* LSFHelperControllerServiceManagerCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 872B4CBA1A2CF25B0019E9F1 /* LSFHelperControllerServiceManagerCallback.m */; };
@@ -669,6 +683,7 @@
 			targets = (
 				87E6301F19BF9A0700F447A1 /* LSFObjCHelper */,
 				87E6302F19BF9A0700F447A1 /* LSFObjCHelperTests */,
+				874D987D1A3B989600E1DDFC /* API Documentation */,
 			);
 		};
 /* End PBXProject section */
@@ -700,6 +715,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		874D98821A3B98AF00E1DDFC /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Xcode appledoc script\n#\n# Start variables\nLSF_DOC_COMPANY_NAME=\"AllSeen Alliance\";\nLSF_DOC_COMPANY_ID=\"org.allseen.lsf\";\nLSF_DOC_PLATFORM=\"iphoneos\";\nLSF_DOC_PATH_OUTPUT=\"${SOURCE_ROOT}/doc\";\nLSF_DOC_PATH_COMMAND=`(echo appledoc; ls /usr/bin/appledoc; ls /usr/local/bin/appledoc; which appledoc) 2>/dev/null | tail -1`\nLSF_DOC_PATH_TEMPLATES=`(echo; ls -d \"${HOME}/Library/Application \\Support/appledoc\"; ls -d \"${HOME}/.appledoc\") 2>/dev/null | tail -1`\n# End variables\n\nif [\"${LSF_DOC_PATH_TEMPLATES}\" != \"\" ]; then\n    ${LSF_DOC_PATH_COMMAND} \\\n        --project-name \"${PROJECT_NAME}\" \\\n        --project-company \"${LSF_DOC_COMPANY_NAME}\" \\\n        --company-id \"${LSF_DOC_COMPANY_ID}\" \\\n        --docset-platform-family \"${LSF_DOC_PLATFORM}\" \\\n        --output \"${LSF_DOC_PATH_OUTPUT}\" \\\n        --templates \"${LSF_DOC_PATH_TEMPLATES}\" \\\n        --logformat xcode \\\n        --keep-intermediate-files \\\n        --no-repeat-first-par \\\n        --no-warn-invalid-crossref \\\n        --no-create-docset \\\n        --ignore LSFObjCHelperTests \\\n        --ignore .m \\\n        --ignore .mm \\\n        --exit-threshold 2 \\\n        \"${PROJECT_DIR}\"\nelse\n    ${LSF_DOC_PATH_COMMAND} \\\n        --project-name \"${PROJECT_NAME}\" \\\n        --project-company \"${LSF_DOC_COMPANY_NAME}\" \\\n        --company-id \"${LSF_DOC_COMPANY_ID}\" \\\n        --docset-platform-family \"${LSF_DOC_PLATFORM}\" \\\n        --output \"${LSF_DOC_PATH_OUTPUT}\" \\\n        --logformat xcode \\\n        --keep-intermediate-files \\\n        --no-repeat-first-par \\\n        --no-warn-invalid-crossref \\\n        --no-create-docset \\\n        --ignore LSFObjCHelperTests \\\n        --ignore .m \\\n        --ignore .mm \\\n        --exit-threshold 2 \\\n        \"${PROJECT_DIR}\"\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		87E6301C19BF9A0700F447A1 /* Sources */ = {
@@ -794,6 +825,20 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		874D987E1A3B989600E1DDFC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		874D987F1A3B989600E1DDFC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		87E6304119BF9A0700F447A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -990,6 +1035,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		874D98811A3B989600E1DDFC /* Build configuration list for PBXAggregateTarget "API Documentation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				874D987E1A3B989600E1DDFC /* Debug */,
+				874D987F1A3B989600E1DDFC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		87E6301B19BF9A0700F447A1 /* Build configuration list for PBXProject "LSFObjCHelper" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

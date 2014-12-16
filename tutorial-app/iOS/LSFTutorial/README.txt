@@ -29,15 +29,11 @@ project. The steps to build the app and push it to an iOS device are as follows:
    b) "LSF Home" for the Display Name
    c) "<lsf_tutorial_install_dir>/iOS/Projects/service_framework" for the Path
 8) Create another variable by repeating steps 4-5 using the following information:
-   a) "LSF_OBJC_HELPER_HOME" for the Name
-   b) "LSF ObjC Helper Home" for the Display Name
-   c) "<lsf_tutorial_install_dir>/iOS/Projects/lsf/apps/helper-lib/objc/LSFObjCHelper" for the Path
-9) Create another variable by repeating steps 4-5 using the following information:
    a) "OPENSSL_ROOT" for the Name
    b) "OpenSSL Root" for the Display Name
    c) "<open_ssl_install_dir>" for the Path (see #4 in the prerequisites section)
-10) Open the LSFTutorial Xcode project at the following path:
+9) Open the LSFTutorial Xcode project at the following path:
    "<lsf_tutorial_install_dir>/iOS/Projects/lsf/apps/tutorial-app/iOS/LSFTutorial/LSFTutorial.xcodeproj"
-11) In the top-left, ensure that "LSFTutorial" is set as the active build scheme and your are building
+10) In the top-left, ensure that "LSFTutorial" is set as the active build scheme and your are building
     for the connected iOS device.
-12) Click the "Play" button in the top-left to build and run the application on your iOS device.
+11) Click the "Play" button in the top-left to build and run the application on your iOS device.

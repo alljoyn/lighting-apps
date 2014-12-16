@@ -61,10 +61,10 @@
     [ajManager.lsfLampManager transitionLampID: self.lampModel.theID onOffField: powerOn];
 }
 
--(void)setColorWithHue:(unsigned int)hueDegress saturation:(unsigned int)saturationPercent brightness:(unsigned int)brightnessPercent andColorTemp:(unsigned int)colorTempDegrees
+-(void)setColorWithHue:(unsigned int)hueDegrees saturation:(unsigned int)saturationPercent brightness:(unsigned int)brightnessPercent andColorTemp:(unsigned int)colorTempDegrees
 {
     NSLog(@"LSFLamps - setColor() executing");
-    NSLog(@"Hue = %u", hueDegress);
+    NSLog(@"Hue = %u", hueDegrees);
     NSLog(@"Saturation = %u", saturationPercent);
     NSLog(@"Brightness = %u", brightnessPercent);
     NSLog(@"ColorTemp = %u", colorTempDegrees);
@@ -73,7 +73,7 @@
     LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
 
     unsigned int scaledBrightness = [constants scaleLampStateValue: brightnessPercent withMax: 100];
-    unsigned int scaledHue = [constants scaleLampStateValue: hueDegress withMax: 360];
+    unsigned int scaledHue = [constants scaleLampStateValue: hueDegrees withMax: 360];
     unsigned int scaledSaturation = [constants scaleLampStateValue: saturationPercent withMax: 100];
     unsigned int scaledColorTemp = [constants scaleColorTemp: colorTempDegrees];
 

@@ -14,6 +14,10 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
+/**
+ * Note: This class is not intended to be used by clients, and its interface may change
+ * in subsequent releases of the SDK.
+ */
 typedef enum {
     Connected,
     Disconnected
