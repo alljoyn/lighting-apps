@@ -28,6 +28,25 @@
 		8719C92618D910630011CD45 /* LSFLampStateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8719C92518D910630011CD45 /* LSFLampStateTests.mm */; };
 		8719C95118DA28A70011CD45 /* libstdc++.6.0.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8719C95018DA28A70011CD45 /* libstdc++.6.0.9.dylib */; };
 		8719C95D18DCB1F00011CD45 /* LSFObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 8719C95C18DCB1F00011CD45 /* LSFObject.m */; };
+		871C4F941A5C91F8004062BA /* LSFMasterSceneManagerCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 874CFED01971D44600E30A48 /* LSFMasterSceneManagerCallback.h */; };
+		871C4F951A5C91F8004062BA /* LSFPresetManagerCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 870C0B15196A2928009E1408 /* LSFPresetManagerCallback.h */; };
+		871C4F961A5C91F8004062BA /* LSFSceneManagerCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 874CFECB1971BDC900E30A48 /* LSFSceneManagerCallback.h */; };
+		871C4F971A5C91F8004062BA /* LSFMasterSceneManagerCallbackDelegate.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 874CFECF1971D0AA00E30A48 /* LSFMasterSceneManagerCallbackDelegate.h */; };
+		871C4F981A5C91F8004062BA /* LSFPresetManagerCallbackDelegate.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 870C0B18196A2F7C009E1408 /* LSFPresetManagerCallbackDelegate.h */; };
+		871C4F991A5C91F8004062BA /* LSFSceneManagerCallbackDelegate.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 874CFECE1971BE5000E30A48 /* LSFSceneManagerCallbackDelegate.h */; };
+		871C4F9A1A5C91F8004062BA /* LSFMasterScene.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 874CFEC21971AD6000E30A48 /* LSFMasterScene.h */; };
+		871C4F9B1A5C91F8004062BA /* LSFPresetPulseEffect.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 879A3FE81970BDE70082B204 /* LSFPresetPulseEffect.h */; };
+		871C4F9C1A5C91F8004062BA /* LSFPresetTransitionEffect.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 879A3FDB1970A3DA0082B204 /* LSFPresetTransitionEffect.h */; };
+		871C4F9D1A5C91F8004062BA /* LSFScene.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 879A3FEE1970DBA80082B204 /* LSFScene.h */; };
+		871C4F9E1A5C91F8004062BA /* LSFStatePulseEffect.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 879A3FE21970ACAD0082B204 /* LSFStatePulseEffect.h */; };
+		871C4F9F1A5C91F8004062BA /* LSFStateTransitionEffect.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 879A3FD5197085E60082B204 /* LSFStateTransitionEffect.h */; };
+		871C4FA01A5C91F8004062BA /* LSFMasterSceneManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 874CFED31971D97C00E30A48 /* LSFMasterSceneManager.h */; };
+		871C4FA11A5C91F8004062BA /* LSFPresetManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 870C0B19196A3586009E1408 /* LSFPresetManager.h */; };
+		871C4FA21A5C91F8004062BA /* LSFSceneManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 874CFEC81971BD6100E30A48 /* LSFSceneManager.h */; };
+		871C4FA31A5C91F8004062BA /* LSFLampMemberList.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87D5E4B3197083190038B494 /* LSFLampMemberList.h */; };
+		871C4FA41A5C91F8004062BA /* LSFPulseEffect.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 879A3FE11970AB9A0082B204 /* LSFPulseEffect.h */; };
+		871C4FA51A5C91F8004062BA /* LSFTransitionEffect.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87D5E4B4197084A90038B494 /* LSFTransitionEffect.h */; };
+		871C4FA61A5C91F8004062BA /* Rank.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8774B20E1A07EE7000EE42E9 /* Rank.h */; };
 		871F207F18D2168400784E84 /* LSFControllerClientCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 871F207E18D2168400784E84 /* LSFControllerClientCallback.mm */; };
 		871F208618D2274300784E84 /* LSFLampGroupManagerCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 871F208518D2274300784E84 /* LSFLampGroupManagerCallback.mm */; };
 		871F208D18D259E500784E84 /* LSFLampManagerCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 871F208C18D259E500784E84 /* LSFLampManagerCallback.mm */; };
@@ -134,6 +153,25 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				871C4F941A5C91F8004062BA /* LSFMasterSceneManagerCallback.h in CopyFiles */,
+				871C4F951A5C91F8004062BA /* LSFPresetManagerCallback.h in CopyFiles */,
+				871C4F961A5C91F8004062BA /* LSFSceneManagerCallback.h in CopyFiles */,
+				871C4F971A5C91F8004062BA /* LSFMasterSceneManagerCallbackDelegate.h in CopyFiles */,
+				871C4F981A5C91F8004062BA /* LSFPresetManagerCallbackDelegate.h in CopyFiles */,
+				871C4F991A5C91F8004062BA /* LSFSceneManagerCallbackDelegate.h in CopyFiles */,
+				871C4F9A1A5C91F8004062BA /* LSFMasterScene.h in CopyFiles */,
+				871C4F9B1A5C91F8004062BA /* LSFPresetPulseEffect.h in CopyFiles */,
+				871C4F9C1A5C91F8004062BA /* LSFPresetTransitionEffect.h in CopyFiles */,
+				871C4F9D1A5C91F8004062BA /* LSFScene.h in CopyFiles */,
+				871C4F9E1A5C91F8004062BA /* LSFStatePulseEffect.h in CopyFiles */,
+				871C4F9F1A5C91F8004062BA /* LSFStateTransitionEffect.h in CopyFiles */,
+				871C4FA01A5C91F8004062BA /* LSFMasterSceneManager.h in CopyFiles */,
+				871C4FA11A5C91F8004062BA /* LSFPresetManager.h in CopyFiles */,
+				871C4FA21A5C91F8004062BA /* LSFSceneManager.h in CopyFiles */,
+				871C4FA31A5C91F8004062BA /* LSFLampMemberList.h in CopyFiles */,
+				871C4FA41A5C91F8004062BA /* LSFPulseEffect.h in CopyFiles */,
+				871C4FA51A5C91F8004062BA /* LSFTransitionEffect.h in CopyFiles */,
+				871C4FA61A5C91F8004062BA /* Rank.h in CopyFiles */,
 				87443D25195C5AF5008EEF36 /* LSFControllerClientCallback.h in CopyFiles */,
 				87443D26195C5AF5008EEF36 /* LSFControllerServiceManagerCallback.h in CopyFiles */,
 				87443D27195C5AF5008EEF36 /* LSFLampGroupManagerCallback.h in CopyFiles */,

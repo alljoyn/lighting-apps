@@ -21,7 +21,6 @@
 		8776E06219BEAAED00BDF50B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8776E04419BEAAED00BDF50B /* UIKit.framework */; };
 		8776E06A19BEAAED00BDF50B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8776E06819BEAAED00BDF50B /* InfoPlist.strings */; };
 		8776E06C19BEAAED00BDF50B /* LSFTutorialTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776E06B19BEAAED00BDF50B /* LSFTutorialTests.m */; };
-		87E6306519BFAF4A00F447A1 /* libLSFObjCHelper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87E6306019BFAED100F447A1 /* libLSFObjCHelper.a */; };
 		87FA42591A23B41200059BF7 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87FA42581A23B41200059BF7 /* SystemConfiguration.framework */; };
 		87FA42601A23B42800059BF7 /* libc++.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87FA425A1A23B42700059BF7 /* libc++.1.dylib */; };
 		87FA42611A23B42800059BF7 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87FA425B1A23B42800059BF7 /* libc++.dylib */; };
@@ -38,27 +37,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 8776E03C19BEAAED00BDF50B;
 			remoteInfo = LSFTutorial;
-		};
-		87E6305F19BFAED100F447A1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 87E6305A19BFAED100F447A1 /* LSFObjCHelper.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 87E6302019BF9A0700F447A1;
-			remoteInfo = LSFObjCHelper;
-		};
-		87E6306119BFAED100F447A1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 87E6305A19BFAED100F447A1 /* LSFObjCHelper.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 87E6303019BF9A0700F447A1;
-			remoteInfo = LSFObjCHelperTests;
-		};
-		87E6306319BFAF4300F447A1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 87E6305A19BFAED100F447A1 /* LSFObjCHelper.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 87E6301F19BF9A0700F447A1;
-			remoteInfo = LSFObjCHelper;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -83,7 +61,6 @@
 		8776E06919BEAAED00BDF50B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8776E06B19BEAAED00BDF50B /* LSFTutorialTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSFTutorialTests.m; sourceTree = "<group>"; };
 		87A15C601A24DB0D004FE3CD /* libLSFObjC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLSFObjC.a; path = "../../../../../../../Library/Developer/Xcode/DerivedData/LSFTutorial-dzkmvxsuctrceocsjmzyqvjtjlgj/Build/Products/Debug-iphoneos/libLSFObjC.a"; sourceTree = "<group>"; };
-		87E6305A19BFAED100F447A1 /* LSFObjCHelper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LSFObjCHelper.xcodeproj; path = "../../../helper-lib/objc/LSFObjCHelper/LSFObjCHelper.xcodeproj"; sourceTree = "<group>"; };
 		87FA42581A23B41200059BF7 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		87FA425A1A23B42700059BF7 /* libc++.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.1.dylib"; path = "usr/lib/libc++.1.dylib"; sourceTree = SDKROOT; };
 		87FA425B1A23B42800059BF7 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
@@ -98,7 +75,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				87E6306519BFAF4A00F447A1 /* libLSFObjCHelper.a in Frameworks */,
 				87FA42631A23B42800059BF7 /* libstdc++.6.0.9.dylib in Frameworks */,
 				87FA42641A23B42800059BF7 /* libstdc++.6.dylib in Frameworks */,
 				87FA42651A23B42800059BF7 /* libstdc++.dylib in Frameworks */,
@@ -132,7 +108,6 @@
 				8776E06519BEAAED00BDF50B /* LSFTutorialTests */,
 				8776E03F19BEAAED00BDF50B /* Frameworks */,
 				8776E03E19BEAAED00BDF50B /* Products */,
-				87E6305A19BFAED100F447A1 /* LSFObjCHelper.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -207,15 +182,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		87E6305B19BFAED100F447A1 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				87E6306019BFAED100F447A1 /* libLSFObjCHelper.a */,
-				87E6306219BFAED100F447A1 /* LSFObjCHelperTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -230,7 +196,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				87E6306419BFAF4300F447A1 /* PBXTargetDependency */,
 			);
 			name = LSFTutorial;
 			productName = LSFTutorial;
@@ -281,12 +246,6 @@
 			mainGroup = 8776E03419BEAAED00BDF50B;
 			productRefGroup = 8776E03E19BEAAED00BDF50B /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 87E6305B19BFAED100F447A1 /* Products */;
-					ProjectRef = 87E6305A19BFAED100F447A1 /* LSFObjCHelper.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				8776E03C19BEAAED00BDF50B /* LSFTutorial */,
@@ -294,23 +253,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		87E6306019BFAED100F447A1 /* libLSFObjCHelper.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libLSFObjCHelper.a;
-			remoteRef = 87E6305F19BFAED100F447A1 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		87E6306219BFAED100F447A1 /* LSFObjCHelperTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = LSFObjCHelperTests.xctest;
-			remoteRef = 87E6306119BFAED100F447A1 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		8776E03B19BEAAED00BDF50B /* Resources */ = {
@@ -359,11 +301,6 @@
 			isa = PBXTargetDependency;
 			target = 8776E03C19BEAAED00BDF50B /* LSFTutorial */;
 			targetProxy = 8776E06319BEAAED00BDF50B /* PBXContainerItemProxy */;
-		};
-		87E6306419BFAF4300F447A1 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = LSFObjCHelper;
-			targetProxy = 87E6306319BFAF4300F447A1 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -483,23 +420,21 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
-					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
-					"\"$(ALLJOYN_HOME)/services/about/cpp/inc\"",
-					"\"$(ALLJOYN_HOME)/services/about/ios/inc\"",
-					"\"$(ALLJOYN_HOME)/alljoyn_objc/AllJoynFramework/AllJoynFramework\"",
-					"\"$(LSF_HOME)/standard_core_library/lighting_controller_client/inc\"",
-					"\"$(LSF_HOME)/standard_core_library/common/inc\"",
-					"\"$(LSF_HOME)/common/inc\"",
-					"\"$(APPS_HOME)/apps/bindings/objc/LSFObjC/LSFObjC\"",
-					"\"$(APPS_HOME)/apps/helper-lib/objc/LSFObjCHelper/LSFObjCHelper\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjC/include/LSFObjC\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/services/about/cpp/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/services/about/ios/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/alljoyn_objc/AllJoynFramework/AllJoynFramework\"",
 				);
 				INFOPLIST_FILE = "LSFTutorial/LSFTutorial-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(ALLJOYN_HOME)/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/lib\"",
-					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/about/lib\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/lib\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/about/lib\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/lib/$(CONFIGURATION)-$(PLATFORM_NAME)\"",
 					"\"$(OPENSSL_ROOT)/build/$(CONFIGURATION)-$(PLATFORM_NAME)\"",
 				);
 				ONLY_ACTIVE_ARCH = NO;
@@ -514,6 +449,7 @@
 					"-lBundledRouter.o",
 					"-lssl",
 					"-lcrypto",
+					"-lLSFObjCHelper",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -540,23 +476,21 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
-					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
-					"\"$(ALLJOYN_HOME)/services/about/cpp/inc\"",
-					"\"$(ALLJOYN_HOME)/services/about/ios/inc\"",
-					"\"$(ALLJOYN_HOME)/alljoyn_objc/AllJoynFramework/AllJoynFramework\"",
-					"\"$(LSF_HOME)/standard_core_library/lighting_controller_client/inc\"",
-					"\"$(LSF_HOME)/standard_core_library/common/inc\"",
-					"\"$(LSF_HOME)/common/inc\"",
-					"\"$(APPS_HOME)/apps/bindings/objc/LSFObjC/LSFObjC\"",
-					"\"$(APPS_HOME)/apps/helper-lib/objc/LSFObjCHelper/LSFObjCHelper\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjC/include/LSFObjC\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/services/about/cpp/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/services/about/ios/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/alljoyn_objc/AllJoynFramework/AllJoynFramework\"",
 				);
 				INFOPLIST_FILE = "LSFTutorial/LSFTutorial-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(ALLJOYN_HOME)/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/lib\"",
-					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/about/lib\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/lib\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/about/lib\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/lib/$(CONFIGURATION)-$(PLATFORM_NAME)\"",
 					"\"$(OPENSSL_ROOT)/build/$(CONFIGURATION)-$(PLATFORM_NAME)\"",
 				);
 				ONLY_ACTIVE_ARCH = NO;
@@ -572,6 +506,7 @@
 					"-lBundledRouter.o",
 					"-lssl",
 					"-lcrypto",
+					"-lLSFObjCHelper",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
