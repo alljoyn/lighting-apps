@@ -41,6 +41,7 @@
     [LSFDispatchQueue getDispatchQueue];
     [LSFConstants getConstants];
     [LSFWifiMonitor getWifiMonitor];
+    [LSFTabManager getTabManager];
     
     return YES;
 }

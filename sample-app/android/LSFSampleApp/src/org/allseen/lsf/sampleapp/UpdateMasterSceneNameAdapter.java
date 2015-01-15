@@ -15,6 +15,12 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import java.util.Iterator;
+
+import org.allseen.lsf.helper.facade.MasterScene;
+import org.allseen.lsf.helper.manager.AllJoynManager;
+import org.allseen.lsf.helper.model.MasterSceneDataModel;
+
 public class UpdateMasterSceneNameAdapter extends UpdateItemNameAdapter {
 
     public UpdateMasterSceneNameAdapter(MasterSceneDataModel masterSceneModel, SampleAppActivity activity) {
@@ -33,11 +39,14 @@ public class UpdateMasterSceneNameAdapter extends UpdateItemNameAdapter {
 
     @Override
     protected boolean duplicateName(String name) {
-        for (MasterSceneDataModel data : activity.masterSceneModels.values()) {
-            if (data.getName().equals(name) && !name.equals(itemModel.getName())) {
+        Iterator<MasterScene> i = activity.systemManager.getMasterSceneCollectionManager().getMasterSceneIterator();
+
+        while (i.hasNext()) {
+            if (i.next().getMasterSceneDataModel().getName().equals(name) && !name.equals(itemModel.getName())) {
                 return true;
             }
         }
+
         return false;
     }
 }

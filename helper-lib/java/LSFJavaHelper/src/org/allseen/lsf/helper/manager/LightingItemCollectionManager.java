@@ -16,7 +16,6 @@
 package org.allseen.lsf.helper.manager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,7 +32,6 @@ import org.allseen.lsf.helper.listener.LightingItemErrorEvent;
 public abstract class LightingItemCollectionManager<ADAPTER, LISTENER, MODEL> extends LightingItemListenerManager<LISTENER> {
 
     protected final Map<String, ADAPTER> itemAdapters = new HashMap<String, ADAPTER>();
-    protected final List<LISTENER> itemListeners = new ArrayList<LISTENER>();
 
     public LightingItemCollectionManager(LightingSystemManager director) {
         super(director);
@@ -67,6 +65,22 @@ public abstract class LightingItemCollectionManager<ADAPTER, LISTENER, MODEL> ex
         return itemAdapters.get(itemID);
     }
 
+    protected Collection<ADAPTER> removeAllAdapters() {
+        List<ADAPTER> list = new ArrayList<ADAPTER>(size());
+        Iterator<ADAPTER> i = getAdapters().iterator();
+
+        while (i.hasNext()) {
+            ADAPTER item = i.next();
+
+            i.remove();
+            list.add(item);
+
+            sendRemovedEvent(item);
+        }
+
+        return list;
+    }
+
     protected ADAPTER removeAdapter(String itemID) {
         ADAPTER item = itemAdapters.remove(itemID);
 
@@ -83,26 +97,22 @@ public abstract class LightingItemCollectionManager<ADAPTER, LISTENER, MODEL> ex
     public void addListener(LISTENER listener) {
         super.addListener(listener);
 
-        sendChangedEvent(listener, itemAdapters.values().iterator(), size());
+        Iterator<ADAPTER> i = itemAdapters.values().iterator();
+
+        while (i.hasNext()) {
+            sendChangedEvent(listener, i.next());
+        }
     }
 
     public void sendChangedEvent(String itemID) {
-        sendChangedEvent(Arrays.asList(getAdapter(itemID)).iterator(), 1);
-    }
-
-    protected void sendChangedEvent(Iterator<ADAPTER> items, int count) {
         for (LISTENER listener : itemListeners) {
-            sendChangedEvent(listener, items, count);
+            sendChangedEvent(listener, getAdapter(itemID));
         }
     }
 
     public void sendRemovedEvent(ADAPTER item) {
-        sendRemovedEvent(Arrays.asList(item).iterator(), 1);
-    }
-
-    protected void sendRemovedEvent(Iterator<ADAPTER> items, int count) {
         for (LISTENER listener : itemListeners) {
-            sendChangedEvent(listener, items, count);
+            sendRemovedEvent(listener, item);
         }
     }
 
@@ -120,8 +130,8 @@ public abstract class LightingItemCollectionManager<ADAPTER, LISTENER, MODEL> ex
         }
     }
 
-    protected abstract void sendChangedEvent(LISTENER listener, Iterator<ADAPTER> items, int count);
-    protected abstract void sendRemovedEvent(LISTENER listener, Iterator<ADAPTER> items, int count);
+    protected abstract void sendChangedEvent(LISTENER listener, ADAPTER item);
+    protected abstract void sendRemovedEvent(LISTENER listener, ADAPTER item);
     protected abstract void sendErrorEvent(LISTENER listener, LightingItemErrorEvent errorEvent);
 
     public abstract MODEL getModel(String itemID);

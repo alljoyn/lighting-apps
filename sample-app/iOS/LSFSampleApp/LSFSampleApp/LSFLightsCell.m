@@ -19,6 +19,8 @@
 #import "LSFAllJoynManager.h"
 #import "LSFConstants.h"
 #import "LSFLampModelContainer.h"
+#import "LSFLamp.h"
+#import "LSFLampModel.h"
 
 @interface LSFLightsCell()
 
@@ -60,14 +62,13 @@
 
 -(IBAction)powerImagePressed: (UIButton *)sender
 {
-    LSFLampModelContainer *container = [LSFLampModelContainer getLampModelContainer];
-    NSMutableDictionary *lamps = container.lampContainer;
-    LSFLampModel *model = [lamps valueForKey: self.lampID];
+    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
+    LSFLampModel *model = [[lamps valueForKey: self.lampID] getLampDataModel];
 
     if (model != nil && model.state.onOff)
     {
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-            LSFLampManager *lampManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampManager;
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+            LSFLampManager *lampManager = [[LSFAllJoynManager getAllJoynManager] lsfLampManager];
             [lampManager transitionLampID: self.lampID onOffField: NO];
         });
     }
@@ -75,8 +76,8 @@
     {
         LSFConstants *constants = [LSFConstants getConstants];
 
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-            LSFLampManager *lampManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampManager;
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+            LSFLampManager *lampManager = [[LSFAllJoynManager getAllJoynManager] lsfLampManager];
 
             if (model.state.brightness == 0 && model.lampDetails.dimmable)
             {
@@ -93,12 +94,11 @@
 {
     LSFConstants *constants = [LSFConstants getConstants];
 
-    dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-        LSFLampModelContainer *container = [LSFLampModelContainer getLampModelContainer];
-        NSMutableDictionary *lamps = container.lampContainer;
-        LSFLampModel *model = [lamps valueForKey: self.lampID];
+    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+        NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
+        LSFLampModel *model = [[lamps valueForKey: self.lampID] getLampDataModel];
 
-        LSFLampManager *lampManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampManager;
+        LSFLampManager *lampManager = [[LSFAllJoynManager getAllJoynManager] lsfLampManager];
         unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)sender.value withMax: 100];
         [lampManager transitionLampID: self.lampID brightnessField: scaledBrightness];
 
@@ -137,13 +137,12 @@
     CGFloat delta = percentage * (s.maximumValue - s.minimumValue);
     CGFloat value = round(s.minimumValue + delta);
 
-    dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-        LSFLampModelContainer *container = [LSFLampModelContainer getLampModelContainer];
-        NSMutableDictionary *lamps = container.lampContainer;
-        LSFLampModel *model = [lamps valueForKey: self.lampID];
+    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+        NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
+        LSFLampModel *model = [[lamps valueForKey: self.lampID] getLampDataModel];
         LSFConstants *constants = [LSFConstants getConstants];
 
-        LSFLampManager *lampManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampManager;
+        LSFLampManager *lampManager = [[LSFAllJoynManager getAllJoynManager] lsfLampManager];
         unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)value withMax: 100];
         [lampManager transitionLampID: self.lampID brightnessField: scaledBrightness];
 

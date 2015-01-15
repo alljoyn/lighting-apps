@@ -15,7 +15,12 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import java.util.Iterator;
+
 import org.allseen.lsf.LampGroup;
+import org.allseen.lsf.helper.facade.Scene;
+import org.allseen.lsf.helper.model.LampCapabilities;
+import org.allseen.lsf.helper.model.SceneDataModel;
 
 import android.util.Log;
 
@@ -32,14 +37,14 @@ public class BasicSceneEnterNameFragment extends EnterNameFragment {
 
     @Override
     protected void setName(String name) {
-        BasicSceneDataModel sceneModel = new BasicSceneDataModel();
+        SceneDataModel sceneModel = new SceneDataModel();
 
         sceneModel.setName(name);
 
         SampleAppActivity activity = (SampleAppActivity)getActivity();
         activity.pendingBasicSceneModel = sceneModel;
         activity.pendingBasicSceneElementMembers = new LampGroup();
-        activity.pendingBasicSceneElementCapability = new CapabilityData(true, true, true);
+        activity.pendingBasicSceneElementCapability = new LampCapabilities(true, true, true);
 
         Log.d(SampleAppActivity.TAG, "Pending basic scene name: " + activity.pendingBasicSceneModel.getName());
     }
@@ -51,8 +56,12 @@ public class BasicSceneEnterNameFragment extends EnterNameFragment {
 
     @Override
     protected boolean duplicateName(String name) {
-        for (BasicSceneDataModel data : ((SampleAppActivity) this.getActivity()).basicSceneModels.values()) {
-            if (data.getName().equals(name)) {
+        Iterator<Scene> i = ((SampleAppActivity)getActivity()).systemManager.getSceneCollectionManager().getSceneIterator();
+
+        while (i.hasNext()) {
+            SceneDataModel sceneModel = i.next().getSceneDataModel();
+
+            if (sceneModel.getName().equals(name)) {
                 return true;
             }
         }

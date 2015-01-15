@@ -15,8 +15,6 @@
  */
 package org.allseen.lsf.helper.listener;
 
-import java.util.Iterator;
-
 import org.allseen.lsf.helper.facade.Group;
 import org.allseen.lsf.helper.facade.Lamp;
 import org.allseen.lsf.helper.facade.MasterScene;
@@ -31,59 +29,53 @@ import org.allseen.lsf.helper.model.ControllerDataModel;
 public class AllCollectionAdapter implements AllCollectionListener {
 
     @Override
-    public void onLampsChanged(Iterator<Lamp> lamps, int count)                         { }
+    public void onLampChanged(Lamp lamp)                            { }
 
     @Override
-    public void onLampsRemoved(Iterator<Lamp> lamps, int count)                         { }
+    public void onLampRemoved(Lamp lamp)                            { }
 
     @Override
-    public void onLampError(LightingItemErrorEvent error)                               { }
+    public void onLampError(LightingItemErrorEvent error)           { }
 
     @Override
-    public void onGroupsChanged(Iterator<Group> groups, int count)                      { }
+    public void onGroupChanged(Group group)                         { }
 
     @Override
-    public void onGroupsRemoved(Iterator<Group> groups, int count)                      { }
+    public void onGroupRemoved(Group group)                         { }
 
     @Override
-    public void onGroupError(LightingItemErrorEvent error)                              { }
+    public void onGroupError(LightingItemErrorEvent error)          { }
 
     @Override
-    public void onPresetsChanged(Iterator<Preset> presets, int count)                   { }
+    public void onPresetChanged(Preset preset)                      { }
 
     @Override
-    public void onPresetsRemoved(Iterator<Preset> presets, int count)                   { }
+    public void onPresetRemoved(Preset preset)                      { }
 
     @Override
-    public void onPresetError(LightingItemErrorEvent error)                             { }
+    public void onPresetError(LightingItemErrorEvent error)         { }
 
     @Override
-    public void onScenesChanged(Iterator<Scene> scenes, int count)                      { }
+    public void onSceneChanged(Scene scene)                         { }
 
     @Override
-    public void onScenesRemoved(Iterator<Scene> scenes, int count)                      { }
+    public void onSceneRemoved(Scene scene)                         { }
 
     @Override
-    public void onSceneError(LightingItemErrorEvent error)                              { }
+    public void onSceneError(LightingItemErrorEvent error)          { }
 
     @Override
-    public void onMasterScenesChanged(Iterator<MasterScene> masterScenes, int count)    { }
+    public void onMasterSceneChanged(MasterScene masterScene)       { }
 
     @Override
-    public void onMasterScenesRemoved(Iterator<MasterScene> masterScenes, int count)    { }
+    public void onMasterSceneRemoved(MasterScene masterScene)       { }
 
     @Override
-    public void onMasterSceneError(LightingItemErrorEvent error)                        { }
+    public void onMasterSceneError(LightingItemErrorEvent error)    { }
 
     @Override
-    public void onLeaderModelChange(ControllerDataModel leadModel) { }
+    public void onLeaderModelChange(ControllerDataModel leadModel)  { }
 
     @Override
     public void onControllerErrors(ControllerErrorEvent errorEvent) { }
-
-    @Override
-    public void onWifiConnected(WifiEvent wifiEvent) { }
-
-    @Override
-    public void onWifiDisconnected(WifiEvent wifiEvent) { }
 }

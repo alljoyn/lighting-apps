@@ -15,6 +15,8 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import org.allseen.lsf.helper.model.ControllerDataModel;
+
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.util.Log;
@@ -57,7 +59,7 @@ public class SettingsFragment extends PageFrameChildFragment implements OnClickL
     }
 
     public void onUpdateView() {
-        ControllerDataModel leaderControllerModel = ((SampleAppActivity)getActivity()).leaderControllerModel;
+        ControllerDataModel leaderControllerModel = ((SampleAppActivity)getActivity()).systemManager.getControllerManager().getLeadControllerModel();
         String leaderName = ControllerDataModel.defaultName;
 
         if (leaderControllerModel != null && leaderControllerModel.getName() != null && !leaderControllerModel.getName().isEmpty()) {

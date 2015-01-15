@@ -15,6 +15,8 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import org.allseen.lsf.helper.model.MasterSceneDataModel;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,7 +30,7 @@ public class MasterSceneInfoFragment extends PageFrameChildFragment implements V
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SampleAppActivity activity = (SampleAppActivity) getActivity();
-        MasterSceneDataModel masterSceneModel = activity.masterSceneModels.get(key);
+        MasterSceneDataModel masterSceneModel = activity.systemManager.getMasterSceneCollectionManager().getModel(key);
 
         view = inflater.inflate(R.layout.fragment_master_scene_info, container, false);
 
@@ -76,22 +78,22 @@ public class MasterSceneInfoFragment extends PageFrameChildFragment implements V
 
     protected void onHeaderClick() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        MasterSceneDataModel masterSceneModel = activity.masterSceneModels.get(key);
+        MasterSceneDataModel masterSceneModel = activity.systemManager.getMasterSceneCollectionManager().getModel(key);
 
-        activity.showItemNameDialog(R.string.title_master_scene_rename, new UpdateMasterSceneNameAdapter(masterSceneModel, (SampleAppActivity) getActivity()));
+        activity.showItemNameDialog(R.string.title_master_scene_rename, new UpdateMasterSceneNameAdapter(masterSceneModel, activity));
     }
 
     protected void onMembersClick() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
 
-        activity.pendingMasterSceneModel = new MasterSceneDataModel(activity.masterSceneModels.get(key));
+        activity.pendingMasterSceneModel = new MasterSceneDataModel(activity.systemManager.getMasterSceneCollectionManager().getModel(key));
 
         ((ScenesPageFragment)parent).showSelectMembersChildFragment();
     }
 
     public void updateInfoFields() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        updateInfoFields(activity, activity.masterSceneModels.get(key));
+        updateInfoFields(activity, activity.systemManager.getMasterSceneCollectionManager().getModel(key));
     }
 
     public void updateInfoFields(SampleAppActivity activity, MasterSceneDataModel masterSceneModel) {

@@ -15,16 +15,17 @@
  */
 package org.allseen.lsf.helper.callback;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.alljoyn.bus.Variant;
 import org.allseen.lsf.LampDetails;
-import org.allseen.lsf.LampManager;
 import org.allseen.lsf.LampManagerCallback;
 import org.allseen.lsf.LampParameters;
 import org.allseen.lsf.LampState;
 import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.helper.facade.Lamp;
+import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.manager.LightingSystemManager;
 import org.allseen.lsf.helper.model.LampAbout;
 import org.allseen.lsf.helper.model.LampDataModel;
@@ -34,25 +35,31 @@ import org.allseen.lsf.helper.model.LampDataModel;
  * in subsequent releases of the SDK</b>.
  */
 public class HelperLampManagerCallback extends LampManagerCallback {
-    private static final int RETRY_DELAY = 500;
+    private static final int RETRY_DELAY = 1000;
 
-    protected LightingSystemManager director;
+    protected LightingSystemManager manager;
+    protected Map<String, LampAbout> savedLampAbouts;
 
-    public HelperLampManagerCallback(LightingSystemManager director) {
+    public HelperLampManagerCallback(LightingSystemManager manager) {
         super();
 
-        this.director = director;
+        this.manager = manager;
+        this.savedLampAbouts = new HashMap<String, LampAbout>();
+    }
+
+    public void clear() {
+        savedLampAbouts.clear();
     }
 
     @Override
     public void getAllLampIDsReplyCB(ResponseCode responseCode, String[] lampIDs) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getLampCollectionManager().sendErrorEvent("getAllLampIDsReplyCB", responseCode);
+            manager.getLampCollectionManager().sendErrorEvent("getAllLampIDsReplyCB", responseCode);
         }
 
         // Process lamp IDs regardless of response code
         for (String lampID : lampIDs) {
-            postUpdateLampID(lampID);
+            postUpdateLampID(lampID, 0);
         }
     }
 
@@ -62,18 +69,18 @@ public class HelperLampManagerCallback extends LampManagerCallback {
             postUpdateLampName(lampID, lampName);
         } else {
             postGetLampName(lampID, RETRY_DELAY);
-            director.getLampCollectionManager().sendErrorEvent("getLampNameReplyCB", responseCode, lampID);
+            manager.getLampCollectionManager().sendErrorEvent("getLampNameReplyCB", responseCode, lampID);
         }
     }
 
     @Override
     public void setLampNameReplyCB(ResponseCode responseCode, String lampID, String language) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getLampCollectionManager().sendErrorEvent("setLampNameReplyCB", responseCode, lampID);
+            manager.getLampCollectionManager().sendErrorEvent("setLampNameReplyCB", responseCode, lampID);
         }
 
         // Read back name regardless of response code
-        director.getLampManager().getLampName(lampID, LightingSystemManager.LANGUAGE);
+        postGetLampName(lampID, 0);
     }
 
     @Override
@@ -84,13 +91,15 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     @Override
     public void lampsFoundCB(String[] lampIDs) {
         for (String lampID : lampIDs) {
-            postUpdateLampID(lampID);
+            postUpdateLampID(lampID, 0);
         }
     }
 
     @Override
     public void lampsLostCB(String[] lampIDs) {
-        //TODO-IMPL
+        for (String lampID : lampIDs) {
+            postRemoveLampID(lampID);
+        }
     }
 
     @Override
@@ -99,7 +108,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
             postUpdateLampDetails(lampID, lampDetails);
         } else {
             postGetLampDetails(lampID, RETRY_DELAY);
-            director.getLampCollectionManager().sendErrorEvent("getLampDetailsReplyCB", responseCode, lampID);
+            manager.getLampCollectionManager().sendErrorEvent("getLampDetailsReplyCB", responseCode, lampID);
         }
     }
 
@@ -109,7 +118,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
             postUpdateLampParameters(lampID, lampParameters);
         } else {
             postGetLampParameters(lampID, RETRY_DELAY);
-            director.getLampCollectionManager().sendErrorEvent("getLampParametersReplyCB", responseCode, lampID);
+            manager.getLampCollectionManager().sendErrorEvent("getLampParametersReplyCB", responseCode, lampID);
         }
     }
 
@@ -120,7 +129,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
             postGetLampParameters(lampID, 0);
         } else {
             postGetLampState(lampID, RETRY_DELAY);
-            director.getLampCollectionManager().sendErrorEvent("getLampStateReplyCB", responseCode, lampID);
+            manager.getLampCollectionManager().sendErrorEvent("getLampStateReplyCB", responseCode, lampID);
         }
     }
 
@@ -131,7 +140,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
             postGetLampParameters(lampID, 0);
         } else {
             postGetLampStateOnOffField(lampID, RETRY_DELAY);
-            director.getLampCollectionManager().sendErrorEvent("getLampStateOnOffFieldReplyCB", responseCode, lampID);
+            manager.getLampCollectionManager().sendErrorEvent("getLampStateOnOffFieldReplyCB", responseCode, lampID);
         }
     }
 
@@ -141,7 +150,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
             postUpdateLampStateHue(lampID, hue);
         } else {
             postGetLampStateHueField(lampID, RETRY_DELAY);
-            director.getLampCollectionManager().sendErrorEvent("getLampStateHueFieldReplyCB", responseCode, lampID);
+            manager.getLampCollectionManager().sendErrorEvent("getLampStateHueFieldReplyCB", responseCode, lampID);
         }
     }
 
@@ -151,7 +160,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
             postUpdateLampStateSaturation(lampID, saturation);
         } else {
             postGetLampStateSaturationField(lampID, RETRY_DELAY);
-            director.getLampCollectionManager().sendErrorEvent("getLampStateSaturationFieldReplyCB", responseCode, lampID);
+            manager.getLampCollectionManager().sendErrorEvent("getLampStateSaturationFieldReplyCB", responseCode, lampID);
         }
     }
 
@@ -162,7 +171,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
             postGetLampParameters(lampID, 0);
         } else {
             postGetLampStateBrightnessField(lampID, RETRY_DELAY);
-            director.getLampCollectionManager().sendErrorEvent("getLampStateBrightnessFieldReplyCB", responseCode, lampID);
+            manager.getLampCollectionManager().sendErrorEvent("getLampStateBrightnessFieldReplyCB", responseCode, lampID);
         }
     }
 
@@ -172,7 +181,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
             postUpdateLampStateColorTemp(lampID, colorTemp);
         } else {
             postGetLampStateColorTempField(lampID, RETRY_DELAY);
-            director.getLampCollectionManager().sendErrorEvent("getLampStateColorTempFieldReplyCB", responseCode, lampID);
+            manager.getLampCollectionManager().sendErrorEvent("getLampStateColorTempFieldReplyCB", responseCode, lampID);
         }
     }
 
@@ -185,82 +194,102 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     @Override
     public void transitionLampStateOnOffFieldReplyCB(ResponseCode responseCode, String lampID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getLampCollectionManager().sendErrorEvent("transitionLampStateOnOffFieldReplyCB", responseCode, lampID);
+            postGetLampStateOnOffField(lampID, 0);
+            manager.getLampCollectionManager().sendErrorEvent("transitionLampStateOnOffFieldReplyCB", responseCode, lampID);
         }
-
-        // Read back field value regardless of response code
-        director.getLampManager().getLampStateOnOffField(lampID);
     }
 
     @Override
     public void transitionLampStateHueFieldReplyCB(ResponseCode responseCode, String lampID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getLampCollectionManager().sendErrorEvent("transitionLampStateHueFieldReplyCB", responseCode, lampID);
+            postGetLampStateHueField(lampID, 0);
+            manager.getLampCollectionManager().sendErrorEvent("transitionLampStateHueFieldReplyCB", responseCode, lampID);
         }
-
-        // Read back field value regardless of response code
-        director.getLampManager().getLampStateHueField(lampID);
     }
 
     @Override
     public void transitionLampStateSaturationFieldReplyCB(ResponseCode responseCode, String lampID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getLampCollectionManager().sendErrorEvent("transitionLampStateSaturationFieldReplyCB", responseCode, lampID);
+            postGetLampStateSaturationField(lampID, 0);
+            manager.getLampCollectionManager().sendErrorEvent("transitionLampStateSaturationFieldReplyCB", responseCode, lampID);
         }
-
-        // Read back field value regardless of response code
-        director.getLampManager().getLampStateSaturationField(lampID);
     }
 
     @Override
     public void transitionLampStateBrightnessFieldReplyCB(ResponseCode responseCode, String lampID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getLampCollectionManager().sendErrorEvent("transitionLampStateBrightnessFieldReplyCB", responseCode, lampID);
+            postGetLampStateBrightnessField(lampID, 0);
+            manager.getLampCollectionManager().sendErrorEvent("transitionLampStateBrightnessFieldReplyCB", responseCode, lampID);
         }
-
-        // Read back field value regardless of response code
-        director.getLampManager().getLampStateBrightnessField(lampID);
     }
 
     @Override
     public void transitionLampStateColorTempFieldReplyCB(ResponseCode responseCode, String lampID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getLampCollectionManager().sendErrorEvent("transitionLampStateColorTempFieldReplyCB", responseCode, lampID);
+            postGetLampStateColorTempField(lampID, 0);
+            manager.getLampCollectionManager().sendErrorEvent("transitionLampStateColorTempFieldReplyCB", responseCode, lampID);
         }
-
-        // Read back field value regardless of response code
-        director.getLampManager().getLampStateColorTempField(lampID);
     }
 
-    protected void postUpdateLampID(String lampID) {
-        postUpdateLampID(lampID, null, null, 0);
-    }
-
-    public void postUpdateLampID(final String lampID, final Map<String, Variant> announcedData, final Map<String, Object> queriedData, int delay) {
-        director.getHandler().postDelayed(new Runnable() {
+    public void postOnLampAnnouncedAboutData(final String lampID, final String peer, final short port, final Map<String, Variant> announcedData, int delay) {
+        manager.getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Lamp lamp = director.getLampCollectionManager().getLamp(lampID);
+                LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
+
+                if (lampModel != null) {
+                    lampModel.getAbout().setAnnouncedData(peer, port, announcedData);
+                    postGetLampName(lampID, 0);
+                } else {
+                    LampAbout lampAbout = new LampAbout();
+                    lampAbout.setAnnouncedData(peer, port, announcedData);
+
+                    savedLampAbouts.put(lampID, lampAbout);
+                }
+            }
+        }, delay);
+    }
+
+    public void postOnLampQueriedAboutData(final String lampID, final Map<String, Object> queriedData, int delay) {
+        manager.getHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
+
+                if (lampModel != null) {
+                    lampModel.getAbout().setQueriedData(queriedData);
+                }
+            }
+        }, delay);
+
+        //TODO: we may want to distinguish when lamp details change vs. when other lamp values change
+        postSendLampChanged(lampID);
+    }
+
+    protected void postUpdateLampID(final String lampID, int delay) {
+        manager.getHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Lamp lamp = manager.getLampCollectionManager().getLamp(lampID);
 
                 if (lamp == null) {
-                    lamp = director.getLampCollectionManager().addLamp(lampID);
+                    lamp = manager.getLampCollectionManager().addLamp(lampID);
                 }
 
                 LampDataModel lampModel = lamp.getLampDataModel();
 
                 if (LampDataModel.defaultName.equals(lampModel.getName())) {
-                    LampManager lampManager = director.getLampManager();
-
-                    lampManager.getLampName(lampID, LightingSystemManager.LANGUAGE);
-                    lampManager.getLampState(lampID);
-                    lampManager.getLampParameters(lampID);
-                    lampManager.getLampDetails(lampID);
+                    postGetLampName(lampID, 0);
+                    postGetLampState(lampID, 0);
+                    postGetLampParameters(lampID, 0);
+                    postGetLampDetails(lampID, 0);
                 }
 
-                LampAbout lampAbout = lampModel.getAbout();
+                LampAbout savedLampAbout = savedLampAbouts.remove(lampID);
 
-                lampAbout.setAnnouncedData(announcedData);
-                lampAbout.setQueriedData(queriedData);
+                if (savedLampAbout != null) {
+                    lampModel.setAbout(savedLampAbout);
+                }
 
                 // update the timestamp
                 lampModel.updateTime();
@@ -270,22 +299,31 @@ public class HelperLampManagerCallback extends LampManagerCallback {
         postSendLampChanged(lampID);
     }
 
-    protected void postGetLampName(final String lampID, int delay) {
-        director.getHandler().postDelayed(new Runnable() {
+    public void postRemoveLampID(final String lampID) {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                if (!director.isLampExpired(lampID)) {
-                    director.getLampManager().getLampName(lampID, LightingSystemManager.LANGUAGE);
+                manager.getLampCollectionManager().removeLamp(lampID);
+            }
+        });
+    }
+
+    protected void postGetLampName(final String lampID, int delay) {
+        manager.getHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (AllJoynManager.controllerConnected) {
+                    manager.getLampManager().getLampName(lampID, LightingSystemManager.LANGUAGE);
                 }
             }
         }, delay);
     }
 
     protected void postUpdateLampState(final String lampID, final LampState lampState) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                LampDataModel lampModel = director.getLampCollectionManager().getModel(lampID);
+                LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
 
                 if (lampModel != null) {
                     lampModel.state = lampState;
@@ -297,21 +335,21 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postGetLampState(final String lampID, int delay) {
-        director.getHandler().postDelayed(new Runnable() {
+        manager.getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (!director.isLampExpired(lampID)) {
-                    director.getLampManager().getLampState(lampID);
+                if (AllJoynManager.controllerConnected) {
+                    manager.getLampManager().getLampState(lampID);
                 }
             }
         }, delay);
     }
 
     protected void postUpdateLampParameters(final String lampID, final LampParameters lampParams) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                LampDataModel lampModel = director.getLampCollectionManager().getModel(lampID);
+                LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
 
                 if (lampModel != null) {
                     lampModel.setParameters(lampParams);
@@ -323,21 +361,21 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postGetLampParameters(final String lampID, int delay) {
-        director.getHandler().postDelayed(new Runnable() {
+        manager.getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (!director.isLampExpired(lampID)) {
-                    director.getLampManager().getLampParameters(lampID);
+                if (AllJoynManager.controllerConnected) {
+                    manager.getLampManager().getLampParameters(lampID);
                 }
             }
         }, delay);
     }
 
     protected void postUpdateLampDetails(final String lampID, final LampDetails lampDetails) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                LampDataModel lampModel = director.getLampCollectionManager().getModel(lampID);
+                LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
 
                 if (lampModel != null) {
                     lampModel.setDetails(lampDetails);
@@ -349,21 +387,21 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postGetLampDetails(final String lampID, final int delay) {
-        if (!director.isLampExpired(lampID)) {
-            director.getHandler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    director.getLampManager().getLampDetails(lampID);
+        manager.getHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (AllJoynManager.controllerConnected) {
+                    manager.getLampManager().getLampDetails(lampID);
                 }
-            }, delay);
-        }
+            }
+        }, delay);
     }
 
     protected void postUpdateLampName(final String lampID, final String lampName) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                LampDataModel lampModel = director.getLampCollectionManager().getModel(lampID);
+                LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
 
                 if (lampModel != null) {
                     lampModel.setName(lampName);
@@ -375,10 +413,10 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postUpdateLampStateOnOff(final String lampID, final boolean onOff) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                LampDataModel lampModel = director.getLampCollectionManager().getModel(lampID);
+                LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
 
                 if (lampModel != null) {
                     lampModel.state.setOnOff(onOff);
@@ -390,21 +428,21 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postGetLampStateOnOffField(final String lampID, int delay) {
-        director.getHandler().postDelayed(new Runnable() {
+        manager.getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (!director.isLampExpired(lampID)) {
-                    director.getLampManager().getLampStateOnOffField(lampID);
+                if (AllJoynManager.controllerConnected) {
+                    manager.getLampManager().getLampStateOnOffField(lampID);
                 }
             }
         }, delay);
     }
 
     protected void postUpdateLampStateHue(final String lampID, final long hue) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                LampDataModel lampModel = director.getLampCollectionManager().getModel(lampID);
+                LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
 
                 if (lampModel != null) {
                     lampModel.state.setHue(hue);
@@ -416,21 +454,21 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postGetLampStateHueField(final String lampID, int delay) {
-        director.getHandler().postDelayed(new Runnable() {
+        manager.getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (!director.isLampExpired(lampID)) {
-                    director.getLampManager().getLampStateHueField(lampID);
+                if (AllJoynManager.controllerConnected) {
+                    manager.getLampManager().getLampStateHueField(lampID);
                 }
             }
         }, delay);
     }
 
     protected void postUpdateLampStateSaturation(final String lampID, final long saturation) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                LampDataModel lampModel = director.getLampCollectionManager().getModel(lampID);
+                LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
 
                 if (lampModel != null) {
                     lampModel.state.setSaturation(saturation);
@@ -442,21 +480,21 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postGetLampStateSaturationField(final String lampID, int delay) {
-        director.getHandler().postDelayed(new Runnable() {
+        manager.getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (!director.isLampExpired(lampID)) {
-                    director.getLampManager().getLampStateSaturationField(lampID);
+                if (AllJoynManager.controllerConnected) {
+                    manager.getLampManager().getLampStateSaturationField(lampID);
                 }
             }
         }, delay);
     }
 
     protected void postUpdateLampStateBrightness(final String lampID, final long brightness) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                LampDataModel lampModel = director.getLampCollectionManager().getModel(lampID);
+                LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
 
                 if (lampModel != null) {
                     lampModel.state.setBrightness(brightness);
@@ -468,21 +506,21 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postGetLampStateBrightnessField(final String lampID, int delay) {
-        director.getHandler().postDelayed(new Runnable() {
+        manager.getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (!director.isLampExpired(lampID)) {
-                    director.getLampManager().getLampStateBrightnessField(lampID);
+                if (AllJoynManager.controllerConnected) {
+                    manager.getLampManager().getLampStateBrightnessField(lampID);
                 }
             }
         }, delay);
     }
 
     protected void postUpdateLampStateColorTemp(final String lampID, final long colorTemp) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                LampDataModel lampModel = director.getLampCollectionManager().getModel(lampID);
+                LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
 
                 if (lampModel != null) {
                     lampModel.state.setColorTemp(colorTemp);
@@ -494,21 +532,21 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postGetLampStateColorTempField(final String lampID, int delay) {
-        director.getHandler().postDelayed(new Runnable() {
+        manager.getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (!director.isLampExpired(lampID)) {
-                    director.getLampManager().getLampStateColorTempField(lampID);
+                if (AllJoynManager.controllerConnected) {
+                    manager.getLampManager().getLampStateColorTempField(lampID);
                 }
             }
         }, delay);
     }
 
     protected void postSendLampChanged(final String lampID) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                director.getLampCollectionManager().sendChangedEvent(lampID);
+                manager.getLampCollectionManager().sendChangedEvent(lampID);
             }
         });
     }

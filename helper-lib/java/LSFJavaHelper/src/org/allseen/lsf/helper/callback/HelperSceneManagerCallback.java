@@ -27,18 +27,18 @@ import org.allseen.lsf.helper.model.SceneDataModel;
  * in subsequent releases of the SDK</b>.
  */
 public class HelperSceneManagerCallback extends SceneManagerCallback {
-    protected LightingSystemManager director;
+    protected LightingSystemManager manager;
 
-    public HelperSceneManagerCallback(LightingSystemManager director) {
+    public HelperSceneManagerCallback(LightingSystemManager manager) {
         super();
 
-        this.director = director;
+        this.manager = manager;
     }
 
     @Override
     public void getAllSceneIDsReplyCB(ResponseCode responseCode, String[] sceneIDs) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getSceneCollectionManager().sendErrorEvent("getAllSceneIDsReplyCB", responseCode, null);
+            manager.getSceneCollectionManager().sendErrorEvent("getAllSceneIDsReplyCB", responseCode, null);
         }
 
         for (final String sceneID : sceneIDs) {
@@ -49,7 +49,7 @@ public class HelperSceneManagerCallback extends SceneManagerCallback {
     @Override
     public void getSceneNameReplyCB(ResponseCode responseCode, String sceneID, String language, String sceneName) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getSceneCollectionManager().sendErrorEvent("getSceneNameReplyCB", responseCode, sceneID);
+            manager.getSceneCollectionManager().sendErrorEvent("getSceneNameReplyCB", responseCode, sceneID);
         }
 
         postUpdateSceneName(sceneID, sceneName);
@@ -58,7 +58,7 @@ public class HelperSceneManagerCallback extends SceneManagerCallback {
     @Override
     public void setSceneNameReplyCB(ResponseCode responseCode, String sceneID, String language) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getSceneCollectionManager().sendErrorEvent("setSceneNameReplyCB", responseCode, sceneID);
+            manager.getSceneCollectionManager().sendErrorEvent("setSceneNameReplyCB", responseCode, sceneID);
         }
 
         AllJoynManager.sceneManager.getSceneName(sceneID, LightingSystemManager.LANGUAGE);
@@ -66,13 +66,13 @@ public class HelperSceneManagerCallback extends SceneManagerCallback {
 
     @Override
     public void scenesNameChangedCB(final String[] sceneIDs) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
                 boolean containsNewIDs = false;
 
                 for (final String sceneID : sceneIDs) {
-                    if (director.getSceneCollectionManager().hasID(sceneID)) {
+                    if (manager.getSceneCollectionManager().hasID(sceneID)) {
                         AllJoynManager.sceneManager.getSceneName(sceneID, LightingSystemManager.LANGUAGE);
                     } else {
                         containsNewIDs = true;
@@ -89,10 +89,8 @@ public class HelperSceneManagerCallback extends SceneManagerCallback {
     @Override
     public void createSceneReplyCB(ResponseCode responseCode, String sceneID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getSceneCollectionManager().sendErrorEvent("createSceneReplyCB", responseCode, sceneID);
+            manager.getSceneCollectionManager().sendErrorEvent("createSceneReplyCB", responseCode, sceneID);
         }
-
-        postProcessSceneID(sceneID);
     }
 
     @Override
@@ -103,7 +101,7 @@ public class HelperSceneManagerCallback extends SceneManagerCallback {
     @Override
     public void updateSceneReplyCB(ResponseCode responseCode, String sceneID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getSceneCollectionManager().sendErrorEvent("updateSceneReplyCB", responseCode, sceneID);
+            manager.getSceneCollectionManager().sendErrorEvent("updateSceneReplyCB", responseCode, sceneID);
         }
     }
 
@@ -117,7 +115,7 @@ public class HelperSceneManagerCallback extends SceneManagerCallback {
     @Override
     public void deleteSceneReplyCB(ResponseCode responseCode, String sceneID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getSceneCollectionManager().sendErrorEvent("deleteSceneReplyCB", responseCode, sceneID);
+            manager.getSceneCollectionManager().sendErrorEvent("deleteSceneReplyCB", responseCode, sceneID);
         }
     }
 
@@ -129,7 +127,7 @@ public class HelperSceneManagerCallback extends SceneManagerCallback {
     @Override
     public void getSceneReplyCB(ResponseCode responseCode, String sceneID, Scene scene) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getSceneCollectionManager().sendErrorEvent("getSceneReplyCB", responseCode, sceneID);
+            manager.getSceneCollectionManager().sendErrorEvent("getSceneReplyCB", responseCode, sceneID);
         }
 
         postUpdateScene(sceneID, scene);
@@ -138,7 +136,7 @@ public class HelperSceneManagerCallback extends SceneManagerCallback {
     @Override
     public void applySceneReplyCB(ResponseCode responseCode, String sceneID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getSceneCollectionManager().sendErrorEvent("applySceneReplyCB", responseCode, sceneID);
+            manager.getSceneCollectionManager().sendErrorEvent("applySceneReplyCB", responseCode, sceneID);
         }
 
         //TODO-CHK Do we need to do anything here?
@@ -150,10 +148,10 @@ public class HelperSceneManagerCallback extends SceneManagerCallback {
     }
 
     protected void postProcessSceneID(final String sceneID) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                if (!director.getSceneCollectionManager().hasID(sceneID)) {
+                if (!manager.getSceneCollectionManager().hasID(sceneID)) {
                     postUpdateSceneID(sceneID);
                     AllJoynManager.sceneManager.getSceneName(sceneID, LightingSystemManager.LANGUAGE);
                     AllJoynManager.sceneManager.getScene(sceneID);
@@ -163,11 +161,11 @@ public class HelperSceneManagerCallback extends SceneManagerCallback {
     }
 
     protected void postUpdateSceneID(final String sceneID) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                if (!director.getSceneCollectionManager().hasID(sceneID)) {
-                    director.getSceneCollectionManager().addScene(sceneID);
+                if (!manager.getSceneCollectionManager().hasID(sceneID)) {
+                    manager.getSceneCollectionManager().addScene(sceneID);
                 }
             }
         });
@@ -176,10 +174,10 @@ public class HelperSceneManagerCallback extends SceneManagerCallback {
     }
 
     protected void postUpdateScene(final String sceneID, final Scene scene) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                SceneDataModel basicSceneModel = director.getSceneCollectionManager().getModel(sceneID);
+                SceneDataModel basicSceneModel = manager.getSceneCollectionManager().getModel(sceneID);
 
                 if (basicSceneModel != null) {
                     basicSceneModel.fromScene(scene);
@@ -191,10 +189,10 @@ public class HelperSceneManagerCallback extends SceneManagerCallback {
     }
 
     protected void postUpdateSceneName(final String sceneID, final String sceneName) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                SceneDataModel basicSceneModel = director.getSceneCollectionManager().getModel(sceneID);
+                SceneDataModel basicSceneModel = manager.getSceneCollectionManager().getModel(sceneID);
 
                 if (basicSceneModel != null) {
                     basicSceneModel.setName(sceneName);
@@ -206,21 +204,21 @@ public class HelperSceneManagerCallback extends SceneManagerCallback {
     }
 
     protected void postDeleteScenes(final String[] sceneIDs) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
                 for (String sceneID : sceneIDs) {
-                    director.getSceneCollectionManager().removeScene(sceneID);
+                    manager.getSceneCollectionManager().removeScene(sceneID);
                 }
             }
         });
     }
 
     protected void postSendSceneChanged(final String sceneID) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                director.getSceneCollectionManager().sendChangedEvent(sceneID);
+                manager.getSceneCollectionManager().sendChangedEvent(sceneID);
             }
         });
     }

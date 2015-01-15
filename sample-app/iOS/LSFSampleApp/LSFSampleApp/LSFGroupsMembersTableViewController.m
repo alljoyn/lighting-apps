@@ -23,6 +23,8 @@
 #import "LSFGroupModel.h"
 #import "LSFCapabilityData.h"
 #import "LSFEnums.h"
+#import "LSFLamp.h"
+#import "LSFGroup.h"
 
 @interface LSFGroupsMembersTableViewController ()
 
@@ -70,9 +72,8 @@
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(groupNotificationReceived:) name: @"GroupNotification" object: nil];
     
     //Grab the group model using the passed in group ID
-    LSFGroupModelContainer *container = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groups = container.groupContainer;
-    self.groupModel = [groups valueForKey: self.groupID];
+    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
+    self.groupModel = [[groups valueForKey: self.groupID] getLampGroupDataModel];
     
     //Load UI
     [self buildTableArray];
@@ -140,9 +141,8 @@
     if ([self.groupID isEqualToString: groupID])
     {
         //Grab the group model using the passed in group ID
-        LSFGroupModelContainer *container = [LSFGroupModelContainer getGroupModelContainer];
-        NSMutableDictionary *groups = container.groupContainer;
-        self.groupModel = [groups valueForKey: self.groupID];
+        NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
+        self.groupModel = [[groups valueForKey: self.groupID] getLampGroupDataModel];
 
         //Load UI
         [self buildTableArray];
@@ -172,12 +172,12 @@
 /*
  * UITableViewDataSource Protocol Implementation
  */
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [self.lampsGroupsArray count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     id model = [self.lampsGroupsArray objectAtIndex: [indexPath row]];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"ModifyLampsGroup" forIndexPath:indexPath];
@@ -281,9 +281,13 @@
  */
 -(void)buildTableArray
 {
-    LSFGroupModelContainer *groupContainer = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groups = groupContainer.groupContainer;
-    NSMutableArray *groupsArray = [NSMutableArray arrayWithArray: [groups allValues]];
+    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
+    NSMutableArray *groupsArray = [[NSMutableArray alloc] init];
+
+    for (LSFGroup *group in [groups allValues])
+    {
+        [groupsArray addObject: [group getLampGroupDataModel]];
+    }
     
     for (LSFGroupModel *groupModel in [groupsArray copy])
     {
@@ -292,10 +296,14 @@
             [groupsArray removeObject: groupModel];
         }
     }
-    
-    LSFLampModelContainer *lampsContainer = [LSFLampModelContainer getLampModelContainer];
-    NSMutableDictionary *lamps = lampsContainer.lampContainer;
-    NSMutableArray *lampsArray = [NSMutableArray arrayWithArray: [lamps allValues]];
+
+    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
+    NSMutableArray *lampsArray = [[NSMutableArray alloc] init];
+
+    for (LSFLamp *lamp in [lamps allValues])
+    {
+        [lampsArray addObject: [lamp getLampDataModel]];
+    }
     
     self.lampsGroupsArray = [NSMutableArray arrayWithArray: [self sortLampsGroupsData: groupsArray]];
     [self.lampsGroupsArray addObjectsFromArray: [self sortLampsGroupsData: lampsArray]];
@@ -375,8 +383,8 @@
 
 -(void)createLampGroup
 {
-    dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-        LSFLampGroupManager *groupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
+    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+        LSFLampGroupManager *groupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
         [groupManager updateLampGroupWithID: self.groupID andLampGroup: self.lampGroup];
     });
     

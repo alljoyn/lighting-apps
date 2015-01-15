@@ -15,7 +15,6 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import android.util.Log;
 import android.widget.EditText;
 
 public class ItemNameFragmentTextWatcher extends ItemNameTextWatcher {

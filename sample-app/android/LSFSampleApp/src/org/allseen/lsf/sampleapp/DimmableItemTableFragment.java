@@ -15,8 +15,9 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import org.allseen.lsf.helper.model.ColorStateConverter;
+
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,7 +26,6 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public abstract class DimmableItemTableFragment
     extends ScrollableTableFragment
@@ -86,7 +86,7 @@ public abstract class DimmableItemTableFragment
             ((TextView)tableRow.findViewById(R.id.dimmableItemRowText)).setText(name);
 
             SeekBar seekBar = (SeekBar)tableRow.findViewById(R.id.dimmableItemRowSlider);
-            seekBar.setProgress(DimmableItemScaleConverter.convertBrightnessModelToView(modelBrightness));
+            seekBar.setProgress(ColorStateConverter.convertBrightnessModelToView(modelBrightness));
             seekBar.setTag(itemID);
             seekBar.setSaveEnabled(false);
             seekBar.setOnSeekBarChangeListener(this);
@@ -108,7 +108,7 @@ public abstract class DimmableItemTableFragment
             ((TextView)tableRow.findViewById(R.id.dimmableItemRowText)).setText(name);
 
             SeekBar seekBar = (SeekBar)tableRow.findViewById(R.id.dimmableItemRowSlider);
-            seekBar.setProgress(DimmableItemScaleConverter.convertBrightnessModelToView(modelBrightness));
+            seekBar.setProgress(ColorStateConverter.convertBrightnessModelToView(modelBrightness));
             seekBar.setThumb(getResources().getDrawable(uniformBrightness ? R.drawable.slider_thumb_normal : R.drawable.slider_thumb_midstate));
             seekBar.setEnabled(isEnabled);
 

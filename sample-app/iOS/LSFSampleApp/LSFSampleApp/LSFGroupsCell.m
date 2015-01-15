@@ -20,6 +20,7 @@
 #import "LSFAllJoynManager.h"
 #import "LSFGroupModel.h"
 #import "LSFGroupModelContainer.h"
+#import "LSFGroup.h"
 
 @interface LSFGroupsCell()
 
@@ -62,14 +63,13 @@
 
 -(IBAction)powerImagePressed: (UIButton *)sender
 {
-    LSFGroupModelContainer *container = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groups = container.groupContainer;
-    LSFGroupModel *model = [groups valueForKey: self.groupID];
+    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
+    LSFGroupModel *model = [[groups valueForKey: self.groupID] getLampGroupDataModel];
 
     if (model != nil && model.state.onOff)
     {
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-            LSFLampGroupManager *groupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+            LSFLampGroupManager *groupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
             [groupManager transitionLampGroupID: self.groupID onOffField: NO];
         });
     }
@@ -77,8 +77,8 @@
     {
         LSFConstants *constants = [LSFConstants getConstants];
         
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-            LSFLampGroupManager *groupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+            LSFLampGroupManager *groupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
 
             if (model.state.brightness == 0)
             {
@@ -95,12 +95,11 @@
 {
     LSFConstants *constants = [LSFConstants getConstants];
         
-    dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-        LSFGroupModelContainer *container = [LSFGroupModelContainer getGroupModelContainer];
-        NSMutableDictionary *groups = container.groupContainer;
-        LSFGroupModel *model = [groups valueForKey: self.groupID];
+    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+        NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
+        LSFGroupModel *model = [[groups valueForKey: self.groupID] getLampGroupDataModel];
 
-        LSFLampGroupManager *groupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
+        LSFLampGroupManager *groupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
         unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)sender.value withMax: 100];
         [groupManager transitionLampGroupID: self.groupID brightnessField: scaledBrightness];
 
@@ -144,13 +143,12 @@
     unsigned int newBrightness = (uint32_t)value;
     self.brightnessSlider.value = newBrightness;
     
-    dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-        LSFGroupModelContainer *container = [LSFGroupModelContainer getGroupModelContainer];
-        NSMutableDictionary *groups = container.groupContainer;
-        LSFGroupModel *model = [groups valueForKey: self.groupID];
+    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+        NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
+        LSFGroupModel *model = [[groups valueForKey: self.groupID] getLampGroupDataModel];
         LSFConstants *constants = [LSFConstants getConstants];
 
-        LSFLampGroupManager *groupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
+        LSFLampGroupManager *groupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
         unsigned int scaledBrightness = [constants scaleLampStateValue: newBrightness withMax: 100];
         [groupManager transitionLampGroupID: self.groupID brightnessField: scaledBrightness];
 
@@ -167,9 +165,8 @@
 {
     LSFConstants *constants = [LSFConstants getConstants];
 
-    LSFGroupModelContainer *container = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groups = container.groupContainer;
-    LSFGroupModel *model = [groups valueForKey: self.groupID];
+    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
+    LSFGroupModel *model = [[groups valueForKey: self.groupID] getLampGroupDataModel];
 
     model.timestamp = (long long)([[NSDate date] timeIntervalSince1970] * 1000);
 
@@ -181,7 +178,7 @@
 
 -(void)postDelayedGroupRefresh: (unsigned int)delay
 {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(((double)delay / 1000.0) * NSEC_PER_SEC)), ([LSFDispatchQueue getDispatchQueue]).queue, ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(((double)delay / 1000.0) * NSEC_PER_SEC)), [[LSFDispatchQueue getDispatchQueue] queue], ^{
         LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
         [ajManager.slgmc refreshAllLampGroupIDs];
     });

@@ -137,7 +137,7 @@ public class AllJoynManager {
                         if (status.equals(ControllerClientStatus.OK)) {
                             Log.d(AllJoynManager.TAG, "AllJoynManager.start(): succeeded");
 
-                            //TODO-IMPL aboutManager.start(AllJoynManager.bus);
+                            aboutManager.start(AllJoynManager.bus);
 
                             controllerStarted = true;
                         } else {
@@ -162,7 +162,7 @@ public class AllJoynManager {
                         Log.d(AllJoynManager.TAG, "AllJoynManager.stop(): succeeded");
 
                         controllerClient.stop();
-                        //TODO-IMPL aboutManager.stop();
+                        aboutManager.stop();
 
                         controllerStarted = false;
                     }
@@ -315,7 +315,7 @@ public class AllJoynManager {
             AllJoynManager.sceneManager = alljoynManagerFragment.sceneManager;
             AllJoynManager.masterSceneManager = alljoynManagerFragment.masterSceneManager;
 
-            aboutManager.initializeClient(AllJoynManager.bus);
+            aboutManager.start(AllJoynManager.bus);
 
             AllJoynManager.alljoynSemaphore.release();
 

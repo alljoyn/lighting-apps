@@ -30,6 +30,8 @@
 #import "LSFConstants.h"
 #import "LSFWifiMonitor.h"
 #import "LSFEnums.h"
+#import "LSFGroup.h"
+#import "LSFLightingScene.h"
 
 @interface LSFGroupsTableViewController ()
 
@@ -87,8 +89,12 @@
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(groupNotificationReceived:) name: @"GroupNotification" object: nil];
     
     //Set the content of the default group data array
-    LSFGroupModelContainer *container = [LSFGroupModelContainer getGroupModelContainer];
-    self.data = [[NSMutableArray alloc] initWithArray: [container.groupContainer allValues]];
+    self.data = [[NSMutableArray alloc] init];
+
+    for (LSFGroup *group in [[[LSFGroupModelContainer getGroupModelContainer] groupContainer] allValues])
+    {
+        [self.data addObject: [group getLampGroupDataModel]];
+    }
 
     if (self.data.count > 0)
     {
@@ -146,9 +152,8 @@
 
 -(void)addNewGroup: (NSString *)groupID
 {
-    LSFGroupModelContainer *container = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groups = container.groupContainer;
-    LSFGroupModel *model = [groups valueForKey: groupID];
+    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
+    LSFGroupModel *model = [[groups valueForKey: groupID] getLampGroupDataModel];
 
     long long currentTmestamp = (long long)([[NSDate date] timeIntervalSince1970] * 1000);
 
@@ -165,9 +170,8 @@
 
 -(void)refreshGroup: (NSString *)groupID
 {
-    LSFGroupModelContainer *container = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groups = container.groupContainer;
-    LSFGroupModel *model = [groups valueForKey: groupID];
+    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
+    LSFGroupModel *model = [[groups valueForKey: groupID] getLampGroupDataModel];
 
     long long currentTmestamp = (long long)([[NSDate date] timeIntervalSince1970] * 1000);
 
@@ -194,9 +198,8 @@
 
 -(void)reorderGroup: (NSString *)groupID
 {
-    LSFGroupModelContainer *container = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groups = container.groupContainer;
-    LSFGroupModel *model = [groups valueForKey: groupID];
+    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
+    LSFGroupModel *model = [[groups valueForKey: groupID] getLampGroupDataModel];
 
     long long currentTmestamp = (long long)([[NSDate date] timeIntervalSince1970] * 1000);
 
@@ -219,12 +222,11 @@
 
 -(void)removeGroup: (NSArray *)groupIDs
 {
-    LSFGroupModelContainer *container = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groups = container.groupContainer;
+    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
 
     for (NSString *groupID in groupIDs)
     {
-        LSFGroupModel *model = [groups valueForKey: groupID];
+        LSFGroupModel *model = [[groups valueForKey: groupID] getLampGroupDataModel];
 
         if (model == nil)
         {
@@ -441,8 +443,8 @@
             // Delete the row from the data source
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 
-            dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-                LSFLampGroupManager *groupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
+            dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+                LSFLampGroupManager *groupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
                 [groupManager deleteLampGroupWithID: data.theID];
             });
         }
@@ -589,12 +591,12 @@
 -(NSArray *)isGroupContainedInGroupsOrScenes: (NSString *)groupID
 {
     NSMutableArray *names = [[NSMutableArray alloc] init];
+    NSMutableArray *groups = [[NSMutableArray alloc] initWithArray: [[[LSFGroupModelContainer getGroupModelContainer] groupContainer] allValues]];
 
-    LSFGroupModelContainer *container = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableArray *groups = [[NSMutableArray alloc] initWithArray: [container.groupContainer allValues]];
-
-    for (LSFGroupModel *model in groups)
+    for (LSFGroup *group in groups)
     {
+        LSFGroupModel *model = [group getLampGroupDataModel];
+
         if (![groupID isEqualToString: model.theID])
         {
             if ([model.members.lampGroups containsObject: groupID])
@@ -605,11 +607,12 @@
         }
     }
 
-    LSFSceneModelContainer *sceneContainer = [LSFSceneModelContainer getSceneModelContainer];
-    NSMutableArray *scenes = [[NSMutableArray alloc] initWithArray: [sceneContainer.sceneContainer allValues]];
+    NSMutableArray *scenes = [[NSMutableArray alloc] initWithArray: [[[LSFSceneModelContainer getSceneModelContainer] sceneContainer] allValues]];
 
-    for (LSFSceneDataModel *model in scenes)
+    for (LSFLightingScene *scene in scenes)
     {
+        LSFSceneDataModel *model = [scene getSceneDataModel];
+
         for (LSFNoEffectDataModel *nedm in model.noEffects)
         {
             if ([nedm.members.lampGroups containsObject: groupID])

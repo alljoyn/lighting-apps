@@ -15,6 +15,7 @@
  */
 package org.allseen.lsf.helper.manager;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 import org.allseen.lsf.helper.facade.Group;
@@ -59,18 +60,26 @@ public class GroupCollectionManager extends LightingItemCollectionManager<Group,
         groupsFlattener.flattenGroups(itemAdapters);
     }
 
+    public void flattenGroup(Group group) {
+        groupsFlattener.flattenGroup(itemAdapters, group);
+    }
+
+    public Collection<Group> removeGroups() {
+        return removeAllAdapters();
+    }
+
     public Group removeGroup(String groupID) {
         return removeAdapter(groupID);
     }
 
     @Override
-    protected void sendChangedEvent(GroupCollectionListener listener, Iterator<Group> groups, int count) {
-        listener.onGroupsChanged(groups, count);
+    protected void sendChangedEvent(GroupCollectionListener listener, Group group) {
+        listener.onGroupChanged(group);
     }
 
     @Override
-    protected void sendRemovedEvent(GroupCollectionListener listener, Iterator<Group> groups, int count) {
-        listener.onGroupsRemoved(groups, count);
+    protected void sendRemovedEvent(GroupCollectionListener listener, Group group) {
+        listener.onGroupRemoved(group);
     }
 
     @Override

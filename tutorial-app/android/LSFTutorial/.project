@@ -45,7 +45,7 @@
 		<link>
 			<name>links/jar/AllJoyn/alljoyn_about.jar</name>
 			<type>1</type>
-			<locationURI>ALLJOYN_HOME/about/jar/alljoyn_about.jar</locationURI>
+			<locationURI>ALLJOYN_HOME/java/jar/alljoyn_about.jar</locationURI>
 		</link>
 		<link>
 			<name>links/jar/android/android-support-v4.jar</name>

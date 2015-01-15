@@ -21,6 +21,11 @@ import java.util.List;
 
 import org.allseen.lsf.LampDetails;
 import org.allseen.lsf.LampGroup;
+import org.allseen.lsf.helper.model.ColorStateConverter;
+import org.allseen.lsf.helper.model.GroupDataModel;
+import org.allseen.lsf.helper.model.LampCapabilities;
+import org.allseen.lsf.helper.model.LampDataModel;
+import org.allseen.lsf.helper.model.NoEffectDataModel;
 
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -54,7 +59,7 @@ public class BasicSceneSelectMembersFragment extends SelectMembersFragment {
     }
 
     @Override
-    protected void processSelection(SampleAppActivity activity, List<String> lampIDs, List<String> groupIDs, List<String> sceneIDs, CapabilityData capability) {
+    protected void processSelection(SampleAppActivity activity, List<String> lampIDs, List<String> groupIDs, List<String> sceneIDs, LampCapabilities capability) {
         activity.pendingBasicSceneElementCapability = capability;
         super.processSelection(activity, lampIDs, groupIDs, sceneIDs, capability);
     }
@@ -74,11 +79,11 @@ public class BasicSceneSelectMembersFragment extends SelectMembersFragment {
         processLampSelection(activity, lampIDs);
 
         if (activity.pendingBasicSceneElementMembersMinColorTemp == -1) {
-            activity.pendingBasicSceneElementMembersMinColorTemp = DimmableItemScaleConverter.VIEW_COLORTEMP_MIN;
+            activity.pendingBasicSceneElementMembersMinColorTemp = ColorStateConverter.VIEW_COLORTEMP_MIN;
         }
 
         if (activity.pendingBasicSceneElementMembersMaxColorTemp == -1) {
-            activity.pendingBasicSceneElementMembersMaxColorTemp = DimmableItemScaleConverter.VIEW_COLORTEMP_MAX;
+            activity.pendingBasicSceneElementMembersMaxColorTemp = ColorStateConverter.VIEW_COLORTEMP_MAX;
         }
     }
 
@@ -91,7 +96,7 @@ public class BasicSceneSelectMembersFragment extends SelectMembersFragment {
     }
 
     protected void processLampSelection(SampleAppActivity activity, String groupID) {
-        GroupDataModel groupModel = activity.groupModels.get(groupID);
+        GroupDataModel groupModel = activity.systemManager.getGroupCollectionManager().getModel(groupID);
 
         if (groupModel != null) {
             processLampSelection(activity, groupModel.getLamps());
@@ -101,7 +106,7 @@ public class BasicSceneSelectMembersFragment extends SelectMembersFragment {
     protected void processLampSelection(SampleAppActivity activity, Collection<String> lampIDs) {
         if (lampIDs.size() > 0) {
             for (Iterator<String> it = lampIDs.iterator(); it.hasNext();) {
-                LampDataModel lampModel = activity.lampModels.get(it.next());
+                LampDataModel lampModel = activity.systemManager.getLampCollectionManager().getModel(it.next());
 
                 if (lampModel != null) {
                     LampDetails lampDetails = lampModel.getDetails();
@@ -111,8 +116,8 @@ public class BasicSceneSelectMembersFragment extends SelectMembersFragment {
                         boolean lampHasVariableColorTemp = lampDetails.hasVariableColorTemp();
                         int lampMinTemperature = lampDetails.getMinTemperature();
                         int lampMaxTemperature = lampHasVariableColorTemp ? lampDetails.getMaxTemperature() : lampMinTemperature;
-                        boolean lampValidColorTempMin = lampMinTemperature >= DimmableItemScaleConverter.VIEW_COLORTEMP_MIN && lampMinTemperature <= DimmableItemScaleConverter.VIEW_COLORTEMP_MAX;
-                        boolean lampValidColorTempMax = lampMaxTemperature >= DimmableItemScaleConverter.VIEW_COLORTEMP_MIN && lampMaxTemperature <= DimmableItemScaleConverter.VIEW_COLORTEMP_MAX;
+                        boolean lampValidColorTempMin = lampMinTemperature >= ColorStateConverter.VIEW_COLORTEMP_MIN && lampMinTemperature <= ColorStateConverter.VIEW_COLORTEMP_MAX;
+                        boolean lampValidColorTempMax = lampMaxTemperature >= ColorStateConverter.VIEW_COLORTEMP_MIN && lampMaxTemperature <= ColorStateConverter.VIEW_COLORTEMP_MAX;
 
                         if (lampHasEffects) {
                             activity.pendingBasicSceneElementMembersHaveEffects = true;
@@ -121,7 +126,7 @@ public class BasicSceneSelectMembersFragment extends SelectMembersFragment {
                         if (lampHasVariableColorTemp) {
                             activity.pendingBasicSceneElementColorTempAverager.add(lampModel.state.getColorTemp());
                         } else if (lampValidColorTempMin) {
-                            activity.pendingBasicSceneElementColorTempAverager.add(DimmableItemScaleConverter.convertColorTempViewToModel(lampMinTemperature));
+                            activity.pendingBasicSceneElementColorTempAverager.add(ColorStateConverter.convertColorTempViewToModel(lampMinTemperature));
                         }
 
                         if (lampValidColorTempMin && lampValidColorTempMax) {

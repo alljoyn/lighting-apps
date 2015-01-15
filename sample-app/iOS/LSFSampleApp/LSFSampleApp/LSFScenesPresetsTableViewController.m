@@ -313,8 +313,8 @@
         // Delete the row from the data source
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-            LSFPresetManager *presetManager = ([LSFAllJoynManager getAllJoynManager]).lsfPresetManager;
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+            LSFPresetManager *presetManager = [[LSFAllJoynManager getAllJoynManager] lsfPresetManager];
             [presetManager deletePresetWithID: data.theID];
         });
     }

@@ -15,6 +15,7 @@
  */
 package org.allseen.lsf.helper.manager;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 import org.allseen.lsf.helper.facade.Scene;
@@ -36,6 +37,10 @@ public class SceneCollectionManager extends LightingItemCollectionManager<Scene,
         return addScene(sceneID, new Scene(sceneID));
     }
 
+    public Scene addScene(SceneDataModel sceneModel) {
+        return addScene(sceneModel.id, new Scene(sceneModel));
+    }
+
     public Scene addScene(String sceneID, Scene scene) {
         return itemAdapters.put(sceneID, scene);
     }
@@ -48,8 +53,12 @@ public class SceneCollectionManager extends LightingItemCollectionManager<Scene,
         return getAdapters().toArray(new Scene[size()]);
     }
 
-    public Iterator<Scene> getPresetIterator() {
+    public Iterator<Scene> getSceneIterator() {
         return getAdapters().iterator();
+    }
+
+    public Collection<Scene> removeScenes() {
+        return removeAllAdapters();
     }
 
     public Scene removeScene(String sceneID) {
@@ -57,13 +66,13 @@ public class SceneCollectionManager extends LightingItemCollectionManager<Scene,
     }
 
     @Override
-    protected void sendChangedEvent(SceneCollectionListener listener, Iterator<Scene> scenes, int count) {
-        listener.onScenesChanged(scenes, count);
+    protected void sendChangedEvent(SceneCollectionListener listener, Scene scene) {
+        listener.onSceneChanged(scene);
     }
 
     @Override
-    protected void sendRemovedEvent(SceneCollectionListener listener, Iterator<Scene> scenes, int count) {
-        listener.onScenesRemoved(scenes, count);
+    protected void sendRemovedEvent(SceneCollectionListener listener, Scene scene) {
+        listener.onSceneRemoved(scene);
     }
 
     @Override

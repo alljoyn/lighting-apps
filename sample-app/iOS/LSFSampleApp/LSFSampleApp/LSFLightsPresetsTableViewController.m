@@ -24,6 +24,7 @@
 #import "LSFAllJoynManager.h"
 #import "LSFConstants.h"
 #import "LSFEnums.h"
+#import "LSFLamp.h"
 
 @interface LSFLightsPresetsTableViewController ()
 
@@ -144,9 +145,8 @@
 
 -(void)reloadPresets
 {
-    LSFLampModelContainer *lampsContainer = [LSFLampModelContainer getLampModelContainer];
-    NSMutableDictionary *lamps = lampsContainer.lampContainer;
-    self.lampModel = [lamps valueForKey: self.lampID];
+    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
+    self.lampModel = [[lamps valueForKey: self.lampID] getLampDataModel];
 
     LSFPresetModelContainer *container = [LSFPresetModelContainer getPresetModelContainer];
     self.presetData = [container.presetContainer allValues];
@@ -205,8 +205,8 @@
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
             LSFPresetModel *data = [self.presetDataSorted objectAtIndex: [indexPath row]];
 
-            dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-                LSFLampManager *lampManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampManager;
+            dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+                LSFLampManager *lampManager = [[LSFAllJoynManager getAllJoynManager] lsfLampManager];
                 [lampManager transitionLampID: self.lampID toPresetID: data.theID];
             });
 
@@ -268,8 +268,8 @@
         // Delete the row from the data source
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-            LSFPresetManager *presetManager = ([LSFAllJoynManager getAllJoynManager]).lsfPresetManager;
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+            LSFPresetManager *presetManager = [[LSFAllJoynManager getAllJoynManager] lsfPresetManager];
             [presetManager deletePresetWithID: data.theID];
         });
     }

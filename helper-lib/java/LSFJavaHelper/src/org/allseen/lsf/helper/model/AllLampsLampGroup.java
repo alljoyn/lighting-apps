@@ -24,11 +24,20 @@ import org.allseen.lsf.helper.manager.LightingSystemManager;
  * in subsequent releases of the SDK</b>.
  */
 public class AllLampsLampGroup extends LampGroup {
-    protected LightingSystemManager director;
+    public static final AllLampsLampGroup instance = new AllLampsLampGroup();
 
-    public AllLampsLampGroup(LightingSystemManager director) {
+    protected static final String[] emptyList = new String[0];
+
+    protected LightingSystemManager manager;
+
+    protected AllLampsLampGroup() {
         super();
-        this.director = director;
+
+        this.manager = null;
+    }
+
+    public void setLightingSystemManager(LightingSystemManager manager) {
+        this.manager = manager;
     }
 
     @Override
@@ -38,7 +47,7 @@ public class AllLampsLampGroup extends LampGroup {
 
     @Override
     public String[] getLamps() {
-        return director.getLampCollectionManager().getIDArray();
+        return manager != null ? manager.getLampCollectionManager().getIDArray() : emptyList;
     }
 
     @Override

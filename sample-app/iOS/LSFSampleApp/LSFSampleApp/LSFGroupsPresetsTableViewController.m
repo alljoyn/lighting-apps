@@ -24,6 +24,7 @@
 #import "LSFAllJoynManager.h"
 #import "LSFConstants.h"
 #import "LSFEnums.h"
+#import "LSFGroup.h"
 
 @interface LSFGroupsPresetsTableViewController ()
 
@@ -142,12 +143,10 @@
 
 -(void)reloadPresets
 {
-    LSFGroupModelContainer *groupsContainer = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groups = groupsContainer.groupContainer;
-    self.groupModel = [groups valueForKey: self.groupID];
+    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
+    self.groupModel = [[groups valueForKey: self.groupID] getLampGroupDataModel];
 
-    LSFPresetModelContainer *container = [LSFPresetModelContainer getPresetModelContainer];
-    self.presetData = [container.presetContainer allValues];
+    self.presetData = [[[LSFPresetModelContainer getPresetModelContainer] presetContainer] allValues];
     [self sortPresetData];
 
     [self.tableView reloadData];
@@ -203,8 +202,8 @@
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
             LSFPresetModel *data = [self.presetDataSorted objectAtIndex: [indexPath row]];
 
-            dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-                LSFLampGroupManager *lampGroupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
+            dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+                LSFLampGroupManager *lampGroupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
                 [lampGroupManager transitionLampGroupID: self.groupModel.theID toPreset: data.theID];
             });
 
@@ -270,8 +269,8 @@
         // Delete the row from the data source
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-            LSFPresetManager *presetManager = ([LSFAllJoynManager getAllJoynManager]).lsfPresetManager;
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+            LSFPresetManager *presetManager = [[LSFAllJoynManager getAllJoynManager] lsfPresetManager];
             [presetManager deletePresetWithID: data.theID];
         });
     }

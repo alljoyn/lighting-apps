@@ -24,11 +24,11 @@ public class ControllerDataModel extends LightingItemDataModel {
 
     public static String defaultName = "<Loading controller info...>";
 
+    public long version;
     public boolean connected;
 
     public ControllerDataModel() {
         this((String)null);
-        connected = false;
     }
 
     public ControllerDataModel(String controllerID) {
@@ -37,9 +37,15 @@ public class ControllerDataModel extends LightingItemDataModel {
 
     public ControllerDataModel(String controllerID, String controllerName) {
         super(controllerID, TAG_PREFIX_CONTROLLER, controllerName != null ? controllerName : defaultName);
+
+        version = 0;
+        connected = false;
     }
 
     public ControllerDataModel(ControllerDataModel other) {
         super(other);
+
+        version = other.version;
+        connected = other.connected;
     }
 }

@@ -16,6 +16,12 @@
 package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.LampGroup;
+import org.allseen.lsf.helper.manager.AllJoynManager;
+import org.allseen.lsf.helper.model.LampCapabilities;
+import org.allseen.lsf.helper.model.NoEffectDataModel;
+import org.allseen.lsf.helper.model.PulseEffectDataModel;
+import org.allseen.lsf.helper.model.SceneDataModel;
+import org.allseen.lsf.helper.model.TransitionEffectDataModel;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -30,14 +36,14 @@ import android.widget.TextView;
 
 public class BasicSceneInfoFragment extends PageFrameChildFragment implements View.OnClickListener {
 
-    protected BasicSceneDataModel getBasicSceneDataModel() {
+    protected SceneDataModel getBasicSceneDataModel() {
         return ((SampleAppActivity) getActivity()).pendingBasicSceneModel;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SampleAppActivity activity = (SampleAppActivity) getActivity();
-        BasicSceneDataModel basicSceneModel = getBasicSceneDataModel();
+        SceneDataModel basicSceneModel = getBasicSceneDataModel();
 
         view = inflater.inflate(R.layout.fragment_basic_scene_info, container, false);
         View statusView = view.findViewById(R.id.infoStatusRow);
@@ -68,7 +74,7 @@ public class BasicSceneInfoFragment extends PageFrameChildFragment implements Vi
     public void onActionAdd() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
         activity.pendingBasicSceneElementMembers = new LampGroup();
-        activity.pendingBasicSceneElementCapability = new CapabilityData(true, true, true);
+        activity.pendingBasicSceneElementCapability = new LampCapabilities(true, true, true);
         activity.pendingNoEffectModel = null;
         activity.pendingTransitionEffectModel = null;
         activity.pendingPulseEffectModel = null;
@@ -80,9 +86,9 @@ public class BasicSceneInfoFragment extends PageFrameChildFragment implements Vi
     public void onActionDone() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
 
-        if (activity.pendingBasicSceneModel.id != null && !activity.pendingBasicSceneModel.id.isEmpty()) {
+        if (activity.pendingBasicSceneModel.id != null && !activity.pendingBasicSceneModel.hasDefaultID()) {
             AllJoynManager.sceneManager.updateScene(activity.pendingBasicSceneModel.id, activity.pendingBasicSceneModel.toScene());
-            activity.basicSceneModels.put(activity.pendingBasicSceneModel.id, activity.pendingBasicSceneModel);
+            activity.systemManager.getSceneCollectionManager().addScene(activity.pendingBasicSceneModel);
         } else {
             AllJoynManager.sceneManager.createScene(activity.pendingBasicSceneModel.toScene(), activity.pendingBasicSceneModel.getName(), SampleAppActivity.LANGUAGE);
         }
@@ -105,20 +111,20 @@ public class BasicSceneInfoFragment extends PageFrameChildFragment implements Vi
 
     protected void onHeaderClick() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        BasicSceneDataModel sceneModel = getBasicSceneDataModel();
+        SceneDataModel sceneModel = getBasicSceneDataModel();
 
         activity.showItemNameDialog(R.string.title_basic_scene_rename, new UpdateBasicSceneNameAdapter(sceneModel, (SampleAppActivity) getActivity()));
     }
 
     protected void onElementTextClick(String elementID) {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        BasicSceneDataModel basicSceneModel = activity.pendingBasicSceneModel;
+        SceneDataModel basicSceneModel = activity.pendingBasicSceneModel;
 
         if (basicSceneModel.noEffects != null) {
             for (NoEffectDataModel elementModel : basicSceneModel.noEffects) {
                 if (elementID.equals(elementModel.id)) {
                     activity.pendingBasicSceneElementMembers = new LampGroup(elementModel.members);
-                    activity.pendingBasicSceneElementCapability = new CapabilityData(elementModel.capability);
+                    activity.pendingBasicSceneElementCapability = new LampCapabilities(elementModel.getCapability());
                     activity.pendingNoEffectModel = new NoEffectDataModel(elementModel);
                     activity.pendingTransitionEffectModel = null;
                     activity.pendingPulseEffectModel = null;
@@ -133,7 +139,7 @@ public class BasicSceneInfoFragment extends PageFrameChildFragment implements Vi
             for (TransitionEffectDataModel elementModel : basicSceneModel.transitionEffects) {
                 if (elementID.equals(elementModel.id)) {
                     activity.pendingBasicSceneElementMembers = new LampGroup(elementModel.members);
-                    activity.pendingBasicSceneElementCapability = new CapabilityData(elementModel.capability);
+                    activity.pendingBasicSceneElementCapability = new LampCapabilities(elementModel.getCapability());
                     activity.pendingNoEffectModel = null;
                     activity.pendingTransitionEffectModel = new TransitionEffectDataModel(elementModel);
                     activity.pendingPulseEffectModel = null;
@@ -148,7 +154,7 @@ public class BasicSceneInfoFragment extends PageFrameChildFragment implements Vi
             for (PulseEffectDataModel elementModel : basicSceneModel.pulseEffects) {
                 if (elementID.equals(elementModel.id)) {
                     activity.pendingBasicSceneElementMembers = new LampGroup(elementModel.members);
-                    activity.pendingBasicSceneElementCapability = new CapabilityData(elementModel.capability);
+                    activity.pendingBasicSceneElementCapability = new LampCapabilities(elementModel.getCapability());
                     activity.pendingNoEffectModel = null;
                     activity.pendingTransitionEffectModel = null;
                     activity.pendingPulseEffectModel = new PulseEffectDataModel(elementModel);
@@ -169,7 +175,7 @@ public class BasicSceneInfoFragment extends PageFrameChildFragment implements Vi
         updateInfoFields(activity, getBasicSceneDataModel());
     }
 
-    public void updateInfoFields(SampleAppActivity activity, BasicSceneDataModel basicSceneModel) {
+    public void updateInfoFields(SampleAppActivity activity, SceneDataModel basicSceneModel) {
         // Update name and members
         setTextViewValue(view, R.id.statusTextName, basicSceneModel.getName(), 0);
 

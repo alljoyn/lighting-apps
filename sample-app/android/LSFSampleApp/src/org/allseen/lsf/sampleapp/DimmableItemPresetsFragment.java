@@ -15,10 +15,13 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import java.util.Map;
-
+import java.util.Iterator;
 import org.allseen.lsf.LampState;
 import org.allseen.lsf.PresetManager;
+import org.allseen.lsf.helper.facade.Preset;
+import org.allseen.lsf.helper.manager.AllJoynManager;
+import org.allseen.lsf.helper.model.ColorItemDataModel;
+import org.allseen.lsf.helper.model.PresetDataModel;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -56,14 +59,17 @@ public abstract class DimmableItemPresetsFragment extends SelectableItemTableFra
 
     public void onUpdateView(LayoutInflater inflater, View root) {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
+        Iterator<Preset> i = activity.systemManager.getPresetCollectionManager().getPresetIterator();
 
         table.removeAllViews();
 
-        for (PresetDataModel presetModel : activity.presetModels.values()) {
+        while (i.hasNext()) {
+            PresetDataModel presetModel = i.next().getPresetDataModel();
+
             updateSelectableItemRow(inflater, root, presetModel.id, presetModel.tag, R.drawable.nav_more_menu_icon, presetModel.getName(), false);
         }
 
-        view.findViewById(R.id.selectHeader).setVisibility(activity.presetModels.size() < PresetManager.MAX_PRESETS ? View.VISIBLE : View.GONE);
+        view.findViewById(R.id.selectHeader).setVisibility(activity.systemManager.getPresetCollectionManager().size() < PresetManager.MAX_PRESETS ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -78,7 +84,7 @@ public abstract class DimmableItemPresetsFragment extends SelectableItemTableFra
         super.removeElement(id);
 
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        view.findViewById(R.id.selectHeader).setVisibility(activity.presetModels.size() < PresetManager.MAX_PRESETS ? View.VISIBLE : View.GONE);
+        view.findViewById(R.id.selectHeader).setVisibility(activity.systemManager.getPresetCollectionManager().size() < PresetManager.MAX_PRESETS ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -88,7 +94,7 @@ public abstract class DimmableItemPresetsFragment extends SelectableItemTableFra
 
     @Override
     protected boolean isItemSelected(String presetID) {
-        return isItemSelected(((SampleAppActivity)getActivity()).presetModels.get(presetID));
+        return isItemSelected(((SampleAppActivity)getActivity()).systemManager.getPresetCollectionManager().getModel(presetID));
     }
 
     protected boolean isItemSelected(PresetDataModel presetModel) {
@@ -136,7 +142,7 @@ public abstract class DimmableItemPresetsFragment extends SelectableItemTableFra
         SampleAppActivity activity = (SampleAppActivity)getActivity();
 
         // Default new preset name suffix is next available index (number of preset models + 1 for now)
-        return currentName == null ? String.format(activity.getString(R.string.presets_new_name), activity.presetModels.size() + 1) : currentName;
+        return currentName == null ? String.format(activity.getString(R.string.presets_new_name), activity.systemManager.getPresetCollectionManager().size() + 1) : currentName;
     }
 
     @Override
@@ -170,13 +176,15 @@ public abstract class DimmableItemPresetsFragment extends SelectableItemTableFra
     }
 
     private boolean duplicateName(String presetName) {
+        Iterator<Preset> i = ((SampleAppActivity)getActivity()).systemManager.getPresetCollectionManager().getPresetIterator();
         boolean isDuplicate = false;
-        Map<String, PresetDataModel> currentPresets = ((SampleAppActivity) getActivity()).presetModels;
-        for (String currentPresetName : currentPresets.keySet()) {
-            if (currentPresets.get(currentPresetName).getName().equals(presetName)) {
+
+        while (i.hasNext()) {
+            if (i.next().getPresetDataModel().getName().equals(presetName)) {
                 isDuplicate = true;
             }
         }
+
         return isDuplicate;
     }
 
@@ -190,7 +198,7 @@ public abstract class DimmableItemPresetsFragment extends SelectableItemTableFra
     }
 
     protected void doSavePreset(String presetName) {
-        DimmableItemDataModel itemModel = getDimmableItemDataModel();
+        ColorItemDataModel itemModel = getDimmableItemDataModel();
 
         if ((presetName != null) && (!presetName.isEmpty()) && (itemModel != null)) {
             doSavePreset(presetName, itemModel.state);
@@ -207,11 +215,11 @@ public abstract class DimmableItemPresetsFragment extends SelectableItemTableFra
     }
 
     protected void doApplyPreset(String presetID) {
-        doApplyPreset(((SampleAppActivity)getActivity()).presetModels.get(presetID));
+        doApplyPreset(((SampleAppActivity)getActivity()).systemManager.getPresetCollectionManager().getModel(presetID));
 
         ((SampleAppActivity)getActivity()).onBackPressed();
     }
 
     protected abstract void doApplyPreset(PresetDataModel presetModel);
-    protected abstract DimmableItemDataModel getDimmableItemDataModel();
+    protected abstract ColorItemDataModel getDimmableItemDataModel();
 }

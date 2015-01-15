@@ -24,6 +24,7 @@
 #import "LSFLightsTableViewController.h"
 #import "LSFLightInfoTableViewController.h"
 #import "LSFEnums.h"
+#import "LSFLamp.h"
 
 @interface LSFLightsChangeNameViewController ()
 
@@ -115,9 +116,8 @@
 
 -(void)reloadLampName
 {
-    LSFLampModelContainer *lampsContainer = [LSFLampModelContainer getLampModelContainer];
-    NSMutableDictionary *lamps = lampsContainer.lampContainer;
-    self.lampModel = [lamps valueForKey: self.lampID];
+    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
+    self.lampModel = [[lamps valueForKey: self.lampID] getLampDataModel];
 
     self.lampNameTextField.text = self.lampModel.name;
 }
@@ -158,8 +158,8 @@
         self.doneButtonPressed = YES;
         [textField resignFirstResponder];
         
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-            LSFLampManager *lampManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampManager;
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+            LSFLampManager *lampManager = [[LSFAllJoynManager getAllJoynManager] lsfLampManager];
             [lampManager setLampNameWithID: self.lampID andName: self.lampNameTextField.text];
         });
         
@@ -194,8 +194,8 @@
         self.doneButtonPressed = YES;
         [self.lampNameTextField resignFirstResponder];
         
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-            LSFLampManager *lampManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampManager;
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+            LSFLampManager *lampManager = [[LSFAllJoynManager getAllJoynManager] lsfLampManager];
             [lampManager setLampNameWithID: self.lampID andName: self.lampNameTextField.text];
         });
     }
@@ -206,11 +206,12 @@
  */
 -(BOOL)checkForDuplicateName: (NSString *)name
 {
-    LSFLampModelContainer *container = [LSFLampModelContainer getLampModelContainer];
-    NSDictionary *lamps = container.lampContainer;
+    NSDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
     
-    for (LSFLampModel *model in [lamps allValues])
+    for (LSFLamp *lamp in [lamps allValues])
     {
+        LSFLampModel *model = [lamp getLampDataModel];
+
         if ([name isEqualToString: model.name])
         {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Duplicate Name"

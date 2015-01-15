@@ -15,6 +15,10 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import org.allseen.lsf.helper.model.ColorItemDataModel;
+import org.allseen.lsf.helper.model.SceneElementDataModel;
+import org.allseen.lsf.helper.model.TransitionEffectDataModel;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +63,7 @@ public class TransitionEffectFragment extends BasicSceneElementInfoFragment {
     }
 
     @Override
-    public void updateInfoFields(DimmableItemDataModel itemModel) {
+    public void updateInfoFields(ColorItemDataModel itemModel) {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
 
         // Capabilities can change if the member set is edited
@@ -92,7 +96,7 @@ public class TransitionEffectFragment extends BasicSceneElementInfoFragment {
     }
 
     @Override
-    protected BasicSceneElementDataModel getPendingSceneElementDataModel() {
+    protected SceneElementDataModel getPendingSceneElementDataModel() {
         return ((SampleAppActivity)getActivity()).pendingTransitionEffectModel;
     }
 

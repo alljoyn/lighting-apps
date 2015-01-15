@@ -29,7 +29,7 @@ public class MasterSceneDataModel extends LightingItemDataModel {
     public MasterScene masterScene;
 
     public MasterSceneDataModel() {
-        this("", null);
+        this(null, null);
     }
 
     public MasterSceneDataModel(String masterSceneID) {
@@ -46,5 +46,17 @@ public class MasterSceneDataModel extends LightingItemDataModel {
         super(other);
 
         this.masterScene = new MasterScene(other.masterScene);
+    }
+
+    public boolean containsBasicScene(String basicSceneID) {
+        String[] childIDs = masterScene.getScenes();
+
+        for (String childID : childIDs) {
+            if (childID.equals(basicSceneID)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

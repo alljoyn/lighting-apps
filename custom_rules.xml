@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- * Copyright (c) 2014, AllSeen Alliance. All rights reserved.
+ * Copyright (c) 2014-2015, AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -25,7 +25,7 @@
 
     <path id="apps.classpath">
         <pathelement location="${apps.path.alljoyn}/java/jar/alljoyn.jar"/>
-        <pathelement location="${apps.path.alljoyn}/about/jar/alljoyn_about.jar"/>
+        <pathelement location="${apps.path.alljoyn}/java/jar/alljoyn_about.jar"/>
         <pathelement location="${sdk.dir}/extras/android/support/v4/android-support-v4.jar"/>
         <pathelement location="${sdk.dir}/extras/android/support/v13/android-support-v13.jar"/>
     </path>

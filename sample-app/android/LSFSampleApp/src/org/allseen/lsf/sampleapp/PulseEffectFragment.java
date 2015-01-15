@@ -17,6 +17,10 @@ package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.LampState;
 import org.allseen.lsf.PresetPulseEffect;
+import org.allseen.lsf.helper.model.ColorItemDataModel;
+import org.allseen.lsf.helper.model.PresetDataModel;
+import org.allseen.lsf.helper.model.PulseEffectDataModel;
+import org.allseen.lsf.helper.model.SceneElementDataModel;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -40,7 +44,7 @@ public class PulseEffectFragment extends BasicSceneElementInfoFragment implement
         PulseEffectDataModel pulseEffectModel = activity.pendingPulseEffectModel;
 
         if (pulseEffectModel.endPresetID != null && !pulseEffectModel.endPresetID.equals(PresetPulseEffect.PRESET_ID_CURRENT_STATE)) {
-            PresetDataModel presetModel = activity.presetModels.get(pulseEffectModel.endPresetID);
+            PresetDataModel presetModel = activity.systemManager.getPresetCollectionManager().getModel(pulseEffectModel.endPresetID);
 
             if (presetModel != null) {
                 pulseEffectModel.endState = presetModel.state;
@@ -97,7 +101,7 @@ public class PulseEffectFragment extends BasicSceneElementInfoFragment implement
         // state adapter
         stateAdapter2 = new LampStateViewAdapter(view.findViewById(R.id.infoStateRow2), STATE2_ITEM_TAG, getColorTempMin(), getColorTempSpan(), this);
 
-        setColorIndicator(view.findViewById(R.id.infoStateRow2), pulseEffectModel.endState, pulseEffectModel.capability, getColorTempDefault());
+        setColorIndicator(view.findViewById(R.id.infoStateRow2), pulseEffectModel.endState, pulseEffectModel.getCapability(), getColorTempDefault());
         updateInfoFields(pulseEffectModel);
 
         View currentStateRow = view.findViewById(R.id.infoStateRow).findViewById(R.id.startWithCurrentStateRow);
@@ -133,7 +137,7 @@ public class PulseEffectFragment extends BasicSceneElementInfoFragment implement
     }
 
     @Override
-    public void updateInfoFields(DimmableItemDataModel itemModel) {
+    public void updateInfoFields(ColorItemDataModel itemModel) {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
 
         // Capabilities can change if the member set is edited
@@ -147,7 +151,7 @@ public class PulseEffectFragment extends BasicSceneElementInfoFragment implement
     }
 
     @Override
-    public void updatePresetFields(DimmableItemDataModel itemModel) {
+    public void updatePresetFields(ColorItemDataModel itemModel) {
         super.updatePresetFields(itemModel);
         updatePresetFields(((PulseEffectDataModel)itemModel).endState, stateAdapter2);
     }
@@ -211,7 +215,7 @@ public class PulseEffectFragment extends BasicSceneElementInfoFragment implement
     }
 
     @Override
-    protected void checkInitialColorTemp(BasicSceneElementDataModel pendingModel, long modelColorTempMin) {
+    protected void checkInitialColorTemp(SceneElementDataModel pendingModel, long modelColorTempMin) {
         super.checkInitialColorTemp(pendingModel, modelColorTempMin);
 
         if (((PulseEffectDataModel)pendingModel).endState.getColorTemp() < modelColorTempMin) {
@@ -220,7 +224,7 @@ public class PulseEffectFragment extends BasicSceneElementInfoFragment implement
     }
 
     @Override
-    protected BasicSceneElementDataModel getPendingSceneElementDataModel() {
+    protected SceneElementDataModel getPendingSceneElementDataModel() {
         return ((SampleAppActivity)getActivity()).pendingPulseEffectModel;
     }
 

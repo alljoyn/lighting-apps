@@ -24,6 +24,8 @@
 #import "LSFNoEffectTableViewController.h"
 #import "LSFEnums.h"
 #import "LSFConstants.h"
+#import "LSFLamp.h"
+#import "LSFGroup.h"
 
 @interface LSFScenesMembersTableViewController ()
 
@@ -176,24 +178,28 @@
  */
 -(void)buildTableArray
 {
-    LSFGroupModelContainer *groupContainer = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groups = groupContainer.groupContainer;
-    NSMutableArray *groupsArray = [NSMutableArray arrayWithArray: [groups allValues]];
+    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
+    NSMutableArray *groupsArray = [[NSMutableArray alloc] init];
 
-    for (LSFGroupModel *groupModel in groupsArray)
+    for (LSFGroup *group in [groups allValues])
     {
-        if ([groupModel.theID isEqualToString: @"!!all_lamps!!"])
+        LSFGroupModel *groupModel = [group getLampGroupDataModel];
+
+        if (![groupModel.theID isEqualToString: @"!!all_lamps!!"])
         {
-            [groupsArray removeObject: groupModel];
-            break;
+            [groupsArray addObject: [group getLampGroupDataModel]];
         }
     }
 
-    LSFLampModelContainer *lampsContainer = [LSFLampModelContainer getLampModelContainer];
-    NSMutableDictionary *lamps = lampsContainer.lampContainer;
-    NSMutableArray *lampsArray = [NSMutableArray arrayWithArray: [lamps allValues]];
+    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
+    NSMutableArray *lampsArray = [[NSMutableArray alloc] init];
 
-    self.dataArray = [NSMutableArray arrayWithArray: [self sortLampsGroupsData: groupsArray]];
+    for (LSFLamp *lamp in [lamps allValues])
+    {
+        [lampsArray addObject: [lamp getLampDataModel]];
+    }
+
+    [self.dataArray addObjectsFromArray: [self sortLampsGroupsData: groupsArray]];
     [self.dataArray addObjectsFromArray: [self sortLampsGroupsData: lampsArray]];
 }
 
@@ -270,12 +276,11 @@
 
 -(BOOL)checkIfEffectsAreSupported
 {
-    LSFLampModelContainer *lampContainer = [LSFLampModelContainer getLampModelContainer];
-    NSMutableDictionary *lamps = lampContainer.lampContainer;
+    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
 
     for (NSString *lampID in self.sceneElement.members.lamps)
     {
-        LSFLampModel *lampModel = [lamps valueForKey: lampID];
+        LSFLampModel *lampModel = [[lamps valueForKey: lampID] getLampDataModel];
 
         if (lampModel.lampDetails.hasEffects)
         {
@@ -283,12 +288,11 @@
         }
     }
 
-    LSFGroupModelContainer *groupContainer = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groups = groupContainer.groupContainer;
+    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
 
     for (NSString *groupID in self.sceneElement.members.lampGroups)
     {
-        LSFGroupModel *groupModel = [groups valueForKey: groupID];
+        LSFGroupModel *groupModel = [[groups valueForKey: groupID] getLampGroupDataModel];
 
         for (NSString *lampID in groupModel.lamps)
         {
@@ -309,12 +313,11 @@
     int colorTempGroupMin = -1;
     int colorTempGroupMax = -1;
 
-    LSFLampModelContainer *lampContainer = [LSFLampModelContainer getLampModelContainer];
-    NSMutableDictionary *lamps = lampContainer.lampContainer;
+    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
 
     for (NSString *lampID in self.sceneElement.members.lamps)
     {
-        LSFLampModel *lampModel = [lamps valueForKey: lampID];
+        LSFLampModel *lampModel = [[lamps valueForKey: lampID] getLampDataModel];
 
         int colorTempLampMin = lampModel.lampDetails.minTemperature;
         int colorTempLampMax = lampModel.lampDetails.maxTemperature;
@@ -330,16 +333,15 @@
         }
     }
 
-    LSFGroupModelContainer *groupContainer = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groups = groupContainer.groupContainer;
+    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
 
     for (NSString *groupID in self.sceneElement.members.lampGroups)
     {
-        LSFGroupModel *groupModel = [groups valueForKey: groupID];
+        LSFGroupModel *groupModel = [[groups valueForKey: groupID] getLampGroupDataModel];
 
         for (NSString *lampID in groupModel.lamps)
         {
-            LSFLampModel *lampModel = [lamps valueForKey: lampID];
+            LSFLampModel *lampModel = [[lamps valueForKey: lampID] getLampDataModel];
 
             int colorTempLampMin = lampModel.lampDetails.minTemperature;
             int colorTempLampMax = lampModel.lampDetails.maxTemperature;

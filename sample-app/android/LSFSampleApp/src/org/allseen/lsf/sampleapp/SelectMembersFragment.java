@@ -18,11 +18,20 @@ package org.allseen.lsf.sampleapp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.allseen.lsf.LampGroup;
+import org.allseen.lsf.helper.facade.Group;
+import org.allseen.lsf.helper.facade.Lamp;
+import org.allseen.lsf.helper.facade.Scene;
+import org.allseen.lsf.helper.model.AllLampsDataModel;
+import org.allseen.lsf.helper.model.GroupDataModel;
+import org.allseen.lsf.helper.model.LampCapabilities;
+import org.allseen.lsf.helper.model.LampDataModel;
+import org.allseen.lsf.helper.model.SceneDataModel;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -74,8 +83,10 @@ public abstract class SelectMembersFragment extends SelectableItemTableFragment 
         getPendingSelection();
 
         if (showGroups()) {
-            for (Map.Entry<String, GroupDataModel> entry : activity.groupModels.entrySet()) {
-                GroupDataModel groupModel = entry.getValue();
+            Iterator<Group> i = activity.systemManager.getGroupCollectionManager().getGroupIterator();
+
+            while(i.hasNext()) {
+                GroupDataModel groupModel = i.next().getGroupDataModel();
                 GroupDataModel pendingGroupModel = ((SampleAppActivity)getActivity()).pendingGroupModel;
                 String pendingGroupModelID = pendingGroupModel != null ? pendingGroupModel.id : "";
                 boolean otherIsParent = pendingGroupModelID != null && groupModel.getGroups() != null && groupModel.getGroups().contains(pendingGroupModelID);
@@ -87,8 +98,11 @@ public abstract class SelectMembersFragment extends SelectableItemTableFragment 
         }
 
         if (showLamps()) {
-            for (Map.Entry<String, LampDataModel> entry : activity.lampModels.entrySet()) {
-                LampDataModel lampModel = entry.getValue();
+            Iterator<Lamp> i = activity.systemManager.getLampCollectionManager().getLampIterator();
+
+            while (i.hasNext()){
+                LampDataModel lampModel = i.next().getLampDataModel();
+
                 if (lampModel != null && !itemID.equals(lampModel.id)) {
                     updateSelectableItemRow(inflater, root, lampModel.id, lampModel.tag, R.drawable.group_lightbulb_icon, lampModel.getName(), isItemSelected(lampModel.id));
                 }
@@ -96,8 +110,11 @@ public abstract class SelectMembersFragment extends SelectableItemTableFragment 
         }
 
         if (showScenes()) {
-            for (Map.Entry<String, BasicSceneDataModel> entry : activity.basicSceneModels.entrySet()) {
-                BasicSceneDataModel sceneModel = entry.getValue();
+            Iterator<Scene> i = activity.systemManager.getSceneCollectionManager().getSceneIterator();
+
+            while (i.hasNext()){
+                SceneDataModel sceneModel = i.next().getSceneDataModel();
+
                 if (sceneModel != null && !itemID.equals(sceneModel.id)) {
                     updateSelectableItemRow(inflater, root, sceneModel.id, sceneModel.tag, R.drawable.scene_set_icon, sceneModel.getName(), isItemSelected(sceneModel.id));
                 }
@@ -160,8 +177,8 @@ public abstract class SelectMembersFragment extends SelectableItemTableFragment 
         return null;
     }
 
-    protected boolean processLampID(SampleAppActivity activity, String lampID, List<String> lampIDs, CapabilityData capability) {
-        LampDataModel lampModel = activity.lampModels.get(lampID);
+    protected boolean processLampID(SampleAppActivity activity, String lampID, List<String> lampIDs, LampCapabilities capability) {
+        LampDataModel lampModel = activity.systemManager.getLampCollectionManager().getModel(lampID);
         boolean found = lampModel != null;
 
         if (found) {
@@ -172,8 +189,8 @@ public abstract class SelectMembersFragment extends SelectableItemTableFragment 
         return found;
     }
 
-    protected boolean processGroupID(SampleAppActivity activity, String groupID, List<String> groupIDs, CapabilityData capability) {
-        GroupDataModel groupModel = activity.groupModels.get(groupID);
+    protected boolean processGroupID(SampleAppActivity activity, String groupID, List<String> groupIDs, LampCapabilities capability) {
+        GroupDataModel groupModel = activity.systemManager.getGroupCollectionManager().getModel(groupID);
         boolean found = groupModel != null;
 
         if (found) {
@@ -184,8 +201,8 @@ public abstract class SelectMembersFragment extends SelectableItemTableFragment 
         return found;
     }
 
-    protected boolean processSceneID(SampleAppActivity activity, String sceneID, List<String> sceneIDs, CapabilityData capability) {
-        BasicSceneDataModel sceneModel = activity.basicSceneModels.get(sceneID);
+    protected boolean processSceneID(SampleAppActivity activity, String sceneID, List<String> sceneIDs, LampCapabilities capability) {
+        SceneDataModel sceneModel = activity.systemManager.getSceneCollectionManager().getModel(sceneID);
         boolean found = sceneModel != null;
 
         if (found) {
@@ -198,7 +215,7 @@ public abstract class SelectMembersFragment extends SelectableItemTableFragment 
 
     protected boolean processSelection() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        CapabilityData capability = new CapabilityData();
+        LampCapabilities capability = new LampCapabilities();
 
         List<String> selectedItemIDs = getSelectedIDs();
 
@@ -233,7 +250,7 @@ public abstract class SelectMembersFragment extends SelectableItemTableFragment 
         return valid;
     }
 
-    protected void processSelection(final SampleAppActivity activity, final List<String> lampIDs, final List<String> groupIDs, final List<String> sceneIDs, CapabilityData capability) {
+    protected void processSelection(final SampleAppActivity activity, final List<String> lampIDs, final List<String> groupIDs, final List<String> sceneIDs, LampCapabilities capability) {
         if (confirmMixedSelection() && capability.isMixed()) {
             // detected a mixed group of lamps
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());

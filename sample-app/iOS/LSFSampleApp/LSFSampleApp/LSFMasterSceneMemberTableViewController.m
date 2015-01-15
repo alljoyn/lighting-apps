@@ -20,6 +20,7 @@
 #import "LSFAllJoynManager.h"
 #import "LSFDispatchQueue.h"
 #import "LSFEnums.h"
+#import "LSFLightingScene.h"
 
 @interface LSFMasterSceneMembersTableViewController ()
 
@@ -174,11 +175,15 @@
  */
 -(void)buildTableArray
 {
-    LSFSceneModelContainer *scenesContainer = [LSFSceneModelContainer getSceneModelContainer];
-    NSMutableDictionary *scenes = scenesContainer.sceneContainer;
-    NSMutableArray *scenesArray = [NSMutableArray arrayWithArray: [scenes allValues]];
+    NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
+    NSMutableArray *scenesArray = [[NSMutableArray alloc] init];
 
-    [self sortScenesByName: [NSMutableArray arrayWithArray: scenesArray]];
+    for (LSFLightingScene *scene in [scenes allValues])
+    {
+        [scenesArray addObject: [scene getSceneDataModel]];
+    }
+
+    [self sortScenesByName: scenesArray];
 }
 
 -(void)processSelectedRows
@@ -197,14 +202,14 @@
 
     if ([self.masterSceneModel.theID isEqualToString: @""])
     {
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
             LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
             [ajManager.lsfMasterSceneManager createMasterScene: self.masterSceneModel.masterScene withName: self.masterSceneModel.name];
         });
     }
     else
     {
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
             LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
             [ajManager.lsfMasterSceneManager updateMasterSceneWithID: self.masterSceneModel.theID andMasterScene: self.masterSceneModel.masterScene];
         });

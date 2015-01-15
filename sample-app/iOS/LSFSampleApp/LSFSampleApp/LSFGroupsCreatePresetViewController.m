@@ -146,7 +146,7 @@
         self.doneButtonPressed = YES;
         [textField resignFirstResponder];
         
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
             LSFConstants *constants = [LSFConstants getConstants];
             unsigned int scaledBrightness = [constants scaleLampStateValue: self.lampState.brightness withMax: 100];
             unsigned int scaledHue = [constants scaleLampStateValue: self.lampState.hue withMax: 360];
@@ -155,7 +155,7 @@
             
             LSFLampState *scaledState = [[LSFLampState alloc] initWithOnOff: self.lampState.onOff brightness: scaledBrightness hue: scaledHue saturation: scaledSaturation colorTemp: scaledColorTemp];
             
-            LSFPresetManager *presetManager = ([LSFAllJoynManager getAllJoynManager]).lsfPresetManager;
+            LSFPresetManager *presetManager = [[LSFAllJoynManager getAllJoynManager] lsfPresetManager];
             [presetManager createPresetWithState: scaledState andPresetName: self.presetNameTextField.text];
         });
         
@@ -205,8 +205,8 @@
         self.doneButtonPressed = YES;
         [self.presetNameTextField resignFirstResponder];
         
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-            LSFPresetManager *presetManager = ([LSFAllJoynManager getAllJoynManager]).lsfPresetManager;
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+            LSFPresetManager *presetManager = [[LSFAllJoynManager getAllJoynManager] lsfPresetManager];
             [presetManager createPresetWithState: self.lampState andPresetName: self.presetNameTextField.text];
         });
     }

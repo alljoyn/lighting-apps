@@ -22,6 +22,8 @@
 #import "LSFGroupModel.h"
 #import "LSFAllJoynManager.h"
 #import "LSFEnums.h"
+#import "LSFLamp.h"
+#import "LSFGroup.h"
 
 @interface LSFScenesCreateSceneElementsTableViewController ()
 
@@ -214,14 +216,12 @@
 {
     BOOL firstNameAdded = NO;
     NSMutableString *memberString = [[NSMutableString alloc] init];
-
-    LSFLampModelContainer *lampContainer = [LSFLampModelContainer getLampModelContainer];
-    NSMutableDictionary *lampsDictionary = lampContainer.lampContainer;
+    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
 
     for (int i = 0; !firstNameAdded && i < sceneElement.members.lamps.count; i++)
     {
         NSString *lampID = [sceneElement.members.lamps objectAtIndex: i];
-        LSFLampModel *lampModel = [lampsDictionary valueForKey: lampID];
+        LSFLampModel *lampModel = [[lamps valueForKey: lampID] getLampDataModel];;
 
         if (lampModel != nil)
         {
@@ -230,13 +230,12 @@
         }
     }
 
-    LSFGroupModelContainer *groupContainer = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groupsDictionary = groupContainer.groupContainer;
+    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
 
     for (int i = 0; !firstNameAdded && i < sceneElement.members.lampGroups.count; i++)
     {
         NSString *groupID = [sceneElement.members.lampGroups objectAtIndex: i];
-        LSFGroupModel *groupModel = [groupsDictionary valueForKey: groupID];
+        LSFGroupModel *groupModel = [[groups valueForKey: groupID] getLampGroupDataModel];
 
         if (groupModel != nil)
         {

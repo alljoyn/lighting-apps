@@ -15,6 +15,11 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import org.allseen.lsf.helper.model.AllLampsDataModel;
+import org.allseen.lsf.helper.model.ColorItemDataModel;
+import org.allseen.lsf.helper.model.ColorStateConverter;
+import org.allseen.lsf.helper.model.GroupDataModel;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,7 +36,6 @@ public class GroupInfoFragment extends DimmableItemInfoFragment {
         String groupID = key;
 
         itemType = SampleAppActivity.Type.GROUP;
-        itemModels = ((SampleAppActivity)getActivity()).groupModels;
 
         ((TextView)statusView.findViewById(R.id.statusLabelName)).setText(R.string.label_group_name);
 
@@ -45,7 +49,7 @@ public class GroupInfoFragment extends DimmableItemInfoFragment {
         membersValue.setClickable(true);
         membersValue.setOnClickListener(this);
 
-        updateInfoFields(((SampleAppActivity)getActivity()).groupModels.get(groupID));
+        updateInfoFields(((SampleAppActivity)getActivity()).systemManager.getGroupCollectionManager().getModel(groupID));
 
         return view;
     }
@@ -61,7 +65,7 @@ public class GroupInfoFragment extends DimmableItemInfoFragment {
 
         if (viewID == R.id.nameValueNameText || viewID == R.id.nameValueValueText) {
             if ((parent != null) && (!AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(key))) {
-                GroupDataModel groupModel = ((SampleAppActivity)getActivity()).groupModels.get(key);
+                GroupDataModel groupModel = ((SampleAppActivity)getActivity()).systemManager.getGroupCollectionManager().getModel(key);
 
                 if (groupModel != null) {
                     ((SampleAppActivity)getActivity()).pendingGroupModel = new GroupDataModel(groupModel);
@@ -95,23 +99,23 @@ public class GroupInfoFragment extends DimmableItemInfoFragment {
     @Override
     protected int getColorTempMin() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        GroupDataModel groupModel = activity.groupModels.get(key);
+        GroupDataModel groupModel = activity.systemManager.getGroupCollectionManager().getModel(key);
 
-        return groupModel != null ? groupModel.viewColorTempMin : DimmableItemScaleConverter.VIEW_COLORTEMP_MIN;
+        return groupModel != null ? groupModel.viewColorTempMin : ColorStateConverter.VIEW_COLORTEMP_MIN;
     }
 
     @Override
     protected int getColorTempSpan() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        GroupDataModel groupModel = activity.groupModels.get(key);
+        GroupDataModel groupModel = activity.systemManager.getGroupCollectionManager().getModel(key);
 
-        return groupModel != null ? groupModel.viewColorTempMax - groupModel.viewColorTempMin : DimmableItemScaleConverter.VIEW_COLORTEMP_SPAN;
+        return groupModel != null ? groupModel.viewColorTempMax - groupModel.viewColorTempMin : ColorStateConverter.VIEW_COLORTEMP_SPAN;
     }
 
     @Override
     protected long getColorTempDefault() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        GroupDataModel groupModel = activity.groupModels.get(key);
+        GroupDataModel groupModel = activity.systemManager.getGroupCollectionManager().getModel(key);
 
         return groupModel.state.getColorTemp();
     }
@@ -120,9 +124,14 @@ public class GroupInfoFragment extends DimmableItemInfoFragment {
     protected void onHeaderClick() {
         if (!AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(key)) {
             SampleAppActivity activity = (SampleAppActivity)getActivity();
-            GroupDataModel groupModel = activity.groupModels.get(key);
+            GroupDataModel groupModel = activity.systemManager.getGroupCollectionManager().getModel(key);
 
             activity.showItemNameDialog(R.string.title_group_rename, new UpdateGroupNameAdapter(groupModel, (SampleAppActivity) getActivity()));
         }
+    }
+
+    @Override
+    protected ColorItemDataModel getColorItemDataModel(String groupID){
+        return ((SampleAppActivity)getActivity()).systemManager.getGroupCollectionManager().getModel(groupID);
     }
 }

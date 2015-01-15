@@ -23,6 +23,7 @@ import org.allseen.lsf.LampGroupManager;
 import org.allseen.lsf.LampState;
 import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.helper.callback.HelperGroupManagerCallback;
+import org.allseen.lsf.helper.model.AllLampsDataModel;
 import org.allseen.lsf.helper.model.AllLampsLampGroup;
 
 /**
@@ -30,31 +31,20 @@ import org.allseen.lsf.helper.model.AllLampsLampGroup;
  * in subsequent releases of the SDK</b>.
  */
 public class SampleGroupManager extends LampGroupManager {
-    public static final String ALL_LAMPS_GROUP_ID = "!!all_lamps!!";
-    public static final String ALL_LAMPS_GROUP_NAME_DEFAULT= "All Lamps";
-
     protected HelperGroupManagerCallback callback;
-    protected AllLampsLampGroup allLampsLampGroup;
-    protected String allLampsGroupName;
 
     public SampleGroupManager(ControllerClient controller, HelperGroupManagerCallback callback) {
-        this(controller, callback, ALL_LAMPS_GROUP_NAME_DEFAULT);
-    }
-
-    public SampleGroupManager(ControllerClient controller, HelperGroupManagerCallback callback, String allLampsGroupName) {
         super(controller, callback);
 
         this.callback = callback;
-        this.allLampsLampGroup = new AllLampsLampGroup(callback.director);
-        this.allLampsGroupName = allLampsGroupName;
     }
 
     @Override
     public ControllerClientStatus getLampGroupName(String groupID, String language) {
         ControllerClientStatus status = ControllerClientStatus.OK;
 
-        if (ALL_LAMPS_GROUP_ID.equals(groupID)) {
-            callback.getLampGroupNameReplyCB(ResponseCode.OK, ALL_LAMPS_GROUP_ID, language, allLampsGroupName);
+        if (AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupID)) {
+            callback.getLampGroupNameReplyCB(ResponseCode.OK, AllLampsDataModel.ALL_LAMPS_GROUP_ID, language, AllLampsDataModel.ALL_LAMPS_GROUP_NAME);
         } else {
             status = super.getLampGroupName(groupID, language);
         }
@@ -66,8 +56,8 @@ public class SampleGroupManager extends LampGroupManager {
     public ControllerClientStatus getLampGroup(String groupID) {
         ControllerClientStatus status = ControllerClientStatus.OK;
 
-        if (ALL_LAMPS_GROUP_ID.equals(groupID)) {
-            callback.getLampGroupReplyCB(ResponseCode.OK, ALL_LAMPS_GROUP_ID, allLampsLampGroup);
+        if (AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupID)) {
+            callback.getLampGroupReplyCB(ResponseCode.OK, AllLampsDataModel.ALL_LAMPS_GROUP_ID, AllLampsLampGroup.instance);
         } else {
             status = super.getLampGroup(groupID);
         }
@@ -79,7 +69,7 @@ public class SampleGroupManager extends LampGroupManager {
     public ControllerClientStatus transitionLampGroupState(String groupID, LampState state, long duration) {
         ControllerClientStatus status = ControllerClientStatus.OK;
 
-        if (ALL_LAMPS_GROUP_ID.equals(groupID)) {
+        if (AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupID)) {
             Iterator<String> i = getLampIDs();
 
             while(status == ControllerClientStatus.OK && i.hasNext()) {
@@ -96,12 +86,11 @@ public class SampleGroupManager extends LampGroupManager {
     public ControllerClientStatus pulseLampGroupWithState(String groupID, LampState toState, long period, long duration, long count, LampState fromState) {
         ControllerClientStatus status = ControllerClientStatus.OK;
 
-        if (ALL_LAMPS_GROUP_ID.equals(groupID)) {
+        if (AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupID)) {
             Iterator<String> i = getLampIDs();
 
             while(status == ControllerClientStatus.OK && i.hasNext()) {
-//TODO-FIX bindings need to be updated
-//                status = AllJoynManager.lampManager.pulseLampWithState(i.next(), toState, period, duration, count, fromState);
+                status = AllJoynManager.lampManager.pulseLampWithState(i.next(), toState, period, duration, count, fromState);
             }
         } else {
             status = super.pulseLampGroupWithState(groupID, toState, period, duration, count, fromState);
@@ -114,12 +103,11 @@ public class SampleGroupManager extends LampGroupManager {
     public ControllerClientStatus pulseLampGroupWithPreset(String groupID, String toPresetID, long period, long duration, long count, String fromPresetID) {
         ControllerClientStatus status = ControllerClientStatus.OK;
 
-        if (ALL_LAMPS_GROUP_ID.equals(groupID)) {
+        if (AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupID)) {
             Iterator<String> i = getLampIDs();
 
             while(status == ControllerClientStatus.OK && i.hasNext()) {
-//TODO-FIX bindings need to be updated
-//                status = AllJoynManager.lampManager.pulseLampWithPreset(i.next(), toPresetID, period, duration, count, fromPresetID);
+                status = AllJoynManager.lampManager.pulseLampWithPreset(i.next(), toPresetID, period, duration, count, fromPresetID);
             }
         } else {
             status = super.pulseLampGroupWithPreset(groupID, toPresetID, period, duration, count, fromPresetID);
@@ -132,7 +120,7 @@ public class SampleGroupManager extends LampGroupManager {
     public ControllerClientStatus transitionLampGroupStateOnOffField(String groupID, boolean onOff) {
         ControllerClientStatus status = ControllerClientStatus.OK;
 
-        if (ALL_LAMPS_GROUP_ID.equals(groupID)) {
+        if (AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupID)) {
             Iterator<String> i = getLampIDs();
 
             while(status == ControllerClientStatus.OK && i.hasNext()) {
@@ -149,7 +137,7 @@ public class SampleGroupManager extends LampGroupManager {
     public ControllerClientStatus transitionLampGroupStateHueField(String groupID, long hue, long duration) {
         ControllerClientStatus status = ControllerClientStatus.OK;
 
-        if (ALL_LAMPS_GROUP_ID.equals(groupID)) {
+        if (AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupID)) {
             Iterator<String> i = getLampIDs();
 
             while(status == ControllerClientStatus.OK && i.hasNext()) {
@@ -166,7 +154,7 @@ public class SampleGroupManager extends LampGroupManager {
     public ControllerClientStatus transitionLampGroupStateSaturationField(String groupID, long saturation, long duration) {
         ControllerClientStatus status = ControllerClientStatus.OK;
 
-        if (ALL_LAMPS_GROUP_ID.equals(groupID)) {
+        if (AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupID)) {
             Iterator<String> i = getLampIDs();
 
             while(status == ControllerClientStatus.OK && i.hasNext()) {
@@ -183,7 +171,7 @@ public class SampleGroupManager extends LampGroupManager {
     public ControllerClientStatus transitionLampGroupStateBrightnessField(String groupID, long brightness, long duration) {
         ControllerClientStatus status = ControllerClientStatus.OK;
 
-        if (ALL_LAMPS_GROUP_ID.equals(groupID)) {
+        if (AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupID)) {
             Iterator<String> i = getLampIDs();
 
             while(status == ControllerClientStatus.OK && i.hasNext()) {
@@ -200,7 +188,7 @@ public class SampleGroupManager extends LampGroupManager {
     public ControllerClientStatus transitionLampGroupStateColorTempField(String groupID, long colorTemp, long duration) {
         ControllerClientStatus status = ControllerClientStatus.OK;
 
-        if (ALL_LAMPS_GROUP_ID.equals(groupID)) {
+        if (AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupID)) {
             Iterator<String> i = getLampIDs();
 
             while(status == ControllerClientStatus.OK && i.hasNext()) {
@@ -217,7 +205,7 @@ public class SampleGroupManager extends LampGroupManager {
     public ControllerClientStatus transitionLampGroupStateToPreset(String groupID, String presetID, long duration) {
         ControllerClientStatus status = ControllerClientStatus.OK;
 
-        if (ALL_LAMPS_GROUP_ID.equals(groupID)) {
+        if (AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupID)) {
             Iterator<String> i = getLampIDs();
 
             while(status == ControllerClientStatus.OK && i.hasNext()) {
@@ -234,7 +222,7 @@ public class SampleGroupManager extends LampGroupManager {
     public ControllerClientStatus resetLampGroupState(String groupID) {
         ControllerClientStatus status = ControllerClientStatus.OK;
 
-        if (ALL_LAMPS_GROUP_ID.equals(groupID)) {
+        if (AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupID)) {
             Iterator<String> i = getLampIDs();
 
             while(status == ControllerClientStatus.OK && i.hasNext()) {
@@ -251,7 +239,7 @@ public class SampleGroupManager extends LampGroupManager {
     public ControllerClientStatus resetLampGroupStateOnOffField(String groupID) {
         ControllerClientStatus status = ControllerClientStatus.OK;
 
-        if (ALL_LAMPS_GROUP_ID.equals(groupID)) {
+        if (AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupID)) {
             Iterator<String> i = getLampIDs();
 
             while(status == ControllerClientStatus.OK && i.hasNext()) {
@@ -268,7 +256,7 @@ public class SampleGroupManager extends LampGroupManager {
     public ControllerClientStatus resetLampGroupStateHueField(String groupID) {
         ControllerClientStatus status = ControllerClientStatus.OK;
 
-        if (ALL_LAMPS_GROUP_ID.equals(groupID)) {
+        if (AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupID)) {
             Iterator<String> i = getLampIDs();
 
             while(status == ControllerClientStatus.OK && i.hasNext()) {
@@ -285,7 +273,7 @@ public class SampleGroupManager extends LampGroupManager {
     public ControllerClientStatus resetLampGroupStateSaturationField(String groupID) {
         ControllerClientStatus status = ControllerClientStatus.OK;
 
-        if (ALL_LAMPS_GROUP_ID.equals(groupID)) {
+        if (AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupID)) {
             Iterator<String> i = getLampIDs();
 
             while(status == ControllerClientStatus.OK && i.hasNext()) {
@@ -302,7 +290,7 @@ public class SampleGroupManager extends LampGroupManager {
     public ControllerClientStatus resetLampGroupStateBrightnessField(String groupID) {
         ControllerClientStatus status = ControllerClientStatus.OK;
 
-        if (ALL_LAMPS_GROUP_ID.equals(groupID)) {
+        if (AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupID)) {
             Iterator<String> i = getLampIDs();
 
             while(status == ControllerClientStatus.OK && i.hasNext()) {
@@ -319,7 +307,7 @@ public class SampleGroupManager extends LampGroupManager {
     public ControllerClientStatus resetLampGroupStateColorTempField(String groupID) {
         ControllerClientStatus status = ControllerClientStatus.OK;
 
-        if (ALL_LAMPS_GROUP_ID.equals(groupID)) {
+        if (AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupID)) {
             Iterator<String> i = getLampIDs();
 
             while(status == ControllerClientStatus.OK && i.hasNext()) {
@@ -333,6 +321,6 @@ public class SampleGroupManager extends LampGroupManager {
     }
 
     protected Iterator<String> getLampIDs() {
-        return callback.director.getLampCollectionManager().getIDIterator();
+        return callback.manager.getLampCollectionManager().getIDIterator();
     }
 }

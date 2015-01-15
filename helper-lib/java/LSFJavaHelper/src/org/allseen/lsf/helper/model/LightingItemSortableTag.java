@@ -37,7 +37,7 @@ public class LightingItemSortableTag implements Comparable<LightingItemSortableT
     public LightingItemSortableTag(String id, char prefix, String name) {
         super();
 
-        this.sortableName = prefix + name.toLowerCase(Locale.getDefault());
+        this.sortableName = prefix + name.toLowerCase(Locale.ENGLISH);
         this.tieBreaker = id;
     }
 

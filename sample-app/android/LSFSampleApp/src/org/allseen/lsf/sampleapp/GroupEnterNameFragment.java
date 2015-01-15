@@ -15,6 +15,11 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import java.util.Iterator;
+
+import org.allseen.lsf.helper.facade.Group;
+import org.allseen.lsf.helper.model.GroupDataModel;
+
 import android.util.Log;
 
 public class GroupEnterNameFragment extends EnterNameFragment {
@@ -46,11 +51,14 @@ public class GroupEnterNameFragment extends EnterNameFragment {
 
     @Override
     protected boolean duplicateName(String name) {
-        for (GroupDataModel data : ((SampleAppActivity) this.getActivity()).groupModels.values()) {
-            if (data.getName().equals(name)) {
+        Iterator<Group> i = ((SampleAppActivity)getActivity()).systemManager.getGroupCollectionManager().getGroupIterator();
+
+        while(i.hasNext()) {
+            if (i.next().getGroupDataModel().getName().equals(name)) {
                 return true;
             }
         }
+
         return false;
     }
 }

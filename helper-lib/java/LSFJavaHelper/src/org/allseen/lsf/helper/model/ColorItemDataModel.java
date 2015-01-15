@@ -22,15 +22,23 @@ import org.allseen.lsf.LampState;
  * in subsequent releases of the SDK</b>.
  */
 public class ColorItemDataModel extends LightingItemDataModel {
+    public static final char TAG_PREFIX_UNKNOWN = 'X';
 
     public LampState state;
+    public LampStateUniformity uniformity;
 
     protected LampCapabilities capability;
+
+    public ColorItemDataModel() {
+        this(null, TAG_PREFIX_UNKNOWN, "");
+    }
 
     public ColorItemDataModel(String itemID, char prefix, String itemName) {
         super(itemID, prefix, itemName);
 
         state = new LampState();
+        uniformity = new LampStateUniformity();
+
         capability = new LampCapabilities();
 
         state.setOnOff(false);
@@ -44,6 +52,7 @@ public class ColorItemDataModel extends LightingItemDataModel {
         super(other);
 
         this.state = new LampState(other.state);
+        this.uniformity = new LampStateUniformity(other.uniformity);
         this.capability = other.getCapability();
     }
 
@@ -55,22 +64,12 @@ public class ColorItemDataModel extends LightingItemDataModel {
         boolean result = false;
 
         if (thatState != null) {
-            // See if we are comparing full color (hsv) or color temp (ct) values
-            boolean modeHSV = this.state.getSaturation() != 0;
-
-            if (modeHSV) {
-                result =
-                    this.state.getHue() == thatState.getHue() &&
-                    this.state.getSaturation() == thatState.getSaturation() &&
-                    this.state.getBrightness() == thatState.getBrightness() &&
-                    this.state.getOnOff() == thatState.getOnOff();
-            } else {
-                result =
-                    this.state.getSaturation() == thatState.getSaturation() &&
-                    this.state.getBrightness() == thatState.getBrightness() &&
-                    this.state.getColorTemp() == thatState.getColorTemp() &&
-                    this.state.getOnOff() == thatState.getOnOff();
-            }
+            result =
+                this.state.getHue() == thatState.getHue() &&
+                this.state.getSaturation() == thatState.getSaturation() &&
+                this.state.getBrightness() == thatState.getBrightness() &&
+                this.state.getColorTemp() == thatState.getColorTemp() &&
+                this.state.getOnOff() == thatState.getOnOff();
         }
 
         return result;

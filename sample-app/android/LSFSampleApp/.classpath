@@ -6,7 +6,12 @@
 	<classpathentry exported="true" kind="lib" path="links/jar/AllJoyn/alljoyn.jar" sourcepath="links/jar/AllJoyn/alljoyn-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="links/jar/android/android-support-v4.jar"/>
 	<classpathentry exported="true" kind="lib" path="links/jar/AllJoyn/alljoyn_about.jar"/>
+	<classpathentry kind="lib" path="links/jar/lsf/lsfjava.jar"/>
+	<classpathentry kind="lib" path="links/jar/lsf/lsfjavahelper.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="src" path="links/jni/android"/>
+	<classpathentry kind="src" path="links/jni/lsf"/>
+	<classpathentry kind="src" path="links/jni/AllJoyn"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

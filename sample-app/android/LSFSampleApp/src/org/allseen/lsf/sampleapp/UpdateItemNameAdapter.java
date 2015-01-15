@@ -15,6 +15,8 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import org.allseen.lsf.helper.model.LightingItemDataModel;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -22,10 +24,10 @@ import android.util.Log;
 import android.widget.EditText;
 
 public abstract class UpdateItemNameAdapter implements ItemNameAdapter {
-    protected ItemDataModel itemModel;
+    protected LightingItemDataModel itemModel;
     protected SampleAppActivity activity;
 
-    public UpdateItemNameAdapter(ItemDataModel itemModel, SampleAppActivity activity) {
+    public UpdateItemNameAdapter(LightingItemDataModel itemModel, SampleAppActivity activity) {
         this.itemModel = itemModel;
         this.activity = activity;
     }
@@ -83,5 +85,5 @@ public abstract class UpdateItemNameAdapter implements ItemNameAdapter {
 
     protected abstract void doUpdateName();
     protected abstract String getDuplicateNameMessage();
-    protected abstract boolean duplicateName(String name);
+    protected abstract boolean duplicateName(String itemName);
 }

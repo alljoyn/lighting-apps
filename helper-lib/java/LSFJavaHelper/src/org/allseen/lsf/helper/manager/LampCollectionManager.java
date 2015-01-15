@@ -66,6 +66,10 @@ public class LampCollectionManager extends LightingItemCollectionManager<Lamp, L
         return getAdapters().iterator();
     }
 
+    public Collection<Lamp> removeAllLamps() {
+        return removeAllAdapters();
+    }
+
     public Lamp removeLamp(String lampID) {
         lampIDs.remove(lampID);
 
@@ -73,13 +77,13 @@ public class LampCollectionManager extends LightingItemCollectionManager<Lamp, L
     }
 
     @Override
-    protected void sendChangedEvent(LampCollectionListener listener, Iterator<Lamp> lamps, int count) {
-        listener.onLampsChanged(lamps, count);
+    protected void sendChangedEvent(LampCollectionListener listener, Lamp lamp) {
+        listener.onLampChanged(lamp);
     }
 
     @Override
-    protected void sendRemovedEvent(LampCollectionListener listener, Iterator<Lamp> lamps, int count) {
-        listener.onLampsRemoved(lamps, count);
+    protected void sendRemovedEvent(LampCollectionListener listener, Lamp lamp) {
+        listener.onLampRemoved(lamp);
     }
 
     @Override

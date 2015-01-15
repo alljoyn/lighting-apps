@@ -15,8 +15,11 @@
  */
 package org.allseen.lsf.helper.callback;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
+import org.allseen.lsf.LampDetails;
 import org.allseen.lsf.LampGroup;
 import org.allseen.lsf.LampGroupManagerCallback;
 import org.allseen.lsf.ResponseCode;
@@ -24,7 +27,9 @@ import org.allseen.lsf.helper.facade.Group;
 import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.manager.GroupCollectionManager;
 import org.allseen.lsf.helper.manager.LightingSystemManager;
-import org.allseen.lsf.helper.manager.SampleGroupManager;
+import org.allseen.lsf.helper.model.AllLampsDataModel;
+import org.allseen.lsf.helper.model.ColorAverager;
+import org.allseen.lsf.helper.model.ColorStateConverter;
 import org.allseen.lsf.helper.model.GroupDataModel;
 import org.allseen.lsf.helper.model.LampCapabilities;
 import org.allseen.lsf.helper.model.LampDataModel;
@@ -34,105 +39,97 @@ import org.allseen.lsf.helper.model.LampDataModel;
  * in subsequent releases of the SDK</b>.
  */
 public class HelperGroupManagerCallback extends LampGroupManagerCallback {
-    public LightingSystemManager director;
+    public LightingSystemManager manager;
 
-    protected String flattenTriggerGroupID;
+    protected final ColorAverager averageHue = new ColorAverager();
+    protected final ColorAverager averageSaturation = new ColorAverager();
+    protected final ColorAverager averageBrightness = new ColorAverager();
+    protected final ColorAverager averageColorTemp = new ColorAverager();
 
-    public HelperGroupManagerCallback(LightingSystemManager director) {
+    protected Set<String> groupIDsWithPendingMembers = new HashSet<String>();
+    protected Set<String> groupIDsWithPendingFlatten = new HashSet<String>();
+
+    public HelperGroupManagerCallback(LightingSystemManager manager) {
         super();
 
-        this.director = director;
+        this.manager = manager;
     }
 
     public void refreshAllLampGroupIDs() {
-        int count = director.getGroupCollectionManager().size();
+        int count = manager.getGroupCollectionManager().size();
 
         if (count > 0) {
-            getAllLampGroupIDsReplyCB(ResponseCode.OK, director.getGroupCollectionManager().getIDArray());
+            getAllLampGroupIDsReplyCB(ResponseCode.OK, manager.getGroupCollectionManager().getIDArray());
         }
     }
 
     @Override
     public void getAllLampGroupIDsReplyCB(ResponseCode responseCode, String[] groupIDs) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getGroupCollectionManager().sendErrorEvent("getAllLampGroupIDsReplyCB", responseCode);
+            manager.getGroupCollectionManager().sendErrorEvent("getAllLampGroupIDsReplyCB", responseCode);
         }
 
-        postProcessLampGroupIDs(groupIDs);
-        postProcessLampGroupID(SampleGroupManager.ALL_LAMPS_GROUP_ID);
+        postProcessLampGroupID(AllLampsDataModel.ALL_LAMPS_GROUP_ID, true, true);
 
         for (final String groupID : groupIDs) {
-            postProcessLampGroupID(groupID);
+            postProcessLampGroupID(groupID, true, true);
         }
     }
 
     @Override
     public void getLampGroupNameReplyCB(ResponseCode responseCode, String groupID, String language, String groupName) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getGroupCollectionManager().sendErrorEvent("getLampGroupNameReplyCB", responseCode, groupID);
+            manager.getGroupCollectionManager().sendErrorEvent("getLampGroupNameReplyCB", responseCode, groupID);
+            AllJoynManager.groupManager.getLampGroupName(groupID, LightingSystemManager.LANGUAGE);
+        } else {
+            postUpdateLampGroupName(groupID, groupName);
         }
-
-        postUpdateLampGroupName(groupID, groupName);
     }
 
     @Override
     public void setLampGroupNameReplyCB(ResponseCode responseCode, String groupID, String language) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getGroupCollectionManager().sendErrorEvent("setLampGroupNameReplyCB", responseCode, groupID);
+            manager.getGroupCollectionManager().sendErrorEvent("setLampGroupNameReplyCB", responseCode, groupID);
         }
 
         AllJoynManager.groupManager.getLampGroupName(groupID, LightingSystemManager.LANGUAGE);
     }
 
     @Override
-    public void lampGroupsNameChangedCB(final String[] lampGroupIDs) {
-        director.getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                boolean containsNewIDs = false;
-
-                for (final String groupID : lampGroupIDs) {
-                    if (director.getGroupCollectionManager().hasID(groupID)) {
-                        AllJoynManager.groupManager.getLampGroupName(groupID, LightingSystemManager.LANGUAGE);
-                    } else {
-                        containsNewIDs = true;
-                    }
-                }
-
-                if (containsNewIDs) {
-                    AllJoynManager.groupManager.getAllLampGroupIDs();
-                }
-            }
-        });
+    public void lampGroupsNameChangedCB(final String[] groupIDs) {
+        for (String groupID : groupIDs) {
+            postProcessLampGroupID(groupID, true, false);
+        }
     }
 
     @Override
     public void createLampGroupReplyCB(ResponseCode responseCode, String groupID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getGroupCollectionManager().sendErrorEvent("createLampGroupReplyCB", responseCode, groupID);
+            manager.getGroupCollectionManager().sendErrorEvent("createLampGroupReplyCB", responseCode, groupID);
         }
-
-        postProcessLampGroupID(groupID);
     }
 
     @Override
     public void lampGroupsCreatedCB(String[] groupIDs) {
-        AllJoynManager.groupManager.getAllLampGroupIDs();
+        for (final String groupID : groupIDs) {
+            postProcessLampGroupID(groupID, true, true);
+        }
     }
 
     @Override
     public void getLampGroupReplyCB(ResponseCode responseCode, String groupID, LampGroup lampGroup) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getGroupCollectionManager().sendErrorEvent("getLampGroupReplyCB", responseCode, groupID);
+            manager.getGroupCollectionManager().sendErrorEvent("getLampGroupReplyCB", responseCode, groupID);
+            AllJoynManager.groupManager.getLampGroup(groupID);
+        } else {
+            postUpdateLampGroup(groupID, lampGroup);
         }
-
-        postUpdateLampGroup(groupID, lampGroup);
     }
 
     @Override
     public void deleteLampGroupReplyCB(ResponseCode responseCode, String groupID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getGroupCollectionManager().sendErrorEvent("deleteLampGroupReplyCB", responseCode, groupID);
+            manager.getGroupCollectionManager().sendErrorEvent("deleteLampGroupReplyCB", responseCode, groupID);
         }
     }
 
@@ -144,104 +141,76 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
     @Override
     public void transitionLampGroupStateOnOffFieldReplyCB(ResponseCode responseCode, String groupID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getGroupCollectionManager().sendErrorEvent("transitionLampGroupStateOnOffFieldReplyCB", responseCode, groupID);
+            manager.getGroupCollectionManager().sendErrorEvent("transitionLampGroupStateOnOffFieldReplyCB", responseCode, groupID);
         }
-
-        postSendGroupChanged(groupID);
-        postUpdateLampGroupMemberLamps(groupID);
     }
 
     @Override
     public void transitionLampGroupStateHueFieldReplyCB(ResponseCode responseCode, String groupID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getGroupCollectionManager().sendErrorEvent("transitionLampGroupStateHueFieldReplyCB", responseCode, groupID);
+            manager.getGroupCollectionManager().sendErrorEvent("transitionLampGroupStateHueFieldReplyCB", responseCode, groupID);
         }
-
-        postSendGroupChanged(groupID);
-        postUpdateLampGroupMemberLamps(groupID);
     }
 
     @Override
     public void transitionLampGroupStateSaturationFieldReplyCB(ResponseCode responseCode, String groupID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getGroupCollectionManager().sendErrorEvent("transitionLampGroupStateSaturationFieldReplyCB", responseCode, groupID);
+            manager.getGroupCollectionManager().sendErrorEvent("transitionLampGroupStateSaturationFieldReplyCB", responseCode, groupID);
         }
-
-        postSendGroupChanged(groupID);
-        postUpdateLampGroupMemberLamps(groupID);
     }
 
     @Override
     public void transitionLampGroupStateBrightnessFieldReplyCB(ResponseCode responseCode, String groupID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getGroupCollectionManager().sendErrorEvent("transitionLampGroupStateBrightnessFieldReplyCB", responseCode, groupID);
+            manager.getGroupCollectionManager().sendErrorEvent("transitionLampGroupStateBrightnessFieldReplyCB", responseCode, groupID);
         }
-
-        postSendGroupChanged(groupID);
-        postUpdateLampGroupMemberLamps(groupID);
     }
 
     @Override
     public void transitionLampGroupStateColorTempFieldReplyCB(ResponseCode responseCode, String groupID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getGroupCollectionManager().sendErrorEvent("transitionLampGroupStateColorTempFieldReplyCB", responseCode, groupID);
+            manager.getGroupCollectionManager().sendErrorEvent("transitionLampGroupStateColorTempFieldReplyCB", responseCode, groupID);
         }
-
-        postSendGroupChanged(groupID);
-        postUpdateLampGroupMemberLamps(groupID);
     }
 
     @Override
     public void lampGroupsUpdatedCB(String[] groupIDs) {
         for (String groupID : groupIDs) {
-            AllJoynManager.groupManager.getLampGroup(groupID);
+            postProcessLampGroupID(groupID, false, true);
         }
     }
 
-    protected void postProcessLampGroupIDs(String[] groupIDs) {
-        final String lastGroupID = groupIDs.length > 0 ? groupIDs[groupIDs.length - 1] : SampleGroupManager.ALL_LAMPS_GROUP_ID;
-
-        director.getHandler().post(new Runnable() {
+    protected void postProcessLampGroupID(final String groupID, final boolean needName, final boolean needState) {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                flattenTriggerGroupID = lastGroupID;
-            }
-        });
-    }
+                boolean getName = needName;
+                boolean getState = needState;
 
-    protected void postProcessLampGroupID(final String groupID) {
-        director.getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                if (!director.getGroupCollectionManager().hasID(groupID)) {
-                    postUpdateLampGroupID(groupID);
+                if (!manager.getGroupCollectionManager().hasID(groupID)) {
+                    manager.getGroupCollectionManager().addGroup(groupID);
+
+                    getName = true;
+                    getState = true;
+                }
+
+                if (getName) {
                     AllJoynManager.groupManager.getLampGroupName(groupID, LightingSystemManager.LANGUAGE);
+                }
+
+                if (getState) {
+                    groupIDsWithPendingMembers.add(groupID);
                     AllJoynManager.groupManager.getLampGroup(groupID);
-                } else if (groupID.equals(flattenTriggerGroupID)) {
-                    postFlattenLampGroups();
                 }
             }
         });
-    }
-
-    protected void postUpdateLampGroupID(final String groupID) {
-        director.getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                if (!director.getGroupCollectionManager().hasID(groupID)) {
-                    director.getGroupCollectionManager().addGroup(groupID);
-                }
-            }
-        });
-
-        postSendGroupChanged(groupID);
     }
 
     protected void postUpdateLampGroupName(final String groupID, final String groupName) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                GroupDataModel groupModel = director.getGroupCollectionManager().getModel(groupID);
+                GroupDataModel groupModel = manager.getGroupCollectionManager().getModel(groupID);
 
                 if (groupModel != null) {
                     groupModel.setName(groupName);
@@ -253,129 +222,166 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
     }
 
     protected void postUpdateLampGroup(final String groupID, final LampGroup lampGroup) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                GroupDataModel groupModel = director.getGroupCollectionManager().getModel(groupID);
+                GroupDataModel groupModel = manager.getGroupCollectionManager().getModel(groupID);
+
+                groupIDsWithPendingMembers.remove(groupID);
 
                 if (groupModel != null) {
                     groupModel.members = lampGroup;
                 }
 
-                if (groupID.equals(flattenTriggerGroupID)) {
-                    postFlattenLampGroups();
+                groupIDsWithPendingFlatten.add(groupID);
+
+                if (groupIDsWithPendingMembers.size() == 0) {
+                    for (String groupID : groupIDsWithPendingFlatten) {
+                        postFlattenLampGroup(groupID);
+                    }
+
+                    groupIDsWithPendingFlatten.clear();
+
+                    postUpdateLampGroupState(groupModel);
                 }
             }
         });
-
-        postSendGroupChanged(groupID);
     }
 
-    protected void postFlattenLampGroups() {
-        director.getHandler().post(new Runnable() {
+    protected void postFlattenLampGroup(final String groupID) {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                GroupCollectionManager groupCollectionManager = director.getGroupCollectionManager();
+                GroupCollectionManager groupCollectionManager = manager.getGroupCollectionManager();
+                Group group = groupCollectionManager.getGroup(groupID);
 
-                groupCollectionManager.flattenGroups();
+                if (group != null) {
+                    groupCollectionManager.flattenGroup(group);
+                }
+            }
+        });
+    }
 
-                for (Iterator<Group> i = groupCollectionManager.getGroupIterator(); i.hasNext();) {
-                    postUpdateLampGroupState(i.next().getGroupDataModel());
+    public void postUpdateDependentLampGroups(final String lampID) {
+        manager.getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                Iterator<Group> i = manager.getGroupCollectionManager().getGroupIterator();
+
+                while(i.hasNext()) {
+                    GroupDataModel groupModel = i.next().getGroupDataModel();
+                    Set<String> lampIDs = groupModel.getLamps();
+
+                    if (lampIDs != null && lampIDs.contains(lampID)) {
+                        postUpdateLampGroupState(groupModel);
+                    }
                 }
             }
         });
     }
 
     protected void postUpdateLampGroupState(final GroupDataModel groupModel) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                boolean powerOn = false;
-                long hue = 0;
-                long saturation = 0;
-                long brightness = 0;
-                long colorTemp = 0;
-
-                long countDim = 0;
-                long countColor = 0;
-                long countTemp = 0;
                 LampCapabilities capability = new LampCapabilities();
+                int countOn = 0;
+                int countOff = 0;
+                int viewColorTempGroupMin = -1;
+                int viewColorTempGroupMax = -1;
+
+                averageHue.reset();
+                averageSaturation.reset();
+                averageBrightness.reset();
+                averageColorTemp.reset();
 
                 for (String lampID : groupModel.getLamps()) {
-                    LampDataModel lampModel = director.getLampCollectionManager().getModel(lampID);
+                    LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
 
                     if (lampModel != null) {
+                        LampDetails lampDetails = lampModel.getDetails();
+
                         capability.includeData(lampModel.getCapability());
 
-                        powerOn = powerOn || lampModel.state.getOnOff();
-
-                        if (lampModel.getDetails().isDimmable()) {
-                            brightness = brightness + lampModel.state.getBrightness();
-                            countDim++;
+                        if ( lampModel.state.getOnOff()) {
+                            countOn++;
+                        } else {
+                            countOff++;
                         }
 
-                        if (lampModel.getDetails().hasColor()) {
-                            hue = hue + lampModel.state.getHue();
-                            saturation = saturation + lampModel.state.getSaturation();
-                            countColor++;
+                        if (lampDetails.hasColor()) {
+                            averageHue.add(lampModel.state.getHue());
+                            averageSaturation.add(lampModel.state.getSaturation());
                         }
 
-                        if (lampModel.getDetails().hasVariableColorTemp()) {
-                            colorTemp = colorTemp + lampModel.state.getColorTemp();
-                            countTemp++;
+                        if (lampDetails.isDimmable()) {
+                            averageBrightness.add(lampModel.state.getBrightness());
                         }
-                    } else {
+
+                        boolean hasVariableColorTemp = lampDetails.hasVariableColorTemp();
+                        int viewColorTempLampMin = lampDetails.getMinTemperature();
+                        int viewColorTempLampMax = hasVariableColorTemp ? lampDetails.getMaxTemperature() : viewColorTempLampMin;
+                        boolean validColorTempLampMin = viewColorTempLampMin >= ColorStateConverter.VIEW_COLORTEMP_MIN && viewColorTempLampMin <= ColorStateConverter.VIEW_COLORTEMP_MAX;
+                        boolean validColorTempLampMax = viewColorTempLampMax >= ColorStateConverter.VIEW_COLORTEMP_MIN && viewColorTempLampMax <= ColorStateConverter.VIEW_COLORTEMP_MAX;
+
+                        if (hasVariableColorTemp) {
+                            averageColorTemp.add(lampModel.state.getColorTemp());
+                        } else if (validColorTempLampMin) {
+                            averageColorTemp.add(ColorStateConverter.convertColorTempViewToModel(viewColorTempLampMin));
+                        }
+
+                        if (validColorTempLampMin && validColorTempLampMax) {
+                            if (viewColorTempGroupMin == -1 || viewColorTempGroupMin > viewColorTempLampMin) {
+                                viewColorTempGroupMin = viewColorTempLampMin;
+                            }
+
+                            if (viewColorTempGroupMax == -1 || viewColorTempGroupMax < viewColorTempLampMax) {
+                                viewColorTempGroupMax = viewColorTempLampMax;
+                            }
+                        }
+                     } else {
                         //TODO-FIX Log.d(SampleAppActivity.TAG, "missing lamp: " + lampID);
                     }
                 }
 
-                double divisorDim = countDim > 0 ? countDim : 1.0;
-                double divisorColor = countColor > 0 ? countColor : 1.0;
-                double divisorTemp = countTemp > 0 ? countTemp : 1.0;
-
-                groupModel.state.setOnOff(powerOn);
-                groupModel.state.setHue(Math.round(hue / divisorColor));
-                groupModel.state.setSaturation(Math.round(saturation / divisorColor));
-                groupModel.state.setBrightness(Math.round(brightness / divisorDim));
-                groupModel.state.setColorTemp(Math.round(colorTemp / divisorTemp));
                 groupModel.setCapability(capability);
+
+                groupModel.state.setOnOff(countOn > 0);
+                groupModel.state.setHue(averageHue.getAverage());
+                groupModel.state.setSaturation(averageSaturation.getAverage());
+                groupModel.state.setBrightness(averageBrightness.getAverage());
+                groupModel.state.setColorTemp(averageColorTemp.getAverage());
+
+                groupModel.uniformity.power = countOn == 0 || countOff == 0;
+                groupModel.uniformity.hue = averageHue.isUniform();
+                groupModel.uniformity.saturation = averageSaturation.isUniform();
+                groupModel.uniformity.brightness = averageBrightness.isUniform();
+                groupModel.uniformity.colorTemp = averageColorTemp.isUniform();
+
+                groupModel.viewColorTempMin = viewColorTempGroupMin != -1 ? viewColorTempGroupMin : ColorStateConverter.VIEW_COLORTEMP_MIN;
+                groupModel.viewColorTempMax = viewColorTempGroupMax != -1 ? viewColorTempGroupMax : ColorStateConverter.VIEW_COLORTEMP_MAX;
             }
         });
 
         postSendGroupChanged(groupModel.id);
     }
 
-    protected void postUpdateLampGroupMemberLamps(final String groupID) {
-        director.getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                GroupDataModel groupModel = director.getGroupCollectionManager().getModel(groupID);
-
-                if (groupModel != null) {
-                    for (String lampID : groupModel.getLamps()) {
-                        AllJoynManager.lampManager.getLampState(lampID);
-                    }
-                }
-            }
-        });
-    }
-
     protected void postDeleteGroups(final String[] groupIDs) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
                 for (String groupID : groupIDs) {
-                    director.getGroupCollectionManager().removeGroup(groupID);
+                    manager.getGroupCollectionManager().removeGroup(groupID);
                 }
             }
         });
     }
 
     protected void postSendGroupChanged(final String groupID) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                director.getGroupCollectionManager().sendChangedEvent(groupID);
+                manager.getGroupCollectionManager().sendChangedEvent(groupID);
             }
         });
     }

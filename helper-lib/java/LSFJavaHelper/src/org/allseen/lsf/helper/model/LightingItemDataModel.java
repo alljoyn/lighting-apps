@@ -60,6 +60,10 @@ public class LightingItemDataModel {
         this.tag = new LightingItemSortableTag(this.id, this.prefix, this.name);
     }
 
+    public boolean hasDefaultID() {
+        return LightingItemDataModel.defaultID.equals(id);
+    }
+
     @Override
     public int hashCode() {
         return id.hashCode();

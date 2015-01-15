@@ -18,6 +18,7 @@ package org.allseen.lsf.sampleapp;
 import java.util.List;
 
 import org.allseen.lsf.LampGroup;
+import org.allseen.lsf.helper.manager.AllJoynManager;
 
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,7 +35,7 @@ public class GroupSelectMembersFragment extends SelectMembersFragment {
 
         SampleAppActivity activity = (SampleAppActivity)getActivity();
 
-        activity.updateActionBar(activity.pendingGroupModel.id.isEmpty() ? R.string.title_group_add : R.string.title_group_edit, false, false, false, true, true);
+        activity.updateActionBar(activity.pendingGroupModel.hasDefaultID() ? R.string.title_group_add : R.string.title_group_edit, false, false, false, true, true);
     }
 
     @Override
@@ -57,7 +58,7 @@ public class GroupSelectMembersFragment extends SelectMembersFragment {
         activity.pendingGroupModel.members.setLamps(lampIDs.toArray(new String[lampIDs.size()]));
         activity.pendingGroupModel.members.setLampGroups(groupIDs.toArray(new String[groupIDs.size()]));
 
-        if (activity.pendingGroupModel.id.isEmpty()) {
+        if (activity.pendingGroupModel.hasDefaultID()) {
             AllJoynManager.groupManager.createLampGroup(activity.pendingGroupModel.members, activity.pendingGroupModel.getName(), SampleAppActivity.LANGUAGE);
         } else {
             AllJoynManager.groupManager.updateLampGroup(activity.pendingGroupModel.id, activity.pendingGroupModel.members);

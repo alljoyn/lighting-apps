@@ -15,8 +15,6 @@
  */
 package org.allseen.lsf.helper.listener;
 
-import java.util.Iterator;
-
 import org.allseen.lsf.helper.facade.Preset;
 
 /**
@@ -24,7 +22,7 @@ import org.allseen.lsf.helper.facade.Preset;
  * in subsequent releases of the SDK</b>.
  */
 public interface PresetCollectionListener {
-    public void onPresetsChanged(Iterator<Preset> presets, int count);
-    public void onPresetsRemoved(Iterator<Preset> presets, int count);
+    public void onPresetChanged(Preset preset);
+    public void onPresetRemoved(Preset preset);
     public void onPresetError(LightingItemErrorEvent error);
 }

@@ -23,6 +23,7 @@
 #import "LSFUtilityFunctions.h"
 #import "LSFGroupModel.h"
 #import "LSFEnums.h"
+#import "LSFGroup.h"
 
 @interface LSFGroupsChangeNameViewController ()
 
@@ -53,9 +54,8 @@
 {
     [super viewWillAppear: animated];
 
-    LSFGroupModelContainer *groupContainer = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groups = groupContainer.groupContainer;
-    self.groupModel = [groups valueForKey: self.groupID];
+    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
+    self.groupModel = [[groups valueForKey: self.groupID] getLampGroupDataModel];
 
     //Set notification handler
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
@@ -122,9 +122,8 @@
 
 -(void)reloadGroupName
 {
-    LSFGroupModelContainer *groupsContainer = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groups = groupsContainer.groupContainer;
-    self.groupModel = [groups valueForKey: self.groupID];
+    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
+    self.groupModel = [[groups valueForKey: self.groupID] getLampGroupDataModel];
 
     self.groupNameTextField.text = self.groupModel.name;
 }
@@ -165,8 +164,8 @@
         self.doneButtonPressed = YES;
         [textField resignFirstResponder];
         
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-            LSFLampGroupManager *lampGroupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+            LSFLampGroupManager *lampGroupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
             [lampGroupManager setLampGroupNameForID: self.groupID andName: self.groupNameTextField.text];
         });
         
@@ -201,8 +200,8 @@
         self.doneButtonPressed = YES;
         [self.groupNameTextField resignFirstResponder];
         
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-            LSFLampGroupManager *lampGroupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+            LSFLampGroupManager *lampGroupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
             [lampGroupManager setLampGroupNameForID: self.groupID andName: self.groupNameTextField.text];
         });
     }
@@ -213,11 +212,12 @@
  */
 -(BOOL)checkForDuplicateName: (NSString *)name
 {
-    LSFGroupModelContainer *container = [LSFGroupModelContainer getGroupModelContainer];
-    NSDictionary *groups = container.groupContainer;
+    NSDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
     
-    for (LSFGroupModel *model in [groups allValues])
+    for (LSFGroup *group in [groups allValues])
     {
+        LSFGroupModel *model = [group getLampGroupDataModel];
+
         if ([name isEqualToString: model.name])
         {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Duplicate Name"

@@ -22,7 +22,6 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public abstract class EnterNumberFragment extends PageFrameChildFragment {
     @Override

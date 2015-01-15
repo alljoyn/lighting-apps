@@ -21,6 +21,7 @@
 #import "LSFSceneModelContainer.h"
 #import "LSFUtilityFunctions.h"
 #import "LSFEnums.h"
+#import "LSFLightingScene.h"
 
 @interface LSFScenesChangeNameViewController ()
 
@@ -49,9 +50,8 @@
 
 -(void)viewWillAppear: (BOOL)animated
 {
-    LSFSceneModelContainer *container = [LSFSceneModelContainer getSceneModelContainer];
-    NSMutableDictionary *scenes = container.sceneContainer;
-    self.sceneModel = [scenes valueForKey: self.sceneID];
+    NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
+    self.sceneModel = [[scenes valueForKey: self.sceneID] getSceneDataModel];
 
     //Set notification handler
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
@@ -117,9 +117,8 @@
 
 -(void)reloadSceneName
 {
-    LSFSceneModelContainer *scenesContainer = [LSFSceneModelContainer getSceneModelContainer];
-    NSMutableDictionary *scenes = scenesContainer.sceneContainer;
-    self.sceneModel = [scenes valueForKey: self.sceneID];
+    NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
+    self.sceneModel = [[scenes valueForKey: self.sceneID] getSceneDataModel];
 
     self.sceneNameTextField.text = self.sceneModel.name;
 }
@@ -165,8 +164,8 @@
         self.doneButtonPressed = YES;
         [textField resignFirstResponder];
 
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-            LSFSceneManager *sceneManager = ([LSFAllJoynManager getAllJoynManager]).lsfSceneManager;
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+            LSFSceneManager *sceneManager = [[LSFAllJoynManager getAllJoynManager] lsfSceneManager];
             [sceneManager setSceneNameWithID: self.sceneID andSceneName: self.sceneNameTextField.text];
         });
 
@@ -201,8 +200,8 @@
         self.doneButtonPressed = YES;
         [self.sceneNameTextField resignFirstResponder];
 
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-            LSFSceneManager *sceneManager = ([LSFAllJoynManager getAllJoynManager]).lsfSceneManager;
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+            LSFSceneManager *sceneManager = [[LSFAllJoynManager getAllJoynManager] lsfSceneManager];
             [sceneManager setSceneNameWithID: self.sceneID andSceneName: self.sceneNameTextField.text];
         });
     }
@@ -213,11 +212,12 @@
  */
 -(BOOL)checkForDuplicateName: (NSString *)name
 {
-    LSFSceneModelContainer *container = [LSFSceneModelContainer getSceneModelContainer];
-    NSDictionary *scenes = container.sceneContainer;
+    NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
 
-    for (LSFSceneDataModel *model in [scenes allValues])
+    for (LSFLightingScene *scene in [scenes allValues])
     {
+        LSFSceneDataModel *model = [scene getSceneDataModel];
+
         if ([name isEqualToString: model.name])
         {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Duplicate Name"

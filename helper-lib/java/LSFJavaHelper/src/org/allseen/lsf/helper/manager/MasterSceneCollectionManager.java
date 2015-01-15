@@ -15,6 +15,7 @@
  */
 package org.allseen.lsf.helper.manager;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 import org.allseen.lsf.helper.facade.MasterScene;
@@ -52,18 +53,22 @@ public class MasterSceneCollectionManager extends LightingItemCollectionManager<
         return getAdapters().iterator();
     }
 
+    public Collection<MasterScene> removeMasterScenes() {
+        return removeAllAdapters();
+    }
+
     public MasterScene removeMasterScene(String masterSceneID) {
         return removeAdapter(masterSceneID);
     }
 
     @Override
-    protected void sendChangedEvent(MasterSceneCollectionListener listener, Iterator<MasterScene> masterScenes, int count) {
-        listener.onMasterScenesChanged(masterScenes, count);
+    protected void sendChangedEvent(MasterSceneCollectionListener listener, MasterScene masterScene) {
+        listener.onMasterSceneChanged(masterScene);
     }
 
     @Override
-    protected void sendRemovedEvent(MasterSceneCollectionListener listener, Iterator<MasterScene> masterScenes, int count) {
-        listener.onMasterScenesRemoved(masterScenes, count);
+    protected void sendRemovedEvent(MasterSceneCollectionListener listener, MasterScene masterScene) {
+        listener.onMasterSceneRemoved(masterScene);
     }
 
     @Override

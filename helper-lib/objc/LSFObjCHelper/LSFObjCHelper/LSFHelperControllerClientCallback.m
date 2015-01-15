@@ -24,7 +24,6 @@
 #import "LSFSceneModelContainer.h"
 #import "LSFMasterSceneModelContainer.h"
 #import "LSFPresetModelContainer.h"
-//#import "LSFTabManager.h"
 
 @interface LSFHelperControllerClientCallback()
 
@@ -204,10 +203,11 @@
     [masterSceneContainer.masterScenesContainer removeAllObjects];
     [presetContainer.presetContainer removeAllObjects];
 
-//    LSFTabManager *tabManager = [LSFTabManager getTabManager];
-//    [tabManager updateLampsTab];
-//    [tabManager updateGroupsTab];
-//    [tabManager updateScenesTab];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateLamps" object: self userInfo: nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateGroups" object: self userInfo: nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateScenes" object: self userInfo: nil];
+    });
 }
 
 @end

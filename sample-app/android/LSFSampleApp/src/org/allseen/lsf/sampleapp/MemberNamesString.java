@@ -21,6 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.allseen.lsf.LampGroup;
+import org.allseen.lsf.helper.model.GroupDataModel;
+import org.allseen.lsf.helper.model.LampDataModel;
 
 public class MemberNamesString {
     // Creates a details string, containing a list of all lamps and subgroups in a lamp group
@@ -33,12 +35,12 @@ public class MemberNamesString {
         List<String> lampNames = new ArrayList<String>();
 
         for (String groupID : members.getLampGroups()) {
-            GroupDataModel groupModel = activity.groupModels.get(groupID);
+            GroupDataModel groupModel = activity.systemManager.getGroupCollectionManager().getModel(groupID);
             groupNames.add(groupModel != null ? groupModel.getName() : String.format(activity.getString(R.string.member_group_not_found), groupID));
         }
 
         for (String lampID : members.getLamps()) {
-            LampDataModel lampModel = activity.lampModels.get(lampID);
+            LampDataModel lampModel = activity.systemManager.getLampCollectionManager().getModel(lampID);
             lampNames.add(lampModel != null ? lampModel.getName() : String.format(activity.getString(R.string.member_lamp_not_found), lampID));
         }
 

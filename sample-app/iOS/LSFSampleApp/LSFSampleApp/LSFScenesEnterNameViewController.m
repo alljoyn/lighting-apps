@@ -21,6 +21,7 @@
 #import "LSFAllJoynManager.h"
 #import "LSFUtilityFunctions.h"
 #import "LSFEnums.h"
+#import "LSFLightingScene.h"
 
 @interface LSFScenesEnterNameViewController ()
 
@@ -150,11 +151,12 @@
  */
 -(BOOL)checkForDuplicateName: (NSString *)name
 {
-    LSFSceneModelContainer *container = [LSFSceneModelContainer getSceneModelContainer];
-    NSDictionary *scenes = container.sceneContainer;
+    NSDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
 
-    for (LSFSceneDataModel *model in [scenes allValues])
+    for (LSFLightingScene *scene in [scenes allValues])
     {
+        LSFSceneDataModel *model = [scene getSceneDataModel];
+
         if ([name isEqualToString: model.name])
         {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Duplicate Name"

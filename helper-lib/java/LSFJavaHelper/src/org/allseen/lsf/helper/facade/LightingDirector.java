@@ -19,6 +19,7 @@ import org.alljoyn.bus.BusAttachment;
 import org.allseen.lsf.helper.facade.Group;
 import org.allseen.lsf.helper.facade.Lamp;
 import org.allseen.lsf.helper.facade.Scene;
+import org.allseen.lsf.helper.listener.AllJoynListener;
 import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.manager.LightingSystemManager;
 import android.os.Handler;
@@ -63,7 +64,13 @@ public class LightingDirector {
      * @param fragmentManager Currently needed for system initialization
      */
     public void start(FragmentManager fragmentManager) {
-        lightingManager.start(fragmentManager);
+        lightingManager.init(fragmentManager, new AllJoynListener() {
+            @Override
+            public void onAllJoynInitialized() {
+                //TODO-FIX: We're supposed to make sure the network is available
+                //          before calling start() here
+                lightingManager.start();
+            }});
     }
 
     /**
@@ -72,7 +79,7 @@ public class LightingDirector {
      * @param fragmentManager Must be the same instance passed to start()
      */
     public void stop(FragmentManager fragmentManager) {
-        lightingManager.stop(fragmentManager);
+        lightingManager.destroy(fragmentManager);
     }
 
     /**

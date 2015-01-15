@@ -16,6 +16,7 @@ package org.allseen.lsf.helper.facade;
 
 import org.allseen.lsf.LampState;
 import org.allseen.lsf.helper.manager.AllJoynManager;
+import org.allseen.lsf.helper.model.AllLampsDataModel;
 import org.allseen.lsf.helper.model.ColorItemDataModel;
 import org.allseen.lsf.helper.model.ColorStateConverter;
 import org.allseen.lsf.helper.model.GroupDataModel;
@@ -56,7 +57,7 @@ public class Group extends ColorItem {
     public Group(String groupID, String groupName) {
         super();
 
-        groupModel = new GroupDataModel(groupID, groupName);
+        groupModel = AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupID) ? AllLampsDataModel.instance : new GroupDataModel(groupID, groupName);
     }
 
     /**

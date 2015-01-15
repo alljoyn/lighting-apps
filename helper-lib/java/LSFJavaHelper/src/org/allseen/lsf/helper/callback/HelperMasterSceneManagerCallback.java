@@ -27,18 +27,18 @@ import org.allseen.lsf.helper.model.MasterSceneDataModel;
  * in subsequent releases of the SDK</b>.
  */
 public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback {
-    protected LightingSystemManager director;
+    protected LightingSystemManager manager;
 
-    public HelperMasterSceneManagerCallback(LightingSystemManager director) {
+    public HelperMasterSceneManagerCallback(LightingSystemManager manager) {
         super();
 
-        this.director = director;
+        this.manager = manager;
     }
 
     @Override
     public void getAllMasterSceneIDsReplyCB(ResponseCode responseCode, String[] masterSceneIDs) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getMasterSceneCollectionManager().sendErrorEvent("getAllMasterSceneIDsReplyCB", responseCode);
+            manager.getMasterSceneCollectionManager().sendErrorEvent("getAllMasterSceneIDsReplyCB", responseCode);
         }
 
         for (final String masterSceneID : masterSceneIDs) {
@@ -49,7 +49,7 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
     @Override
     public void getMasterSceneNameReplyCB(ResponseCode responseCode, String masterSceneID, String language, String masterSceneName) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getMasterSceneCollectionManager().sendErrorEvent("getMasterSceneNameReplyCB", responseCode, masterSceneID);
+            manager.getMasterSceneCollectionManager().sendErrorEvent("getMasterSceneNameReplyCB", responseCode, masterSceneID);
         }
 
         postUpdateMasterSceneName(masterSceneID, masterSceneName);
@@ -58,7 +58,7 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
     @Override
     public void setMasterSceneNameReplyCB(ResponseCode responseCode, String masterSceneID, String language) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getMasterSceneCollectionManager().sendErrorEvent("setMasterSceneNameReplyCB", responseCode, masterSceneID);
+            manager.getMasterSceneCollectionManager().sendErrorEvent("setMasterSceneNameReplyCB", responseCode, masterSceneID);
         }
 
         AllJoynManager.masterSceneManager.getMasterSceneName(masterSceneID, LightingSystemManager.LANGUAGE);
@@ -66,13 +66,13 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
 
     @Override
     public void masterScenesNameChangedCB(final String[] masterSceneIDs) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
                 boolean containsNewIDs = false;
 
                 for (final String masterSceneID : masterSceneIDs) {
-                    if (director.getMasterSceneCollectionManager().hasID(masterSceneID)) {
+                    if (manager.getMasterSceneCollectionManager().hasID(masterSceneID)) {
                         AllJoynManager.masterSceneManager.getMasterSceneName(masterSceneID, LightingSystemManager.LANGUAGE);
                     } else {
                         containsNewIDs = true;
@@ -89,10 +89,8 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
     @Override
     public void createMasterSceneReplyCB(ResponseCode responseCode, String masterSceneID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getMasterSceneCollectionManager().sendErrorEvent("createMasterSceneReplyCB", responseCode, masterSceneID);
+            manager.getMasterSceneCollectionManager().sendErrorEvent("createMasterSceneReplyCB", responseCode, masterSceneID);
         }
-
-        postProcessMasterSceneID(masterSceneID);
     }
 
     @Override
@@ -103,7 +101,7 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
     @Override
     public void updateMasterSceneReplyCB(ResponseCode responseCode, String masterSceneID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getMasterSceneCollectionManager().sendErrorEvent("updateMasterSceneReplyCB", responseCode, masterSceneID);
+            manager.getMasterSceneCollectionManager().sendErrorEvent("updateMasterSceneReplyCB", responseCode, masterSceneID);
         }
     }
 
@@ -117,7 +115,7 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
     @Override
     public void deleteMasterSceneReplyCB(ResponseCode responseCode, String masterSceneID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getMasterSceneCollectionManager().sendErrorEvent("deleteMasterSceneReplyCB", responseCode, masterSceneID);
+            manager.getMasterSceneCollectionManager().sendErrorEvent("deleteMasterSceneReplyCB", responseCode, masterSceneID);
         }
     }
 
@@ -129,7 +127,7 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
     @Override
     public void getMasterSceneReplyCB(ResponseCode responseCode, String masterSceneID, MasterScene masterScene) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getMasterSceneCollectionManager().sendErrorEvent("getMasterSceneReplyCB", responseCode, masterSceneID);
+            manager.getMasterSceneCollectionManager().sendErrorEvent("getMasterSceneReplyCB", responseCode, masterSceneID);
         }
 
         postUpdateMasterScene(masterSceneID, masterScene);
@@ -138,7 +136,7 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
     @Override
     public void applyMasterSceneReplyCB(ResponseCode responseCode, String masterSceneID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getMasterSceneCollectionManager().sendErrorEvent("applyMasterSceneReplyCB", responseCode, masterSceneID);
+            manager.getMasterSceneCollectionManager().sendErrorEvent("applyMasterSceneReplyCB", responseCode, masterSceneID);
         }
 
         //TODO-CHK Do we need to do anything here?
@@ -150,10 +148,10 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
     }
 
     protected void postProcessMasterSceneID(final String masterSceneID) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                if (!director.getMasterSceneCollectionManager().hasID(masterSceneID)) {
+                if (!manager.getMasterSceneCollectionManager().hasID(masterSceneID)) {
                     postUpdateMasterSceneID(masterSceneID);
                     AllJoynManager.masterSceneManager.getMasterSceneName(masterSceneID, LightingSystemManager.LANGUAGE);
                     AllJoynManager.masterSceneManager.getMasterScene(masterSceneID);
@@ -163,11 +161,11 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
     }
 
     protected void postUpdateMasterSceneID(final String masterSceneID) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                if (!director.getMasterSceneCollectionManager().hasID(masterSceneID)) {
-                    director.getMasterSceneCollectionManager().addMasterScene(masterSceneID);
+                if (!manager.getMasterSceneCollectionManager().hasID(masterSceneID)) {
+                    manager.getMasterSceneCollectionManager().addMasterScene(masterSceneID);
                 }
             }
         });
@@ -176,10 +174,10 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
     }
 
     protected void postUpdateMasterScene(final String masterSceneID, final MasterScene masterScene) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                MasterSceneDataModel masterSceneModel = director.getMasterSceneCollectionManager().getModel(masterSceneID);
+                MasterSceneDataModel masterSceneModel = manager.getMasterSceneCollectionManager().getModel(masterSceneID);
 
                 if (masterSceneModel != null) {
                     masterSceneModel.masterScene = masterScene;
@@ -191,10 +189,10 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
     }
 
     protected void postUpdateMasterSceneName(final String masterSceneID, final String masterSceneName) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                MasterSceneDataModel masterSceneModel = director.getMasterSceneCollectionManager().getModel(masterSceneID);
+                MasterSceneDataModel masterSceneModel = manager.getMasterSceneCollectionManager().getModel(masterSceneID);
 
                 if (masterSceneModel != null) {
                     masterSceneModel.setName(masterSceneName);
@@ -206,21 +204,21 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
     }
 
     protected void postDeleteMasterScenes(final String[] masterSceneIDs) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
                 for (String masterSceneID : masterSceneIDs) {
-                    director.getMasterSceneCollectionManager().removeMasterScene(masterSceneID);
+                    manager.getMasterSceneCollectionManager().removeMasterScene(masterSceneID);
                 }
             }
         });
     }
 
     protected void postSendMasterSceneChanged(final String masterSceneID) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                director.getMasterSceneCollectionManager().sendChangedEvent(masterSceneID);
+                manager.getMasterSceneCollectionManager().sendChangedEvent(masterSceneID);
             }
         });
     }

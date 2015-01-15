@@ -15,8 +15,6 @@
  */
 package org.allseen.lsf.helper.listener;
 
-import java.util.Iterator;
-
 import org.allseen.lsf.helper.facade.Scene;
 
 /**
@@ -24,7 +22,7 @@ import org.allseen.lsf.helper.facade.Scene;
  * in subsequent releases of the SDK</b>.
  */
 public interface SceneCollectionListener {
-    public void onScenesChanged(Iterator<Scene> scenes, int count);
-    public void onScenesRemoved(Iterator<Scene> scenes, int count);
+    public void onSceneChanged(Scene scene);
+    public void onSceneRemoved(Scene scene);
     public void onSceneError(LightingItemErrorEvent error);
 }

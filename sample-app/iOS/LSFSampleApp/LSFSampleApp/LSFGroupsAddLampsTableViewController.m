@@ -23,6 +23,8 @@
 #import "LSFGroupModel.h"
 #import "LSFCapabilityData.h"
 #import "LSFEnums.h"
+#import "LSFGroup.h"
+#import "LSFLamp.h"
 
 @interface LSFGroupsAddLampsTableViewController ()
 
@@ -181,9 +183,13 @@
  */
 -(void)buildTableArray
 {
-    LSFGroupModelContainer *groupContainer = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groups = groupContainer.groupContainer;
-    NSMutableArray *groupsArray = [NSMutableArray arrayWithArray: [groups allValues]];
+    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
+    NSMutableArray *groupsArray = [[NSMutableArray alloc] init];
+
+    for (LSFGroup *group in [groups allValues])
+    {
+        [groupsArray addObject: [group getLampGroupDataModel]];
+    }
     
     for (LSFGroupModel *groupModel in groupsArray)
     {
@@ -193,10 +199,14 @@
             break;
         }
     }
-    
-    LSFLampModelContainer *lampsContainer = [LSFLampModelContainer getLampModelContainer];
-    NSMutableDictionary *lamps = lampsContainer.lampContainer;
-    NSMutableArray *lampsArray = [NSMutableArray arrayWithArray: [lamps allValues]];
+
+    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
+    NSMutableArray *lampsArray = [[NSMutableArray alloc] init];
+
+    for (LSFLamp *lamp in [lamps allValues])
+    {
+        [lampsArray addObject: [lamp getLampDataModel]];
+    }
     
     self.lampsGroupsArray = [NSMutableArray arrayWithArray: [self sortLampsGroupsData: groupsArray]];
     [self.lampsGroupsArray addObjectsFromArray: [self sortLampsGroupsData: lampsArray]];
@@ -276,8 +286,8 @@
 
 -(void)createLampGroup
 {
-    dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-        LSFLampGroupManager *groupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
+    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+        LSFLampGroupManager *groupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
         [groupManager createLampGroup: self.lampGroup withName: self.groupName];
     });
     

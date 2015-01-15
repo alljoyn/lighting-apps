@@ -22,6 +22,7 @@
 #import "LSFAllJoynManager.h"
 #import "LSFUtilityFunctions.h"
 #import "LSFEnums.h"
+#import "LSFGroup.h"
 
 @interface LSFGroupsAddNameViewController ()
 
@@ -200,11 +201,12 @@
  */
 -(BOOL)checkForDuplicateName: (NSString *)name
 {
-    LSFGroupModelContainer *container = [LSFGroupModelContainer getGroupModelContainer];
-    NSDictionary *groups = container.groupContainer;
+    NSDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
     
-    for (LSFGroupModel *model in [groups allValues])
+    for (LSFGroup *group in [groups allValues])
     {
+        LSFGroupModel *model = [group getLampGroupDataModel];
+
         if ([name isEqualToString: model.name])
         {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Duplicate Name"

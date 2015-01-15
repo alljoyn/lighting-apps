@@ -27,9 +27,9 @@ import org.allseen.lsf.helper.facade.Group;
  * in subsequent releases of the SDK</b>.
  */
 public class GroupsFlattener {
-    public Set<String> groupIDSet;
-    public Set<String> lampIDSet;
-    int duplicates;
+    protected Set<String> groupIDSet;
+    protected Set<String> lampIDSet;
+    protected int duplicates;
 
     public GroupsFlattener() {
         super();
@@ -37,22 +37,26 @@ public class GroupsFlattener {
 
     public void flattenGroups(Map<String, Group> groups) {
         for (Group group : groups.values()) {
-            GroupDataModel groupModel = group.getGroupDataModel();
-
-            groupIDSet = new HashSet<String>();
-            lampIDSet = new HashSet<String>();
-            duplicates = 0;
-
-            flattenGroups(groups, groupModel);
-            flattenLamps(groups);
-
-            groupModel.setGroups(groupIDSet);
-            groupModel.setLamps(lampIDSet);
-            groupModel.duplicates = duplicates;
+            flattenGroup(groups, group);
         }
     }
 
-    public void flattenGroups(Map<String, Group> groups, GroupDataModel parentModel) {
+    public void flattenGroup(Map<String, Group> groups, Group group) {
+        GroupDataModel groupModel = group.getGroupDataModel();
+
+        groupIDSet = new HashSet<String>();
+        lampIDSet = new HashSet<String>();
+        duplicates = 0;
+
+        walkGroups(groups, groupModel);
+        walkLamps(groups);
+
+        groupModel.setGroups(groupIDSet);
+        groupModel.setLamps(lampIDSet);
+        groupModel.duplicates = duplicates;
+    }
+
+    protected void walkGroups(Map<String, Group> groups, GroupDataModel parentModel) {
         if (!groupIDSet.contains(parentModel.id)) {
             groupIDSet.add(parentModel.id);
 
@@ -61,7 +65,7 @@ public class GroupsFlattener {
                 GroupDataModel childModel = childGroup != null ? childGroup.getGroupDataModel() : null;
 
                 if (childModel != null) {
-                    flattenGroups(groups, childModel);
+                    walkGroups(groups, childModel);
                 }
             }
         } else {
@@ -69,7 +73,7 @@ public class GroupsFlattener {
         }
     }
 
-    public void flattenLamps(Map<String, Group> groups) {
+    protected void walkLamps(Map<String, Group> groups) {
         for (String groupID : groupIDSet) {
             Group group = groups.get(groupID);
             GroupDataModel groupModel = group != null ? group.getGroupDataModel() : null;

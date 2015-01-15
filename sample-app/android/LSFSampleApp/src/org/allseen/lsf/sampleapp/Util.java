@@ -17,16 +17,25 @@ package org.allseen.lsf.sampleapp;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.allseen.lsf.LampGroup;
 import org.allseen.lsf.LampState;
 import org.allseen.lsf.MasterScene;
+import org.allseen.lsf.helper.facade.Preset;
+import org.allseen.lsf.helper.model.GroupDataModel;
+import org.allseen.lsf.helper.model.LampDataModel;
+import org.allseen.lsf.helper.model.NoEffectDataModel;
+import org.allseen.lsf.helper.model.PresetDataModel;
+import org.allseen.lsf.helper.model.PulseEffectDataModel;
+import org.allseen.lsf.helper.model.SceneDataModel;
+import org.allseen.lsf.helper.model.TransitionEffectDataModel;
 
 public class Util {
 
     // Creates a details string, containing a list of all lamps and groups in a basic scene
-    public static String createMemberNamesString(SampleAppActivity activity, BasicSceneDataModel basicSceneModel, String separator) {
+    public static String createMemberNamesString(SampleAppActivity activity, SceneDataModel basicSceneModel, String separator) {
         String details = null;
 
         if (basicSceneModel.noEffects != null) {
@@ -67,12 +76,12 @@ public class Util {
         List<String> lampNames = new ArrayList<String>();
 
         for (String groupID : members.getLampGroups()) {
-            GroupDataModel groupModel = activity.groupModels.get(groupID);
+            GroupDataModel groupModel = activity.systemManager.getGroupCollectionManager().getModel(groupID);
             groupNames.add(groupModel != null ? groupModel.getName() : String.format(activity.getString(R.string.member_group_not_found), groupID));
         }
 
         for (String lampID : members.getLamps()) {
-            LampDataModel lampModel = activity.lampModels.get(lampID);
+            LampDataModel lampModel = activity.systemManager.getLampCollectionManager().getModel(lampID);
             lampNames.add(lampModel != null ? lampModel.getName() : String.format(activity.getString(R.string.member_lamp_not_found), lampID));
         }
 
@@ -106,8 +115,11 @@ public class Util {
     // Creates a string containing a sorted comma-separated list of preset names that match the specified state
     public static String createPresetNamesString(SampleAppActivity activity, LampState itemState) {
         List<String> presetNames = new ArrayList<String>();
+        Iterator<Preset> i = activity.systemManager.getPresetCollectionManager().getPresetIterator();
 
-        for (PresetDataModel presetModel : activity.presetModels.values()) {
+        while (i.hasNext()) {
+            PresetDataModel presetModel = i.next().getPresetDataModel();
+
             if (presetModel.state != null) {
                 if (presetModel.stateEquals(itemState)) {
                     presetNames.add(presetModel.getName());
@@ -125,7 +137,7 @@ public class Util {
         List<String> basicSceneNames = new ArrayList<String>();
 
         for (String basicSceneID : masterScene.getScenes()) {
-            BasicSceneDataModel basicSceneModel = activity.basicSceneModels.get(basicSceneID);
+            SceneDataModel basicSceneModel = activity.systemManager.getSceneCollectionManager().getModel(basicSceneID);
             basicSceneNames.add(basicSceneModel != null ? basicSceneModel.getName() : String.format(activity.getString(R.string.member_scene_not_found), basicSceneID));
         }
 

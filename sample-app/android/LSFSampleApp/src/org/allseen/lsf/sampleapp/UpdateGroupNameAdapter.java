@@ -15,6 +15,12 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import java.util.Iterator;
+
+import org.allseen.lsf.helper.facade.Group;
+import org.allseen.lsf.helper.manager.AllJoynManager;
+import org.allseen.lsf.helper.model.GroupDataModel;
+
 public class UpdateGroupNameAdapter extends UpdateItemNameAdapter {
 
     public UpdateGroupNameAdapter(GroupDataModel groupModel, SampleAppActivity activity) {
@@ -33,8 +39,10 @@ public class UpdateGroupNameAdapter extends UpdateItemNameAdapter {
 
     @Override
     protected boolean duplicateName(String name) {
-        for (GroupDataModel data : activity.groupModels.values()) {
-            if (data.getName().equals(name) && !name.equals(itemModel.getName())) {
+        Iterator<Group> i = activity.systemManager.getGroupCollectionManager().getGroupIterator();
+
+        while(i.hasNext()) {
+            if (i.next().getName().equals(name) && !name.equals(itemModel.getName())) {
                 return true;
             }
         }

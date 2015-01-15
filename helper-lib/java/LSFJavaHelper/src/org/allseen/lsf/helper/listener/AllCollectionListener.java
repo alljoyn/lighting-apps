@@ -22,5 +22,5 @@ package org.allseen.lsf.helper.listener;
 public interface AllCollectionListener extends
     LampCollectionListener, GroupCollectionListener, PresetCollectionListener,
     SceneCollectionListener, MasterSceneCollectionListener,
-    ControllerListener, WifiListener {
+    ControllerListener {
 }

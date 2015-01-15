@@ -19,7 +19,6 @@
 #import "LSFSceneDataModel.h"
 #import "LSFAllJoynManager.h"
 #import "LSFDispatchQueue.h"
-//#import "LSFTabManager.h"
 #import "LSFEnums.h"
 #import "LSFLightingScene.h"
 
@@ -235,10 +234,9 @@
         scene = [[LSFLightingScene alloc] initWithSceneID: sceneID];
         [scenes setValue: scene forKey: sceneID];
 
-//        dispatch_async(self.queue, ^{
-//            LSFTabManager *tabManager = [LSFTabManager getTabManager];
-//            [tabManager updateScenesTab];
-//        });
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateScenes" object: self userInfo: nil];
+        });
     }
 
     [self updateSceneWithID: sceneID andCallbackOperation: SceneCreated];
@@ -283,10 +281,9 @@
         [sceneNames insertObject: model.name atIndex: i];
         [scenes removeObjectForKey: sceneID];
 
-//        dispatch_async(self.queue, ^{
-//            LSFTabManager *tabManager = [LSFTabManager getTabManager];
-//            [tabManager updateScenesTab];
-//        });
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateScenes" object: self userInfo: nil];
+        });
     }
 
     dispatch_async(dispatch_get_main_queue(), ^{

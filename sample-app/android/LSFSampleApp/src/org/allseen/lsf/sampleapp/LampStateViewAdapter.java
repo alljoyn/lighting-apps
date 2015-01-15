@@ -15,6 +15,9 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import org.allseen.lsf.helper.model.ColorStateConverter;
+import org.allseen.lsf.helper.model.LampCapabilities;
+
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -34,7 +37,7 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
 
     private final int viewColorTempMin;
     private final int viewColorTempSpan;
-    private CapabilityData capability;
+    private LampCapabilities capability;
 
     public LampStateViewAdapter(View stateView, String tag, int colorTempMin, int colorTempSpan, DimmableItemInfoFragment parentFragment) {
         this.stateView = stateView;
@@ -70,15 +73,15 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
 
         viewColorTempMin = colorTempMin;
         viewColorTempSpan = colorTempSpan;
-        capability = new CapabilityData();
+        capability = new LampCapabilities();
     }
 
-    public void setCapability(CapabilityData capability) {
+    public void setCapability(LampCapabilities capability) {
         this.capability = capability;
         boolean displayStarFooter = false;
 
         // dimmable
-        if (capability.dimmable >= CapabilityData.SOME) {
+        if (capability.dimmable >= LampCapabilities.SOME) {
             brightnessSeekBar.setEnabled(true);
             presetsButton.setEnabled(true);
         } else {
@@ -86,7 +89,7 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
             presetsButton.setEnabled(false);
             parentFragment.setTextViewValue(stateView, R.id.stateTextBrightness, parentFragment.getResources().getString(R.string.na), 0);
         }
-        if (capability.dimmable == CapabilityData.SOME) {
+        if (capability.dimmable == LampCapabilities.SOME) {
             stateView.findViewById(R.id.stateLabelBrightnessStar).setVisibility(View.VISIBLE);
             displayStarFooter = true;
         } else {
@@ -94,7 +97,7 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
         }
 
         // color support
-        if (capability.color >= CapabilityData.SOME) {
+        if (capability.color >= LampCapabilities.SOME) {
             hueSeekBar.setEnabled(true);
             saturationSeekBar.setEnabled(true);
         } else {
@@ -103,7 +106,7 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
             parentFragment.setTextViewValue(stateView, R.id.stateTextHue, parentFragment.getResources().getString(R.string.na), 0);
             parentFragment.setTextViewValue(stateView, R.id.stateTextSaturation, parentFragment.getResources().getString(R.string.na), 0);
         }
-        if (capability.color == CapabilityData.SOME) {
+        if (capability.color == LampCapabilities.SOME) {
             stateView.findViewById(R.id.stateLabelHueStar).setVisibility(View.VISIBLE);
             stateView.findViewById(R.id.stateLabelSaturationStar).setVisibility(View.VISIBLE);
             displayStarFooter = true;
@@ -113,13 +116,13 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
         }
 
         // temperature support
-        if (capability.temp >= CapabilityData.SOME) {
+        if (capability.temp >= LampCapabilities.SOME) {
             tempSeekBar.setEnabled(true);
         } else {
             tempSeekBar.setEnabled(false);
             parentFragment.setTextViewValue(stateView, R.id.stateTextColorTemp, parentFragment.getResources().getString(R.string.na), 0);
         }
-        if (capability.temp == CapabilityData.SOME) {
+        if (capability.temp == LampCapabilities.SOME) {
             stateView.findViewById(R.id.stateLabelColorTempStar).setVisibility(View.VISIBLE);
             displayStarFooter = true;
         } else {
@@ -140,8 +143,8 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
     }
 
     public void setBrightness(long modelBrightness, boolean uniformBrightness) {
-        if (capability.dimmable >= CapabilityData.SOME) {
-            int viewBrightness = DimmableItemScaleConverter.convertBrightnessModelToView(modelBrightness);
+        if (capability.dimmable >= LampCapabilities.SOME) {
+            int viewBrightness = ColorStateConverter.convertBrightnessModelToView(modelBrightness);
 
             brightnessSeekBar.setProgress(viewBrightness);
             brightnessSeekBar.setThumb(parentFragment.getResources().getDrawable(uniformBrightness ? R.drawable.slider_thumb_normal : R.drawable.slider_thumb_midstate));
@@ -151,8 +154,8 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
     }
 
     public void setHue(long modelHue, boolean uniformHue) {
-        if (capability.color >= CapabilityData.SOME) {
-            int viewHue = DimmableItemScaleConverter.convertHueModelToView(modelHue);
+        if (capability.color >= LampCapabilities.SOME) {
+            int viewHue = ColorStateConverter.convertHueModelToView(modelHue);
 
             hueSeekBar.setProgress(viewHue);
             hueSeekBar.setThumb(parentFragment.getResources().getDrawable(uniformHue ? R.drawable.slider_thumb_normal : R.drawable.slider_thumb_midstate));
@@ -162,8 +165,8 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
     }
 
     public void setSaturation(long modelSaturation, boolean uniformSaturation) {
-        if (capability.color >= CapabilityData.SOME) {
-            int viewSaturation = DimmableItemScaleConverter.convertSaturationModelToView(modelSaturation);
+        if (capability.color >= LampCapabilities.SOME) {
+            int viewSaturation = ColorStateConverter.convertSaturationModelToView(modelSaturation);
 
             saturationSeekBar.setProgress(viewSaturation);
             saturationSeekBar.setThumb(parentFragment.getResources().getDrawable(uniformSaturation ? R.drawable.slider_thumb_normal : R.drawable.slider_thumb_midstate));
@@ -175,8 +178,8 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
     }
 
     public void setColorTemp(long modelColorTemp, boolean uniformColorTemp) {
-        if (capability.temp >= CapabilityData.SOME) {
-            int viewColorTemp = DimmableItemScaleConverter.convertColorTempModelToView(modelColorTemp);
+        if (capability.temp >= LampCapabilities.SOME) {
+            int viewColorTemp = ColorStateConverter.convertColorTempModelToView(modelColorTemp);
 
             tempSeekBar.setProgress(viewColorTemp - viewColorTempMin);
             tempSeekBar.setThumb(parentFragment.getResources().getDrawable(uniformColorTemp ? R.drawable.slider_thumb_normal : R.drawable.slider_thumb_midstate));
@@ -188,13 +191,13 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
     private void saturationCheck() {
         if (saturationSeekBar.getProgress() == 0) {
             hueSeekBar.setEnabled(false);
-        } else if (capability.color >= CapabilityData.SOME) {
+        } else if (capability.color >= LampCapabilities.SOME) {
             hueSeekBar.setEnabled(true);
         }
 
         if (saturationSeekBar.getProgress() == saturationSeekBar.getMax()) {
             tempSeekBar.setEnabled(false);
-        } else if (capability.temp >= CapabilityData.SOME) {
+        } else if (capability.temp >= LampCapabilities.SOME) {
             tempSeekBar.setEnabled(true);
         }
     }
@@ -251,21 +254,21 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
         int viewID = v.getId();
 
         if (viewID == R.id.stateControlBrightness) {
-            if (capability.dimmable <= CapabilityData.NONE) {
+            if (capability.dimmable <= LampCapabilities.NONE) {
             	((SampleAppActivity)parentFragment.getActivity()).showToast(R.string.no_support_dimmable);
             }
         } else if (viewID == R.id.stateControlHue) {
-            if (capability.color <= CapabilityData.NONE) {
+            if (capability.color <= LampCapabilities.NONE) {
             	((SampleAppActivity)parentFragment.getActivity()).showToast(R.string.no_support_color);
             } else if (saturationSeekBar.getProgress() == 0) {
             	((SampleAppActivity)parentFragment.getActivity()).showToast(R.string.saturation_disable_hue);
             }
         } else if (viewID == R.id.stateControlSaturation) {
-            if (capability.color <= CapabilityData.NONE) {
+            if (capability.color <= LampCapabilities.NONE) {
             	((SampleAppActivity)parentFragment.getActivity()).showToast(R.string.no_support_color);
             }
         } else if (viewID == R.id.stateControlColorTemp) {
-            if (capability.temp <= CapabilityData.NONE) {
+            if (capability.temp <= LampCapabilities.NONE) {
             	((SampleAppActivity)parentFragment.getActivity()).showToast(R.string.no_support_temp);
             } else if (saturationSeekBar.getProgress() == saturationSeekBar.getMax()) {
             	((SampleAppActivity)parentFragment.getActivity()).showToast(R.string.saturation_disable_temp);

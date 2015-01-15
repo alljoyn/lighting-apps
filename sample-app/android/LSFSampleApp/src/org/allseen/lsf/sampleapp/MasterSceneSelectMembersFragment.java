@@ -17,6 +17,8 @@ package org.allseen.lsf.sampleapp;
 
 import java.util.List;
 
+import org.allseen.lsf.helper.manager.AllJoynManager;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 
@@ -57,7 +59,7 @@ public class MasterSceneSelectMembersFragment extends SelectMembersFragment {
     protected void processSelection(SampleAppActivity activity, List<String> lampIDs, List<String> groupIDs, List<String> sceneIDs) {
         activity.pendingMasterSceneModel.masterScene.setScenes(sceneIDs.toArray(new String[sceneIDs.size()]));
 
-        if (activity.pendingMasterSceneModel.id.isEmpty()) {
+        if (activity.pendingMasterSceneModel.hasDefaultID()) {
             AllJoynManager.masterSceneManager.createMasterScene(activity.pendingMasterSceneModel.masterScene, activity.pendingMasterSceneModel.getName(), SampleAppActivity.LANGUAGE);
         } else {
             AllJoynManager.masterSceneManager.updateMasterScene(activity.pendingMasterSceneModel.id, activity.pendingMasterSceneModel.masterScene);

@@ -19,7 +19,6 @@
 #import "LSFAllJoynManager.h"
 #import "LSFMasterSceneModelContainer.h"
 #import "LSFMasterSceneDataModel.h"
-//#import "LSFTabManager.h"
 #import "LSFEnums.h"
 
 @interface LSFHelperMasterSceneManagerCallback()
@@ -261,10 +260,9 @@
         masterSceneModel = [[LSFMasterSceneDataModel alloc] initWithID: masterSceneID];
         [container.masterScenesContainer setValue: masterSceneModel forKey: masterSceneID];
 
-//        dispatch_async(self.queue, ^{
-//            LSFTabManager *tabManager = [LSFTabManager getTabManager];
-//            [tabManager updateScenesTab];
-//        });
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateScenes" object: self userInfo: nil];
+        });
     }
 
     [self updateMasterSceneWithID: masterSceneID andCallbackOperation: MasterSceneCreated];
@@ -315,10 +313,9 @@
         [masterSceneNames insertObject: model.name atIndex: i];
         [masterScenes removeObjectForKey: masterSceneID];
 
-//        dispatch_async(self.queue, ^{
-//            LSFTabManager *tabManager = [LSFTabManager getTabManager];
-//            [tabManager updateScenesTab];
-//        });
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateScenes" object: self userInfo: nil];
+        });
     }
 
     dispatch_async(dispatch_get_main_queue(), ^{

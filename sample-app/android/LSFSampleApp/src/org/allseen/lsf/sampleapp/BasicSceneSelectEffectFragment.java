@@ -17,6 +17,11 @@ package org.allseen.lsf.sampleapp;
 
 import java.util.List;
 
+import org.allseen.lsf.helper.model.EffectType;
+import org.allseen.lsf.helper.model.NoEffectDataModel;
+import org.allseen.lsf.helper.model.PulseEffectDataModel;
+import org.allseen.lsf.helper.model.TransitionEffectDataModel;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;

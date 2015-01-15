@@ -15,15 +15,9 @@
  */
 package org.allseen.lsf.helper.callback;
 
-import java.util.Map;
-
-import org.alljoyn.about.AboutKeys;
-import org.alljoyn.bus.Variant;
 import org.allseen.lsf.ControllerClientCallback;
 import org.allseen.lsf.ErrorCode;
-import org.allseen.lsf.helper.manager.AboutManager;
 import org.allseen.lsf.helper.manager.AllJoynManager;
-import org.allseen.lsf.helper.manager.ControllerMaintenance;
 import org.allseen.lsf.helper.manager.LightingSystemManager;
 import org.allseen.lsf.helper.model.ControllerDataModel;
 
@@ -32,20 +26,23 @@ import org.allseen.lsf.helper.model.ControllerDataModel;
  * in subsequent releases of the SDK</b>.
  */
 public class HelperControllerClientCallback extends ControllerClientCallback {
-    protected LightingSystemManager director;
+    protected LightingSystemManager manager;
 
-    public HelperControllerClientCallback(LightingSystemManager director) {
+    public HelperControllerClientCallback(LightingSystemManager manager) {
         super();
 
-        this.director = director;
+        this.manager = manager;
     }
 
     @Override
     public void connectedToControllerServiceCB(String controllerServiceDeviceID, String controllerServiceName) {
         AllJoynManager.controllerConnected = true;
+        AllJoynManager.controllerServiceManager.getControllerServiceVersion();
 
-        postUpdateControllerID(controllerServiceDeviceID, controllerServiceName, true, 0);
-        postGetAllLampIDs();
+        manager.getLampManager().getAllLampIDs();
+
+        postOnControllerConnected(controllerServiceDeviceID, controllerServiceName, 0);
+
         postGetAllLampGroupIDs();
         postGetAllPresetIDs();
         postGetAllBasicSceneIDs();
@@ -55,30 +52,30 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
     @Override
     public void connectToControllerServiceFailedCB(String controllerServiceDeviceID, String controllerServiceName) {
         AllJoynManager.controllerConnected = false;
-        postUpdateControllerID(controllerServiceDeviceID, controllerServiceName, false, 0);
+        postOnControllerDisconnected(controllerServiceDeviceID, controllerServiceName, 0);
     }
 
     @Override
     public void disconnectedFromControllerServiceCB(String controllerServiceDeviceID, String controllerServiceName) {
         AllJoynManager.controllerConnected = false;
-        postUpdateControllerID(controllerServiceDeviceID, controllerServiceName, false, 0);
+        postOnControllerDisconnected(controllerServiceDeviceID, controllerServiceName, 0);
     }
 
     @Override
     public void controllerClientErrorCB(ErrorCode[] errorCodes) {
-        director.getControllerManager().sendErrorEvent("controllerClientErrorCB", errorCodes);
+        manager.getControllerManager().sendErrorEvent("controllerClientErrorCB", errorCodes);
     }
 
-    public void postUpdateControllerID(final String controllerID, final String controllerName, final boolean connected, int delay) {
-        director.getHandler().postDelayed(new Runnable() {
+    public void postOnControllerConnected(final String controllerID, final String controllerName, int delay) {
+        manager.getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                ControllerDataModel leadModel = director.getControllerManager().getLeadControllerModel();
+                ControllerDataModel leadModel = manager.getControllerManager().getLeadControllerModel();
 
-                if (connected || leadModel.id.equals(controllerID)) {
+                if (!leadModel.id.equals(controllerID) || !leadModel.connected) {
                     leadModel.id = controllerID;
                     leadModel.setName(controllerName);
-                    leadModel.connected = connected;
+                    leadModel.connected = true;
                     leadModel.updateTime();
 
                     postSendControllerChanged();
@@ -87,13 +84,27 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
         }, delay);
     }
 
-    public void postUpdateControllerName(final String controllerID, Map<String, Variant> announceData, int delay) {
-        final String controllerName = AboutManager.getStringFromAnnounceData(AboutKeys.ABOUT_DEVICE_NAME, announceData, null);
-
-        director.getHandler().postDelayed(new Runnable() {
+    public void postOnControllerDisconnected(final String controllerID, final String controllerName, int delay) {
+        manager.getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                ControllerDataModel leadModel = director.getControllerManager().getLeadControllerModel();
+                ControllerDataModel leadModel = manager.getControllerManager().getLeadControllerModel();
+
+                if (leadModel.id.equals(controllerID) && leadModel.connected) {
+                    leadModel.connected = false;
+                    leadModel.updateTime();
+
+                    postSendControllerChanged();
+                }
+            }
+        }, delay);
+    }
+
+    public void postOnControllerAnnouncedAboutData(final String controllerID, final String controllerName, int delay) {
+        manager.getHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ControllerDataModel leadModel = manager.getControllerManager().getLeadControllerModel();
 
                 if (leadModel.id.equals(controllerID)) {
                     leadModel.setName(controllerName);
@@ -105,12 +116,8 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
         }, delay);
     }
 
-    protected void postGetAllLampIDs() {
-        new ControllerMaintenance(director);
-    }
-
     protected void postGetAllLampGroupIDs() {
-        director.getHandler().postDelayed(new Runnable() {
+        manager.getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 AllJoynManager.groupManager.getAllLampGroupIDs();
@@ -119,7 +126,7 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
     }
 
     protected void postGetAllPresetIDs() {
-        director.getHandler().postDelayed(new Runnable() {
+        manager.getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 AllJoynManager.presetManager.getAllPresetIDs();
@@ -128,7 +135,7 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
     }
 
     protected void postGetAllBasicSceneIDs() {
-        director.getHandler().postDelayed(new Runnable() {
+        manager.getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 AllJoynManager.sceneManager.getAllSceneIDs();
@@ -137,7 +144,7 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
     }
 
     protected void postGetAllMasterSceneIDs() {
-        director.getHandler().postDelayed(new Runnable() {
+        manager.getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 AllJoynManager.masterSceneManager.getAllMasterSceneIDs();
@@ -147,10 +154,10 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
 
     protected void postSendControllerChanged() {
         // if connection status is ever changed, then prompt for updating the loading information
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                director.getControllerManager().sendLeaderStateChangeEvent();
+                manager.getControllerManager().sendLeaderStateChangeEvent();
             }
         });
     }

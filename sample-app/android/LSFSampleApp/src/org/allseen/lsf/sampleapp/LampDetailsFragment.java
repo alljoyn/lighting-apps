@@ -17,6 +17,10 @@ package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.LampDetails;
 import org.allseen.lsf.LampMake;
+import org.allseen.lsf.helper.manager.AllJoynManager;
+import org.allseen.lsf.helper.model.EmptyLampDetails;
+import org.allseen.lsf.helper.model.LampAbout;
+import org.allseen.lsf.helper.model.LampDataModel;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,7 +35,7 @@ public class LampDetailsFragment extends PageFrameChildFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_lamp_details, container, false);
 
-        LampDataModel lampModel = ((SampleAppActivity)getActivity()).lampModels.get(key);
+        LampDataModel lampModel = ((SampleAppActivity)getActivity()).systemManager.getLampCollectionManager().getModel(key);
         LampAbout lampAbout = lampModel.getAbout();
 
         if (!lampAbout.aboutQuery && lampAbout.aboutPeer != null) {

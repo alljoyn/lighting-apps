@@ -17,6 +17,11 @@ package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.LampDetails;
 import org.allseen.lsf.LampParameters;
+import org.allseen.lsf.helper.model.ColorItemDataModel;
+import org.allseen.lsf.helper.model.ColorStateConverter;
+import org.allseen.lsf.helper.model.EmptyLampDetails;
+import org.allseen.lsf.helper.model.EmptyLampParamaters;
+import org.allseen.lsf.helper.model.LampDataModel;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,17 +36,18 @@ public class LampInfoFragment extends DimmableItemInfoFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
+
+        SampleAppActivity activity = (SampleAppActivity)getActivity();
         String lampID = key;
 
         itemType = SampleAppActivity.Type.LAMP;
-        itemModels = ((SampleAppActivity)getActivity()).lampModels;
 
         ((TextView)statusView.findViewById(R.id.statusLabelName)).setText(R.string.label_lamp_name);
 
         // details
         view.findViewById(R.id.lampInfoTableRow5).setOnClickListener(this);
 
-        updateInfoFields(((SampleAppActivity)getActivity()).lampModels.get(lampID));
+        updateInfoFields(activity.systemManager.getLampCollectionManager().getModel(lampID));
 
         return view;
     }
@@ -81,7 +87,7 @@ public class LampInfoFragment extends DimmableItemInfoFragment {
     @Override
     protected int getColorTempMin() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        LampDataModel lampModel = activity.lampModels.get(key);
+        LampDataModel lampModel = activity.systemManager.getLampCollectionManager().getModel(key);
         LampDetails lampDetails = lampModel != null ? lampModel.getDetails() : EmptyLampDetails.instance;
 
         return lampDetails.getMinTemperature();
@@ -90,7 +96,7 @@ public class LampInfoFragment extends DimmableItemInfoFragment {
     @Override
     protected int getColorTempSpan() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        LampDataModel lampModel = activity.lampModels.get(key);
+        LampDataModel lampModel = activity.systemManager.getLampCollectionManager().getModel(key);
         LampDetails lampDetails = lampModel != null ? lampModel.getDetails() : EmptyLampDetails.instance;
 
         return lampDetails.getMaxTemperature() - lampDetails.getMinTemperature();
@@ -98,14 +104,19 @@ public class LampInfoFragment extends DimmableItemInfoFragment {
 
     @Override
     protected long getColorTempDefault() {
-        return DimmableItemScaleConverter.convertColorTempViewToModel(getColorTempMin());
+        return ColorStateConverter.convertColorTempViewToModel(getColorTempMin());
     }
 
     @Override
     protected void onHeaderClick() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        LampDataModel lampModel = activity.lampModels.get(key);
+        LampDataModel lampModel = activity.systemManager.getLampCollectionManager().getModel(key);
 
-        activity.showItemNameDialog(R.string.title_lamp_rename, new UpdateLampNameAdapter(lampModel, (SampleAppActivity) getActivity()));
+        activity.showItemNameDialog(R.string.title_lamp_rename, new UpdateLampNameAdapter(lampModel, activity));
+    }
+
+    @Override
+    protected ColorItemDataModel getColorItemDataModel(String lampID){
+        return ((SampleAppActivity)getActivity()).systemManager.getLampCollectionManager().getModel(lampID);
     }
 }

@@ -31,6 +31,9 @@
 #import "LSFAllJoynManager.h"
 #import "LSFDispatchQueue.h"
 #import "LSFEnums.h"
+#import "LSFLightingScene.h"
+#import "LSFLamp.h"
+#import "LSFGroup.h"
 
 @interface LSFSceneInfoTableViewController ()
 
@@ -147,9 +150,8 @@
     {
         [self.dataArray removeAllObjects];
 
-        LSFSceneModelContainer *container = [LSFSceneModelContainer getSceneModelContainer];
-        NSMutableDictionary *sceneDictionary = container.sceneContainer;
-        self.sceneModel = [sceneDictionary valueForKey: self.sceneID];
+        NSMutableDictionary *sceneDictionary = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
+        self.sceneModel = [[sceneDictionary valueForKey: self.sceneID] getSceneDataModel];
 
         if (self.sceneModel != nil)
         {
@@ -275,7 +277,7 @@
         {
             //NSLog(@"Removing scene element for SceneDataModel was succesful");
 
-            dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
+            dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
                 LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
                 [ajManager.lsfSceneManager updateSceneWithID: self.sceneModel.theID withScene: [self.sceneModel toScene]];
             });
@@ -344,13 +346,12 @@
     BOOL firstNameAdded = NO;
     NSMutableString *memberString = [[NSMutableString alloc] init];
 
-    LSFLampModelContainer *lampContainer = [LSFLampModelContainer getLampModelContainer];
-    NSMutableDictionary *lampsDictionary = lampContainer.lampContainer;
+    NSMutableDictionary *lampsDictionary = [[LSFLampModelContainer getLampModelContainer] lampContainer];
 
     for (int i = 0; !firstNameAdded && i < sceneElement.members.lamps.count; i++)
     {
         NSString *lampID = [sceneElement.members.lamps objectAtIndex: i];
-        LSFLampModel *lampModel = [lampsDictionary valueForKey: lampID];
+        LSFLampModel *lampModel = [[lampsDictionary valueForKey: lampID] getLampDataModel];
 
         if (lampModel != nil)
         {
@@ -359,13 +360,12 @@
         }
     }
 
-    LSFGroupModelContainer *groupContainer = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groupsDictionary = groupContainer.groupContainer;
+    NSMutableDictionary *groupsDictionary = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
 
     for (int i = 0; !firstNameAdded && i < sceneElement.members.lampGroups.count; i++)
     {
         NSString *groupID = [sceneElement.members.lampGroups objectAtIndex: i];
-        LSFGroupModel *groupModel = [groupsDictionary valueForKey: groupID];
+        LSFGroupModel *groupModel = [[groupsDictionary valueForKey: groupID] getLampGroupDataModel];
 
         if (groupModel != nil)
         {

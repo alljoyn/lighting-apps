@@ -23,7 +23,6 @@
 #import "LSFConstants.h"
 #import "LSFDispatchQueue.h"
 #import "LSFAboutData.h"
-//#import "LSFTabManager.h"
 #import "LSFEnums.h"
 #import "LSFLamp.h"
 
@@ -467,16 +466,12 @@
     if (lamp == nil)
     {
         //NSLog(@"Creating Lamp Model for ID: %@", lampID);
-        //lampModel = [[LSFLampModel alloc] initWithLampID: lampID];
         lamp = [[LSFLamp alloc] initWithLampID: lampID];
-
-        //[lamps setValue: lampModel forKey: lampID];
         [lamps setValue: lamp forKey: lampID];
 
-//        dispatch_async(self.queue, ^{
-//            LSFTabManager *tabManager = [LSFTabManager getTabManager];
-//            [tabManager updateLampsTab];
-//        });
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateLamps" object: self userInfo: nil];
+        });
 
         [self updateLampWithID: lampID withCallbackOperation: LampFound];
     }
@@ -509,10 +504,9 @@
         [lamps removeObjectForKey: lampID];
         [self deleteLampWithID: lampID withLampName: lampName andCallbackOperation: LampDeleted];
 
-//        dispatch_async(self.queue, ^{
-//            LSFTabManager *tabManager = [LSFTabManager getTabManager];
-//            [tabManager updateLampsTab];
-//        });
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateLamps" object: self userInfo: nil];
+        });
     }
     else
     {

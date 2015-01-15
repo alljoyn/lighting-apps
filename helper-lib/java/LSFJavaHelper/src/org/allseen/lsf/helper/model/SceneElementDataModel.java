@@ -28,12 +28,9 @@ public class SceneElementDataModel extends ColorItemDataModel {
 
     public final EffectType type;
     public LampGroup members;
+    public String presetID;
 
-    public SceneElementDataModel() {
-        this(null, "");
-    }
-
-    public SceneElementDataModel(EffectType type, String name) {
+    protected SceneElementDataModel(EffectType type, String name) {
         super(String.valueOf(nextID++), TAG_PREFIX_SCENE_ELEMENT, name);
 
         this.type = type;
@@ -53,5 +50,23 @@ public class SceneElementDataModel extends ColorItemDataModel {
 
         this.type = other.type;
         this.members = new LampGroup(other.members);
+        this.presetID = other.presetID;
+    }
+
+    public boolean containsGroup(String groupID) {
+        String[] childIDs = members.getLampGroups();
+
+        for (String childID : childIDs) {
+            if (childID.equals(groupID)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean containsPreset(String presetID) {
+        //TODO-FIX
+        return false;
     }
 }

@@ -15,8 +15,6 @@
  */
 package org.allseen.lsf.helper.listener;
 
-import java.util.Iterator;
-
 import org.allseen.lsf.helper.facade.MasterScene;
 
 /**
@@ -26,11 +24,11 @@ import org.allseen.lsf.helper.facade.MasterScene;
 public class MasterSceneCollectionAdapter implements MasterSceneCollectionListener {
 
     @Override
-    public void onMasterScenesChanged(Iterator<MasterScene> masterScenes, int count)    { }
+    public void onMasterSceneChanged(MasterScene masterScene)       { }
 
     @Override
-    public void onMasterScenesRemoved(Iterator<MasterScene> masterScenes, int count)    { }
+    public void onMasterSceneRemoved(MasterScene masterScene)       { }
 
     @Override
-    public void onMasterSceneError(LightingItemErrorEvent error)                        { }
+    public void onMasterSceneError(LightingItemErrorEvent error)    { }
 }

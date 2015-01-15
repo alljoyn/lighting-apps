@@ -25,6 +25,10 @@
 
 @property (nonatomic, strong) UITabBarController *tabBarController;
 
+-(void)updateLamps: (NSNotification *)notification;
+-(void)updateGroups: (NSNotification *)notification;
+-(void)updateScenes: (NSNotification *)notification;
+
 @end
 
 @implementation LSFTabManager
@@ -52,44 +56,34 @@
         LSFAppDelegate *appDelegate = (LSFAppDelegate *)[[UIApplication sharedApplication] delegate];
         self.tabBarController = (UITabBarController *)appDelegate.window.rootViewController;
 
-        [self updateLampsTab];
-        [self updateGroupsTab];
-        [self updateScenesTab];
+        [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(updateLamps:) name: @"UpdateLamps" object: nil];
+        [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(updateGroups:) name: @"UpdateGroups" object: nil];
+        [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(updateScenes:) name: @"UpdateScenes" object: nil];
+
+        [self updateLamps: nil];
+        [self updateGroups: nil];
+        [self updateScenes: nil];
     }
 
     return self;
 }
 
--(void)updateLampsTab
+-(void)updateLamps: (NSNotification *)notification
 {
-    LSFLampModelContainer *container = [LSFLampModelContainer getLampModelContainer];
-    NSMutableDictionary *lamps = container.lampContainer;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[self.tabBarController.tabBar.items objectAtIndex: 0] setTitle: [NSString stringWithFormat: @"Lamps (%i)", lamps.count]];
-    });
+    [[self.tabBarController.tabBar.items objectAtIndex: 0] setTitle: [NSString stringWithFormat: @"Lamps (%i)", [[[LSFLampModelContainer getLampModelContainer] lampContainer] count]]];
 }
 
--(void)updateGroupsTab
+-(void)updateGroups: (NSNotification *)notification
 {
-    LSFGroupModelContainer *container = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groups = container.groupContainer;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[self.tabBarController.tabBar.items objectAtIndex: 1] setTitle: [NSString stringWithFormat: @"Groups (%i)", groups.count]];
-    });
+    [[self.tabBarController.tabBar.items objectAtIndex: 1] setTitle: [NSString stringWithFormat: @"Groups (%i)", [[[LSFGroupModelContainer getGroupModelContainer] groupContainer] count]]];
 }
 
--(void)updateScenesTab
+-(void)updateScenes: (NSNotification *)notification
 {
-    LSFSceneModelContainer *sceneContainer = [LSFSceneModelContainer getSceneModelContainer];
-    LSFMasterSceneModelContainer *masterScenesContainer = [LSFMasterSceneModelContainer getMasterSceneModelContainer];
-    NSMutableDictionary *scenes = sceneContainer.sceneContainer;
-    NSMutableDictionary *masterScenes = masterScenesContainer.masterScenesContainer;
+    NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
+    NSMutableDictionary *masterScenes = [[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer];
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[self.tabBarController.tabBar.items objectAtIndex: 2] setTitle: [NSString stringWithFormat: @"Scenes (%i)", (scenes.count + masterScenes.count)]];
-    });
+    [[self.tabBarController.tabBar.items objectAtIndex: 2] setTitle: [NSString stringWithFormat: @"Scenes (%i)", (scenes.count + masterScenes.count)]];
 }
 
 @end

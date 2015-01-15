@@ -16,13 +16,17 @@
 package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.LampState;
+import org.allseen.lsf.helper.model.ColorItemDataModel;
+import org.allseen.lsf.helper.model.PresetDataModel;
+import org.allseen.lsf.helper.model.PulseEffectDataModel;
+import org.allseen.lsf.helper.model.SceneElementDataModel;
 
 public class BasicSceneElementPresetsFragment extends DimmableItemPresetsFragment {
 
     @Override
-    protected DimmableItemDataModel getDimmableItemDataModel() {
+    protected ColorItemDataModel getDimmableItemDataModel() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        DimmableItemDataModel itemModel;
+        ColorItemDataModel itemModel;
 
         if (activity.pendingNoEffectModel != null) {
             itemModel = activity.pendingNoEffectModel;
@@ -62,7 +66,7 @@ public class BasicSceneElementPresetsFragment extends DimmableItemPresetsFragmen
             pulseModel.endPresetID = presetModel.id;
             pulseModel.endState = new LampState(presetModel.state);
         } else {
-            BasicSceneElementDataModel elementModel = (BasicSceneElementDataModel)getDimmableItemDataModel();
+            SceneElementDataModel elementModel = (SceneElementDataModel)getDimmableItemDataModel();
             elementModel.presetID = presetModel.id;
             elementModel.state = new LampState(presetModel.state);
         }

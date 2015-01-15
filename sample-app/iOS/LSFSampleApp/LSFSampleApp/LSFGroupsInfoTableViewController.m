@@ -23,11 +23,13 @@
 #import "LSFDispatchQueue.h"
 #import "LSFAllJoynManager.h"
 #import "LSFConstants.h"
+#import "LSFGroupModel.h"
 #import "LSFGroupModelContainer.h"
 #import "LSFPresetModelContainer.h"
 #import "LSFPresetModel.h"
 #import "LSFUtilityFunctions.h"
 #import "LSFEnums.h"
+#import "LSFGroup.h"
 
 @interface LSFGroupsInfoTableViewController ()
 
@@ -193,9 +195,8 @@
 {
     LSFConstants *constants = [LSFConstants getConstants];
 
-    LSFGroupModelContainer *groupContainer = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groups = groupContainer.groupContainer;
-    self.groupModel = [groups valueForKey: self.groupID];
+    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
+    self.groupModel = [[groups valueForKey: self.groupID] getLampGroupDataModel];
 
     if (self.groupModel == nil)
     {
@@ -221,8 +222,8 @@
     {
         if (self.groupModel.state.onOff && self.groupModel.state.brightness == 0)
         {
-            dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-                LSFLampGroupManager *lampGroupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
+            dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+                LSFLampGroupManager *lampGroupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
                 [lampGroupManager transitionLampGroupID: self.groupModel.theID onOffField: NO];
             });
         }
@@ -457,8 +458,8 @@
     
     LSFConstants *constants = [LSFConstants getConstants];
     
-    dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-        LSFLampGroupManager *lampGroupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
+    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+        LSFLampGroupManager *lampGroupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
         
         if (sender.isOn && self.isDimmable && self.groupModel.state.brightness == 0)
         {
@@ -682,9 +683,9 @@
     //Update timestamp and delay
     [self setTimestampAndDelay];
     
-    dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
+    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
         LSFConstants *constants = [LSFConstants getConstants];
-        LSFLampGroupManager *lampGroupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
+        LSFLampGroupManager *lampGroupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
         unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)value withMax: 100];
         [lampGroupManager transitionLampGroupID: self.groupModel.theID brightnessField: scaledBrightness];
 
@@ -717,9 +718,9 @@
     //Update timestamp and delay
     [self setTimestampAndDelay];
     
-    dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
+    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
         LSFConstants *constants = [LSFConstants getConstants];
-        LSFLampGroupManager *lampGroupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
+        LSFLampGroupManager *lampGroupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
         unsigned int scaledHue = [constants scaleLampStateValue: (uint32_t)value withMax: 360];
         [lampGroupManager transitionLampGroupID: self.groupModel.theID hueField: scaledHue];
     });
@@ -746,9 +747,9 @@
     //Update timestamp and delay
     [self setTimestampAndDelay];
     
-    dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
+    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
         LSFConstants *constants = [LSFConstants getConstants];
-        LSFLampGroupManager *lampGroupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
+        LSFLampGroupManager *lampGroupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
         unsigned int scaledSaturation = [constants scaleLampStateValue: (uint32_t)value withMax: 100];
         [lampGroupManager transitionLampGroupID: self.groupModel.theID saturationField: scaledSaturation];
     });
@@ -775,9 +776,9 @@
     //Update timestamp and delay
     [self setTimestampAndDelay];
     
-    dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
+    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
         LSFConstants *constants = [LSFConstants getConstants];
-        LSFLampGroupManager *lampGroupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
+        LSFLampGroupManager *lampGroupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
         unsigned int scaledColorTemp = [constants scaleColorTemp: (uint32_t)value];
         [lampGroupManager transitionLampGroupID: self.groupModel.theID colorTempField: scaledColorTemp];
     });
@@ -821,8 +822,8 @@
 
     LSFConstants *constants = [LSFConstants getConstants];
 
-    dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-        LSFLampGroupManager *lampGroupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
+    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+        LSFLampGroupManager *lampGroupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
         unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)((UISlider *)sender).value withMax: 100];
         [lampGroupManager transitionLampGroupID: self.groupModel.theID brightnessField: scaledBrightness];
 
@@ -843,8 +844,8 @@
 
     LSFConstants *constants = [LSFConstants getConstants];
 
-    dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-        LSFLampGroupManager *lampGroupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
+    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+        LSFLampGroupManager *lampGroupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
         unsigned int scaledHue = [constants scaleLampStateValue: (uint32_t)((UISlider *)sender).value withMax: 360];
         [lampGroupManager transitionLampGroupID: self.groupModel.theID hueField: scaledHue];
     });
@@ -860,8 +861,8 @@
 
     LSFConstants *constants = [LSFConstants getConstants];
 
-    dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-        LSFLampGroupManager *lampGroupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
+    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+        LSFLampGroupManager *lampGroupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
         unsigned int scaledSaturation = [constants scaleLampStateValue: (uint32_t)((UISlider *)sender).value withMax: 100];
         [lampGroupManager transitionLampGroupID: self.groupModel.theID saturationField: scaledSaturation];
     });
@@ -877,8 +878,8 @@
 
     LSFConstants *constants = [LSFConstants getConstants];
 
-    dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-        LSFLampGroupManager *lampGroupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
+    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+        LSFLampGroupManager *lampGroupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
         unsigned int scaledColorTemp = [constants scaleColorTemp: (uint32_t)((UISlider *)sender).value];
         [lampGroupManager transitionLampGroupID: self.groupModel.theID colorTempField: scaledColorTemp];
     });
@@ -904,7 +905,7 @@
 
 -(void)postDelayedGroupRefresh
 {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(((double)self.delay / 1000.0) * NSEC_PER_SEC)), ([LSFDispatchQueue getDispatchQueue]).queue, ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(((double)self.delay / 1000.0) * NSEC_PER_SEC)), [[LSFDispatchQueue getDispatchQueue] queue], ^{
         LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
         [ajManager.slgmc refreshAllLampGroupIDs];
     });

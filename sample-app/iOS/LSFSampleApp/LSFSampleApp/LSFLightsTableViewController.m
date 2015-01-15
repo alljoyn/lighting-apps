@@ -25,6 +25,7 @@
 #import "LSFUtilityFunctions.h"
 #import "LSFWifiMonitor.h"
 #import "LSFEnums.h"
+#import "LSFLamp.h"
 
 @interface LSFLightsTableViewController ()
 
@@ -60,8 +61,13 @@
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(lampNotificationReceived:) name: @"LampNotification" object: nil];
 
     //Set the content of the default lamp data array
-    LSFLampModelContainer *container = [LSFLampModelContainer getLampModelContainer];
-    self.data = [[NSMutableArray alloc] initWithArray: [container.lampContainer allValues]];
+    self.data = [[NSMutableArray alloc] init];
+
+    for (LSFLamp *lamp in [[[LSFLampModelContainer getLampModelContainer] lampContainer] allValues])
+    {
+        [self.data addObject: [lamp getLampDataModel]];
+    }
+
     [self sortLampsByName];
 
     //Reload the table
@@ -117,9 +123,8 @@
 
 -(void)addNewLamp: (NSString *)lampID
 {
-    LSFLampModelContainer *container = [LSFLampModelContainer getLampModelContainer];
-    NSMutableDictionary *lamps = container.lampContainer;
-    LSFLampModel *model = [lamps valueForKey: lampID];
+    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
+    LSFLampModel *model = [[lamps valueForKey: lampID] getLampDataModel];
 
     NSUInteger existingIndex = [self checkIfLampModelExists: model];
 
@@ -138,9 +143,8 @@
 
 -(void)refreshLamp: (NSString *)lampID
 {
-    LSFLampModelContainer *container = [LSFLampModelContainer getLampModelContainer];
-    NSMutableDictionary *lamps = container.lampContainer;
-    LSFLampModel *model = [lamps valueForKey: lampID];
+    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
+    LSFLampModel *model = [[lamps valueForKey: lampID] getLampDataModel];
 
     if (model != nil)
     {
@@ -159,9 +163,8 @@
 
 -(void)reorderLamp: (NSString *)lampID
 {
-    LSFLampModelContainer *container = [LSFLampModelContainer getLampModelContainer];
-    NSMutableDictionary *lamps = container.lampContainer;
-    LSFLampModel *model = [lamps valueForKey: lampID];
+    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
+    LSFLampModel *model = [[lamps valueForKey: lampID] getLampDataModel];
 
     if (model != nil)
     {
@@ -196,9 +199,8 @@
 
 -(void)removeLamp: (NSString *)lampID
 {
-    LSFLampModelContainer *container = [LSFLampModelContainer getLampModelContainer];
-    NSMutableDictionary *lamps = container.lampContainer;
-    LSFLampModel *model = [lamps valueForKey: lampID];
+    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
+    LSFLampModel *model = [[lamps valueForKey: lampID] getLampDataModel];
 
     if (model == nil)
     {

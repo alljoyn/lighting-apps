@@ -22,7 +22,7 @@ package org.allseen.lsf.helper.model;
 public class TransitionEffectDataModel extends SceneElementDataModel {
     public static String defaultName = "<Loading transition effect info...>";
 
-    protected long duration;
+    public long duration;
 
     public TransitionEffectDataModel() {
         super(EffectType.Transition, defaultName);

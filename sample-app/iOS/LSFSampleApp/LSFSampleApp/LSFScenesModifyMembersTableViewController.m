@@ -24,6 +24,8 @@
 #import "LSFGroupModel.h"
 #import "LSFEnums.h"
 #import "LSFConstants.h"
+#import "LSFLamp.h"
+#import "LSFGroup.h"
 
 @interface LSFScenesModifyMembersTableViewController ()
 
@@ -262,12 +264,11 @@
     int colorTempGroupMin = -1;
     int colorTempGroupMax = -1;
 
-    LSFLampModelContainer *lampContainer = [LSFLampModelContainer getLampModelContainer];
-    NSMutableDictionary *lamps = lampContainer.lampContainer;
+    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
 
     for (NSString *lampID in self.sceneElement.members.lamps)
     {
-        LSFLampModel *lampModel = [lamps valueForKey: lampID];
+        LSFLampModel *lampModel = [[lamps valueForKey: lampID] getLampDataModel];
 
         int colorTempLampMin = lampModel.lampDetails.minTemperature;
         int colorTempLampMax = lampModel.lampDetails.maxTemperature;
@@ -283,16 +284,15 @@
         }
     }
 
-    LSFGroupModelContainer *groupContainer = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groups = groupContainer.groupContainer;
+    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
 
     for (NSString *groupID in self.sceneElement.members.lampGroups)
     {
-        LSFGroupModel *groupModel = [groups valueForKey: groupID];
+        LSFGroupModel *groupModel = [[groups valueForKey: groupID] getLampGroupDataModel];
 
         for (NSString *lampID in groupModel.lamps)
         {
-            LSFLampModel *lampModel = [lamps valueForKey: lampID];
+            LSFLampModel *lampModel = [[lamps valueForKey: lampID] getLampDataModel];
 
             int colorTempLampMin = lampModel.lampDetails.minTemperature;
             int colorTempLampMax = lampModel.lampDetails.maxTemperature;

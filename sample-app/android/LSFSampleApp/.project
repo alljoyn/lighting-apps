@@ -45,12 +45,32 @@
 		<link>
 			<name>links/jar/AllJoyn/alljoyn_about.jar</name>
 			<type>1</type>
-			<locationURI>ALLJOYN_HOME/about/jar/alljoyn_about.jar</locationURI>
+			<locationURI>ALLJOYN_HOME/java/jar/alljoyn_about.jar</locationURI>
 		</link>
 		<link>
 			<name>links/jar/android/android-support-v4.jar</name>
 			<type>1</type>
 			<locationURI>ANDROID_HOME/extras/android/support/v4/android-support-v4.jar</locationURI>
+		</link>
+		<link>
+			<name>links/jar/lsf/lsfjava.jar</name>
+			<type>1</type>
+			<locationURI>LSF_JAVA_HOME/bin/lsfjava.jar</locationURI>
+		</link>
+		<link>
+			<name>links/jar/lsf/lsfjavahelper.jar</name>
+			<type>1</type>
+			<locationURI>LSF_JAVA_HELPER_HOME/bin/lsfjavahelper.jar</locationURI>
+		</link>
+		<link>
+			<name>links/jni/AllJoyn/lib/armeabi/liballjoyn_java.so</name>
+			<type>1</type>
+			<locationURI>ALLJOYN_HOME/java/lib/liballjoyn_java.so</locationURI>
+		</link>
+		<link>
+			<name>links/jni/android/lib/armeabi/libgnustl_shared.so</name>
+			<type>1</type>
+			<locationURI>LSF_JAVA_HOME/libs/armeabi/libgnustl_shared.so</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

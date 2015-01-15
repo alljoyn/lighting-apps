@@ -15,8 +15,6 @@
  */
 package org.allseen.lsf.helper.listener;
 
-import java.util.Iterator;
-
 import org.allseen.lsf.helper.facade.Lamp;
 
 /**
@@ -24,7 +22,7 @@ import org.allseen.lsf.helper.facade.Lamp;
  * in subsequent releases of the SDK</b>.
  */
 public interface LampCollectionListener {
-    public void onLampsChanged(Iterator<Lamp> lamps, int count);
-    public void onLampsRemoved(Iterator<Lamp> lamps, int count);
+    public void onLampChanged(Lamp lamp);
+    public void onLampRemoved(Lamp lamp);
     public void onLampError(LightingItemErrorEvent error);
 }

@@ -15,6 +15,11 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import java.util.Iterator;
+
+import org.allseen.lsf.helper.facade.MasterScene;
+import org.allseen.lsf.helper.model.MasterSceneDataModel;
+
 import android.util.Log;
 
 public class MasterSceneEnterNameFragment extends EnterNameFragment {
@@ -46,11 +51,14 @@ public class MasterSceneEnterNameFragment extends EnterNameFragment {
 
     @Override
     protected boolean duplicateName(String name) {
-        for (MasterSceneDataModel data : ((SampleAppActivity) this.getActivity()).masterSceneModels.values()) {
-            if (data.getName().equals(name)) {
+        Iterator<MasterScene> i = ((SampleAppActivity)getActivity()).systemManager.getMasterSceneCollectionManager().getMasterSceneIterator();
+
+        while (i.hasNext()) {
+            if (i.next().getMasterSceneDataModel().getName().equals(name)) {
                 return true;
             }
         }
+
         return false;
     }
 }

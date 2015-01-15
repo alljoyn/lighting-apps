@@ -15,9 +15,9 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import java.util.Map;
-
 import org.allseen.lsf.LampState;
+import org.allseen.lsf.helper.model.ColorItemDataModel;
+import org.allseen.lsf.helper.model.LampCapabilities;
 
 import android.graphics.PorterDuff.Mode;
 import android.os.Bundle;
@@ -34,7 +34,6 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
     public static int defaultIndicatorColor = 00000000;
 
     protected SampleAppActivity.Type itemType = SampleAppActivity.Type.LAMP;
-    protected Map<String, ? extends DimmableItemDataModel> itemModels;
     protected LampStateViewAdapter stateAdapter;
 
     protected View statusView;
@@ -101,7 +100,7 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         }
     }
 
-    public void updateInfoFields(DimmableItemDataModel itemModel) {
+    public void updateInfoFields(ColorItemDataModel itemModel) {
         if (itemModel.id.equals(key)) {
             if (itemModel.uniformity.power) {
                 setImageButtonBackgroundResource(statusView, R.id.statusButtonPower, itemModel.state.getOnOff() ? R.drawable.power_button_on : R.drawable.power_button_off);
@@ -119,15 +118,15 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
             // presets button
             updatePresetFields(itemModel);
 
-            setColorIndicator(stateAdapter.stateView, itemModel.state, itemModel.capability, getColorTempDefault());
+            setColorIndicator(stateAdapter.stateView, itemModel.state, itemModel.getCapability(), getColorTempDefault());
         }
     }
 
     public void updatePresetFields() {
-        updatePresetFields(itemModels.get(key));
+        updatePresetFields(getColorItemDataModel(key));
     }
 
-    public void updatePresetFields(DimmableItemDataModel itemModel) {
+    public void updatePresetFields(ColorItemDataModel itemModel) {
         updatePresetFields(itemModel != null ? itemModel.state : null, stateAdapter);
     }
 
@@ -135,8 +134,8 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         itemAdapter.setPreset(Util.createPresetNamesString((SampleAppActivity)getActivity(), itemState));
     }
 
-    public void setColorIndicator(View parentStateView, LampState lampState, CapabilityData capability, long modelColorTempDefault) {
-        int color = lampState != null ? DimmableItemScaleConverter.getColor(lampState, capability, modelColorTempDefault) : defaultIndicatorColor;
+    public void setColorIndicator(View parentStateView, LampState lampState, LampCapabilities capability, long modelColorTempDefault) {
+        int color = lampState != null ? ViewColor.calculate(lampState, capability, modelColorTempDefault) : defaultIndicatorColor;
 
         parentStateView.findViewById(R.id.stateRowColorIndicator).getBackground().setColorFilter(color, Mode.MULTIPLY);
     }
@@ -146,4 +145,5 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
     protected abstract int getColorTempSpan();
     protected abstract long getColorTempDefault();
     protected abstract void onHeaderClick();
+    protected abstract ColorItemDataModel getColorItemDataModel(String itemID);
 }

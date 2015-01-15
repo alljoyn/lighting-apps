@@ -15,7 +15,6 @@
  ******************************************************************************/
 
 #import <UIKit/UIKit.h>
-#import "LSFGroupModel.h"
 
 @interface LSFGroupsInfoTableViewController : UITableViewController
 

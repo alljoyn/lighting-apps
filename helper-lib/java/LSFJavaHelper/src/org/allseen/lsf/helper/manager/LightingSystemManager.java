@@ -30,6 +30,7 @@ import org.allseen.lsf.helper.callback.HelperPresetManagerCallback;
 import org.allseen.lsf.helper.callback.HelperSceneManagerCallback;
 import org.allseen.lsf.helper.listener.AllJoynListener;
 import org.allseen.lsf.helper.listener.ControllerAdapter;
+import org.allseen.lsf.helper.model.AllLampsLampGroup;
 import org.allseen.lsf.helper.model.ControllerDataModel;
 
 import android.os.Handler;
@@ -68,6 +69,8 @@ public class LightingSystemManager {
     public LightingSystemManager(Handler handler) {
         this.handler = handler;
 
+        AllLampsLampGroup.instance.setLightingSystemManager(this);
+
         controllerClientCB = new HelperControllerClientCallback(this);
         controllerServiceManagerCB = new HelperControllerServiceManagerCallback(this);
         lampManagerCB = new HelperLampManagerCallback(this);
@@ -76,43 +79,54 @@ public class LightingSystemManager {
         sceneManagerCB = new HelperSceneManagerCallback(this);
         masterSceneManagerCB = new HelperMasterSceneManagerCallback(this);
 
-//TODO-IMPL        garbageCollector = new GarbageCollector(this, SampleAppActivity.POLLING_DELAY, SampleAppActivity.LAMP_EXPIRATION);
-
         lampCollectionManager = new LampCollectionManager(this);
         groupCollectionManager = new GroupCollectionManager(this);
         presetCollectionManager = new PresetCollectionManager(this);
         sceneCollectionManager = new SceneCollectionManager(this);
         masterSceneCollectionManager = new MasterSceneCollectionManager(this);
         controllerManager = new ControllerManager(this);
+
+        controllerManager.addListener(new ControllerAdapter() {
+            @Override
+            public void onLeaderModelChange(ControllerDataModel leaderModel) {
+                if (!leaderModel.connected) {
+                    clearModels();
+                }
+            }
+        });
     }
 
-    public void start(FragmentManager fragmentManager) {
+    public void init(FragmentManager fragmentManager, AllJoynListener alljoynListener) {
         AboutManager aboutManager = new AboutManager(this);
 
         AllJoynManager.init(
-                fragmentManager,
-                controllerClientCB,
-                controllerServiceManagerCB,
-                lampManagerCB,
-                groupManagerCB,
-                presetManagerCB,
-                sceneManagerCB,
-                masterSceneManagerCB,
-                aboutManager,
-                new AllJoynListener() {
-                    @Override
-                    public void onAllJoynInitialized() {
-                        //TODO-FIX: We're supposed to make sure the network is available
-                        //          before calling start() here
-                        AllJoynManager.start(handler);
-                    }
-                });
-
-//TODO-IMPL            garbageCollector.start();
+            fragmentManager,
+            controllerClientCB,
+            controllerServiceManagerCB,
+            lampManagerCB,
+            groupManagerCB,
+            presetManagerCB,
+            sceneManagerCB,
+            masterSceneManagerCB,
+            aboutManager,
+            alljoynListener);
     }
 
-    public void stop(FragmentManager fragmentManager) {
+    public void start() {
+        clearModels();
+
+        AllJoynManager.start(handler);
+    }
+
+    public void stop() {
+        clearModels();
+
         AllJoynManager.stop(handler);
+    }
+
+    public void destroy(FragmentManager fragmentManager) {
+        stop();
+
         AllJoynManager.destroy(fragmentManager);
     }
 
@@ -178,8 +192,13 @@ public class LightingSystemManager {
         });
     }
 
-    public boolean isLampExpired(String lampID) {
-        //TODO-IMPL
-        return false;
+    private void clearModels() {
+        lampManagerCB.clear();
+
+        lampCollectionManager.removeAllAdapters();
+        groupCollectionManager.removeAllAdapters();
+        presetCollectionManager.removeAllAdapters();
+        sceneCollectionManager.removeAllAdapters();
+        masterSceneCollectionManager.removeAllAdapters();
     }
 }

@@ -15,7 +15,6 @@
  ******************************************************************************/
 
 #import <UIKit/UIKit.h>
-#import "LSFLampModel.h"
 
 @interface LSFLightsCell : UITableViewCell
 

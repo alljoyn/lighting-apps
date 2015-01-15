@@ -36,9 +36,13 @@ public final class Scene extends LightingItem {
      * @param sceneID The ID of the scene
      */
     public Scene(String sceneID) {
+        this(new SceneDataModel(sceneID));
+    }
+
+    public Scene(SceneDataModel sceneModel) {
         super();
 
-        sceneModel = new SceneDataModel(sceneID);
+        this.sceneModel = sceneModel;
     }
 
     /**

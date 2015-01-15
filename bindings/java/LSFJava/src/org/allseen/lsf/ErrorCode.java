@@ -24,6 +24,7 @@ public enum ErrorCode {
     ERR_IRRECOVERABLE,
     ERR_DISCONNECTED_FROM_BUS,
     ERR_CONTROLLER_CLIENT_EXITING,
+    ERR_MESSAGE_WITH_INVALID_ARGS,
     ERROR_CODE_LAST;
 
     /** Static lookup, used by the native code */

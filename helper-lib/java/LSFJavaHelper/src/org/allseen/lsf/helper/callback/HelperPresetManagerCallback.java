@@ -27,18 +27,18 @@ import org.allseen.lsf.helper.model.PresetDataModel;
  * in subsequent releases of the SDK</b>.
  */
 public class HelperPresetManagerCallback extends PresetManagerCallback {
-    protected LightingSystemManager director;
+    protected LightingSystemManager manager;
 
-    public HelperPresetManagerCallback(LightingSystemManager director) {
+    public HelperPresetManagerCallback(LightingSystemManager manager) {
         super();
 
-        this.director = director;
+        this.manager = manager;
     }
 
     @Override
     public void getPresetReplyCB(ResponseCode responseCode, String presetID, LampState preset) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getPresetCollectionManager().sendErrorEvent("getPresetReplyCB", responseCode, presetID);
+            manager.getPresetCollectionManager().sendErrorEvent("getPresetReplyCB", responseCode, presetID);
         }
 
         postUpdatePreset(presetID, preset);
@@ -47,7 +47,7 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
     @Override
     public void getAllPresetIDsReplyCB(ResponseCode responseCode, String[] presetIDs) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getPresetCollectionManager().sendErrorEvent("getAllPresetIDsReplyCB", responseCode);
+            manager.getPresetCollectionManager().sendErrorEvent("getAllPresetIDsReplyCB", responseCode);
         }
 
         for (final String presetID : presetIDs) {
@@ -58,7 +58,7 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
     @Override
     public void getPresetNameReplyCB(ResponseCode responseCode, String presetID, String language, String presetName) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getPresetCollectionManager().sendErrorEvent("getPresetNameReplyCB", responseCode, presetID);
+            manager.getPresetCollectionManager().sendErrorEvent("getPresetNameReplyCB", responseCode, presetID);
         }
 
         postUpdatePresetName(presetID, presetName);
@@ -67,7 +67,7 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
     @Override
     public void setPresetNameReplyCB(ResponseCode responseCode, String presetID, String language) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getPresetCollectionManager().sendErrorEvent("setPresetNameReplyCB", responseCode, presetID);
+            manager.getPresetCollectionManager().sendErrorEvent("setPresetNameReplyCB", responseCode, presetID);
         }
 
         // Currently nothing to do
@@ -75,13 +75,13 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
 
     @Override
     public void presetsNameChangedCB(final String[] presetIDs) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
                 boolean containsNewIDs = false;
 
                 for (final String presetID : presetIDs) {
-                    if (director.getPresetCollectionManager().hasID(presetID)) {
+                    if (manager.getPresetCollectionManager().hasID(presetID)) {
                         AllJoynManager.presetManager.getPresetName(presetID, LightingSystemManager.LANGUAGE);
                     } else {
                         containsNewIDs = true;
@@ -98,7 +98,7 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
     @Override
     public void createPresetReplyCB(ResponseCode responseCode, String presetID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getPresetCollectionManager().sendErrorEvent("createPresetReplyCB", responseCode, presetID);
+            manager.getPresetCollectionManager().sendErrorEvent("createPresetReplyCB", responseCode, presetID);
         }
 
         // Currently nothing to do
@@ -112,7 +112,7 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
     @Override
     public void updatePresetReplyCB(ResponseCode responseCode, String presetID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getPresetCollectionManager().sendErrorEvent("updatePresetReplyCB", responseCode, presetID);
+            manager.getPresetCollectionManager().sendErrorEvent("updatePresetReplyCB", responseCode, presetID);
         }
 
         // Currently nothing to do
@@ -128,7 +128,7 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
     @Override
     public void deletePresetReplyCB(ResponseCode responseCode, String presetID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getPresetCollectionManager().sendErrorEvent("deletePresetReplyCB", responseCode, presetID);
+            manager.getPresetCollectionManager().sendErrorEvent("deletePresetReplyCB", responseCode, presetID);
         }
 
         // Currently nothing to do
@@ -142,7 +142,7 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
     @Override
     public void getDefaultLampStateReplyCB(ResponseCode responseCode, LampState defaultLampState) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getPresetCollectionManager().sendErrorEvent("getDefaultLampStateReplyCB", responseCode);
+            manager.getPresetCollectionManager().sendErrorEvent("getDefaultLampStateReplyCB", responseCode);
         }
 
         // Currently nothing to do
@@ -151,7 +151,7 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
     @Override
     public void setDefaultLampStateReplyCB(ResponseCode responseCode) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            director.getPresetCollectionManager().sendErrorEvent("setDefaultLampStateReplyCB", responseCode);
+            manager.getPresetCollectionManager().sendErrorEvent("setDefaultLampStateReplyCB", responseCode);
         }
 
         // Currently nothing to do
@@ -163,10 +163,10 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
     }
 
     protected void postProcessPresetID(final String presetID) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                if (!director.getPresetCollectionManager().hasID(presetID)) {
+                if (!manager.getPresetCollectionManager().hasID(presetID)) {
                     postUpdatePresetID(presetID);
                     AllJoynManager.presetManager.getPresetName(presetID, LightingSystemManager.LANGUAGE);
                     AllJoynManager.presetManager.getPreset(presetID);
@@ -176,11 +176,11 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
     }
 
     protected void postUpdatePresetID(final String presetID) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                if (!director.getPresetCollectionManager().hasID(presetID)) {
-                    director.getPresetCollectionManager().addPreset(presetID);
+                if (!manager.getPresetCollectionManager().hasID(presetID)) {
+                    manager.getPresetCollectionManager().addPreset(presetID);
                 }
             }
         });
@@ -189,10 +189,10 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
     }
 
     protected void postUpdatePresetName(final String presetID, final String presetName) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                PresetDataModel presetModel = director.getPresetCollectionManager().getModel(presetID);
+                PresetDataModel presetModel = manager.getPresetCollectionManager().getModel(presetID);
 
                 if (presetModel != null) {
                     presetModel.setName(presetName);
@@ -204,10 +204,10 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
     }
 
     protected void postUpdatePreset(final String presetID, final LampState preset) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                PresetDataModel presetModel = director.getPresetCollectionManager().getModel(presetID);
+                PresetDataModel presetModel = manager.getPresetCollectionManager().getModel(presetID);
 
                 if (presetModel != null) {
                     presetModel.state = preset;
@@ -219,21 +219,21 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
     }
 
     protected void postDeletePresets(final String[] presetIDs) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
                 for (String presetID : presetIDs) {
-                    director.getPresetCollectionManager().removePreset(presetID);
+                    manager.getPresetCollectionManager().removePreset(presetID);
                 }
             }
         });
     }
 
     protected void postSendPresetChanged(final String presetID) {
-        director.getHandler().post(new Runnable() {
+        manager.getHandler().post(new Runnable() {
             @Override
             public void run() {
-                director.getPresetCollectionManager().sendChangedEvent(presetID);
+                manager.getPresetCollectionManager().sendChangedEvent(presetID);
             }
         });
     }

@@ -156,10 +156,10 @@
         self.doneButtonPressed = YES;
         [textField resignFirstResponder];
 
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
             LSFLampState *scaledState = [[LSFLampState alloc] initWithOnOff: self.lampState.onOff brightness: self.lampState.brightness hue: self.lampState.hue saturation: self.lampState.saturation colorTemp: self.lampState.colorTemp];
 
-            LSFPresetManager *presetManager = ([LSFAllJoynManager getAllJoynManager]).lsfPresetManager;
+            LSFPresetManager *presetManager = [[LSFAllJoynManager getAllJoynManager] lsfPresetManager];
             [presetManager createPresetWithState: scaledState andPresetName: self.presetNameTextField.text];
         });
 
@@ -210,10 +210,10 @@
         self.doneButtonPressed = YES;
         [self.presetNameTextField resignFirstResponder];
 
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
             LSFLampState *scaledState = [[LSFLampState alloc] initWithOnOff: self.lampState.onOff brightness: self.lampState.brightness hue: self.lampState.hue saturation: self.lampState.saturation colorTemp: self.lampState.colorTemp];
 
-            LSFPresetManager *presetManager = ([LSFAllJoynManager getAllJoynManager]).lsfPresetManager;
+            LSFPresetManager *presetManager = [[LSFAllJoynManager getAllJoynManager] lsfPresetManager];
             [presetManager createPresetWithState: scaledState andPresetName: self.presetNameTextField.text];
         });
     }
@@ -224,8 +224,7 @@
  */
 -(BOOL)checkForDuplicateName: (NSString *)name
 {
-    LSFPresetModelContainer *container = [LSFPresetModelContainer getPresetModelContainer];
-    NSDictionary *presets = container.presetContainer;
+    NSDictionary *presets = [[LSFPresetModelContainer getPresetModelContainer] presetContainer];
 
     for (LSFPresetModel *model in [presets allValues])
     {

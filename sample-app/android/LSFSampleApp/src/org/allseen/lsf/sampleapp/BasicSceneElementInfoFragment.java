@@ -15,10 +15,15 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import java.util.Map;
-
+import java.util.Iterator;
 import org.allseen.lsf.LampState;
 import org.allseen.lsf.PresetPulseEffect;
+import org.allseen.lsf.helper.facade.Preset;
+import org.allseen.lsf.helper.model.ColorItemDataModel;
+import org.allseen.lsf.helper.model.ColorStateConverter;
+import org.allseen.lsf.helper.model.LampCapabilities;
+import org.allseen.lsf.helper.model.PresetDataModel;
+import org.allseen.lsf.helper.model.SceneElementDataModel;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -33,14 +38,14 @@ public abstract class BasicSceneElementInfoFragment extends DimmableItemInfoFrag
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        BasicSceneElementDataModel pendingModel = getPendingSceneElementDataModel();
+        SceneElementDataModel pendingModel = getPendingSceneElementDataModel();
 
-        checkInitialColorTemp(pendingModel, DimmableItemScaleConverter.convertColorTempViewToModel(activity.pendingBasicSceneElementMembersMinColorTemp));
+        checkInitialColorTemp(pendingModel, ColorStateConverter.convertColorTempViewToModel(activity.pendingBasicSceneElementMembersMinColorTemp));
 
         View root = super.onCreateView(inflater, container, savedInstanceState);
 
         if (pendingModel.presetID != null && !pendingModel.presetID.equals(PresetPulseEffect.PRESET_ID_CURRENT_STATE)) {
-            PresetDataModel presetModel = activity.presetModels.get(pendingModel.presetID);
+            PresetDataModel presetModel = activity.systemManager.getPresetCollectionManager().getModel(pendingModel.presetID);
 
             if (presetModel != null) {
                 pendingModel.state = presetModel.state;
@@ -75,6 +80,11 @@ public abstract class BasicSceneElementInfoFragment extends DimmableItemInfoFrag
         // TODO-FIX dialog to change effect type here
     }
 
+    @Override
+    protected ColorItemDataModel getColorItemDataModel(String itemID) {
+        return getPendingSceneElementDataModel();
+    }
+
     // Override parent to update the pending lamp state rather than call the activity
     @Override
     public void setField(SeekBar seekBar) {
@@ -82,17 +92,17 @@ public abstract class BasicSceneElementInfoFragment extends DimmableItemInfoFrag
         int seekBarProgress = seekBar.getProgress();
         Object seekBarTag = seekBar.getTag();
         LampState pendingState = getPendingSceneElementState(seekBarTag);
-        CapabilityData capability = getPendingSceneElementDataModel().capability;
+        LampCapabilities capability = getPendingSceneElementDataModel().getCapability();
         int colorTempMin = getColorTempMin();
 
         if (seekBarID == R.id.stateSliderBrightness) {
-            pendingState.setBrightness(DimmableItemScaleConverter.convertBrightnessViewToModel(seekBarProgress));
+            pendingState.setBrightness(ColorStateConverter.convertBrightnessViewToModel(seekBarProgress));
         } else if (seekBarID == R.id.stateSliderHue) {
-            pendingState.setHue(DimmableItemScaleConverter.convertHueViewToModel(seekBarProgress));
+            pendingState.setHue(ColorStateConverter.convertHueViewToModel(seekBarProgress));
         } else if (seekBarID == R.id.stateSliderSaturation) {
-            pendingState.setSaturation(DimmableItemScaleConverter.convertSaturationViewToModel(seekBarProgress));
+            pendingState.setSaturation(ColorStateConverter.convertSaturationViewToModel(seekBarProgress));
         } else if (seekBarID == R.id.stateSliderColorTemp) {
-            pendingState.setColorTemp(DimmableItemScaleConverter.convertColorTempViewToModel(seekBarProgress + colorTempMin));
+            pendingState.setColorTemp(ColorStateConverter.convertColorTempViewToModel(seekBarProgress + colorTempMin));
         }
 
         updatePresetFields(pendingState, getLampStateViewAdapter(seekBarTag));
@@ -119,9 +129,11 @@ public abstract class BasicSceneElementInfoFragment extends DimmableItemInfoFrag
     }
 
     protected String getMatchingPreset(LampState itemState) {
-        Map<String, PresetDataModel> presetModels = ((SampleAppActivity)getActivity()).presetModels;
+        Iterator<Preset> i = ((SampleAppActivity)getActivity()).systemManager.getPresetCollectionManager().getPresetIterator();
 
-        for (PresetDataModel presetModel : presetModels.values()) {
+        while(i.hasNext()) {
+            PresetDataModel presetModel = i.next().getPresetDataModel();
+
             if (presetModel.stateEquals(itemState)) {
                 return presetModel.id;
             }
@@ -133,10 +145,10 @@ public abstract class BasicSceneElementInfoFragment extends DimmableItemInfoFrag
     @Override
     public void onActionDone() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        BasicSceneElementDataModel elementModel = getPendingSceneElementDataModel();
+        SceneElementDataModel elementModel = getPendingSceneElementDataModel();
 
         elementModel.members = activity.pendingBasicSceneElementMembers;
-        elementModel.capability = activity.pendingBasicSceneElementCapability;
+        elementModel.setCapability(activity.pendingBasicSceneElementCapability);
 
         updatePendingSceneElement();
 
@@ -171,12 +183,12 @@ public abstract class BasicSceneElementInfoFragment extends DimmableItemInfoFrag
         return activity.pendingBasicSceneElementColorTempAverager.getAverage();
     }
 
-    protected void checkInitialColorTemp(BasicSceneElementDataModel pendingModel, long modelColorTempMin) {
+    protected void checkInitialColorTemp(SceneElementDataModel pendingModel, long modelColorTempMin) {
         if (pendingModel.state.getColorTemp() < modelColorTempMin) {
             pendingModel.state.setColorTemp(modelColorTempMin);
         }
     }
 
-    protected abstract BasicSceneElementDataModel getPendingSceneElementDataModel();
+    protected abstract SceneElementDataModel getPendingSceneElementDataModel();
     protected abstract void updatePendingSceneElement();
 }

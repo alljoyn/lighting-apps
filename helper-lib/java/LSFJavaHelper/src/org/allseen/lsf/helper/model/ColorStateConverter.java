@@ -24,13 +24,17 @@ import org.allseen.lsf.LampState;
 public class ColorStateConverter {
     public static final long UINT32_MAX = 0xffffffffL;
     public static final int VIEW_HUE_MIN = 0;
-    public static final int VIEW_HUE_SPAN = 360;
+    public static final int VIEW_HUE_MAX = 360;
+    public static final int VIEW_HUE_SPAN = VIEW_HUE_MAX - VIEW_HUE_MIN;
     public static final int VIEW_SATURATION_MIN = 0;
-    public static final int VIEW_SATURATION_SPAN = 100;
+    public static final int VIEW_SATURATION_MAX = 100;
+    public static final int VIEW_SATURATION_SPAN = VIEW_SATURATION_MAX - VIEW_SATURATION_MIN;
     public static final int VIEW_BRIGHTNESS_MIN = 0;
-    public static final int VIEW_BRIGHTNESS_SPAN = 100;
-    public static final int VIEW_COLORTEMP_MIN = 2700;
-    public static final int VIEW_COLORTEMP_SPAN = 9000 - VIEW_COLORTEMP_MIN;
+    public static final int VIEW_BRIGHTNESS_MAX = 100;
+    public static final int VIEW_BRIGHTNESS_SPAN = VIEW_BRIGHTNESS_MAX - VIEW_BRIGHTNESS_MIN;
+    public static final int VIEW_COLORTEMP_MIN = 1000;
+    public static final int VIEW_COLORTEMP_MAX = 20000;
+    public static final int VIEW_COLORTEMP_SPAN = VIEW_COLORTEMP_MAX - VIEW_COLORTEMP_MIN;
 
     public static int convertHueModelToView(long modelHue) {
         return convertModelToView(modelHue, VIEW_HUE_MIN, VIEW_HUE_SPAN);

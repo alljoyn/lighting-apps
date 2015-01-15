@@ -15,6 +15,12 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import java.util.Iterator;
+
+import org.allseen.lsf.helper.manager.AllJoynManager;
+import org.allseen.lsf.helper.model.MasterSceneDataModel;
+import org.allseen.lsf.helper.model.SceneDataModel;
+
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -36,13 +42,18 @@ public class ScenesTableFragment extends DetailedItemTableFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
+        SampleAppActivity activity = (SampleAppActivity) getActivity();
 
-        for (String masterSceneID : ((SampleAppActivity) getActivity()).masterSceneModels.keySet()) {
-            addElement(masterSceneID);
+        Iterator<String> masterSceneIterator = activity.systemManager.getMasterSceneCollectionManager().getIDIterator();
+
+        while (masterSceneIterator.hasNext()) {
+            addElement(masterSceneIterator.next());
         }
 
-        for (String basicSceneID : ((SampleAppActivity) getActivity()).basicSceneModels.keySet()) {
-            addElement(basicSceneID);
+        Iterator<String> sceneIterator = activity.systemManager.getSceneCollectionManager().getIDIterator();
+
+        while (sceneIterator.hasNext()) {
+            addElement(sceneIterator.next());
         }
 
         return root;
@@ -57,8 +68,8 @@ public class ScenesTableFragment extends DetailedItemTableFragment {
     @Override
     public void addElement(String id) {
         SampleAppActivity activity = (SampleAppActivity) getActivity();
-        BasicSceneDataModel basicSceneModel = activity.basicSceneModels.get(id);
-        MasterSceneDataModel masterSceneModel = activity.masterSceneModels.get(id);
+        SceneDataModel basicSceneModel = activity.systemManager.getSceneCollectionManager().getModel(id);
+        MasterSceneDataModel masterSceneModel = activity.systemManager.getMasterSceneCollectionManager().getModel(id);
 
         if (basicSceneModel != null) {
             String details = Util.createMemberNamesString(activity, basicSceneModel, ", ");
@@ -75,7 +86,7 @@ public class ScenesTableFragment extends DetailedItemTableFragment {
     public void updateLoading() {
         super.updateLoading();
 
-        if (AllJoynManager.controllerConnected && ((SampleAppActivity) getActivity()).basicSceneModels.size() == 0) {
+        if (AllJoynManager.controllerConnected && ((SampleAppActivity) getActivity()).systemManager.getSceneCollectionManager().size() == 0) {
             // connected but no scenes found; display create scenes screen, hide the scroll table
             layout.findViewById(R.id.scrollLoadingView).setVisibility(View.VISIBLE);
             layout.findViewById(R.id.scrollScrollView).setVisibility(View.GONE);

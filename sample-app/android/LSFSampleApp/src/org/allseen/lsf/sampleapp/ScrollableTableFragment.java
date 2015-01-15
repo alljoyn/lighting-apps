@@ -15,6 +15,8 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import org.allseen.lsf.helper.manager.AllJoynManager;
+
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;

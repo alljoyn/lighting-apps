@@ -15,6 +15,7 @@
  */
 package org.allseen.lsf.helper.manager;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 import org.allseen.lsf.helper.facade.Preset;
@@ -52,18 +53,22 @@ public class PresetCollectionManager extends LightingItemCollectionManager<Prese
         return getAdapters().iterator();
     }
 
+    public Collection<Preset> removePresets() {
+        return removeAllAdapters();
+    }
+
     public Preset removePreset(String presetID) {
         return removeAdapter(presetID);
     }
 
     @Override
-    protected void sendChangedEvent(PresetCollectionListener listener, Iterator<Preset> presets, int count) {
-        listener.onPresetsChanged(presets, count);
+    protected void sendChangedEvent(PresetCollectionListener listener, Preset preset) {
+        listener.onPresetChanged(preset);
     }
 
     @Override
-    protected void sendRemovedEvent(PresetCollectionListener listener, Iterator<Preset> presets, int count) {
-        listener.onPresetsRemoved(presets, count);
+    protected void sendRemovedEvent(PresetCollectionListener listener, Preset preset) {
+        listener.onPresetRemoved(preset);
     }
 
     @Override

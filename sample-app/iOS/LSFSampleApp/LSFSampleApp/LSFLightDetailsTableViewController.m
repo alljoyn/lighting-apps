@@ -21,6 +21,7 @@
 #import "LSFLampModel.h"
 #import "LSFAllJoynManager.h"
 #import "LSFEnums.h"
+#import "LSFLamp.h"
 
 @interface LSFLightDetailsTableViewController ()
 
@@ -65,9 +66,8 @@
     [self showLoadingAlert:@"Fetching lamp details..."];
 
     [[LSFAllJoynManager getAllJoynManager] getAboutDataForLampID: self.lampID];
-    LSFLampModelContainer *container = [LSFLampModelContainer getLampModelContainer];
-    NSMutableDictionary *lamps = container.lampContainer;
-    self.lampModel = [lamps valueForKey: self.lampID];
+    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
+    self.lampModel = [[lamps valueForKey: self.lampID] getLampDataModel];
     [self.tableView reloadData];
 
     [self dismissLoadingAlert];

@@ -33,22 +33,37 @@ public class HelperControllerServiceManagerCallback extends ControllerServiceMan
     }
 
     @Override
-    public void getControllerServiceVersionReplyCB(long version) {
-        //TODO-IMPL
+    public void getControllerServiceVersionReplyCB(final long version) {
+        manager.getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                manager.getControllerManager().getLeadControllerModel().version = version;
+                postSendControllerChanged();
+            }
+        });
     }
 
     @Override
     public void lightingResetControllerServiceReplyCB(ResponseCode responseCode) {
-        //TODO-IMPL
+        // Currently nothing to do
     }
 
     @Override
     public void controllerServiceLightingResetCB() {
-        //TODO-IMPL
+        // Currently nothing to do
     }
 
     @Override
     public void controllerServiceNameChangedCB(String controllerServiceDeviceID, String controllerServiceName) {
         // This is currently handled by the AboutManager
+    }
+
+    protected void postSendControllerChanged() {
+        manager.getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                manager.getControllerManager().sendLeaderStateChangeEvent();
+            }
+        });
     }
 }

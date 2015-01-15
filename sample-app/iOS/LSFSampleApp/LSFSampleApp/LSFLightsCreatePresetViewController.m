@@ -149,7 +149,7 @@
         self.doneButtonPressed = YES;
         [textField resignFirstResponder];
         
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
             LSFConstants *constants = [LSFConstants getConstants];
             
             unsigned int scaledBrightness = [constants scaleLampStateValue: self.lampState.brightness withMax: 100];
@@ -159,7 +159,7 @@
             
             LSFLampState *scaledState = [[LSFLampState alloc] initWithOnOff: self.lampState.onOff brightness: scaledBrightness hue: scaledHue saturation: scaledSaturation colorTemp: scaledColorTemp];
             
-            LSFPresetManager *presetManager = ([LSFAllJoynManager getAllJoynManager]).lsfPresetManager;
+            LSFPresetManager *presetManager = [[LSFAllJoynManager getAllJoynManager] lsfPresetManager];
             [presetManager createPresetWithState: scaledState andPresetName: self.presetNameTextField.text];
         });
         
@@ -209,7 +209,7 @@
         self.doneButtonPressed = YES;
         [self.presetNameTextField resignFirstResponder];
         
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
             LSFConstants *constants = [LSFConstants getConstants];
 
             unsigned int scaledBrightness = [constants scaleLampStateValue: self.lampState.brightness withMax: 100];
@@ -219,7 +219,7 @@
 
             LSFLampState *scaledState = [[LSFLampState alloc] initWithOnOff: self.lampState.onOff brightness: scaledBrightness hue: scaledHue saturation: scaledSaturation colorTemp: scaledColorTemp];
 
-            LSFPresetManager *presetManager = ([LSFAllJoynManager getAllJoynManager]).lsfPresetManager;
+            LSFPresetManager *presetManager = [[LSFAllJoynManager getAllJoynManager] lsfPresetManager];
             [presetManager createPresetWithState: scaledState andPresetName: self.presetNameTextField.text];
         });
     }
@@ -230,8 +230,7 @@
  */
 -(BOOL)checkForDuplicateName: (NSString *)name
 {
-    LSFPresetModelContainer *container = [LSFPresetModelContainer getPresetModelContainer];
-    NSDictionary *presets = container.presetContainer;
+    NSDictionary *presets = [[LSFPresetModelContainer getPresetModelContainer] presetContainer];
     
     for (LSFPresetModel *model in [presets allValues])
     {

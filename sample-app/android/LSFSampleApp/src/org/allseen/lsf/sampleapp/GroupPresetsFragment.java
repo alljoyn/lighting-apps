@@ -15,16 +15,20 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import org.allseen.lsf.helper.manager.AllJoynManager;
+import org.allseen.lsf.helper.model.ColorItemDataModel;
+import org.allseen.lsf.helper.model.PresetDataModel;
+
 public class GroupPresetsFragment extends DimmableItemPresetsFragment {
 
     @Override
-    protected DimmableItemDataModel getDimmableItemDataModel() {
-        return ((SampleAppActivity)getActivity()).groupModels.get(key);
+    protected ColorItemDataModel getDimmableItemDataModel() {
+        return ((SampleAppActivity)getActivity()).systemManager.getGroupCollectionManager().getModel(key);
     }
 
     @Override
     protected void doApplyPreset(PresetDataModel presetModel) {
-        DimmableItemDataModel itemModel = getDimmableItemDataModel();
+        ColorItemDataModel itemModel = getDimmableItemDataModel();
 
         if ((presetModel != null) && (presetModel.state != null)) {
             AllJoynManager.groupManager.transitionLampGroupState(itemModel.id, presetModel.state, SampleAppActivity.STATE_TRANSITION_DURATION);

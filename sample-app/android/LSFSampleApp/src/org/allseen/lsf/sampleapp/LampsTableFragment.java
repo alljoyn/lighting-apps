@@ -15,6 +15,12 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import java.util.Iterator;
+
+import org.allseen.lsf.helper.manager.AllJoynManager;
+import org.allseen.lsf.helper.model.LampCapabilities;
+import org.allseen.lsf.helper.model.LampDataModel;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -42,9 +48,10 @@ public class LampsTableFragment extends DimmableItemTableFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
+        Iterator<String> i = ((SampleAppActivity) getActivity()).systemManager.getLampCollectionManager().getIDIterator();
 
-        for (String id : ((SampleAppActivity) getActivity()).lampModels.keySet()) {
-            addElement(id);
+        while(i.hasNext()) {
+            addElement(i.next());
         }
 
         return root;
@@ -58,7 +65,7 @@ public class LampsTableFragment extends DimmableItemTableFragment {
 
     @Override
     public void addElement(String id) {
-        LampDataModel lampModel = ((SampleAppActivity) getActivity()).lampModels.get(id);
+        LampDataModel lampModel = ((SampleAppActivity) getActivity()).systemManager.getLampCollectionManager().getModel(id);
         if (lampModel != null) {
             insertDimmableItemRow(
                 getActivity(),
@@ -69,8 +76,8 @@ public class LampsTableFragment extends DimmableItemTableFragment {
                 lampModel.getName(),
                 lampModel.state.getBrightness(),
                 true,
-                DimmableItemScaleConverter.getColor(lampModel.state, lampModel.capability, lampModel.getDetails()),
-                lampModel.capability.dimmable >= CapabilityData.SOME);
+                ViewColor.calculate(lampModel.state, lampModel.getCapability(), lampModel.getDetails()),
+                lampModel.getCapability().dimmable >= LampCapabilities.SOME);
             updateLoading();
         }
     }
@@ -79,7 +86,7 @@ public class LampsTableFragment extends DimmableItemTableFragment {
     public void updateLoading() {
         super.updateLoading();
 
-        boolean hasLamps = ((SampleAppActivity) getActivity()).lampModels.size() > 0;
+        boolean hasLamps = ((SampleAppActivity) getActivity()).systemManager.getLampCollectionManager().size() > 0;
 
         if (AllJoynManager.controllerConnected && !hasLamps) {
             // connected but no lamps found; display loading lamps screen, hide the scroll table

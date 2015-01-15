@@ -15,6 +15,11 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import java.util.Iterator;
+
+import org.allseen.lsf.helper.model.GroupDataModel;
+import org.allseen.lsf.helper.model.LampCapabilities;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -41,9 +46,10 @@ public class GroupsTableFragment extends DimmableItemTableFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
+        Iterator<String> i = ((SampleAppActivity)getActivity()).systemManager.getGroupCollectionManager().getIDIterator();
 
-        for (String id : ((SampleAppActivity) getActivity()).groupModels.keySet()) {
-            addElement(id);
+        while(i.hasNext()) {
+            addElement(i.next());
         }
 
         return root;
@@ -51,9 +57,9 @@ public class GroupsTableFragment extends DimmableItemTableFragment {
 
     @Override
     public void addElement(String id) {
-        GroupDataModel groupModel = ((SampleAppActivity) getActivity()).groupModels.get(id);
+        GroupDataModel groupModel = ((SampleAppActivity) getActivity()).systemManager.getGroupCollectionManager().getModel(id);
         if (groupModel != null) {
-            insertDimmableItemRow(getActivity(), groupModel.id, groupModel.tag, groupModel.state.getOnOff(), groupModel.uniformity.power, groupModel.getName(), groupModel.state.getBrightness(), groupModel.uniformity.brightness, 0, groupModel.capability.dimmable >= CapabilityData.SOME);
+            insertDimmableItemRow(getActivity(), groupModel.id, groupModel.tag, groupModel.state.getOnOff(), groupModel.uniformity.power, groupModel.getName(), groupModel.state.getBrightness(), groupModel.uniformity.brightness, 0, groupModel.getCapability().dimmable >= LampCapabilities.SOME);
         }
     }
 }

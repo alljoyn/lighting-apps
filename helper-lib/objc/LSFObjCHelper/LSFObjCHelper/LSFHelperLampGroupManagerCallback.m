@@ -23,7 +23,6 @@
 #import "LSFLampModelContainer.h"
 #import "LSFLampModel.h"
 #import "LSFAllJoynManager.h"
-//#import "LSFTabManager.h"
 #import "LSFEnums.h"
 #import "LSFColorAverager.h"
 #import "LSFGroup.h"
@@ -362,24 +361,18 @@
 {
     NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
 
-    //LSFGroupModel *groupModel = [groups valueForKey: groupID];
     LSFGroup *group = [groups valueForKey: groupID];
-    
-    //if (groupModel == nil)
+
     if (group == nil)
     {
-        //groupModel = [[LSFGroupModel alloc] initWithGroupID: groupID];
         group = [[LSFGroup alloc] initWithGroupID: groupID];
-
-        //[groups setValue: groupModel forKey: groupID];
         [groups setValue: group forKey: groupID];
 
         [self updateGroupWithID: groupID andCallbackOperation: GroupCreated];
 
-//        dispatch_async(self.queue, ^{
-//            LSFTabManager *tabManager = [LSFTabManager getTabManager];
-//            [tabManager updateGroupsTab];
-//        });
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateGroups" object: self userInfo: nil];
+        });
 
         LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
         [ajManager.lsfLampGroupManager getLampGroupNameForID: groupID];
@@ -473,7 +466,7 @@
             }
 
             //Average the color temp and figure out the min/max
-            NSLog(@"Adding %u to the color temp averager", lampModel.state.colorTemp);
+            //NSLog(@"Adding %u to the color temp averager", lampModel.state.colorTemp);
             [self.averageColorTemp add: lampModel.state.colorTemp];
 
             int colorTempLampMin = lampModel.lampDetails.minTemperature;
@@ -554,10 +547,9 @@
         [groupNames insertObject: model.name atIndex: i];
         [groups removeObjectForKey: groupID];
 
-//        dispatch_async(self.queue, ^{
-//            LSFTabManager *tabManager = [LSFTabManager getTabManager];
-//            [tabManager updateGroupsTab];
-//        });
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateGroups" object: self userInfo: nil];
+        });
     }
 
     dispatch_async(dispatch_get_main_queue(), ^{

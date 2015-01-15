@@ -26,7 +26,6 @@
 #import "LSFDispatchQueue.h"
 #import "AJNSessionOptions.h"
 #import "alljoyn/about/AJNAboutClient.h"
-//#import "LSFConfigManager.h"
 #import "LSFLampAnnouncementData.h"
 
 @interface LSFAboutManager()
@@ -134,8 +133,8 @@
 {
     LSFConstants *constants = [LSFConstants getConstants];
 
-    NSSet *cis = [NSSet setWithArray: [objectDescs valueForKey: constants.controllerServiceObjectDescription]];
-    NSSet *controllerInterfacesSet = [NSSet setWithArray: [NSArray arrayWithObjects: constants.controllerServiceInterfaceName, constants.controllerServiceLampInterfaceName, constants.controllerServiceLampGroupInterfaceName, constants.controllerServicePresetInterfaceName, constants.controllerServiceSceneInterfaceName, constants.controllerServiceMasterSceneInterfaceName, nil]];
+//    NSSet *cis = [NSSet setWithArray: [objectDescs valueForKey: constants.controllerServiceObjectDescription]];
+//    NSSet *controllerInterfacesSet = [NSSet setWithArray: [NSArray arrayWithObjects: constants.controllerServiceInterfaceName, constants.controllerServiceLampInterfaceName, constants.controllerServiceLampGroupInterfaceName, constants.controllerServicePresetInterfaceName, constants.controllerServiceSceneInterfaceName, constants.controllerServiceMasterSceneInterfaceName, nil]];
 
     NSSet *lis = [NSSet setWithArray: [objectDescs valueForKey: constants.lampServiceObjectDescription]];
     NSSet *lampInterfacesSet = [NSSet setWithArray: [NSArray arrayWithObjects: constants.lampServiceInterfaceName, constants.lampStateInterfaceName, constants.lampDetailsInterfaceName, constants.lampParametersInterfaceName, nil]];
@@ -150,12 +149,6 @@
             //[self getAboutDataFrom: busName onPort: port usingAboutData: *aboutData];
             [[LSFAllJoynManager getAllJoynManager] addNewLamp: lampID lampAnnouncementData: lampAnnData];
         });
-    }
-    else if ([cis isEqualToSet: controllerInterfacesSet])
-    {
-//        LSFConfigManager *configManager = [LSFConfigManager getConfigManager];
-//        configManager.controllerBusName = busName;
-//        configManager.controllerPort = port;
     }
     else
     {

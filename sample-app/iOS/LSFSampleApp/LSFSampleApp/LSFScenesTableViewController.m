@@ -36,6 +36,9 @@
 #import "LSFConstants.h"
 #import "LSFWifiMonitor.h"
 #import "LSFEnums.h"
+#import "LSFLamp.h"
+#import "LSFGroup.h"
+#import "LSFLightingScene.h"
 
 @interface LSFScenesTableViewController ()
 
@@ -103,14 +106,21 @@
 {
     [super viewWillAppear: animated];
 
+    self.data = [[NSMutableArray alloc] init];
+
     //Set scenes and master scenes notification handler
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneNotificationReceived:) name: @"SceneNotification" object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(masterSceneNotificationReceived:) name: @"MasterSceneNotification" object: nil];
 
     //Set the content of the default scene data array
-    LSFSceneModelContainer *scenesContainer = [LSFSceneModelContainer getSceneModelContainer];
+    NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
+
+    for (LSFLightingScene *scene in [scenes allValues])
+    {
+        [self.data addObject: [scene getSceneDataModel]];
+    }
+
     LSFMasterSceneModelContainer *masterScenesContainer = [LSFMasterSceneModelContainer getMasterSceneModelContainer];
-    self.data = [NSMutableArray arrayWithArray: [scenesContainer.sceneContainer allValues]];
     [self.data addObjectsFromArray: [masterScenesContainer.masterScenesContainer allValues]];
 
     if (self.data.count > 0)
@@ -167,9 +177,8 @@
 
 -(void)addNewScene: (NSString *)sceneID
 {
-    LSFSceneModelContainer *container = [LSFSceneModelContainer getSceneModelContainer];
-    NSMutableDictionary *scenes = container.sceneContainer;
-    LSFSceneDataModel *model = [scenes valueForKey: sceneID];
+    NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
+    LSFSceneDataModel *model = [[scenes valueForKey: sceneID] getSceneDataModel];
 
     NSUInteger existingIndex = [self checkIfModelExists: (LSFDataModel *)model];
 
@@ -184,9 +193,8 @@
 
 -(void)reorderScene: (NSString *)sceneID
 {
-    LSFSceneModelContainer *container = [LSFSceneModelContainer getSceneModelContainer];
-    NSMutableDictionary *scenes = container.sceneContainer;
-    LSFSceneDataModel *model = [scenes valueForKey: sceneID];
+    NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
+    LSFSceneDataModel *model = [[scenes valueForKey: sceneID] getSceneDataModel];
 
     if (model != nil)
     {
@@ -214,9 +222,8 @@
 
 -(void)refreshScene: (NSString *)sceneID
 {
-    LSFSceneModelContainer *container = [LSFSceneModelContainer getSceneModelContainer];
-    NSMutableDictionary *scenes = container.sceneContainer;
-    LSFSceneDataModel *model = [scenes valueForKey: sceneID];
+    NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
+    LSFSceneDataModel *model = [[scenes valueForKey: sceneID] getSceneDataModel];
 
     if (model != nil)
     {
@@ -231,14 +238,13 @@
 
 -(void)removeScenes: (NSArray *)sceneIDs
 {
-    LSFSceneModelContainer *container = [LSFSceneModelContainer getSceneModelContainer];
-    NSMutableDictionary *scenes = container.sceneContainer;
+    NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
 
     NSMutableArray *deleteIndexPaths = [[NSMutableArray alloc] init];
 
     for (NSString *sceneID in sceneIDs)
     {
-        LSFSceneDataModel *model = [scenes valueForKey: sceneID];
+        LSFSceneDataModel *model = [[scenes valueForKey: sceneID] getSceneDataModel];
 
         if (model == nil)
         {
@@ -288,8 +294,7 @@
 
 -(void)addNewMasterScene: (NSString *)masterSceneID
 {
-    LSFMasterSceneModelContainer *container = [LSFMasterSceneModelContainer getMasterSceneModelContainer];
-    NSMutableDictionary *masterScenes = container.masterScenesContainer;
+    NSMutableDictionary *masterScenes = [[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer];
     LSFMasterSceneDataModel *model = [masterScenes valueForKey: masterSceneID];
 
     NSUInteger existingIndex = [self checkIfModelExists: (LSFDataModel *)model];
@@ -305,8 +310,7 @@
 
 -(void)reorderMasterScene: (NSString *)masterSceneID
 {
-    LSFMasterSceneModelContainer *container = [LSFMasterSceneModelContainer getMasterSceneModelContainer];
-    NSMutableDictionary *masterScenes = container.masterScenesContainer;
+    NSMutableDictionary *masterScenes = [[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer];
     LSFMasterSceneDataModel *model = [masterScenes valueForKey: masterSceneID];
 
     if (model != nil)
@@ -335,8 +339,7 @@
 
 -(void)refreshMasterScene: (NSString *)masterSceneID
 {
-    LSFMasterSceneModelContainer *container = [LSFMasterSceneModelContainer getMasterSceneModelContainer];
-    NSMutableDictionary *masterScenes = container.masterScenesContainer;
+    NSMutableDictionary *masterScenes = [[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer];
     LSFMasterSceneDataModel *model = [masterScenes valueForKey: masterSceneID];
 
     if (model != nil)
@@ -352,9 +355,7 @@
 
 -(void)removeMasterScenes: (NSArray *)masterSceneIDs
 {
-    LSFMasterSceneModelContainer *container = [LSFMasterSceneModelContainer getMasterSceneModelContainer];
-    NSMutableDictionary *masterScenes = container.masterScenesContainer;
-
+    NSMutableDictionary *masterScenes = [[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer];
     NSMutableArray *deleteIndexPaths = [[NSMutableArray alloc] init];
 
     for (NSString *masterSceneID in masterSceneIDs)
@@ -417,8 +418,8 @@
     {
         LSFSceneDataModel *sceneDataModel = (LSFSceneDataModel *)data;
 
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-            LSFSceneManager *sceneManager = ([LSFAllJoynManager getAllJoynManager]).lsfSceneManager;
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+            LSFSceneManager *sceneManager = [[LSFAllJoynManager getAllJoynManager] lsfSceneManager];
             [sceneManager applySceneWithID: sceneDataModel.theID];
         });
 
@@ -428,8 +429,8 @@
     {
         LSFMasterSceneDataModel *masterSceneDataModel = (LSFMasterSceneDataModel *)data;
 
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-            LSFMasterSceneManager *masterSceneManager = ([LSFAllJoynManager getAllJoynManager]).lsfMasterSceneManager;
+        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+            LSFMasterSceneManager *masterSceneManager = [[LSFAllJoynManager getAllJoynManager] lsfMasterSceneManager];
             [masterSceneManager applyMasterSceneWithID: masterSceneDataModel.theID];
         });
 
@@ -562,8 +563,8 @@
                 // Delete the row from the data source
                 [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation: UITableViewRowAnimationFade];
 
-                dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-                    LSFSceneManager *sceneManager = ([LSFAllJoynManager getAllJoynManager]).lsfSceneManager;
+                dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+                    LSFSceneManager *sceneManager = [[LSFAllJoynManager getAllJoynManager] lsfSceneManager];
                     [sceneManager deleteSceneWithID: sceneDataModel.theID];
                 });
             }
@@ -578,8 +579,8 @@
             // Delete the row from the data source
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation: UITableViewRowAnimationFade];
 
-            dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-                LSFMasterSceneManager *masterSceneManager = ([LSFAllJoynManager getAllJoynManager]).lsfMasterSceneManager;
+            dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+                LSFMasterSceneManager *masterSceneManager = [[LSFAllJoynManager getAllJoynManager] lsfMasterSceneManager];
                 [masterSceneManager deleteMasterSceneWithID: masterSceneDataModel.theID];
             });
         }
@@ -714,11 +715,11 @@
 
 -(void)appendLampNames: (NSArray *)lampIDs toString: (NSMutableString *)detailsString
 {
-    LSFLampModelContainer *lampContainer = [LSFLampModelContainer getLampModelContainer];
+    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
 
     for (NSString *lampID in lampIDs)
     {
-        LSFLampModel *lampModel = [lampContainer.lampContainer valueForKey: lampID];
+        LSFLampModel *lampModel = [[lamps valueForKey: lampID] getLampDataModel];
 
         if (lampModel != nil)
         {
@@ -729,11 +730,11 @@
 
 -(void)appendGroupNames: (NSArray *)groupIDs toString: (NSMutableString *)detailsString
 {
-    LSFGroupModelContainer *groupContainer = [LSFGroupModelContainer getGroupModelContainer];
+    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
 
     for (NSString *groupID in groupIDs)
     {
-        LSFGroupModel *groupModel = [groupContainer.groupContainer valueForKey: groupID];
+        LSFGroupModel *groupModel = [[groups valueForKey: groupID] getLampGroupDataModel];
 
         if (groupModel != nil)
         {
@@ -758,11 +759,11 @@
 
 -(void)appendSceneNames: (NSArray *)sceneIDs toString: (NSMutableString *)detailsString
 {
-    LSFSceneModelContainer *sceneContainer = [LSFSceneModelContainer getSceneModelContainer];
+    NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
 
     for (NSString *sceneID in sceneIDs)
     {
-        LSFSceneDataModel *sceneModel = [sceneContainer.sceneContainer valueForKey: sceneID];
+        LSFSceneDataModel *sceneModel = [[scenes valueForKey: sceneID] getSceneDataModel];
 
         if (sceneModel != nil)
         {

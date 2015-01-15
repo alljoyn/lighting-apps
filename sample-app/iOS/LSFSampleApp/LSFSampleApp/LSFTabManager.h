@@ -19,8 +19,5 @@
 @interface LSFTabManager : NSObject
 
 +(id)getTabManager;
--(void)updateLampsTab;
--(void)updateGroupsTab;
--(void)updateScenesTab;
 
 @end

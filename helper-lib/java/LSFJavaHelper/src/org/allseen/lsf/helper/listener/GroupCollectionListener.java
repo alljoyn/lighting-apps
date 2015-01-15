@@ -15,8 +15,6 @@
  */
 package org.allseen.lsf.helper.listener;
 
-import java.util.Iterator;
-
 import org.allseen.lsf.helper.facade.Group;
 
 /**
@@ -24,7 +22,7 @@ import org.allseen.lsf.helper.facade.Group;
  * in subsequent releases of the SDK</b>.
  */
 public interface GroupCollectionListener {
-    public void onGroupsChanged(Iterator<Group> groups, int count);
-    public void onGroupsRemoved(Iterator<Group> groups, int count);
+    public void onGroupChanged(Group group);
+    public void onGroupRemoved(Group group);
     public void onGroupError(LightingItemErrorEvent error);
 }

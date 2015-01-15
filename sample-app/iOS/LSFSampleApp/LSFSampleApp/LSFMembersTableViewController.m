@@ -43,7 +43,8 @@
 {
     [super viewWillAppear: animated];
 
-    //Initialize selected rows array
+    //Initialize arrays
+    self.dataArray = [[NSMutableArray alloc] init];
     self.selectedRows = [[NSMutableArray alloc] init];
 
     //Load UI

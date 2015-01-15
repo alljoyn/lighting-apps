@@ -20,7 +20,7 @@ package org.allseen.lsf.helper.model;
  * in subsequent releases of the SDK</b>.
  */
 public class NoEffectDataModel extends SceneElementDataModel {
-    public static String defaultName = "";
+    public static String defaultName = "<Loading scene element info...>";
 
     public NoEffectDataModel() {
         super(EffectType.None, defaultName);
