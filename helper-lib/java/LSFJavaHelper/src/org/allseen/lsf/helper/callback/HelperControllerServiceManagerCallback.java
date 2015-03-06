@@ -34,7 +34,7 @@ public class HelperControllerServiceManagerCallback extends ControllerServiceMan
 
     @Override
     public void getControllerServiceVersionReplyCB(final long version) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 manager.getControllerManager().getLeadControllerModel().version = version;
@@ -59,7 +59,7 @@ public class HelperControllerServiceManagerCallback extends ControllerServiceMan
     }
 
     protected void postSendControllerChanged() {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 manager.getControllerManager().sendLeaderStateChangeEvent();

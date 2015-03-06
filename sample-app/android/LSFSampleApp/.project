@@ -72,5 +72,10 @@
 			<type>1</type>
 			<locationURI>LSF_JAVA_HOME/libs/armeabi/libgnustl_shared.so</locationURI>
 		</link>
+		<link>
+			<name>links/jni/lsf/lib/armeabi/liballjoyn_lsf_java.so</name>
+			<type>1</type>
+			<locationURI>LSF_JAVA_HOME/libs/armeabi/liballjoyn_lsf_java.so</locationURI>
+		</link>
 	</linkedResources>
 </projectDescription>

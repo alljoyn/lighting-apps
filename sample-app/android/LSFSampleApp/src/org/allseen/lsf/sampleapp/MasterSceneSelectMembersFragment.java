@@ -73,7 +73,6 @@ public class MasterSceneSelectMembersFragment extends SelectMembersFragment {
 
     @Override
     protected int getMixedSelectionPositiveButtonID() {
-        // TODO Auto-generated method stub
         return R.string.create_scene;
     }
 }

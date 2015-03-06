@@ -19,6 +19,7 @@ LOCAL_PATH := $(call my-dir)
 MY_ALLJOYN_HOME        := $(shell $(LOCAL_PATH)/../project_var ALLJOYN_HOME $(ECLIPSE_WORKSPACE_PATH))
 MY_ALLJOYN_INC         := $(MY_ALLJOYN_HOME)/cpp/inc
 MY_ALLJOYN_LIB         := $(MY_ALLJOYN_HOME)/java/lib
+MY_ALLJOYN_OBJ         := obj/local/armeabi/objs-debug/alljoyn
 #$(info ALLJOYN_HOME   = $(MY_ALLJOYN_HOME))
 #$(info ALLJOYN_INC    = $(MY_ALLJOYN_INC))
 #$(info ALLJOYN_LIB    = $(MY_ALLJOYN_LIB))
@@ -45,7 +46,6 @@ MY_LSF_STD_CLIENT_SRC  := ../$(MY_LSF_STD_CLIENT_HOME)/src
 #$(info LSF_STD_CLIENT_SRC  = $(MY_LSF_STD_CLIENT_SRC))
 
 
-
 # -----------------------------------------------------------------------------
 #include $(CLEAR_VARS)
 
@@ -65,12 +65,9 @@ include $(PREBUILT_SHARED_LIBRARY)
 
 
 # -----------------------------------------------------------------------------
-include $(CLEAR_VARS)
-
-LOCAL_MODULE            := alljoyn_about
-LOCAL_SRC_FILES         := $(MY_ABOUT_LIB)/liballjoyn_about.a
-
-include $(PREBUILT_STATIC_LIBRARY)
+$(shell ar x $(MY_ABOUT_LIB)/liballjoyn.a AboutObjectDescription.o)
+$(shell mkdir -p $(MY_ALLJOYN_OBJ))
+$(shell mv AboutObjectDescription.o $(MY_ALLJOYN_OBJ))
 
 
 # ----------------------------------------------------------------------------
@@ -84,10 +81,10 @@ LOCAL_C_INCLUDES := $(MY_LSF_COMMON_INC) \
                     $(MY_ABOUT_INC)
                     
 LOCAL_SHARED_LIBRARIES := alljoyn_java
-LOCAL_STATIC_LIBRARIES := alljoyn_about
+LOCAL_STATIC_LIBRARIES :=
 
 LOCAL_CFLAGS     := -DQCC_OS_GROUP_POSIX -DQCC_OS_ANDROID -DQCC_CPU_ARM -fpic
-LOCAL_LDLIBS	 := -llog
+LOCAL_LDLIBS	 := $(MY_ALLJOYN_OBJ)/AboutObjectDescription.o -llog
 
 LOCAL_MODULE     := alljoyn_lsf_java
 LOCAL_SRC_FILES  := $(MY_LSF_STD_CLIENT_SRC)/ControllerClient.cc \

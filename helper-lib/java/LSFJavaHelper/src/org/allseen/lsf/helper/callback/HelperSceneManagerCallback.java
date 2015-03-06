@@ -66,7 +66,7 @@ public class HelperSceneManagerCallback extends SceneManagerCallback {
 
     @Override
     public void scenesNameChangedCB(final String[] sceneIDs) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 boolean containsNewIDs = false;
@@ -138,17 +138,15 @@ public class HelperSceneManagerCallback extends SceneManagerCallback {
         if (!responseCode.equals(ResponseCode.OK)) {
             manager.getSceneCollectionManager().sendErrorEvent("applySceneReplyCB", responseCode, sceneID);
         }
-
-        //TODO-CHK Do we need to do anything here?
     }
 
     @Override
     public void scenesAppliedCB(String[] sceneIDs) {
-        //TODO-CHK Do we need to do anything here?
+        // Currently nothing to do
     }
 
     protected void postProcessSceneID(final String sceneID) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 if (!manager.getSceneCollectionManager().hasID(sceneID)) {
@@ -161,7 +159,7 @@ public class HelperSceneManagerCallback extends SceneManagerCallback {
     }
 
     protected void postUpdateSceneID(final String sceneID) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 if (!manager.getSceneCollectionManager().hasID(sceneID)) {
@@ -174,7 +172,7 @@ public class HelperSceneManagerCallback extends SceneManagerCallback {
     }
 
     protected void postUpdateScene(final String sceneID, final Scene scene) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 SceneDataModel basicSceneModel = manager.getSceneCollectionManager().getModel(sceneID);
@@ -189,7 +187,7 @@ public class HelperSceneManagerCallback extends SceneManagerCallback {
     }
 
     protected void postUpdateSceneName(final String sceneID, final String sceneName) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 SceneDataModel basicSceneModel = manager.getSceneCollectionManager().getModel(sceneID);
@@ -204,7 +202,7 @@ public class HelperSceneManagerCallback extends SceneManagerCallback {
     }
 
     protected void postDeleteScenes(final String[] sceneIDs) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 for (String sceneID : sceneIDs) {
@@ -215,7 +213,7 @@ public class HelperSceneManagerCallback extends SceneManagerCallback {
     }
 
     protected void postSendSceneChanged(final String sceneID) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 manager.getSceneCollectionManager().sendChangedEvent(sceneID);

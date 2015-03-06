@@ -33,9 +33,6 @@ import org.allseen.lsf.helper.listener.ControllerAdapter;
 import org.allseen.lsf.helper.model.AllLampsLampGroup;
 import org.allseen.lsf.helper.model.ControllerDataModel;
 
-import android.os.Handler;
-import android.support.v4.app.FragmentManager;
-
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
@@ -48,7 +45,7 @@ public class LightingSystemManager {
     public static final int POLLING_DELAY = 10000;
     public static final int LAMP_EXPIRATION = 15000;
 
-    private final Handler handler;
+    private final LightingSystemQueue queue;
 
     //TODO-FIX add get...() methods for these
     public final HelperControllerClientCallback controllerClientCB;
@@ -66,8 +63,8 @@ public class LightingSystemManager {
     private final MasterSceneCollectionManager masterSceneCollectionManager;
     private final ControllerManager controllerManager;
 
-    public LightingSystemManager(Handler handler) {
-        this.handler = handler;
+    public LightingSystemManager(LightingSystemQueue queue) {
+        this.queue = queue;
 
         AllLampsLampGroup.instance.setLightingSystemManager(this);
 
@@ -96,11 +93,12 @@ public class LightingSystemManager {
         });
     }
 
-    public void init(FragmentManager fragmentManager, AllJoynListener alljoynListener) {
+    public void init(String applicationName, AllJoynListener alljoynListener) {
         AboutManager aboutManager = new AboutManager(this);
 
         AllJoynManager.init(
-            fragmentManager,
+            applicationName,
+            queue,
             controllerClientCB,
             controllerServiceManagerCB,
             lampManagerCB,
@@ -115,23 +113,23 @@ public class LightingSystemManager {
     public void start() {
         clearModels();
 
-        AllJoynManager.start(handler);
+        AllJoynManager.start(queue);
     }
 
     public void stop() {
         clearModels();
 
-        AllJoynManager.stop(handler);
+        AllJoynManager.stop(queue);
     }
 
-    public void destroy(FragmentManager fragmentManager) {
+    public void destroy() {
         stop();
 
-        AllJoynManager.destroy(fragmentManager);
+        AllJoynManager.destroy();
     }
 
-    public Handler getHandler() {
-        return handler;
+    public LightingSystemQueue getQueue() {
+        return queue;
     }
 
     public LampCollectionManager getLampCollectionManager() {
@@ -186,7 +184,7 @@ public class LightingSystemManager {
             public void onLeaderModelChange(ControllerDataModel leaderModel) {
                 if (leaderModel.connected) {
                     controllerManager.removeListener(this);
-                    getHandler().postDelayed(task, delay);
+                    getQueue().postDelayed(task, delay);
                 }
             }
         });

@@ -66,7 +66,7 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
 
     @Override
     public void masterScenesNameChangedCB(final String[] masterSceneIDs) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 boolean containsNewIDs = false;
@@ -138,17 +138,15 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
         if (!responseCode.equals(ResponseCode.OK)) {
             manager.getMasterSceneCollectionManager().sendErrorEvent("applyMasterSceneReplyCB", responseCode, masterSceneID);
         }
-
-        //TODO-CHK Do we need to do anything here?
     }
 
     @Override
     public void masterScenesAppliedCB(String[] masterSceneIDs) {
-        //TODO-CHK Do we need to do anything here?
+        // Currently nothing to do
     }
 
     protected void postProcessMasterSceneID(final String masterSceneID) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 if (!manager.getMasterSceneCollectionManager().hasID(masterSceneID)) {
@@ -161,7 +159,7 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
     }
 
     protected void postUpdateMasterSceneID(final String masterSceneID) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 if (!manager.getMasterSceneCollectionManager().hasID(masterSceneID)) {
@@ -174,7 +172,7 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
     }
 
     protected void postUpdateMasterScene(final String masterSceneID, final MasterScene masterScene) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 MasterSceneDataModel masterSceneModel = manager.getMasterSceneCollectionManager().getModel(masterSceneID);
@@ -189,7 +187,7 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
     }
 
     protected void postUpdateMasterSceneName(final String masterSceneID, final String masterSceneName) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 MasterSceneDataModel masterSceneModel = manager.getMasterSceneCollectionManager().getModel(masterSceneID);
@@ -204,7 +202,7 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
     }
 
     protected void postDeleteMasterScenes(final String[] masterSceneIDs) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 for (String masterSceneID : masterSceneIDs) {
@@ -215,7 +213,7 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
     }
 
     protected void postSendMasterSceneChanged(final String masterSceneID) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 manager.getMasterSceneCollectionManager().sendChangedEvent(masterSceneID);

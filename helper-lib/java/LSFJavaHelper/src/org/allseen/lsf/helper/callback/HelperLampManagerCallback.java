@@ -232,7 +232,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     public void postOnLampAnnouncedAboutData(final String lampID, final String peer, final short port, final Map<String, Variant> announcedData, int delay) {
-        manager.getHandler().postDelayed(new Runnable() {
+        manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
                 LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
@@ -251,7 +251,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     public void postOnLampQueriedAboutData(final String lampID, final Map<String, Object> queriedData, int delay) {
-        manager.getHandler().postDelayed(new Runnable() {
+        manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
                 LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
@@ -267,7 +267,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postUpdateLampID(final String lampID, int delay) {
-        manager.getHandler().postDelayed(new Runnable() {
+        manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Lamp lamp = manager.getLampCollectionManager().getLamp(lampID);
@@ -300,7 +300,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     public void postRemoveLampID(final String lampID) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 manager.getLampCollectionManager().removeLamp(lampID);
@@ -309,7 +309,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postGetLampName(final String lampID, int delay) {
-        manager.getHandler().postDelayed(new Runnable() {
+        manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (AllJoynManager.controllerConnected) {
@@ -320,7 +320,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postUpdateLampState(final String lampID, final LampState lampState) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
@@ -335,7 +335,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postGetLampState(final String lampID, int delay) {
-        manager.getHandler().postDelayed(new Runnable() {
+        manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (AllJoynManager.controllerConnected) {
@@ -346,7 +346,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postUpdateLampParameters(final String lampID, final LampParameters lampParams) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
@@ -361,7 +361,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postGetLampParameters(final String lampID, int delay) {
-        manager.getHandler().postDelayed(new Runnable() {
+        manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (AllJoynManager.controllerConnected) {
@@ -372,7 +372,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postUpdateLampDetails(final String lampID, final LampDetails lampDetails) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
@@ -387,7 +387,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postGetLampDetails(final String lampID, final int delay) {
-        manager.getHandler().postDelayed(new Runnable() {
+        manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (AllJoynManager.controllerConnected) {
@@ -398,7 +398,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postUpdateLampName(final String lampID, final String lampName) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
@@ -413,7 +413,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postUpdateLampStateOnOff(final String lampID, final boolean onOff) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
@@ -428,7 +428,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postGetLampStateOnOffField(final String lampID, int delay) {
-        manager.getHandler().postDelayed(new Runnable() {
+        manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (AllJoynManager.controllerConnected) {
@@ -439,7 +439,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postUpdateLampStateHue(final String lampID, final long hue) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
@@ -454,7 +454,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postGetLampStateHueField(final String lampID, int delay) {
-        manager.getHandler().postDelayed(new Runnable() {
+        manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (AllJoynManager.controllerConnected) {
@@ -465,7 +465,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postUpdateLampStateSaturation(final String lampID, final long saturation) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
@@ -480,7 +480,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postGetLampStateSaturationField(final String lampID, int delay) {
-        manager.getHandler().postDelayed(new Runnable() {
+        manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (AllJoynManager.controllerConnected) {
@@ -491,7 +491,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postUpdateLampStateBrightness(final String lampID, final long brightness) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
@@ -506,7 +506,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postGetLampStateBrightnessField(final String lampID, int delay) {
-        manager.getHandler().postDelayed(new Runnable() {
+        manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (AllJoynManager.controllerConnected) {
@@ -517,7 +517,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postUpdateLampStateColorTemp(final String lampID, final long colorTemp) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
@@ -532,7 +532,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postGetLampStateColorTempField(final String lampID, int delay) {
-        manager.getHandler().postDelayed(new Runnable() {
+        manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (AllJoynManager.controllerConnected) {
@@ -543,7 +543,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
     }
 
     protected void postSendLampChanged(final String lampID) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 manager.getLampCollectionManager().sendChangedEvent(lampID);

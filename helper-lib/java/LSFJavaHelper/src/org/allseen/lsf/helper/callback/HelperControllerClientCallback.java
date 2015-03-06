@@ -67,7 +67,7 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
     }
 
     public void postOnControllerConnected(final String controllerID, final String controllerName, int delay) {
-        manager.getHandler().postDelayed(new Runnable() {
+        manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
                 ControllerDataModel leadModel = manager.getControllerManager().getLeadControllerModel();
@@ -85,7 +85,7 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
     }
 
     public void postOnControllerDisconnected(final String controllerID, final String controllerName, int delay) {
-        manager.getHandler().postDelayed(new Runnable() {
+        manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
                 ControllerDataModel leadModel = manager.getControllerManager().getLeadControllerModel();
@@ -101,7 +101,7 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
     }
 
     public void postOnControllerAnnouncedAboutData(final String controllerID, final String controllerName, int delay) {
-        manager.getHandler().postDelayed(new Runnable() {
+        manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
                 ControllerDataModel leadModel = manager.getControllerManager().getLeadControllerModel();
@@ -117,7 +117,7 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
     }
 
     protected void postGetAllLampGroupIDs() {
-        manager.getHandler().postDelayed(new Runnable() {
+        manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
                 AllJoynManager.groupManager.getAllLampGroupIDs();
@@ -126,7 +126,7 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
     }
 
     protected void postGetAllPresetIDs() {
-        manager.getHandler().postDelayed(new Runnable() {
+        manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
                 AllJoynManager.presetManager.getAllPresetIDs();
@@ -135,7 +135,7 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
     }
 
     protected void postGetAllBasicSceneIDs() {
-        manager.getHandler().postDelayed(new Runnable() {
+        manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
                 AllJoynManager.sceneManager.getAllSceneIDs();
@@ -144,7 +144,7 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
     }
 
     protected void postGetAllMasterSceneIDs() {
-        manager.getHandler().postDelayed(new Runnable() {
+        manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
                 AllJoynManager.masterSceneManager.getAllMasterSceneIDs();
@@ -154,7 +154,7 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
 
     protected void postSendControllerChanged() {
         // if connection status is ever changed, then prompt for updating the loading information
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 manager.getControllerManager().sendLeaderStateChangeEvent();

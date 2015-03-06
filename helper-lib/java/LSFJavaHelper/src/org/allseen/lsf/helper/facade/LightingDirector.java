@@ -22,8 +22,7 @@ import org.allseen.lsf.helper.facade.Scene;
 import org.allseen.lsf.helper.listener.AllJoynListener;
 import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.manager.LightingSystemManager;
-import android.os.Handler;
-import android.support.v4.app.FragmentManager;
+import org.allseen.lsf.helper.manager.LightingSystemQueue;
 
 /**
  * LightingDirector is the main class in the facade interface of the Lighting SDK.
@@ -44,9 +43,9 @@ public class LightingDirector {
      *
      * @param handler A handler which receives tasks to run when certain events occur.
      */
-    public LightingDirector(Handler handler) {
+    public LightingDirector(LightingSystemQueue queue) {
         super();
-        lightingManager = new LightingSystemManager(handler);
+        lightingManager = new LightingSystemManager(queue);
     }
 
     /**
@@ -63,8 +62,8 @@ public class LightingDirector {
      *
      * @param fragmentManager Currently needed for system initialization
      */
-    public void start(FragmentManager fragmentManager) {
-        lightingManager.init(fragmentManager, new AllJoynListener() {
+    public void start(String applicationName) {
+        lightingManager.init(applicationName, new AllJoynListener() {
             @Override
             public void onAllJoynInitialized() {
                 //TODO-FIX: We're supposed to make sure the network is available
@@ -78,8 +77,8 @@ public class LightingDirector {
      *
      * @param fragmentManager Must be the same instance passed to start()
      */
-    public void stop(FragmentManager fragmentManager) {
-        lightingManager.destroy(fragmentManager);
+    public void stop() {
+        lightingManager.destroy();
     }
 
     /**

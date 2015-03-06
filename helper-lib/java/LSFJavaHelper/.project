@@ -48,9 +48,9 @@
 			<locationURI>ALLJOYN_HOME/java/jar/alljoyn_about.jar</locationURI>
 		</link>
 		<link>
-			<name>links/jar/android/android-support-v4.jar</name>
+			<name>links/jar/Java/rt.jar</name>
 			<type>1</type>
-			<locationURI>ANDROID_HOME/extras/android/support/v4/android-support-v4.jar</locationURI>
+			<locationURI>JAVA_HOME/jre/lib/rt.jar</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

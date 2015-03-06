@@ -44,6 +44,7 @@ import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.manager.GroupCollectionManager;
 import org.allseen.lsf.helper.manager.LampCollectionManager;
 import org.allseen.lsf.helper.manager.LightingSystemManager;
+import org.allseen.lsf.helper.manager.LightingSystemQueue;
 import org.allseen.lsf.helper.manager.MasterSceneCollectionManager;
 import org.allseen.lsf.helper.manager.SceneCollectionManager;
 import org.allseen.lsf.helper.model.AllLampsDataModel;
@@ -181,7 +182,17 @@ public class SampleAppActivity extends FragmentActivity implements
         Log.d(SampleAppActivity.TAG, "===========================================");
         Log.d(SampleAppActivity.TAG, "Creating LightingSystemManager");
 
-        systemManager = new LightingSystemManager(handler);
+        systemManager = new LightingSystemManager(new LightingSystemQueue() {
+            @Override
+            public void post(Runnable r) {
+                handler.post(r);
+            }
+
+            @Override
+            public void postDelayed(Runnable r, int delay) {
+                handler.postDelayed(r, delay);
+            }});
+
         systemManager.getLampCollectionManager().addListener(this);
         systemManager.getGroupCollectionManager().addListener(this);
         systemManager.getPresetCollectionManager().addListener(this);
@@ -189,7 +200,7 @@ public class SampleAppActivity extends FragmentActivity implements
         systemManager.getMasterSceneCollectionManager().addListener(this);
         systemManager.getControllerManager().addListener(this);
 
-        systemManager.init(getSupportFragmentManager(), this);
+        systemManager.init("SampleApp", this);
     }
 
     protected boolean isWifiConnected() {

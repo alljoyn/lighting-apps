@@ -20,6 +20,8 @@ import org.allseen.lsf.helper.facade.Group;
 import org.allseen.lsf.helper.facade.Lamp;
 import org.allseen.lsf.helper.facade.LightingDirector;
 import org.allseen.lsf.helper.facade.Scene;
+import org.allseen.lsf.helper.manager.LightingSystemQueue;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -41,18 +43,29 @@ public class TutorialActivity extends FragmentActivity {
         ((TextView)findViewById(R.id.appTextVersion)).setText(version);
 
         // Instantiate the director and wait for the connection
-        lightingDirector = new LightingDirector(new Handler(Looper.getMainLooper()));
+        lightingDirector = new LightingDirector(new LightingSystemQueue() {
+            Handler handler = new Handler(Looper.getMainLooper());
+            @Override
+            public void post(Runnable r) {
+                handler.post(r);
+            }
+
+            @Override
+            public void postDelayed(Runnable r, int delay) {
+                handler.postDelayed(r, delay);
+            }});
+
         lightingDirector.postOnNextControllerConnection(new Runnable() {
             @Override
             public void run() {
                 performLightingOperations();
             }}, 5000);
-        lightingDirector.start(getSupportFragmentManager());
+        lightingDirector.start("TutorialApp");
     }
 
     @Override
     protected void onDestroy() {
-        lightingDirector.stop(getSupportFragmentManager());
+        lightingDirector.stop();
         super.onDestroy();
     }
 

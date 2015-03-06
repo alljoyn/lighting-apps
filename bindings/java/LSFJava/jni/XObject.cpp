@@ -20,8 +20,6 @@
 // templated code to be visible there.
 #ifdef LSF_JNI_XOBJECT_H_INCLUDE_TEMPLATE_METHODS
 
-#include <android/log.h>
-
 #include <qcc/Debug.h>
 
 #include "NDefs.h"

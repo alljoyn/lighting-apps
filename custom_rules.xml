@@ -21,11 +21,16 @@
         <isset property="env.ALLJOYN_HOME" />
     </condition>
 
+    <condition property="apps.path.lsf.java" value="${env.LSF_JAVA_HOME}" else="${target.path.apps}/bindings/java/LSFJava">
+        <isset property="env.LSF_JAVA_HOME" />
+    </condition>
+
     <echo>AllJoyn    : ${apps.path.alljoyn}</echo>
 
     <path id="apps.classpath">
         <pathelement location="${apps.path.alljoyn}/java/jar/alljoyn.jar"/>
         <pathelement location="${apps.path.alljoyn}/java/jar/alljoyn_about.jar"/>
+        <pathelement location="${apps.path.lsf.java}/bin/lsfjava.jar"/>
         <pathelement location="${sdk.dir}/extras/android/support/v4/android-support-v4.jar"/>
         <pathelement location="${sdk.dir}/extras/android/support/v13/android-support-v13.jar"/>
     </path>

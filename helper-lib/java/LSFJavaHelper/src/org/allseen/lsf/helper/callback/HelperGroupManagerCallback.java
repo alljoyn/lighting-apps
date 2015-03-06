@@ -181,7 +181,7 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
     }
 
     protected void postProcessLampGroupID(final String groupID, final boolean needName, final boolean needState) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 boolean getName = needName;
@@ -207,7 +207,7 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
     }
 
     protected void postUpdateLampGroupName(final String groupID, final String groupName) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 GroupDataModel groupModel = manager.getGroupCollectionManager().getModel(groupID);
@@ -222,7 +222,7 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
     }
 
     protected void postUpdateLampGroup(final String groupID, final LampGroup lampGroup) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 GroupDataModel groupModel = manager.getGroupCollectionManager().getModel(groupID);
@@ -249,7 +249,7 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
     }
 
     protected void postFlattenLampGroup(final String groupID) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 GroupCollectionManager groupCollectionManager = manager.getGroupCollectionManager();
@@ -263,7 +263,7 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
     }
 
     public void postUpdateDependentLampGroups(final String lampID) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 Iterator<Group> i = manager.getGroupCollectionManager().getGroupIterator();
@@ -281,7 +281,7 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
     }
 
     protected void postUpdateLampGroupState(final GroupDataModel groupModel) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 LampCapabilities capability = new LampCapabilities();
@@ -367,7 +367,7 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
     }
 
     protected void postDeleteGroups(final String[] groupIDs) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 for (String groupID : groupIDs) {
@@ -378,7 +378,7 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
     }
 
     protected void postSendGroupChanged(final String groupID) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 manager.getGroupCollectionManager().sendChangedEvent(groupID);

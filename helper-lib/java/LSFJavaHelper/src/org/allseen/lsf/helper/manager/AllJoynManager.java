@@ -15,8 +15,6 @@
  */
 package org.allseen.lsf.helper.manager;
 
-import java.util.concurrent.Semaphore;
-
 import org.alljoyn.bus.BusAttachment;
 import org.allseen.lsf.ControllerClient;
 import org.allseen.lsf.ControllerClientCallback;
@@ -34,14 +32,6 @@ import org.allseen.lsf.SceneManager;
 import org.allseen.lsf.SceneManagerCallback;
 import org.allseen.lsf.helper.callback.HelperGroupManagerCallback;
 import org.allseen.lsf.helper.listener.AllJoynListener;
-
-import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.util.Log;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
@@ -62,72 +52,62 @@ public class AllJoynManager {
     public static AllJoynListener alljoynListener;
 
     public static boolean controllerConnected = false;
-    public static boolean controllerStarted = false;
-    public static final Semaphore alljoynSemaphore = new Semaphore(1);
+    private static boolean controllerStarted = false;
 
     public static void init(
-            final FragmentManager fragmentManager,
-            final ControllerClientCallback controllerClientCallback,
-            final ControllerServiceManagerCallback controllerServiceManagerCallback,
-            final LampManagerCallback lampManagerCallback,
-            final HelperGroupManagerCallback groupManagerCallback,
-            final PresetManagerCallback presetManagerCallback,
-            final SceneManagerCallback sceneManagerCallback,
-            final MasterSceneManagerCallback masterSceneManagerCallback,
-            final AboutManager aboutManager,
-            final AllJoynListener alljoynListener) {
+        final String applicationName,
+        final LightingSystemQueue queue,
+        final ControllerClientCallback controllerClientCallback,
+        final ControllerServiceManagerCallback controllerServiceManagerCallback,
+        final LampManagerCallback lampManagerCallback,
+        final HelperGroupManagerCallback groupManagerCallback,
+        final PresetManagerCallback presetManagerCallback,
+        final SceneManagerCallback sceneManagerCallback,
+        final MasterSceneManagerCallback masterSceneManagerCallback,
+        final AboutManager aboutManager,
+        final AllJoynListener alljoynListener) {
 
-//TODO-FIX
-//        // acquire lock on new thread to prevent deadlock
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Log.d(AllJoynManager.TAG, "AllJoynManager.init() - acquiring lock");
-//                alljoynSemaphore.acquireUninterruptibly();
-//                Log.d(AllJoynManager.TAG, "AllJoynManager.init() - locked");
-//
-//                // run business logic back in main UI thread
-//                activity.handler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-                        Log.d(AllJoynManager.TAG, "AllJoynManager.init() - running");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("AllJoynManager.init() - thread starting");
 
-                        AllJoynManager.aboutManager = aboutManager;
-                        AllJoynManager.alljoynListener = alljoynListener;
+                AllJoynManager.aboutManager = aboutManager;
+                AllJoynManager.alljoynListener = alljoynListener;
 
-                        controllerConnected = false;
+                controllerConnected = false;
 
-                        AllJoynManagerFragment alljoynManagerFragment = (AllJoynManagerFragment) fragmentManager.findFragmentByTag(AllJoynManager.TAG);
+                AllJoynManager.bus = new BusAttachment(applicationName, BusAttachment.RemoteMessage.Receive);
+                AllJoynManager.bus.connect();
+//                AllJoynManager.bus.setDebugLevel("ALL", 7);
+//                AllJoynManager.bus.setDaemonDebug("ALL", 7);
 
-                        if (alljoynManagerFragment == null) {
-                            alljoynManagerFragment = new AllJoynManagerFragment();
-                            alljoynManagerFragment.controllerClientCallback = controllerClientCallback;
-                            alljoynManagerFragment.controllerServiceManagerCallback = controllerServiceManagerCallback;
-                            alljoynManagerFragment.lampManagerCallback = lampManagerCallback;
-                            alljoynManagerFragment.groupManagerCallback = groupManagerCallback;
-                            alljoynManagerFragment.presetManagerCallback = presetManagerCallback;
-                            alljoynManagerFragment.sceneManagerCallback = sceneManagerCallback;
-                            alljoynManagerFragment.masterSceneManagerCallback = masterSceneManagerCallback;
+                AllJoynManager.controllerClient = new ControllerClient(bus, controllerClientCallback);
+                AllJoynManager.controllerServiceManager = new ControllerServiceManager(controllerClient, controllerServiceManagerCallback);
+                AllJoynManager.lampManager = new LampManager(controllerClient, lampManagerCallback);
+                AllJoynManager.groupManager = new SampleGroupManager(controllerClient, groupManagerCallback);
+                AllJoynManager.presetManager = new PresetManager(controllerClient, presetManagerCallback);
+                AllJoynManager.sceneManager = new SceneManager(controllerClient, sceneManagerCallback);
+                AllJoynManager.masterSceneManager = new MasterSceneManager(controllerClient, masterSceneManagerCallback);
 
-                            fragmentManager.beginTransaction().add(alljoynManagerFragment, AllJoynManager.TAG).commit();
-                        }
-//TODO-FIX
-//                    }
-//                });
-//            }
-//        }).start();
-//        Log.d(AllJoynManager.TAG, "AllJoynManager.init() - thread started, resuming");
+                AllJoynManager.aboutManager.start(bus);
+
+                AllJoynManager.alljoynListener.onAllJoynInitialized();
+
+                System.out.println("AllJoynManager.init() - thread stopping");
+            }
+        }).start();
     }
 
-    public static void restart(Handler handler) {
-        Log.d(AllJoynManager.TAG, "AllJoynManager.restart()");
+    public static void restart(LightingSystemQueue queue) {
+        System.out.println("AllJoynManager.restart()");
 
-        AllJoynManager.stop(handler);
-        AllJoynManager.start(handler);
+        AllJoynManager.stop(queue);
+        AllJoynManager.start(queue);
     }
 
-    public static void start(final Handler handler) {
-        handler.post(new Runnable() {
+    public static void start(final LightingSystemQueue queue) {
+        queue.post(new Runnable() {
             @Override
             public void run() {
                 if (controllerClient != null) {
@@ -135,31 +115,31 @@ public class AllJoynManager {
                         ControllerClientStatus status = controllerClient.start();
 
                         if (status.equals(ControllerClientStatus.OK)) {
-                            Log.d(AllJoynManager.TAG, "AllJoynManager.start(): succeeded");
+                            System.out.println("AllJoynManager.start(): succeeded");
 
                             aboutManager.start(AllJoynManager.bus);
 
                             controllerStarted = true;
                         } else {
-                            Log.d(AllJoynManager.TAG, "AllJoynManager.start(): reposting");
+                            System.out.println("AllJoynManager.start(): reposting");
 
-                            handler.postDelayed(this, 5000);
+                            queue.postDelayed(this, 5000);
                         }
                     }
                 } else {
-                    Log.w(AllJoynManager.TAG, "AllJoynManager.start(): no controller client");
+                    System.err.println("AllJoynManager.start(): no controller client");
                 }
             }
         });
     }
 
-    public static void stop(final Handler handler) {
-        handler.post(new Runnable() {
+    public static void stop(final LightingSystemQueue queue) {
+        queue.post(new Runnable() {
             @Override
             public void run() {
                 if (controllerClient != null) {
                     if (controllerStarted) {
-                        Log.d(AllJoynManager.TAG, "AllJoynManager.stop(): succeeded");
+                        System.out.println("AllJoynManager.stop(): succeeded");
 
                         controllerClient.stop();
                         aboutManager.stop();
@@ -167,161 +147,37 @@ public class AllJoynManager {
                         controllerStarted = false;
                     }
                 } else {
-                    Log.w(AllJoynManager.TAG, "AllJoynManager.stop(): no controller client");
+                    System.err.println("AllJoynManager.stop(): no controller client");
                 }
             }
         });
     }
 
-    public static void destroy(final FragmentManager fragmentManager) {
+    public static void destroy() {
+        System.out.println("AllJoynManager.destroy()");
 
-//TODO-FIX
-//        // acquire lock on new thread to prevent deadlock
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Log.d(AllJoynManager.TAG, "AllJoynManager.destroy() - acquiring lock");
-//                alljoynSemaphore.acquireUninterruptibly();
-//                Log.d(AllJoynManager.TAG, "AllJoynManager.destroy() - locked");
-//
-//                // run business logic back in main UI thread
-//                activity.handler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-                        Log.d(AllJoynManager.TAG, "AllJoynManager.destroy() - running");
+        AllJoynManager.aboutManager.destroy();
 
-                        AllJoynManagerFragment alljoynManagerFragment = (AllJoynManagerFragment) fragmentManager.findFragmentByTag(AllJoynManager.TAG);
+        AllJoynManager.masterSceneManager.destroy();
+        AllJoynManager.sceneManager.destroy();
+        AllJoynManager.presetManager.destroy();
+        AllJoynManager.groupManager.destroy();
+        AllJoynManager.lampManager.destroy();
+        AllJoynManager.controllerServiceManager.destroy();
+        AllJoynManager.controllerClient.destroy();
 
-                        if (alljoynManagerFragment != null) {
-                            fragmentManager.beginTransaction().remove(alljoynManagerFragment).commitAllowingStateLoss();
-                        }
-//TODO-FIX
-//                    }
-//                });
-//            }
-//        }).start();
-//        Log.d(AllJoynManager.TAG, "AllJoynManager.destroy() - thread started, resuming");
-    }
+        AllJoynManager.bus.disconnect();
+        AllJoynManager.bus.release();
 
-    /**
-     * <b>WARNING: This class is not intended to be used by clients, and its interface may change
-     * in subsequent releases of the SDK</b>.
-     */
-    public static class AllJoynManagerFragment extends Fragment {
-        private AllJoynManagerAsyncTask alljoynManagerTask;
-
-        public ControllerClientCallback controllerClientCallback;
-        public ControllerServiceManagerCallback controllerServiceManagerCallback;
-        public LampManagerCallback lampManagerCallback;
-        public HelperGroupManagerCallback groupManagerCallback;
-        public PresetManagerCallback presetManagerCallback;
-        public SceneManagerCallback sceneManagerCallback;
-        public MasterSceneManagerCallback masterSceneManagerCallback;
-
-        public BusAttachment bus;
-        public ControllerClient controllerClient;
-        public ControllerServiceManager controllerServiceManager;
-        public LampManager lampManager;
-        public LampGroupManager groupManager;
-        public PresetManager presetManager;
-        public SceneManager sceneManager;
-        public MasterSceneManager masterSceneManager;
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            setRetainInstance(true);
-
-            Context context = getActivity().getApplicationContext();
-
-            org.alljoyn.bus.alljoyn.DaemonInit.PrepareDaemon(context);
-
-            alljoynManagerTask = new AllJoynManagerAsyncTask(this);
-            alljoynManagerTask.execute(context.getPackageName());
-        }
-
-        @Override
-        public void onDestroy() {
-            super.onDestroy();
-
-            Log.d(AllJoynManager.TAG, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            Log.d(AllJoynManager.TAG, "onDestroy()");
-            aboutManager.destroy();
-
-            masterSceneManager.destroy();
-            sceneManager.destroy();
-            presetManager.destroy();
-            groupManager.destroy();
-            lampManager.destroy();
-            controllerServiceManager.destroy();
-            controllerClient.destroy();
-
-            bus.disconnect();
-            bus.release();
-
-//TODO-DEL?
-//            AllJoynManager.controllerConnected = false;
-//            AllJoynManager.masterSceneManager = null;
-//            AllJoynManager.sceneManager = null;
-//            AllJoynManager.presetManager = null;
-//            AllJoynManager.groupManager = null;
-//            AllJoynManager.lampManager = null;
-//            AllJoynManager.controllerServiceManager = null;
-//            AllJoynManager.controllerClient = null;
-//            AllJoynManager.bus = null;
-
-            AllJoynManager.alljoynSemaphore.release();
-            Log.d(AllJoynManager.TAG, "AllJoynManager.destroy() - unlocked");
-        }
-    };
-
-    private static class AllJoynManagerAsyncTask extends AsyncTask<String, Void, Void> {
-        private final AllJoynManagerFragment alljoynManagerFragment;
-
-        private AllJoynManagerAsyncTask(AllJoynManagerFragment alljoynManagerFragment) {
-            this.alljoynManagerFragment = alljoynManagerFragment;
-        }
-
-        @Override
-        protected Void doInBackground(String... params) {
-            Log.d(AllJoynManager.TAG, "Creating BusAttachment");
-            alljoynManagerFragment.bus = new BusAttachment(params[0], BusAttachment.RemoteMessage.Receive);
-            alljoynManagerFragment.bus.connect();
-//TODO-TMP            alljoynManagerFragment.bus.setDebugLevel("ALL", 7);
-//TODO-TMP            alljoynManagerFragment.bus.setDaemonDebug("ALL", 7);
-
-            alljoynManagerFragment.controllerClient = new ControllerClient(alljoynManagerFragment.bus, alljoynManagerFragment.controllerClientCallback);
-            alljoynManagerFragment.controllerServiceManager = new ControllerServiceManager(alljoynManagerFragment.controllerClient, alljoynManagerFragment.controllerServiceManagerCallback);
-            alljoynManagerFragment.lampManager = new LampManager(alljoynManagerFragment.controllerClient, alljoynManagerFragment.lampManagerCallback);
-            alljoynManagerFragment.groupManager = new SampleGroupManager(alljoynManagerFragment.controllerClient, alljoynManagerFragment.groupManagerCallback);
-            alljoynManagerFragment.presetManager = new PresetManager(alljoynManagerFragment.controllerClient, alljoynManagerFragment.presetManagerCallback);
-            alljoynManagerFragment.sceneManager = new SceneManager(alljoynManagerFragment.controllerClient, alljoynManagerFragment.sceneManagerCallback);
-            alljoynManagerFragment.masterSceneManager = new MasterSceneManager(alljoynManagerFragment.controllerClient, alljoynManagerFragment.masterSceneManagerCallback);
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void response) {
-            super.onPostExecute(response);
-
-            AllJoynManager.bus = alljoynManagerFragment.bus;
-            AllJoynManager.controllerClient = alljoynManagerFragment.controllerClient;
-            AllJoynManager.controllerServiceManager = alljoynManagerFragment.controllerServiceManager;
-            AllJoynManager.lampManager = alljoynManagerFragment.lampManager;
-            AllJoynManager.groupManager = alljoynManagerFragment.groupManager;
-            AllJoynManager.presetManager = alljoynManagerFragment.presetManager;
-            AllJoynManager.sceneManager = alljoynManagerFragment.sceneManager;
-            AllJoynManager.masterSceneManager = alljoynManagerFragment.masterSceneManager;
-
-            aboutManager.start(AllJoynManager.bus);
-
-            AllJoynManager.alljoynSemaphore.release();
-
-            AllJoynManager.alljoynListener.onAllJoynInitialized();
-
-            Log.d(AllJoynManager.TAG, "AllJoynManager.init() - unlocked");
-       }
+      //TODO-DEL?
+//      AllJoynManager.controllerConnected = false;
+//      AllJoynManager.masterSceneManager = null;
+//      AllJoynManager.sceneManager = null;
+//      AllJoynManager.presetManager = null;
+//      AllJoynManager.groupManager = null;
+//      AllJoynManager.lampManager = null;
+//      AllJoynManager.controllerServiceManager = null;
+//      AllJoynManager.controllerClient = null;
+//      AllJoynManager.bus = null;
     }
 }

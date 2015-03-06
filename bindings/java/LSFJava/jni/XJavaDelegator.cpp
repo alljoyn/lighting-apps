@@ -14,8 +14,6 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  ******************************************************************************/
-#include <android/log.h>
-
 #include <qcc/Debug.h>
 
 #include "JEnum.h"
@@ -164,9 +162,6 @@ void XJavaDelegator::Call_Void_String_Object(const jweak jdelegate, char const *
     }
 
     *xobjValue = objValue;
-
-//    __android_log_print(ANDROID_LOG_DEBUG, QCC_MODULE, "cObj = %s", objValue.c_str());
-//    __android_log_print(ANDROID_LOG_DEBUG, QCC_MODULE, "xObj = %s", xobjValue->c_str());
 
     char sig[512];
     snprintf(sig, sizeof(sig), "(Ljava/lang/String;L%s;)V", xClass->className);
@@ -363,9 +358,6 @@ void XJavaDelegator::Call_Void_ResponseCode_String_Object(const jweak jdelegate,
     }
 
     *xobjValue = objValue;
-
-//    __android_log_print(ANDROID_LOG_DEBUG, QCC_MODULE, "cObj = %s", objValue.c_str());
-//    __android_log_print(ANDROID_LOG_DEBUG, QCC_MODULE, "xObj = %s", xobjValue->c_str());
 
     char sig[512];
     snprintf(sig, sizeof(sig), "(Lorg/allseen/lsf/ResponseCode;Ljava/lang/String;L%s;)V", xClass->className);

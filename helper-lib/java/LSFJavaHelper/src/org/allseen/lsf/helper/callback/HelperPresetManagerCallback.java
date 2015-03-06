@@ -75,7 +75,7 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
 
     @Override
     public void presetsNameChangedCB(final String[] presetIDs) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 boolean containsNewIDs = false;
@@ -163,7 +163,7 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
     }
 
     protected void postProcessPresetID(final String presetID) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 if (!manager.getPresetCollectionManager().hasID(presetID)) {
@@ -176,7 +176,7 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
     }
 
     protected void postUpdatePresetID(final String presetID) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 if (!manager.getPresetCollectionManager().hasID(presetID)) {
@@ -189,7 +189,7 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
     }
 
     protected void postUpdatePresetName(final String presetID, final String presetName) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 PresetDataModel presetModel = manager.getPresetCollectionManager().getModel(presetID);
@@ -204,7 +204,7 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
     }
 
     protected void postUpdatePreset(final String presetID, final LampState preset) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 PresetDataModel presetModel = manager.getPresetCollectionManager().getModel(presetID);
@@ -219,7 +219,7 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
     }
 
     protected void postDeletePresets(final String[] presetIDs) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 for (String presetID : presetIDs) {
@@ -230,7 +230,7 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
     }
 
     protected void postSendPresetChanged(final String presetID) {
-        manager.getHandler().post(new Runnable() {
+        manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
                 manager.getPresetCollectionManager().sendChangedEvent(presetID);
