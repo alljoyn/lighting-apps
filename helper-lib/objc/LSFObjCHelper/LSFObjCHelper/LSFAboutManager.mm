@@ -15,25 +15,23 @@
  ******************************************************************************/
 
 #import "LSFAboutManager.h"
-#import "alljoyn/about/AJNAnnouncementReceiver.h"
 #import "LSFConstants.h"
 #import "AJNMessageArgument.h"
-#import "alljoyn/about/AJNConvertUtil.h"
 #import "LSFAboutData.h"
 #import "LSFLampModelContainer.h"
 #import "LSFLampModel.h"
 #import "LSFAllJoynManager.h"
 #import "LSFDispatchQueue.h"
 #import "AJNSessionOptions.h"
-#import "alljoyn/about/AJNAboutClient.h"
 #import "LSFLampAnnouncementData.h"
+#import "AJNAboutObjectDescription.h"
+#import "AJNAboutProxy.h"
 
 @interface LSFAboutManager()
 
 @property (nonatomic, strong) AJNBusAttachment *bus;
-@property (strong, nonatomic) AJNAnnouncementReceiver *announcementReceiver;
 
--(void)getAboutDataFrom: (NSString *)peerName onPort: (unsigned int)port usingAboutData: (NSMutableDictionary *)aboutData;
+-(void)getAboutDataFrom: (NSString *)peerName onPort: (unsigned int)port;
 -(void)extractAboutData: (NSMutableDictionary *)aboutData;
 -(NSString *)extractNSStringFromAJNMessageArgument: (AJNMessageArgument *)msgArg;
 -(NSString *)extractAppIDFromArrayOfBytes: (AJNMessageArgument *)msgArg;
@@ -44,7 +42,6 @@
 @implementation LSFAboutManager
 
 @synthesize bus = _bus;
-@synthesize announcementReceiver = _announcementReceiver;
 
 -(id)initWithBusAttachment: (AJNBusAttachment *)bus
 {
@@ -66,33 +63,12 @@
 
     LSFConstants *constants = [LSFConstants getConstants];
 
-    const char* lampInterfaces[] = { [constants.lampStateInterfaceName UTF8String], [constants.lampDetailsInterfaceName UTF8String], [constants.lampParametersInterfaceName UTF8String],
-        [constants.lampServiceInterfaceName UTF8String] };
+    NSArray *lampInterfaces = [[NSArray alloc] initWithObjects: constants.lampStateInterfaceName, constants.lampDetailsInterfaceName, constants.lampParametersInterfaceName, constants.lampServiceInterfaceName, nil];
+    NSArray *controllerInterfaces = [[NSArray alloc] initWithObjects: constants.controllerServiceInterfaceName, constants.controllerServiceLampInterfaceName, constants.controllerServiceLampGroupInterfaceName, constants.controllerServicePresetInterfaceName, constants.controllerServiceSceneInterfaceName, constants.controllerServiceMasterSceneInterfaceName, constants.configServiceInterfaceName, constants.aboutInterfaceName, nil];
 
-    const char* controllerInterfaces[] =
-    {
-        [constants.controllerServiceInterfaceName UTF8String],
-        [constants.controllerServiceLampInterfaceName UTF8String],
-        [constants.controllerServiceLampGroupInterfaceName UTF8String],
-        [constants.controllerServicePresetInterfaceName UTF8String],
-        [constants.controllerServiceSceneInterfaceName UTF8String],
-        [constants.controllerServiceMasterSceneInterfaceName UTF8String],
-        [constants.configServiceInterfaceName UTF8String],
-        [constants.aboutInterfaceName UTF8String]
-    };
-
-    self.announcementReceiver = [[AJNAnnouncementReceiver alloc] initWithAnnouncementListener: self andBus: self.bus];
-    QStatus status = [self.announcementReceiver registerAnnouncementReceiverForInterfaces: lampInterfaces withNumberOfInterfaces: 4];
-    if (status != ER_OK)
-    {
-        NSLog(@"Error registering announcement interfaces for lamps");
-    }
-
-    status = [self.announcementReceiver registerAnnouncementReceiverForInterfaces: controllerInterfaces withNumberOfInterfaces: 8];
-    if (status != ER_OK)
-    {
-        NSLog(@"Error registering announcement interfaces for controllers");
-    }
+    [self.bus registerAboutListener: self];
+    [self.bus whoImplementsInterfaces: lampInterfaces numberOfInterfaces: [lampInterfaces count]];
+    [self.bus whoImplementsInterfaces: controllerInterfaces numberOfInterfaces: [controllerInterfaces count]];
 }
 
 -(void)unregisterAnnouncementHandler
@@ -101,54 +77,73 @@
 
     LSFConstants *constants = [LSFConstants getConstants];
 
-    const char* lampInterfaces[] = { [constants.lampStateInterfaceName UTF8String], [constants.lampDetailsInterfaceName UTF8String], [constants.lampParametersInterfaceName UTF8String],
-        [constants.lampServiceInterfaceName UTF8String] };
+    NSArray *lampInterfaces = [[NSArray alloc] initWithObjects: constants.lampStateInterfaceName, constants.lampDetailsInterfaceName, constants.lampParametersInterfaceName, constants.lampServiceInterfaceName, nil];
+    NSArray *controllerInterfaces = [[NSArray alloc] initWithObjects: constants.controllerServiceInterfaceName, constants.controllerServiceLampInterfaceName, constants.controllerServiceLampGroupInterfaceName, constants.controllerServicePresetInterfaceName, constants.controllerServiceSceneInterfaceName, constants.controllerServiceMasterSceneInterfaceName, constants.configServiceInterfaceName, constants.aboutInterfaceName, nil];
 
-    const char* controllerInterfaces[] =
-    {
-        [constants.controllerServiceInterfaceName UTF8String],
-        [constants.controllerServiceLampInterfaceName UTF8String],
-        [constants.controllerServiceLampGroupInterfaceName UTF8String],
-        [constants.controllerServicePresetInterfaceName UTF8String],
-        [constants.controllerServiceSceneInterfaceName UTF8String],
-        [constants.controllerServiceMasterSceneInterfaceName UTF8String],
-        [constants.configServiceInterfaceName UTF8String],
-        [constants.aboutInterfaceName UTF8String]
-    };
-
-    QStatus status = [self.announcementReceiver unRegisterAnnouncementReceiverForInterfaces: lampInterfaces withNumberOfInterfaces: 4];
-    if (status != ER_OK)
-    {
-        NSLog(@"Error unregistering announcement interfaces for lamps");
-    }
-
-    status = [self.announcementReceiver unRegisterAnnouncementReceiverForInterfaces: controllerInterfaces withNumberOfInterfaces: 8];
-    if (status != ER_OK)
-    {
-        NSLog(@"Error unregistering announcement interfaces for lamps");
-    }
+    [self.bus registerAboutListener: self];
+    [self.bus cancelWhoImplementsInterfaces: lampInterfaces numberOfInterfaces: [lampInterfaces count]];
+    [self.bus cancelWhoImplementsInterfaces: controllerInterfaces numberOfInterfaces: [controllerInterfaces count]];
 }
 
-- (void)announceWithVersion: (uint16_t)version port: (uint16_t)port busName: (NSString *)busName objectDescriptions: (NSMutableDictionary *)objectDescs aboutData: (NSMutableDictionary **)aboutData;
+- (void)didReceiveAnnounceOnBus:(NSString *)busName withVersion:(uint16_t)version withSessionPort:(AJNSessionPort)port withObjectDescription:(AJNMessageArgument *)objectDescriptionArg withAboutDataArg:(AJNMessageArgument *)aboutDataArg
 {
+    NSLog(@"LSFAboutManager - didReceiveAnnounceOnBus:withVersion:withSessionPort:withOnjectDescription:withAboutDataArg: executing()");
+
     LSFConstants *constants = [LSFConstants getConstants];
+    AJNAboutObjectDescription *aboutObjectDescription = [[AJNAboutObjectDescription alloc] initWithMsgArg: objectDescriptionArg];
 
-//    NSSet *cis = [NSSet setWithArray: [objectDescs valueForKey: constants.controllerServiceObjectDescription]];
-//    NSSet *controllerInterfacesSet = [NSSet setWithArray: [NSArray arrayWithObjects: constants.controllerServiceInterfaceName, constants.controllerServiceLampInterfaceName, constants.controllerServiceLampGroupInterfaceName, constants.controllerServicePresetInterfaceName, constants.controllerServiceSceneInterfaceName, constants.controllerServiceMasterSceneInterfaceName, nil]];
+    size_t numLampInterfaces = [aboutObjectDescription getInterfacesForPath: constants.lampServiceObjectDescription interfaces: nil numOfInterfaces: 0];
+    NSMutableArray *lampInterfaces = [[NSMutableArray alloc] initWithCapacity:numLampInterfaces];
+    [aboutObjectDescription getInterfacesForPath: constants.lampServiceObjectDescription interfaces: &lampInterfaces numOfInterfaces: numLampInterfaces];
 
-    NSSet *lis = [NSSet setWithArray: [objectDescs valueForKey: constants.lampServiceObjectDescription]];
+    size_t numControllerInterfaces = [aboutObjectDescription getInterfacesForPath: constants.controllerServiceObjectDescription interfaces: nil numOfInterfaces: 0];
+    NSMutableArray *controllerInterfaces = [[NSMutableArray alloc] initWithCapacity:numControllerInterfaces];
+    [aboutObjectDescription getInterfacesForPath: constants.controllerServiceObjectDescription interfaces: &controllerInterfaces numOfInterfaces: numControllerInterfaces];
+
+    NSSet *lis = [NSSet setWithArray: lampInterfaces];
+    NSSet *cis = [NSSet setWithArray: controllerInterfaces];
     NSSet *lampInterfacesSet = [NSSet setWithArray: [NSArray arrayWithObjects: constants.lampServiceInterfaceName, constants.lampStateInterfaceName, constants.lampDetailsInterfaceName, constants.lampParametersInterfaceName, nil]];
+    NSSet *controllerInterfacesSet = [NSSet setWithArray: [NSArray arrayWithObjects: constants.controllerServiceInterfaceName, constants.controllerServiceLampInterfaceName, constants.controllerServiceLampGroupInterfaceName, constants.controllerServicePresetInterfaceName, constants.controllerServiceSceneInterfaceName, constants.controllerServiceMasterSceneInterfaceName, nil]];
 
     if ([lis isEqualToSet: lampInterfacesSet])
     {
-        AJNMessageArgument *msgArg  = [*aboutData valueForKey: @"DeviceId"];
-        NSString *lampID = [self extractNSStringFromAJNMessageArgument: msgArg];
+        NSLog(@"Received lamp announcement");
+
+        MsgArg *entries;
+        size_t numFields;
+        MsgArg *arg = static_cast<MsgArg*>(aboutDataArg.handle);
+
+        arg->Get("a{sv}", &numFields, &entries);
+
+        char *key;
+        MsgArg *value;
+        NSString *lampID;
+        for (size_t i = 0; i < numFields; ++i)
+        {
+            entries[i].Get("{sv}", &key, &value);
+
+            if (strcmp(key, "DeviceId") == 0)
+            {
+                NSLog(@"Found Device ID");
+                char *deviceID;
+                value->Get("s", &deviceID);
+
+                lampID = [NSString stringWithUTF8String: deviceID];
+                NSLog(@"LampID = %@", lampID);
+                break;
+            }
+        }
+
         LSFLampAnnouncementData *lampAnnData = [[LSFLampAnnouncementData alloc] initPort: port busName: busName];
 
         dispatch_async(dispatch_queue_create("GetAboutData", NULL), ^{
             //[self getAboutDataFrom: busName onPort: port usingAboutData: *aboutData];
             [[LSFAllJoynManager getAllJoynManager] addNewLamp: lampID lampAnnouncementData: lampAnnData];
         });
+    }
+    else if ([cis isEqualToSet: controllerInterfacesSet])
+    {
+        NSLog(@"Received controller announcement");
     }
     else
     {
@@ -158,14 +153,15 @@
 
 -(void)getAboutDataFromBusName: (NSString *)busName onPort: (unsigned int)port
 {
-    [self getAboutDataFrom:busName onPort:port usingAboutData:nil];
+    [self getAboutDataFrom:busName onPort:port];
 }
 
 /*
  * Private Functions
  */
--(void)getAboutDataFrom: (NSString *)peerName onPort: (unsigned int)port usingAboutData: (NSMutableDictionary *)aboutData
+-(void)getAboutDataFrom: (NSString *)peerName onPort: (unsigned int)port
 {
+    LSFConstants *constants = [LSFConstants getConstants];
     AJNSessionOptions *opt = [[AJNSessionOptions alloc] initWithTrafficType: kAJNTrafficMessages supportsMultipoint: false proximity: kAJNProximityAny transportMask: kAJNTransportMaskAny];
     AJNSessionId sessionID = [self.bus joinSessionWithName: peerName onPort: port withDelegate: nil options: opt];
 
@@ -177,13 +173,13 @@
     {
         NSLog(@"Session ID = %u", sessionID);
 
-        NSMutableDictionary *fullAboutData;
-        AJNAboutClient *ajnAboutClient = [[AJNAboutClient alloc] initWithBus: self.bus];
+        NSMutableDictionary *fullAboutData = [[NSMutableDictionary alloc] init];
+        AJNAboutProxy *aboutProxy = [[AJNAboutProxy alloc] initWithBusAttachment: self.bus busName: peerName sessionId: sessionID];
 
         QStatus status = ER_OK;
         for (int i = 0; i < 5; i++)
         {
-            status = [ajnAboutClient aboutDataWithBusName: peerName andLanguageTag: ([LSFConstants getConstants]).defaultLanguage andAboutData: &fullAboutData andSessionId: sessionID];
+            status = [aboutProxy getAboutDataForLanguage: constants.defaultLanguage usingDictionary: &fullAboutData];
 
             if (status != ER_OK)
             {
@@ -205,8 +201,8 @@
             [self extractAboutData: fullAboutData];
         }
 
-        //Ensure AboutClient is nil before proceeding. This ensures the object gets cleaned up by the garbage collector
-        ajnAboutClient = nil;
+        fullAboutData = nil;
+        aboutProxy = nil;
     }
 
     //Need to make sure I leave the session to ensure the sample app fully disconnects from the lamp
@@ -294,7 +290,7 @@
     QStatus status;
     const char* msgArgContent;
     status = [msgArg value: @"s", &msgArgContent];
-    return [AJNConvertUtil convertConstCharToNSString: msgArgContent];
+    return [NSString stringWithUTF8String: msgArgContent];
 }
 
 -(NSString *)extractAppIDFromArrayOfBytes: (AJNMessageArgument *)msgArg

@@ -15,14 +15,14 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "alljoyn/about/AJNAnnouncementListener.h"
+#import "AJNAboutListener.h"
 #import "AJNBusAttachment.h"
 
 /**
  * @warning *Note:* This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK.
  */
-@interface LSFAboutManager : NSObject <AJNAnnouncementListener>
+@interface LSFAboutManager : NSObject <AJNAboutListener>
 
 -(id)initWithBusAttachment: (AJNBusAttachment *)bus;
 -(void)getAboutDataFromBusName: (NSString *)busName onPort: (unsigned int)port;

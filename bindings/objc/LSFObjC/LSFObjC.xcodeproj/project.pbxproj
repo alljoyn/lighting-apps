@@ -105,7 +105,6 @@
 		8771850018E4B3400085D153 /* LSFLampDetailsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 877184FF18E4B3400085D153 /* LSFLampDetailsTest.mm */; };
 		8771850618E4BC7A0085D153 /* LSFUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8771850518E4BC7A0085D153 /* LSFUtils.mm */; };
 		8774B2101A07EE8000EE42E9 /* Rank.cc in Sources */ = {isa = PBXBuildFile; fileRef = 8774B20F1A07EE8000EE42E9 /* Rank.cc */; };
-		877725BE198820D500390287 /* liballjoyn_about_cpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87443CC2195B826F008EEF36 /* liballjoyn_about_cpp.a */; };
 		877725BF198820D500390287 /* libAllJoynFramework_iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87443CC3195B826F008EEF36 /* libAllJoynFramework_iOS.a */; };
 		878EC57118E88A0F0023C1B7 /* LSFLampManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 878EC57018E88A0F0023C1B7 /* LSFLampManager.mm */; };
 		878EC57418E8912D0023C1B7 /* LSFLampGroupManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 878EC57318E8912D0023C1B7 /* LSFLampGroupManager.mm */; };
@@ -378,7 +377,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				877725BE198820D500390287 /* liballjoyn_about_cpp.a in Frameworks */,
 				877725BF198820D500390287 /* libAllJoynFramework_iOS.a in Frameworks */,
 				87D813D318CA4B8300903D59 /* SystemConfiguration.framework in Frameworks */,
 				87D8139B18CA483C00903D59 /* Foundation.framework in Frameworks */,
@@ -993,7 +991,6 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
-					"\"$(ALLJOYN_HOME)/services/about/cpp/inc\"",
 					"\"$(ALLJOYN_HOME)/alljoyn_objc/AllJoynFramework/AllJoynFramework\"",
 					"\"$(LSF_HOME)/standard_core_library/lighting_controller_client/inc\"",
 					"\"$(LSF_HOME)/standard_core_library/common/inc\"",
@@ -1035,7 +1032,6 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
-					"\"$(ALLJOYN_HOME)/services/about/cpp/inc\"",
 					"\"$(ALLJOYN_HOME)/alljoyn_objc/AllJoynFramework/AllJoynFramework\"",
 					"\"$(LSF_HOME)/standard_core_library/lighting_controller_client/inc\"",
 					"\"$(LSF_HOME)/standard_core_library/common/inc\"",

@@ -18,7 +18,6 @@
 
 @interface LSFLampAnnouncementData ()
 
-@property (nonatomic, strong) NSString *lampID;
 @property (nonatomic) uint16_t port;
 @property (nonatomic, strong) NSString *busName;
 

@@ -135,7 +135,6 @@
 		87E6305919BFA9D500F447A1 /* LSFColorItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E6305819BFA9D500F447A1 /* LSFColorItem.m */; };
 		87FA42461A23AFEB00059BF7 /* libLSFObjC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87FA42341A23A57E00059BF7 /* libLSFObjC.a */; };
 		87FA42481A23AFFA00059BF7 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87FA42471A23AFFA00059BF7 /* SystemConfiguration.framework */; };
-		87FA42561A23B05100059BF7 /* liballjoyn_about_objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87FA42551A23B05100059BF7 /* liballjoyn_about_objc.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -366,7 +365,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				87FA42561A23B05100059BF7 /* liballjoyn_about_objc.a in Frameworks */,
 				87FA42461A23AFEB00059BF7 /* libLSFObjC.a in Frameworks */,
 				87A15CA91A2538F3004FE3CD /* UIKit.framework in Frameworks */,
 				87FA42481A23AFFA00059BF7 /* SystemConfiguration.framework in Frameworks */,
@@ -912,6 +910,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
+				CODE_SIGN_IDENTITY = "";
 				DSTROOT = /tmp/LSFObjCHelper.dst;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
@@ -924,8 +923,6 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
-					"\"$(ALLJOYN_HOME)/services/about/cpp/inc\"",
-					"\"$(ALLJOYN_HOME)/services/about/ios/inc\"",
 					"\"$(ALLJOYN_HOME)/alljoyn_objc/AllJoynFramework/AllJoynFramework\"",
 					"\"$(LSF_HOME)/standard_core_library/lighting_controller_client/inc\"",
 					"\"$(LSF_HOME)/standard_core_library/common/inc\"",
@@ -956,6 +953,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
+				CODE_SIGN_IDENTITY = "";
 				DSTROOT = /tmp/LSFObjCHelper.dst;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
@@ -968,8 +966,6 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
-					"\"$(ALLJOYN_HOME)/services/about/cpp/inc\"",
-					"\"$(ALLJOYN_HOME)/services/about/ios/inc\"",
 					"\"$(ALLJOYN_HOME)/alljoyn_objc/AllJoynFramework/AllJoynFramework\"",
 					"\"$(LSF_HOME)/standard_core_library/lighting_controller_client/inc\"",
 					"\"$(LSF_HOME)/standard_core_library/common/inc\"",
