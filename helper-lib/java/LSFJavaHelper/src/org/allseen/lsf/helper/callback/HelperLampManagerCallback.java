@@ -250,7 +250,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
         }, delay);
     }
 
-    public void postOnLampQueriedAboutData(final String lampID, final Map<String, Object> queriedData, int delay) {
+    public void postOnLampQueriedAboutData(final String lampID, final Map<String, Variant> queriedData, int delay) {
         manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {

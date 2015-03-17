@@ -73,25 +73,25 @@ public class LampAbout {
             aboutPeer = peer;
             aboutPort = port;
 
-            aboutAppID = AboutManager.getByteArrayHexStringFromAnnouncedData(AboutKeys.ABOUT_APP_ID, announcedData, dataNotFound);
+            aboutAppID = AboutManager.getByteArrayHexStringFromVariantMap(AboutKeys.ABOUT_APP_ID, announcedData, dataNotFound);
         }
     }
 
-    public void setQueriedData(Map<String, Object> queriedData) {
+    public void setQueriedData(Map<String, Variant> queriedData) {
         if (queriedData != null) {
             aboutQuery = true;
 
-            aboutDeviceID = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_DEVICE_ID, queriedData, dataNotFound);
-            aboutDeviceName = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_DEVICE_NAME, queriedData, dataNotFound);
-            aboutDefaultLanguage = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_DEFAULT_LANGUAGE, queriedData, dataNotFound);
-            aboutAppName = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_APP_NAME, queriedData, dataNotFound);
-            aboutManufacturer = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_MANUFACTURER, queriedData, dataNotFound);
-            aboutModelNumber = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_MODEL_NUMBER, queriedData, dataNotFound);
-            aboutDescription = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_DESCRIPTION, queriedData, dataNotFound);
-            aboutDateOfManufacture = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_DATE_OF_MANUFACTURE, queriedData, dataNotFound);
-            aboutSoftwareVersion = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_SOFTWARE_VERSION, queriedData, dataNotFound);
-            aboutHardwareVersion = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_HARDWARE_VERSION, queriedData, dataNotFound);
-            aboutSupportUrl = AboutManager.getStringFromQueriedData(AboutKeys.ABOUT_SUPPORT_URL, queriedData, dataNotFound);
+            aboutDeviceID = AboutManager.getStringFromVariantMap(AboutKeys.ABOUT_DEVICE_ID, queriedData, dataNotFound);
+            aboutDeviceName = AboutManager.getStringFromVariantMap(AboutKeys.ABOUT_DEVICE_NAME, queriedData, dataNotFound);
+            aboutDefaultLanguage = AboutManager.getStringFromVariantMap(AboutKeys.ABOUT_DEFAULT_LANGUAGE, queriedData, dataNotFound);
+            aboutAppName = AboutManager.getStringFromVariantMap(AboutKeys.ABOUT_APP_NAME, queriedData, dataNotFound);
+            aboutManufacturer = AboutManager.getStringFromVariantMap(AboutKeys.ABOUT_MANUFACTURER, queriedData, dataNotFound);
+            aboutModelNumber = AboutManager.getStringFromVariantMap(AboutKeys.ABOUT_MODEL_NUMBER, queriedData, dataNotFound);
+            aboutDescription = AboutManager.getStringFromVariantMap(AboutKeys.ABOUT_DESCRIPTION, queriedData, dataNotFound);
+            aboutDateOfManufacture = AboutManager.getStringFromVariantMap(AboutKeys.ABOUT_DATE_OF_MANUFACTURE, queriedData, dataNotFound);
+            aboutSoftwareVersion = AboutManager.getStringFromVariantMap(AboutKeys.ABOUT_SOFTWARE_VERSION, queriedData, dataNotFound);
+            aboutHardwareVersion = AboutManager.getStringFromVariantMap(AboutKeys.ABOUT_HARDWARE_VERSION, queriedData, dataNotFound);
+            aboutSupportUrl = AboutManager.getStringFromVariantMap(AboutKeys.ABOUT_SUPPORT_URL, queriedData, dataNotFound);
         }
     }
 }

@@ -20,21 +20,23 @@ import java.util.List;
 import java.util.Map;
 
 import org.alljoyn.about.AboutKeys;
-import org.alljoyn.about.AboutService;
-import org.alljoyn.about.AboutServiceImpl;
-import org.alljoyn.about.client.AboutClient;
+import org.alljoyn.bus.AboutListener;
+import org.alljoyn.bus.AboutObjectDescription;
+import org.alljoyn.bus.AboutProxy;
 import org.alljoyn.bus.BusAttachment;
 import org.alljoyn.bus.BusException;
+import org.alljoyn.bus.Mutable;
+import org.alljoyn.bus.SessionListener;
+import org.alljoyn.bus.SessionOpts;
+import org.alljoyn.bus.Status;
 import org.alljoyn.bus.Variant;
-import org.alljoyn.services.common.AnnouncementHandler;
-import org.alljoyn.services.common.BusObjectDescription;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class AboutManager implements AnnouncementHandler {
-    private AboutService aboutService;
+public class AboutManager implements AboutListener {
+    private BusAttachment bus;
     private final LightingSystemManager manager;
 
     private static final String[] LAMP_SERVICE_INTERFACE_NAMES = {
@@ -50,73 +52,55 @@ public class AboutManager implements AnnouncementHandler {
         "org.allseen.LSF.ControllerService.MasterScene" };
 
     public AboutManager(LightingSystemManager manager) {
+        this.bus = null;
         this.manager = manager;
     }
 
-    public void start(BusAttachment bus) {
-        if (aboutService == null) {
-            // Add match to receive sessionless signals
-            bus.addMatch("sessionless='t',type='error'");
+    public void start(BusAttachment ba) {
+        if (bus == null) {
+            bus = ba;
 
-            aboutService = AboutServiceImpl.getInstance();
+            bus.registerAboutListener(this);
 
-            try {
-                aboutService.startAboutClient(bus);
-                //TODO-FIX Log.d(SampleAppActivity.TAG, "AboutClient started");
-            } catch (Exception e) {
-                //TODO-FIX Log.e(SampleAppActivity.TAG, "Exception caught when starting AboutService client: " + e.getMessage());
-            }
-        }
-
-        if (aboutService != null) {
-            aboutService.addAnnouncementHandler(this, AboutManager.LAMP_SERVICE_INTERFACE_NAMES);
-            aboutService.addAnnouncementHandler(this, AboutManager.CONTROLLER_SERVICE_INTERFACE_NAMES);
-        } else {
-            //TODO-FIX Log.d(SampleAppActivity.TAG, "start(): start failed");
+            bus.whoImplements(AboutManager.LAMP_SERVICE_INTERFACE_NAMES);
+            bus.whoImplements(AboutManager.CONTROLLER_SERVICE_INTERFACE_NAMES);
         }
     }
 
     public void stop() {
-        if (aboutService != null) {
-            aboutService.removeAnnouncementHandler(this, AboutManager.LAMP_SERVICE_INTERFACE_NAMES);
-            aboutService.removeAnnouncementHandler(this, AboutManager.CONTROLLER_SERVICE_INTERFACE_NAMES);
-        } else {
-            //TODO-FIX Log.d(SampleAppActivity.TAG, "stop(): not started");
+        if (bus != null) {
+            bus.unregisterAboutListener(this);
+
+            bus.cancelWhoImplements(AboutManager.LAMP_SERVICE_INTERFACE_NAMES);
+            bus.cancelWhoImplements(AboutManager.CONTROLLER_SERVICE_INTERFACE_NAMES);
+
+            bus = null;
         }
     }
 
     public void destroy() {
-        if (aboutService != null) {
+        if (bus != null) {
             stop();
-
-            try {
-                aboutService.stopAboutClient();
-                //TODO-FIX Log.d(SampleAppActivity.TAG, "AboutClient destroyed");
-            } catch (Exception e) {
-                //TODO-FIX Log.e(SampleAppActivity.TAG, "Exception caught trying to stop AboutService client: " + e.getMessage());
-            }
-
-            aboutService = null;
         }
     }
 
     @Override
-    public void onAnnouncement(String peerName, short port, BusObjectDescription[] busObjects, Map<String, Variant> announcedData) {
-        //TODO-FIX Log.d(SampleAppActivity.TAG, "Announcement received from AboutService");
+    public void announced(String busName, int version, short port, AboutObjectDescription[] aboutObjects, Map<String, Variant> announcedData) {
+        //TODO-FIX Log.d("AboutManager", "Announcement received from AboutService");
 
         // Flatten the interfaces
         List<String> allInterfaces = new ArrayList<String>();
-        for (BusObjectDescription busObject : busObjects) {
-            for (String iface : busObject.getInterfaces()) {
+        for (AboutObjectDescription aboutObject : aboutObjects) {
+            for (String iface : aboutObject.interfaces) {
                 allInterfaces.add(iface);
             }
         }
 
         if (containsLampInterfaces(allInterfaces)) {
-            //TODO-FIX Log.d(SampleAppActivity.TAG, "announcement: lamp ifaces found");
-            addLampAnnouncedAboutData(peerName, port, announcedData);
+            //TODO-FIX Log.d("AboutManager", "announcement: lamp ifaces found");
+            addLampAnnouncedAboutData(busName, port, announcedData);
         } else if (containsControllerInterfaces(allInterfaces)) {
-            //TODO-FIX Log.d(SampleAppActivity.TAG, "announcement: controller ifaces found");
+            //TODO-FIX Log.d("AboutManager", "announcement: controller ifaces found");
             addControllerAnnouncedAboutData(announcedData);
         }
     }
@@ -143,63 +127,62 @@ public class AboutManager implements AnnouncementHandler {
         return true;
     }
 
-    @Override
-    public void onDeviceLost(String arg0) {
-        //TODO-FIX Log.d(SampleAppActivity.TAG, "Device Lost: " + arg0);
-    }
-
-    protected void addLampAnnouncedAboutData(String peerName, short port, final Map<String, Variant> announcedData) {
-        String lampID = getStringFromAnnouncedData(AboutKeys.ABOUT_DEVICE_ID, announcedData, null);
+    protected void addLampAnnouncedAboutData(String busName, short port, final Map<String, Variant> announcedData) {
+        String lampID = getStringFromVariantMap(AboutKeys.ABOUT_DEVICE_ID, announcedData, null);
 
         if (lampID != null) {
-            //TODO-FIX Log.d(SampleAppActivity.TAG, "Announce received: " + lampID);
-
-            manager.lampManagerCB.postOnLampAnnouncedAboutData(lampID, peerName, port, announcedData, 0);
+            //TODO-FIX Log.d("AboutManager", "Announce received: " + lampID);
+            manager.lampManagerCB.postOnLampAnnouncedAboutData(lampID, busName, port, announcedData, 0);
         } else {
-            //TODO-FIX Log.e(SampleAppActivity.TAG, "Announcement lacks device ID");
+            //TODO-FIX Log.e("AboutManager", "Announcement lacks device ID");
         }
     }
 
-    public void getLampQueriedAboutData(String lampID, String peer, short port) {
-        AboutClient aboutClient = null;
-        Map<String, Object> aboutData = null;
-
+    public void getLampQueriedAboutData(String lampID, String busName, short port) {
         try {
-            aboutClient = aboutService.createAboutClient(peer, null, port);
-        } catch (Exception e) {
-            //TODO-FIX Log.e(SampleAppActivity.TAG, "About client creation failed: " + e.getMessage());
-        }
+            Mutable.IntegerValue sessionId = new Mutable.IntegerValue();;
 
-        try {
-            if (aboutClient != null) {
-                aboutClient.connect();
+            SessionOpts sessionOpts = new SessionOpts();
+            sessionOpts.traffic = SessionOpts.TRAFFIC_MESSAGES;
+            sessionOpts.isMultipoint = false;
+            sessionOpts.proximity = SessionOpts.PROXIMITY_ANY;
+            sessionOpts.transports = SessionOpts.TRANSPORT_ANY;
 
-                aboutData = aboutClient.getAbout(LightingSystemManager.LANGUAGE);
+            Status status = bus.joinSession(busName, port, sessionId, sessionOpts, new SessionListener() {
+                @Override
+                public void sessionLost(int sessionId, int reason) {
+                    //TODO-FIX Log.d("AboutManager", "Session Lost : " + sessionId + " reason: " + reason);
+                }});
 
-                manager.lampManagerCB.postOnLampQueriedAboutData(lampID, aboutData, 0);
+            //TODO-FIX Log.d("AboutManager", "bus " + busName + ", port " + port + ", session " + sessionId.value);
+
+            if (status == Status.OK) {
+                //TODO-FIX Log.d("AboutManager", "join session success");
+                AboutProxy aboutProxy = new AboutProxy(bus, busName, sessionId.value);
+                Map<String, Variant> queriedData = aboutProxy.getAboutData(LightingSystemManager.LANGUAGE);
+
+                manager.lampManagerCB.postOnLampQueriedAboutData(lampID, queriedData, 0);
+            } else {
+                //TODO-FIX Log.e("AboutManager", "join session failed " + status);
             }
         } catch (BusException e) {
-            //TODO-FIX Log.e(SampleAppActivity.TAG, "About data retrieval failed: " + e.getMessage());
-        } finally {
-            if (aboutClient != null) {
-                aboutClient.disconnect();
-            }
+            //TODO-FIX Log.e("AboutManager", "About data retrieval failed: " + e.getMessage());
         }
     }
 
     protected void addControllerAnnouncedAboutData(final Map<String, Variant> announceData) {
-        String controllerID = getStringFromAnnouncedData(AboutKeys.ABOUT_DEVICE_ID, announceData, null);
-        String controllerName = getStringFromAnnouncedData(AboutKeys.ABOUT_DEVICE_NAME, announceData, null);
+        String controllerID = getStringFromVariantMap(AboutKeys.ABOUT_DEVICE_ID, announceData, null);
+        String controllerName = getStringFromVariantMap(AboutKeys.ABOUT_DEVICE_NAME, announceData, null);
 
         manager.controllerClientCB.postOnControllerAnnouncedAboutData(controllerID, controllerName, 200);
     }
 
-    public static String getStringFromAnnouncedData(String key, Map<String, Variant> announceData, String defaultValue) {
+    public static String getStringFromVariantMap(String key, Map<String, Variant> variantMap, String defaultValue) {
         String value = defaultValue;
 
-        if (announceData != null) {
+        if (variantMap != null) {
             try {
-                Variant variant = announceData.get(key);
+                Variant variant = variantMap.get(key);
 
                 if (variant != null) {
                     value = variant.getObject(String.class);
@@ -212,12 +195,12 @@ public class AboutManager implements AnnouncementHandler {
         return value;
     }
 
-    public static String getByteArrayHexStringFromAnnouncedData(String key, Map<String, Variant> announcedData, String defaultValue) {
+    public static String getByteArrayHexStringFromVariantMap(String key, Map<String, Variant> variantMap, String defaultValue) {
         String value = defaultValue;
 
-        if (announcedData != null) {
+        if (variantMap != null) {
             try {
-                Variant variant = announcedData.get(key);
+                Variant variant = variantMap.get(key);
 
                 if (variant != null) {
                     byte[] bytes = variant.getObject(byte[].class);
@@ -241,19 +224,5 @@ public class AboutManager implements AnnouncementHandler {
         }
 
        return value;
-    }
-
-    public static String getStringFromQueriedData(String key, Map<String, Object> queriedData, String defaultValue) {
-        String value = defaultValue;
-
-        if (queriedData != null) {
-            Object object = queriedData.get(key);
-
-            if (object instanceof String) {
-                value = (String)object;
-            }
-        }
-
-        return value;
     }
 }
