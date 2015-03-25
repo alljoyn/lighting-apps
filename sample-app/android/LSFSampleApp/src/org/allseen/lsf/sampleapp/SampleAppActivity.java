@@ -203,6 +203,15 @@ public class SampleAppActivity extends FragmentActivity implements
         systemManager.init("SampleApp", this);
     }
 
+    @Override
+    protected void onDestroy() {
+        if (systemManager != null) {
+            systemManager.stop();
+        }
+
+        super.onDestroy();
+    }
+
     protected boolean isWifiConnected() {
         NetworkInfo wifiNetworkInfo = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
