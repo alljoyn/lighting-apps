@@ -1,0 +1,65 @@
+AllSeen Lighting Applications 14.12 Release Notes
+=================================================
+
+Platform Support
+----------------
+ 1) Android API level 16 (JellyBean) or greater
+ 2) iOS 7.0 or higher
+
+
+Features added in Version 14.12
+--------------------------------
+*               Initial release of the iOS Lighting SDK.
+ASALIGHT-158    Modify iOS Sample App to use the 14.12 About API
+ASALIGHT-157    Modify Android Sample App to use the 14.12 About API
+ASALIGHT-149    Add support for the LampsLost API
+
+
+Issues Addressed in Version 14.12
+----------------------------------
+ASACORE-1146    AllJoynPeerObj populates incorrect serial number when generating error replies for method calls that fail due to peer authentication failure
+ASACORE-905     Remove dependency on NameOwnerChanged signals from TCL
+ASACORE-793     Routing node appears to hang sending data to an abandoned thin client connection
+ASACORE-748     Dismiss All Notifications Test Doesn't Acheive Receiving 95% Of DismissAll Signals Under 10 Seconds Time Frame
+ASACORE-151     Implement a heartbeat message between routing and non-routing nodes
+ASACORE-133     AJTCL fails to bind ServicePort on RoutingNode after multiple resets
+
+For a complete list of AllJoyn core issues fixed in 14.12:
+https://jira.allseenalliance.org/issues/?jql=project%20%3D%20ASACORE%20AND%20resolution%20%3D%20Fixed%20AND%20fixVersion%20%3D%20%2214.12%22
+
+ASALIGHT-164    Fix a race condition in the LSF Controller Client library
+ASALIGHT-141    Controller Service erroneously generates LampsFound signal instead of LampNameChanged signal in some cases
+ASALIGHT-140    Add bound checks on array arguments where-ever applicable in the Controller Service, Controller Client and Lamp Service
+ASALIGHT-122    Remove AJ_SetMinProtoVersion(MIN_ROUTER_VERSION); from Lamp Service
+ASALIGHT-111    Add support for LampsLost API to inform the application about when to remove a lamp from an active list
+
+For a complete list of AllJoyn lighting issues fixed in 14.12:
+https://jira.allseenalliance.org/issues/?jql=project%20%3D%20ASALIGHT%20AND%20resolution%20%3D%20Fixed%20AND%20fixVersion%20%3D%20%2214.12%22
+
+
+Known Issues in Version 14.12
+------------------------------
+ASALIGHT-174    Integrate Lighting Controller Service as part of Lighting iOS SDK and Sample App
+ASALIGHT-166    Build iOS SDK using XCode 6 and 64-bit native
+ASALIGHT-165    Build iOS Sample apps using XCode 6 and 64-bit native
+ASALIGHT-161    Using 15.04 Core lifecycle APIs (iOS App)
+ASALIGHT-128    Add support to restrict the LSF user traffic in the Controller Service
+ASALIGHT-124    Modify the Lamp Service to use the new heartbeat feature that will added in AllJoyn Core
+ASALIGHT-115    Lamp service not always responsive to state change actions from controller service
+ASALIGHT-98     Add a manifest file to LSF GIT repository
+ASALIGHT-84     Issue with the ControllerService name defined during the Onboarding process
+ASALIGHT-72     Controller Service State Sync Algorithm corner case
+
+For a complete list of open AllJoyn lighting issues:
+https://jira.allseenalliance.org/issues/?jql=project%20%3D%20ASALIGHT%20AND%20status%20in%20(Open%2C%20%22In%20Progress%22%2C%20Reopened%2C%20New)
+
+
+Compatibility
+-------------
+Backward compatible with previous releases (14.06)
+
+
+Change history
+--------------
+[No items]
+
