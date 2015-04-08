@@ -16,7 +16,7 @@
 
 #import <Foundation/Foundation.h>
 #import "LSFNextControllerConnectionDelegate.h"
-#import "AJNBusAttachment.h"
+#import "BusAttachment.h"
 
 /**
  * LSFLightingDirector is the main class in the facade interface of the iOS Lighting SDK.
@@ -44,7 +44,7 @@
  *
  * @return The AllJoyn BusAttachment object.
  */
-@property (nonatomic, readonly) AJNBusAttachment *busAttachment;
+@property (nonatomic, readonly) ajn::BusAttachment *busAttachment;
 
 /** @name Creating LSFLightingDirector */
 

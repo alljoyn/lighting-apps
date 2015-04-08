@@ -19,7 +19,7 @@
 #import "LSFControllerServiceManager.h"
 #import "LSFLampManager.h"
 #import "LSFPresetManager.h"
-#import "AJNBusAttachment.h"
+#import "BusAttachment.h"
 #import "LSFLampGroupManager.h"
 #import "LSFSceneManager.h"
 #import "LSFMasterSceneManager.h"
@@ -41,7 +41,7 @@
 @interface LSFAllJoynManager : NSObject
 
 @property (nonatomic, strong) LSFLightingSystemManager *director;
-@property (nonatomic, strong) AJNBusAttachment *bus;
+@property (nonatomic, readonly) ajn::BusAttachment *bus;
 @property (nonatomic, strong) LSFControllerClient *lsfControllerClient;
 @property (nonatomic, strong) LSFControllerServiceManager *lsfControllerServiceManager;
 @property (nonatomic, strong) LSFLampManager *lsfLampManager;

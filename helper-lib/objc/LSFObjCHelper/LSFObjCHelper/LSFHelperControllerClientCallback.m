@@ -66,14 +66,18 @@
     LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
     ajManager.isConnectedToController = YES;
 
+    //dispatch_async(self.queue, ^{
+    [self postUpdateControllerID: controllerServiceID controllerName: controllerServiceName andIsConnected: YES];
+    //});
+
     dispatch_async(dispatch_get_main_queue(), ^{
         NSNumber *controllerStatus = [[NSNumber alloc] initWithInt: Connected];
         NSDictionary *userInfoDict = [[NSDictionary alloc] initWithObjects: [[NSArray alloc] initWithObjects: controllerStatus, nil] forKeys: [[NSArray alloc] initWithObjects: @"status", nil]];
         [[NSNotificationCenter defaultCenter] postNotificationName: @"ControllerNotification" object: self userInfo: userInfoDict];
+        [[NSNotificationCenter defaultCenter] postNotificationName: @"ControllerNameChanged" object: self userInfo: nil];
     });
     
     dispatch_async(self.queue, ^{
-        [self postUpdateControllerID: controllerServiceID controllerName: controllerServiceName andIsConnected: YES];
         [self postGetAllLampIDs];
         [self postGetAllLampGroupIDs];
         [self postGetAllPresetIDs];
@@ -97,9 +101,9 @@
     NSLog(@"Disconnected from Controller Service with name: %@ and ID: %@", controllerServiceName, controllerServiceID);
     ([LSFAllJoynManager getAllJoynManager]).isConnectedToController = NO;
 
-    dispatch_async(self.queue, ^{
-        [self postUpdateControllerID: controllerServiceID controllerName: controllerServiceName andIsConnected: NO];
-    });
+    //dispatch_async(self.queue, ^{
+    [self postUpdateControllerID: controllerServiceID controllerName: @"[Loading Controller Name...]" andIsConnected: NO];
+    //});
 
     [self clearModels];
 
@@ -107,6 +111,7 @@
         NSNumber *controllerStatus = [[NSNumber alloc] initWithInt: Disconnected];
         NSDictionary *userInfoDict = [[NSDictionary alloc] initWithObjects: [[NSArray alloc] initWithObjects: controllerStatus, nil] forKeys: [[NSArray alloc] initWithObjects: @"status", nil]];
         [[NSNotificationCenter defaultCenter] postNotificationName: @"ControllerNotification" object: self userInfo: userInfoDict];
+        [[NSNotificationCenter defaultCenter] postNotificationName: @"ControllerNameChanged" object: self userInfo: nil];
     });
 }
 

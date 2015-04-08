@@ -19,5 +19,6 @@
 @interface LSFSettingsTableViewController : UITableViewController
 
 @property (weak, nonatomic) IBOutlet UILabel *controllerNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *startControllerLabel;
 
 @end

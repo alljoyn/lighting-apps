@@ -19,10 +19,12 @@
 #import "LSFControllerModel.h"
 #import "LSFDispatchQueue.h"
 #import "LSFAllJoynManager.h"
+#import "LSFControllerSystemManager.h"
 
 @interface LSFSettingsTableViewController ()
 
 -(void)controllerNameNotificationReceived: (NSNotification *)notification;
+-(void)startBundledController;
 
 @end
 
@@ -40,7 +42,16 @@
     //Set controller notification handler
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNameNotificationReceived:) name: @"ControllerNameChanged" object: nil];
 
-    [self.controllerNameLabel setText:([LSFControllerModel getControllerModel]).name];
+    [self.controllerNameLabel setText: [[LSFControllerModel getControllerModel] name]];
+
+    if ([[LSFControllerSystemManager getControllerSystemManager] controllerStarted])
+    {
+        self.startControllerLabel.text = @"Stop Controller";
+    }
+    else
+    {
+        self.startControllerLabel.text = @"Start Controller";
+    }
 }
 
 -(void)viewWillDisappear: (BOOL)animated
@@ -61,7 +72,7 @@
  */
 -(void)controllerNameNotificationReceived: (NSNotification *)notification
 {
-    [self.controllerNameLabel setText:([LSFControllerModel getControllerModel]).name];
+    [self.controllerNameLabel setText: [[LSFControllerModel getControllerModel] name]];
 }
 
 /*
@@ -82,6 +93,9 @@
         case 3:
             [self performSegueWithIdentifier: @"ScenesSettingInfo" sender: cell]; //reuseIdentifier = noticeInfoCell
             break;
+        case 4:
+            [self startBundledController];
+            [self.tableView deselectRowAtIndexPath: indexPath animated: YES];
         default:
             break;
     }
@@ -112,6 +126,22 @@
             ssivc.inputText = @"Notice";
         }
 
+    }
+}
+
+-(void)startBundledController
+{
+    if ([self.startControllerLabel.text isEqualToString: @"Start Controller"])
+    {
+        NSLog(@"Starting Controller...");
+        self.startControllerLabel.text = @"Stop Controller";
+        [[LSFControllerSystemManager getControllerSystemManager] startController];
+    }
+    else
+    {
+        NSLog(@"Stopping Controller...");
+        self.startControllerLabel.text = @"Start Controller";
+        [[LSFControllerSystemManager getControllerSystemManager] stopController];
     }
 }
 

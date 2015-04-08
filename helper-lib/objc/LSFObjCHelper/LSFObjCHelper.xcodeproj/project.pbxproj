@@ -45,6 +45,7 @@
 		872B4CFB1A2E3B4C0019E9F1 /* LSFControllerErrorEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 872B4CFA1A2E3B4C0019E9F1 /* LSFControllerErrorEvent.m */; };
 		872B4CFF1A2E44B10019E9F1 /* LSFControllerAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 872B4CFE1A2E44B10019E9F1 /* LSFControllerAdapter.m */; };
 		8732A5171A26539700AF641B /* LSFLightingMasterScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 8732A5161A26539700AF641B /* LSFLightingMasterScene.m */; };
+		87677E861AC0B11C0033B8C6 /* LSFControllerSystemManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87677E851AC0B11C0033B8C6 /* LSFControllerSystemManager.m */; };
 		87A15C5B1A23C311004FE3CD /* LSFLightingSystemManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A15C5A1A23C311004FE3CD /* LSFLightingSystemManager.m */; };
 		87A15C921A25004D004FE3CD /* LSFAboutData.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A15C721A25004D004FE3CD /* LSFAboutData.m */; };
 		87A15C931A25004D004FE3CD /* LSFAllLampsLampGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A15C741A25004D004FE3CD /* LSFAllLampsLampGroup.m */; };
@@ -66,6 +67,7 @@
 		87A15CA71A250FD1004FE3CD /* LSFConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A15CA61A250FD1004FE3CD /* LSFConstants.m */; };
 		87A15CA91A2538F3004FE3CD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87A15CA81A2538F3004FE3CD /* UIKit.framework */; };
 		87A15CAC1A253FC9004FE3CD /* LSFPreset.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A15CAB1A253FC9004FE3CD /* LSFPreset.m */; };
+		87A4F7871AD5CE2F0059F3B6 /* LSFControllerSystemManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87677E841AC0B11C0033B8C6 /* LSFControllerSystemManager.h */; };
 		87DC51501A311FEC0003ED47 /* LSFHelperControllerClientCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 872B4CB71A2CF25B0019E9F1 /* LSFHelperControllerClientCallback.h */; };
 		87DC51511A311FEC0003ED47 /* LSFHelperControllerServiceManagerCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 872B4CB91A2CF25B0019E9F1 /* LSFHelperControllerServiceManagerCallback.h */; };
 		87DC51521A311FEC0003ED47 /* LSFHelperLampGroupManagerCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 872B4CBB1A2CF25B0019E9F1 /* LSFHelperLampGroupManagerCallback.h */; };
@@ -121,7 +123,7 @@
 		87DC51841A311FEC0003ED47 /* LSFTransitionEffectDataModel.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87A15C901A25004D004FE3CD /* LSFTransitionEffectDataModel.h */; };
 		87E6302419BF9A0700F447A1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87E6302319BF9A0700F447A1 /* Foundation.framework */; };
 		87E6302919BF9A0700F447A1 /* LSFLightingDirector.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87E6302819BF9A0700F447A1 /* LSFLightingDirector.h */; };
-		87E6302B19BF9A0700F447A1 /* LSFLightingDirector.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E6302A19BF9A0700F447A1 /* LSFLightingDirector.m */; };
+		87E6302B19BF9A0700F447A1 /* LSFLightingDirector.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87E6302A19BF9A0700F447A1 /* LSFLightingDirector.mm */; };
 		87E6303219BF9A0700F447A1 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87E6303119BF9A0700F447A1 /* XCTest.framework */; };
 		87E6303319BF9A0700F447A1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87E6302319BF9A0700F447A1 /* Foundation.framework */; };
 		87E6303519BF9A0700F447A1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87E6303419BF9A0700F447A1 /* UIKit.framework */; };
@@ -175,6 +177,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				87A4F7871AD5CE2F0059F3B6 /* LSFControllerSystemManager.h in CopyFiles */,
 				87DC51501A311FEC0003ED47 /* LSFHelperControllerClientCallback.h in CopyFiles */,
 				87DC51511A311FEC0003ED47 /* LSFHelperControllerServiceManagerCallback.h in CopyFiles */,
 				87DC51521A311FEC0003ED47 /* LSFHelperLampGroupManagerCallback.h in CopyFiles */,
@@ -285,6 +288,8 @@
 		872B4CFE1A2E44B10019E9F1 /* LSFControllerAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFControllerAdapter.m; sourceTree = "<group>"; };
 		8732A5151A26539700AF641B /* LSFLightingMasterScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFLightingMasterScene.h; sourceTree = "<group>"; };
 		8732A5161A26539700AF641B /* LSFLightingMasterScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFLightingMasterScene.m; sourceTree = "<group>"; };
+		87677E841AC0B11C0033B8C6 /* LSFControllerSystemManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFControllerSystemManager.h; sourceTree = "<group>"; };
+		87677E851AC0B11C0033B8C6 /* LSFControllerSystemManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFControllerSystemManager.m; sourceTree = "<group>"; };
 		87A15C591A23C311004FE3CD /* LSFLightingSystemManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFLightingSystemManager.h; sourceTree = "<group>"; };
 		87A15C5A1A23C311004FE3CD /* LSFLightingSystemManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFLightingSystemManager.m; sourceTree = "<group>"; };
 		87A15C711A25004D004FE3CD /* LSFAboutData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFAboutData.h; sourceTree = "<group>"; };
@@ -331,7 +336,7 @@
 		87E6302319BF9A0700F447A1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		87E6302719BF9A0700F447A1 /* LSFObjCHelper-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LSFObjCHelper-Prefix.pch"; sourceTree = "<group>"; };
 		87E6302819BF9A0700F447A1 /* LSFLightingDirector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSFLightingDirector.h; sourceTree = "<group>"; };
-		87E6302A19BF9A0700F447A1 /* LSFLightingDirector.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSFLightingDirector.m; sourceTree = "<group>"; };
+		87E6302A19BF9A0700F447A1 /* LSFLightingDirector.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFLightingDirector.mm; sourceTree = "<group>"; };
 		87E6303019BF9A0700F447A1 /* LSFObjCHelperTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LSFObjCHelperTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		87E6303119BF9A0700F447A1 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		87E6303419BF9A0700F447A1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -560,7 +565,7 @@
 				87E6304B19BFA8E100F447A1 /* LSFLamp.h */,
 				87E6304C19BFA8E100F447A1 /* LSFLamp.m */,
 				87E6302819BF9A0700F447A1 /* LSFLightingDirector.h */,
-				87E6302A19BF9A0700F447A1 /* LSFLightingDirector.m */,
+				87E6302A19BF9A0700F447A1 /* LSFLightingDirector.mm */,
 				87E6305419BFA9BD00F447A1 /* LSFLightingItem.h */,
 				87E6305519BFA9BD00F447A1 /* LSFLightingItem.m */,
 				8732A5151A26539700AF641B /* LSFLightingMasterScene.h */,
@@ -592,6 +597,8 @@
 				872B4CD01A2CF5030019E9F1 /* LSFAllJoynManager.mm */,
 				872B4CF61A2E3A500019E9F1 /* LSFControllerManager.h */,
 				872B4CF71A2E3A500019E9F1 /* LSFControllerManager.m */,
+				87677E841AC0B11C0033B8C6 /* LSFControllerSystemManager.h */,
+				87677E851AC0B11C0033B8C6 /* LSFControllerSystemManager.m */,
 				872B4CE01A2D139E0019E9F1 /* LSFGroupModelContainer.h */,
 				872B4CE11A2D139E0019E9F1 /* LSFGroupModelContainer.m */,
 				872B4CE21A2D139E0019E9F1 /* LSFLampModelContainer.h */,
@@ -745,12 +752,13 @@
 				87E6305619BFA9BD00F447A1 /* LSFLightingItem.m in Sources */,
 				872B4CDB1A2CF58F0019E9F1 /* LSFEnumConversions.m in Sources */,
 				872B4CD11A2CF5030019E9F1 /* LSFAboutManager.mm in Sources */,
+				87677E861AC0B11C0033B8C6 /* LSFControllerSystemManager.m in Sources */,
 				87A15C9E1A25004D004FE3CD /* LSFPulseEffectDataModel.m in Sources */,
 				872B4CC91A2CF25B0019E9F1 /* LSFHelperMasterSceneManagerCallback.m in Sources */,
 				872B4CF11A2D14380019E9F1 /* LSFColorAverager.m in Sources */,
 				872B4CEA1A2D139E0019E9F1 /* LSFGroupModelContainer.m in Sources */,
 				87A15C9F1A25004D004FE3CD /* LSFSceneDataModel.m in Sources */,
-				87E6302B19BF9A0700F447A1 /* LSFLightingDirector.m in Sources */,
+				87E6302B19BF9A0700F447A1 /* LSFLightingDirector.mm in Sources */,
 				87A15CA01A25004D004FE3CD /* LSFSceneElementDataModel.m in Sources */,
 				872B4CED1A2D139E0019E9F1 /* LSFPresetModelContainer.m in Sources */,
 				87A15CA11A25004D004FE3CD /* LSFTransitionEffectDataModel.m in Sources */,
@@ -923,12 +931,12 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
-					"\"$(ALLJOYN_HOME)/alljoyn_objc/AllJoynFramework/AllJoynFramework\"",
 					"\"$(LSF_HOME)/standard_core_library/lighting_controller_client/inc\"",
 					"\"$(LSF_HOME)/standard_core_library/common/inc\"",
 					"\"$(LSF_HOME)/common/inc\"",
 					"\"$(APPS_HOME)/apps/bindings/objc/LSFObjC/LSFObjC\"",
 				);
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(ALLJOYN_HOME)/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/lib\"",
@@ -966,12 +974,12 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
-					"\"$(ALLJOYN_HOME)/alljoyn_objc/AllJoynFramework/AllJoynFramework\"",
 					"\"$(LSF_HOME)/standard_core_library/lighting_controller_client/inc\"",
 					"\"$(LSF_HOME)/standard_core_library/common/inc\"",
 					"\"$(LSF_HOME)/common/inc\"",
 					"\"$(APPS_HOME)/apps/bindings/objc/LSFObjC/LSFObjC\"",
 				);
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(ALLJOYN_HOME)/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/lib\"",

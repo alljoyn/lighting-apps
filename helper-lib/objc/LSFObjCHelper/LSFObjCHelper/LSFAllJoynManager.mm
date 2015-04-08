@@ -15,11 +15,14 @@
  ******************************************************************************/
 
 #import "LSFAllJoynManager.h"
-#import "AJNPasswordManager.h"
 #import "LSFSampleLampGroupManager.h"
 #import "LSFDispatchQueue.h"
+#import "BusAttachment.h"
+#import "PasswordManager.h"
 
-@interface LSFAllJoynManager()
+@interface LSFAllJoynManager() {
+    BusAttachment *busAttachment;
+}
 
 @property (nonatomic, strong) dispatch_queue_t backgroundQueue;
 @property (nonatomic, strong) NSMutableDictionary *lampsAnnouncementData;
@@ -83,27 +86,27 @@
         
         //Create Bus
         QStatus status = ER_OK;
-        self.bus = [[AJNBusAttachment alloc] initWithApplicationName: @"LSFSampleController" allowRemoteMessages: YES];
+        busAttachment = new BusAttachment("LSFSampleController", true);
         
         //Create password for Bundled Router
-        status = [AJNPasswordManager setCredentialsForAuthMechanism: @"ALLJOYN_PIN_KEYX" usingPassword: @"000000"];
+        status = PasswordManager::SetCredentials("ALLJOYN_PIN_KEYX", "ALLJOYN_PIN_KEYX");
         if (status != ER_OK)
         {
             NSLog(@"ERROR: Failed to set Password Manager Credentials");
         }
         
         //Start the bus
-        status = [self.bus start];
+        status = busAttachment->Start();
         if (status != ER_OK)
         {
-            NSLog(@"ERROR: Failed to start bus. %@", [AJNStatus descriptionForStatusCode: status]);
+            NSLog(@"ERROR: Failed to start bus. %@", [NSString stringWithUTF8String: QCC_StatusText(status)]);
         }
         
         //Connect the bus
-        status = [self.bus connectWithArguments: @"null:"];
+        status = busAttachment->Connect();
         if (status != ER_OK)
         {
-            NSLog(@"ERROR: Failed to connect bus. %@", [AJNStatus descriptionForStatusCode: status]);
+            NSLog(@"ERROR: Failed to connect bus. %@", [NSString stringWithUTF8String: QCC_StatusText(status)]);
         }
         
 //        status = [self.bus requestWellKnownName: @"org.alljoyn.BusNode" withFlags: kAJNBusNameFlagDoNotQueue];
@@ -118,14 +121,14 @@
 //            NSLog(@"ERROR: Failed to advertise well-known name for bundled router");
 //        }
         
-        self.lsfControllerClient = [[LSFControllerClient alloc] initWithBusAttachment: self.bus andControllerClientCallbackDelegate: self.sccc];
+        self.lsfControllerClient = [[LSFControllerClient alloc] initWithBusAttachment: busAttachment andControllerClientCallbackDelegate: self.sccc];
         self.lsfControllerServiceManager = [[LSFControllerServiceManager alloc] initWithControllerClient: self.lsfControllerClient andControllerServiceManagerCallbackDelegate: self.scsmc];
         self.lsfLampManager = [[LSFLampManager alloc] initWithControllerClient: self.lsfControllerClient andLampManagerCallbackDelegate: self.slmc];
         self.lsfLampGroupManager = [[LSFSampleLampGroupManager alloc] initWithControllerClient: self.lsfControllerClient andLampManagerCallbackDelegate: self.slgmc];
         self.lsfPresetManager = [[LSFPresetManager alloc] initWithControllerClient: self.lsfControllerClient andPresetManagerCallbackDelegate: self.spmc];
         self.lsfSceneManager = [[LSFSceneManager alloc] initWithControllerClient: self.lsfControllerClient andSceneManagerCallbackDelegate: self.ssmc];
         self.lsfMasterSceneManager = [[LSFMasterSceneManager alloc] initWithControllerClient: self.lsfControllerClient andMasterSceneManagerCallbackDelegate: self.smsmc];
-        self.aboutManager = [[LSFAboutManager alloc] initWithBusAttachment: self.bus];
+        self.aboutManager = [[LSFAboutManager alloc] initWithBusAttachment: busAttachment];
         self.lampsAnnouncementData = [[NSMutableDictionary alloc] init];
     }
     
@@ -183,4 +186,10 @@
     LSFLampAnnouncementData* lampAnnData = [self.lampsAnnouncementData  objectForKey: lampID];
     [self.aboutManager getAboutDataFromBusName: [lampAnnData busName] onPort: [lampAnnData port]];
 }
+
+-(ajn::BusAttachment *)bus
+{
+    return busAttachment;
+}
+
 @end

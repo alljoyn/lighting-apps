@@ -59,7 +59,7 @@
     [self.lightingManager stop];
 }
 
--(AJNBusAttachment *)busAttachment
+-(ajn::BusAttachment *)busAttachment
 {
     return [[LSFAllJoynManager getAllJoynManager] bus];
 }

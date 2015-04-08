@@ -15,18 +15,28 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "AJNAboutListener.h"
-#import "AJNBusAttachment.h"
+#import "BusAttachment.h"
+#import "LSFAboutData.h"
 
 /**
  * @warning *Note:* This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK.
  */
-@interface LSFAboutManager : NSObject <AJNAboutListener>
 
--(id)initWithBusAttachment: (AJNBusAttachment *)bus;
--(void)getAboutDataFromBusName: (NSString *)busName onPort: (unsigned int)port;
+using namespace ajn;
+
+@protocol LampAnnouncementDelegate <NSObject>
+
+-(void)lampAnnouncementReceivedFromLamp: (NSString *)lampID onBus: (NSString *)busName onPort: (uint16_t)port;
+-(void)saveAboutData: (LSFAboutData *)myAboutData;
+
+@end
+
+@interface LSFAboutManager : NSObject <LampAnnouncementDelegate>
+
+-(id)initWithBusAttachment: (BusAttachment *)bus;
 -(void)unregisterAnnouncementHandler;
 -(void)registerAnnouncementHandler;
+-(void)getAboutDataFromBusName: (NSString *)busName onPort: (unsigned int)port;
 
 @end

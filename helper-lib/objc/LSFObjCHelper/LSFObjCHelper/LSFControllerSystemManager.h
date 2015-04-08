@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2014, AllSeen Alliance. All rights reserved.
+ * Copyright (c) 2015, AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -15,22 +15,14 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFLampState.h"
-#import "LSFLampGroup.h"
-#import "LSFCapabilityData.h"
-#import "LSFDataModel.h"
+#import "LSFControllerServiceDelegate.h"
 
-@interface LSFGroupModel : LSFDataModel
+@interface LSFControllerSystemManager : NSObject <LSFControllerServiceDelegate>
 
-@property (nonatomic, strong) LSFLampGroup *members;
-@property (nonatomic, strong) NSSet *lamps;
-@property (nonatomic, strong) NSSet *groups;
-@property (nonatomic) int duplicates;
-@property (nonatomic) unsigned int delay;
-@property (nonatomic) unsigned int groupColorTempMin;
-@property (nonatomic) unsigned int groupColorTempMax;
+@property (nonatomic) BOOL controllerStarted;
 
--(id)initWithGroupID: (NSString *)groupID;
--(id)initWithGroupID: (NSString *)groupID andGroupName: (NSString *)groupName;
++(LSFControllerSystemManager *)getControllerSystemManager;
+-(void)startController;
+-(void)stopController;
 
 @end

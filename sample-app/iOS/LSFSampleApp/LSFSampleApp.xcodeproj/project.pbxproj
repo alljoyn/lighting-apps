@@ -217,6 +217,7 @@
 		874F4C511981AEFF007EE9E0 /* LSFGroupsAddNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFGroupsAddNameViewController.m; sourceTree = "<group>"; };
 		874F4C531981CE5B007EE9E0 /* LSFGroupsAddLampsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFGroupsAddLampsTableViewController.h; sourceTree = "<group>"; };
 		874F4C541981CE5B007EE9E0 /* LSFGroupsAddLampsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFGroupsAddLampsTableViewController.m; sourceTree = "<group>"; };
+		87512A511ACDDD930070C264 /* libc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libc.dylib; path = usr/lib/libc.dylib; sourceTree = SDKROOT; };
 		8759DD8D195083920047D92D /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MainStoryboard.storyboard; path = ../MainStoryboard.storyboard; sourceTree = "<group>"; };
 		875C595F19885247007806EE /* LSFScenesEnterNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFScenesEnterNameViewController.h; sourceTree = "<group>"; };
 		875C596019885247007806EE /* LSFScenesEnterNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFScenesEnterNameViewController.m; sourceTree = "<group>"; };
@@ -539,6 +540,7 @@
 		87D813EF18CA536700903D59 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				87512A511ACDDD930070C264 /* libc.dylib */,
 				873D8B121A38D7490054DE4F /* libLSFObjC.a */,
 				1903F52B198F953D00E9B302 /* QuartzCore.framework */,
 				87B4FB811964BC3B003621AD /* liballjoyn_about_objc.a */,
@@ -1000,7 +1002,6 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
-					"\"$(ALLJOYN_HOME)/alljoyn_objc/AllJoynFramework/AllJoynFramework\"",
 					"\"$(LSF_HOME)/standard_core_library/lighting_controller_client/inc\"",
 					"\"$(LSF_HOME)/standard_core_library/common/inc\"",
 					"\"$(LSF_HOME)/common/inc\"",
@@ -1053,7 +1054,6 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
-					"\"$(ALLJOYN_HOME)/alljoyn_objc/AllJoynFramework/AllJoynFramework\"",
 					"\"$(LSF_HOME)/standard_core_library/lighting_controller_client/inc\"",
 					"\"$(LSF_HOME)/standard_core_library/common/inc\"",
 					"\"$(LSF_HOME)/common/inc\"",

@@ -19,7 +19,7 @@
 
 @interface LSFControllerClient ()
 
-@property (nonatomic, assign) AJNBusAttachment *bus;
+@property (nonatomic, assign) BusAttachment *bus;
 @property (nonatomic, assign) LSFControllerClientCallback *controllerClientCallback;
 @property (nonatomic, readonly) ControllerClient *controllerClient;
 
@@ -31,7 +31,7 @@
 @synthesize controllerClientCallback = _controllerClientCallback;
 @synthesize controllerClient = _controllerClient;
 
--(id)initWithBusAttachment: (AJNBusAttachment *)bus
+-(id)initWithBusAttachment: (BusAttachment *)bus
                             andControllerClientCallbackDelegate: (id<LSFControllerClientCallbackDelegate>)cccDelegate;
 {
     self = [super init];
@@ -40,8 +40,7 @@
     {
         self.bus = bus;
         self.controllerClientCallback = new LSFControllerClientCallback(cccDelegate);
-        self.handle = new ControllerClient(*static_cast<ajn::BusAttachment*>(bus.handle),
-                                           *(self.controllerClientCallback));
+        self.handle = new ControllerClient(*(self.bus), *(self.controllerClientCallback));
     }
     
     return self;
@@ -65,17 +64,13 @@
 }
 
 -(ControllerClientStatus)start
-//-(void)start
 {
     return self.controllerClient->Start();
-    //self.controllerClient->Start();
 }
 
 -(ControllerClientStatus)stop
-//-(void)stop
 {
     return self.controllerClient->Stop();
-    //self.controllerClient->Stop();
 }
 
 /*
