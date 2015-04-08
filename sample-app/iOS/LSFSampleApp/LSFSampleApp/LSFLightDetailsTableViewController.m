@@ -21,7 +21,7 @@
 #import "LSFLampModel.h"
 #import "LSFAllJoynManager.h"
 #import "LSFEnums.h"
-#import "LSFLamp.h"
+#import "LSFSDKLamp.h"
 
 @interface LSFLightDetailsTableViewController ()
 

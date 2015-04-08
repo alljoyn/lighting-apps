@@ -25,7 +25,7 @@
 #import "LSFUtilityFunctions.h"
 #import "LSFWifiMonitor.h"
 #import "LSFEnums.h"
-#import "LSFLamp.h"
+#import "LSFSDKLamp.h"
 
 @interface LSFLightsTableViewController ()
 
@@ -63,7 +63,7 @@
     //Set the content of the default lamp data array
     self.data = [[NSMutableArray alloc] init];
 
-    for (LSFLamp *lamp in [[[LSFLampModelContainer getLampModelContainer] lampContainer] allValues])
+    for (LSFSDKLamp *lamp in [[[LSFLampModelContainer getLampModelContainer] lampContainer] allValues])
     {
         [self.data addObject: [lamp getLampDataModel]];
     }

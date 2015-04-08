@@ -18,4 +18,5 @@ package org.allseen.lsf.helper.manager;
 public interface LightingSystemQueue {
     public void post(Runnable r);
     public void postDelayed(Runnable r, int delay);
+    public void stop();
 }

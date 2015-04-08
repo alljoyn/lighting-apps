@@ -20,14 +20,14 @@ import java.util.Iterator;
 
 import org.allseen.lsf.helper.facade.Preset;
 import org.allseen.lsf.helper.listener.LightingItemErrorEvent;
-import org.allseen.lsf.helper.listener.PresetCollectionListener;
+import org.allseen.lsf.helper.listener.PresetListener;
 import org.allseen.lsf.helper.model.PresetDataModel;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class PresetCollectionManager extends LightingItemCollectionManager<Preset, PresetCollectionListener, PresetDataModel> {
+public class PresetCollectionManager extends LightingItemCollectionManager<Preset, PresetListener, PresetDataModel> {
 
     public PresetCollectionManager(LightingSystemManager director) {
         super(director);
@@ -62,17 +62,17 @@ public class PresetCollectionManager extends LightingItemCollectionManager<Prese
     }
 
     @Override
-    protected void sendChangedEvent(PresetCollectionListener listener, Preset preset) {
+    protected void sendChangedEvent(PresetListener listener, Preset preset) {
         listener.onPresetChanged(preset);
     }
 
     @Override
-    protected void sendRemovedEvent(PresetCollectionListener listener, Preset preset) {
+    protected void sendRemovedEvent(PresetListener listener, Preset preset) {
         listener.onPresetRemoved(preset);
     }
 
     @Override
-    protected void sendErrorEvent(PresetCollectionListener listener, LightingItemErrorEvent errorEvent) {
+    protected void sendErrorEvent(PresetListener listener, LightingItemErrorEvent errorEvent) {
         listener.onPresetError(errorEvent);
     }
 

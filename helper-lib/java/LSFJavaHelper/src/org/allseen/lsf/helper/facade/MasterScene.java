@@ -38,6 +38,29 @@ public final class MasterScene extends LightingItem {
        AllJoynManager.masterSceneManager.applyMasterScene(masterModel.id);
    }
 
+   public void modify(Scene[] scene) {
+       // TODO-IMPL
+   }
+
+   public void add(Scene scene) {
+       // TODO-IMPL
+   }
+
+   public void remove(Scene scene) {
+       // TODO-IMPL
+   }
+
+   public void delete() {
+       AllJoynManager.masterSceneManager.deleteMasterScene(masterModel.id);
+   }
+
+   @Override
+   public void rename(String masterSceneName) {
+       if (masterSceneName != null) {
+           AllJoynManager.masterSceneManager.setMasterSceneName(masterModel.id, masterSceneName, LightingDirector.get().getDefaultLanguage());
+       }
+   }
+
    @Override
    protected LightingItemDataModel getItemDataModel() {
        return getMasterSceneDataModel();

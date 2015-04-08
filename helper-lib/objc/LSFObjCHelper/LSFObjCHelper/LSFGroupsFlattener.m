@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import "LSFGroupsFlattener.h"
-#import "LSFGroup.h"
+#import "LSFSDKGroup.h"
 
 @implementation LSFGroupsFlattener
 
@@ -39,7 +39,7 @@
 
 -(void)flattenGroups: (NSMutableDictionary *)groups
 {
-    for (LSFGroup *group in [groups allValues])
+    for (LSFSDKGroup *group in [groups allValues])
     {
         LSFGroupModel *groupModel = [group getLampGroupDataModel];
 

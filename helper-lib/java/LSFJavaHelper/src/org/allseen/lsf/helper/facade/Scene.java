@@ -53,6 +53,29 @@ public final class Scene extends LightingItem {
         AllJoynManager.sceneManager.applyScene(sceneModel.id);
     }
 
+    public void modify(SceneElement[] element) {
+        // TODO-IMPL
+    }
+
+    public void add(SceneElement element) {
+        // TODO-IMPL
+    }
+
+    public void remove(SceneElement element) {
+        // TODO-IMPl
+    }
+
+    @Override
+    public void rename(String sceneName) {
+        if (sceneName != null) {
+            AllJoynManager.sceneManager.setSceneName(sceneModel.id, sceneName, LightingDirector.get().getDefaultLanguage());
+        }
+    }
+
+    public void delete() {
+        AllJoynManager.sceneManager.deleteScene(sceneModel.id);
+    }
+
     @Override
     protected LightingItemDataModel getItemDataModel() {
         return getSceneDataModel();

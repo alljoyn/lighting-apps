@@ -295,52 +295,60 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
                 averageBrightness.reset();
                 averageColorTemp.reset();
 
-                for (String lampID : groupModel.getLamps()) {
-                    LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
+                Set<String> lamps = groupModel.getLamps();
 
-                    if (lampModel != null) {
-                        LampDetails lampDetails = lampModel.getDetails();
+                // The set of lamps can be null if the group information becomes available
+                // before the lamp information is available. This is especially true for the
+                // All Lamps Lamp Group, which is actually maintained by the library and not
+                // by the controller.
+                if (lamps != null) {
+                    for (String lampID : lamps) {
+                        LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
 
-                        capability.includeData(lampModel.getCapability());
+                        if (lampModel != null) {
+                            LampDetails lampDetails = lampModel.getDetails();
 
-                        if ( lampModel.state.getOnOff()) {
-                            countOn++;
+                            capability.includeData(lampModel.getCapability());
+
+                            if ( lampModel.state.getOnOff()) {
+                                countOn++;
+                            } else {
+                                countOff++;
+                            }
+
+                            if (lampDetails.hasColor()) {
+                                averageHue.add(lampModel.state.getHue());
+                                averageSaturation.add(lampModel.state.getSaturation());
+                            }
+
+                            if (lampDetails.isDimmable()) {
+                                averageBrightness.add(lampModel.state.getBrightness());
+                            }
+
+                            boolean hasVariableColorTemp = lampDetails.hasVariableColorTemp();
+                            int viewColorTempLampMin = lampDetails.getMinTemperature();
+                            int viewColorTempLampMax = hasVariableColorTemp ? lampDetails.getMaxTemperature() : viewColorTempLampMin;
+                            boolean validColorTempLampMin = viewColorTempLampMin >= ColorStateConverter.VIEW_COLORTEMP_MIN && viewColorTempLampMin <= ColorStateConverter.VIEW_COLORTEMP_MAX;
+                            boolean validColorTempLampMax = viewColorTempLampMax >= ColorStateConverter.VIEW_COLORTEMP_MIN && viewColorTempLampMax <= ColorStateConverter.VIEW_COLORTEMP_MAX;
+
+                            if (hasVariableColorTemp) {
+                                averageColorTemp.add(lampModel.state.getColorTemp());
+                            } else if (validColorTempLampMin) {
+                                averageColorTemp.add(ColorStateConverter.convertColorTempViewToModel(viewColorTempLampMin));
+                            }
+
+                            if (validColorTempLampMin && validColorTempLampMax) {
+                                if (viewColorTempGroupMin == -1 || viewColorTempGroupMin > viewColorTempLampMin) {
+                                    viewColorTempGroupMin = viewColorTempLampMin;
+                                }
+
+                                if (viewColorTempGroupMax == -1 || viewColorTempGroupMax < viewColorTempLampMax) {
+                                    viewColorTempGroupMax = viewColorTempLampMax;
+                                }
+                            }
                         } else {
-                            countOff++;
+                            //TODO-FIX Log.d(SampleAppActivity.TAG, "missing lamp: " + lampID);
                         }
-
-                        if (lampDetails.hasColor()) {
-                            averageHue.add(lampModel.state.getHue());
-                            averageSaturation.add(lampModel.state.getSaturation());
-                        }
-
-                        if (lampDetails.isDimmable()) {
-                            averageBrightness.add(lampModel.state.getBrightness());
-                        }
-
-                        boolean hasVariableColorTemp = lampDetails.hasVariableColorTemp();
-                        int viewColorTempLampMin = lampDetails.getMinTemperature();
-                        int viewColorTempLampMax = hasVariableColorTemp ? lampDetails.getMaxTemperature() : viewColorTempLampMin;
-                        boolean validColorTempLampMin = viewColorTempLampMin >= ColorStateConverter.VIEW_COLORTEMP_MIN && viewColorTempLampMin <= ColorStateConverter.VIEW_COLORTEMP_MAX;
-                        boolean validColorTempLampMax = viewColorTempLampMax >= ColorStateConverter.VIEW_COLORTEMP_MIN && viewColorTempLampMax <= ColorStateConverter.VIEW_COLORTEMP_MAX;
-
-                        if (hasVariableColorTemp) {
-                            averageColorTemp.add(lampModel.state.getColorTemp());
-                        } else if (validColorTempLampMin) {
-                            averageColorTemp.add(ColorStateConverter.convertColorTempViewToModel(viewColorTempLampMin));
-                        }
-
-                        if (validColorTempLampMin && validColorTempLampMax) {
-                            if (viewColorTempGroupMin == -1 || viewColorTempGroupMin > viewColorTempLampMin) {
-                                viewColorTempGroupMin = viewColorTempLampMin;
-                            }
-
-                            if (viewColorTempGroupMax == -1 || viewColorTempGroupMax < viewColorTempLampMax) {
-                                viewColorTempGroupMax = viewColorTempLampMax;
-                            }
-                        }
-                     } else {
-                        //TODO-FIX Log.d(SampleAppActivity.TAG, "missing lamp: " + lampID);
                     }
                 }
 

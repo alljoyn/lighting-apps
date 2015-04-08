@@ -27,7 +27,7 @@
 #import "LSFUtilityFunctions.h"
 #import "LSFEnums.h"
 #import "LSFLampModel.h"
-#import "LSFLamp.h"
+#import "LSFSDKLamp.h"
 
 @interface LSFLightInfoTableViewController ()
 

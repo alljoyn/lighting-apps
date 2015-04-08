@@ -31,9 +31,9 @@
 #import "LSFAllJoynManager.h"
 #import "LSFDispatchQueue.h"
 #import "LSFEnums.h"
-#import "LSFLightingScene.h"
-#import "LSFLamp.h"
-#import "LSFGroup.h"
+#import "LSFSDKScene.h"
+#import "LSFSDKLamp.h"
+#import "LSFSDKGroup.h"
 
 @interface LSFSceneInfoTableViewController ()
 

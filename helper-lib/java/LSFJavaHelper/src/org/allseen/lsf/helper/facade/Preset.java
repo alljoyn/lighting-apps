@@ -15,16 +15,17 @@
 package org.allseen.lsf.helper.facade;
 
 import org.allseen.lsf.helper.manager.AllJoynManager;
-import org.allseen.lsf.helper.model.LightingItemDataModel;
+import org.allseen.lsf.helper.model.ColorItemDataModel;
+import org.allseen.lsf.helper.model.LightingItemUtil;
 import org.allseen.lsf.helper.model.PresetDataModel;
 
 /**
  * A Preset object represents a predefined color state in a lighting system.
  * <p>
- * <b>WARNING: This class is not intended to be used by clients, and its interface may change
- * in subsequent releases of the SDK</b>.
+ * <b>WARNING: This class is not intended to be used by clients, and its
+ * interface may change in subsequent releases of the SDK</b>.
  */
-public class Preset extends LightingItem {
+public class Preset extends ColorItem implements Effect {
 
     protected PresetDataModel presetModel;
 
@@ -38,28 +39,42 @@ public class Preset extends LightingItem {
         presetModel = new PresetDataModel(presetID, presetName);
     }
 
-    public void applyTo(Lamp lamp) {
-        applyToLamp(lamp.getLampDataModel().id);
+    @Override
+    public void applyTo(GroupMember member) {
+        member.applyPreset(this);
     }
 
-    public void applyTo(Group group) {
-        applyToGroup(group.getGroupDataModel().id);
-    }
-
-    protected void applyToLamp(String lampID) {
-        AllJoynManager.lampManager.transitionLampStateToPreset(lampID, presetModel.id, 0);
-    }
-
-    protected void applyToGroup(String groupID) {
-        AllJoynManager.groupManager.transitionLampGroupStateToPreset(groupID, presetModel.id, 0);
+    public void modify(Power power, Color color) {
+        AllJoynManager.presetManager.updatePreset(presetModel.id, LightingItemUtil.createLampStateFromView(
+                power == Power.ON, color.getHue(), color.getSaturation(), color.getBrightness(),
+                color.getColorTemperature()));
     }
 
     @Override
-    protected LightingItemDataModel getItemDataModel() {
-        return getPresetDataModel();
+    public void rename(String presetName) {
+        AllJoynManager.presetManager.setPresetName(presetModel.id, presetName, LightingDirector.get().getDefaultLanguage());
+    }
+
+    public void delete() {
+        AllJoynManager.presetManager.deletePreset(presetModel.id);
     }
 
     public PresetDataModel getPresetDataModel() {
         return presetModel;
+    }
+
+    @Override
+    public void setPowerOn(boolean powerOn) {
+        modify((powerOn)? Power.ON : Power.OFF, getColor());
+    }
+
+    @Override
+    public void setColorHsvt(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees) {
+        modify(getPower(), new Color(hueDegrees, saturationPercent, brightnessPercent, colorTempDegrees));
+    }
+
+    @Override
+    protected ColorItemDataModel getColorDataModel() {
+        return getPresetDataModel();
     }
 }

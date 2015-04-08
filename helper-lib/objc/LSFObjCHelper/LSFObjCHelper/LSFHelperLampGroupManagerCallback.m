@@ -25,8 +25,8 @@
 #import "LSFAllJoynManager.h"
 #import "LSFEnums.h"
 #import "LSFColorAverager.h"
-#import "LSFGroup.h"
-#import "LSFLamp.h"
+#import "LSFSDKGroup.h"
+#import "LSFSDKLamp.h"
 
 @interface LSFHelperLampGroupManagerCallback()
 
@@ -361,11 +361,11 @@
 {
     NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
 
-    LSFGroup *group = [groups valueForKey: groupID];
+    LSFSDKGroup *group = [groups valueForKey: groupID];
 
     if (group == nil)
     {
-        group = [[LSFGroup alloc] initWithGroupID: groupID];
+        group = [[LSFSDKGroup alloc] initWithGroupID: groupID];
         [groups setValue: group forKey: groupID];
 
         [self updateGroupWithID: groupID andCallbackOperation: GroupCreated];
@@ -416,7 +416,7 @@
     NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
     [[[LSFGroupsFlattener alloc] init] flattenGroups: groups];
     
-    for (LSFGroup *group in [groups allValues])
+    for (LSFSDKGroup *group in [groups allValues])
     {
         [self postUpdateLampGroupState: [group getLampGroupDataModel]];
     }

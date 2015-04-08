@@ -20,14 +20,14 @@ import java.util.Iterator;
 
 import org.allseen.lsf.helper.facade.Scene;
 import org.allseen.lsf.helper.listener.LightingItemErrorEvent;
-import org.allseen.lsf.helper.listener.SceneCollectionListener;
+import org.allseen.lsf.helper.listener.SceneListener;
 import org.allseen.lsf.helper.model.SceneDataModel;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class SceneCollectionManager extends LightingItemCollectionManager<Scene, SceneCollectionListener, SceneDataModel> {
+public class SceneCollectionManager extends LightingItemCollectionManager<Scene, SceneListener, SceneDataModel> {
 
     public SceneCollectionManager(LightingSystemManager director) {
         super(director);
@@ -66,17 +66,17 @@ public class SceneCollectionManager extends LightingItemCollectionManager<Scene,
     }
 
     @Override
-    protected void sendChangedEvent(SceneCollectionListener listener, Scene scene) {
+    protected void sendChangedEvent(SceneListener listener, Scene scene) {
         listener.onSceneChanged(scene);
     }
 
     @Override
-    protected void sendRemovedEvent(SceneCollectionListener listener, Scene scene) {
+    protected void sendRemovedEvent(SceneListener listener, Scene scene) {
         listener.onSceneRemoved(scene);
     }
 
     @Override
-    protected void sendErrorEvent(SceneCollectionListener listener, LightingItemErrorEvent errorEvent) {
+    protected void sendErrorEvent(SceneListener listener, LightingItemErrorEvent errorEvent) {
         listener.onSceneError(errorEvent);
     }
 

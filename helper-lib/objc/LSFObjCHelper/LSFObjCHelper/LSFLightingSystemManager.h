@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFNextControllerConnectionDelegate.h"
+#import "LSFSDKNextControllerConnectionDelegate.h"
 //#import "LSFLampCollectionManager.h"
 //#import "LSFGroupCollectionManager.h"
 //#import "LSFPresetCollectionManager.h"
@@ -50,6 +50,6 @@
 -(LSFPresetManager *)getPresetManager;
 -(LSFSceneManager *)getSceneManager;
 -(LSFMasterSceneManager *)getMasterSceneManager;
--(void)postOnNextControllerConnection: (id<LSFNextControllerConnectionDelegate>)delegate;
+-(void)postOnNextControllerConnection: (id<LSFSDKNextControllerConnectionDelegate>)delegate;
 
 @end

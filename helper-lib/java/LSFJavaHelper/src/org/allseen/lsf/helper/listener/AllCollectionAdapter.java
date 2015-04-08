@@ -19,7 +19,10 @@ import org.allseen.lsf.helper.facade.Group;
 import org.allseen.lsf.helper.facade.Lamp;
 import org.allseen.lsf.helper.facade.MasterScene;
 import org.allseen.lsf.helper.facade.Preset;
+import org.allseen.lsf.helper.facade.PulseEffect;
 import org.allseen.lsf.helper.facade.Scene;
+import org.allseen.lsf.helper.facade.SceneElement;
+import org.allseen.lsf.helper.facade.TransitionEffect;
 import org.allseen.lsf.helper.model.ControllerDataModel;
 
 /**
@@ -29,53 +32,80 @@ import org.allseen.lsf.helper.model.ControllerDataModel;
 public class AllCollectionAdapter implements AllCollectionListener {
 
     @Override
-    public void onLampChanged(Lamp lamp)                            { }
+    public void onLampChanged(Lamp lamp)                                { }
 
     @Override
-    public void onLampRemoved(Lamp lamp)                            { }
+    public void onLampRemoved(Lamp lamp)                                { }
 
     @Override
-    public void onLampError(LightingItemErrorEvent error)           { }
+    public void onLampError(LightingItemErrorEvent error)               { }
 
     @Override
-    public void onGroupChanged(Group group)                         { }
+    public void onGroupChanged(Group group)                             { }
 
     @Override
-    public void onGroupRemoved(Group group)                         { }
+    public void onGroupRemoved(Group group)                             { }
 
     @Override
-    public void onGroupError(LightingItemErrorEvent error)          { }
+    public void onGroupError(LightingItemErrorEvent error)              { }
 
     @Override
-    public void onPresetChanged(Preset preset)                      { }
+    public void onPresetChanged(Preset preset)                          { }
 
     @Override
-    public void onPresetRemoved(Preset preset)                      { }
+    public void onPresetRemoved(Preset preset)                          { }
 
     @Override
-    public void onPresetError(LightingItemErrorEvent error)         { }
+    public void onPresetError(LightingItemErrorEvent error)             { }
 
     @Override
-    public void onSceneChanged(Scene scene)                         { }
+    public void onTransitionEffectChanged(TransitionEffect effect)      { }
 
     @Override
-    public void onSceneRemoved(Scene scene)                         { }
+    public void onTransitionEffectRemoved(TransitionEffect effect)      { }
 
     @Override
-    public void onSceneError(LightingItemErrorEvent error)          { }
+    public void onTransitionEffectError(LightingItemErrorEvent error)   { }
 
     @Override
-    public void onMasterSceneChanged(MasterScene masterScene)       { }
+    public void onPulseEffectChanged(PulseEffect effect)                { }
 
     @Override
-    public void onMasterSceneRemoved(MasterScene masterScene)       { }
+    public void onPulseEffectRemoved(PulseEffect effect)                { }
 
     @Override
-    public void onMasterSceneError(LightingItemErrorEvent error)    { }
+    public void onPulseEffectError(LightingItemErrorEvent error)        { }
 
     @Override
-    public void onLeaderModelChange(ControllerDataModel leadModel)  { }
+    public void onSceneElementChanged(SceneElement element)             { }
 
     @Override
-    public void onControllerErrors(ControllerErrorEvent errorEvent) { }
+    public void onSceneElementRemoved(SceneElement element)             { }
+
+    @Override
+    public void onSceneElementError(LightingItemErrorEvent error)       { }
+
+    @Override
+    public void onSceneChanged(Scene scene)                             { }
+
+    @Override
+    public void onSceneRemoved(Scene scene)                             { }
+
+    @Override
+    public void onSceneError(LightingItemErrorEvent error)              { }
+
+    @Override
+    public void onMasterSceneChanged(MasterScene masterScene)           { }
+
+    @Override
+    public void onMasterSceneRemoved(MasterScene masterScene)           { }
+
+    @Override
+    public void onMasterSceneError(LightingItemErrorEvent error)        { }
+
+    @Override
+    public void onLeaderModelChange(ControllerDataModel leadModel)      { }
+
+    @Override
+    public void onControllerErrors(ControllerErrorEvent errorEvent)     { }
 }

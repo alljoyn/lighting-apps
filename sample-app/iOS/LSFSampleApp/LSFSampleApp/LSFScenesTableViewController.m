@@ -36,9 +36,9 @@
 #import "LSFConstants.h"
 #import "LSFWifiMonitor.h"
 #import "LSFEnums.h"
-#import "LSFLamp.h"
-#import "LSFGroup.h"
-#import "LSFLightingScene.h"
+#import "LSFSDKLamp.h"
+#import "LSFSDKGroup.h"
+#import "LSFSDKScene.h"
 
 @interface LSFScenesTableViewController ()
 
@@ -115,7 +115,7 @@
     //Set the content of the default scene data array
     NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
 
-    for (LSFLightingScene *scene in [scenes allValues])
+    for (LSFSDKScene *scene in [scenes allValues])
     {
         [self.data addObject: [scene getSceneDataModel]];
     }

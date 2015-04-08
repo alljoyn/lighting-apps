@@ -20,7 +20,7 @@
 #import "LSFAllJoynManager.h"
 #import "LSFGroupModel.h"
 #import "LSFGroupModelContainer.h"
-#import "LSFGroup.h"
+#import "LSFSDKGroup.h"
 
 @interface LSFGroupsCell()
 

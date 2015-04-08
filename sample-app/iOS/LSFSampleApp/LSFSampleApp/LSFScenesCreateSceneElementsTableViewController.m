@@ -22,8 +22,8 @@
 #import "LSFGroupModel.h"
 #import "LSFAllJoynManager.h"
 #import "LSFEnums.h"
-#import "LSFLamp.h"
-#import "LSFGroup.h"
+#import "LSFSDKLamp.h"
+#import "LSFSDKGroup.h"
 
 @interface LSFScenesCreateSceneElementsTableViewController ()
 

@@ -24,7 +24,7 @@
 #import "LSFAllJoynManager.h"
 #import "LSFConstants.h"
 #import "LSFEnums.h"
-#import "LSFLamp.h"
+#import "LSFSDKLamp.h"
 
 @interface LSFLightsPresetsTableViewController ()
 

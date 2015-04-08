@@ -20,7 +20,7 @@
 #import "LSFAllJoynManager.h"
 #import "LSFDispatchQueue.h"
 #import "LSFEnums.h"
-#import "LSFLightingScene.h"
+#import "LSFSDKScene.h"
 
 @interface LSFMasterSceneMembersTableViewController ()
 
@@ -178,7 +178,7 @@
     NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
     NSMutableArray *scenesArray = [[NSMutableArray alloc] init];
 
-    for (LSFLightingScene *scene in [scenes allValues])
+    for (LSFSDKScene *scene in [scenes allValues])
     {
         [scenesArray addObject: [scene getSceneDataModel]];
     }

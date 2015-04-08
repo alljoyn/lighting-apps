@@ -24,7 +24,7 @@ import org.allseen.lsf.helper.model.LightingItemDataModel;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public abstract class ColorItem extends LightingItem {
+public abstract class ColorItem extends LightingItem implements LampState {
 
     public void turnOn() {
         setPowerOn(true);
@@ -34,12 +34,32 @@ public abstract class ColorItem extends LightingItem {
         setPowerOn(false);
     }
 
-    public void setColor(int[] hsvt) {
-        setColor(hsvt[0], hsvt[1], hsvt[2], hsvt[3]);
+    public void setColorHsvt(int[] hsvt) {
+        setColorHsvt(hsvt[0], hsvt[1], hsvt[2], hsvt[3]);
     }
 
-    public int[] setColor() {
+    public int[] getColorHsvt() {
         return ColorStateConverter.convertModelToView(getColorDataModel().state);
+    }
+
+    public void setPower(Power power) {
+        setPowerOn(power == Power.ON);
+    }
+
+    public boolean getPowerOn() {
+        return getColorDataModel().state.getOnOff();
+    }
+
+    public Power getPower() {
+        return (getPowerOn())? Power.ON : Power.OFF;
+    }
+
+    public void setColor(Color color) {
+        setColorHsvt(color.getHue(), color.getSaturation(), color.getBrightness(), color.getColorTemperature());
+    }
+
+    public Color getColor() {
+        return new Color(getColorHsvt());
     }
 
     @Override
@@ -48,7 +68,6 @@ public abstract class ColorItem extends LightingItem {
     }
 
     public abstract void setPowerOn(boolean powerOn);
-    public abstract void setColor(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees);
-
+    public abstract void setColorHsvt(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees);
     protected abstract ColorItemDataModel getColorDataModel();
 }

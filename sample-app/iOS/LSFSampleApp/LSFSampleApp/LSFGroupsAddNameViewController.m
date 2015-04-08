@@ -22,7 +22,7 @@
 #import "LSFAllJoynManager.h"
 #import "LSFUtilityFunctions.h"
 #import "LSFEnums.h"
-#import "LSFGroup.h"
+#import "LSFSDKGroup.h"
 
 @interface LSFGroupsAddNameViewController ()
 
@@ -203,7 +203,7 @@
 {
     NSDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
     
-    for (LSFGroup *group in [groups allValues])
+    for (LSFSDKGroup *group in [groups allValues])
     {
         LSFGroupModel *model = [group getLampGroupDataModel];
 

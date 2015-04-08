@@ -16,7 +16,7 @@
 
 #import "LSFLightingSystemManager.h"
 #import "LSFAllJoynManager.h"
-#import "LSFControllerAdapter.h"
+#import "LSFSDKControllerAdapter.h"
 
 @interface LSFLightingSystemManager()
 
@@ -114,9 +114,9 @@
     return ajManager.lsfMasterSceneManager;
 }
 
--(void)postOnNextControllerConnection: (id<LSFNextControllerConnectionDelegate>)delegate
+-(void)postOnNextControllerConnection: (id<LSFSDKNextControllerConnectionDelegate>)delegate
 {
-    LSFControllerAdapter *controllerAdapter = [[LSFControllerAdapter alloc] init];
+    LSFSDKControllerAdapter *controllerAdapter = [[LSFSDKControllerAdapter alloc] init];
     controllerAdapter.delegate = delegate;
 
     LSFControllerManager *controllerManager = [self getControllerManager];

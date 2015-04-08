@@ -29,7 +29,7 @@
 #import "LSFPresetModel.h"
 #import "LSFUtilityFunctions.h"
 #import "LSFEnums.h"
-#import "LSFGroup.h"
+#import "LSFSDKGroup.h"
 
 @interface LSFGroupsInfoTableViewController ()
 

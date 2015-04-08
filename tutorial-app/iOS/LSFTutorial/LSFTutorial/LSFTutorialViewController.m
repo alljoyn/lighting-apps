@@ -15,14 +15,14 @@
  ******************************************************************************/
 
 #import "LSFTutorialViewController.h"
-#import "LSFLightingDirector.h"
-#import "LSFLamp.h"
-#import "LSFGroup.h"
-#import "LSFLightingScene.h"
+#import "LSFSDKLightingDirector.h"
+#import "LSFSDKLamp.h"
+#import "LSFSDKGroup.h"
+#import "LSFSDKScene.h"
 
 @interface LSFTutorialViewController ()
 
-@property (nonatomic, strong) LSFLightingDirector *lightingDirector;
+@property (nonatomic, strong) LSFSDKLightingDirector *lightingDirector;
 
 @end
 
@@ -39,8 +39,8 @@
     [appVersion appendString: [NSString stringWithFormat: @".%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]]];
     [self.versionLabel setText: appVersion];
 
-    self.lightingDirector = [[LSFLightingDirector alloc] init];
-    [self.lightingDirector postOnNextControllerConnection: self];
+    self.lightingDirector = [LSFSDKLightingDirector getLightingDirector];
+    [self.lightingDirector postOnNextControllerConnectionWithDelay: 0 delegate: self];
     [self.lightingDirector start];
 }
 
@@ -66,16 +66,16 @@
     NSLog(@"LSFTutorialViewController - onNextControllerConnection() executing");
 
     // Lamp operations
-    NSArray *lamps = [self.lightingDirector getLamps];
+    NSArray *lamps = [self.lightingDirector lamps];
 
-    for (LSFLamp *lamp in lamps)
+    for (LSFSDKLamp *lamp in lamps)
     {
         [lamp turnOn];
     }
 
     [NSThread sleepForTimeInterval: 2.0];
 
-    for (LSFLamp *lamp in lamps)
+    for (LSFSDKLamp *lamp in lamps)
     {
         [lamp turnOff];
     }
@@ -84,40 +84,40 @@
 
     for (int i = 0; i < lamps.count; i++)
     {
-        LSFLamp *lamp = [lamps objectAtIndex: i];
-        [lamp setColorWithHue: 180 saturation: 100 brightness: 50 andColorTemp: 4000];
+        LSFSDKLamp *lamp = [lamps objectAtIndex: i];
+        [lamp setColorHsvtWithHue: 180 saturation: 100 brightness: 50 colorTemp: 4000];
     }
 
     // Group operations
-    NSArray *groups = [self.lightingDirector getGroups];
+    NSArray *groups = [self.lightingDirector groups];
 
-    for (LSFGroup *group in groups)
+    for (LSFSDKGroup *group in groups)
     {
         [group turnOn];
     }
 
     [NSThread sleepForTimeInterval: 2.0];
 
-    for (LSFGroup *group in groups)
+    for (LSFSDKGroup *group in groups)
     {
         [group turnOff];
     }
 
     [NSThread sleepForTimeInterval: 2.0];
 
-    for (LSFGroup *group in groups)
+    for (LSFSDKGroup *group in groups)
     {
-        [group setColorWithHue: 280 saturation: 100 brightness: 100 andColorTemp: 4000];
+        [group setColorHsvtWithHue: 280 saturation: 100 brightness: 100 colorTemp: 4000];
     }
 
     [NSThread sleepForTimeInterval: 2.0];
 
     // Scene operations
-    NSArray *scenes = [self.lightingDirector getScenes];
+    NSArray *scenes = [self.lightingDirector scenes];
 
     for (int i = 0; i < scenes.count; i++)
     {
-        LSFLightingScene *scene = [scenes objectAtIndex: i];
+        LSFSDKScene *scene = [scenes objectAtIndex: i];
         [scene apply];
     }
 }

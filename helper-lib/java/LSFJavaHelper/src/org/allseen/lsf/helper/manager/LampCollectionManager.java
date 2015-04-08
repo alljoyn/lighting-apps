@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.Queue;
 
 import org.allseen.lsf.helper.facade.Lamp;
-import org.allseen.lsf.helper.listener.LampCollectionListener;
+import org.allseen.lsf.helper.listener.LampListener;
 import org.allseen.lsf.helper.listener.LightingItemErrorEvent;
 import org.allseen.lsf.helper.model.LampDataModel;
 
@@ -29,7 +29,7 @@ import org.allseen.lsf.helper.model.LampDataModel;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class LampCollectionManager extends LightingItemCollectionManager<Lamp, LampCollectionListener, LampDataModel> {
+public class LampCollectionManager extends LightingItemCollectionManager<Lamp, LampListener, LampDataModel> {
 
     protected final Queue<String> lampIDs = new ArrayDeque<String>();
 
@@ -77,17 +77,17 @@ public class LampCollectionManager extends LightingItemCollectionManager<Lamp, L
     }
 
     @Override
-    protected void sendChangedEvent(LampCollectionListener listener, Lamp lamp) {
+    protected void sendChangedEvent(LampListener listener, Lamp lamp) {
         listener.onLampChanged(lamp);
     }
 
     @Override
-    protected void sendRemovedEvent(LampCollectionListener listener, Lamp lamp) {
+    protected void sendRemovedEvent(LampListener listener, Lamp lamp) {
         listener.onLampRemoved(lamp);
     }
 
     @Override
-    protected void sendErrorEvent(LampCollectionListener listener, LightingItemErrorEvent errorEvent) {
+    protected void sendErrorEvent(LampListener listener, LightingItemErrorEvent errorEvent) {
         listener.onLampError(errorEvent);
     }
 

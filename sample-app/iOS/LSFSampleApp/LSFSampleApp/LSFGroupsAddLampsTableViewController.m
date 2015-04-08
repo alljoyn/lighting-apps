@@ -23,8 +23,8 @@
 #import "LSFGroupModel.h"
 #import "LSFCapabilityData.h"
 #import "LSFEnums.h"
-#import "LSFGroup.h"
-#import "LSFLamp.h"
+#import "LSFSDKGroup.h"
+#import "LSFSDKLamp.h"
 
 @interface LSFGroupsAddLampsTableViewController ()
 
@@ -186,7 +186,7 @@
     NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
     NSMutableArray *groupsArray = [[NSMutableArray alloc] init];
 
-    for (LSFGroup *group in [groups allValues])
+    for (LSFSDKGroup *group in [groups allValues])
     {
         [groupsArray addObject: [group getLampGroupDataModel]];
     }
@@ -203,7 +203,7 @@
     NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
     NSMutableArray *lampsArray = [[NSMutableArray alloc] init];
 
-    for (LSFLamp *lamp in [lamps allValues])
+    for (LSFSDKLamp *lamp in [lamps allValues])
     {
         [lampsArray addObject: [lamp getLampDataModel]];
     }

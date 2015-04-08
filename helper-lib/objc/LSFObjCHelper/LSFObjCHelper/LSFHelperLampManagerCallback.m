@@ -24,7 +24,7 @@
 #import "LSFDispatchQueue.h"
 #import "LSFAboutData.h"
 #import "LSFEnums.h"
-#import "LSFLamp.h"
+#import "LSFSDKLamp.h"
 
 @interface LSFHelperLampManagerCallback()
 
@@ -460,13 +460,13 @@
     NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
 
     //LSFLampModel *lampModel = [lamps valueForKey: lampID];
-    LSFLamp *lamp = [lamps valueForKey: lampID];
+    LSFSDKLamp *lamp = [lamps valueForKey: lampID];
 
     //if (lampModel == nil)
     if (lamp == nil)
     {
         //NSLog(@"Creating Lamp Model for ID: %@", lampID);
-        lamp = [[LSFLamp alloc] initWithLampID: lampID];
+        lamp = [[LSFSDKLamp alloc] initWithLampID: lampID];
         [lamps setValue: lamp forKey: lampID];
 
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -496,7 +496,7 @@
 -(void)postRemoveLampID: (NSString *)lampID
 {
     NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
-    LSFLamp *lamp = [lamps valueForKey: lampID];
+    LSFSDKLamp *lamp = [lamps valueForKey: lampID];
     NSString *lampName = [NSString stringWithString: [[[lamps valueForKey: lampID] getLampDataModel] name]];
 
     if (lamp != nil)

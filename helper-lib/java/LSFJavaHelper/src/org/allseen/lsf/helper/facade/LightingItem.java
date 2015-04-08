@@ -27,5 +27,6 @@ public abstract class LightingItem {
         return getItemDataModel().getName();
     }
 
+    public abstract void rename(String name);
     protected abstract LightingItemDataModel getItemDataModel();
 }

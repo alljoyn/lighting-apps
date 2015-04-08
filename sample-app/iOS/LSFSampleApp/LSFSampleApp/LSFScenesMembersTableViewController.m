@@ -24,8 +24,8 @@
 #import "LSFNoEffectTableViewController.h"
 #import "LSFEnums.h"
 #import "LSFConstants.h"
-#import "LSFLamp.h"
-#import "LSFGroup.h"
+#import "LSFSDKLamp.h"
+#import "LSFSDKGroup.h"
 
 @interface LSFScenesMembersTableViewController ()
 
@@ -181,7 +181,7 @@
     NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
     NSMutableArray *groupsArray = [[NSMutableArray alloc] init];
 
-    for (LSFGroup *group in [groups allValues])
+    for (LSFSDKGroup *group in [groups allValues])
     {
         LSFGroupModel *groupModel = [group getLampGroupDataModel];
 
@@ -194,7 +194,7 @@
     NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
     NSMutableArray *lampsArray = [[NSMutableArray alloc] init];
 
-    for (LSFLamp *lamp in [lamps allValues])
+    for (LSFSDKLamp *lamp in [lamps allValues])
     {
         [lampsArray addObject: [lamp getLampDataModel]];
     }

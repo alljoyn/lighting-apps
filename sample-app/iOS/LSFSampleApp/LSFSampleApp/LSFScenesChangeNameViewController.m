@@ -21,7 +21,7 @@
 #import "LSFSceneModelContainer.h"
 #import "LSFUtilityFunctions.h"
 #import "LSFEnums.h"
-#import "LSFLightingScene.h"
+#import "LSFSDKScene.h"
 
 @interface LSFScenesChangeNameViewController ()
 
@@ -214,7 +214,7 @@
 {
     NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
 
-    for (LSFLightingScene *scene in [scenes allValues])
+    for (LSFSDKScene *scene in [scenes allValues])
     {
         LSFSceneDataModel *model = [scene getSceneDataModel];
 

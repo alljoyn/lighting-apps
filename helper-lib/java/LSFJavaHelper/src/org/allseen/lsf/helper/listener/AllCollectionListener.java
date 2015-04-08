@@ -20,7 +20,8 @@ package org.allseen.lsf.helper.listener;
  * in subsequent releases of the SDK</b>.
  */
 public interface AllCollectionListener extends
-    LampCollectionListener, GroupCollectionListener, PresetCollectionListener,
-    SceneCollectionListener, MasterSceneCollectionListener,
+    LampListener, GroupListener, PresetListener, TransitionEffectListener,
+    PulseEffectListener, SceneElementListener,
+    SceneListener, MasterSceneListener,
     ControllerListener {
 }

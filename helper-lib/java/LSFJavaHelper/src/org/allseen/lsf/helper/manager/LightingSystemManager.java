@@ -15,6 +15,7 @@
  */
 package org.allseen.lsf.helper.manager;
 
+import org.alljoyn.bus.BusAttachment;
 import org.allseen.lsf.LampGroupManager;
 import org.allseen.lsf.LampManager;
 import org.allseen.lsf.MasterSceneManager;
@@ -30,6 +31,7 @@ import org.allseen.lsf.helper.callback.HelperPresetManagerCallback;
 import org.allseen.lsf.helper.callback.HelperSceneManagerCallback;
 import org.allseen.lsf.helper.listener.AllJoynListener;
 import org.allseen.lsf.helper.listener.ControllerAdapter;
+import org.allseen.lsf.helper.listener.NextControllerConnectionListener;
 import org.allseen.lsf.helper.model.AllLampsLampGroup;
 import org.allseen.lsf.helper.model.ControllerDataModel;
 
@@ -45,7 +47,7 @@ public class LightingSystemManager {
     public static final int POLLING_DELAY = 10000;
     public static final int LAMP_EXPIRATION = 15000;
 
-    private final LightingSystemQueue queue;
+    private LightingSystemQueue queue;
 
     //TODO-FIX add get...() methods for these
     public final HelperControllerClientCallback controllerClientCB;
@@ -63,9 +65,7 @@ public class LightingSystemManager {
     private final MasterSceneCollectionManager masterSceneCollectionManager;
     private final ControllerManager controllerManager;
 
-    public LightingSystemManager(LightingSystemQueue queue) {
-        this.queue = queue;
-
+    public LightingSystemManager() {
         AllLampsLampGroup.instance.setLightingSystemManager(this);
 
         controllerClientCB = new HelperControllerClientCallback(this);
@@ -93,12 +93,11 @@ public class LightingSystemManager {
         });
     }
 
-    public void init(String applicationName, AllJoynListener alljoynListener) {
-        AboutManager aboutManager = new AboutManager(this);
+    public void init(String applicationName, LightingSystemQueue queue, AllJoynListener alljoynListener) {
+        setQueue(queue);
 
         AllJoynManager.init(
             applicationName,
-            queue,
             controllerClientCB,
             controllerServiceManagerCB,
             lampManagerCB,
@@ -106,7 +105,23 @@ public class LightingSystemManager {
             presetManagerCB,
             sceneManagerCB,
             masterSceneManagerCB,
-            aboutManager,
+            new AboutManager(this),
+            alljoynListener);
+    }
+
+    public void init(BusAttachment busAttachment, LightingSystemQueue queue, AllJoynListener alljoynListener) {
+        setQueue(queue);
+
+        AllJoynManager.init(
+            busAttachment,
+            controllerClientCB,
+            controllerServiceManagerCB,
+            lampManagerCB,
+            groupManagerCB,
+            presetManagerCB,
+            sceneManagerCB,
+            masterSceneManagerCB,
+            new AboutManager(this),
             alljoynListener);
     }
 
@@ -125,7 +140,26 @@ public class LightingSystemManager {
     public void destroy() {
         stop();
 
-        AllJoynManager.destroy();
+        AllJoynManager.destroy(queue);
+
+        queue.post(new Runnable() {
+            @Override
+            public void run() {
+                queue.stop();
+            }
+        });
+    }
+
+    protected void setQueue(LightingSystemQueue queue) {
+        if (queue == null) {
+            queue = new DefaultLightingSystemQueue();
+        }
+
+        if (this.queue != null) {
+            this.queue.stop();
+        }
+
+        this.queue = queue;
     }
 
     public LightingSystemQueue getQueue() {
@@ -174,6 +208,14 @@ public class LightingSystemManager {
 
     public MasterSceneManager getMasterSceneManager() {
         return AllJoynManager.masterSceneManager;
+    }
+
+    public void postOnNextControllerConnection(final NextControllerConnectionListener listener, final int delay) {
+        postOnNextControllerConnection(new Runnable() {
+            @Override
+            public void run() {
+                listener.onControllerConnected();
+            }}, delay);
     }
 
     public void postOnNextControllerConnection(final Runnable task, final int delay) {

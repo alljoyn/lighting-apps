@@ -15,9 +15,9 @@
  ******************************************************************************/
 
 #import <UIKit/UIKit.h>
-#import "LSFNextControllerConnectionDelegate.h"
+#import "LSFSDKNextControllerConnectionDelegate.h"
 
-@interface LSFTutorialViewController : UIViewController <LSFNextControllerConnectionDelegate>
+@interface LSFTutorialViewController : UIViewController <LSFSDKNextControllerConnectionDelegate>
 
 @property (nonatomic, weak) IBOutlet UILabel *versionLabel;
 

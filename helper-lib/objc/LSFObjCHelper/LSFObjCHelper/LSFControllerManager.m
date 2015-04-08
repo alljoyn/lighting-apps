@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import "LSFControllerManager.h"
-#import "LSFControllerListener.h"
+#import "LSFSDKControllerDelegate.h"
 
 @implementation LSFControllerManager
 
@@ -40,10 +40,10 @@
 {
     for (id delegate in [self getDelegates])
     {
-        if ([delegate conformsToProtocol: @protocol(LSFControllerListener)])
+        if ([delegate conformsToProtocol: @protocol(LSFSDKControllerDelegate)])
         {
-            id<LSFControllerListener> controllerListener = (id<LSFControllerListener>)delegate;
-            [controllerListener onLeaderModelChange: [LSFControllerModel getControllerModel]];
+            id<LSFSDKControllerDelegate> controllerDelegate = (id<LSFSDKControllerDelegate>)delegate;
+            [controllerDelegate onLeaderModelChange: [LSFControllerModel getControllerModel]];
         }
         else
         {
@@ -54,18 +54,18 @@
 
 -(void)sendErrorEventWithName: (NSString *)name andErrorCodes: (NSArray *)errorCodes
 {
-    LSFControllerErrorEvent *errorEvent = [[LSFControllerErrorEvent alloc] initWithName: name andErrorCodes: errorCodes];
+    LSFSDKControllerErrorEvent *errorEvent = [[LSFSDKControllerErrorEvent alloc] initWithName: name andErrorCodes: errorCodes];
     [self sendErrorEvent: errorEvent];
 }
 
--(void)sendErrorEvent: (LSFControllerErrorEvent *)errorEvent
+-(void)sendErrorEvent: (LSFSDKControllerErrorEvent *)errorEvent
 {
     for (id delegate in [self getDelegates])
     {
-        if ([delegate conformsToProtocol: @protocol(LSFControllerListener)])
+        if ([delegate conformsToProtocol: @protocol(LSFSDKControllerDelegate)])
         {
-            id<LSFControllerListener> controllerListener = (id<LSFControllerListener>)delegate;
-            [controllerListener onControllerError: errorEvent];
+            id<LSFSDKControllerDelegate> controllerDelegate = (id<LSFSDKControllerDelegate>)delegate;
+            [controllerDelegate onControllerError: errorEvent];
         }
         else
         {

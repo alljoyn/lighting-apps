@@ -24,8 +24,8 @@
 #import "LSFGroupModel.h"
 #import "LSFEnums.h"
 #import "LSFConstants.h"
-#import "LSFLamp.h"
-#import "LSFGroup.h"
+#import "LSFSDKLamp.h"
+#import "LSFSDKGroup.h"
 
 @interface LSFScenesModifyMembersTableViewController ()
 

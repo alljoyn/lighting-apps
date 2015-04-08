@@ -20,14 +20,14 @@ import java.util.Iterator;
 
 import org.allseen.lsf.helper.facade.MasterScene;
 import org.allseen.lsf.helper.listener.LightingItemErrorEvent;
-import org.allseen.lsf.helper.listener.MasterSceneCollectionListener;
+import org.allseen.lsf.helper.listener.MasterSceneListener;
 import org.allseen.lsf.helper.model.MasterSceneDataModel;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class MasterSceneCollectionManager extends LightingItemCollectionManager<MasterScene, MasterSceneCollectionListener, MasterSceneDataModel> {
+public class MasterSceneCollectionManager extends LightingItemCollectionManager<MasterScene, MasterSceneListener, MasterSceneDataModel> {
 
     public MasterSceneCollectionManager(LightingSystemManager director) {
         super(director);
@@ -62,17 +62,17 @@ public class MasterSceneCollectionManager extends LightingItemCollectionManager<
     }
 
     @Override
-    protected void sendChangedEvent(MasterSceneCollectionListener listener, MasterScene masterScene) {
+    protected void sendChangedEvent(MasterSceneListener listener, MasterScene masterScene) {
         listener.onMasterSceneChanged(masterScene);
     }
 
     @Override
-    protected void sendRemovedEvent(MasterSceneCollectionListener listener, MasterScene masterScene) {
+    protected void sendRemovedEvent(MasterSceneListener listener, MasterScene masterScene) {
         listener.onMasterSceneRemoved(masterScene);
     }
 
     @Override
-    protected void sendErrorEvent(MasterSceneCollectionListener listener, LightingItemErrorEvent errorEvent) {
+    protected void sendErrorEvent(MasterSceneListener listener, LightingItemErrorEvent errorEvent) {
         listener.onMasterSceneError(errorEvent);
     }
 

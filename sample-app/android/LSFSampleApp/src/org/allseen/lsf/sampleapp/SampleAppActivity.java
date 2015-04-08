@@ -35,7 +35,10 @@ import org.allseen.lsf.helper.facade.Group;
 import org.allseen.lsf.helper.facade.Lamp;
 import org.allseen.lsf.helper.facade.MasterScene;
 import org.allseen.lsf.helper.facade.Preset;
+import org.allseen.lsf.helper.facade.PulseEffect;
 import org.allseen.lsf.helper.facade.Scene;
+import org.allseen.lsf.helper.facade.SceneElement;
+import org.allseen.lsf.helper.facade.TransitionEffect;
 import org.allseen.lsf.helper.listener.AllCollectionListener;
 import org.allseen.lsf.helper.listener.AllJoynListener;
 import org.allseen.lsf.helper.listener.ControllerErrorEvent;
@@ -182,16 +185,7 @@ public class SampleAppActivity extends FragmentActivity implements
         Log.d(SampleAppActivity.TAG, "===========================================");
         Log.d(SampleAppActivity.TAG, "Creating LightingSystemManager");
 
-        systemManager = new LightingSystemManager(new LightingSystemQueue() {
-            @Override
-            public void post(Runnable r) {
-                handler.post(r);
-            }
-
-            @Override
-            public void postDelayed(Runnable r, int delay) {
-                handler.postDelayed(r, delay);
-            }});
+        systemManager = new LightingSystemManager();
 
         systemManager.getLampCollectionManager().addListener(this);
         systemManager.getGroupCollectionManager().addListener(this);
@@ -200,7 +194,24 @@ public class SampleAppActivity extends FragmentActivity implements
         systemManager.getMasterSceneCollectionManager().addListener(this);
         systemManager.getControllerManager().addListener(this);
 
-        systemManager.init("SampleApp", this);
+        systemManager.init(
+            "SampleApp",
+            new LightingSystemQueue() {
+                @Override
+                public void post(Runnable r) {
+                    handler.post(r);
+                }
+
+                @Override
+                public void postDelayed(Runnable r, int delay) {
+                    handler.postDelayed(r, delay);
+                }
+
+                @Override
+                public void stop() {
+                    // Currently nothing to do
+                }},
+            this);
     }
 
     @Override
@@ -1674,5 +1685,59 @@ public class SampleAppActivity extends FragmentActivity implements
                 }
             }
         });
+    }
+
+    @Override
+    public void onTransitionEffectChanged(TransitionEffect effect) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onTransitionEffectError(LightingItemErrorEvent error) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onTransitionEffectRemoved(TransitionEffect effect) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onPulseEffectChanged(PulseEffect effect) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onPulseEffectError(LightingItemErrorEvent error) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onPulseEffectRemoved(PulseEffect effect) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onSceneElementChanged(SceneElement element) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onSceneElementError(LightingItemErrorEvent error) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onSceneElementRemoved(SceneElement element) {
+        // TODO Auto-generated method stub
+
     }
 }

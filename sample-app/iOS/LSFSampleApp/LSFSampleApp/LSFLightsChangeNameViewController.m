@@ -24,7 +24,7 @@
 #import "LSFLightsTableViewController.h"
 #import "LSFLightInfoTableViewController.h"
 #import "LSFEnums.h"
-#import "LSFLamp.h"
+#import "LSFSDKLamp.h"
 
 @interface LSFLightsChangeNameViewController ()
 
@@ -208,7 +208,7 @@
 {
     NSDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
     
-    for (LSFLamp *lamp in [lamps allValues])
+    for (LSFSDKLamp *lamp in [lamps allValues])
     {
         LSFLampModel *model = [lamp getLampDataModel];
 

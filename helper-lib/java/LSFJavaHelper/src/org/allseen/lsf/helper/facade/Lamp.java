@@ -24,7 +24,7 @@ import org.allseen.lsf.helper.model.LampDataModel;
  * A Lamp object represents a lamp in a lighting system, and can be used to send commands
  * to it.
  */
-public final class Lamp extends ColorItem {
+public final class Lamp extends GroupMember {
 
     protected LampDataModel lampModel;
 
@@ -57,6 +57,16 @@ public final class Lamp extends ColorItem {
         lampModel = new LampDataModel(lampID, lampName);
     }
 
+    @Override
+    public void applyPreset(Preset preset) {
+        AllJoynManager.lampManager.transitionLampStateToPreset(lampModel.id, preset.getPresetDataModel().id, 0);
+    }
+
+    @Override
+    public void applyEffect(Effect effect) {
+        // TODO-IMPL
+    }
+
     /**
      * Sends a command to turn this Lamp on or off.
      *
@@ -76,7 +86,7 @@ public final class Lamp extends ColorItem {
      * @param colorTempDegrees The color temperature component of the desired color, in degrees Kelvin (2700-9000)
      */
     @Override
-    public void setColor(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees) {
+    public void setColorHsvt(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees) {
         LampState lampState = new LampState();
 
         lampState.setOnOff(true);
@@ -84,6 +94,11 @@ public final class Lamp extends ColorItem {
         ColorStateConverter.convertViewToModel(hueDegrees, saturationPercent, brightnessPercent, colorTempDegrees, lampState);
 
         AllJoynManager.lampManager.transitionLampState(lampModel.id, lampState, 0);
+    }
+
+    @Override
+    public void rename(String lampName) {
+        AllJoynManager.lampManager.setLampName(lampModel.id, lampName, LightingDirector.get().getDefaultLanguage());
     }
 
     @Override

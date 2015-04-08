@@ -49,14 +49,13 @@ public class AllJoynManager {
     public static SceneManager sceneManager;
     public static MasterSceneManager masterSceneManager;
     public static AboutManager aboutManager;
-    public static AllJoynListener alljoynListener;
 
     public static boolean controllerConnected = false;
     private static boolean controllerStarted = false;
+    private static boolean disconnectBusOnDestroy = false;
 
     public static void init(
         final String applicationName,
-        final LightingSystemQueue queue,
         final ControllerClientCallback controllerClientCallback,
         final ControllerServiceManagerCallback controllerServiceManagerCallback,
         final LampManagerCallback lampManagerCallback,
@@ -67,18 +66,44 @@ public class AllJoynManager {
         final AboutManager aboutManager,
         final AllJoynListener alljoynListener) {
 
-        new Thread(new Runnable() {
+        AllJoynManager.init(
+            new BusAttachment(applicationName != null ? applicationName : "AllJoynManager", BusAttachment.RemoteMessage.Receive),
+            controllerClientCallback,
+            controllerServiceManagerCallback,
+            lampManagerCallback,
+            groupManagerCallback,
+            presetManagerCallback,
+            sceneManagerCallback,
+            masterSceneManagerCallback,
+            aboutManager,
+            alljoynListener);
+    }
+
+    public static void init(
+        final BusAttachment busAttachment,
+        final ControllerClientCallback controllerClientCallback,
+        final ControllerServiceManagerCallback controllerServiceManagerCallback,
+        final LampManagerCallback lampManagerCallback,
+        final HelperGroupManagerCallback groupManagerCallback,
+        final PresetManagerCallback presetManagerCallback,
+        final SceneManagerCallback sceneManagerCallback,
+        final MasterSceneManagerCallback masterSceneManagerCallback,
+        final AboutManager aboutManager,
+        final AllJoynListener alljoynListener) {
+
+        new Thread() {
             @Override
             public void run() {
                 System.out.println("AllJoynManager.init() - thread starting");
 
                 AllJoynManager.aboutManager = aboutManager;
-                AllJoynManager.alljoynListener = alljoynListener;
+                AllJoynManager.controllerConnected = false;
+                AllJoynManager.bus = busAttachment;
 
-                controllerConnected = false;
-
-                AllJoynManager.bus = new BusAttachment(applicationName, BusAttachment.RemoteMessage.Receive);
-                AllJoynManager.bus.connect();
+                if (!AllJoynManager.bus.isConnected()) {
+                    AllJoynManager.bus.connect();
+                    AllJoynManager.disconnectBusOnDestroy = true;
+                }
 //                AllJoynManager.bus.setDebugLevel("ALL", 7);
 //                AllJoynManager.bus.setDaemonDebug("ALL", 7);
 
@@ -92,11 +117,12 @@ public class AllJoynManager {
 
                 AllJoynManager.aboutManager.start(bus);
 
-                AllJoynManager.alljoynListener.onAllJoynInitialized();
+                if (alljoynListener != null) {
+                    alljoynListener.onAllJoynInitialized();
+                }
 
                 System.out.println("AllJoynManager.init() - thread stopping");
-            }
-        }).start();
+            }}.start();
     }
 
     public static void restart(LightingSystemQueue queue) {
@@ -153,31 +179,39 @@ public class AllJoynManager {
         });
     }
 
-    public static void destroy() {
-        System.out.println("AllJoynManager.destroy()");
+    public static void destroy(final LightingSystemQueue queue) {
+        queue.post(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("AllJoynManager.destroy()");
 
-        AllJoynManager.aboutManager.destroy();
+                AllJoynManager.aboutManager.destroy();
 
-        AllJoynManager.masterSceneManager.destroy();
-        AllJoynManager.sceneManager.destroy();
-        AllJoynManager.presetManager.destroy();
-        AllJoynManager.groupManager.destroy();
-        AllJoynManager.lampManager.destroy();
-        AllJoynManager.controllerServiceManager.destroy();
-        AllJoynManager.controllerClient.destroy();
+                AllJoynManager.masterSceneManager.destroy();
+                AllJoynManager.sceneManager.destroy();
+                AllJoynManager.presetManager.destroy();
+                AllJoynManager.groupManager.destroy();
+                AllJoynManager.lampManager.destroy();
+                AllJoynManager.controllerServiceManager.destroy();
+                AllJoynManager.controllerClient.destroy();
 
-        AllJoynManager.bus.disconnect();
-        AllJoynManager.bus.release();
+                if (AllJoynManager.disconnectBusOnDestroy) {
+                    AllJoynManager.bus.disconnect();
+                    AllJoynManager.bus.release();
+                }
 
-      //TODO-DEL?
-//      AllJoynManager.controllerConnected = false;
-//      AllJoynManager.masterSceneManager = null;
-//      AllJoynManager.sceneManager = null;
-//      AllJoynManager.presetManager = null;
-//      AllJoynManager.groupManager = null;
-//      AllJoynManager.lampManager = null;
-//      AllJoynManager.controllerServiceManager = null;
-//      AllJoynManager.controllerClient = null;
-//      AllJoynManager.bus = null;
+                //TODO-DEL?
+//              AllJoynManager.controllerConnected = false;
+//              AllJoynManager.disconnectBusOnDestroy = false;
+//              AllJoynManager.masterSceneManager = null;
+//              AllJoynManager.sceneManager = null;
+//              AllJoynManager.presetManager = null;
+//              AllJoynManager.groupManager = null;
+//              AllJoynManager.lampManager = null;
+//              AllJoynManager.controllerServiceManager = null;
+//              AllJoynManager.controllerClient = null;
+//              AllJoynManager.bus = null;
+            }
+        });
     }
 }

@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.allseen.lsf.helper.facade.Group;
-import org.allseen.lsf.helper.listener.GroupCollectionListener;
+import org.allseen.lsf.helper.listener.GroupListener;
 import org.allseen.lsf.helper.listener.LightingItemErrorEvent;
 import org.allseen.lsf.helper.model.GroupDataModel;
 import org.allseen.lsf.helper.model.GroupsFlattener;
@@ -28,7 +28,7 @@ import org.allseen.lsf.helper.model.GroupsFlattener;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class GroupCollectionManager extends LightingItemCollectionManager<Group, GroupCollectionListener, GroupDataModel> {
+public class GroupCollectionManager extends LightingItemCollectionManager<Group, GroupListener, GroupDataModel> {
 
     protected GroupsFlattener groupsFlattener = new GroupsFlattener();
 
@@ -73,17 +73,17 @@ public class GroupCollectionManager extends LightingItemCollectionManager<Group,
     }
 
     @Override
-    protected void sendChangedEvent(GroupCollectionListener listener, Group group) {
+    protected void sendChangedEvent(GroupListener listener, Group group) {
         listener.onGroupChanged(group);
     }
 
     @Override
-    protected void sendRemovedEvent(GroupCollectionListener listener, Group group) {
+    protected void sendRemovedEvent(GroupListener listener, Group group) {
         listener.onGroupRemoved(group);
     }
 
     @Override
-    protected void sendErrorEvent(GroupCollectionListener listener, LightingItemErrorEvent errorEvent) {
+    protected void sendErrorEvent(GroupListener listener, LightingItemErrorEvent errorEvent) {
         listener.onGroupError(errorEvent);
     }
 
@@ -93,4 +93,5 @@ public class GroupCollectionManager extends LightingItemCollectionManager<Group,
 
         return group != null ? group.getGroupDataModel() : null;
     }
+
 }

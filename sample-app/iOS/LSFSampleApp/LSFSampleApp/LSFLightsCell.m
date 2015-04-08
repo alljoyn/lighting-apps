@@ -19,7 +19,7 @@
 #import "LSFAllJoynManager.h"
 #import "LSFConstants.h"
 #import "LSFLampModelContainer.h"
-#import "LSFLamp.h"
+#import "LSFSDKLamp.h"
 #import "LSFLampModel.h"
 
 @interface LSFLightsCell()

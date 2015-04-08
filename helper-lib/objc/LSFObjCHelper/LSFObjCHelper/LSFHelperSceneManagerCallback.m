@@ -20,7 +20,7 @@
 #import "LSFAllJoynManager.h"
 #import "LSFDispatchQueue.h"
 #import "LSFEnums.h"
-#import "LSFLightingScene.h"
+#import "LSFSDKScene.h"
 
 @interface LSFHelperSceneManagerCallback()
 
@@ -208,7 +208,7 @@
 -(void)postProcessSceneID: (NSString *)sceneID
 {
     NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
-    LSFLightingScene *scene = [scenes valueForKey: sceneID];
+    LSFSDKScene *scene = [scenes valueForKey: sceneID];
 
     if (scene == nil)
     {
@@ -227,11 +227,11 @@
     //LSFSceneDataModel *sceneModel = [container.sceneContainer valueForKey: sceneID];
 
     NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
-    LSFLightingScene *scene = [scenes valueForKey: sceneID];
+    LSFSDKScene *scene = [scenes valueForKey: sceneID];
 
     if (scene == nil)
     {
-        scene = [[LSFLightingScene alloc] initWithSceneID: sceneID];
+        scene = [[LSFSDKScene alloc] initWithSceneID: sceneID];
         [scenes setValue: scene forKey: sceneID];
 
         dispatch_async(dispatch_get_main_queue(), ^{

@@ -14,12 +14,16 @@
  */
 package org.allseen.lsf.helper.facade;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.allseen.lsf.LampState;
 import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.model.AllLampsDataModel;
 import org.allseen.lsf.helper.model.ColorItemDataModel;
 import org.allseen.lsf.helper.model.ColorStateConverter;
 import org.allseen.lsf.helper.model.GroupDataModel;
+import org.allseen.lsf.helper.model.LightingItemUtil;
 
 /**
  * A Group object represents a set of lamps in a lighting system, and can be used to send the
@@ -27,7 +31,7 @@ import org.allseen.lsf.helper.model.GroupDataModel;
  *
  * Groups can contain lamps and other groups.
  */
-public class Group extends ColorItem {
+public class Group extends GroupMember {
 
     protected GroupDataModel groupModel;
 
@@ -79,7 +83,7 @@ public class Group extends ColorItem {
      * @param colorTempDegrees The color temperature component of the desired color, in degrees Kelvin (2700-9000)
      */
     @Override
-    public void setColor(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees) {
+    public void setColorHsvt(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees) {
         LampState lampState = new LampState();
 
         lampState.setOnOff(true);
@@ -87,6 +91,55 @@ public class Group extends ColorItem {
         ColorStateConverter.convertViewToModel(hueDegrees, saturationPercent, brightnessPercent, colorTempDegrees, lampState);
 
         AllJoynManager.groupManager.transitionLampGroupState(groupModel.id, lampState, 0);
+    }
+
+    public void add(GroupMember member) {
+        Set<String> lamps = new HashSet<String>(groupModel.getLamps());
+        Set<String> groups = new HashSet<String>(groupModel.getGroups());
+
+        if (member instanceof Lamp) {
+            lamps.add(member.getColorDataModel().id);
+        } else if (member instanceof Group) {
+            groups.add(member.getColorDataModel().id);
+        }
+
+        AllJoynManager.groupManager.updateLampGroup(groupModel.id, LightingItemUtil.createLampGroup(
+                (String[])lamps.toArray(), (String[])groups.toArray()));
+    }
+
+    public void remove(GroupMember member) {
+        Set<String> lamps = new HashSet<String>(groupModel.getLamps());
+        Set<String> groups = new HashSet<String>(groupModel.getGroups());
+
+        boolean didRemove = lamps.remove(member.getColorDataModel().id) || groups.remove(member.getColorDataModel().id);
+
+        if (didRemove) {
+            AllJoynManager.groupManager.updateLampGroup(groupModel.id, LightingItemUtil.createLampGroup(
+                lamps.toArray(new String[lamps.size()]), groups.toArray(new String[groups.size()])));
+        }
+    }
+
+    public void modify(GroupMember[] members) {
+        AllJoynManager.groupManager.updateLampGroup(groupModel.id, LightingItemUtil.createLampGroup(members));
+    }
+
+    public void delete() {
+        AllJoynManager.groupManager.deleteLampGroup(groupModel.id);
+    }
+
+    @Override
+    public void applyPreset(Preset preset) {
+        AllJoynManager.groupManager.transitionLampGroupStateToPreset(groupModel.id, preset.getPresetDataModel().id, 0);
+    }
+
+    @Override
+    public void applyEffect(Effect effect) {
+        // TODO-IMPL
+    }
+
+    @Override
+    public void rename(String groupName) {
+        AllJoynManager.groupManager.setLampGroupName(groupModel.id, groupName, LightingDirector.get().getDefaultLanguage());
     }
 
     @Override

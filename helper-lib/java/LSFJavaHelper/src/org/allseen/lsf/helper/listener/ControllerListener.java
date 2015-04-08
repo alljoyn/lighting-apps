@@ -21,7 +21,7 @@ import org.allseen.lsf.helper.model.ControllerDataModel;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public interface ControllerListener {
+public interface ControllerListener extends LightingListener {
     public void onLeaderModelChange(ControllerDataModel leadModel);
     public void onControllerErrors(ControllerErrorEvent errorEvent);
 }

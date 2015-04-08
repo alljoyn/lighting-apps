@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, AllSeen Alliance. All rights reserved.
+ * Copyright AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -86,10 +86,10 @@ public class ColorStateConverter {
     }
 
     public static void convertViewToModel(int viewHue, int viewSaturation, int viewBrightness, int viewColorTemp, LampState lampState) {
-        lampState.setHue(convertHueViewToModel(viewHue));
-        lampState.setSaturation(convertSaturationViewToModel(viewSaturation));
-        lampState.setBrightness(convertBrightnessViewToModel(viewBrightness));
-        lampState.setColorTemp(convertColorTempViewToModel(viewColorTemp));
+        lampState.setHue(convertHueViewToModel(boundHueView(viewHue)));
+        lampState.setSaturation(convertSaturationViewToModel(boundSaturationView(viewSaturation)));
+        lampState.setBrightness(convertBrightnessViewToModel(boundBrightnessView(viewBrightness)));
+        lampState.setColorTemp(convertColorTempViewToModel(boundColorTempView(viewColorTemp)));
     }
 
     public static float[] convertModelToHSV(LampState lampState) {
@@ -100,11 +100,31 @@ public class ColorStateConverter {
         return new float[] {viewHue, (float) (viewSaturation / 100.0), (float) (viewBrightness / 100.0)};
     }
 
+    public static int boundHueView(int viewHue) {
+        return boundValue(viewHue, VIEW_HUE_MIN, VIEW_HUE_MAX);
+    }
+
+    public static int boundSaturationView(int viewSaturation) {
+        return boundValue(viewSaturation, VIEW_SATURATION_MIN, VIEW_SATURATION_MAX);
+    }
+
+    public static int boundBrightnessView(int viewBrightness) {
+        return boundValue(viewBrightness, VIEW_BRIGHTNESS_MIN, VIEW_BRIGHTNESS_MAX);
+    }
+
+    public static int boundColorTempView(int viewColorTemp) {
+        return boundValue(viewColorTemp, VIEW_COLORTEMP_MIN, VIEW_COLORTEMP_MAX);
+    }
+
     protected static int convertModelToView(long modelValue, int min, int span) {
         return min + (int)Math.round((modelValue / (double)UINT32_MAX) * span);
     }
 
     protected static long convertViewToModel(int viewValue, int min, int span) {
         return Math.round(((double)(viewValue - min) / (double)span) * UINT32_MAX);
+    }
+
+    private static int boundValue(int value, int min, int max) {
+        return Math.max(Math.min(value, max), min);
     }
 }

@@ -30,8 +30,8 @@
 #import "LSFConstants.h"
 #import "LSFWifiMonitor.h"
 #import "LSFEnums.h"
-#import "LSFGroup.h"
-#import "LSFLightingScene.h"
+#import "LSFSDKGroup.h"
+#import "LSFSDKScene.h"
 
 @interface LSFGroupsTableViewController ()
 
@@ -91,7 +91,7 @@
     //Set the content of the default group data array
     self.data = [[NSMutableArray alloc] init];
 
-    for (LSFGroup *group in [[[LSFGroupModelContainer getGroupModelContainer] groupContainer] allValues])
+    for (LSFSDKGroup *group in [[[LSFGroupModelContainer getGroupModelContainer] groupContainer] allValues])
     {
         [self.data addObject: [group getLampGroupDataModel]];
     }
@@ -593,7 +593,7 @@
     NSMutableArray *names = [[NSMutableArray alloc] init];
     NSMutableArray *groups = [[NSMutableArray alloc] initWithArray: [[[LSFGroupModelContainer getGroupModelContainer] groupContainer] allValues]];
 
-    for (LSFGroup *group in groups)
+    for (LSFSDKGroup *group in groups)
     {
         LSFGroupModel *model = [group getLampGroupDataModel];
 
@@ -609,7 +609,7 @@
 
     NSMutableArray *scenes = [[NSMutableArray alloc] initWithArray: [[[LSFSceneModelContainer getSceneModelContainer] sceneContainer] allValues]];
 
-    for (LSFLightingScene *scene in scenes)
+    for (LSFSDKScene *scene in scenes)
     {
         LSFSceneDataModel *model = [scene getSceneDataModel];
 

@@ -16,19 +16,18 @@
 package org.allseen.lsf.tutorial;
 
 import org.alljoyn.lsf.tutorial.R;
+import org.allseen.lsf.helper.facade.Color;
 import org.allseen.lsf.helper.facade.Group;
 import org.allseen.lsf.helper.facade.Lamp;
 import org.allseen.lsf.helper.facade.LightingDirector;
 import org.allseen.lsf.helper.facade.Scene;
-import org.allseen.lsf.helper.manager.LightingSystemQueue;
+import org.allseen.lsf.helper.listener.NextControllerConnectionListener;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
 import android.widget.TextView;
 
-public class TutorialActivity extends FragmentActivity {
+public class TutorialActivity extends FragmentActivity implements NextControllerConnectionListener {
     private LightingDirector lightingDirector;
 
     @Override
@@ -43,23 +42,8 @@ public class TutorialActivity extends FragmentActivity {
         ((TextView)findViewById(R.id.appTextVersion)).setText(version);
 
         // Instantiate the director and wait for the connection
-        lightingDirector = new LightingDirector(new LightingSystemQueue() {
-            Handler handler = new Handler(Looper.getMainLooper());
-            @Override
-            public void post(Runnable r) {
-                handler.post(r);
-            }
-
-            @Override
-            public void postDelayed(Runnable r, int delay) {
-                handler.postDelayed(r, delay);
-            }});
-
-        lightingDirector.postOnNextControllerConnection(new Runnable() {
-            @Override
-            public void run() {
-                performLightingOperations();
-            }}, 5000);
+        lightingDirector = LightingDirector.get();
+        lightingDirector.postOnNextControllerConnection(this, 5000);
         lightingDirector.start("TutorialApp");
     }
 
@@ -69,7 +53,8 @@ public class TutorialActivity extends FragmentActivity {
         super.onDestroy();
     }
 
-    protected void performLightingOperations() {
+    @Override
+    public void onControllerConnected() {
         // Lamp operations
         Lamp[] lamps = lightingDirector.getLamps();
 
@@ -86,7 +71,7 @@ public class TutorialActivity extends FragmentActivity {
         try {Thread.sleep(2000);} catch(Exception e) { }
 
         for (int i = 0; i < lamps.length; i++) {
-            lamps[i].setColor(180, 100, 50, 4000);
+            lamps[i].setColor(new Color(180, 100, 50, 4000));
         }
 
         // Group operations
@@ -105,7 +90,7 @@ public class TutorialActivity extends FragmentActivity {
         try {Thread.sleep(2000);} catch(Exception e) { }
 
         for (int i = 0; i < groups.length; i++) {
-            groups[i].setColor(90, 100, 75, 4000);
+            groups[i].setColor(new Color(90, 100, 75, 4000));
         }
 
         try {Thread.sleep(2000);} catch(Exception e) { }
