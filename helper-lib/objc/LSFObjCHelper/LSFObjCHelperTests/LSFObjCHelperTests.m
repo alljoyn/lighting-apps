@@ -3,7 +3,7 @@
 //  LSFObjCHelperTests
 //
 //  Created by Fullen, Jason on 9/9/14.
-//  Copyright (c) 2014 AllSeen Alliance. All rights reserved.
+//  Copyright (c) AllSeen Alliance. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
