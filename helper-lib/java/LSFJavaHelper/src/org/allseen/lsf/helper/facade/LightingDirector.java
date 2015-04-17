@@ -93,7 +93,12 @@ public class LightingDirector {
 
     /**
      * Causes the LightingDirector to start interacting with the Lighting
-     * system.
+     * system. This method will create its own BusAttachment and default
+     * LightingSystemQueue since none are provided.
+     * <p>
+     * Note: start() should be called before interacting with the Lighting
+     * Director. Subsequent calls to start() must each be preceded by a call
+     * to stop().
      * <p>
      * Note: you should make sure a WiFi or other network connection is
      * available before calling this method.
@@ -104,7 +109,12 @@ public class LightingDirector {
 
     /**
      * Causes the LightingDirector to start interacting with the Lighting system
-     * using the specified application name.
+     * using the specified application name. This method uses the application
+     * name when creating the AllJoyn bus attachment.
+     * <p>
+     * Note: start() should be called before interacting with the Lighting
+     * Director. Subsequent calls to start() must each be preceded by a call
+     * to stop().
      * <p>
      * Note: you should make sure a WiFi or other network connection is
      * available before calling this method.
@@ -120,7 +130,12 @@ public class LightingDirector {
 
     /**
      * Causes the LightingDirector to start interacting with the Lighting system
-     * using the specified AllJoyn bus attachment.
+     * using the specified AllJoyn bus attachment. In this method, the application
+     * name is not necessary since a bus attachment is passed in directly.
+     * <p>
+     * Note: start() should be called before interacting with the Lighting
+     * Director. Subsequent calls to start() must each be preceded by a call
+     * to stop().
      * <p>
      * Note: you should make sure a WiFi or other network connection is
      * available before calling this method.
@@ -135,7 +150,12 @@ public class LightingDirector {
 
     /**
      * Causes the LightingDirector to start interacting with the Lighting system
-     * using the specified application name and dispatch queue.
+     * using the specified application name and dispatch queue. The passed in
+     * application name will be used in creating an AllJoyn BusAttachment.
+     * <p>
+     * Note: start() should be called before interacting with the Lighting
+     * Director. Subsequent calls to start() must each be preceded by a call
+     * to stop().
      * <p>
      * Note: you should make sure a WiFi or other network connection is
      * available before calling this method.
@@ -156,6 +176,10 @@ public class LightingDirector {
     /**
      * Causes the LightingDirector to start interacting with the Lighting system
      * using the specified AllJoyn bus attachment and dispatch queue.
+     * <p>
+     * Note: start() should be called before interacting with the Lighting
+     * Director. Subsequent calls to start() must each be preceded by a call
+     * to stop().
      * <p>
      * Note: you should make sure a WiFi or other network connection is
      * available before calling this method.
@@ -234,11 +258,13 @@ public class LightingDirector {
     }
 
     /**
-     * Returns an instance of the Lamp with the corresponding lamp ID.
+     * Returns an instance of the Lamp with the corresponding lamp ID. If a
+     * Lamp corresponding to the lamp ID is not found, then this method will
+     * return null.
      *
      * @param lampId The ID of the Lamp
      *
-     * @return Instance of Lamp
+     * @return Instance of Lamp or null if Lamp does not exist.
      */
     public Lamp getLamp(String lampId) {
         return getLampCollectionManager().getLamp(lampId);
@@ -275,11 +301,13 @@ public class LightingDirector {
     }
 
     /**
-     * Returns an instance of the Group with the corresponding group ID.
+     * Returns an instance of the Group with the corresponding group ID. If a
+     * Group corresponding to the group ID is not found, then this method will
+     * return null.
      *
      * @param groupId The ID of the Group
      *
-     * @return Instance of Group
+     * @return Instance of Group or null if Group does not exist.
      */
     public Group getGroup(String groupId) {
         return getGroupCollectionManager().getGroup(groupId);
@@ -316,11 +344,13 @@ public class LightingDirector {
     }
 
     /**
-     * Returns an instance of the Preset with the corresponding preset ID.
+     * Returns an instance of the Preset with the corresponding preset ID. If a
+     * Preset corresponding to the preset ID is not found, then this method will
+     * return null.
      *
      * @param presetId The ID of the Preset
      *
-     * @return Instance of Preset
+     * @return Instance of Preset or null if Preset does not exist.
      */
     public Preset getPreset(String presetId) {
         return getPresetCollectionManager().getPreset(presetId);
@@ -359,11 +389,12 @@ public class LightingDirector {
 
     /**
      * Returns an instance of the TransistionEffect with the corresponding
-     * transition effect ID.
+     * transition effect ID. If a TransitionEffect corresponding to the
+     * transition effect ID does not exist, then this method will return null.
      *
      * @param transitionEffectId The ID of the TransitionEffect
      *
-     * @return Instance of TransitionEffect
+     * @return Instance of TransitionEffect or null if TransitionEffect does not exist.
      */
     public TransitionEffect getTransitionEffect(String transitionEffectId) {
         // TODO-IMPL
@@ -403,11 +434,12 @@ public class LightingDirector {
 
     /**
      * Returns an instance of the PulseEffect with the corresponding
-     * pulse effect ID.
+     * pulse effect ID. If a PulseEffect corresponding to the pulse effect ID
+     * does not exist, then this method will return null.
      *
      * @param pulseEffectId The ID of the PulseEffect
      *
-     * @return Instance of PulseEffect
+     * @return Instance of PulseEffect or null if PulseEffect does not exist
      */
     public PulseEffect getPuseEffect(String pulseEffectId) {
         // TODO-IMPL
@@ -447,11 +479,12 @@ public class LightingDirector {
 
     /**
      * Returns an instance of the SceneElement with the corresponding
-     * scene element ID.
+     * scene element ID. If a SceneElement corresponding to the scene element
+     * ID does not exist, then this method will return null.
      *
      * @param sceneElementId The ID of the SceneElement
      *
-     * @return Instance of SceneElement
+     * @return Instance of SceneElement or null if SceneElement does not exist.
      */
     public SceneElement getSceneElement(String sceneElementId) {
         // TODO-IMPL
@@ -490,11 +523,12 @@ public class LightingDirector {
 
     /**
      * Returns an instance of the Scene with the corresponding
-     * scene ID.
+     * scene ID.  If a Scene corresponding to the scene ID does not exists,
+     * then this method will return null.
      *
      * @param sceneId The ID of the Scene
      *
-     * @return Instance of Scene
+     * @return Instance of Scene or null if Scene does not exist.
      */
     public Scene getScene(String sceneId) {
         return getSceneCollectionManager().getScene(sceneId);
@@ -533,11 +567,12 @@ public class LightingDirector {
 
     /**
      * Returns an instance of the MasterScene with the corresponding
-     * master scene ID.
+     * master scene ID. If a MasterScene corresponding to the master
+     * sceen ID does not exist, then this method will return null.
      *
      * @param masterSceneId The ID of the MasterScene
      *
-     * @return Instance of MasterScene
+     * @return Instance of MasterScene or null if MasterScene does not exist
      */
     public MasterScene getMasterScene(String masterSceneId) {
         return getMasterSceneCollectionManager().getMasterScene(masterSceneId);
@@ -592,6 +627,10 @@ public class LightingDirector {
 
     /**
      * Synchronously creates a Group on the Lighting Controller.
+     *<p>
+     * This is a blocking call that will block the current thread until the object
+     * is successfully created or the create sync timeout is exceeded. The timeout
+     * value can be set using {@link #setCreateSyncTimeout(long) createSyncTimeout}.
      *
      * @param members
      *            Array of GroupMember
@@ -626,7 +665,8 @@ public class LightingDirector {
      * Synchronously creates a Preset on the Lighting Controller.
      * <p>
      * This is a blocking call that will block the current thread until the object
-     * is successfully created or the create sync timeout is exceeded.
+     * is successfully created or the create sync timeout is exceeded. The timeout
+     * value can be set using {@link #setCreateSyncTimeout(long) createSyncTimeout}.
      *
      * @param power
      *            Specifies the Power of the Preset's lamp state
@@ -666,7 +706,8 @@ public class LightingDirector {
      * Synchronously creates a TransitionEffect on the Lighting Controller.
      * <p>
      * This is a blocking call that will block the current thread until the object
-     * is successfully created or the create sync timeout is exceeded.
+     * is successfully created or the create sync timeout is exceeded. The timeout
+     * value can be set using {@link #setCreateSyncTimeout(long) createSyncTimeout}.
      *
      * @param state
      *            Specifies the lamp state of the TransitionEffect
@@ -702,7 +743,8 @@ public class LightingDirector {
      * Synchronously creates a PulseEffect on the Lighting Controller.
      * <p>
      * This is a blocking call that will block the current thread until the object
-     * is successfully created or the create sync timeout is exceeded.
+     * is successfully created or the create sync timeout is exceeded. The timeout
+     * value can be set using {@link #setCreateSyncTimeout(long) createSyncTimeout}.
      *
      * @param fromState
      *            Specifies the starting LampState of the PulseEffect
@@ -750,7 +792,8 @@ public class LightingDirector {
      * Synchronously creates a SceneElement on the Lighting Controller.
      * <p>
      * This is a blocking call that will block the current thread until the object
-     * is successfully created or the create sync timeout is exceeded.
+     * is successfully created or the create sync timeout is exceeded. The timeout
+     * value can be set using {@link #setCreateSyncTimeout(long) createSyncTimeout}.
      *
      * @param effect
      *            Specifies the SceneElement's effect
@@ -786,7 +829,8 @@ public class LightingDirector {
      * Synchronously creates a Scene on the Lighting Controller.
      * <p>
      * This is a blocking call that will block the current thread until the object
-     * is successfully created or the create sync timeout is exceeded.
+     * is successfully created or the create sync timeout is exceeded. The timeout
+     * value can be set using {@link #setCreateSyncTimeout(long) createSyncTimeout}.
      *
      * @param sceneElements
      *            Specifies the SceneElements that belong to the Scene
@@ -818,7 +862,8 @@ public class LightingDirector {
      * Synchronously creates a MasterScene on the Lighting Controller.
      * <p>
      * This is a blocking call that will block the current thread until the object
-     * is successfully created or the create sync timeout is exceeded.
+     * is successfully created or the create sync timeout is exceeded. The timeout
+     * value can be set using {@link #setCreateSyncTimeout(long) createSyncTimeout}.
      *
      * @param scenes
      *            Specifies the Scenes that belong to the MasterScene
