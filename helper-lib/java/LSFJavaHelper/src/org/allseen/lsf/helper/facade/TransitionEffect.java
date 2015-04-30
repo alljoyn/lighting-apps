@@ -15,7 +15,9 @@
  */
 package org.allseen.lsf.helper.facade;
 
+import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.model.ColorItemDataModel;
+import org.allseen.lsf.helper.model.LightingItemUtil;
 import org.allseen.lsf.helper.model.TransitionEffectDataModel;
 
 public class TransitionEffect extends ColorItem implements Effect {
@@ -23,47 +25,50 @@ public class TransitionEffect extends ColorItem implements Effect {
     private TransitionEffectDataModel transitionEffectModel;
 
     public TransitionEffect(String transitionEffectId) {
-        // TODO-IMPL
+        this(transitionEffectId, null);
     }
 
     public TransitionEffect(String transitionEffectId, String transitionEffectName) {
-        // TODO-IMPL
+        super();
+
+        transitionEffectModel = new TransitionEffectDataModel(transitionEffectId, transitionEffectName);
     }
 
     public void applyTo(GroupMember member) {
-        member.applyEffect(this);
+//        member.applyEffect(this);
+        // TODO-FIX to use above impl
+        if (member instanceof Lamp) {
+            AllJoynManager.transitionEffectManager.applyTransitionEffectOnLamps(transitionEffectModel.id, new String[] { member.getColorDataModel().id });
+        } else if (member instanceof Group) {
+            AllJoynManager.transitionEffectManager.applyTransitionEffectOnLampGroups(transitionEffectModel.id, new String [] { member.getColorDataModel().id });
+        }
     }
 
     public void modify(LampState state, long duration) {
-        // TODO-IMPL
+        if (state instanceof Preset) {
+            AllJoynManager.transitionEffectManager.updateTransitionEffect(transitionEffectModel.id, LightingItemUtil.createTransitionEffect((Preset) state, duration));
+        } else {
+            AllJoynManager.transitionEffectManager.updateTransitionEffect(transitionEffectModel.id,
+                    LightingItemUtil.createTransitionEffect(state.getPowerOn(), state.getColorHsvt(), duration));
+        }
     }
 
     @Override
     public void rename(String effectName) {
-        // TODO-IMPL
+        AllJoynManager.transitionEffectManager.setTransitionEffectName(transitionEffectModel.id, effectName,
+                LightingDirector.get().getDefaultLanguage());
     }
 
     public void delete() {
-        // TODO-IMPl
+        AllJoynManager.transitionEffectManager.deleteTransitionEffect(transitionEffectModel.id);
     }
 
-    @Override
-    public void setPowerOn(boolean powerOn) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void setColorHsvt(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees) {
-        // TODO Auto-generated method stub
-    }
-
-    public TransitionEffectDataModel getTransistionEffectDataModel() {
+    public TransitionEffectDataModel getTransitionEffectDataModel() {
         return transitionEffectModel;
     }
 
     @Override
     protected ColorItemDataModel getColorDataModel() {
-        return getTransistionEffectDataModel();
+        return getTransitionEffectDataModel();
     }
 }

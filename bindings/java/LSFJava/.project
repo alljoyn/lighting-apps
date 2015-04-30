@@ -130,6 +130,41 @@
 			<type>2</type>
 			<locationURI>NDK_HOME/toolchains</locationURI>
 		</link>
+		<link>
+			<name>links/jni/Base/config/inc</name>
+			<type>2</type>
+			<locationURI>CONFIG_HOME/config/inc</locationURI>
+		</link>
+		<link>
+			<name>links/jni/Base/notification/inc</name>
+			<type>2</type>
+			<locationURI>NOTIFICATION_HOME/notification/inc</locationURI>
+		</link>
+		<link>
+			<name>links/jni/Base/services_common/inc</name>
+			<type>2</type>
+			<locationURI>CONFIG_HOME/services_common/inc</locationURI>
+		</link>
+		<link>
+			<name>links/jni/LSF/common/inc</name>
+			<type>2</type>
+			<locationURI>LSF_HOME/common/inc</locationURI>
+		</link>
+		<link>
+			<name>links/jni/LSF/standard_core_library/common/inc</name>
+			<type>2</type>
+			<locationURI>LSF_HOME/standard_core_library/common/inc</locationURI>
+		</link>
+		<link>
+			<name>links/jni/LSF/standard_core_library/lighting_controller_client/inc</name>
+			<type>2</type>
+			<locationURI>LSF_HOME/standard_core_library/lighting_controller_client/inc</locationURI>
+		</link>
+		<link>
+			<name>links/jni/LSF/standard_core_library/lighting_controller_service/inc</name>
+			<type>2</type>
+			<locationURI>LSF_HOME/standard_core_library/lighting_controller_service/inc</locationURI>
+		</link>
 	</linkedResources>
 	<variableList>
 		<variable>

@@ -15,7 +15,7 @@
  */
 package org.allseen.lsf;
 
-public class StatePulseEffect extends DefaultNativeClassWrapper implements PulseEffect {
+public class StatePulseEffect extends DefaultNativeClassWrapper implements PulseEffectV10 {
     public StatePulseEffect() {
         createNativeObject();
     }

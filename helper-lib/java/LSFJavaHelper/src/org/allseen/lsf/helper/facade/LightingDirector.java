@@ -16,6 +16,7 @@
 package org.allseen.lsf.helper.facade;
 
 import org.alljoyn.bus.BusAttachment;
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.listener.AllJoynListener;
 import org.allseen.lsf.helper.listener.ControllerListener;
 import org.allseen.lsf.helper.listener.GroupListener;
@@ -37,7 +38,10 @@ import org.allseen.lsf.helper.manager.LightingSystemManager;
 import org.allseen.lsf.helper.manager.LightingSystemQueue;
 import org.allseen.lsf.helper.manager.MasterSceneCollectionManager;
 import org.allseen.lsf.helper.manager.PresetCollectionManager;
+import org.allseen.lsf.helper.manager.PulseEffectCollectionManager;
 import org.allseen.lsf.helper.manager.SceneCollectionManager;
+import org.allseen.lsf.helper.manager.SceneElementCollectionManager;
+import org.allseen.lsf.helper.manager.TransitionEffectCollectionManager;
 import org.allseen.lsf.helper.model.LightingItemUtil;
 
 /**
@@ -368,8 +372,7 @@ public class LightingDirector {
      * @return An array of active TransitionEffects
      */
     public TransitionEffect[] getTransitionEffects() {
-        // TODO-IMPL
-        return null;
+        return getTransitionEffectCollectionManager().getTransitionEffects();
     }
 
     /**
@@ -397,8 +400,7 @@ public class LightingDirector {
      * @return Instance of TransitionEffect or null if TransitionEffect does not exist.
      */
     public TransitionEffect getTransitionEffect(String transitionEffectId) {
-        // TODO-IMPL
-        return null;
+        return getTransitionEffectCollectionManager().getTransistionEffect(transitionEffectId);
     }
 
     /**
@@ -413,8 +415,7 @@ public class LightingDirector {
      * @return An array of active PulseEffects
      */
     public PulseEffect[] getPulseEffects() {
-        // TODO-IMPL
-        return null;
+        return getPulseEffectCollectionManager().getPulseEffect();
     }
 
     /**
@@ -442,8 +443,7 @@ public class LightingDirector {
      * @return Instance of PulseEffect or null if PulseEffect does not exist
      */
     public PulseEffect getPuseEffect(String pulseEffectId) {
-        // TODO-IMPL
-        return null;
+        return getPulseEffectCollectionManager().getPulseEffect(pulseEffectId);
     }
 
     /**
@@ -736,7 +736,16 @@ public class LightingDirector {
      *            Specifies a callback that's invoked only for the TransitionEffect being created
      */
     public void createTransitionEffect(LampState state, long duration, String effectName, TransitionEffectListener listener) {
-        // TODO-IMPL
+        // TODO-IMPL handle one-shot listener
+
+        if (state instanceof Preset) {
+            AllJoynManager.transitionEffectManager.createTransitionEffect(new TrackingID(),
+                    LightingItemUtil.createTransitionEffect((Preset)state, duration), effectName, getDefaultLanguage());
+        } else {
+            AllJoynManager.transitionEffectManager.createTransitionEffect(new TrackingID(),
+                    LightingItemUtil.createTransitionEffect(state.getPowerOn(), state.getColorHsvt(), duration),
+                    effectName, getDefaultLanguage());
+        }
     }
 
     /**
@@ -785,7 +794,17 @@ public class LightingDirector {
      *            Specifies a callback that's invoked only for the PulseEffect being created
      */
     public void createPulseEffect(LampState fromState, LampState toState, long period, long duration, long count, String effectName, PulseEffectListener listener) {
-        // TODO-IMPL
+        // TODO-IMPL handle one-shot listener
+
+        if (fromState instanceof Preset && toState instanceof Preset) {
+            AllJoynManager.pulseEffectManager.createPulseEffect(new TrackingID(),
+                    LightingItemUtil.createPulseEffect((Preset)fromState, (Preset)toState, period, duration, count),
+                    effectName, getDefaultLanguage());
+        } else {
+            AllJoynManager.pulseEffectManager.createPulseEffect(new TrackingID(),
+                    LightingItemUtil.createPulseEffect(fromState.getPowerOn(), fromState.getColorHsvt(), toState.getPowerOn(), toState.getColorHsvt(), period, duration, count),
+                    effectName, getDefaultLanguage());
+        }
     }
 
     /**
@@ -822,7 +841,10 @@ public class LightingDirector {
      *            Specifies the callback that's invoked only for the scene element being created
      */
     public void createSceneElement(Effect effect, GroupMember[] members, String sceneElementName, SceneElementListener listener) {
-        // TODO-IMPL
+        // TODO-IMPL handle one-shot listener
+
+        AllJoynManager.sceneElementManager.createSceneElement(new TrackingID(),
+                LightingItemUtil.createSceneElement(effect.getId(), members), sceneElementName, getDefaultLanguage());
     }
 
     /**
@@ -977,7 +999,7 @@ public class LightingDirector {
      *            The listener to receive all TransitionEffect events.
      */
     public void addTransitionEffectListener(TransitionEffectListener listener) {
-        // TODO-IMPL
+        getTransitionEffectCollectionManager().addListener(listener);
     }
 
     /**
@@ -987,7 +1009,7 @@ public class LightingDirector {
      *            The listener to receive all PulseEffect events.
      */
     public void addPulseEffectListener(PulseEffectListener listener) {
-        // TODO-IMPL
+        getPulseEffectCollectionManager().addListener(listener);
     }
 
     /**
@@ -997,7 +1019,7 @@ public class LightingDirector {
      *            The listener to receive all SceneElement events.
      */
     public void addSceneElementListener(SceneElementListener listener) {
-        // TODO-IMPL
+        getSceneElementCollectionManager().addListener(listener);
     }
 
     /**
@@ -1126,7 +1148,7 @@ public class LightingDirector {
      *            The listener that receives all TransitionEffect events.
      */
     public void removeTransitionEffectListener(TransitionEffectListener listener) {
-        // TODO-IMPL
+        getTransitionEffectCollectionManager().removeListener(listener);
     }
 
     /**
@@ -1136,7 +1158,7 @@ public class LightingDirector {
      *            The listener that receives all PulseEffect events.
      */
     public void removePulseEffectListener(PulseEffectListener listener) {
-        // TODO-IMPL
+        getPulseEffectCollectionManager().removeListener(listener);
     }
 
     /**
@@ -1146,7 +1168,7 @@ public class LightingDirector {
      *            The listener that receives all SceneElement events.
      */
     public void removeSceneElementListener(SceneElementListener listener) {
-        // TODO-IMPL
+        getSceneElementCollectionManager().removeListener(listener);
     }
 
     /**
@@ -1282,6 +1304,30 @@ public class LightingDirector {
      */
     protected PresetCollectionManager getPresetCollectionManager() {
         return lightingManager.getPresetCollectionManager();
+    }
+
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
+    protected TransitionEffectCollectionManager getTransitionEffectCollectionManager() {
+        return lightingManager.getTransitionEffectCollectionManager();
+    }
+
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
+    protected PulseEffectCollectionManager getPulseEffectCollectionManager() {
+        return lightingManager.getPulseEffectCollectionManager();
+    }
+
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
+    protected SceneElementCollectionManager getSceneElementCollectionManager() {
+        return lightingManager.getSceneElementCollectionManager();
     }
 
     /**

@@ -15,7 +15,7 @@
  */
 package org.allseen.lsf;
 
-public class PresetPulseEffect extends DefaultNativeClassWrapper implements PulseEffect {
+public class PresetPulseEffect extends DefaultNativeClassWrapper implements PulseEffectV10 {
     public static String PRESET_ID_CURRENT_STATE = "CURRENT_STATE";
 
     public PresetPulseEffect() {

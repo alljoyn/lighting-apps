@@ -45,6 +45,9 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
 
         postGetAllLampGroupIDs();
         postGetAllPresetIDs();
+        postGetAllTransitionEffectIDs();
+        postGetAllPulseEffectIDs();
+        postGetAllSceneElementIDs();
         postGetAllBasicSceneIDs();
         postGetAllMasterSceneIDs();
     }
@@ -130,6 +133,33 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
             @Override
             public void run() {
                 AllJoynManager.presetManager.getAllPresetIDs();
+            }
+        }, 200);
+    }
+
+    protected void postGetAllTransitionEffectIDs() {
+        manager.getQueue().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                AllJoynManager.transitionEffectManager.getAllTransitionEffectIDs();
+            }
+        }, 200);
+    }
+
+    protected void postGetAllPulseEffectIDs() {
+        manager.getQueue().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                AllJoynManager.pulseEffectManager.getAllPulseEffectIDs();
+            }
+        }, 200);
+    }
+
+    protected void postGetAllSceneElementIDs() {
+        manager.getQueue().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                AllJoynManager.sceneElementManager.getAllSceneElementIDs();
             }
         }, 200);
     }

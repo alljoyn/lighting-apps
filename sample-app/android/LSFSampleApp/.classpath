@@ -8,6 +8,15 @@
 	<classpathentry exported="true" kind="lib" path="links/jar/AllJoyn/alljoyn_about.jar"/>
 	<classpathentry exported="true" kind="lib" path="links/jar/lsf/lsfjava.jar"/>
 	<classpathentry exported="true" kind="lib" path="links/jar/lsf/lsfjavahelper.jar"/>
+	<classpathentry kind="lib" path="links/jar/Base/common/alljoyn_apps_android_utils.jar"/>
+	<classpathentry kind="lib" path="links/jar/Base/config/alljoyn_config.jar"/>
+	<classpathentry kind="lib" path="links/jar/Base/controlpanel/ControlPanelAdapter.jar"/>
+	<classpathentry kind="lib" path="links/jar/Base/controlpanel/ControlPanelService.jar"/>
+	<classpathentry kind="lib" path="links/jar/Base/notification/NotificationService.jar"/>
+	<classpathentry kind="lib" path="links/jar/Base/notification/NSCommons.jar"/>
+	<classpathentry kind="lib" path="links/jar/Base/notification/NSNativePlatformAndr.jar"/>
+	<classpathentry kind="lib" path="links/jar/Base/onboarding/alljoyn_onboarding_manager.jar"/>
+	<classpathentry kind="lib" path="links/jar/Base/onboarding/alljoyn_onboarding.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="src" path="links/jni/android"/>

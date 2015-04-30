@@ -19,8 +19,8 @@ import java.util.List;
 
 import org.allseen.lsf.helper.model.EffectType;
 import org.allseen.lsf.helper.model.NoEffectDataModel;
-import org.allseen.lsf.helper.model.PulseEffectDataModel;
-import org.allseen.lsf.helper.model.TransitionEffectDataModel;
+import org.allseen.lsf.helper.model.PulseEffectDataModelV10;
+import org.allseen.lsf.helper.model.TransitionEffectDataModelV10;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -90,13 +90,13 @@ public class BasicSceneSelectEffectFragment extends SelectableItemTableFragment 
             ((ScenesPageFragment)parent).showNoEffectChildFragment();
         } else if (effectID.equals(EffectType.Transition.toString())) {
             activity.pendingNoEffectModel = null;
-            activity.pendingTransitionEffectModel = new TransitionEffectDataModel();
+            activity.pendingTransitionEffectModel = new TransitionEffectDataModelV10();
             activity.pendingPulseEffectModel = null;
             ((ScenesPageFragment)parent).showTransitionEffectChildFragment();
         } else if (effectID.equals(EffectType.Pulse.toString())) {
             activity.pendingNoEffectModel = null;
             activity.pendingTransitionEffectModel = null;
-            activity.pendingPulseEffectModel = new PulseEffectDataModel();
+            activity.pendingPulseEffectModel = new PulseEffectDataModelV10();
             ((ScenesPageFragment)parent).showPulseEffectChildFragment();
         }
     }

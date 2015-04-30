@@ -22,6 +22,9 @@
 
 #include <qcc/Debug.h>
 
+#include "JStringArray.h"
+#include "XTrackingID.h"
+
 #define QCC_MODULE LSF_QCC_MODULE
 
 namespace lsf {
@@ -147,6 +150,34 @@ jobject XCppDelegator::Call_ControllerClientStatus_String_String_String(JNIEnv *
     std::string cString3 = xString3.c_str();
 
     return JEnum::jControllerClientStatusEnum->getObject((int)((xDelegate->*cMethod)(cString1, cString2, cString3)));
+}
+
+template <typename T>
+jobject XCppDelegator::Call_ControllerClientStatus_String_StringList(JNIEnv *env, jobject thiz, jstring jString, jobjectArray jStringList, ControllerClientStatus (T::*cMethod)(const std::string&, const std::list<std::string>&))
+{
+    T *xDelegate = GetHandle<T*>(thiz);
+    if (env->ExceptionCheck() || !xDelegate) {
+        QCC_LogError(ER_FAIL, ("GetHandle() failed"));
+        return NULL;
+    }
+
+    JString xString(jString);
+    if (env->ExceptionCheck()) {
+        QCC_LogError(ER_FAIL, ("JString failed"));
+        return NULL;
+    }
+
+    if (!xString.c_str()) {
+        QCC_LogError(ER_FAIL, ("JString invalid"));
+        return NULL;
+    }
+
+    std::string cString = xString.c_str();
+
+    std::list<std::string> cStringList;
+    JStringArray::CopyStringArray(jStringList, cStringList);
+
+    return JEnum::jControllerClientStatusEnum->getObject((int)((xDelegate->*cMethod)(cString, cStringList)));
 }
 
 template <typename T>
@@ -475,6 +506,54 @@ jobject XCppDelegator::Call_ControllerClientStatus_Object_String_String(JNIEnv *
     std::string cString2 = xString2.c_str();
 
     return JEnum::jControllerClientStatusEnum->getObject((int)((xDelegate->*cMethod)(cObject, cString1, cString2)));
+}
+
+template <typename T1, typename T2, typename T3>
+jobject XCppDelegator::Call_ControllerClientStatus_TrackingID_Object_String_String(JNIEnv *env, jobject thiz, jobject jTrackingID, jobject jObject, jstring jString1, jstring jString2, ControllerClientStatus (T1::*cMethod)(uint32_t&, const T3&, const std::string&, const std::string&))
+{
+    T1 *xDelegate = GetHandle<T1*>(thiz);
+    if (env->ExceptionCheck() || !xDelegate) {
+        QCC_LogError(ER_FAIL, ("GetHandle() failed"));
+        return NULL;
+    }
+
+    T2 *xObject = GetHandle<T2*>(jObject);
+    if (env->ExceptionCheck() || !xObject) {
+        QCC_LogError(ER_FAIL, ("GetHandle() failed"));
+        return NULL;
+    }
+
+    JString xString1(jString1);
+    if (env->ExceptionCheck()) {
+        QCC_LogError(ER_FAIL, ("JString failed"));
+        return NULL;
+    }
+
+    if (!xString1.c_str()) {
+        QCC_LogError(ER_FAIL, ("JString invalid"));
+        return NULL;
+    }
+
+    JString xString2(jString2);
+    if (env->ExceptionCheck()) {
+        QCC_LogError(ER_FAIL, ("JString failed"));
+        return NULL;
+    }
+
+    if (!xString2.c_str()) {
+        QCC_LogError(ER_FAIL, ("JString invalid"));
+        return NULL;
+    }
+
+    T3 cObject = (T3&)(*xObject);
+    std::string cString1 = xString1.c_str();
+    std::string cString2 = xString2.c_str();
+
+    uint32_t cTrackingID = 0;
+    jobject controllerClientStatus = JEnum::jControllerClientStatusEnum->getObject((int)((xDelegate->*cMethod)(cTrackingID, cObject, cString1, cString2)));
+    XTrackingID::SetTrackingID(jTrackingID, cTrackingID);
+
+    return controllerClientStatus;
 }
 
 } // namespace lsf

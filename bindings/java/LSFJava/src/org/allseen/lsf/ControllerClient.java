@@ -18,18 +18,15 @@ package org.allseen.lsf;
 
 import org.alljoyn.bus.BusAttachment;
 
-public class ControllerClient extends BaseNativeClassWrapper
-{
+public class ControllerClient extends BaseNativeClassWrapper {
     private static final NativeLibraryLoader LIBS = NativeLibraryLoader.LIBS;
 
-    public ControllerClient(BusAttachment bus, ControllerClientCallback callback)
-    {
+    public ControllerClient(BusAttachment bus, ControllerClientCallback callback) {
         createNativeObject(bus, callback);
     }
 
     // TODO-FIX make native
-    public Integer getVersion()
-    {
+    public Integer getVersion() {
         return 0;
     }
 

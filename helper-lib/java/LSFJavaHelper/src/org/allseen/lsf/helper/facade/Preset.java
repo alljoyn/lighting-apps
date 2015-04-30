@@ -25,7 +25,7 @@ import org.allseen.lsf.helper.model.PresetDataModel;
  * <b>WARNING: This class is not intended to be used by clients, and its
  * interface may change in subsequent releases of the SDK</b>.
  */
-public class Preset extends ColorItem implements Effect {
+public class Preset extends MutableColorItem implements Effect {
 
     protected PresetDataModel presetModel;
 

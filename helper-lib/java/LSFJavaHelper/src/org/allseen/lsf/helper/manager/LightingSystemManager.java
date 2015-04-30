@@ -21,14 +21,20 @@ import org.allseen.lsf.LampManager;
 import org.allseen.lsf.MasterSceneManager;
 import org.allseen.lsf.NativeLibraryLoader;
 import org.allseen.lsf.PresetManager;
+import org.allseen.lsf.PulseEffectManager;
+import org.allseen.lsf.SceneElementManager;
 import org.allseen.lsf.SceneManager;
+import org.allseen.lsf.TransitionEffectManager;
 import org.allseen.lsf.helper.callback.HelperControllerClientCallback;
 import org.allseen.lsf.helper.callback.HelperControllerServiceManagerCallback;
 import org.allseen.lsf.helper.callback.HelperGroupManagerCallback;
 import org.allseen.lsf.helper.callback.HelperLampManagerCallback;
 import org.allseen.lsf.helper.callback.HelperMasterSceneManagerCallback;
 import org.allseen.lsf.helper.callback.HelperPresetManagerCallback;
+import org.allseen.lsf.helper.callback.HelperPulseEffectManagerCallback;
+import org.allseen.lsf.helper.callback.HelperSceneElementManagerCallback;
 import org.allseen.lsf.helper.callback.HelperSceneManagerCallback;
+import org.allseen.lsf.helper.callback.HelperTransitionEffectManagerCallback;
 import org.allseen.lsf.helper.listener.AllJoynListener;
 import org.allseen.lsf.helper.listener.ControllerAdapter;
 import org.allseen.lsf.helper.listener.NextControllerConnectionListener;
@@ -55,12 +61,18 @@ public class LightingSystemManager {
     public final HelperLampManagerCallback lampManagerCB;
     public final HelperGroupManagerCallback groupManagerCB;
     public final HelperPresetManagerCallback presetManagerCB;
+    public final HelperTransitionEffectManagerCallback transitionEffectManagerCB;
+    public final HelperPulseEffectManagerCallback pulseEffectManagerCB;
+    public final HelperSceneElementManagerCallback sceneElementManagerCB;
     public final HelperSceneManagerCallback sceneManagerCB;
     public final HelperMasterSceneManagerCallback masterSceneManagerCB;
 
     private final LampCollectionManager lampCollectionManager;
     private final GroupCollectionManager groupCollectionManager;
     private final PresetCollectionManager presetCollectionManager;
+    private final TransitionEffectCollectionManager transitionEffectCollectionManager;
+    private final PulseEffectCollectionManager pulseEffectCollectionManager;
+    private final SceneElementCollectionManager sceneElementCollectionManager;
     private final SceneCollectionManager sceneCollectionManager;
     private final MasterSceneCollectionManager masterSceneCollectionManager;
     private final ControllerManager controllerManager;
@@ -73,12 +85,18 @@ public class LightingSystemManager {
         lampManagerCB = new HelperLampManagerCallback(this);
         groupManagerCB = new HelperGroupManagerCallback(this);
         presetManagerCB = new HelperPresetManagerCallback(this);
+        transitionEffectManagerCB = new HelperTransitionEffectManagerCallback(this);
+        pulseEffectManagerCB = new HelperPulseEffectManagerCallback(this);
+        sceneElementManagerCB = new HelperSceneElementManagerCallback(this);
         sceneManagerCB = new HelperSceneManagerCallback(this);
         masterSceneManagerCB = new HelperMasterSceneManagerCallback(this);
 
         lampCollectionManager = new LampCollectionManager(this);
         groupCollectionManager = new GroupCollectionManager(this);
         presetCollectionManager = new PresetCollectionManager(this);
+        transitionEffectCollectionManager = new TransitionEffectCollectionManager(this);
+        pulseEffectCollectionManager = new PulseEffectCollectionManager(this);
+        sceneElementCollectionManager = new SceneElementCollectionManager(this);
         sceneCollectionManager = new SceneCollectionManager(this);
         masterSceneCollectionManager = new MasterSceneCollectionManager(this);
         controllerManager = new ControllerManager(this);
@@ -103,6 +121,9 @@ public class LightingSystemManager {
             lampManagerCB,
             groupManagerCB,
             presetManagerCB,
+            transitionEffectManagerCB,
+            pulseEffectManagerCB,
+            sceneElementManagerCB,
             sceneManagerCB,
             masterSceneManagerCB,
             new AboutManager(this),
@@ -119,6 +140,9 @@ public class LightingSystemManager {
             lampManagerCB,
             groupManagerCB,
             presetManagerCB,
+            transitionEffectManagerCB,
+            pulseEffectManagerCB,
+            sceneElementManagerCB,
             sceneManagerCB,
             masterSceneManagerCB,
             new AboutManager(this),
@@ -178,6 +202,18 @@ public class LightingSystemManager {
         return presetCollectionManager;
     }
 
+    public TransitionEffectCollectionManager getTransitionEffectCollectionManager() {
+        return transitionEffectCollectionManager;
+    }
+
+    public PulseEffectCollectionManager getPulseEffectCollectionManager() {
+        return pulseEffectCollectionManager;
+    }
+
+    public SceneElementCollectionManager getSceneElementCollectionManager() {
+        return sceneElementCollectionManager;
+    }
+
     public SceneCollectionManager getSceneCollectionManager() {
         return sceneCollectionManager;
     }
@@ -200,6 +236,18 @@ public class LightingSystemManager {
 
     public PresetManager getPresetManager() {
         return AllJoynManager.presetManager;
+    }
+
+    public TransitionEffectManager getTransitionEffectManager() {
+        return AllJoynManager.transitionEffectManager;
+    }
+
+    public PulseEffectManager getPulseEffectManager() {
+        return AllJoynManager.pulseEffectManager;
+    }
+
+    public SceneElementManager getSceneElementManager() {
+        return AllJoynManager.sceneElementManager;
     }
 
     public SceneManager getSceneManager() {
@@ -238,6 +286,8 @@ public class LightingSystemManager {
         lampCollectionManager.removeAllAdapters();
         groupCollectionManager.removeAllAdapters();
         presetCollectionManager.removeAllAdapters();
+        transitionEffectCollectionManager.removeAllAdapters();
+        pulseEffectCollectionManager.removeAllAdapters();
         sceneCollectionManager.removeAllAdapters();
         masterSceneCollectionManager.removeAllAdapters();
     }

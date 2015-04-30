@@ -15,34 +15,22 @@
  *
  ******************************************************************************/
 
-#ifndef LSF_JNI_XPULSEEFFECT_H_
-#define LSF_JNI_XPULSEEFFECT_H_
+#ifndef XPULSEEFFECT_H_
+#define XPULSEEFFECT_H_
 
 #include <jni.h>
 
+#include <LSFTypes.h>
+
 namespace lsf {
 
-class XPulseEffect {
-private:
-    XPulseEffect();
-
+class XPulseEffect : public PulseEffect {
 public:
-    template <typename T> static void SetPulsePeriod(JNIEnv *env, jobject thiz, jlong jPulsePeriod);
-    template <typename T> static jlong GetPulsePeriod(JNIEnv *env, jobject thiz);
+    XPulseEffect(jobject jobj);
+    virtual ~XPulseEffect();
 
-    template <typename T> static void SetPulseDuration(JNIEnv *env, jobject thiz, jlong jPulseDuration);
-    template <typename T> static jlong GetPulseDuration(JNIEnv *env, jobject thiz);
-
-    template <typename T> static void SetPulseCount(JNIEnv *env, jobject thiz, jlong jPulseCount);
-    template <typename T> static jlong GetPulseCount(JNIEnv *env, jobject thiz);
+    XPulseEffect& operator=(const PulseEffect& other);
 };
 
 } /* namespace lsf */
-
-// The .cpp file is #include'd in this .h file because some templated
-// methods must be defined here. The following #define prevents the
-// non-templated code from being visible here.
-#define LSF_JNI_XPULSEEFFECT_H_INCLUDE_TEMPLATE_METHODS
-#include "XPulseEffect.cpp"
-#undef LSF_JNI_XPULSEEFFECT_H_INCLUDE_TEMPLATE_METHODS
-#endif /* LSF_JNI_XPULSEEFFECT_H_ */
+#endif /* XPULSEEFFECT_H_ */

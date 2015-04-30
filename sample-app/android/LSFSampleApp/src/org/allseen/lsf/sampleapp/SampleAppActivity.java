@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
 
+import org.allseen.lsf.ControllerService;
 import org.allseen.lsf.ErrorCode;
 import org.allseen.lsf.LampGroup;
 import org.allseen.lsf.LampGroupManager;
@@ -61,9 +62,9 @@ import org.allseen.lsf.helper.model.LampDataModel;
 import org.allseen.lsf.helper.model.MasterSceneDataModel;
 import org.allseen.lsf.helper.model.NoEffectDataModel;
 import org.allseen.lsf.helper.model.PresetDataModel;
-import org.allseen.lsf.helper.model.PulseEffectDataModel;
+import org.allseen.lsf.helper.model.PulseEffectDataModelV10;
 import org.allseen.lsf.helper.model.SceneDataModel;
-import org.allseen.lsf.helper.model.TransitionEffectDataModel;
+import org.allseen.lsf.helper.model.TransitionEffectDataModelV10;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
@@ -76,6 +77,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -121,6 +123,9 @@ public class SampleAppActivity extends FragmentActivity implements
     public volatile Queue<Runnable> runInForeground;
 
     public LightingSystemManager systemManager;
+    private ControllerService controllerService;
+    private boolean controllerServiceEnabled;
+    private volatile boolean controllerServiceStarted;
 
     public GroupDataModel pendingGroupModel;
     public SceneDataModel pendingBasicSceneModel;
@@ -134,8 +139,8 @@ public class SampleAppActivity extends FragmentActivity implements
     public int pendingBasicSceneElementMembersMaxColorTemp;
 
     public NoEffectDataModel pendingNoEffectModel;
-    public TransitionEffectDataModel pendingTransitionEffectModel;
-    public PulseEffectDataModel pendingPulseEffectModel;
+    public TransitionEffectDataModelV10 pendingTransitionEffectModel;
+    public PulseEffectDataModelV10 pendingPulseEffectModel;
 
     public PageFrameParentFragment pageFrameParent;
 
@@ -175,8 +180,8 @@ public class SampleAppActivity extends FragmentActivity implements
         PresetDataModel.defaultName = this.getString(R.string.default_preset_name);
 
         NoEffectDataModel.defaultName = this.getString(R.string.effect_name_none);
-        TransitionEffectDataModel.defaultName = this.getString(R.string.effect_name_transition);
-        PulseEffectDataModel.defaultName = this.getString(R.string.effect_name_pulse);
+        TransitionEffectDataModelV10.defaultName = this.getString(R.string.effect_name_transition);
+        PulseEffectDataModelV10.defaultName = this.getString(R.string.effect_name_pulse);
 
         SceneDataModel.defaultName = this.getString(R.string.default_basic_scene_name);
         MasterSceneDataModel.defaultName = this.getString(R.string.default_master_scene_name);
@@ -193,6 +198,10 @@ public class SampleAppActivity extends FragmentActivity implements
         systemManager.getSceneCollectionManager().addListener(this);
         systemManager.getMasterSceneCollectionManager().addListener(this);
         systemManager.getControllerManager().addListener(this);
+
+        // We initialize the dashboard plugin first to avoid an apparent
+        // race condition with processing about announcements.
+        initDashboard();
 
         systemManager.init(
             "SampleApp",
@@ -212,6 +221,19 @@ public class SampleAppActivity extends FragmentActivity implements
                     // Currently nothing to do
                 }},
             this);
+
+        // Controller service support
+        controllerServiceEnabled = true;
+        controllerService = new ControllerService() {
+            @Override
+            public long getMacAddressAsDecimal(String generatedMacAddress) {
+                return getMacAddress(generatedMacAddress);
+            }
+
+            @Override
+            public boolean isNetworkConnected() {
+                return isWifiConnected();
+            }};
     }
 
     @Override
@@ -220,7 +242,32 @@ public class SampleAppActivity extends FragmentActivity implements
             systemManager.stop();
         }
 
+        setControllerServiceStarted(false);
+
         super.onDestroy();
+    }
+
+    public boolean isControllerServiceStarted() {
+        return controllerServiceStarted;
+    }
+
+    public void setControllerServiceStarted(final boolean startControllerService) {
+        controllerServiceEnabled = startControllerService;
+
+        if (controllerService != null) {
+            new Thread() {
+                @Override
+                public void run() {
+                    if (startControllerService) {
+                        controllerServiceStarted = true;
+                        controllerService.start(getApplicationContext().getFileStreamPath("").getAbsolutePath());
+                        controllerServiceStarted = false;
+                    } else {
+                        controllerService.stop();
+                        controllerServiceStarted = false;
+                    }
+                }}.start();
+        }
     }
 
     protected boolean isWifiConnected() {
@@ -240,6 +287,28 @@ public class SampleAppActivity extends FragmentActivity implements
         Log.d(SampleAppActivity.TAG, "Connectivity state " + wifiNetworkInfo.getState().name() + " - connected:" + wifiNetworkInfo.isConnected() + " hotspot:" + isWifiApEnabled);
 
         return wifiNetworkInfo.isConnected() || isWifiApEnabled;
+    }
+
+    protected long getMacAddress(String generatedMacAddress) {
+        WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        WifiInfo wInfo = wifiManager.getConnectionInfo();
+        String originalMacAddress = wInfo.getMacAddress();
+
+        if (originalMacAddress == null) {
+            // If we don't have mac address, create one of length 12 which is
+            // the usual length of mac address.
+            originalMacAddress = generatedMacAddress;
+        }
+
+        originalMacAddress = originalMacAddress.replace(":", "");
+
+        // Mac address is in hex format. so convert it to decimal. since Mac
+        // address length is 12, its max values can be 16^12
+        Long decimal = Long.decode("0x" + originalMacAddress);
+
+        Log.d(SampleAppActivity.TAG, "getMacAddresAsDecimal returns: " + decimal);
+
+        return decimal;
     }
 
     @Override
@@ -346,6 +415,9 @@ public class SampleAppActivity extends FragmentActivity implements
                 return true;
             case R.id.action_settings:
                 showSettingsFragment();
+                return true;
+            case R.id.action_dashboard:
+                showDashboard();
                 return true;
         }
 
@@ -472,6 +544,10 @@ public class SampleAppActivity extends FragmentActivity implements
                             systemManager.stop();
                             systemManager.start();
 
+                            if (controllerServiceEnabled) {
+                                setControllerServiceStarted(true);
+                            }
+
                             if (wifiDisconnectAlertDialog != null) {
                                 wifiDisconnectAlertDialog.dismiss();
                                 wifiDisconnectAlertDialog = null;
@@ -493,6 +569,8 @@ public class SampleAppActivity extends FragmentActivity implements
                                 Log.d(SampleAppActivity.TAG, "Stopping system");
 
                                 systemManager.stop();
+
+                                setControllerServiceStarted(false);
 
                                 View view = activity.getLayoutInflater().inflate(R.layout.view_loading, null);
                                 ((TextView) view.findViewById(R.id.loadingText1)).setText(activity.getText(R.string.no_wifi_message));
@@ -859,6 +937,69 @@ public class SampleAppActivity extends FragmentActivity implements
         }
 
         pageFrameParent.showSettingsChildFragment("");
+    }
+
+    protected void initDashboard() {
+        try {
+            // Use reflection for loose coupling with the Dashboard plugin
+            Class<?> dashboardPluginClass = Class.forName("org.alljoyn.dashboard.plugin.DashboardPlugin");
+
+            if (dashboardPluginClass != null) {
+                Method getDashboardInstanceMethod = dashboardPluginClass.getMethod("getInstance");
+
+                if (getDashboardInstanceMethod != null) {
+                    Method initDashboardMethod = dashboardPluginClass.getMethod("init", android.content.Context.class);
+
+                    if (initDashboardMethod != null) {
+                        Log.d(SampleAppActivity.TAG_TRACE, "initializing dashboard");
+                        initDashboardMethod.invoke(getDashboardInstanceMethod.invoke(null), this);
+                    } else {
+                        Log.d(SampleAppActivity.TAG_TRACE, "dashboard init() not found");
+                    }
+                } else {
+                    Log.d(SampleAppActivity.TAG_TRACE, "dashboard getInstance() not found");
+                }
+            } else {
+                Log.d(SampleAppActivity.TAG_TRACE, "dashboard class not found");
+            }
+        } catch (Exception e) {
+            Log.d(SampleAppActivity.TAG_TRACE, "dashboard init failed: " + e.toString());
+        }
+    }
+
+    protected void showDashboard() {
+        boolean success = false;
+
+        try {
+            // Use reflection for loose coupling with the Dashboard plugin
+            Class<?> dashboardPluginClass = Class.forName("org.alljoyn.dashboard.plugin.DashboardPlugin");
+
+            if (dashboardPluginClass != null) {
+                Method getDashboardInstanceMethod = dashboardPluginClass.getMethod("getInstance");
+
+                if (getDashboardInstanceMethod != null) {
+                    Method showDashboardMethod = dashboardPluginClass.getMethod("showInitialActivity");
+
+                    if (showDashboardMethod != null) {
+                        Log.d(SampleAppActivity.TAG_TRACE, "showing dashboard");
+                        showDashboardMethod.invoke(getDashboardInstanceMethod.invoke(null));
+                        success = true;
+                    } else {
+                        Log.d(SampleAppActivity.TAG_TRACE, "dashboard show...() not found");
+                    }
+                } else {
+                    Log.d(SampleAppActivity.TAG_TRACE, "dashboard getInstance() not found");
+                }
+            } else {
+                Log.d(SampleAppActivity.TAG_TRACE, "dashboard class not found");
+            }
+        } catch (Exception e) {
+            Log.d(SampleAppActivity.TAG_TRACE, "dashboard show...() failed: " + e.toString());
+        }
+
+        if (!success) {
+            showPositiveErrorDialog(R.string.error_dashboard, "Onboarding dashboard plugin not installed.");
+        }
     }
 
     @Override

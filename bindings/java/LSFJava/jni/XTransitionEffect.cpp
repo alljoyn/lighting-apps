@@ -15,46 +15,23 @@
  *
  ******************************************************************************/
 
-// This .cpp file is #include'd in the .h file because some templated
-// methods must be defined there. The following #ifdef allows the
-// templated code to be visible there.
-#ifdef LSF_JNI_XTRANSITIONEFFECT_H_INCLUDE_TEMPLATE_METHODS
-
-#include <qcc/Debug.h>
-
-#include "NDefs.h"
 #include "XTransitionEffect.h"
-
-#define QCC_MODULE LSF_QCC_MODULE
 
 namespace lsf {
 
-template <typename T>
-void XTransitionEffect::SetTransitionPeriod(JNIEnv *env, jobject thiz, jlong jTransitionPeriod)
+XTransitionEffect::XTransitionEffect(jobject jobj)
 {
-    T *xDelegate = GetHandle<T*>(thiz);
-    if (env->ExceptionCheck() || !xDelegate) {
-        QCC_LogError(ER_FAIL, ("GetHandle() failed"));
-        return;
-    }
-
-    xDelegate->transitionPeriod = (uint32_t)jTransitionPeriod;
+    // Currently nothing to do
 }
 
-template <typename T>
-jlong XTransitionEffect::GetTransitionPeriod(JNIEnv *env, jobject thiz)
+XTransitionEffect::~XTransitionEffect()
 {
-    T *xDelegate = GetHandle<T*>(thiz);
-    if (env->ExceptionCheck() || !xDelegate) {
-        QCC_LogError(ER_FAIL, ("GetHandle() failed"));
-        return (jint)0;
-    }
-
-    return (jlong)xDelegate->transitionPeriod;
+    // Currently nothing to do
 }
 
+XTransitionEffect& XTransitionEffect::operator=(const TransitionEffect& other)
+{
+    TransitionEffect::operator=(other);
+    return *this;
+}
 } /* namespace lsf */
-
-#undef QCC_MODULE
-
-#endif /* LSF_JNI_XPULSEEFFECT_H_INCLUDE_TEMPLATE_METHODS */

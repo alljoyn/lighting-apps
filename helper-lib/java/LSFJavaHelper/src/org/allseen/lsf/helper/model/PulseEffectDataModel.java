@@ -21,45 +21,113 @@ import org.allseen.lsf.LampState;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class PulseEffectDataModel extends SceneElementDataModel {
+public class PulseEffectDataModel extends ColorItemDataModel {
+    public static final char TAG_PREFIX_PULSE = 'p';
+
     public static String defaultName = "<Loading pulse effect info...>";
+    public static long defaultPeriod = 1000;
+    public static long defaultDuration = 500;
+    public static long defaultCount = 10;
 
-    public boolean startWithCurrent;
-
-    public String endPresetID;
-    public LampState endState;
-
-    public long period;
-    public long duration;
-    public long count;
+    private LampState endState;
+    private String startPresetID;
+    private String endPresetID;
+    private long period;
+    private long duration;
+    private long count;
+    private boolean startWithCurrent;
 
     public PulseEffectDataModel() {
-        super(EffectType.Pulse, defaultName);
+        this((String)null);
+    }
 
-        this.startWithCurrent = false;
+    public PulseEffectDataModel(String pulseEffectID) {
+        this(pulseEffectID, null);
+    }
 
-        this.endPresetID = null;
-        this.endState = new LampState();
+    public PulseEffectDataModel(String pulseEffectID, String pulseEffectName) {
+        super(pulseEffectID, TAG_PREFIX_PULSE, pulseEffectName != null ? pulseEffectName : defaultName);
 
-        // State is always set to "on". To turn the lamp off as part of an effect,
-        // you have to set the brightness to zero
-        this.endState.setOnOff(true);
-
-        this.period = 1000;
-        this.duration = 500;
-        this.count = 10;
+        setEndState(null);
+        setStartPresetID(null);
+        setEndPresetID(null);
+        setPeriod(defaultPeriod);
+        setDuration(defaultDuration);
+        setCount(defaultCount);
+        setStartWithCurrent(false);
     }
 
     public PulseEffectDataModel(PulseEffectDataModel other) {
         super(other);
 
-        this.startWithCurrent = other.startWithCurrent;
+        LampState otherEndState = other.getEndState();
+        if (otherEndState != null) {
+            setEndState(new LampState(otherEndState));
+        } else {
+            setEndState(null);
+        }
 
-        this.endPresetID = other.endPresetID;
-        this.endState = new LampState(other.endState);
+        setStartPresetID(other.getStartPresetID());
+        setEndPresetID(other.getEndPresetID());
+        setPeriod(other.getPeriod());
+        setDuration(other.getDuration());
+        setCount(other.getCount());
+        setStartWithCurrent(other.isStartWithCurrent());
+    }
 
-        this.period = other.period;
-        this.duration = other.duration;
-        this.count = other.count;
+    public LampState getEndState() {
+        return endState;
+    }
+
+    public void setEndState(LampState state) {
+        endState = state;
+    }
+
+    public String getStartPresetID() {
+        return startPresetID;
+    }
+
+    public void setStartPresetID(String presetID) {
+        startPresetID = presetID;
+    }
+
+    public String getEndPresetID() {
+        return endPresetID;
+    }
+
+    public void setEndPresetID(String endPresetID) {
+        this.endPresetID = endPresetID;
+    }
+
+    public long getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(long period) {
+        this.period = period;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    public long getCount() {
+        return count;
+    }
+
+    public void setCount(long count) {
+        this.count = count;
+    }
+
+    public boolean isStartWithCurrent() {
+        return startWithCurrent;
+    }
+
+    public void setStartWithCurrent(boolean startWithCurrent) {
+        this.startWithCurrent = startWithCurrent;
     }
 }

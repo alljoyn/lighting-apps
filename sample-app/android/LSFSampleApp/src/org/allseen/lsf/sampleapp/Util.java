@@ -28,9 +28,9 @@ import org.allseen.lsf.helper.model.GroupDataModel;
 import org.allseen.lsf.helper.model.LampDataModel;
 import org.allseen.lsf.helper.model.NoEffectDataModel;
 import org.allseen.lsf.helper.model.PresetDataModel;
-import org.allseen.lsf.helper.model.PulseEffectDataModel;
+import org.allseen.lsf.helper.model.PulseEffectDataModelV10;
 import org.allseen.lsf.helper.model.SceneDataModel;
-import org.allseen.lsf.helper.model.TransitionEffectDataModel;
+import org.allseen.lsf.helper.model.TransitionEffectDataModelV10;
 
 public class Util {
 
@@ -45,13 +45,13 @@ public class Util {
         }
 
         if (basicSceneModel.transitionEffects != null) {
-            for (TransitionEffectDataModel elementModel : basicSceneModel.transitionEffects) {
+            for (TransitionEffectDataModelV10 elementModel : basicSceneModel.transitionEffects) {
                 details = createMemberNamesString(activity, details, elementModel.members, separator, R.string.basic_scene_members_none);
             }
         }
 
         if (basicSceneModel.pulseEffects != null) {
-            for (PulseEffectDataModel elementModel : basicSceneModel.pulseEffects) {
+            for (PulseEffectDataModelV10 elementModel : basicSceneModel.pulseEffects) {
                 details = createMemberNamesString(activity, details, elementModel.members, separator, R.string.basic_scene_members_none);
             }
         }

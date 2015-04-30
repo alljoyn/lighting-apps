@@ -18,8 +18,8 @@ package org.allseen.lsf.sampleapp;
 import org.allseen.lsf.LampState;
 import org.allseen.lsf.helper.model.ColorItemDataModel;
 import org.allseen.lsf.helper.model.PresetDataModel;
-import org.allseen.lsf.helper.model.PulseEffectDataModel;
-import org.allseen.lsf.helper.model.SceneElementDataModel;
+import org.allseen.lsf.helper.model.PulseEffectDataModelV10;
+import org.allseen.lsf.helper.model.SceneElementDataModelV10;
 
 public class BasicSceneElementPresetsFragment extends DimmableItemPresetsFragment {
 
@@ -42,7 +42,7 @@ public class BasicSceneElementPresetsFragment extends DimmableItemPresetsFragmen
     @Override
     protected boolean isItemSelected(PresetDataModel presetModel) {
         if (key2 == PulseEffectFragment.STATE2_ITEM_TAG) {
-            PulseEffectDataModel pulseModel = (PulseEffectDataModel)getDimmableItemDataModel();
+            PulseEffectDataModelV10 pulseModel = (PulseEffectDataModelV10)getDimmableItemDataModel();
             return presetModel.stateEquals(pulseModel.endState);
         } else {
             return super.isItemSelected(presetModel);
@@ -52,7 +52,7 @@ public class BasicSceneElementPresetsFragment extends DimmableItemPresetsFragmen
     @Override
     protected void doSavePreset(String presetName) {
         if (key2 == PulseEffectFragment.STATE2_ITEM_TAG) {
-            PulseEffectDataModel pulseModel = (PulseEffectDataModel)getDimmableItemDataModel();
+            PulseEffectDataModelV10 pulseModel = (PulseEffectDataModelV10)getDimmableItemDataModel();
             doSavePreset(presetName, pulseModel.endState);
         } else {
             super.doSavePreset(presetName);
@@ -62,11 +62,11 @@ public class BasicSceneElementPresetsFragment extends DimmableItemPresetsFragmen
     @Override
     protected void doApplyPreset(PresetDataModel presetModel) {
         if (key2 == PulseEffectFragment.STATE2_ITEM_TAG) {
-            PulseEffectDataModel pulseModel = (PulseEffectDataModel)getDimmableItemDataModel();
+            PulseEffectDataModelV10 pulseModel = (PulseEffectDataModelV10)getDimmableItemDataModel();
             pulseModel.endPresetID = presetModel.id;
             pulseModel.endState = new LampState(presetModel.state);
         } else {
-            SceneElementDataModel elementModel = (SceneElementDataModel)getDimmableItemDataModel();
+            SceneElementDataModelV10 elementModel = (SceneElementDataModelV10)getDimmableItemDataModel();
             elementModel.presetID = presetModel.id;
             elementModel.state = new LampState(presetModel.state);
         }

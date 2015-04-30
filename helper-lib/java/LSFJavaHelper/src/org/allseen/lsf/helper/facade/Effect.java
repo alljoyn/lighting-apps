@@ -15,6 +15,6 @@
  */
 package org.allseen.lsf.helper.facade;
 
-public interface Effect {
+public interface Effect extends LightingItemInterface {
     public void applyTo(GroupMember member);
 }

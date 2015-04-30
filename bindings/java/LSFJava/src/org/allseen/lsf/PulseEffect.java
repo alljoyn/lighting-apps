@@ -15,13 +15,47 @@
  */
 package org.allseen.lsf;
 
-public interface PulseEffect extends LampMemberList {
-    public void setPulsePeriod(long pulsePeriod);
-    public long getPulsePeriod();
+public class PulseEffect extends DefaultNativeClassWrapper {
+    public PulseEffect() {
+        createNativeObject();
+    }
 
-    public void setPulseDuration(long pulseDuration);
-    public long getPulseDuration();
+    public PulseEffect(PulseEffect other) {
+        this();
 
-    public void setPulseCount(long pulseCount);
-    public long getPulseCount();
+        this.setToLampState(other.getToLampState());
+        this.setFromLampState(other.getFromLampState());
+        this.setToPresetID(other.getToPresetID());
+        this.setFromPresetID(other.getFromPresetID());
+        this.setPulsePeriod(other.getPulsePeriod());
+        this.setPulseDuration(other.getPulseDuration());
+        this.setNumPulses(this.getNumPulses());
+    }
+
+    public native void setToLampState(LampState lampState);
+    public native LampState getToLampState();
+
+    public native void setFromLampState(LampState lampState);
+    public native LampState getFromLampState();
+
+    public native void setToPresetID(String presetID);
+    public native String getToPresetID();
+
+    public native void setFromPresetID(String presetID);
+    public native String getFromPresetID();
+
+    public native void setPulsePeriod(long pulsePeriod);
+    public native long getPulsePeriod();
+
+    public native void setPulseDuration(long pulseDuration);
+    public native long getPulseDuration();
+
+    public native void setNumPulses(long numPulses);
+    public native long getNumPulses();
+
+    @Override
+    protected native void createNativeObject();
+
+    @Override
+    protected native void destroyNativeObject();
 }

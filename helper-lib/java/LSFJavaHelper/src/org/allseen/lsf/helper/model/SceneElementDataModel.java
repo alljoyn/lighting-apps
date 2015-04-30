@@ -15,58 +15,63 @@
  */
 package org.allseen.lsf.helper.model;
 
-import org.allseen.lsf.LampGroup;
+import java.util.HashSet;
+import java.util.Set;
 
-/**
- * <b>WARNING: This class is not intended to be used by clients, and its interface may change
- * in subsequent releases of the SDK</b>.
- */
-public class SceneElementDataModel extends ColorItemDataModel {
-    public static final char TAG_PREFIX_SCENE_ELEMENT = 's';
+public class SceneElementDataModel extends LightingItemDataModel {
+    public static final char TAG_PREFIX_SCENE_ELEMENT = 'E';
 
-    protected static int nextID = 1;
+    public static String defaultName = "<Loading scene element info...>";
 
-    public final EffectType type;
-    public LampGroup members;
-    public String presetID;
+    private Set<String> lamps;
+    private Set<String> groups;
+    private String effectId;
 
-    protected SceneElementDataModel(EffectType type, String name) {
-        super(String.valueOf(nextID++), TAG_PREFIX_SCENE_ELEMENT, name);
+    public SceneElementDataModel() {
+        this((String)null);
+    }
 
-        this.type = type;
-        this.members = new LampGroup();
+    public SceneElementDataModel(String sceneElementID) {
+        this(sceneElementID, null);
+    }
 
-        // State is always set to "on". To turn the lamp off as part of an effect,
-        // you have to set the brightness to zero
-        this.state.setOnOff(true);
+    public SceneElementDataModel(String sceneElementID, String sceneElementName) {
+        super(sceneElementID, TAG_PREFIX_SCENE_ELEMENT, sceneElementName != null ? sceneElementName : defaultName);
 
-        this.capability.dimmable = LampCapabilities.ALL;
-        this.capability.color = LampCapabilities.ALL;
-        this.capability.temp = LampCapabilities.ALL;
+        lamps = new HashSet<String>();
+        groups = new HashSet<String>();
+        effectId = null;
     }
 
     public SceneElementDataModel(SceneElementDataModel other) {
         super(other);
 
-        this.type = other.type;
-        this.members = new LampGroup(other.members);
-        this.presetID = other.presetID;
+        setLamps(new HashSet<String>(other.getLamps()));
+        setGroups(new HashSet<String>(other.getGroups()));
+        setEffectId(other.getEffectId());
     }
 
-    public boolean containsGroup(String groupID) {
-        String[] childIDs = members.getLampGroups();
-
-        for (String childID : childIDs) {
-            if (childID.equals(groupID)) {
-                return true;
-            }
-        }
-
-        return false;
+    public Set<String> getLamps() {
+        return lamps;
     }
 
-    public boolean containsPreset(String presetID) {
-        //TODO-FIX
-        return false;
+    public void setLamps(Set<String> lamps) {
+        this.lamps = lamps;
+    }
+
+    public Set<String> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<String> groups) {
+        this.groups = groups;
+    }
+
+    public String getEffectId() {
+        return effectId;
+    }
+
+    public void setEffectId(String effectId) {
+        this.effectId = effectId;
     }
 }

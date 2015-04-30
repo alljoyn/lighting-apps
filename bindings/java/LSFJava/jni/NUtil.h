@@ -49,6 +49,7 @@ template <typename T> T GetNativeListener(JNIEnv *, jobject);
 class XClass {
   public:
     // Classes here require a call to do_find() in JNI_OnLoad()
+    static XClass *xTrackingID;
     static XClass *xLampState;
     static XClass *xLampDetails;
     static XClass *xLampParameters;
@@ -59,6 +60,9 @@ class XClass {
     static XClass *xPresetTransitionEffect;
     static XClass *xStatePulseEffect;
     static XClass *xPresetPulseEffect;
+    static XClass *xTransitionEffect;
+    static XClass *xPulseEffect;
+    static XClass *xSceneElement;
 
     XClass(const char *name) { className = name; classRef = NULL; }
     ~XClass();

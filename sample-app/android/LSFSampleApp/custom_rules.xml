@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--  
+<!--
  * Copyright (c) AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
@@ -15,6 +15,105 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  -->
 <project name="LSFSampleApp-custom-rules" default="help">
+    <property name="manifestmerger.enabled" value="true" />
     <property name="target.path.apps" value="${basedir}/../../.." />
-    <import file="../../../custom_rules.xml"/>
+
+    <import file="${target.path.apps}/custom_rules.xml"/>
+
+    <condition property="apps.path.dashboard" value="${env.DASHBOARD_HOME}" else="${target.path.apps}/../../alljoyn_on">
+        <isset property="env.DASHBOARD_HOME" />
+    </condition>
+
+    <condition property="apps.path.dashboard.plugin" value="${env.DASHBOARD_PLUGIN_HOME}" else="${apps.path.dashboard}/android/IoTHub/iot/IskDashboard">
+        <isset property="env.DASHBOARD_PLUGIN_HOME" />
+    </condition>
+
+    <property name="apps.path.aar.dashboard.plugin" value="${apps.path.dashboard.plugin}/bin/DashboardPlugin.aar"/>
+
+    <available file="${apps.path.aar.dashboard.plugin}" property="apps.path.aar.dashboard.plugin.found"/>
+
+    <target name="pre-build-aar-files" if="apps.path.aar.dashboard.plugin.found">
+        <!-- Unzip AAR files -->
+        <echo>Extracting AAR files into ${out.dir}/aar</echo>
+
+        <!-- Add an unzip task for each AAR file -->
+        <unzip src="${apps.path.aar.dashboard.plugin}" dest="${out.dir}/aar/DashboardPlugin"/>
+
+        <!-- This property should contain a comma-separated list of AAR packages -->
+        <property name="project.library.packages" value="org.alljoyn.dashboard.plugin"/>
+
+        <!-- Path elements for each AAR resource directory -->
+        <path id="project.library.res.folder.path">
+            <pathelement location="${out.dir}/aar/DashboardPlugin/res"/>
+        </path>
+
+        <!-- Path elements for each AAR resource summary file -->
+        <path id="project.library.bin.r.file.path">
+            <pathelement location="${out.dir}/aar/DashboardPlugin/R.txt"/>
+        </path>
+
+        <!-- Copy jars -->
+        <copy file="${out.dir}/aar/DashboardPlugin/classes.jar" tofile="${basedir}/libs/dashboardplugin.jar"/>
+    </target>
+
+    <target name="-pre-clean">
+        <!-- Clean jars -->
+        <delete quiet="true" file="${basedir}/libs/alljoyn.jar"/>
+        <delete quiet="true" file="${basedir}/libs/alljoyn_about.jar"/>
+        <delete quiet="true" file="${basedir}/libs/alljoyn_apps_android_utils.jar"/>
+        <delete quiet="true" file="${basedir}/libs/alljoyn_config.jar"/>
+        <delete quiet="true" file="${basedir}/libs/NotificationService.jar"/>
+        <delete quiet="true" file="${basedir}/libs/NSCommons.jar"/>
+        <delete quiet="true" file="${basedir}/libs/NSNativePlatformAndr.jar"/>
+        <delete quiet="true" file="${basedir}/libs/ControlPanelService.jar"/>
+        <delete quiet="true" file="${basedir}/libs/ControlPanelAdapter.jar"/>
+        <delete quiet="true" file="${basedir}/libs/alljoyn_onboarding.jar"/>
+        <delete quiet="true" file="${basedir}/libs/alljoyn_onboarding_manager.jar"/>
+        <delete quiet="true" file="${basedir}/libs/dashboardplugin.jar"/>
+        <delete quiet="true" file="${basedir}/libs/lsfjava.jar"/>
+        <delete quiet="true" file="${basedir}/libs/lsfjavahelper.jar"/>
+        <delete quiet="true" file="${basedir}/libs/android-support-v4.jar"/>
+
+        <!-- Clean native libraries -->
+        <delete quiet="true" file="${basedir}/libs/armeabi/liballjoyn_java.so"/>
+        <delete quiet="true" file="${basedir}/libs/armeabi/liballjoyn_lsf_java.so"/>
+        <delete quiet="true" file="${basedir}/libs/armeabi/libgnustl_shared.so"/>
+    </target>
+
+    <target name="-pre-build" depends="pre-build-aar-files">
+        <!-- Copy jars -->
+        <copy file="${apps.path.jar.alljoyn}" todir="${basedir}/libs"/>
+        <copy file="${apps.path.jar.alljoyn.about}" todir="${basedir}/libs"/>
+        <copy file="${apps.path.jar.base.common.android}" todir="${basedir}/libs"/>
+        <copy file="${apps.path.jar.base.config}" todir="${basedir}/libs"/>
+        <copy file="${apps.path.jar.base.notification.service}" todir="${basedir}/libs"/>
+        <copy file="${apps.path.jar.base.notification.commons}" todir="${basedir}/libs"/>
+        <copy file="${apps.path.jar.base.notification.android}" todir="${basedir}/libs"/>
+        <copy file="${apps.path.jar.base.controlpanel.service}" todir="${basedir}/libs"/>
+        <copy file="${apps.path.jar.base.controlpanel.adapter}" todir="${basedir}/libs"/>
+        <copy file="${apps.path.jar.base.onboarding}" todir="${basedir}/libs"/>
+        <copy file="${apps.path.jar.base.onboarding.manager}" todir="${basedir}/libs"/>
+        <copy file="${apps.path.jar.lsf.java}" todir="${basedir}/libs"/>
+        <copy file="${apps.path.jar.lsf.java.helper}" todir="${basedir}/libs"/>
+        <copy file="${sdk.dir}/extras/android/support/v4/android-support-v4.jar" todir="${basedir}/libs"/>
+
+        <!-- Copy native libraries -->
+        <copy file="${apps.path.so.alljoyn}" todir="${basedir}/libs/armeabi"/>
+        <copy file="${apps.path.so.lsf.java}" todir="${basedir}/libs/armeabi"/>
+        <copy file="${apps.path.so.stl.gnu}" todir="${basedir}/libs/armeabi"/>
+    </target>
+
+    <!-- Update properties and paths to reference contents of all AAR files -->
+    <target name="-pre-compile" if="apps.path.aar.dashboard.plugin.found">
+        <!-- Path elements for each AAR manifest -->
+        <path id="project.library.manifest.file.path">
+            <pathelement location="${out.dir}/aar/DashboardPlugin/AndroidManifest.xml"/>
+        </path>
+
+        <!-- Merge the app manifest with the AAR manifests -->
+        <echo>Merging AAR manifests</echo>
+        <mergemanifest appManifest="${manifest.abs.file}" outManifest="${out.manifest.abs.file}" enabled="${manifestmerger.enabled}">
+            <library refid="project.library.manifest.file.path" />
+        </mergemanifest>
+    </target>
 </project>

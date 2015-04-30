@@ -37,6 +37,7 @@ public:
     template <typename T> static jobject Call_ControllerClientStatus_String(JNIEnv *env, jobject thiz, jstring jString, ControllerClientStatus (T::*cMethod)(const std::string&));
     template <typename T> static jobject Call_ControllerClientStatus_String_String(JNIEnv *env, jobject thiz, jstring jString1, jstring jString2, ControllerClientStatus (T::*cMethod)(const std::string&, const std::string&));
     template <typename T> static jobject Call_ControllerClientStatus_String_String_String(JNIEnv *env, jobject thiz, jstring jString1, jstring jString2, jstring jString3, ControllerClientStatus (T::*cMethod)(const std::string&, const std::string&, const std::string&));
+    template <typename T> static jobject Call_ControllerClientStatus_String_StringList(JNIEnv *env, jobject thiz, jstring jString, jobjectArray jStringList, ControllerClientStatus (T::*cMethod)(const std::string&, const std::list<std::string>&));
 
     template <typename T> static jobject Call_ControllerClientStatus_String_Boolean(JNIEnv *env, jobject thiz, jstring jString, jboolean jBoolean, ControllerClientStatus (T::*cMethod)(const std::string&, const bool&));
     template <typename T> static jobject Call_ControllerClientStatus_String_UInt32(JNIEnv *env, jobject thiz, jstring jString, jlong jLong, ControllerClientStatus (T::*cMethod)(const std::string&, const uint32_t&));
@@ -50,6 +51,8 @@ public:
 
     template <typename T1, typename T2, typename T3> static jobject Call_ControllerClientStatus_Object(JNIEnv *env, jobject thiz, jobject jObject, ControllerClientStatus (T1::*cMethod)(const T3&));
     template <typename T1, typename T2, typename T3> static jobject Call_ControllerClientStatus_Object_String_String(JNIEnv *env, jobject thiz, jobject jObject, jstring jString1, jstring jString2, ControllerClientStatus (T1::*cMethod)(const T3&, const std::string&, const std::string&));
+
+    template <typename T1, typename T2, typename T3> static jobject Call_ControllerClientStatus_TrackingID_Object_String_String(JNIEnv *env, jobject thiz, jobject jTrackingID, jobject jObject, jstring jString1, jstring jString2, ControllerClientStatus (T1::*cMethod)(uint32_t&, const T3&, const std::string&, const std::string&));
 };
 
 } /* namespace lsf */

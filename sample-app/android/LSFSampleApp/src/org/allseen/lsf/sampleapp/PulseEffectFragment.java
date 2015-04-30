@@ -19,8 +19,8 @@ import org.allseen.lsf.LampState;
 import org.allseen.lsf.PresetPulseEffect;
 import org.allseen.lsf.helper.model.ColorItemDataModel;
 import org.allseen.lsf.helper.model.PresetDataModel;
-import org.allseen.lsf.helper.model.PulseEffectDataModel;
-import org.allseen.lsf.helper.model.SceneElementDataModel;
+import org.allseen.lsf.helper.model.PulseEffectDataModelV10;
+import org.allseen.lsf.helper.model.SceneElementDataModelV10;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -41,7 +41,7 @@ public class PulseEffectFragment extends BasicSceneElementInfoFragment implement
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        PulseEffectDataModel pulseEffectModel = activity.pendingPulseEffectModel;
+        PulseEffectDataModelV10 pulseEffectModel = activity.pendingPulseEffectModel;
 
         if (pulseEffectModel.endPresetID != null && !pulseEffectModel.endPresetID.equals(PresetPulseEffect.PRESET_ID_CURRENT_STATE)) {
             PresetDataModel presetModel = activity.systemManager.getPresetCollectionManager().getModel(pulseEffectModel.endPresetID);
@@ -147,13 +147,13 @@ public class PulseEffectFragment extends BasicSceneElementInfoFragment implement
 
         super.updateInfoFields(itemModel);
 
-        updatePulseEffectInfoFields(activity, (PulseEffectDataModel)itemModel);
+        updatePulseEffectInfoFields(activity, (PulseEffectDataModelV10)itemModel);
     }
 
     @Override
     public void updatePresetFields(ColorItemDataModel itemModel) {
         super.updatePresetFields(itemModel);
-        updatePresetFields(((PulseEffectDataModel)itemModel).endState, stateAdapter2);
+        updatePresetFields(((PulseEffectDataModelV10)itemModel).endState, stateAdapter2);
     }
 
     @Override
@@ -161,11 +161,11 @@ public class PulseEffectFragment extends BasicSceneElementInfoFragment implement
         if (viewTag != STATE2_ITEM_TAG) {
             super.updatePresetID(presetID, viewTag);
         } else {
-            ((PulseEffectDataModel)getPendingSceneElementDataModel()).endPresetID = presetID;
+            ((PulseEffectDataModelV10)getPendingSceneElementDataModel()).endPresetID = presetID;
         }
     }
 
-    protected void updatePulseEffectInfoFields(SampleAppActivity activity, PulseEffectDataModel elementModel) {
+    protected void updatePulseEffectInfoFields(SampleAppActivity activity, PulseEffectDataModelV10 elementModel) {
         String members = MemberNamesString.format(activity, activity.pendingBasicSceneElementMembers, MemberNamesOptions.en, 3, R.string.effect_info_help_no_members);
         setTextViewValue(view.findViewById(R.id.infoHelpRow), R.id.helpText, String.format(getString(R.string.effect_info_help_pulse), members), 0);
 
@@ -205,7 +205,7 @@ public class PulseEffectFragment extends BasicSceneElementInfoFragment implement
 
     @Override
     protected LampState getPendingSceneElementState(Object viewTag) {
-        PulseEffectDataModel pendingModel = ((SampleAppActivity)getActivity()).pendingPulseEffectModel;
+        PulseEffectDataModelV10 pendingModel = ((SampleAppActivity)getActivity()).pendingPulseEffectModel;
         return viewTag != STATE2_ITEM_TAG ? super.getPendingSceneElementState(viewTag) : pendingModel.endState;
     }
 
@@ -215,16 +215,16 @@ public class PulseEffectFragment extends BasicSceneElementInfoFragment implement
     }
 
     @Override
-    protected void checkInitialColorTemp(SceneElementDataModel pendingModel, long modelColorTempMin) {
+    protected void checkInitialColorTemp(SceneElementDataModelV10 pendingModel, long modelColorTempMin) {
         super.checkInitialColorTemp(pendingModel, modelColorTempMin);
 
-        if (((PulseEffectDataModel)pendingModel).endState.getColorTemp() < modelColorTempMin) {
-            ((PulseEffectDataModel)pendingModel).endState.setColorTemp(modelColorTempMin);
+        if (((PulseEffectDataModelV10)pendingModel).endState.getColorTemp() < modelColorTempMin) {
+            ((PulseEffectDataModelV10)pendingModel).endState.setColorTemp(modelColorTempMin);
         }
     }
 
     @Override
-    protected SceneElementDataModel getPendingSceneElementDataModel() {
+    protected SceneElementDataModelV10 getPendingSceneElementDataModel() {
         return ((SampleAppActivity)getActivity()).pendingPulseEffectModel;
     }
 
@@ -236,7 +236,7 @@ public class PulseEffectFragment extends BasicSceneElementInfoFragment implement
 
     @Override
     public void onCheckedChanged(CompoundButton stateRowTick, boolean checked) {
-        PulseEffectDataModel pulseEffectModel = ((SampleAppActivity)getActivity()).pendingPulseEffectModel;
+        PulseEffectDataModelV10 pulseEffectModel = ((SampleAppActivity)getActivity()).pendingPulseEffectModel;
         pulseEffectModel.startWithCurrent = checked;
 
         ((SeekBar)view.findViewById(R.id.stateSliderBrightness)).setEnabled(!checked);

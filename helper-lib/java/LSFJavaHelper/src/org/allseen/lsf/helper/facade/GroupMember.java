@@ -15,7 +15,7 @@
  */
 package org.allseen.lsf.helper.facade;
 
-public abstract class GroupMember extends ColorItem {
+public abstract class GroupMember extends MutableColorItem {
     public abstract void applyPreset(Preset preset);
     public abstract void applyEffect(Effect effect);
 }

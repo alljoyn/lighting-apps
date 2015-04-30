@@ -18,10 +18,12 @@
 
     <string name="app_name">LSF Sample App</string>
     <string name="controller">Controller</string>
+    <string name="controller_enable">Enable bundled Controller Service</string>
     <string name="action_add">Add</string>
     <string name="action_next">Next</string>
     <string name="action_done">Done</string>
     <string name="action_settings">Settings</string>
+    <string name="action_dashboard">Onboarding Dashboard</string>
     <string name="menu_group_info">Group Info</string>
     <string name="menu_group_delete">Delete Group</string>
     <string name="menu_basic_scene_apply">Apply Scene</string>
@@ -209,6 +211,7 @@
     <string name="searching_wifi">Waiting for Wi-Fi to become available&#8230;</string>
     <string name="error_title">Controller Service Error</string>
     <string name="error_code">Error code</string>
+    <string name="error_dashboard">Onboarding Dashboard Error</string>
     <string name="error_dependency">Cannot delete because another group, scene, or master scene depends on this.</string>
     <string name="error_dependency_group_title">Can\'t Delete Group</string>
     <string name="error_dependency_group_text">The group \"%1$s\" is being used by the following other groups or scenes: %2$s. It cannot be deleted until it is removed from those items, or those items are deleted.</string>

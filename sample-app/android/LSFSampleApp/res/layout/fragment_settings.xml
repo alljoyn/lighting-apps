@@ -94,6 +94,16 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/font_size_2"
                 android:textColor="@color/detail_text" />
+
+            <CheckBox
+                android:id="@+id/settingsStartController"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="-5dp"
+                android:text="@string/controller_enable"
+                android:textColor="@color/detail_text"
+                android:textSize="@dimen/font_size_2" />
+
         </LinearLayout>
     </TableRow>
 

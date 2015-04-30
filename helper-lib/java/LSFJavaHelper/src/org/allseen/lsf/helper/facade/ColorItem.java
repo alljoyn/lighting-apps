@@ -1,4 +1,5 @@
-/* Copyright (c) AllSeen Alliance. All rights reserved.
+/*
+ * Copyright (c) AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -18,32 +19,10 @@ import org.allseen.lsf.helper.model.ColorItemDataModel;
 import org.allseen.lsf.helper.model.ColorStateConverter;
 import org.allseen.lsf.helper.model.LightingItemDataModel;
 
-/**
- * Abstract base class for Lighting items that support color.
- * <p>
- * <b>WARNING: This class is not intended to be used by clients, and its interface may change
- * in subsequent releases of the SDK</b>.
- */
-public abstract class ColorItem extends LightingItem implements LampState {
-
-    public void turnOn() {
-        setPowerOn(true);
-    }
-
-    public void turnOff() {
-        setPowerOn(false);
-    }
-
-    public void setColorHsvt(int[] hsvt) {
-        setColorHsvt(hsvt[0], hsvt[1], hsvt[2], hsvt[3]);
-    }
+public abstract class ColorItem extends LightingItem {
 
     public int[] getColorHsvt() {
         return ColorStateConverter.convertModelToView(getColorDataModel().state);
-    }
-
-    public void setPower(Power power) {
-        setPowerOn(power == Power.ON);
     }
 
     public boolean getPowerOn() {
@@ -52,10 +31,6 @@ public abstract class ColorItem extends LightingItem implements LampState {
 
     public Power getPower() {
         return (getPowerOn())? Power.ON : Power.OFF;
-    }
-
-    public void setColor(Color color) {
-        setColorHsvt(color.getHue(), color.getSaturation(), color.getBrightness(), color.getColorTemperature());
     }
 
     public Color getColor() {
@@ -67,7 +42,5 @@ public abstract class ColorItem extends LightingItem implements LampState {
         return getColorDataModel();
     }
 
-    public abstract void setPowerOn(boolean powerOn);
-    public abstract void setColorHsvt(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees);
     protected abstract ColorItemDataModel getColorDataModel();
 }

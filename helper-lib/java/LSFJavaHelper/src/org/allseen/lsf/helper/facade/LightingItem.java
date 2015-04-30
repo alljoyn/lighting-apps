@@ -22,9 +22,15 @@ import org.allseen.lsf.helper.model.LightingItemDataModel;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public abstract class LightingItem {
+public abstract class LightingItem implements LightingItemInterface {
+    @Override
     public String getName() {
         return getItemDataModel().getName();
+    }
+
+    @Override
+    public String getId() {
+        return getItemDataModel().id;
     }
 
     public abstract void rename(String name);

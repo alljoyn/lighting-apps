@@ -28,8 +28,14 @@ import org.allseen.lsf.MasterSceneManager;
 import org.allseen.lsf.MasterSceneManagerCallback;
 import org.allseen.lsf.PresetManager;
 import org.allseen.lsf.PresetManagerCallback;
+import org.allseen.lsf.PulseEffectManager;
+import org.allseen.lsf.PulseEffectManagerCallback;
+import org.allseen.lsf.SceneElementManager;
+import org.allseen.lsf.SceneElementManagerCallback;
 import org.allseen.lsf.SceneManager;
 import org.allseen.lsf.SceneManagerCallback;
+import org.allseen.lsf.TransitionEffectManager;
+import org.allseen.lsf.TransitionEffectManagerCallback;
 import org.allseen.lsf.helper.callback.HelperGroupManagerCallback;
 import org.allseen.lsf.helper.listener.AllJoynListener;
 
@@ -46,6 +52,9 @@ public class AllJoynManager {
     public static LampManager lampManager;
     public static LampGroupManager groupManager;
     public static PresetManager presetManager;
+    public static TransitionEffectManager transitionEffectManager;
+    public static PulseEffectManager pulseEffectManager;
+    public static SceneElementManager sceneElementManager;
     public static SceneManager sceneManager;
     public static MasterSceneManager masterSceneManager;
     public static AboutManager aboutManager;
@@ -61,6 +70,9 @@ public class AllJoynManager {
         final LampManagerCallback lampManagerCallback,
         final HelperGroupManagerCallback groupManagerCallback,
         final PresetManagerCallback presetManagerCallback,
+        final TransitionEffectManagerCallback transitionEffectManagerCallback,
+        final PulseEffectManagerCallback pulseEffectManagerCallback,
+        final SceneElementManagerCallback sceneElementManagerCallback,
         final SceneManagerCallback sceneManagerCallback,
         final MasterSceneManagerCallback masterSceneManagerCallback,
         final AboutManager aboutManager,
@@ -73,6 +85,9 @@ public class AllJoynManager {
             lampManagerCallback,
             groupManagerCallback,
             presetManagerCallback,
+            transitionEffectManagerCallback,
+            pulseEffectManagerCallback,
+            sceneElementManagerCallback,
             sceneManagerCallback,
             masterSceneManagerCallback,
             aboutManager,
@@ -86,6 +101,9 @@ public class AllJoynManager {
         final LampManagerCallback lampManagerCallback,
         final HelperGroupManagerCallback groupManagerCallback,
         final PresetManagerCallback presetManagerCallback,
+        final TransitionEffectManagerCallback transitionEffectManagerCallback,
+        final PulseEffectManagerCallback pulseEffectManagerCallback,
+        final SceneElementManagerCallback sceneElementManagerCallback,
         final SceneManagerCallback sceneManagerCallback,
         final MasterSceneManagerCallback masterSceneManagerCallback,
         final AboutManager aboutManager,
@@ -112,6 +130,9 @@ public class AllJoynManager {
                 AllJoynManager.lampManager = new LampManager(controllerClient, lampManagerCallback);
                 AllJoynManager.groupManager = new SampleGroupManager(controllerClient, groupManagerCallback);
                 AllJoynManager.presetManager = new PresetManager(controllerClient, presetManagerCallback);
+                AllJoynManager.transitionEffectManager = new TransitionEffectManager(controllerClient, transitionEffectManagerCallback);
+                AllJoynManager.pulseEffectManager = new PulseEffectManager(controllerClient, pulseEffectManagerCallback);
+                AllJoynManager.sceneElementManager = new SceneElementManager(controllerClient, sceneElementManagerCallback);
                 AllJoynManager.sceneManager = new SceneManager(controllerClient, sceneManagerCallback);
                 AllJoynManager.masterSceneManager = new MasterSceneManager(controllerClient, masterSceneManagerCallback);
 
@@ -192,6 +213,9 @@ public class AllJoynManager {
                 AllJoynManager.presetManager.destroy();
                 AllJoynManager.groupManager.destroy();
                 AllJoynManager.lampManager.destroy();
+                AllJoynManager.transitionEffectManager.destroy();
+                AllJoynManager.pulseEffectManager.destroy();
+                AllJoynManager.sceneElementManager.destroy();
                 AllJoynManager.controllerServiceManager.destroy();
                 AllJoynManager.controllerClient.destroy();
 

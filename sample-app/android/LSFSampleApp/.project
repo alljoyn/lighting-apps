@@ -7,23 +7,21 @@
 	</projects>
 	<buildSpec>
 		<buildCommand>
-			<name>com.android.ide.eclipse.adt.ResourceManagerBuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
-			<name>com.android.ide.eclipse.adt.PreCompilerBuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
 			<name>org.eclipse.jdt.core.javabuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>com.android.ide.eclipse.adt.ApkBuilder</name>
+			<name>org.eclipse.ui.externaltools.ExternalToolBuilder</name>
 			<arguments>
+				<dictionary>
+					<key>LaunchConfigHandle</key>
+					<value>&lt;project&gt;/.externalToolBuilders/Ant.launch</value>
+				</dictionary>
+				<dictionary>
+					<key>incclean</key>
+					<value>true</value>
+				</dictionary>
 			</arguments>
 		</buildCommand>
 	</buildSpec>
@@ -61,6 +59,56 @@
 			<name>links/jar/lsf/lsfjavahelper.jar</name>
 			<type>1</type>
 			<locationURI>LSF_JAVA_HELPER_HOME/bin/lsfjavahelper.jar</locationURI>
+		</link>
+		<link>
+			<name>links/sdk/android/android-sdk-linux</name>
+			<type>2</type>
+			<locationURI>ANDROID_HOME</locationURI>
+		</link>
+		<link>
+			<name>links/jar/Base/common/alljoyn_apps_android_utils.jar</name>
+			<type>1</type>
+			<locationURI>CONFIG_HOME/services_common/jar/alljoyn_apps_android_utils.jar</locationURI>
+		</link>
+		<link>
+			<name>links/jar/Base/config/alljoyn_config.jar</name>
+			<type>1</type>
+			<locationURI>CONFIG_HOME/java/jar/alljoyn_config.jar</locationURI>
+		</link>
+		<link>
+			<name>links/jar/Base/controlpanel/ControlPanelAdapter.jar</name>
+			<type>1</type>
+			<locationURI>CONTROLPANEL_HOME/java/jar/ControlPanelAdapter.jar</locationURI>
+		</link>
+		<link>
+			<name>links/jar/Base/controlpanel/ControlPanelService.jar</name>
+			<type>1</type>
+			<locationURI>CONTROLPANEL_HOME/java/jar/ControlPanelService.jar</locationURI>
+		</link>
+		<link>
+			<name>links/jar/Base/notification/NSCommons.jar</name>
+			<type>1</type>
+			<locationURI>NOTIFICATION_HOME/java/jar/NSCommons.jar</locationURI>
+		</link>
+		<link>
+			<name>links/jar/Base/notification/NSNativePlatformAndr.jar</name>
+			<type>1</type>
+			<locationURI>NOTIFICATION_HOME/java/jar/NSNativePlatformAndr.jar</locationURI>
+		</link>
+		<link>
+			<name>links/jar/Base/notification/NotificationService.jar</name>
+			<type>1</type>
+			<locationURI>NOTIFICATION_HOME/java/jar/NotificationService.jar</locationURI>
+		</link>
+		<link>
+			<name>links/jar/Base/onboarding/alljoyn_onboarding.jar</name>
+			<type>1</type>
+			<locationURI>ONBOARDING_HOME/java/jar/alljoyn_onboarding.jar</locationURI>
+		</link>
+		<link>
+			<name>links/jar/Base/onboarding/alljoyn_onboarding_manager.jar</name>
+			<type>1</type>
+			<locationURI>ONBOARDING_HOME/java/jar/alljoyn_onboarding_manager.jar</locationURI>
 		</link>
 		<link>
 			<name>links/jni/AllJoyn/lib/armeabi/liballjoyn_java.so</name>

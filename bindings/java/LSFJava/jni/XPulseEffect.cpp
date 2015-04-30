@@ -15,94 +15,23 @@
  *
  ******************************************************************************/
 
-// This .cpp file is #include'd in the .h file because some templated
-// methods must be defined there. The following #ifdef allows the
-// templated code to be visible there.
-#ifdef LSF_JNI_XPULSEEFFECT_H_INCLUDE_TEMPLATE_METHODS
-
-#include <qcc/Debug.h>
-
-#include "NDefs.h"
 #include "XPulseEffect.h"
-
-#define QCC_MODULE LSF_QCC_MODULE
 
 namespace lsf {
 
-template <typename T>
-void XPulseEffect::SetPulsePeriod(JNIEnv *env, jobject thiz, jlong jPulsePeriod)
+XPulseEffect::XPulseEffect(jobject jobj)
 {
-    T *xDelegate = GetHandle<T*>(thiz);
-    if (env->ExceptionCheck() || !xDelegate) {
-        QCC_LogError(ER_FAIL, ("GetHandle() failed"));
-        return;
-    }
-
-    xDelegate->pulsePeriod = (uint32_t)jPulsePeriod;
+    // Currently nothing to do
 }
 
-template <typename T>
-jlong XPulseEffect::GetPulsePeriod(JNIEnv *env, jobject thiz)
+XPulseEffect::~XPulseEffect()
 {
-    T *xDelegate = GetHandle<T*>(thiz);
-    if (env->ExceptionCheck() || !xDelegate) {
-        QCC_LogError(ER_FAIL, ("GetHandle() failed"));
-        return (jlong)0;
-    }
-
-    return (jlong)xDelegate->pulsePeriod;
+    // Currently nothing to do
 }
 
-template <typename T>
-void XPulseEffect::SetPulseDuration(JNIEnv *env, jobject thiz, jlong jPulseDuration)
+XPulseEffect& XPulseEffect::operator=(const PulseEffect& other)
 {
-    T *xDelegate = GetHandle<T*>(thiz);
-    if (env->ExceptionCheck() || !xDelegate) {
-        QCC_LogError(ER_FAIL, ("GetHandle() failed"));
-        return;
-    }
-
-    xDelegate->pulseDuration = (uint32_t)jPulseDuration;
+	PulseEffect::operator=(other);
+    return *this;
 }
-
-template <typename T>
-jlong XPulseEffect::GetPulseDuration(JNIEnv *env, jobject thiz)
-{
-    T *xDelegate = GetHandle<T*>(thiz);
-    if (env->ExceptionCheck() || !xDelegate) {
-        QCC_LogError(ER_FAIL, ("GetHandle() failed"));
-        return (jlong)0;
-    }
-
-    return (jlong)xDelegate->pulseDuration;
-}
-
-template <typename T>
-void XPulseEffect::SetPulseCount(JNIEnv *env, jobject thiz, jlong jPulseCount)
-{
-    T *xDelegate = GetHandle<T*>(thiz);
-    if (env->ExceptionCheck() || !xDelegate) {
-        QCC_LogError(ER_FAIL, ("GetHandle() failed"));
-        return;
-    }
-
-    xDelegate->numPulses = (uint32_t)jPulseCount;
-}
-
-template <typename T>
-jlong XPulseEffect::GetPulseCount(JNIEnv *env, jobject thiz)
-{
-    T *xDelegate = GetHandle<T*>(thiz);
-    if (env->ExceptionCheck() || !xDelegate) {
-        QCC_LogError(ER_FAIL, ("GetHandle() failed"));
-        return (jlong)0;
-    }
-
-    return (jlong)xDelegate->numPulses;
-}
-
 } /* namespace lsf */
-
-#undef QCC_MODULE
-
-#endif /* LSF_JNI_XPULSEEFFECT_H_INCLUDE_TEMPLATE_METHODS */

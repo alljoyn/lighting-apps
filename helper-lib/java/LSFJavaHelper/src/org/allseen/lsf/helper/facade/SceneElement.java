@@ -15,46 +15,77 @@
  */
 package org.allseen.lsf.helper.facade;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.model.LightingItemDataModel;
+import org.allseen.lsf.helper.model.LightingItemUtil;
+import org.allseen.lsf.helper.model.SceneElementDataModel;
 
 public class SceneElement extends LightingItem {
 
+    private SceneElementDataModel sceneElementModel;
+
     public SceneElement(String sceneElementId) {
-        // TODO-IMPL
+        this(sceneElementId, null);
     }
 
     public SceneElement(String sceneElementId, String sceneElementName) {
-        // TODO-IMPL
+        super();
+
+        sceneElementModel = new SceneElementDataModel(sceneElementId, sceneElementName);
     }
 
     public void apply() {
-        // TODO-IMPL
+        AllJoynManager.sceneElementManager.applySceneElement(sceneElementModel.id);
     }
 
-    public void modify(Effect effect, GroupMember[] memebers) {
-        // TODO-IMPL
+    public void modify(Effect effect, GroupMember[] members) {
+        AllJoynManager.sceneElementManager.updateSceneElement(sceneElementModel.id, LightingItemUtil.createSceneElement(effect.getId(), members));
     }
 
     public void add(GroupMember member) {
-        // TODO-IMPL
+        Set<String> lamps = new HashSet<String>(sceneElementModel.getLamps());
+        Set<String> groups = new HashSet<String>(sceneElementModel.getGroups());
+
+        if (member instanceof Lamp) {
+            lamps.add(member.getId());
+        } else if (member instanceof Group) {
+            groups.add(member.getId());
+        }
+
+        AllJoynManager.sceneElementManager.updateSceneElement(sceneElementModel.id, LightingItemUtil.createSceneElement(
+                sceneElementModel.getEffectId(), lamps.toArray(new String[lamps.size()]), groups.toArray(new String[groups.size()])));
     }
 
     public void remove(GroupMember member) {
-        // TODO-IMPL
+        Set<String> lamps = new HashSet<String>(sceneElementModel.getLamps());
+        Set<String> groups = new HashSet<String>(sceneElementModel.getGroups());
+
+        boolean didRemove = lamps.remove(member.getId()) || groups.remove(member.getId());
+
+        if (didRemove) {
+            AllJoynManager.sceneElementManager.updateSceneElement(sceneElementModel.id, LightingItemUtil.createSceneElement(
+                    sceneElementModel.getEffectId(), lamps.toArray(new String[lamps.size()]), groups.toArray(new String[groups.size()])));
+        }
     }
 
     @Override
     public void rename(String sceneElementName) {
-        // TODO-IMPL
+       AllJoynManager.sceneElementManager.setSceneElementName(sceneElementModel.id, sceneElementName, LightingDirector.get().getDefaultLanguage());
     }
 
     public void delete() {
-        // TODO-IMPL
+       AllJoynManager.sceneElementManager.deleteSceneElement(sceneElementModel.id);
+    }
+
+    public SceneElementDataModel getSceneElementDataModel() {
+        return sceneElementModel;
     }
 
     @Override
     protected LightingItemDataModel getItemDataModel() {
-        // TODO Auto-generated method stub
-        return null;
+        return getSceneElementDataModel();
     }
 }

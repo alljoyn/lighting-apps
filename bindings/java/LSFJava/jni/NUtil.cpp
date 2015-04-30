@@ -50,6 +50,8 @@ static jmethodID MID_Integer_intValue = NULL;
 static jmethodID MID_Object_equals = NULL;
 static jmethodID MID_BusException_log = NULL;
 
+// Also need to call do_find() for these below in JNI_OnLoad()
+XClass *XClass::xTrackingID = new XClass("org/allseen/lsf/TrackingID");
 XClass *XClass::xLampState = new XClass("org/allseen/lsf/LampState");
 XClass *XClass::xLampDetails = new XClass("org/allseen/lsf/LampDetails");
 XClass *XClass::xLampParameters = new XClass("org/allseen/lsf/LampParameters");
@@ -60,6 +62,9 @@ XClass *XClass::xStateTransitionEffect = new XClass("org/allseen/lsf/StateTransi
 XClass *XClass::xPresetTransitionEffect = new XClass("org/allseen/lsf/PresetTransitionEffect");
 XClass *XClass::xStatePulseEffect = new XClass("org/allseen/lsf/StatePulseEffect");
 XClass *XClass::xPresetPulseEffect = new XClass("org/allseen/lsf/PresetPulseEffect");
+XClass *XClass::xTransitionEffect = new XClass("org/allseen/lsf/TransitionEffect");
+XClass *XClass::xPulseEffect = new XClass("org/allseen/lsf/PulseEffect");
+XClass *XClass::xSceneElement = new XClass("org/allseen/lsf/SceneElement");
 
 /**
  * Implement the load hook for the alljoyn_java native library.
@@ -198,6 +203,8 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm,
 //        }
 //        CLS_SessionOpts = (jclass)env->NewGlobalRef(clazz);
 
+        XClass::xTrackingID->doFind(env);
+
         XClass::xLampState->doFind(env);
         XClass::xLampDetails->doFind(env);
         XClass::xLampParameters->doFind(env);
@@ -209,6 +216,9 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm,
         XClass::xPresetTransitionEffect->doFind(env);
         XClass::xStatePulseEffect->doFind(env);
         XClass::xPresetPulseEffect->doFind(env);
+        XClass::xTransitionEffect->doFind(env);
+        XClass::xPulseEffect->doFind(env);
+        XClass::xSceneElement->doFind(env);
 
         // DCD: Workaround to make sure the Enum classes are loaded
         //      here with this class loader.

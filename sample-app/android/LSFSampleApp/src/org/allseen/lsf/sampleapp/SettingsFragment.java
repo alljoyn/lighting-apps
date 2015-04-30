@@ -26,6 +26,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 public class SettingsFragment extends PageFrameChildFragment implements OnClickListener {
@@ -37,6 +38,8 @@ public class SettingsFragment extends PageFrameChildFragment implements OnClickL
         view.findViewById(R.id.settingsRowSource).setOnClickListener(this);
         view.findViewById(R.id.settingsRowTeam).setOnClickListener(this);
         view.findViewById(R.id.settingsRowNotice).setOnClickListener(this);
+
+        view.findViewById(R.id.settingsStartController).setOnClickListener(this);
 
         String version = this.getString(R.string.version) + " ";
         try {
@@ -59,14 +62,16 @@ public class SettingsFragment extends PageFrameChildFragment implements OnClickL
     }
 
     public void onUpdateView() {
-        ControllerDataModel leaderControllerModel = ((SampleAppActivity)getActivity()).systemManager.getControllerManager().getLeadControllerModel();
+        SampleAppActivity activity = (SampleAppActivity)getActivity();
+        ControllerDataModel leaderControllerModel = activity.systemManager.getControllerManager().getLeadControllerModel();
         String leaderName = ControllerDataModel.defaultName;
 
         if (leaderControllerModel != null && leaderControllerModel.getName() != null && !leaderControllerModel.getName().isEmpty()) {
             leaderName = leaderControllerModel.getName();
         }
 
-        ((TextView) view.findViewById(R.id.settingsTextController)).setText(leaderName);
+        ((TextView)view.findViewById(R.id.settingsTextController)).setText(leaderName);
+        ((CheckBox)view.findViewById(R.id.settingsStartController)).setChecked(activity.isControllerServiceStarted());
     }
 
     @Override
@@ -81,6 +86,8 @@ public class SettingsFragment extends PageFrameChildFragment implements OnClickL
             onTeamClick();
         } else if (clickedID == R.id.settingsRowNotice) {
             onNoticeClick();
+        } else if (clickedID == R.id.settingsStartController) {
+            onEnableControllerClick(((CheckBox)clickedView).isChecked());
         }
     }
 
@@ -94,5 +101,9 @@ public class SettingsFragment extends PageFrameChildFragment implements OnClickL
 
     protected void  onTeamClick() {
         parent.showTextChildFragment(getResources().getString(R.string.team_text));
+    }
+
+    protected void onEnableControllerClick(boolean startControllerService) {
+        ((SampleAppActivity)getActivity()).setControllerServiceStarted(startControllerService);
     }
 }

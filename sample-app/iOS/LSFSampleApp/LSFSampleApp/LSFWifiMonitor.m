@@ -18,6 +18,7 @@
 #import "LSFConstants.h"
 #import "LSFAllJoynManager.h"
 #import "LSFDispatchQueue.h"
+#import "LSFControllerSystemManager.h"
 
 #import <arpa/inet.h>
 #import <ifaddrs.h>
@@ -221,6 +222,11 @@ static void NetworkStatusCallback(SCNetworkReachabilityRef target, SCNetworkReac
         [ajManager.aboutManager registerAnnouncementHandler];
         NSLog(@"Controller Client started successfully");
     }
+
+    //Start controller service by default
+    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+        [[LSFControllerSystemManager getControllerSystemManager] startController];
+    });
 }
 
 -(void)stopController
@@ -238,6 +244,11 @@ static void NetworkStatusCallback(SCNetworkReachabilityRef target, SCNetworkReac
     {
         NSLog(@"Controller Client stop returned some type of error");
     }
+
+    //Stop controller service
+    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+        [[LSFControllerSystemManager getControllerSystemManager] stopController];
+    });
 }
 
 @end

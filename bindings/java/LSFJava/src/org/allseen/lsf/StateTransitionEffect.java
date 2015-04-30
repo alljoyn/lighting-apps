@@ -15,7 +15,7 @@
  */
 package org.allseen.lsf;
 
-public class StateTransitionEffect extends DefaultNativeClassWrapper implements TransitionEffect {
+public class StateTransitionEffect extends DefaultNativeClassWrapper implements TransitionEffectV10 {
     public StateTransitionEffect() {
         createNativeObject();
     }

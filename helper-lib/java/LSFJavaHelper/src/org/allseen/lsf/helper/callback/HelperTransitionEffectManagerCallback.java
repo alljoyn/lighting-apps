@@ -1,0 +1,227 @@
+/*
+ * Copyright AllSeen Alliance. All rights reserved.
+ *
+ *    Permission to use, copy, modify, and/or distribute this software for any
+ *    purpose with or without fee is hereby granted, provided that the above
+ *    copyright notice and this permission notice appear in all copies.
+ *
+ *    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ *    WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ *    MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ *    ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ *    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ *    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ */
+package org.allseen.lsf.helper.callback;
+
+import org.allseen.lsf.ResponseCode;
+import org.allseen.lsf.TransitionEffect;
+import org.allseen.lsf.TransitionEffectManagerCallback;
+import org.allseen.lsf.helper.manager.AllJoynManager;
+import org.allseen.lsf.helper.manager.LightingSystemManager;
+import org.allseen.lsf.helper.model.TransitionEffectDataModel;
+
+/**
+ * <b>WARNING: This class is not intended to be used by clients, and its interface may change
+ * in subsequent releases of the SDK</b>.
+ */
+public class HelperTransitionEffectManagerCallback extends TransitionEffectManagerCallback {
+    protected LightingSystemManager manager;
+
+    public HelperTransitionEffectManagerCallback(LightingSystemManager manager) {
+        super();
+
+        this.manager = manager;
+    }
+
+    @Override
+    public void getTransitionEffectReplyCB(ResponseCode responseCode, String transitionEffectID, TransitionEffect transitionEffect) {
+        if (!responseCode.equals(ResponseCode.OK)) {
+            manager.getTransitionEffectCollectionManager().sendErrorEvent("getTransitionEffectReplyCB", responseCode, transitionEffectID);
+        }
+        postUpdateTransitionEffect(transitionEffectID, transitionEffect);
+    }
+
+    @Override
+    public void applyTransitionEffectOnLampsReplyCB(ResponseCode responseCode, String transitionEffectID, String[] lampIDs) {
+        if (!responseCode.equals(ResponseCode.OK)) {
+            manager.getTransitionEffectCollectionManager().sendErrorEvent("applyTransitionEffectOnLampsReplyCB", responseCode, transitionEffectID);
+        }
+    }
+
+    @Override
+    public void applyTransitionEffectOnLampGroupsReplyCB(ResponseCode responseCode, String transitionEffectID, String[] lampGroupIDs) {
+        if (!responseCode.equals(ResponseCode.OK)) {
+            manager.getTransitionEffectCollectionManager().sendErrorEvent("applyTransitionEffectOnLampGroupsReplyCB", responseCode, transitionEffectID);
+        }
+    }
+
+    @Override
+    public void getAllTransitionEffectIDsReplyCB(ResponseCode responseCode, String[] transitionEffectIDs) {
+        if (!responseCode.equals(ResponseCode.OK)) {
+            manager.getTransitionEffectCollectionManager().sendErrorEvent("getAllTransitionEffectIDsReplyCB", responseCode, null);
+        }
+
+        for (final String transitionEffectID : transitionEffectIDs) {
+            postProcessTransitionEffectID(transitionEffectID);
+        }
+    }
+
+    @Override
+    public void getTransitionEffectNameReplyCB(ResponseCode responseCode, String transitionEffectID, String language, String transitionEffectName) {
+        if (!responseCode.equals(ResponseCode.OK)){
+            manager.getTransitionEffectCollectionManager().sendErrorEvent("getTransitionEffectNameReplyCB", responseCode, transitionEffectID);
+        }
+
+        postUpdateTransitionEffectName(transitionEffectID, transitionEffectName);
+    }
+
+    @Override
+    public void setTransitionEffectNameReplyCB(ResponseCode responseCode, String transitionEffectID, String language) {
+        if (!responseCode.equals(ResponseCode.OK)) {
+            manager.getTransitionEffectCollectionManager().sendErrorEvent("setTransitionEffectNameReplyCB", responseCode, transitionEffectID);
+        }
+
+        AllJoynManager.transitionEffectManager.getTransitionEffectName(transitionEffectID, LightingSystemManager.LANGUAGE);
+    }
+
+    @Override
+    public void transitionEffectsNameChangedCB(final String[] transitionEffectIDs) {
+        manager.getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                boolean containsNewIDs = false;
+
+                for (final String transitionEffectID : transitionEffectIDs) {
+                    if (manager.getTransitionEffectCollectionManager().hasID(transitionEffectID)) {
+                        AllJoynManager.transitionEffectManager.getTransitionEffectName(transitionEffectID, LightingSystemManager.LANGUAGE);
+                    } else {
+                        containsNewIDs = true;
+                    }
+                }
+
+                if (containsNewIDs) {
+                    AllJoynManager.transitionEffectManager.getAllTransitionEffectIDs();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void createTransitionEffectReplyCB(ResponseCode responseCode, String transitionEffectID, long trackingID) {
+        if (!responseCode.equals(ResponseCode.OK)) {
+            manager.getTransitionEffectCollectionManager().sendErrorEvent("createTransitionEffectReplyCB", responseCode, transitionEffectID);
+        }
+    }
+
+    @Override
+    public void transitionEffectsCreatedCB(String[] transitionEffectIDs) {
+        AllJoynManager.transitionEffectManager.getAllTransitionEffectIDs();
+    }
+
+    @Override
+    public void updateTransitionEffectReplyCB(ResponseCode responseCode, String transitionEffectID) {
+        if (!responseCode.equals(ResponseCode.OK)) {
+            manager.getTransitionEffectCollectionManager().sendErrorEvent("updateTransitionEffectReplyCB", responseCode, transitionEffectID);
+        }
+    }
+
+    @Override
+    public void transitionEffectsUpdatedCB(String[] transitionEffectIDs) {
+        for (String transitionEffectID : transitionEffectIDs) {
+            AllJoynManager.transitionEffectManager.getTransitionEffect(transitionEffectID);
+        }
+    }
+
+    @Override
+    public void deleteTransitionEffectReplyCB(ResponseCode responseCode, String transitionEffectID) {
+        if (!responseCode.equals(ResponseCode.OK)) {
+            manager.getTransitionEffectCollectionManager().sendErrorEvent("deleteTransitionEffectReplyCB", responseCode, transitionEffectID);
+        }
+    }
+
+    @Override
+    public void transitionEffectsDeletedCB(String[] transitionEffectIDs) {
+        postDeleteTransitionEffects(transitionEffectIDs);
+    }
+
+    protected void postProcessTransitionEffectID(final String transitionEffectID) {
+        manager.getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                if (!manager.getTransitionEffectCollectionManager().hasID(transitionEffectID)) {
+                    postUpdateTransitionEffectID(transitionEffectID);
+                    AllJoynManager.transitionEffectManager.getTransitionEffectName(transitionEffectID, LightingSystemManager.LANGUAGE);
+                    AllJoynManager.transitionEffectManager.getTransitionEffect(transitionEffectID);
+                }
+            }
+        });
+    }
+
+    protected void postUpdateTransitionEffectID(final String transitionEffectID) {
+        System.out.println("postUpdateTransitionEffectID");
+        manager.getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                if (!manager.getTransitionEffectCollectionManager().hasID(transitionEffectID)) {
+                    manager.getTransitionEffectCollectionManager().addTransitionEffect(transitionEffectID);
+                }
+            }
+        });
+
+        postSendTransitionEffectChanged(transitionEffectID);
+    }
+
+    protected void postUpdateTransitionEffectName(final String transitionEffectID, final String transitionEffectName) {
+        manager.getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                TransitionEffectDataModel transitionEffectModel = manager.getTransitionEffectCollectionManager().getModel(transitionEffectID);
+
+                if (transitionEffectModel != null) {
+                    transitionEffectModel.setName(transitionEffectName);
+                }
+            }
+        });
+
+        postSendTransitionEffectChanged(transitionEffectID);
+    }
+
+    protected void postUpdateTransitionEffect(final String transitionEffectID, final TransitionEffect transitionEffect) {
+        manager.getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                TransitionEffectDataModel transitionEffectModel = manager.getTransitionEffectCollectionManager().getModel(transitionEffectID);
+
+                if (transitionEffectModel != null) {
+                    transitionEffectModel.state = transitionEffect.getLampState();
+                    transitionEffectModel.setPresetID(transitionEffect.getPresetID());
+                    transitionEffectModel.setDuration(transitionEffect.getTransitionPeriod());
+                }
+
+                postSendTransitionEffectChanged(transitionEffectID);
+            }
+        });
+    }
+
+    protected void postDeleteTransitionEffects(final String[] transitionEffectIDs) {
+        manager.getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                for (String transitionEffectID : transitionEffectIDs) {
+                    manager.getTransitionEffectCollectionManager().removeTransitionEffect(transitionEffectID);
+                }
+            }
+        });
+    }
+
+    protected void postSendTransitionEffectChanged(final String transitionEffectID) {
+        manager.getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                manager.getTransitionEffectCollectionManager().sendChangedEvent(transitionEffectID);
+            }
+        });
+    }
+}

@@ -31,9 +31,6 @@
 							</builder>
 							<tool id="com.android.gcc.compiler.1628533216" name="Android GCC Compiler" superClass="com.android.gcc.compiler">
 								<option id="com.android.gcc.option.includePath.795893054" superClass="com.android.gcc.option.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="../../../../../../service_framework/common/inc"/>
-									<listOptionValue builtIn="false" value="../../../../../../service_framework/standard_core_library/common/inc"/>
-									<listOptionValue builtIn="false" value="../../../../../../service_framework/standard_core_library/lighting_controller_client/inc"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LSFJava/links/jni/AllJoyn/inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LSFJava/links/jni/NDK/sources/cxx-stl/gnu-libstdc++/4.8/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LSFJava/links/jni/NDK/sources/cxx-stl/gabi++/include}&quot;"/>
@@ -41,6 +38,13 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LSFJava/links/jni/NDK/toolchains/arm-linux-androideabi-4.6/prebuilt/linux-x86_64/lib/gcc/arm-linux-androideabi/4.6/include-fixed}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LSFJava/links/jni/NDK/platforms/android-19/arch-arm/usr/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LSFJava/jni}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LSFJava/links/jni/Base/services_common/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LSFJava/links/jni/Base/config/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LSFJava/links/jni/Base/notification/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LSFJava/links/jni/LSF/common/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LSFJava/links/jni/LSF/standard_core_library/common/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LSFJava/links/jni/LSF/standard_core_library/lighting_controller_client/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LSFJava/links/jni/LSF/standard_core_library/lighting_controller_service/inc}&quot;"/>
 								</option>
 								<inputType id="com.android.gcc.inputType.1435972971" superClass="com.android.gcc.inputType"/>
 							</tool>
