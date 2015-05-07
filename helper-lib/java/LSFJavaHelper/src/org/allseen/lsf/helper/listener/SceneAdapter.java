@@ -15,6 +15,7 @@
  */
 package org.allseen.lsf.helper.listener;
 
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.Scene;
 
 /**
@@ -24,11 +25,14 @@ import org.allseen.lsf.helper.facade.Scene;
 public class SceneAdapter implements SceneListener {
 
     @Override
-    public void onSceneChanged(Scene scene)                 { }
+    public void onSceneInitialized(TrackingID trackingId, Scene scene)          { }
 
     @Override
-    public void onSceneRemoved(Scene scene)                 { }
+    public void onSceneChanged(Scene scene)                                     { }
 
     @Override
-    public void onSceneError(LightingItemErrorEvent error)  { }
+    public void onSceneRemoved(Scene scene)                                     { }
+
+    @Override
+    public void onSceneError(LightingItemErrorEvent error)                      { }
 }

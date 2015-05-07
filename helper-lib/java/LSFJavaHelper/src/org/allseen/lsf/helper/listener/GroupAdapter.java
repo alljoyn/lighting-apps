@@ -15,6 +15,7 @@
  */
 package org.allseen.lsf.helper.listener;
 
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.Group;
 
 
@@ -25,11 +26,14 @@ import org.allseen.lsf.helper.facade.Group;
 public class GroupAdapter implements GroupListener {
 
     @Override
-    public void onGroupChanged(Group group)                 { }
+    public void onGroupInitialized(TrackingID trackingId, Group group)      { }
 
     @Override
-    public void onGroupRemoved(Group group)                 { }
+    public void onGroupChanged(Group group)                                 { }
 
     @Override
-    public void onGroupError(LightingItemErrorEvent error)  { }
+    public void onGroupRemoved(Group group)                                 { }
+
+    @Override
+    public void onGroupError(LightingItemErrorEvent error)                  { }
 }

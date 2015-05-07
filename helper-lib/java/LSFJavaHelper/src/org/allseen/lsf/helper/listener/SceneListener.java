@@ -15,6 +15,7 @@
  */
 package org.allseen.lsf.helper.listener;
 
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.Scene;
 
 /**
@@ -22,6 +23,7 @@ import org.allseen.lsf.helper.facade.Scene;
  * in subsequent releases of the SDK</b>.
  */
 public interface SceneListener extends LightingListener {
+    public void onSceneInitialized(TrackingID trackingId, Scene scene);
     public void onSceneChanged(Scene scene);
     public void onSceneRemoved(Scene scene);
     public void onSceneError(LightingItemErrorEvent error);

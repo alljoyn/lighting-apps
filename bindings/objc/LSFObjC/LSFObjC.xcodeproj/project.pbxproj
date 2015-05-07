@@ -38,6 +38,7 @@
 		871F207F18D2168400784E84 /* LSFControllerClientCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 871F207E18D2168400784E84 /* LSFControllerClientCallback.mm */; };
 		871F208618D2274300784E84 /* LSFLampGroupManagerCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 871F208518D2274300784E84 /* LSFLampGroupManagerCallback.mm */; };
 		871F208D18D259E500784E84 /* LSFLampManagerCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 871F208C18D259E500784E84 /* LSFLampManagerCallback.mm */; };
+		87221C521AFC573E00813C5A /* LSFTrackingID.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87221C511AFC571C00813C5A /* LSFTrackingID.h */; };
 		87443D25195C5AF5008EEF36 /* LSFControllerClientCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 871F207D18D2168400784E84 /* LSFControllerClientCallback.h */; };
 		87443D26195C5AF5008EEF36 /* LSFControllerServiceManagerCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87C2D21418EB547E00E3D895 /* LSFControllerServiceManagerCallback.h */; };
 		87443D27195C5AF5008EEF36 /* LSFLampGroupManagerCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 871F208418D2274300784E84 /* LSFLampGroupManagerCallback.h */; };
@@ -285,6 +286,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				87221C521AFC573E00813C5A /* LSFTrackingID.h in CopyFiles */,
 				87A137041AD5E3ED007A4429 /* LampResponseCodes.h in CopyFiles */,
 				87A137051AD5E3ED007A4429 /* LampValues.h in CopyFiles */,
 				87A137061AD5E3ED007A4429 /* Alarm.h in CopyFiles */,
@@ -380,6 +382,7 @@
 		871F208B18D259E500784E84 /* LSFLampManagerCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFLampManagerCallback.h; sourceTree = "<group>"; };
 		871F208C18D259E500784E84 /* LSFLampManagerCallback.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFLampManagerCallback.mm; sourceTree = "<group>"; };
 		871F208E18D2630E00784E84 /* LSFLampManagerCallbackDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSFLampManagerCallbackDelegate.h; sourceTree = "<group>"; };
+		87221C511AFC571C00813C5A /* LSFTrackingID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFTrackingID.h; sourceTree = "<group>"; };
 		874024E51943861E0081E21A /* libc++.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.1.dylib"; path = "usr/lib/libc++.1.dylib"; sourceTree = SDKROOT; };
 		874024E61943861E0081E21A /* libc++abi.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++abi.dylib"; path = "usr/lib/libc++abi.dylib"; sourceTree = SDKROOT; };
 		874024E71943861E0081E21A /* libstdc++.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.dylib"; path = "usr/lib/libstdc++.6.dylib"; sourceTree = SDKROOT; };
@@ -683,6 +686,7 @@
 				8719C95B18DCB1F00011CD45 /* LSFObject.h */,
 				8719C95C18DCB1F00011CD45 /* LSFObject.m */,
 				879A3FE11970AB9A0082B204 /* LSFPulseEffect.h */,
+				87221C511AFC571C00813C5A /* LSFTrackingID.h */,
 				87D5E4B4197084A90038B494 /* LSFTransitionEffect.h */,
 				8771850418E4BC7A0085D153 /* LSFUtils.h */,
 				8771850518E4BC7A0085D153 /* LSFUtils.mm */,

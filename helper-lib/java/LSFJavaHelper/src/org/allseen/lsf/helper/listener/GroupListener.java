@@ -15,6 +15,7 @@
  */
 package org.allseen.lsf.helper.listener;
 
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.Group;
 
 /**
@@ -22,6 +23,7 @@ import org.allseen.lsf.helper.facade.Group;
  * in subsequent releases of the SDK</b>.
  */
 public interface GroupListener extends LightingListener {
+    public void onGroupInitialized(TrackingID trackingId, Group group);
     public void onGroupChanged(Group group);
     public void onGroupRemoved(Group group);
     public void onGroupError(LightingItemErrorEvent error);

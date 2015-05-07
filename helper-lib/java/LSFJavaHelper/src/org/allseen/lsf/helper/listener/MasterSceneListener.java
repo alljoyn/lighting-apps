@@ -15,6 +15,7 @@
  */
 package org.allseen.lsf.helper.listener;
 
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.MasterScene;
 
 /**
@@ -22,6 +23,7 @@ import org.allseen.lsf.helper.facade.MasterScene;
  * in subsequent releases of the SDK</b>.
  */
 public interface MasterSceneListener extends LightingListener {
+    public void onMasterSceneInitialized(TrackingID trackingId, MasterScene masterScene);
     public void onMasterSceneChanged(MasterScene masterScene);
     public void onMasterSceneRemoved(MasterScene masterScene);
     public void onMasterSceneError(LightingItemErrorEvent error);

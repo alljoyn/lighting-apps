@@ -15,9 +15,11 @@
  */
 package org.allseen.lsf.helper.listener;
 
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.PulseEffect;
 
 public interface PulseEffectListener extends LightingListener {
+    public void onPulseEffectInitialized(TrackingID trackingId, PulseEffect effect);
     public void onPulseEffectChanged(PulseEffect effect);
     public void onPulseEffectRemoved(PulseEffect effect);
     public void onPulseEffectError(LightingItemErrorEvent error);

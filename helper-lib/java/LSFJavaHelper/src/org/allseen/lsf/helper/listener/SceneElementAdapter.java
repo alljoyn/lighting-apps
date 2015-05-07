@@ -15,17 +15,21 @@
  */
 package org.allseen.lsf.helper.listener;
 
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.SceneElement;
 
 public class SceneElementAdapter implements SceneElementListener {
 
     @Override
-    public void onSceneElementChanged(SceneElement element)         { }
+    public void onSceneElementInitialized(TrackingID trackingId, SceneElement element)      { }
 
     @Override
-    public void onSceneElementRemoved(SceneElement element)         { }
+    public void onSceneElementChanged(SceneElement element)                                 { }
 
     @Override
-    public void onSceneElementError(LightingItemErrorEvent error)   { }
+    public void onSceneElementRemoved(SceneElement element)                                 { }
+
+    @Override
+    public void onSceneElementError(LightingItemErrorEvent error)                           { }
 
 }

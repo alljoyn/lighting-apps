@@ -32,6 +32,7 @@ import org.allseen.lsf.LampGroupManager;
 import org.allseen.lsf.MasterSceneManager;
 import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.SceneManager;
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.Group;
 import org.allseen.lsf.helper.facade.Lamp;
 import org.allseen.lsf.helper.facade.MasterScene;
@@ -1878,6 +1879,55 @@ public class SampleAppActivity extends FragmentActivity implements
 
     @Override
     public void onSceneElementRemoved(SceneElement element) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onLampInitialized(Lamp arg0) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onGroupInitialized(TrackingID arg0, Group arg1) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onPresetInitialized(TrackingID arg0, Preset arg1) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onTransitionEffectInitialized(TrackingID arg0,
+            TransitionEffect arg1) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onPulseEffectInitialized(TrackingID arg0, PulseEffect arg1) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onSceneElementInitialized(TrackingID arg0, SceneElement arg1) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onSceneInitialized(TrackingID arg0, Scene arg1) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onMasterSceneInitialized(TrackingID arg0, MasterScene arg1) {
         // TODO Auto-generated method stub
 
     }

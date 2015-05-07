@@ -1,5 +1,5 @@
-/*
- * Copyright AllSeen Alliance. All rights reserved.
+/******************************************************************************
+ * Copyright (c) AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -12,15 +12,12 @@
  *    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
  *    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- */
-package org.allseen.lsf.helper.listener;
+ ******************************************************************************/
 
-import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.helper.facade.TransitionEffect;
+#import <Foundation/Foundation.h>
 
-public interface TransitionEffectListener extends LightingListener {
-    public void onTransitionEffectInitialized(TrackingID trackingId, TransitionEffect effect);
-    public void onTransitionEffectChanged(TransitionEffect effect);
-    public void onTransitionEffectRemoved(TransitionEffect effect);
-    public void onTransitionEffectError(LightingItemErrorEvent error);
-}
+@interface LSFTrackingID : NSObject
+
+@property (nonatomic) unsigned int value;
+
+@end

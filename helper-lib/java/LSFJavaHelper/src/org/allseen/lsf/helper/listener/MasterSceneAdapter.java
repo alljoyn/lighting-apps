@@ -15,6 +15,7 @@
  */
 package org.allseen.lsf.helper.listener;
 
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.MasterScene;
 
 /**
@@ -24,11 +25,14 @@ import org.allseen.lsf.helper.facade.MasterScene;
 public class MasterSceneAdapter implements MasterSceneListener {
 
     @Override
-    public void onMasterSceneChanged(MasterScene masterScene)       { }
+    public void onMasterSceneInitialized(TrackingID trackingId, MasterScene masterScene)        { }
 
     @Override
-    public void onMasterSceneRemoved(MasterScene masterScene)       { }
+    public void onMasterSceneChanged(MasterScene masterScene)                                   { }
 
     @Override
-    public void onMasterSceneError(LightingItemErrorEvent error)    { }
+    public void onMasterSceneRemoved(MasterScene masterScene)                                   { }
+
+    @Override
+    public void onMasterSceneError(LightingItemErrorEvent error)                                { }
 }

@@ -15,17 +15,21 @@
  */
 package org.allseen.lsf.helper.listener;
 
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.PulseEffect;
 
 public class PulseEffectAdapter implements PulseEffectListener {
 
     @Override
-    public void onPulseEffectChanged(PulseEffect effect)            { }
+    public void onPulseEffectInitialized(TrackingID trackingId, PulseEffect effect)     { }
 
     @Override
-    public void onPulseEffectRemoved(PulseEffect effect)            { }
+    public void onPulseEffectChanged(PulseEffect effect)                                { }
 
     @Override
-    public void onPulseEffectError(LightingItemErrorEvent error)    { }
+    public void onPulseEffectRemoved(PulseEffect effect)                                { }
+
+    @Override
+    public void onPulseEffectError(LightingItemErrorEvent error)                        { }
 
 }

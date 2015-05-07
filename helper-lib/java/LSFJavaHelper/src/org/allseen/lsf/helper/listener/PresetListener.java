@@ -15,6 +15,7 @@
  */
 package org.allseen.lsf.helper.listener;
 
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.Preset;
 
 /**
@@ -22,6 +23,7 @@ import org.allseen.lsf.helper.facade.Preset;
  * in subsequent releases of the SDK</b>.
  */
 public interface PresetListener extends LightingListener {
+    public void onPresetInitialized(TrackingID trackingId, Preset preset);
     public void onPresetChanged(Preset preset);
     public void onPresetRemoved(Preset preset);
     public void onPresetError(LightingItemErrorEvent error);

@@ -15,17 +15,21 @@
  */
 package org.allseen.lsf.helper.listener;
 
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.TransitionEffect;
 
 public class TransitionEffectAdapter implements TransitionEffectListener {
 
     @Override
-    public void onTransitionEffectChanged(TransitionEffect effect)      { }
+    public void onTransitionEffectInitialized(TrackingID trackingId, TransitionEffect effect)   { }
 
     @Override
-    public void onTransitionEffectRemoved(TransitionEffect effect)      { }
+    public void onTransitionEffectChanged(TransitionEffect effect)                              { }
 
     @Override
-    public void onTransitionEffectError(LightingItemErrorEvent error)   { }
+    public void onTransitionEffectRemoved(TransitionEffect effect)                              { }
+
+    @Override
+    public void onTransitionEffectError(LightingItemErrorEvent error)                           { }
 
 }

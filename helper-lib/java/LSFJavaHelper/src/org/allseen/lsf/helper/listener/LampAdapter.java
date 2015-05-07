@@ -24,11 +24,14 @@ import org.allseen.lsf.helper.facade.Lamp;
 public class LampAdapter implements LampListener {
 
     @Override
-    public void onLampChanged(Lamp lamp)                    { }
+    public void onLampInitialized(Lamp lamp)                            { }
 
     @Override
-    public void onLampRemoved(Lamp lamp)                    { }
+    public void onLampChanged(Lamp lamp)                                { }
 
     @Override
-    public void onLampError(LightingItemErrorEvent error)   { }
+    public void onLampRemoved(Lamp lamp)                                { }
+
+    @Override
+    public void onLampError(LightingItemErrorEvent error)               { }
 }

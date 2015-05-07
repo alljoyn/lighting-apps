@@ -32,22 +32,13 @@
 @synthesize version = _version;
 @synthesize busAttachment = _busAttachment;
 @synthesize lamps = _lamps;
-@synthesize completeLamps = _completeLamps;
 @synthesize groups = _groups;
-@synthesize completeGroups = _completeGroups;
 @synthesize presets = _presets;
-@synthesize completePresets;
 @synthesize transitionEffects = _transitionEffects;
-@synthesize completeTransitionEffects = _completeTransitionEffects;
 @synthesize pulseEffects = _pulseEffects;
-@synthesize completePulseEffects = _completePulseEffects;
 @synthesize sceneElements = _sceneElements;
-@synthesize completeSceneElements = _completeSceneElements;
 @synthesize scenes = _scenes;
-@synthesize completeScenes = _completeScenes;
 @synthesize masterScenes = _masterScenes;
-@synthesize completeMasterScenes = _completeMasterScenes;
-@synthesize createSyncTimeout = _createSyncTimeout;
 @synthesize defaultLanguage = _defaultLanguage;
 @synthesize lightingManager = _lightingManager;
 

@@ -15,6 +15,7 @@
  */
 package org.allseen.lsf.helper.listener;
 
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.Group;
 import org.allseen.lsf.helper.facade.Lamp;
 import org.allseen.lsf.helper.facade.MasterScene;
@@ -32,80 +33,104 @@ import org.allseen.lsf.helper.model.ControllerDataModel;
 public class AllCollectionAdapter implements AllCollectionListener {
 
     @Override
-    public void onLampChanged(Lamp lamp)                                { }
+    public void onLampInitialized(Lamp lamp)                                                        { }
 
     @Override
-    public void onLampRemoved(Lamp lamp)                                { }
+    public void onLampChanged(Lamp lamp)                                                            { }
 
     @Override
-    public void onLampError(LightingItemErrorEvent error)               { }
+    public void onLampRemoved(Lamp lamp)                                                            { }
 
     @Override
-    public void onGroupChanged(Group group)                             { }
+    public void onLampError(LightingItemErrorEvent error)                                           { }
 
     @Override
-    public void onGroupRemoved(Group group)                             { }
+    public void onGroupInitialized(TrackingID trackingId, Group group)                              { }
 
     @Override
-    public void onGroupError(LightingItemErrorEvent error)              { }
+    public void onGroupChanged(Group group)                                                         { }
 
     @Override
-    public void onPresetChanged(Preset preset)                          { }
+    public void onGroupRemoved(Group group)                                                         { }
 
     @Override
-    public void onPresetRemoved(Preset preset)                          { }
+    public void onGroupError(LightingItemErrorEvent error)                                          { }
 
     @Override
-    public void onPresetError(LightingItemErrorEvent error)             { }
+    public void onPresetInitialized(TrackingID trackingId, Preset preset)                           { }
 
     @Override
-    public void onTransitionEffectChanged(TransitionEffect effect)      { }
+    public void onPresetChanged(Preset preset)                                                      { }
 
     @Override
-    public void onTransitionEffectRemoved(TransitionEffect effect)      { }
+    public void onPresetRemoved(Preset preset)                                                      { }
 
     @Override
-    public void onTransitionEffectError(LightingItemErrorEvent error)   { }
+    public void onPresetError(LightingItemErrorEvent error)                                         { }
 
     @Override
-    public void onPulseEffectChanged(PulseEffect effect)                { }
+    public void onTransitionEffectInitialized(TrackingID trackingId, TransitionEffect effect)       { }
 
     @Override
-    public void onPulseEffectRemoved(PulseEffect effect)                { }
+    public void onTransitionEffectChanged(TransitionEffect effect)                                  { }
 
     @Override
-    public void onPulseEffectError(LightingItemErrorEvent error)        { }
+    public void onTransitionEffectRemoved(TransitionEffect effect)                                  { }
 
     @Override
-    public void onSceneElementChanged(SceneElement element)             { }
+    public void onTransitionEffectError(LightingItemErrorEvent error)                               { }
 
     @Override
-    public void onSceneElementRemoved(SceneElement element)             { }
+    public void onPulseEffectInitialized(TrackingID trackingId, PulseEffect effect)                 { }
 
     @Override
-    public void onSceneElementError(LightingItemErrorEvent error)       { }
+    public void onPulseEffectChanged(PulseEffect effect)                                            { }
 
     @Override
-    public void onSceneChanged(Scene scene)                             { }
+    public void onPulseEffectRemoved(PulseEffect effect)                                            { }
 
     @Override
-    public void onSceneRemoved(Scene scene)                             { }
+    public void onPulseEffectError(LightingItemErrorEvent error)                                    { }
 
     @Override
-    public void onSceneError(LightingItemErrorEvent error)              { }
+    public void onSceneElementInitialized(TrackingID trackingId, SceneElement element)              { }
 
     @Override
-    public void onMasterSceneChanged(MasterScene masterScene)           { }
+    public void onSceneElementChanged(SceneElement element)                                         { }
 
     @Override
-    public void onMasterSceneRemoved(MasterScene masterScene)           { }
+    public void onSceneElementRemoved(SceneElement element)                                         { }
 
     @Override
-    public void onMasterSceneError(LightingItemErrorEvent error)        { }
+    public void onSceneElementError(LightingItemErrorEvent error)                                   { }
 
     @Override
-    public void onLeaderModelChange(ControllerDataModel leadModel)      { }
+    public void onSceneInitialized(TrackingID trackingId, Scene scene)                              { }
 
     @Override
-    public void onControllerErrors(ControllerErrorEvent errorEvent)     { }
+    public void onSceneChanged(Scene scene)                                                         { }
+
+    @Override
+    public void onSceneRemoved(Scene scene)                                                         { }
+
+    @Override
+    public void onSceneError(LightingItemErrorEvent error)                                          { }
+
+    @Override
+    public void onMasterSceneInitialized(TrackingID trackingId, MasterScene masterScene)            { }
+
+    @Override
+    public void onMasterSceneChanged(MasterScene masterScene)                                       { }
+
+    @Override
+    public void onMasterSceneRemoved(MasterScene masterScene)                                       { }
+
+    @Override
+    public void onMasterSceneError(LightingItemErrorEvent error)                                    { }
+
+    @Override
+    public void onLeaderModelChange(ControllerDataModel leadModel)                                  { }
+
+    @Override
+    public void onControllerErrors(ControllerErrorEvent errorEvent)                                 { }
 }

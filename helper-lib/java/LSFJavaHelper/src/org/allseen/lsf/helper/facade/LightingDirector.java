@@ -20,7 +20,6 @@ import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.listener.AllJoynListener;
 import org.allseen.lsf.helper.listener.ControllerListener;
 import org.allseen.lsf.helper.listener.GroupListener;
-import org.allseen.lsf.helper.listener.InitialSetListener;
 import org.allseen.lsf.helper.listener.LampListener;
 import org.allseen.lsf.helper.listener.LightingListener;
 import org.allseen.lsf.helper.listener.MasterSceneListener;
@@ -54,12 +53,10 @@ import org.allseen.lsf.helper.model.LightingItemUtil;
  */
 public class LightingDirector {
     private static final String LANGUAGE_DEFAULT = "en";
-    private static final long SYNC_TIMEOUT_DEFAULT = 30000;
     private static final LightingDirector instance = new LightingDirector();
 
     private final LightingSystemManager lightingManager;
     private String defaultLanguage;
-    private long createSyncTimeout;
 
     /**
      * Construct a LightingDirector instance.
@@ -83,7 +80,6 @@ public class LightingDirector {
         super();
         lightingManager = new LightingSystemManager();
         defaultLanguage = LANGUAGE_DEFAULT;
-        createSyncTimeout = SYNC_TIMEOUT_DEFAULT;
     }
 
     /**
@@ -256,7 +252,7 @@ public class LightingDirector {
      *
      * @return Array of active Lamps
      */
-    public Lamp[] getCompleteLamps() {
+    public Lamp[] getInitializedLamps() {
         // TODO-IMPL
         return null;
     }
@@ -294,12 +290,11 @@ public class LightingDirector {
      * system that have received all the data from the controller.
      * <p>
      * The contents of this array may change in subsequent calls to this method
-     * as new groups are discovered or existing groups are determined to be
-     * offline. This array may be empty.
+     * as new groups are created or existing groups are deleted. This array may be empty.
      *
      * @return Array of active Groups
      */
-    public Group[] getCompleteGroups() {
+    public Group[] getInitializedGroups() {
         // TODO-IMPL
         return null;
     }
@@ -342,7 +337,7 @@ public class LightingDirector {
      *
      * @return An array of active Presets
      */
-    public Preset[] getCompletePresets() {
+    public Preset[] getInitializedPresets() {
         // TODO-IMPL
         return null;
     }
@@ -385,7 +380,7 @@ public class LightingDirector {
      *
      * @return An array of active TransitionEffects
      */
-    public TransitionEffect[] getCompleteTransitionEffects() {
+    public TransitionEffect[] getInitializedTransitionEffects() {
         // TODO-IMPL
         return null;
     }
@@ -428,7 +423,7 @@ public class LightingDirector {
      *
      * @return An array of active PulseEffects
      */
-    public PulseEffect[] getCompletePulseEffects() {
+    public PulseEffect[] getInitializedPulseEffects() {
         // TODO-IMPL
         return null;
     }
@@ -472,7 +467,7 @@ public class LightingDirector {
      *
      * @return An array of active SceneElements
      */
-    public SceneElement[] getCompleteSceneElements() {
+    public SceneElement[] getInitializedSceneElements() {
         // TODO-IMPL
         return null;
     }
@@ -516,7 +511,7 @@ public class LightingDirector {
      *
      * @return An array of active Scenes
      */
-    public Scene[] getCompleteScenes() {
+    public Scene[] getInitializedScenes() {
         // TODO-IMPL
         return null;
     }
@@ -560,7 +555,7 @@ public class LightingDirector {
      *
      * @return An array of active MasterScenes
      */
-    public MasterScene[] getCompleteMasterScenes() {
+    public MasterScene[] getInitializedMasterScenes() {
         // TODO-IMPL
         return null;
     }
@@ -615,36 +610,6 @@ public class LightingDirector {
     }
 
     /**
-     * Waits for the initial data set from the controller to be received
-     * before returning.
-     * <p>
-     * This is a blocking call that will block the current thread until the
-     * method returns.
-     */
-    public void waitForInitialSetCompletion() {
-        // TODO-IMPL
-    }
-
-    /**
-     * Synchronously creates a Group on the Lighting Controller.
-     *<p>
-     * This is a blocking call that will block the current thread until the object
-     * is successfully created or the create sync timeout is exceeded. The timeout
-     * value can be set using {@link #setCreateSyncTimeout(long) createSyncTimeout}.
-     *
-     * @param members
-     *            Array of GroupMember
-     * @param groupName
-     *            Name of the Group
-     *
-     * @return Instance of Group, or null upon failure.
-     */
-    public Group createGroupSync(GroupMember[] members, String groupName) {
-        // TODO-IMPL
-        return null;
-    }
-
-    /**
      * Asynchronously creates a Group on the Lighting Controller.
      *
      * @param members
@@ -653,33 +618,16 @@ public class LightingDirector {
      *            Name of the Group
      * @param listener
      *            Specifies the callback that's invoked only for the Group being created.
+     *
+     * @return TrackingID associated with the creation of the Group
      */
-    public void createGroup(GroupMember[] members, String groupName, GroupListener listener) {
+    public TrackingID createGroup(GroupMember[] members, String groupName, GroupListener listener) {
         // TODO-Handle one-shot listener impl
 
         AllJoynManager.groupManager.createLampGroup(LightingItemUtil.createLampGroup(members),
                 groupName, getDefaultLanguage());
-    }
 
-    /**
-     * Synchronously creates a Preset on the Lighting Controller.
-     * <p>
-     * This is a blocking call that will block the current thread until the object
-     * is successfully created or the create sync timeout is exceeded. The timeout
-     * value can be set using {@link #setCreateSyncTimeout(long) createSyncTimeout}.
-     *
-     * @param power
-     *            Specifies the Power of the Preset's lamp state
-     * @param color
-     *            Specifies the Color of the Preset's lamp state
-     * @param presetName
-     *            Name of the Preset
-     *
-     * @return  Instance of Preset, or null upon failure
-     */
-    public Preset createPresetSync(Power power, Color color, String presetName) {
-        // TODO-IMPLl
-        return null;
+        return null; // TODO-FIX
     }
 
     /**
@@ -693,34 +641,17 @@ public class LightingDirector {
      *            Name of the Preset
      * @param listener
      *            Specifies the callback that's invoked only for the Preset being created.
+     *
+     * @return TrackingID associated with the creation of the Preset
      */
-    public void createPreset(Power power, Color color, String presetName, PresetListener listener) {
+    public TrackingID createPreset(Power power, Color color, String presetName, PresetListener listener) {
         // TODO-Handle one-shot listener impl
 
         AllJoynManager.presetManager.createPreset(LightingItemUtil.createLampStateFromView(
                 power == Power.ON, color.getHue(), color.getSaturation(), color.getBrightness(), color.getColorTemperature()),
                 presetName, getDefaultLanguage());
-    }
 
-    /**
-     * Synchronously creates a TransitionEffect on the Lighting Controller.
-     * <p>
-     * This is a blocking call that will block the current thread until the object
-     * is successfully created or the create sync timeout is exceeded. The timeout
-     * value can be set using {@link #setCreateSyncTimeout(long) createSyncTimeout}.
-     *
-     * @param state
-     *            Specifies the lamp state of the TransitionEffect
-     * @param duration
-     *            Specifies how long the TransitionEffect will take
-     * @param effectName
-     *            Name of the TransitionEffect
-     *
-     * @return Instance of TransitionEffect, or null upon failure
-     */
-    public TransitionEffect createTransitionEffectSync(LampState state, long duration, String effectName) {
-        // TODO-IMPL
-        return null;
+        return null; // TODO-FIX
     }
 
     /**
@@ -734,8 +665,10 @@ public class LightingDirector {
      *            Name of the TransitionEffect
      * @param listener
      *            Specifies a callback that's invoked only for the TransitionEffect being created
+     *
+     * @return TrackingID associated with the creation of the TrasitionEffect
      */
-    public void createTransitionEffect(LampState state, long duration, String effectName, TransitionEffectListener listener) {
+    public TrackingID createTransitionEffect(LampState state, long duration, String effectName, TransitionEffectListener listener) {
         // TODO-IMPL handle one-shot listener
 
         if (state instanceof Preset) {
@@ -746,33 +679,8 @@ public class LightingDirector {
                     LightingItemUtil.createTransitionEffect(state.getPowerOn(), state.getColorHsvt(), duration),
                     effectName, getDefaultLanguage());
         }
-    }
 
-    /**
-     * Synchronously creates a PulseEffect on the Lighting Controller.
-     * <p>
-     * This is a blocking call that will block the current thread until the object
-     * is successfully created or the create sync timeout is exceeded. The timeout
-     * value can be set using {@link #setCreateSyncTimeout(long) createSyncTimeout}.
-     *
-     * @param fromState
-     *            Specifies the starting LampState of the PulseEffect
-     * @param toState
-     *            Specifies the ending LampState of the PulseEffect
-     * @param period
-     *            Specifies the period of the pulse (in ms). Period refers to the time duration between the start of two pulses
-     * @param duration
-     *            Specifies the duration of a single pulse (in ms). This must be less than the period
-     * @param count
-     *            Specifies the number of pulses
-     * @param effectName
-     *            Name of the PulseEffect
-     *
-     * @return Instance of PulseEffect, or null upon failure.
-     */
-    public PulseEffect createPulseEffectSync(LampState fromState, LampState toState, long period, long duration, long count, String effectName) {
-        // TODO-IMPL
-        return null;
+        return null; // TODO-FIX
     }
 
     /**
@@ -792,8 +700,10 @@ public class LightingDirector {
      *            Name of the PulseEffect
      * @param listener
      *            Specifies a callback that's invoked only for the PulseEffect being created
+     *
+     * @return TrackingID associated with the creation of the PulseEffect
      */
-    public void createPulseEffect(LampState fromState, LampState toState, long period, long duration, long count, String effectName, PulseEffectListener listener) {
+    public TrackingID createPulseEffect(LampState fromState, LampState toState, long period, long duration, long count, String effectName, PulseEffectListener listener) {
         // TODO-IMPL handle one-shot listener
 
         if (fromState instanceof Preset && toState instanceof Preset) {
@@ -805,27 +715,8 @@ public class LightingDirector {
                     LightingItemUtil.createPulseEffect(fromState.getPowerOn(), fromState.getColorHsvt(), toState.getPowerOn(), toState.getColorHsvt(), period, duration, count),
                     effectName, getDefaultLanguage());
         }
-    }
 
-    /**
-     * Synchronously creates a SceneElement on the Lighting Controller.
-     * <p>
-     * This is a blocking call that will block the current thread until the object
-     * is successfully created or the create sync timeout is exceeded. The timeout
-     * value can be set using {@link #setCreateSyncTimeout(long) createSyncTimeout}.
-     *
-     * @param effect
-     *            Specifies the SceneElement's effect
-     * @param members
-     *            Specifies the GroupMembers for which the effect will be applied
-     * @param sceneElementName
-     *            Name of the SceneElement
-     *
-     * @return Instance of SceneElement, or null upon failure
-     */
-    public SceneElement createSceneElementSync(Effect effect, GroupMember[] members, String sceneElementName) {
-        // TODO-IMPL
-        return null;
+        return null; // TODO-FIX
     }
 
     /**
@@ -839,31 +730,16 @@ public class LightingDirector {
      *            Name of the SceneElement
      * @param listener
      *            Specifies the callback that's invoked only for the scene element being created
+     *
+     * @return TrackingID associated with the creation of the SceneElement
      */
-    public void createSceneElement(Effect effect, GroupMember[] members, String sceneElementName, SceneElementListener listener) {
+    public TrackingID createSceneElement(Effect effect, GroupMember[] members, String sceneElementName, SceneElementListener listener) {
         // TODO-IMPL handle one-shot listener
 
         AllJoynManager.sceneElementManager.createSceneElement(new TrackingID(),
                 LightingItemUtil.createSceneElement(effect.getId(), members), sceneElementName, getDefaultLanguage());
-    }
 
-    /**
-     * Synchronously creates a Scene on the Lighting Controller.
-     * <p>
-     * This is a blocking call that will block the current thread until the object
-     * is successfully created or the create sync timeout is exceeded. The timeout
-     * value can be set using {@link #setCreateSyncTimeout(long) createSyncTimeout}.
-     *
-     * @param sceneElements
-     *            Specifies the SceneElements that belong to the Scene
-     * @param sceneName
-     *            Name of the Scene
-     *
-     * @return Instance of Scene, or null upon failure
-     */
-    public Scene createSceneSync(SceneElement[] sceneElements, String sceneName) {
-        // TODO-IMPL
-        return null;
+        return null; // TODO-FIX
     }
 
     /**
@@ -875,26 +751,10 @@ public class LightingDirector {
      *            Name of the Scene
      * @param listener
      *            Specifies a callback that's invoked only for the Scene being created
-     */
-    public void createScene(SceneElement[] sceneElements, String sceneName, SceneListener listener) {
-        // TODO-IMPL
-    }
-
-    /**
-     * Synchronously creates a MasterScene on the Lighting Controller.
-     * <p>
-     * This is a blocking call that will block the current thread until the object
-     * is successfully created or the create sync timeout is exceeded. The timeout
-     * value can be set using {@link #setCreateSyncTimeout(long) createSyncTimeout}.
      *
-     * @param scenes
-     *            Specifies the Scenes that belong to the MasterScene
-     * @param masterSceneName
-     *            Name of the MasterScene
-     *
-     * @return Instance of Scene, or null upon failure
+     * @return TrackingID associated with the creation of the Scene
      */
-    public MasterScene createMasterSceneSync(Scene[] scenes, String masterSceneName) {
+    public TrackingID createScene(SceneElement[] sceneElements, String sceneName, SceneListener listener) {
         // TODO-IMPL
         return null;
     }
@@ -908,9 +768,12 @@ public class LightingDirector {
      *            Name of the MasterScene
      * @param listener
      *            Specifies a callback that's invoked only for the MasterScene being created.
+     *
+     * @return TrackingID associated with the creation of the MasterScene
      */
-    public void createMasterScene(Scene[] scenes, String masterSceneName, MasterSceneListener listener) {
+    public TrackingID createMasterScene(Scene[] scenes, String masterSceneName, MasterSceneListener listener) {
         // TODO-IMPL
+        return null;
     }
 
     /**
@@ -955,10 +818,6 @@ public class LightingDirector {
 
         if (listener instanceof ControllerListener) {
             addControllerListener((ControllerListener) listener);
-        }
-
-        if (listener instanceof InitialSetListener) {
-            addInitialSetListener((InitialSetListener) listener);
         }
     }
 
@@ -1053,16 +912,6 @@ public class LightingDirector {
     }
 
     /**
-     * Adds a global listener to receive all initial data set events.
-     *
-     * @param listener
-     *            The listener to receive all initial data set  events.
-     */
-    public void addInitialSetListener(InitialSetListener listener) {
-        // TODO-IMPL
-    }
-
-    /**
      * Removes a global listener that receives all Lighting System events
      * associated with the provided listener.
      *
@@ -1104,10 +953,6 @@ public class LightingDirector {
 
         if (listener instanceof ControllerListener) {
             removeControllerListener((ControllerListener) listener);
-        }
-
-        if (listener instanceof InitialSetListener) {
-            removeInitialSetListener((InitialSetListener) listener);
         }
     }
 
@@ -1199,41 +1044,6 @@ public class LightingDirector {
      */
     public void removeControllerListener(ControllerListener listener) {
         getControllerManager().removeListener(listener);
-    }
-
-    /**
-     * Removes a global listener that receives all initial data set events.
-     *
-     * @param listener
-     *            The listener that receives all initial data set events.
-     */
-    public void removeInitialSetListener(InitialSetListener listener) {
-        // TODO-IMPL
-    }
-
-    /**
-     * Sets the amount of time to wait (in milliseconds) for synchronous
-     * create methods to return.
-     * <p>
-     * If this method is never called, the default timeout value is 30 seconds.
-     *
-     * @param timeout
-     *            The timeout value in milliseconds
-     */
-    public void setCreateSyncTimeout(long timeout) {
-       if (timeout > 0) {
-           createSyncTimeout = timeout;
-       }
-    }
-
-    /**
-     * Gets the timeout value (in milliseconds) used for synchronous create
-     * method calls.
-     *
-     * @return The timeout value in milliseconds
-     */
-    public long getCreateSyncTimeout() {
-        return createSyncTimeout;
     }
 
     /**

@@ -22,6 +22,7 @@ import org.allseen.lsf.helper.facade.Lamp;
  * in subsequent releases of the SDK</b>.
  */
 public interface LampListener extends LightingListener {
+    public void onLampInitialized(Lamp lamp);
     public void onLampChanged(Lamp lamp);
     public void onLampRemoved(Lamp lamp);
     public void onLampError(LightingItemErrorEvent error);

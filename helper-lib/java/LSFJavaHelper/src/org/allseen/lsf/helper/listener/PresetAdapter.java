@@ -15,6 +15,7 @@
  */
 package org.allseen.lsf.helper.listener;
 
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.Preset;
 
 /**
@@ -24,11 +25,14 @@ import org.allseen.lsf.helper.facade.Preset;
 public class PresetAdapter implements PresetListener {
 
     @Override
-    public void onPresetChanged(Preset preset)              { }
+    public void onPresetInitialized(TrackingID trackingId, Preset preset)       { }
 
     @Override
-    public void onPresetRemoved(Preset preset)              { }
+    public void onPresetChanged(Preset preset)                                  { }
 
     @Override
-    public void onPresetError(LightingItemErrorEvent error) { }
+    public void onPresetRemoved(Preset preset)                                  { }
+
+    @Override
+    public void onPresetError(LightingItemErrorEvent error)                     { }
 }
