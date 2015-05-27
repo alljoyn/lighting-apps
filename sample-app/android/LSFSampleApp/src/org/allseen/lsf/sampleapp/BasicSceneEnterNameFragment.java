@@ -18,9 +18,9 @@ package org.allseen.lsf.sampleapp;
 import java.util.Iterator;
 
 import org.allseen.lsf.LampGroup;
-import org.allseen.lsf.helper.facade.SceneV1;
-import org.allseen.lsf.helper.model.LampCapabilities;
-import org.allseen.lsf.helper.model.SceneDataModel;
+import org.allseen.lsf.sdk.SceneV1;
+import org.allseen.lsf.sdk.model.LampCapabilities;
+import org.allseen.lsf.sdk.model.SceneDataModel;
 
 import android.util.Log;
 

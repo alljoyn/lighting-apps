@@ -17,8 +17,8 @@ package org.allseen.lsf.sampleapp;
 
 import java.util.Iterator;
 
-import org.allseen.lsf.helper.facade.Group;
-import org.allseen.lsf.helper.model.GroupDataModel;
+import org.allseen.lsf.sdk.Group;
+import org.allseen.lsf.sdk.model.GroupDataModel;
 
 import android.util.Log;
 

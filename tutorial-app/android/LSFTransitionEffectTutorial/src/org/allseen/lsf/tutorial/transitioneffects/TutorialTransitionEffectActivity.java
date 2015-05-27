@@ -16,13 +16,13 @@
 package org.allseen.lsf.tutorial.transitioneffects;
 
 import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.helper.facade.Color;
-import org.allseen.lsf.helper.facade.LightingDirector;
-import org.allseen.lsf.helper.facade.MyLampState;
-import org.allseen.lsf.helper.facade.Power;
-import org.allseen.lsf.helper.facade.TransitionEffect;
-import org.allseen.lsf.helper.listener.NextControllerConnectionListener;
-import org.allseen.lsf.helper.listener.TransitionEffectAdapter;
+import org.allseen.lsf.sdk.Color;
+import org.allseen.lsf.sdk.LightingDirector;
+import org.allseen.lsf.sdk.MyLampState;
+import org.allseen.lsf.sdk.NextControllerConnectionListener;
+import org.allseen.lsf.sdk.Power;
+import org.allseen.lsf.sdk.TransitionEffect;
+import org.allseen.lsf.sdk.TransitionEffectAdapter;
 
 import android.app.Activity;
 import android.os.Bundle;

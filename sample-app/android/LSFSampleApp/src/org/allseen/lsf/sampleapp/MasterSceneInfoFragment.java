@@ -15,7 +15,7 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.helper.model.MasterSceneDataModel;
+import org.allseen.lsf.sdk.model.MasterSceneDataModel;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

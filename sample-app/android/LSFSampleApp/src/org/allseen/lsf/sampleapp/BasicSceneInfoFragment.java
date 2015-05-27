@@ -16,12 +16,12 @@
 package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.LampGroup;
-import org.allseen.lsf.helper.manager.AllJoynManager;
-import org.allseen.lsf.helper.model.LampCapabilities;
-import org.allseen.lsf.helper.model.NoEffectDataModel;
-import org.allseen.lsf.helper.model.PulseEffectDataModel;
-import org.allseen.lsf.helper.model.SceneDataModel;
-import org.allseen.lsf.helper.model.TransitionEffectDataModel;
+import org.allseen.lsf.sdk.manager.AllJoynManager;
+import org.allseen.lsf.sdk.model.LampCapabilities;
+import org.allseen.lsf.sdk.model.NoEffectDataModel;
+import org.allseen.lsf.sdk.model.PulseEffectDataModel;
+import org.allseen.lsf.sdk.model.SceneDataModel;
+import org.allseen.lsf.sdk.model.TransitionEffectDataModel;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

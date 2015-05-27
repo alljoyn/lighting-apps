@@ -17,9 +17,9 @@ package org.allseen.lsf.sampleapp;
 
 import java.util.Iterator;
 
-import org.allseen.lsf.helper.manager.AllJoynManager;
-import org.allseen.lsf.helper.model.LampCapabilities;
-import org.allseen.lsf.helper.model.LampDataModel;
+import org.allseen.lsf.sdk.manager.AllJoynManager;
+import org.allseen.lsf.sdk.model.LampCapabilities;
+import org.allseen.lsf.sdk.model.LampDataModel;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

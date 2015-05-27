@@ -23,14 +23,14 @@ import java.util.List;
 import org.allseen.lsf.LampGroup;
 import org.allseen.lsf.LampState;
 import org.allseen.lsf.MasterScene;
-import org.allseen.lsf.helper.facade.Preset;
-import org.allseen.lsf.helper.model.GroupDataModel;
-import org.allseen.lsf.helper.model.LampDataModel;
-import org.allseen.lsf.helper.model.NoEffectDataModel;
-import org.allseen.lsf.helper.model.PresetDataModel;
-import org.allseen.lsf.helper.model.PulseEffectDataModel;
-import org.allseen.lsf.helper.model.SceneDataModel;
-import org.allseen.lsf.helper.model.TransitionEffectDataModel;
+import org.allseen.lsf.sdk.Preset;
+import org.allseen.lsf.sdk.model.GroupDataModel;
+import org.allseen.lsf.sdk.model.LampDataModel;
+import org.allseen.lsf.sdk.model.NoEffectDataModel;
+import org.allseen.lsf.sdk.model.PresetDataModel;
+import org.allseen.lsf.sdk.model.PulseEffectDataModel;
+import org.allseen.lsf.sdk.model.SceneDataModel;
+import org.allseen.lsf.sdk.model.TransitionEffectDataModel;
 
 public class Util {
 

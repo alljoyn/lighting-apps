@@ -16,12 +16,13 @@
 package org.allseen.lsf.sampleapp;
 
 import java.util.Iterator;
+
 import org.allseen.lsf.LampState;
 import org.allseen.lsf.PresetManager;
-import org.allseen.lsf.helper.facade.Preset;
-import org.allseen.lsf.helper.manager.AllJoynManager;
-import org.allseen.lsf.helper.model.ColorItemDataModel;
-import org.allseen.lsf.helper.model.PresetDataModel;
+import org.allseen.lsf.sdk.Preset;
+import org.allseen.lsf.sdk.manager.AllJoynManager;
+import org.allseen.lsf.sdk.model.ColorItemDataModel;
+import org.allseen.lsf.sdk.model.PresetDataModel;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

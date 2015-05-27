@@ -17,9 +17,9 @@ package org.allseen.lsf.sampleapp;
 
 import java.util.Iterator;
 
-import org.allseen.lsf.helper.facade.SceneV1;
-import org.allseen.lsf.helper.manager.AllJoynManager;
-import org.allseen.lsf.helper.model.SceneDataModel;
+import org.allseen.lsf.sdk.SceneV1;
+import org.allseen.lsf.sdk.manager.AllJoynManager;
+import org.allseen.lsf.sdk.model.SceneDataModel;
 
 public class UpdateBasicSceneNameAdapter extends UpdateItemNameAdapter {
 

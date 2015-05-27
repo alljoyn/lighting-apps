@@ -15,7 +15,7 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.helper.model.LightingItemDataModel;
+import org.allseen.lsf.sdk.model.LightingItemDataModel;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

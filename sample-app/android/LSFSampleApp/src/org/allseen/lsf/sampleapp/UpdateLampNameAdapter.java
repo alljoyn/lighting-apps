@@ -17,9 +17,9 @@ package org.allseen.lsf.sampleapp;
 
 import java.util.Iterator;
 
-import org.allseen.lsf.helper.facade.Lamp;
-import org.allseen.lsf.helper.manager.AllJoynManager;
-import org.allseen.lsf.helper.model.LampDataModel;
+import org.allseen.lsf.sdk.Lamp;
+import org.allseen.lsf.sdk.manager.AllJoynManager;
+import org.allseen.lsf.sdk.model.LampDataModel;
 
 public class UpdateLampNameAdapter extends UpdateItemNameAdapter {
 

@@ -17,11 +17,11 @@ package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.LampDetails;
 import org.allseen.lsf.LampParameters;
-import org.allseen.lsf.helper.model.ColorItemDataModel;
-import org.allseen.lsf.helper.model.ColorStateConverter;
-import org.allseen.lsf.helper.model.EmptyLampDetails;
-import org.allseen.lsf.helper.model.EmptyLampParamaters;
-import org.allseen.lsf.helper.model.LampDataModel;
+import org.allseen.lsf.sdk.model.ColorItemDataModel;
+import org.allseen.lsf.sdk.model.ColorStateConverter;
+import org.allseen.lsf.sdk.model.EmptyLampDetails;
+import org.allseen.lsf.sdk.model.EmptyLampParamaters;
+import org.allseen.lsf.sdk.model.LampDataModel;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

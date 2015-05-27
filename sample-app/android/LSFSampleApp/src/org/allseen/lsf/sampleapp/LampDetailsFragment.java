@@ -17,10 +17,10 @@ package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.LampDetails;
 import org.allseen.lsf.LampMake;
-import org.allseen.lsf.helper.manager.AllJoynManager;
-import org.allseen.lsf.helper.model.EmptyLampDetails;
-import org.allseen.lsf.helper.model.LampAbout;
-import org.allseen.lsf.helper.model.LampDataModel;
+import org.allseen.lsf.sdk.manager.AllJoynManager;
+import org.allseen.lsf.sdk.model.EmptyLampDetails;
+import org.allseen.lsf.sdk.model.LampAbout;
+import org.allseen.lsf.sdk.model.LampDataModel;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

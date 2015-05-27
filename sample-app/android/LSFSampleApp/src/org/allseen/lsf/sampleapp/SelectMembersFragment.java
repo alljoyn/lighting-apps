@@ -23,14 +23,14 @@ import java.util.List;
 import java.util.Set;
 
 import org.allseen.lsf.LampGroup;
-import org.allseen.lsf.helper.facade.Group;
-import org.allseen.lsf.helper.facade.Lamp;
-import org.allseen.lsf.helper.facade.SceneV1;
-import org.allseen.lsf.helper.model.AllLampsDataModel;
-import org.allseen.lsf.helper.model.GroupDataModel;
-import org.allseen.lsf.helper.model.LampCapabilities;
-import org.allseen.lsf.helper.model.LampDataModel;
-import org.allseen.lsf.helper.model.SceneDataModel;
+import org.allseen.lsf.sdk.Group;
+import org.allseen.lsf.sdk.Lamp;
+import org.allseen.lsf.sdk.SceneV1;
+import org.allseen.lsf.sdk.model.AllLampsDataModel;
+import org.allseen.lsf.sdk.model.GroupDataModel;
+import org.allseen.lsf.sdk.model.LampCapabilities;
+import org.allseen.lsf.sdk.model.LampDataModel;
+import org.allseen.lsf.sdk.model.SceneDataModel;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

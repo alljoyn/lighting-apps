@@ -15,8 +15,8 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.helper.model.ColorStateConverter;
-import org.allseen.lsf.helper.model.LampCapabilities;
+import org.allseen.lsf.sdk.model.ColorStateConverter;
+import org.allseen.lsf.sdk.model.LampCapabilities;
 
 import android.view.View;
 import android.view.View.OnClickListener;

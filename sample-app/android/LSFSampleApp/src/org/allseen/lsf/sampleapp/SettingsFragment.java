@@ -15,7 +15,7 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.helper.model.ControllerDataModel;
+import org.allseen.lsf.sdk.model.ControllerDataModel;
 
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;

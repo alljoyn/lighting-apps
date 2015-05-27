@@ -17,8 +17,8 @@ package org.allseen.lsf.sampleapp;
 
 import java.util.Iterator;
 
-import org.allseen.lsf.helper.facade.MasterScene;
-import org.allseen.lsf.helper.model.MasterSceneDataModel;
+import org.allseen.lsf.sdk.MasterScene;
+import org.allseen.lsf.sdk.model.MasterSceneDataModel;
 
 import android.util.Log;
 

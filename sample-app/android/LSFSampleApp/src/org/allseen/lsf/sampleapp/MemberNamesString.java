@@ -21,8 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.allseen.lsf.LampGroup;
-import org.allseen.lsf.helper.model.GroupDataModel;
-import org.allseen.lsf.helper.model.LampDataModel;
+import org.allseen.lsf.sdk.model.GroupDataModel;
+import org.allseen.lsf.sdk.model.LampDataModel;
 
 public class MemberNamesString {
     // Creates a details string, containing a list of all lamps and subgroups in a lamp group

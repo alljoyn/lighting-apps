@@ -16,15 +16,16 @@
 package org.allseen.lsf.tutorial.pulseeffects;
 
 import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.helper.facade.Color;
-import org.allseen.lsf.helper.facade.Group;
-import org.allseen.lsf.helper.facade.Lamp;
-import org.allseen.lsf.helper.facade.LightingDirector;
-import org.allseen.lsf.helper.facade.MyLampState;
-import org.allseen.lsf.helper.facade.Power;
-import org.allseen.lsf.helper.facade.PulseEffect;
-import org.allseen.lsf.helper.listener.AllCollectionAdapter;
-import org.allseen.lsf.helper.listener.NextControllerConnectionListener;
+import org.allseen.lsf.sdk.AllCollectionAdapter;
+import org.allseen.lsf.sdk.Color;
+import org.allseen.lsf.sdk.Group;
+import org.allseen.lsf.sdk.Lamp;
+import org.allseen.lsf.sdk.LightingDirector;
+import org.allseen.lsf.sdk.MyLampState;
+import org.allseen.lsf.sdk.NextControllerConnectionListener;
+import org.allseen.lsf.sdk.Power;
+import org.allseen.lsf.sdk.PulseEffect;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;

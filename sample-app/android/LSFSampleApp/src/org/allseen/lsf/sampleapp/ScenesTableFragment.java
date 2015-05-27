@@ -17,9 +17,9 @@ package org.allseen.lsf.sampleapp;
 
 import java.util.Iterator;
 
-import org.allseen.lsf.helper.manager.AllJoynManager;
-import org.allseen.lsf.helper.model.MasterSceneDataModel;
-import org.allseen.lsf.helper.model.SceneDataModel;
+import org.allseen.lsf.sdk.manager.AllJoynManager;
+import org.allseen.lsf.sdk.model.MasterSceneDataModel;
+import org.allseen.lsf.sdk.model.SceneDataModel;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;

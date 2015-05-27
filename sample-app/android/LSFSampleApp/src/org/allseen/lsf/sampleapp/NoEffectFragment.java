@@ -15,9 +15,9 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.helper.model.ColorItemDataModel;
-import org.allseen.lsf.helper.model.NoEffectDataModel;
-import org.allseen.lsf.helper.model.SceneElementDataModel;
+import org.allseen.lsf.sdk.model.ColorItemDataModel;
+import org.allseen.lsf.sdk.model.NoEffectDataModel;
+import org.allseen.lsf.sdk.model.SceneElementDataModel;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -15,12 +15,12 @@
  */
 package org.allseen.lsf.tutorial;
 
-import org.allseen.lsf.helper.facade.Color;
-import org.allseen.lsf.helper.facade.Group;
-import org.allseen.lsf.helper.facade.Lamp;
-import org.allseen.lsf.helper.facade.LightingDirector;
-import org.allseen.lsf.helper.facade.Scene;
-import org.allseen.lsf.helper.listener.NextControllerConnectionListener;
+import org.allseen.lsf.sdk.Color;
+import org.allseen.lsf.sdk.Group;
+import org.allseen.lsf.sdk.Lamp;
+import org.allseen.lsf.sdk.LightingDirector;
+import org.allseen.lsf.sdk.NextControllerConnectionListener;
+import org.allseen.lsf.sdk.Scene;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;

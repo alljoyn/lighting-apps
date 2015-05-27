@@ -21,11 +21,11 @@ import java.util.List;
 
 import org.allseen.lsf.LampDetails;
 import org.allseen.lsf.LampGroup;
-import org.allseen.lsf.helper.model.ColorStateConverter;
-import org.allseen.lsf.helper.model.GroupDataModel;
-import org.allseen.lsf.helper.model.LampCapabilities;
-import org.allseen.lsf.helper.model.LampDataModel;
-import org.allseen.lsf.helper.model.NoEffectDataModel;
+import org.allseen.lsf.sdk.model.ColorStateConverter;
+import org.allseen.lsf.sdk.model.GroupDataModel;
+import org.allseen.lsf.sdk.model.LampCapabilities;
+import org.allseen.lsf.sdk.model.LampDataModel;
+import org.allseen.lsf.sdk.model.NoEffectDataModel;
 
 import android.view.Menu;
 import android.view.MenuInflater;

@@ -19,12 +19,12 @@ import java.util.Iterator;
 
 import org.allseen.lsf.LampState;
 import org.allseen.lsf.PresetPulseEffect;
-import org.allseen.lsf.helper.facade.Preset;
-import org.allseen.lsf.helper.model.ColorItemDataModel;
-import org.allseen.lsf.helper.model.ColorStateConverter;
-import org.allseen.lsf.helper.model.LampCapabilities;
-import org.allseen.lsf.helper.model.PresetDataModel;
-import org.allseen.lsf.helper.model.SceneElementDataModel;
+import org.allseen.lsf.sdk.Preset;
+import org.allseen.lsf.sdk.model.ColorItemDataModel;
+import org.allseen.lsf.sdk.model.ColorStateConverter;
+import org.allseen.lsf.sdk.model.LampCapabilities;
+import org.allseen.lsf.sdk.model.PresetDataModel;
+import org.allseen.lsf.sdk.model.SceneElementDataModel;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

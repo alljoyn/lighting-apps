@@ -17,10 +17,10 @@ package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.LampState;
 import org.allseen.lsf.PresetPulseEffect;
-import org.allseen.lsf.helper.model.ColorItemDataModel;
-import org.allseen.lsf.helper.model.PresetDataModel;
-import org.allseen.lsf.helper.model.PulseEffectDataModel;
-import org.allseen.lsf.helper.model.SceneElementDataModel;
+import org.allseen.lsf.sdk.model.ColorItemDataModel;
+import org.allseen.lsf.sdk.model.PresetDataModel;
+import org.allseen.lsf.sdk.model.PulseEffectDataModel;
+import org.allseen.lsf.sdk.model.SceneElementDataModel;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

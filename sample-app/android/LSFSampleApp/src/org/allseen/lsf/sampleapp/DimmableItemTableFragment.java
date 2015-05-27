@@ -15,7 +15,7 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.helper.model.ColorStateConverter;
+import org.allseen.lsf.sdk.model.ColorStateConverter;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;

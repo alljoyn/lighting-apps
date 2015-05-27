@@ -17,8 +17,8 @@ package org.allseen.lsf.sampleapp;
 
 import java.util.Iterator;
 
-import org.allseen.lsf.helper.model.GroupDataModel;
-import org.allseen.lsf.helper.model.LampCapabilities;
+import org.allseen.lsf.sdk.model.GroupDataModel;
+import org.allseen.lsf.sdk.model.LampCapabilities;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

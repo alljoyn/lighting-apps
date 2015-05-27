@@ -15,10 +15,10 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.helper.model.AllLampsDataModel;
-import org.allseen.lsf.helper.model.ColorItemDataModel;
-import org.allseen.lsf.helper.model.ColorStateConverter;
-import org.allseen.lsf.helper.model.GroupDataModel;
+import org.allseen.lsf.sdk.model.AllLampsDataModel;
+import org.allseen.lsf.sdk.model.ColorItemDataModel;
+import org.allseen.lsf.sdk.model.ColorStateConverter;
+import org.allseen.lsf.sdk.model.GroupDataModel;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

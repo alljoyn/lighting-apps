@@ -16,18 +16,18 @@
 package org.allseen.lsf.tutorial.scenes;
 
 import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.helper.facade.Color;
-import org.allseen.lsf.helper.facade.GroupMember;
-import org.allseen.lsf.helper.facade.LightingDirector;
-import org.allseen.lsf.helper.facade.MyLampState;
-import org.allseen.lsf.helper.facade.Power;
-import org.allseen.lsf.helper.facade.PulseEffect;
-import org.allseen.lsf.helper.facade.Scene;
-import org.allseen.lsf.helper.facade.SceneElement;
-import org.allseen.lsf.helper.listener.NextControllerConnectionListener;
-import org.allseen.lsf.helper.listener.PulseEffectAdapter;
-import org.allseen.lsf.helper.listener.SceneAdapter;
-import org.allseen.lsf.helper.listener.SceneElementAdapter;
+import org.allseen.lsf.sdk.Color;
+import org.allseen.lsf.sdk.GroupMember;
+import org.allseen.lsf.sdk.LightingDirector;
+import org.allseen.lsf.sdk.MyLampState;
+import org.allseen.lsf.sdk.NextControllerConnectionListener;
+import org.allseen.lsf.sdk.Power;
+import org.allseen.lsf.sdk.PulseEffect;
+import org.allseen.lsf.sdk.PulseEffectAdapter;
+import org.allseen.lsf.sdk.Scene;
+import org.allseen.lsf.sdk.SceneAdapter;
+import org.allseen.lsf.sdk.SceneElement;
+import org.allseen.lsf.sdk.SceneElementAdapter;
 
 import android.app.Activity;
 import android.os.Bundle;

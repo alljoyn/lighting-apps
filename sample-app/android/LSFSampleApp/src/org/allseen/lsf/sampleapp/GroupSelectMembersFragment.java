@@ -18,7 +18,7 @@ package org.allseen.lsf.sampleapp;
 import java.util.List;
 
 import org.allseen.lsf.LampGroup;
-import org.allseen.lsf.helper.manager.AllJoynManager;
+import org.allseen.lsf.sdk.manager.AllJoynManager;
 
 import android.view.Menu;
 import android.view.MenuInflater;

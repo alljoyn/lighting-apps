@@ -16,12 +16,12 @@
 package org.allseen.lsf.tutorial.presets;
 
 import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.helper.facade.Color;
-import org.allseen.lsf.helper.facade.Lamp;
-import org.allseen.lsf.helper.facade.LightingDirector;
-import org.allseen.lsf.helper.facade.Power;
-import org.allseen.lsf.helper.facade.Preset;
-import org.allseen.lsf.helper.listener.AllCollectionAdapter;
+import org.allseen.lsf.sdk.AllCollectionAdapter;
+import org.allseen.lsf.sdk.Color;
+import org.allseen.lsf.sdk.Lamp;
+import org.allseen.lsf.sdk.LightingDirector;
+import org.allseen.lsf.sdk.Power;
+import org.allseen.lsf.sdk.Preset;
 
 import android.app.Activity;
 import android.os.Bundle;

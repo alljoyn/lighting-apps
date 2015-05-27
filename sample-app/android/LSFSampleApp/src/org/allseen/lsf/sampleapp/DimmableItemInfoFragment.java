@@ -16,8 +16,8 @@
 package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.LampState;
-import org.allseen.lsf.helper.model.ColorItemDataModel;
-import org.allseen.lsf.helper.model.LampCapabilities;
+import org.allseen.lsf.sdk.model.ColorItemDataModel;
+import org.allseen.lsf.sdk.model.LampCapabilities;
 
 import android.graphics.PorterDuff.Mode;
 import android.os.Bundle;
