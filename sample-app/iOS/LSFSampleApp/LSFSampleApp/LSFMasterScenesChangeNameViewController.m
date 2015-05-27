@@ -16,7 +16,7 @@
 
 #import "LSFMasterScenesChangeNameViewController.h"
 #import "LSFMasterSceneModelContainer.h"
-#import "LSFMasterSceneDataModel.h"
+#import "LSFSDKMasterScene.h"
 #import "LSFDispatchQueue.h"
 #import "LSFAllJoynManager.h"
 #import "LSFUtilityFunctions.h"
@@ -57,7 +57,7 @@
 
     LSFMasterSceneModelContainer *container = [LSFMasterSceneModelContainer getMasterSceneModelContainer];
     NSMutableDictionary *masterScenes = container.masterScenesContainer;
-    self.masterSceneModel = [masterScenes objectForKey: self.masterSceneID];
+    self.masterSceneModel = [[masterScenes objectForKey: self.masterSceneID] getMasterSceneDataModel];
 
     [self.masterSceneNameTextField becomeFirstResponder];
     self.masterSceneNameTextField.text = self.masterSceneModel.name;
@@ -119,10 +119,7 @@
 
 -(void)reloadMasterSceneName
 {
-    LSFMasterSceneModelContainer *container = [LSFMasterSceneModelContainer getMasterSceneModelContainer];
-    NSMutableDictionary *masterScenes = container.masterScenesContainer;
-    self.masterSceneModel = [masterScenes objectForKey: self.masterSceneID];
-
+    self.masterSceneModel = [[[[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer] objectForKey: self.masterSceneID] getMasterSceneDataModel];
     self.masterSceneNameTextField.text = self.masterSceneModel.name;
 }
 
@@ -227,11 +224,11 @@
  */
 -(BOOL)checkForDuplicateName: (NSString *)name
 {
-    LSFMasterSceneModelContainer *container = [LSFMasterSceneModelContainer getMasterSceneModelContainer];
-    NSDictionary *masterScenes = container.masterScenesContainer;
+    NSDictionary *masterScenes = [[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer];
 
-    for (LSFMasterSceneDataModel *model in [masterScenes allValues])
+    for (LSFSDKMasterScene *masterScene in [masterScenes allValues])
     {
+        LSFMasterSceneDataModel *model = [masterScene getMasterSceneDataModel];
         if ([name isEqualToString: model.name])
         {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Duplicate Name"

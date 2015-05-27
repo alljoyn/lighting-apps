@@ -28,6 +28,8 @@ public class LightingItemDataModel {
     public LightingItemSortableTag tag;
     public long timestamp;
 
+    protected boolean nameInitialized;
+
     public LightingItemDataModel(String itemID, char itemPrefix, String itemName) {
         super();
 
@@ -35,6 +37,7 @@ public class LightingItemDataModel {
         this.prefix = itemPrefix;
         this.name = itemName;
         this.tag = new LightingItemSortableTag(this.id, this.prefix, this.name);
+        this.nameInitialized = false;
 
         updateTime();
     }
@@ -45,6 +48,7 @@ public class LightingItemDataModel {
         this.name = other.name;
         this.timestamp = other.timestamp;
         this.tag = new LightingItemSortableTag(other.tag);
+        this.nameInitialized = other.nameInitialized;
     }
 
     public void updateTime() {
@@ -58,6 +62,11 @@ public class LightingItemDataModel {
     public void setName(String name) {
         this.name = name;
         this.tag = new LightingItemSortableTag(this.id, this.prefix, this.name);
+        this.nameInitialized = true;
+    }
+
+    public boolean isInitialized() {
+        return nameInitialized;
     }
 
     public boolean hasDefaultID() {

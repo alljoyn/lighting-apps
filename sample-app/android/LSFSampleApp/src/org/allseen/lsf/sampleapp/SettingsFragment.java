@@ -71,7 +71,10 @@ public class SettingsFragment extends PageFrameChildFragment implements OnClickL
         }
 
         ((TextView)view.findViewById(R.id.settingsTextController)).setText(leaderName);
-        ((CheckBox)view.findViewById(R.id.settingsStartController)).setChecked(activity.isControllerServiceStarted());
+
+        CheckBox checkBox = (CheckBox)view.findViewById(R.id.settingsStartController);
+        checkBox.setChecked(activity.isControllerServiceEnabled());
+        checkBox.setText(activity.isControllerServiceStarted() ? R.string.controller_enable_started : R.string.controller_enable_stopped);
     }
 
     @Override
@@ -103,7 +106,7 @@ public class SettingsFragment extends PageFrameChildFragment implements OnClickL
         parent.showTextChildFragment(getResources().getString(R.string.team_text));
     }
 
-    protected void onEnableControllerClick(boolean startControllerService) {
-        ((SampleAppActivity)getActivity()).setControllerServiceStarted(startControllerService);
+    protected void onEnableControllerClick(boolean enableControllerService) {
+        ((SampleAppActivity)getActivity()).setControllerServiceEnabled(enableControllerService);
     }
 }

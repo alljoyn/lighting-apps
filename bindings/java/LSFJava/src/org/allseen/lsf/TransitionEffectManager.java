@@ -31,7 +31,8 @@ public class TransitionEffectManager extends BaseNativeClassWrapper {
     public native ControllerClientStatus createTransitionEffect(TrackingID trackingID, TransitionEffect transitionEffect, String transitionEffectName, String language);
     public native ControllerClientStatus updateTransitionEffect(String transitionEffectID, TransitionEffect transitionEffect);
     public native ControllerClientStatus deleteTransitionEffect(String transitionEffectID);
-//TODO    public native ControllerClientStatus getTransitionEffectDataSet(String transitionEffectID, String language);
+    public native ControllerClientStatus getTransitionEffectVersion(String transitionEffectID);
+    public native ControllerClientStatus getTransitionEffectDataSet(String transitionEffectID, String language);
 
     protected native void createNativeObject(ControllerClient controller, TransitionEffectManagerCallback callback);
 

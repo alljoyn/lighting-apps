@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import <UIKit/UIKit.h>
-#import "LSFMasterSceneDataModel.h"
+#import "LSFSDKMasterScene.h"
 
 @interface LSFMasterScenesEnterNameViewController : UIViewController
 

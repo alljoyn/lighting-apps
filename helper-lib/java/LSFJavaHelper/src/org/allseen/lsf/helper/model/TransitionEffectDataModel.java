@@ -19,43 +19,20 @@ package org.allseen.lsf.helper.model;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class TransitionEffectDataModel extends ColorItemDataModel {
-    public static final char TAG_PREFIX_TRANSITION = 'T';
-
+public class TransitionEffectDataModel extends SceneElementDataModel {
     public static String defaultName = "<Loading transition effect info...>";
-    public static long defaultDuration = 5000;
 
-    private String presetID;
-    private long duration;
+    public long duration;
 
     public TransitionEffectDataModel() {
-        this(null);
+        super(EffectType.Transition, defaultName);
+
+        duration = 5000;
     }
 
-    public TransitionEffectDataModel(String transitionEffectID) {
-        this(transitionEffectID, null);
-    }
+    public TransitionEffectDataModel(TransitionEffectDataModel other) {
+        super(other);
 
-    public TransitionEffectDataModel(String transitionEffectID, String transitionEffectName) {
-        super(transitionEffectID, TAG_PREFIX_TRANSITION, transitionEffectName != null ? transitionEffectName : defaultName);
-
-        setDuration(defaultDuration);
-        setPresetID(null);
-    }
-
-    public String getPresetID() {
-        return presetID;
-    }
-
-    public void setPresetID(String transtionEffectPresetID) {
-        presetID = transtionEffectPresetID;
-    }
-
-    public long getDuration() {
-        return duration;
-    }
-
-    public void setDuration(long transitionEffectDuration) {
-        duration = transitionEffectDuration;
+        this.duration = other.duration;
     }
 }

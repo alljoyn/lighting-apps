@@ -26,6 +26,8 @@ public class MasterSceneDataModel extends LightingItemDataModel {
 
     public static String defaultName = "<Loading master scene info...>";
 
+    protected boolean masterSceneInitialized;
+
     public MasterScene masterScene;
 
     public MasterSceneDataModel() {
@@ -40,12 +42,23 @@ public class MasterSceneDataModel extends LightingItemDataModel {
         super(masterSceneID, TAG_PREFIX_MASTER_SCENE, masterSceneName != null ? masterSceneName : defaultName);
 
         masterScene = new MasterScene();
+        masterSceneInitialized = false;
     }
 
     public MasterSceneDataModel(MasterSceneDataModel other) {
         super(other);
 
         this.masterScene = new MasterScene(other.masterScene);
+        this.masterSceneInitialized = other.masterSceneInitialized;
+    }
+
+    public MasterScene getMasterScene() {
+        return masterScene;
+    }
+
+    public void setMasterScene(MasterScene masterScene) {
+        this.masterScene = masterScene;
+        masterSceneInitialized = true;
     }
 
     public boolean containsBasicScene(String basicSceneID) {
@@ -58,5 +71,10 @@ public class MasterSceneDataModel extends LightingItemDataModel {
         }
 
         return false;
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return super.isInitialized() && masterSceneInitialized;
     }
 }

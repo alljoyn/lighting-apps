@@ -16,15 +16,24 @@
 
 #import "LSFLampModel.h"
 
+NSString *LAMP_DEFAULT_NAME = @"<Loading lamp info...>";
+
+@interface LSFLampModel()
+
+@property (nonatomic) BOOL detailsInitialized;
+
+@end
+
 @implementation LSFLampModel
 
 @synthesize lampDetails = _lampDetails;
 @synthesize lampParameters = _lampParameters;
 @synthesize aboutData = _aboutData;
+@synthesize detailsInitialized = _detailsInitialized;
 
 -(id)initWithLampID: (NSString *)lampID
 {
-    return [self initWithLampID: lampID andLampName: @"[Loading lamp info...]"];
+    return [self initWithLampID: lampID andLampName: @"<Loading lamp info...>"];
 }
 
 -(id)initWithLampID: (NSString *)lampID andLampName: (NSString *)name
@@ -36,6 +45,7 @@
         self.lampDetails = [[LSFLampDetails alloc] init];
         self.lampParameters = [[LSFLampParameters alloc] init];
         self.aboutData = [[LSFAboutData alloc] init];
+        self.detailsInitialized = NO;
     }
 
     return self;
@@ -45,6 +55,12 @@
 {
     _lampDetails = lampDetails;
     self.capability = [[LSFCapabilityData alloc] initWithDimmable: self.lampDetails.dimmable color: self.lampDetails.color andTemp: self.lampDetails.variableColorTemp];
+    self.detailsInitialized = YES;
+}
+
+-(BOOL)isInitialized
+{
+    return ([super isInitialized] && self.detailsInitialized);
 }
 
 @end

@@ -116,6 +116,11 @@
     });
 }
 
+-(void)getLampGroupVersionReplyWithCode: (LSFResponseCode)rc groupID: (NSString *)groupID andVersion: (unsigned int)version
+{
+    //TODO - implement, may be unused
+}
+
 -(void)setLampGroupNameReplyWithCode: (LSFResponseCode)rc groupID: (NSString*)groupID andLanguage: (NSString *)language
 {
     if (rc != LSF_OK)
@@ -165,6 +170,11 @@
     dispatch_async(self.queue, ^{
         [self postProcessLampGroupID: groupID];
     });
+}
+
+-(void)createLampGroupTrackingReplyWithCode: (LSFResponseCode)rc groupID: (NSString *)groupID andTrackingID: (unsigned int)trackingID
+{
+    //TODO - implement, may be unused
 }
 
 -(void)lampGroupsCreated: (NSArray *)groupIDs
@@ -340,6 +350,11 @@
 -(void)transitionLampGroupStateToPresetReplyWithCode: (LSFResponseCode)rc andGroupID: (NSString*)groupID
 {
     //TODO
+}
+
+-(void)setLampGroupEffectReplyWithCode: (LSFResponseCode)rc groupID: (NSString *)groupID andEffectID: (NSString *)effectID
+{
+    //TODO - implement, may be unused
 }
 
 /*

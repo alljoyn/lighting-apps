@@ -18,9 +18,11 @@ package org.allseen.lsf.helper.manager;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.MasterScene;
 import org.allseen.lsf.helper.listener.LightingItemErrorEvent;
 import org.allseen.lsf.helper.listener.MasterSceneListener;
+import org.allseen.lsf.helper.model.LightingItemFilter;
 import org.allseen.lsf.helper.model.MasterSceneDataModel;
 
 /**
@@ -49,6 +51,11 @@ public class MasterSceneCollectionManager extends LightingItemCollectionManager<
         return getAdapters().toArray(new MasterScene[size()]);
     }
 
+    public MasterScene[] getMasterScenes(LightingItemFilter<MasterScene> filter) {
+        Collection<MasterScene> filteredMasterScenes = getAdapters(filter);
+        return filteredMasterScenes.toArray(new MasterScene[filteredMasterScenes.size()]);
+    }
+
     public Iterator<MasterScene> getMasterSceneIterator() {
         return getAdapters().iterator();
     }
@@ -59,6 +66,11 @@ public class MasterSceneCollectionManager extends LightingItemCollectionManager<
 
     public MasterScene removeMasterScene(String masterSceneID) {
         return removeAdapter(masterSceneID);
+    }
+
+    @Override
+    protected void sendInitializedEvent(MasterSceneListener listener, MasterScene masterScene, TrackingID trackingID) {
+        listener.onMasterSceneInitialized(trackingID, masterScene);
     }
 
     @Override

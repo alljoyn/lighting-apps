@@ -24,7 +24,7 @@ import org.allseen.lsf.helper.model.ColorItemDataModel;
 import org.allseen.lsf.helper.model.ColorStateConverter;
 import org.allseen.lsf.helper.model.LampCapabilities;
 import org.allseen.lsf.helper.model.PresetDataModel;
-import org.allseen.lsf.helper.model.SceneElementDataModelV10;
+import org.allseen.lsf.helper.model.SceneElementDataModel;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -39,7 +39,7 @@ public abstract class BasicSceneElementInfoFragment extends DimmableItemInfoFrag
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        SceneElementDataModelV10 pendingModel = getPendingSceneElementDataModel();
+        SceneElementDataModel pendingModel = getPendingSceneElementDataModel();
 
         checkInitialColorTemp(pendingModel, ColorStateConverter.convertColorTempViewToModel(activity.pendingBasicSceneElementMembersMinColorTemp));
 
@@ -146,7 +146,7 @@ public abstract class BasicSceneElementInfoFragment extends DimmableItemInfoFrag
     @Override
     public void onActionDone() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        SceneElementDataModelV10 elementModel = getPendingSceneElementDataModel();
+        SceneElementDataModel elementModel = getPendingSceneElementDataModel();
 
         elementModel.members = activity.pendingBasicSceneElementMembers;
         elementModel.setCapability(activity.pendingBasicSceneElementCapability);
@@ -184,12 +184,12 @@ public abstract class BasicSceneElementInfoFragment extends DimmableItemInfoFrag
         return activity.pendingBasicSceneElementColorTempAverager.getAverage();
     }
 
-    protected void checkInitialColorTemp(SceneElementDataModelV10 pendingModel, long modelColorTempMin) {
+    protected void checkInitialColorTemp(SceneElementDataModel pendingModel, long modelColorTempMin) {
         if (pendingModel.state.getColorTemp() < modelColorTempMin) {
             pendingModel.state.setColorTemp(modelColorTempMin);
         }
     }
 
-    protected abstract SceneElementDataModelV10 getPendingSceneElementDataModel();
+    protected abstract SceneElementDataModel getPendingSceneElementDataModel();
     protected abstract void updatePendingSceneElement();
 }

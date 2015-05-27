@@ -27,6 +27,9 @@
  * Groups can contain lamps and nested groups.
  */
 @interface LSFSDKGroup : LSFSDKGroupMember
+{
+    @protected LSFGroupModel *groupModel;
+}
 
 /** @name Creating LSFSDKLamp */
 

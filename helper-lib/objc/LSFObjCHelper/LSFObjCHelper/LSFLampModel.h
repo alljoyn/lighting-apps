@@ -20,6 +20,8 @@
 #import "LSFAboutData.h"
 #import "LSFDataModel.h"
 
+extern NSString *LAMP_DEFAULT_NAME;
+
 @interface LSFLampModel : LSFDataModel
 
 @property (nonatomic, strong) LSFLampDetails *lampDetails;

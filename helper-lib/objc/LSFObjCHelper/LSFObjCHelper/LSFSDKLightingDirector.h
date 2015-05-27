@@ -35,7 +35,7 @@
 #import "LSFSDKSceneDelegate.h"
 #import "LSFSDKMasterSceneDelegate.h"
 #import "LSFSDKControllerDelegate.h"
-#import "LSFSDKInitialSetDelegate.h"
+#import "LSFSDKLightingSystemManager.h"
 #import "LSFTrackingID.h"
 
 /**
@@ -47,6 +47,9 @@
  * class.
  */
 @interface LSFSDKLightingDirector : NSObject
+{
+    @protected LSFSDKLightingSystemManager *lightingManager;
+}
 
 /** @name Class Properties */
 
@@ -260,6 +263,8 @@
  */
 @property (nonatomic) BOOL isNetworkConnected;
 
+@property (nonatomic, strong, readonly) LSFSDKLightingSystemManager *lightingManager;
+
 /** @name Creating LSFSDKLightingDirector */
 
 /**
@@ -468,7 +473,7 @@
  *
  * @return Instance of LSFTrackingID associate with the creation of the Transition Effect.
  */
--(LSFTrackingID *)createTransitionEffectWithLampState: (id<LSFSDKLampState>)state duration: (unsigned long)duration name: (NSString *)effectName delegate: (id<LSFSDKTransitionEffectDelegate>)delegate;
+-(LSFTrackingID *)createTransitionEffectWithLampState: (id<LSFSDKLampState>)state duration: (unsigned int)duration name: (NSString *)effectName delegate: (id<LSFSDKTransitionEffectDelegate>)delegate;
 
 /**
  * Asynchronously creates a Pulse Effect on the Lighting Controller.
@@ -483,7 +488,7 @@
  *
  * @return Instance of LSFTrackingID associate with the creation of the Pulse Effect.
  */
--(LSFTrackingID *)createPulseEffectWithFromState: (id<LSFSDKLampState>)fromState toState: (id<LSFSDKLampState>)toState period: (unsigned long)period duration: (unsigned long)duration count: (unsigned long)count name: (NSString *)effectName delegate: (id<LSFSDKPulseEffectDelegate>)delegate;
+-(LSFTrackingID *)createPulseEffectWithFromState: (id<LSFSDKLampState>)fromState toState: (id<LSFSDKLampState>)toState period: (unsigned int)period duration: (unsigned int)duration count: (unsigned int)count name: (NSString *)effectName delegate: (id<LSFSDKPulseEffectDelegate>)delegate;
 
 /**
  * Asynchronously creates a Scene Element on the Lighting Controller.

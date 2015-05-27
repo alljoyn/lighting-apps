@@ -17,6 +17,7 @@
 #import <Foundation/Foundation.h>
 #import "BusAttachment.h"
 #import "LSFAboutData.h"
+#import "LSFLampAnnouncementDelegate.h"
 
 /**
  * @warning *Note:* This class is not intended to be used by clients, and its interface may change
@@ -25,14 +26,7 @@
 
 using namespace ajn;
 
-@protocol LampAnnouncementDelegate <NSObject>
-
--(void)lampAnnouncementReceivedFromLamp: (NSString *)lampID onBus: (NSString *)busName onPort: (uint16_t)port;
--(void)saveAboutData: (LSFAboutData *)myAboutData;
-
-@end
-
-@interface LSFAboutManager : NSObject <LampAnnouncementDelegate>
+@interface LSFAboutManager : NSObject <LSFLampAnnouncementDelegate>
 
 -(id)initWithBusAttachment: (BusAttachment *)bus;
 -(void)unregisterAnnouncementHandler;

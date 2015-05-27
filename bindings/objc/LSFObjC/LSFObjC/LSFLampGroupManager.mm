@@ -75,6 +75,12 @@
     return self.lampGroupManager->SetLampGroupName(gid, groupName, lang);
 }
 
+-(ControllerClientStatus)getLampGroupVersionForID: (NSString *)groupID
+{
+    std::string gid([groupID UTF8String]);
+    return CONTROLLER_CLIENT_OK; //self.lampGroupManager->GetLampGroupVersion(gid);
+}
+
 -(ControllerClientStatus)createLampGroup: (LSFLampGroup *)lampGroup withName: (NSString *)lampGroupName
 {
     std::string groupName([lampGroupName UTF8String]);
@@ -86,6 +92,19 @@
     std::string groupName([lampGroupName UTF8String]);
     std::string lang([language UTF8String]);
     return self.lampGroupManager->CreateLampGroup(*(static_cast<lsf::LampGroup*>(lampGroup.handle)), groupName, lang);
+}
+
+-(ControllerClientStatus)createLampGroupWithTracking: (uint32_t *)trackingID lampGroup: (LSFLampGroup *)lampGroup withName: (NSString *)lampGroupName
+{
+    std::string groupName([lampGroupName UTF8String]);
+    return self.lampGroupManager->CreateLampGroupWithTracking(*trackingID, *(static_cast<lsf::LampGroup*>(lampGroup.handle)), groupName);
+}
+
+-(ControllerClientStatus)createLampGroupWithTracking: (uint32_t *)trackingID lampGroup: (LSFLampGroup *)lampGroup withName: (NSString *)lampGroupName andLanguage: (NSString *)language
+{
+    std::string groupName([lampGroupName UTF8String]);
+    std::string lang([language UTF8String]);
+    return self.lampGroupManager->CreateLampGroupWithTracking(*trackingID, *(static_cast<lsf::LampGroup*>(lampGroup.handle)), groupName, lang);
 }
 
 -(ControllerClientStatus)updateLampGroupWithID: (NSString *)groupID andLampGroup: (LSFLampGroup *)lampGroup
@@ -260,6 +279,13 @@
     std::string gid([groupID UTF8String]);
     std::string lang([language UTF8String]);
     return self.lampGroupManager->GetLampGroupDataSet(gid, lang);
+}
+
+-(ControllerClientStatus)setLampGroupEffectForID: (NSString *)groupID andEffectID: (NSString *)effectID
+{
+    std::string gid([groupID UTF8String]);
+    std::string eid([effectID UTF8String]);
+    return CONTROLLER_CLIENT_OK; //self.lampGroupManager->SetLampGroupEffect(gid, eid);
 }
 
 /*

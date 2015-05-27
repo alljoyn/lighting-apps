@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) AllSeen Alliance. All rights reserved.
+ * Copyright AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -88,6 +88,22 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneElementManager_getSceneEleme
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneElementManager_applySceneElement
   (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     org_allseen_lsf_SceneElementManager
+ * Method:    getSceneElementVersion
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ */
+JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneElementManager_getSceneElementVersion
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     org_allseen_lsf_SceneElementManager
+ * Method:    getSceneElementDataSet
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ */
+JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneElementManager_getSceneElementDataSet
+  (JNIEnv *, jobject, jstring, jstring);
 
 /*
  * Class:     org_allseen_lsf_SceneElementManager

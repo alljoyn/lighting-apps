@@ -20,6 +20,7 @@
 #import "LSFPresetModelContainer.h"
 #import "LSFPresetModel.h"
 #import "LSFConstants.h"
+#import "LSFSDKPreset.h"
 
 @interface LSFEffectTableViewController ()
 
@@ -349,8 +350,9 @@
 
     NSMutableArray *presetsArray = [[NSMutableArray alloc] init];
     BOOL presetMatched = NO;
-    for (LSFPresetModel *data in presets)
+    for (LSFSDKPreset *preset in presets)
     {
+        LSFPresetModel *data = [preset getPresetDataModel];
         BOOL matchesPreset = [self checkIfLampState: state matchesPreset: data];
 
         if (matchesPreset)

@@ -147,12 +147,11 @@
  */
 -(BOOL)checkForDuplicateName: (NSString *)name
 {
-    LSFMasterSceneModelContainer *container = [LSFMasterSceneModelContainer getMasterSceneModelContainer];
-    NSDictionary *masterScenes = container.masterScenesContainer;
+    NSDictionary *masterScenes = [[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer];
 
-    for (LSFMasterSceneDataModel *model in [masterScenes allValues])
+    for (LSFSDKMasterScene *masterScene in [masterScenes allValues])
     {
-        LSFMasterSceneDataModel *masterSceneModel = (LSFMasterSceneDataModel *)model;
+        LSFMasterSceneDataModel *masterSceneModel = [masterScene getMasterSceneDataModel];
 
         if ([name isEqualToString: masterSceneModel.name])
         {

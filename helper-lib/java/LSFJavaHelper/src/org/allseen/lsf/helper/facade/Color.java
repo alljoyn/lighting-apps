@@ -76,4 +76,31 @@ public class Color {
         return colorTemperature;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + brightness;
+        result = prime * result + colorTemperature;
+        result = prime * result + hue;
+        result = prime * result + saturation;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other != null && other instanceof Color) {
+            Color otherColor = (Color) other;
+
+            return this.getBrightness() == otherColor.getBrightness() &&
+                   this.getColorTemperature() == otherColor.getColorTemperature() &&
+                   this.getHue() == otherColor.getHue() &&
+                   this.getSaturation() == otherColor.getSaturation();
+        }
+
+        return false;
+    }
+
+
+
 }

@@ -19,7 +19,7 @@ package org.allseen.lsf.helper.model;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class NoEffectDataModel extends SceneElementDataModelV10 {
+public class NoEffectDataModel extends SceneElementDataModel {
     public static String defaultName = "<Loading scene element info...>";
 
     public NoEffectDataModel() {

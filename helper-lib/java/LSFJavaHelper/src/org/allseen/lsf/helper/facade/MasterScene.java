@@ -14,8 +14,14 @@
 */
 package org.allseen.lsf.helper.facade;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.model.LightingItemDataModel;
+import org.allseen.lsf.helper.model.LightingItemUtil;
 import org.allseen.lsf.helper.model.MasterSceneDataModel;
 
 /**
@@ -26,47 +32,96 @@ import org.allseen.lsf.helper.model.MasterSceneDataModel;
  */
 public final class MasterScene extends LightingItem {
 
-   protected MasterSceneDataModel masterModel;
+    protected MasterSceneDataModel masterModel;
 
-   public MasterScene(String masterSceneID) {
-       super();
+    public MasterScene(String masterSceneID) {
+        super();
 
-       masterModel = new MasterSceneDataModel(masterSceneID);
-   }
+        masterModel = new MasterSceneDataModel(masterSceneID);
+    }
 
-   public void apply() {
-       AllJoynManager.masterSceneManager.applyMasterScene(masterModel.id);
-   }
+    public void apply() {
+        String errorContext = "MasterScene.apply() error";
 
-   public void modify(Scene[] scene) {
-       // TODO-IMPL
-   }
+        postErrorIfFailure(errorContext,
+                AllJoynManager.masterSceneManager.applyMasterScene(masterModel.id));
+    }
 
-   public void add(Scene scene) {
-       // TODO-IMPL
-   }
+    public void modify(Scene[] scenes) {
+        String errorContext = "MasterScene.modify() error";
 
-   public void remove(Scene scene) {
-       // TODO-IMPL
-   }
+        if (postInvalidArgIfNull(errorContext, scenes)) {
+            String[] sceneIds = new String[scenes.length];
+            for (int i = 0; i < scenes.length; i++) {
+                sceneIds[i] = scenes[i].getId();
+            }
 
-   public void delete() {
-       AllJoynManager.masterSceneManager.deleteMasterScene(masterModel.id);
-   }
+            postErrorIfFailure(errorContext,
+                    AllJoynManager.masterSceneManager.updateMasterScene(masterModel.id, LightingItemUtil.createMasterScene(sceneIds)));
+        }
+    }
 
-   @Override
-   public void rename(String masterSceneName) {
-       if (masterSceneName != null) {
-           AllJoynManager.masterSceneManager.setMasterSceneName(masterModel.id, masterSceneName, LightingDirector.get().getDefaultLanguage());
-       }
-   }
+    public void add(Scene scene) {
+        String errorContext = "MasterScene.add() error";
 
-   @Override
-   protected LightingItemDataModel getItemDataModel() {
-       return getMasterSceneDataModel();
-   }
+        if (postInvalidArgIfNull(errorContext, scene)) {
+            Set<String> sceneIds = new HashSet<String>(Arrays.asList(masterModel.getMasterScene().getScenes()));
+            // only update this master scene if it does not already contains the scene to add
+            if (sceneIds.add(scene.getId())) {
+                postErrorIfFailure(errorContext,
+                    AllJoynManager.masterSceneManager.updateMasterScene(masterModel.id, LightingItemUtil.createMasterScene(
+                            sceneIds.toArray(new String[sceneIds.size()]))));
+            }
+        }
+    }
 
-   public MasterSceneDataModel getMasterSceneDataModel() {
-       return masterModel;
-   }
+    public void remove(Scene scene) {
+        String errorContext = "MasterScene.remove() error";
+
+        if (postInvalidArgIfNull(errorContext, scene)) {
+            Set<String> sceneIds = new HashSet<String>(Arrays.asList(masterModel.getMasterScene().getScenes()));
+            // only update this master scene if it contains the scene to remove
+            if (sceneIds.remove(scene.getId())) {
+                postErrorIfFailure(errorContext,
+                        AllJoynManager.masterSceneManager.updateMasterScene(masterModel.id, LightingItemUtil.createMasterScene(
+                                sceneIds.toArray(new String[sceneIds.size()]))));
+            }
+        }
+    }
+
+    public void delete() {
+        String errorContext = "MasterScene.delete() error";
+
+        postErrorIfFailure(errorContext,
+                AllJoynManager.masterSceneManager.deleteMasterScene(masterModel.id));
+    }
+
+    @Override
+    public void rename(String masterSceneName) {
+        String errorContext = "MasterScene.rename() error";
+
+        if (postInvalidArgIfNull(errorContext, masterSceneName)) {
+            postErrorIfFailure(errorContext,
+                    AllJoynManager.masterSceneManager.setMasterSceneName(masterModel.id, masterSceneName, LightingDirector.get().getDefaultLanguage()));
+        }
+    }
+
+    @Override
+    protected LightingItemDataModel getItemDataModel() {
+        return getMasterSceneDataModel();
+    }
+
+    public MasterSceneDataModel getMasterSceneDataModel() {
+        return masterModel;
+    }
+
+    @Override
+    protected void postError(final String name, final ResponseCode status) {
+        LightingDirector.get().getLightingSystemManager().getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                LightingDirector.get().getMasterSceneCollectionManager().sendErrorEvent(name, status, getId());
+            }
+        });
+    }
 }

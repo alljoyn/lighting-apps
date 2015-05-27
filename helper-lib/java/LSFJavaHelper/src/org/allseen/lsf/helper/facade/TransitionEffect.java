@@ -15,14 +15,15 @@
  */
 package org.allseen.lsf.helper.facade;
 
+import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.model.ColorItemDataModel;
 import org.allseen.lsf.helper.model.LightingItemUtil;
-import org.allseen.lsf.helper.model.TransitionEffectDataModel;
+import org.allseen.lsf.helper.model.TransitionEffectDataModelV2;
 
 public class TransitionEffect extends ColorItem implements Effect {
 
-    private TransitionEffectDataModel transitionEffectModel;
+    private TransitionEffectDataModelV2 transitionEffectModel;
 
     public TransitionEffect(String transitionEffectId) {
         this(transitionEffectId, null);
@@ -31,44 +32,67 @@ public class TransitionEffect extends ColorItem implements Effect {
     public TransitionEffect(String transitionEffectId, String transitionEffectName) {
         super();
 
-        transitionEffectModel = new TransitionEffectDataModel(transitionEffectId, transitionEffectName);
+        transitionEffectModel = new TransitionEffectDataModelV2(transitionEffectId, transitionEffectName);
     }
 
+    @Override
     public void applyTo(GroupMember member) {
-//        member.applyEffect(this);
-        // TODO-FIX to use above impl
-        if (member instanceof Lamp) {
-            AllJoynManager.transitionEffectManager.applyTransitionEffectOnLamps(transitionEffectModel.id, new String[] { member.getColorDataModel().id });
-        } else if (member instanceof Group) {
-            AllJoynManager.transitionEffectManager.applyTransitionEffectOnLampGroups(transitionEffectModel.id, new String [] { member.getColorDataModel().id });
+        String errorContext = "TransitionEffect.applyTo() error";
+
+        if (postInvalidArgIfNull(errorContext, member)) {
+            member.applyEffect(this);
         }
     }
 
     public void modify(LampState state, long duration) {
-        if (state instanceof Preset) {
-            AllJoynManager.transitionEffectManager.updateTransitionEffect(transitionEffectModel.id, LightingItemUtil.createTransitionEffect((Preset) state, duration));
-        } else {
-            AllJoynManager.transitionEffectManager.updateTransitionEffect(transitionEffectModel.id,
-                    LightingItemUtil.createTransitionEffect(state.getPowerOn(), state.getColorHsvt(), duration));
+        String errorContext = "TransitionEffect.modify() error";
+
+        if (postInvalidArgIfNull(errorContext, state)) {
+            if (state instanceof Preset) {
+                postErrorIfFailure(errorContext,
+                        AllJoynManager.transitionEffectManager.updateTransitionEffect(transitionEffectModel.id, LightingItemUtil.createTransitionEffect((Preset) state, duration)));
+            } else {
+                postErrorIfFailure(errorContext,
+                    AllJoynManager.transitionEffectManager.updateTransitionEffect(transitionEffectModel.id,
+                            LightingItemUtil.createTransitionEffect(state.getPowerOn(), state.getColorHsvt(), duration)));
+            }
         }
     }
 
     @Override
     public void rename(String effectName) {
-        AllJoynManager.transitionEffectManager.setTransitionEffectName(transitionEffectModel.id, effectName,
-                LightingDirector.get().getDefaultLanguage());
+        String errorContext = "TransitionEffect.rename() error";
+
+        if (postInvalidArgIfNull(errorContext, effectName)) {
+            postErrorIfFailure(errorContext,
+                    AllJoynManager.transitionEffectManager.setTransitionEffectName(transitionEffectModel.id, effectName,
+                            LightingDirector.get().getDefaultLanguage()));
+        }
     }
 
     public void delete() {
-        AllJoynManager.transitionEffectManager.deleteTransitionEffect(transitionEffectModel.id);
+        String errorContext = "TransitionEffect.delete() error";
+
+        postErrorIfFailure(errorContext,
+                AllJoynManager.transitionEffectManager.deleteTransitionEffect(transitionEffectModel.id));
     }
 
-    public TransitionEffectDataModel getTransitionEffectDataModel() {
+    public TransitionEffectDataModelV2 getTransitionEffectDataModel() {
         return transitionEffectModel;
     }
 
     @Override
     protected ColorItemDataModel getColorDataModel() {
         return getTransitionEffectDataModel();
+    }
+
+    @Override
+    protected void postError(final String name, final ResponseCode status) {
+        LightingDirector.get().getLightingSystemManager().getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                LightingDirector.get().getTransitionEffectCollectionManager().sendErrorEvent(name, status, getId());
+            }
+        });
     }
 }

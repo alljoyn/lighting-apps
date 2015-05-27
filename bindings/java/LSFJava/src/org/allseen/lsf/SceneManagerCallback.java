@@ -22,19 +22,24 @@ public class SceneManagerCallback extends DefaultNativeClassWrapper {
         createNativeObject();
     }
 
-    public void getAllSceneIDsReplyCB(ResponseCode responseCode, String[] sceneIDs)                                 { }
-    public void getSceneNameReplyCB(ResponseCode responseCode, String sceneID, String language, String sceneName)   { }
-    public void setSceneNameReplyCB(ResponseCode responseCode, String sceneID, String language)                     { }
-    public void scenesNameChangedCB(String[] sceneIDs)                                                              { }
-    public void createSceneReplyCB(ResponseCode responseCode, String sceneID)                                       { }
-    public void scenesCreatedCB(String[] sceneIDs)                                                                  { }
-    public void updateSceneReplyCB(ResponseCode responseCode, String sceneID)                                       { }
-    public void scenesUpdatedCB(String[] sceneIDs)                                                                  { }
-    public void deleteSceneReplyCB(ResponseCode responseCode, String sceneID)                                       { }
-    public void scenesDeletedCB(String[] sceneIDs)                                                                  { }
-    public void getSceneReplyCB(ResponseCode responseCode, String sceneID, Scene scene)                             { }
-    public void applySceneReplyCB(ResponseCode responseCode, String sceneID)                                        { }
-    public void scenesAppliedCB(String[] sceneIDs)                                                                   { }
+    public void getAllSceneIDsReplyCB(ResponseCode responseCode, String[] sceneIDs)                                         { }
+    public void getSceneNameReplyCB(ResponseCode responseCode, String sceneID, String language, String sceneName)           { }
+    public void setSceneNameReplyCB(ResponseCode responseCode, String sceneID, String language)                             { }
+    public void scenesNameChangedCB(String[] sceneIDs)                                                                      { }
+    public void createSceneReplyCB(ResponseCode responseCode, String sceneID)                                               { }
+    public void scenesCreatedCB(String[] sceneIDs)                                                                          { }
+    public void updateSceneReplyCB(ResponseCode responseCode, String sceneID)                                               { }
+    public void scenesUpdatedCB(String[] sceneIDs)                                                                          { }
+    public void deleteSceneReplyCB(ResponseCode responseCode, String sceneID)                                               { }
+    public void scenesDeletedCB(String[] sceneIDs)                                                                          { }
+    public void getSceneReplyCB(ResponseCode responseCode, String sceneID, Scene scene)                                     { }
+    public void applySceneReplyCB(ResponseCode responseCode, String sceneID)                                                { }
+    public void scenesAppliedCB(String[] sceneIDs)                                                                          { }
+    public void createSceneWithTrackingReplyCB(ResponseCode responseCode, String sceneID, long trackingID)                  { }
+    public void createSceneWithSceneElementsReplyCB(ResponseCode responseCode, String sceneID, long trackingID)             { }
+    public void updateSceneWithSceneElementsReplyCB(ResponseCode responseCode, String sceneID)                              { }
+    public void getSceneWithSceneElementsReplyCB(ResponseCode responseCode, String sceneID, SceneWithSceneElements scene)   { }
+    public void getSceneVersionReplyCB(ResponseCode responseCode, String sceneID, long sceneVersion)                        { }
 
     // @Override
     @Override

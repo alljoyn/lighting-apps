@@ -17,6 +17,17 @@
 #import "LSFGroupsFlattener.h"
 #import "LSFSDKGroup.h"
 
+@interface LSFGroupsFlattener()
+
+@property (nonatomic, strong) NSMutableSet *lampIDSet;
+@property (nonatomic, strong) NSMutableSet *groupIDSet;
+@property (nonatomic) int duplicates;
+
+-(void)walkGroups: (NSMutableDictionary *)groups groupDataModel: (LSFGroupModel *)parentModel;
+-(void)walkLamps: (NSMutableDictionary *)groups;
+
+@end
+
 @implementation LSFGroupsFlattener
 
 @synthesize groupIDSet = _groupIDSet;
@@ -29,9 +40,7 @@
     
     if (self)
     {
-        self.groupIDSet = [[NSMutableSet alloc] init];
-        self.lampIDSet = [[NSMutableSet alloc] init];
-        self.duplicates = 0;
+        //Do Nothing
     }
     
     return self;
@@ -41,46 +50,51 @@
 {
     for (LSFSDKGroup *group in [groups allValues])
     {
-        LSFGroupModel *groupModel = [group getLampGroupDataModel];
-
-        self.groupIDSet = [[NSMutableSet alloc] init];
-        self.lampIDSet = [[NSMutableSet alloc] init];
-        self.duplicates = 0;
-        
-        [self flattenGroups: groups withGroupModel: groupModel];
-        [self flattenLamps: groups];
-        
-//        NSLog(@"LSFGroupsFlattener - Printing groups and lamps sets");
-//        
-//        for (NSString *groupID in self.groupIDSet)
-//        {
-//            NSLog(@"%@", groupID);
-//        }
-//        
-//        for (NSString *lampID in self.lampIDSet)
-//        {
-//            NSLog(@"%@", lampID);
-//        }
-
-        groupModel.groups = self.groupIDSet;
-        groupModel.lamps = self.lampIDSet;
-        groupModel.duplicates = self.duplicates;
+        [self flattenGroups: groups withGroup: group];
     }
 }
 
--(void)flattenGroups: (NSMutableDictionary *)groups withGroupModel: (LSFGroupModel *)parentModel
+-(void)flattenGroups: (NSMutableDictionary *)groups withGroup: (LSFSDKGroup *)group;
+{
+    LSFGroupModel *groupModel = [group getLampGroupDataModel];
+
+    self.groupIDSet = [[NSMutableSet alloc] init];
+    self.lampIDSet = [[NSMutableSet alloc] init];
+    self.duplicates = 0;
+
+    [self walkGroups: groups groupDataModel: groupModel];
+    [self walkLamps: groups];
+
+//    NSLog(@"LSFGroupsFlattener - Printing groups and lamps sets");
+//
+//    for (NSString *groupID in self.groupIDSet)
+//    {
+//        NSLog(@"%@", groupID);
+//    }
+//
+//    for (NSString *lampID in self.lampIDSet)
+//    {
+//        NSLog(@"%@", lampID);
+//    }
+
+    groupModel.groups = self.groupIDSet;
+    groupModel.lamps = self.lampIDSet;
+    groupModel.duplicates = self.duplicates;
+}
+
+-(void)walkGroups: (NSMutableDictionary *)groups groupDataModel: (LSFGroupModel *)parentModel
 {
     if (![self.groupIDSet containsObject: parentModel.theID])
     {
         [self.groupIDSet addObject: parentModel.theID];
-        
+
         for (NSString *childGroupID in parentModel.members.lampGroups)
         {
             LSFGroupModel *childModel = [[groups valueForKey: childGroupID] getLampGroupDataModel];
-            
+
             if (childModel != nil)
             {
-                [self flattenGroups: groups withGroupModel: childModel];
+                [self walkGroups: groups groupDataModel: childModel];
             }
         }
     }
@@ -88,20 +102,21 @@
     {
         self.duplicates++;
     }
+
 }
 
--(void)flattenLamps: (NSMutableDictionary *)groups
+-(void)walkLamps: (NSMutableDictionary *)groups
 {
     for (NSString *groupID in self.groupIDSet)
     {
         LSFGroupModel *groupModel = [[groups valueForKey: groupID] getLampGroupDataModel];
-        
+
         if (groupModel != nil)
         {
-            //NSArray *lamps = groupModel.members.lamps;
             [self.lampIDSet addObjectsFromArray: groupModel.members.lamps];
         }
     }
+
 }
 
 @end

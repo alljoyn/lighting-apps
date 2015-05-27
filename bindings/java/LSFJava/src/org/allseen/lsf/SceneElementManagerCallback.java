@@ -34,6 +34,7 @@ public class SceneElementManagerCallback extends DefaultNativeClassWrapper {
     public void getSceneElementReplyCB(ResponseCode responseCode, String sceneElementID, SceneElement sceneElement)                     { }
     public void applySceneElementReplyCB(ResponseCode responseCode, String sceneElementID)                                              { }
     public void sceneElementsAppliedCB(String[] sceneElementIDs)                                                                        { }
+    public void getSceneElementVersionReplyCB(ResponseCode responseCode, String sceneElementID, long sceneElementVersion)               { }
 
     @Override
     protected native void createNativeObject();

@@ -18,16 +18,18 @@ package org.allseen.lsf.helper.manager;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.PulseEffect;
 import org.allseen.lsf.helper.listener.LightingItemErrorEvent;
 import org.allseen.lsf.helper.listener.PulseEffectListener;
-import org.allseen.lsf.helper.model.PulseEffectDataModel;
+import org.allseen.lsf.helper.model.LightingItemFilter;
+import org.allseen.lsf.helper.model.PulseEffectDataModelV2;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class PulseEffectCollectionManager extends LightingItemCollectionManager<PulseEffect, PulseEffectListener, PulseEffectDataModel> {
+public class PulseEffectCollectionManager extends LightingItemCollectionManager<PulseEffect, PulseEffectListener, PulseEffectDataModelV2> {
 
     public PulseEffectCollectionManager(LightingSystemManager director) {
         super(director);
@@ -45,8 +47,13 @@ public class PulseEffectCollectionManager extends LightingItemCollectionManager<
         return getAdapter(pulseEffectId);
     }
 
-    public PulseEffect[] getPulseEffect() {
+    public PulseEffect[] getPulseEffects() {
         return getAdapters().toArray(new PulseEffect[size()]);
+    }
+
+    public PulseEffect[] getPulseEffects(LightingItemFilter<PulseEffect> filter) {
+        Collection<PulseEffect> filteredPulseEffects = getAdapters(filter);
+        return filteredPulseEffects.toArray(new PulseEffect[filteredPulseEffects.size()]);
     }
 
     public Iterator<PulseEffect> getPulseEffectIterator() {
@@ -59,6 +66,11 @@ public class PulseEffectCollectionManager extends LightingItemCollectionManager<
 
     public PulseEffect removePulseEffect(String pulseEffectId) {
         return removeAdapter(pulseEffectId);
+    }
+
+    @Override
+    protected void sendInitializedEvent(PulseEffectListener listener, PulseEffect pulseEffect, TrackingID trackingID) {
+        listener.onPulseEffectInitialized(trackingID, pulseEffect);
     }
 
     @Override
@@ -77,7 +89,7 @@ public class PulseEffectCollectionManager extends LightingItemCollectionManager<
     }
 
     @Override
-    public PulseEffectDataModel getModel(String pulseEffectID) {
+    public PulseEffectDataModelV2 getModel(String pulseEffectID) {
         PulseEffect pulseEffect = getAdapter(pulseEffectID);
 
         return pulseEffect != null ? pulseEffect.getPulseEffectDataModel() : null;

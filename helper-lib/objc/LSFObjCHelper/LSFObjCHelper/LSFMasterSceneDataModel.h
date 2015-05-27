@@ -17,16 +17,22 @@
 #import "LSFModel.h"
 #import "LSFMasterScene.h"
 
+extern const NSString *MASTER_SCENE_DEFAULT_NAME;
+
 /**
  * @warning *Note:* This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK.
  */
 @interface LSFMasterSceneDataModel : LSFModel
+{
+    @protected BOOL masterSceneInitialized;
+}
 
 @property (nonatomic, strong) LSFMasterScene *masterScene;
 
 -(id)init;
--(id)initWithID: (NSString *)masterSceneID;
--(id)initWithID: (NSString *)masterSceneID andName: (NSString *)name;
+-(id)initWithMasterSceneID: (NSString *)masterSceneID;
+-(id)initWithMasterSceneID: (NSString *)masterSceneID andMasterSceneName: (NSString *)masterSceneName;
+-(BOOL)containsSceneID: (NSString *)sceneID;
 
 @end

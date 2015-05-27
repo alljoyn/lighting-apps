@@ -38,7 +38,7 @@
 
 -(void)sendLeaderStateChangedEvent
 {
-    for (id delegate in [self getDelegates])
+    for (id delegate in delegates)
     {
         if ([delegate conformsToProtocol: @protocol(LSFSDKControllerDelegate)])
         {
@@ -60,7 +60,7 @@
 
 -(void)sendErrorEvent: (LSFSDKControllerErrorEvent *)errorEvent
 {
-    for (id delegate in [self getDelegates])
+    for (id delegate in delegates)
     {
         if ([delegate conformsToProtocol: @protocol(LSFSDKControllerDelegate)])
         {

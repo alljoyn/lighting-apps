@@ -50,6 +50,14 @@ void LSFMasterSceneManagerCallback::GetMasterSceneNameReplyCB(const LSFResponseC
     }
 }
 
+void LSFMasterSceneManagerCallback::GetMasterSceneVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& masterSceneID, const uint32_t& masterSceneVersion)
+{
+    if (_msmDelegate != nil)
+    {
+        [_msmDelegate getMasterSceneVersionReplyWithCode: responseCode masterSceneID: [NSString stringWithUTF8String: masterSceneID.c_str()] andMasterSceneVersion: masterSceneVersion];
+    }
+}
+
 void LSFMasterSceneManagerCallback::SetMasterSceneNameReplyCB(const LSFResponseCode& responseCode, const LSFString& masterSceneID, const LSFString& language)
 {
     if (_msmDelegate != nil)
@@ -78,6 +86,14 @@ void LSFMasterSceneManagerCallback::CreateMasterSceneReplyCB(const LSFResponseCo
     if (_msmDelegate != nil)
     {
         [_msmDelegate createMasterSceneReplyWithCode: responseCode andMasterSceneID: [NSString stringWithUTF8String: masterSceneID.c_str()]];
+    }
+}
+
+void LSFMasterSceneManagerCallback::CreateMasterSceneWithTrackingReplyCB(const LSFResponseCode& responseCode, const LSFString& masterSceneID, const uint32_t& trackingID)
+{
+    if (_msmDelegate != nil)
+    {
+        [_msmDelegate createMasterSceneTrackingReplyWithCode: responseCode masterSceneID: [NSString stringWithUTF8String: masterSceneID.c_str()] andTrackingID: trackingID];
     }
 }
 

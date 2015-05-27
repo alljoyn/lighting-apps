@@ -16,6 +16,10 @@
 
 #import <Foundation/Foundation.h>
 #import "LSFModel.h"
+#import "LSFSDKLightingItemProtocol.h"
+#import "ControllerClientDefs.h"
+
+using namespace lsf;
 
 /**
  * Base class for items in the Lighting System.
@@ -23,11 +27,13 @@
  * @warning *Note:* This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK.
  */
-@interface LSFSDKLightingItem : NSObject
+@interface LSFSDKLightingItem : NSObject <LSFSDKLightingItemProtocol>
 
-@property (nonatomic, strong, readonly) NSString *name;
-
+-(BOOL)isInitialized;
+-(BOOL)postInvalidArgIfNull: (NSString *)name object: (id)object;
+-(BOOL)postErrorIfFailure: (NSString *)name status: (ControllerClientStatus)status;
 -(void)rename: (NSString *)name;
 -(LSFModel *)getItemDataModel;
+-(void)postError: (NSString *)name status: (LSFResponseCode)status;
 
 @end

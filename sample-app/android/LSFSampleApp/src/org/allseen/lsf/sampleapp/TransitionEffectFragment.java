@@ -16,8 +16,8 @@
 package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.helper.model.ColorItemDataModel;
-import org.allseen.lsf.helper.model.SceneElementDataModelV10;
-import org.allseen.lsf.helper.model.TransitionEffectDataModelV10;
+import org.allseen.lsf.helper.model.SceneElementDataModel;
+import org.allseen.lsf.helper.model.TransitionEffectDataModel;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -72,10 +72,10 @@ public class TransitionEffectFragment extends BasicSceneElementInfoFragment {
 
         super.updateInfoFields(itemModel);
 
-        updateTransitionEffectInfoFields(activity, (TransitionEffectDataModelV10)itemModel);
+        updateTransitionEffectInfoFields(activity, (TransitionEffectDataModel)itemModel);
     }
 
-    protected void updateTransitionEffectInfoFields(SampleAppActivity activity, TransitionEffectDataModelV10 elementModel) {
+    protected void updateTransitionEffectInfoFields(SampleAppActivity activity, TransitionEffectDataModel elementModel) {
         String members = MemberNamesString.format(activity, activity.pendingBasicSceneElementMembers, MemberNamesOptions.en, 3, R.string.effect_info_help_no_members);
         setTextViewValue(view.findViewById(R.id.infoHelpRow), R.id.helpText, String.format(getString(R.string.effect_info_help_transition), members), 0);
 
@@ -96,7 +96,7 @@ public class TransitionEffectFragment extends BasicSceneElementInfoFragment {
     }
 
     @Override
-    protected SceneElementDataModelV10 getPendingSceneElementDataModel() {
+    protected SceneElementDataModel getPendingSceneElementDataModel() {
         return ((SampleAppActivity)getActivity()).pendingTransitionEffectModel;
     }
 

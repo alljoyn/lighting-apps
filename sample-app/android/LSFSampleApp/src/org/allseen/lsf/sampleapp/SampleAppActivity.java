@@ -40,6 +40,7 @@ import org.allseen.lsf.helper.facade.Preset;
 import org.allseen.lsf.helper.facade.PulseEffect;
 import org.allseen.lsf.helper.facade.Scene;
 import org.allseen.lsf.helper.facade.SceneElement;
+import org.allseen.lsf.helper.facade.SceneV1;
 import org.allseen.lsf.helper.facade.TransitionEffect;
 import org.allseen.lsf.helper.listener.AllCollectionListener;
 import org.allseen.lsf.helper.listener.AllJoynListener;
@@ -63,9 +64,9 @@ import org.allseen.lsf.helper.model.LampDataModel;
 import org.allseen.lsf.helper.model.MasterSceneDataModel;
 import org.allseen.lsf.helper.model.NoEffectDataModel;
 import org.allseen.lsf.helper.model.PresetDataModel;
-import org.allseen.lsf.helper.model.PulseEffectDataModelV10;
+import org.allseen.lsf.helper.model.PulseEffectDataModel;
 import org.allseen.lsf.helper.model.SceneDataModel;
-import org.allseen.lsf.helper.model.TransitionEffectDataModelV10;
+import org.allseen.lsf.helper.model.TransitionEffectDataModel;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
@@ -140,8 +141,8 @@ public class SampleAppActivity extends FragmentActivity implements
     public int pendingBasicSceneElementMembersMaxColorTemp;
 
     public NoEffectDataModel pendingNoEffectModel;
-    public TransitionEffectDataModelV10 pendingTransitionEffectModel;
-    public PulseEffectDataModelV10 pendingPulseEffectModel;
+    public TransitionEffectDataModel pendingTransitionEffectModel;
+    public PulseEffectDataModel pendingPulseEffectModel;
 
     public PageFrameParentFragment pageFrameParent;
 
@@ -181,8 +182,8 @@ public class SampleAppActivity extends FragmentActivity implements
         PresetDataModel.defaultName = this.getString(R.string.default_preset_name);
 
         NoEffectDataModel.defaultName = this.getString(R.string.effect_name_none);
-        TransitionEffectDataModelV10.defaultName = this.getString(R.string.effect_name_transition);
-        PulseEffectDataModelV10.defaultName = this.getString(R.string.effect_name_pulse);
+        TransitionEffectDataModel.defaultName = this.getString(R.string.effect_name_transition);
+        PulseEffectDataModel.defaultName = this.getString(R.string.effect_name_pulse);
 
         SceneDataModel.defaultName = this.getString(R.string.default_basic_scene_name);
         MasterSceneDataModel.defaultName = this.getString(R.string.default_master_scene_name);
@@ -196,7 +197,7 @@ public class SampleAppActivity extends FragmentActivity implements
         systemManager.getLampCollectionManager().addListener(this);
         systemManager.getGroupCollectionManager().addListener(this);
         systemManager.getPresetCollectionManager().addListener(this);
-        systemManager.getSceneCollectionManager().addListener(this);
+        systemManager.getSceneCollectionManagerV1().addListener(this);
         systemManager.getMasterSceneCollectionManager().addListener(this);
         systemManager.getControllerManager().addListener(this);
 
@@ -252,23 +253,34 @@ public class SampleAppActivity extends FragmentActivity implements
         return controllerServiceStarted;
     }
 
-    public void setControllerServiceStarted(final boolean startControllerService) {
-        controllerServiceEnabled = startControllerService;
-
+    private void setControllerServiceStarted(final boolean startControllerService) {
         if (controllerService != null) {
             new Thread() {
                 @Override
                 public void run() {
                     if (startControllerService) {
-                        controllerServiceStarted = true;
-                        controllerService.start(getApplicationContext().getFileStreamPath("").getAbsolutePath());
-                        controllerServiceStarted = false;
+                        if (!controllerServiceStarted) {
+                            controllerServiceStarted = true;
+                            controllerService.start(getApplicationContext().getFileStreamPath("").getAbsolutePath());
+                            controllerServiceStarted = false;
+                        }
                     } else {
                         controllerService.stop();
-                        controllerServiceStarted = false;
                     }
                 }}.start();
         }
+    }
+
+    public boolean isControllerServiceEnabled() {
+        return controllerServiceEnabled;
+    }
+
+    public void setControllerServiceEnabled(final boolean enableControllerService) {
+        if (enableControllerService != controllerServiceStarted) {
+            setControllerServiceStarted(enableControllerService);
+        }
+
+        controllerServiceEnabled = enableControllerService;
     }
 
     protected boolean isWifiConnected() {
@@ -340,7 +352,7 @@ public class SampleAppActivity extends FragmentActivity implements
             } else if (tabIndex == 2) {
                 // Scenes tab
                 hasAdd =
-                    (systemManager.getSceneCollectionManager().size() < SceneManager.MAX_SCENES) ||
+                    (systemManager.getSceneCollectionManagerV1().size() < SceneManager.MAX_SCENES) ||
                     (systemManager.getMasterSceneCollectionManager().size() < MasterSceneManager.MAX_MASTER_SCENES);
             }
         }
@@ -506,7 +518,7 @@ public class SampleAppActivity extends FragmentActivity implements
     }
 
     public void applyBasicScene(String basicSceneID) {
-        SceneDataModel basicSceneModel = systemManager.getSceneCollectionManager().getModel(basicSceneID);
+        SceneDataModel basicSceneModel = systemManager.getSceneCollectionManagerV1().getModel(basicSceneID);
 
         if (basicSceneModel != null) {
             String message = String.format(this.getString(R.string.toast_basic_scene_apply), basicSceneModel.getName());
@@ -671,7 +683,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
     private void showConfirmDeleteBasicSceneDialog(final String basicSceneID) {
         if (basicSceneID != null) {
-            SceneDataModel basicSceneModel = systemManager.getSceneCollectionManager().getModel(basicSceneID);
+            SceneDataModel basicSceneModel = systemManager.getSceneCollectionManagerV1().getModel(basicSceneID);
 
             if (basicSceneModel != null) {
                 List<String> parentSceneNames = new ArrayList<String>();
@@ -742,7 +754,7 @@ public class SampleAppActivity extends FragmentActivity implements
                     }
                 }
 
-                Iterator<Scene> sceneIterator = systemManager.getSceneCollectionManager().getSceneIterator();
+                Iterator<SceneV1> sceneIterator = systemManager.getSceneCollectionManagerV1().getSceneIterator();
 
                 while (sceneIterator.hasNext()) {
                     SceneDataModel nextSceneModel = sceneIterator.next().getSceneDataModel();
@@ -776,7 +788,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
             if (presetModel != null) {
                 List<String> parentSceneNames = new ArrayList<String>();
-                Iterator<Scene> i = systemManager.getSceneCollectionManager().getSceneIterator();
+                Iterator<SceneV1> i = systemManager.getSceneCollectionManagerV1().getSceneIterator();
 
                 while (i.hasNext()) {
                     SceneDataModel nextSceneModel = i.next().getSceneDataModel();
@@ -845,7 +857,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
         if (!isMaster) {
             // Copy the selected scene into the pending state
-            pendingBasicSceneModel = new SceneDataModel(systemManager.getSceneCollectionManager().getModel(popupItemID));
+            pendingBasicSceneModel = new SceneDataModel(systemManager.getSceneCollectionManagerV1().getModel(popupItemID));
             pendingBasicSceneElementMembers = new LampGroup();
             pendingBasicSceneElementCapability = new LampCapabilities(true, true, true);
         }
@@ -880,7 +892,7 @@ public class SampleAppActivity extends FragmentActivity implements
     }
 
     public void showSceneMorePopup(View anchor, String sceneID) {
-        boolean basicScene = systemManager.getSceneCollectionManager().hasID(sceneID);
+        boolean basicScene = systemManager.getSceneCollectionManagerV1().hasID(sceneID);
 
         popupItemID = sceneID;
 
@@ -895,7 +907,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
         PopupMenu popup = new PopupMenu(this, anchor);
         popup.inflate(R.menu.scene_add);
-        popup.getMenu().findItem(R.id.scene_add_basic).setEnabled(systemManager.getSceneCollectionManager().size() < SceneManager.MAX_SCENES);
+        popup.getMenu().findItem(R.id.scene_add_basic).setEnabled(systemManager.getSceneCollectionManagerV1().size() < SceneManager.MAX_SCENES);
         popup.getMenu().findItem(R.id.scene_add_master).setEnabled(systemManager.getMasterSceneCollectionManager().size() < MasterSceneManager.MAX_MASTER_SCENES);
         popup.setOnMenuItemClickListener(this);
         popup.show();
@@ -1353,7 +1365,7 @@ public class SampleAppActivity extends FragmentActivity implements
             GroupCollectionManager groupCollection = systemManager != null ? systemManager.getGroupCollectionManager() : null;
             title = getString(R.string.title_tab_groups, groupCollection != null ? groupCollection.size() : 0).toUpperCase(locale);
         } else if (index == 2) {
-            SceneCollectionManager sceneCollection = systemManager != null ? systemManager.getSceneCollectionManager() : null;
+            SceneCollectionManager sceneCollection = systemManager != null ? systemManager.getSceneCollectionManagerV1() : null;
             MasterSceneCollectionManager masterCollection = systemManager != null ? systemManager.getMasterSceneCollectionManager() : null;
             title = getString(R.string.title_tab_scenes, (sceneCollection != null ? sceneCollection.size() : 0) + (masterCollection != null ? masterCollection.size() : 0)).toUpperCase(locale);
         } else {
@@ -1377,6 +1389,11 @@ public class SampleAppActivity extends FragmentActivity implements
 
     public Toast getToast(){
     	return toast;
+    }
+
+    @Override
+    public void onLampInitialized(final Lamp lamp) {
+        // used; intentionally left blank
     }
 
     @Override
@@ -1456,6 +1473,11 @@ public class SampleAppActivity extends FragmentActivity implements
     }
 
     @Override
+    public void onGroupInitialized(final TrackingID trackingID, Group group) {
+        // used; intentionally left blank
+    }
+
+    @Override
     public void onGroupChanged(Group group) {
         GroupDataModel groupModel = group.getGroupDataModel();
 
@@ -1518,6 +1540,11 @@ public class SampleAppActivity extends FragmentActivity implements
                 showErrorResponseCode(error.responseCode, error.name);
             }
         });
+    }
+
+    @Override
+    public void onPresetInitialized(final TrackingID trackingID, Preset preset) {
+        // used; intentionally left blank
     }
 
     @Override
@@ -1610,36 +1637,45 @@ public class SampleAppActivity extends FragmentActivity implements
     }
 
     @Override
+    public void onSceneInitialized(final TrackingID trackingID, Scene scene) {
+        // used; intentionally left blank
+    }
+
+    @Override
     public void onSceneChanged(Scene scene) {
-        String sceneID = scene.getSceneDataModel().id;
+        if (scene instanceof SceneV1) {
+            String sceneID = ((SceneV1)scene).getSceneDataModel().id;
 
-        Log.d(SampleAppActivity.TAG, "onSceneChanged() " + sceneID);
+            Log.d(SampleAppActivity.TAG, "onSceneChanged() " + sceneID);
 
-        refreshScene(sceneID);
+            refreshScene(sceneID);
+        }
     }
 
     @Override
     public void onSceneRemoved(Scene scene) {
-        SceneDataModel sceneModel = scene.getSceneDataModel();
-        String sceneID = sceneModel.id;
+        if (scene instanceof SceneV1) {
+            SceneDataModel sceneModel = ((SceneV1)scene).getSceneDataModel();
+            String sceneID = sceneModel.id;
 
-        Log.d(SampleAppActivity.TAG, "onSceneRemoved() " + sceneID);
+            Log.d(SampleAppActivity.TAG, "onSceneRemoved() " + sceneID);
 
-        Fragment pageFragment = getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
-        FragmentManager childManager = pageFragment != null ? pageFragment.getChildFragmentManager() : null;
-        ScenesTableFragment tableFragment = childManager != null ? (ScenesTableFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE) : null;
-        BasicSceneInfoFragment infoFragment = childManager != null ? (BasicSceneInfoFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO) : null;
+            Fragment pageFragment = getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
+            FragmentManager childManager = pageFragment != null ? pageFragment.getChildFragmentManager() : null;
+            ScenesTableFragment tableFragment = childManager != null ? (ScenesTableFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE) : null;
+            BasicSceneInfoFragment infoFragment = childManager != null ? (BasicSceneInfoFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO) : null;
 
-        if (tableFragment != null) {
-            tableFragment.removeElement(sceneID);
+            if (tableFragment != null) {
+                tableFragment.removeElement(sceneID);
 
-            if (isSwipeable()) {
-                resetActionBar();
+                if (isSwipeable()) {
+                    resetActionBar();
+                }
             }
-        }
 
-        if ((infoFragment != null) && (infoFragment.key.equals(sceneID))) {
-            createLostConnectionErrorDialog(sceneModel.getName());
+            if ((infoFragment != null) && (infoFragment.key.equals(sceneID))) {
+                createLostConnectionErrorDialog(sceneModel.getName());
+            }
         }
     }
 
@@ -1677,6 +1713,11 @@ public class SampleAppActivity extends FragmentActivity implements
                 }
             }
         }
+    }
+
+    @Override
+    public void onMasterSceneInitialized(final TrackingID trackingID, MasterScene masterScener) {
+        // used; intentionally left blank
     }
 
     @Override
@@ -1830,6 +1871,11 @@ public class SampleAppActivity extends FragmentActivity implements
     }
 
     @Override
+    public void onTransitionEffectInitialized(final TrackingID trackingID, TransitionEffect effect) {
+        // used; intentionally left blank
+    }
+
+    @Override
     public void onTransitionEffectChanged(TransitionEffect effect) {
         // TODO Auto-generated method stub
 
@@ -1845,6 +1891,11 @@ public class SampleAppActivity extends FragmentActivity implements
     public void onTransitionEffectRemoved(TransitionEffect effect) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public void onPulseEffectInitialized(final TrackingID trackingID, PulseEffect effect) {
+        // used; intentionally left blank
     }
 
     @Override
@@ -1866,6 +1917,11 @@ public class SampleAppActivity extends FragmentActivity implements
     }
 
     @Override
+    public void onSceneElementInitialized(final TrackingID trackingID, SceneElement element) {
+        // used; intentionally left blank
+    }
+
+    @Override
     public void onSceneElementChanged(SceneElement element) {
         // TODO Auto-generated method stub
 
@@ -1879,55 +1935,6 @@ public class SampleAppActivity extends FragmentActivity implements
 
     @Override
     public void onSceneElementRemoved(SceneElement element) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onLampInitialized(Lamp arg0) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onGroupInitialized(TrackingID arg0, Group arg1) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onPresetInitialized(TrackingID arg0, Preset arg1) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onTransitionEffectInitialized(TrackingID arg0,
-            TransitionEffect arg1) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onPulseEffectInitialized(TrackingID arg0, PulseEffect arg1) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onSceneElementInitialized(TrackingID arg0, SceneElement arg1) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onSceneInitialized(TrackingID arg0, Scene arg1) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onMasterSceneInitialized(TrackingID arg0, MasterScene arg1) {
         // TODO Auto-generated method stub
 
     }

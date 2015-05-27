@@ -123,9 +123,12 @@ $(shell mkdir -p $(MY_ALLJOYN_OBJ))
 
 # For the controller client
 $(shell ar x $(MY_ABOUT_LIB)/liballjoyn.a AboutObjectDescription.o)
+$(shell ar x $(MY_ABOUT_LIB)/liballjoyn.a AboutData.o)
 $(shell mv AboutObjectDescription.o $(MY_ALLJOYN_OBJ))
+$(shell mv AboutData.o $(MY_ALLJOYN_OBJ))
 MY_CLIENT_C_INCLUDES  := $(MY_LSF_STD_CLIENT_INC)
-MY_CLIENT_LDLIBS      := $(MY_ALLJOYN_OBJ)/AboutObjectDescription.o
+MY_CLIENT_LDLIBS      := $(MY_ALLJOYN_OBJ)/AboutObjectDescription.o \
+                         $(MY_ALLJOYN_OBJ)/AboutData.o
 MY_CLIENT_SRC_FILES   := $(MY_LSF_STD_CLIENT_SRC)/ControllerClient.cc \
                          $(MY_LSF_STD_CLIENT_SRC)/ControllerClientDefs.cc \
                          $(MY_LSF_STD_CLIENT_SRC)/ControllerServiceManager.cc \
@@ -195,6 +198,7 @@ MY_CLIENT_SRC_FILES   := $(MY_LSF_STD_CLIENT_SRC)/ControllerClient.cc \
                          org_allseen_lsf_SceneElement.cpp \
                          org_allseen_lsf_SceneElementManager.cpp \
                          org_allseen_lsf_SceneElementManagerCallback.cpp \
+                         org_allseen_lsf_SceneWithSceneElements.cpp \
                          XControllerServiceManager.cpp \
                          XControllerServiceManagerCallback.cpp \
                          XCppDelegator.cpp \
@@ -216,6 +220,7 @@ MY_CLIENT_SRC_FILES   := $(MY_LSF_STD_CLIENT_SRC)/ControllerClient.cc \
                          XSceneElement.cpp \
                          XSceneElementManager.cpp \
                          XSceneElementManagerCallback.cpp \
+                         XSceneWithSceneElements.cpp \
                          XScene.cpp \
                          XSceneManager.cpp \
                          XSceneManagerCallback.cpp \

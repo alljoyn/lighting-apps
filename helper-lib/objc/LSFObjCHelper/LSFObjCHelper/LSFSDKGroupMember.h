@@ -14,12 +14,12 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFSDKColorItem.h"
+#import "LSFSDKMutableColorItem.h"
 #import "LSFSDKEffect.h"
 
 @class LSFSDKPreset;
 
-@interface LSFSDKGroupMember : LSFSDKColorItem
+@interface LSFSDKGroupMember : LSFSDKMutableColorItem
 
 -(void)applyPreset: (LSFSDKPreset *)preset;
 -(void)applyEffect: (id<LSFSDKEffect>)effect;

@@ -20,7 +20,7 @@
 #import "LSFAllJoynManager.h"
 #import "LSFDispatchQueue.h"
 #import "LSFEnums.h"
-#import "LSFSDKScene.h"
+#import "LSFSDKSceneV1.h"
 
 @interface LSFHelperSceneManagerCallback()
 
@@ -56,9 +56,11 @@
  */
 -(void)getAllSceneIDsReplyWithCode: (LSFResponseCode)rc andSceneIDs: (NSArray *)sceneIDs
 {
+    NSLog(@"LSFHelperSceneManagerCallback - getAllSceneIDsReply() count = %lu", (unsigned long)sceneIDs.count);
+
     if (rc != LSF_OK)
     {
-        //TODO - do something
+        NSLog(@"getAllSceneIDsReply() returned error %@", [NSString stringWithUTF8String: LSFResponseCodeText(rc)]);
     }
 
     dispatch_async(self.queue, ^{
@@ -71,9 +73,11 @@
 
 -(void)getSceneNameReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID language: (NSString *)language andName: (NSString *)sceneName
 {
+    NSLog(@"LSFHelperSceneManagerCallback - getSceneNameReplyWithCode()");
+
     if (rc != LSF_OK)
     {
-        //TODO - do something
+        NSLog(@"getSceneNameReplyWithCode() returned error %@", [NSString stringWithUTF8String: LSFResponseCodeText(rc)]);
     }
 
     dispatch_async(self.queue, ^{
@@ -81,11 +85,23 @@
     });
 }
 
--(void)setSceneNameReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID andLanguage: (NSString *)language
+-(void)getSceneVersionReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID andSceneVersion: (unsigned int)sceneVersion
 {
     if (rc != LSF_OK)
     {
-        //TODO - do something
+        NSLog(@"getSceneVersionReplyWithCode() returned error %@", [NSString stringWithUTF8String: LSFResponseCodeText(rc)]);
+    }
+
+    //TODO - implement if needed
+}
+
+-(void)setSceneNameReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID andLanguage: (NSString *)language
+{
+    NSLog(@"LSFHelperSceneManagerCallback - setSceneNameReplyWithCode()");
+
+    if (rc != LSF_OK)
+    {
+        NSLog(@"setSceneNameReplyWithCode() returned error %@", [NSString stringWithUTF8String: LSFResponseCodeText(rc)]);
     }
 
     dispatch_async(self.queue, ^{
@@ -96,6 +112,8 @@
 
 -(void)scenesNameChanged: (NSArray *)sceneIDs
 {
+    NSLog(@"LSFHelperSceneManagerCallback - scenesNameChanged()");
+
     dispatch_async(self.queue, ^{
         BOOL containsNewSceneIDs = NO;
         LSFSceneModelContainer *container = [LSFSceneModelContainer getSceneModelContainer];
@@ -124,9 +142,11 @@
 
 -(void)createSceneReplyWithCode: (LSFResponseCode)rc andSceneID: (NSString *)sceneID
 {
+    NSLog(@"LSFHelperSceneManagerCallback - createSceneReplyWithCode()");
+
     if (rc != LSF_OK)
     {
-        //TODO - do something
+        NSLog(@"createSceneReplyWithCode() returned error %@", [NSString stringWithUTF8String: LSFResponseCodeText(rc)]);
     }
 
     dispatch_async(self.queue, ^{
@@ -134,8 +154,29 @@
     });
 }
 
+-(void)createSceneTrackingReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID andTrackingID: (unsigned int)trackingID
+{
+    NSLog(@"LSFHelperSceneManagerCallback - createSceneTrackingReplyWithCode()");
+
+    if (rc != LSF_OK)
+    {
+        NSLog(@"createSceneTrackingReplyWithCode() returned error %@", [NSString stringWithUTF8String: LSFResponseCodeText(rc)]);
+    }
+
+    dispatch_async(self.queue, ^{
+        [self postProcessSceneID: sceneID];
+    });
+}
+
+-(void)createSceneWithSceneElementsReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID andTrackingID: (unsigned int)trackingID
+{
+    //TODO - implement when sceneWithSceneElements is implemented
+}
+
 -(void)scenesCreated: (NSArray *)sceneIDs
 {
+    NSLog(@"LSFHelperSceneManagerCallback - scenesCreated()");
+
     dispatch_async(self.queue, ^{
         LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
         [ajManager.lsfSceneManager getAllSceneIDs];
@@ -144,14 +185,23 @@
 
 -(void)updateSceneReplyWithCode: (LSFResponseCode)rc andSceneID: (NSString *)sceneID
 {
+    NSLog(@"LSFHelperSceneManagerCallback - updateSceneReplyWithCode()");
+
     if (rc != LSF_OK)
     {
-        //TODO - do something
+        NSLog(@"updateSceneReplyWithCode() returned error %@", [NSString stringWithUTF8String: LSFResponseCodeText(rc)]);
     }
+}
+
+-(void)updateSceneWithSceneElementsReplyWithCode: (LSFResponseCode)rc andSceneID: (NSString *)sceneID
+{
+    //TODO - implement when sceneWithSceneElements is implemented
 }
 
 -(void)scenesUpdated: (NSArray *)sceneIDs
 {
+    NSLog(@"LSFHelperSceneManagerCallback - scenesUpdated()");
+
     dispatch_async(self.queue, ^{
         LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
 
@@ -164,14 +214,18 @@
 
 -(void)deleteSceneReplyWithCode: (LSFResponseCode)rc andSceneID: (NSString *)sceneID
 {
+    NSLog(@"LSFHelperSceneManagerCallback - deleteSceneReplyWithCode()");
+
     if (rc != LSF_OK)
     {
-        //TODO - do something
+        NSLog(@"deleteSceneReplyWithCode() returned error %@", [NSString stringWithUTF8String: LSFResponseCodeText(rc)]);
     }
 }
 
 -(void)scenesDeleted: (NSArray *)sceneIDs
 {
+    NSLog(@"LSFHelperSceneManagerCallback - scenesDeleted()");
+
     dispatch_async(self.queue, ^{
         [self postDeleteScenes: sceneIDs];
     });
@@ -179,9 +233,11 @@
 
 -(void)getSceneReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID andScene: (LSFScene *)scene
 {
+    NSLog(@"LSFHelperSceneManagerCallback - getSceneReplyWithCode()");
+
     if (rc != LSF_OK)
     {
-        //TODO - do something
+        NSLog(@"getSceneReplyWithCode() returned error %@", [NSString stringWithUTF8String: LSFResponseCodeText(rc)]);
     }
 
     dispatch_async(self.queue, ^{
@@ -189,16 +245,24 @@
     });
 }
 
+-(void)getSceneWithSceneElementsReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID andSceneWithSceneElements: (LSFSceneWithSceneElements *)sceneWithSceneElements
+{
+    //TODO - implement when sceneWithSceneElements is implemented
+}
+
 -(void)applySceneReplyWithCode: (LSFResponseCode)rc andSceneID: (NSString *)sceneID
 {
+    NSLog(@"LSFHelperSceneManagerCallback - applySceneReplyWithCode()");
+
     if (rc != LSF_OK)
     {
-        //TODO - do something
+        NSLog(@"applySceneReplyWithCode() returned error %@", [NSString stringWithUTF8String: LSFResponseCodeText(rc)]);
     }
 }
 
 -(void)scenesApplied: (NSArray *)sceneIDs
 {
+    NSLog(@"LSFHelperSceneManagerCallback - scenesApplied()");
     // Method does nothing
 }
 
@@ -208,7 +272,7 @@
 -(void)postProcessSceneID: (NSString *)sceneID
 {
     NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
-    LSFSDKScene *scene = [scenes valueForKey: sceneID];
+    LSFSDKSceneV1 *scene = [scenes valueForKey: sceneID];
 
     if (scene == nil)
     {
@@ -227,11 +291,11 @@
     //LSFSceneDataModel *sceneModel = [container.sceneContainer valueForKey: sceneID];
 
     NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
-    LSFSDKScene *scene = [scenes valueForKey: sceneID];
+    LSFSDKSceneV1 *scene = [scenes valueForKey: sceneID];
 
     if (scene == nil)
     {
-        scene = [[LSFSDKScene alloc] initWithSceneID: sceneID];
+        scene = [[LSFSDKSceneV1 alloc] initWithSceneID: sceneID];
         [scenes setValue: scene forKey: sceneID];
 
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -250,6 +314,7 @@
     if (sceneModel != nil)
     {
         sceneModel.name = sceneName;
+        NSLog(@"SceneModel Name = %@", sceneModel.name);
     }
 
     [self updateSceneWithID: sceneID andCallbackOperation: SceneNameUpdated];

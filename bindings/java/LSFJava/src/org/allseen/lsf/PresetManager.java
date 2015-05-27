@@ -31,6 +31,9 @@ public class PresetManager extends BaseNativeClassWrapper {
     public native ControllerClientStatus deletePreset(String presetID);
     public native ControllerClientStatus getDefaultLampState();
     public native ControllerClientStatus setDefaultLampState(LampState defaultLampState);
+    public native ControllerClientStatus getPresetVersion(String presetID);
+    public native ControllerClientStatus createPresetWithTracking(TrackingID trackingID, LampState preset, String presetName, String language);
+    public native ControllerClientStatus getPresetDataSet(String presetID, String language);
 
     protected native void createNativeObject(ControllerClient controller, PresetManagerCallback callback);
 

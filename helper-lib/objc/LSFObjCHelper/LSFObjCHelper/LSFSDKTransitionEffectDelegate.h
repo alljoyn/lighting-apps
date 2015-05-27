@@ -16,12 +16,14 @@
 
 #import <Foundation/Foundation.h>
 #import "LSFSDKLightingDelegate.h"
+#import "LSFTrackingID.h"
 
 @class LSFSDKTransitionEffect;
 @class LSFSDKLightingItemErrorEvent;
 
 @protocol LSFSDKTransitionEffectDelegate <LSFSDKLightingDelegate>
 
+-(void)onTransitionEffectInitializedWithTrackingID: (LSFTrackingID *)trackingID andTransitionEffect: (LSFSDKTransitionEffect *)transitionEffect;
 -(void)onTransitionEffectChanged: (LSFSDKTransitionEffect *)transitionEffect;
 -(void)onTransitionEffectRemoved: (LSFSDKTransitionEffect *)transitionEffect;
 -(void)onTransitionEffectError: (LSFSDKLightingItemErrorEvent *)error;

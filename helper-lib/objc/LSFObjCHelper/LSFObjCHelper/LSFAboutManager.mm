@@ -29,7 +29,7 @@ using namespace ajn;
 
 class LSFAboutManagerCpp : AboutListener {
 public:
-    LSFAboutManagerCpp(BusAttachment *bus, id<LampAnnouncementDelegate> lad);
+    LSFAboutManagerCpp(BusAttachment *bus, id<LSFLampAnnouncementDelegate> lad);
     ~LSFAboutManagerCpp();
     void RegisterAnnouncementHandler(void);
     void UnregisterAnnouncementHandler(void);
@@ -38,10 +38,10 @@ public:
 
 private:
     ajn::BusAttachment *busAttachment;
-    id<LampAnnouncementDelegate> delegate;
+    id<LSFLampAnnouncementDelegate> delegate;
 };
 
-LSFAboutManagerCpp::LSFAboutManagerCpp(ajn::BusAttachment *bus, id<LampAnnouncementDelegate> lad) : busAttachment(bus), delegate(lad)
+LSFAboutManagerCpp::LSFAboutManagerCpp(ajn::BusAttachment *bus, id<LSFLampAnnouncementDelegate> lad) : busAttachment(bus), delegate(lad)
 {
     busAttachment->EnableConcurrentCallbacks();
     busAttachment->AddMatch("sessionless='t',type='error'");

@@ -17,75 +17,77 @@
 #import "LSFSDKPulseEffect.h"
 #import "LSFSDKLamp.h"
 #import "LSFSDKGroup.h"
+#import "LSFSDKAllJoynManager.h"
+#import "LSFSDKLightingItemUtil.h"
+#import "LSFSDKLightingDirector.h"
 
 @implementation LSFSDKPulseEffect
 
--(id)initWithID: (NSString *)pulseEffectID
+-(id)initWithPulseEffectID: (NSString *)pulseEffectID
 {
-    //TODO - implement
-    return nil;
+    return [self initWithPulseEffectID: pulseEffectID pulseEffectName: nil];
 }
 
--(id)initWithID: (NSString *)pulseEffectID name: (NSString *)name
+-(id)initWithPulseEffectID: (NSString *)pulseEffectID pulseEffectName: (NSString *)pulseEffectName
 {
-    //TODO - implement
-    return nil;
+    self = [super init];
+
+    if (self)
+    {
+        pulseEffectDataModel = [[LSFPulseEffectDataModelV2 alloc] initWithPulseEffectID: pulseEffectID andPulseEffectName: pulseEffectName];
+    }
+
+    return self;
 }
 
--(void)modifyFromState: (id<LSFSDKLampState>)fromState toState: (id<LSFSDKLampState>)toState period: (unsigned long)period duration: (unsigned long)duration count: (unsigned long)count
+-(void)modifyFromState: (id<LSFSDKLampState>)fromState toState: (id<LSFSDKLampState>)toState period: (unsigned int)period duration: (unsigned int)duration count: (unsigned int)count
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKPulseEffect modify: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: fromState] && [self postInvalidArgIfNull: errorContext object: toState])
+    {
+        if (([fromState isKindOfClass: [LSFSDKPreset class]]) && ([toState isKindOfClass: [LSFSDKPreset class]]))
+        {
+            [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getPulseEffectManager] updatePulseEffectWithID: pulseEffectDataModel.theID andPulseEffect: [LSFSDKLightingItemUtil createPulseeffectFromPreset: (LSFSDKPreset *)fromState toPreset: (LSFSDKPreset *)toState period: period duration: duration count: count]]];
+        }
+        else
+        {
+            [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getPulseEffectManager] updatePulseEffectWithID: pulseEffectDataModel.theID andPulseEffect: [LSFSDKLightingItemUtil createPulseEffectWithFromPowerOn: [fromState getPowerOn] fromColorHsvt: [fromState getColorHsvt] toPowerOn: [toState getPowerOn] toColorHsvt: [toState getColorHsvt] period: period duration: duration count: count]]];
+        }
+    }
 }
 
 -(void)deletePulseEffect
 {
-    //TODO - implement
-}
+    NSString *errorContext = @"LSFSDKPulseEffect delete: error";
 
--(void)setFromStatePower: (Power)power
-{
-    //TODO - implement
-}
-
--(void)setFromStateColor: (LSFSDKColor *)color
-{
-    //TODO - implement
-}
-
--(void)setToStatePower: (Power)power
-{
-    //TODO - implement
-}
-
--(void)setToStateColor: (LSFSDKColor *)color
-{
-    //TODO - implement
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getPulseEffectManager] deletePulseEffectWithID: pulseEffectDataModel.theID]];
 }
 
 /*
  * LSFSDKEffect implementation
  */
--(void)applyToGroupMember: (LSFSDKGroupMember *)group
+-(void)applyToGroupMember: (LSFSDKGroupMember *)member
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKPulseEffect applyToGroupMember: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: member])
+    {
+        [member applyEffect: self];
+    }
 }
 
 /*
  * Override base class functions
  */
--(void)setPowerOn:(BOOL)powerOn
-{
-    //TODO - implement
-}
-
--(void)setColorHsvtWithHue:(unsigned int)hueDegrees saturation:(unsigned int)saturationPercent brightness:(unsigned int)brightnessPercent colorTemp:(unsigned int)colorTempDegrees
-{
-    //TODO - implement
-}
-
 -(void)rename:(NSString *)name
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKPulseEffect rename: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: name])
+    {
+        [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getPulseEffectManager] setPulseEffectNameWithID: pulseEffectDataModel.theID pulseEffectName: name]];
+    }
 }
 
 -(LSFDataModel *)getColorDataModel
@@ -93,14 +95,20 @@
     return [self getPulseEffectDataModel];
 }
 
+-(void)postError:(NSString *)name status:(LSFResponseCode)status
+{
+    dispatch_async([[[LSFSDKLightingDirector getLightingDirector] lightingManager] dispatchQueue], ^{
+        [[[[LSFSDKLightingDirector getLightingDirector] lightingManager] pulseEffectCollectionManager] sendErrorEvent: name statusCode: status itemID: pulseEffectDataModel.theID];
+    });
+}
+
 /**
  * <b>WARNING: This method is not intended to be used by clients, and may change or be
  * removed in subsequent releases of the SDK.</b>
  */
--(LSFPulseEffectDataModel *)getPulseEffectDataModel
+-(LSFPulseEffectDataModelV2 *)getPulseEffectDataModel
 {
-    //TODO - implement
-    return nil;
+    return pulseEffectDataModel;
 }
 
 @end

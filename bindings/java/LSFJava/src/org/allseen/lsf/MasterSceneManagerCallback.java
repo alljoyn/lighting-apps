@@ -22,6 +22,7 @@ public class MasterSceneManagerCallback extends DefaultNativeClassWrapper {
         createNativeObject();
     }
 
+
     public void getAllMasterSceneIDsReplyCB(ResponseCode responseCode, String[] masterSceneIDs)                                         { }
     public void getMasterSceneNameReplyCB(ResponseCode responseCode, String masterSceneID, String language, String masterSceneName)     { }
     public void setMasterSceneNameReplyCB(ResponseCode responseCode, String masterSceneID, String language)                             { }
@@ -35,6 +36,8 @@ public class MasterSceneManagerCallback extends DefaultNativeClassWrapper {
     public void masterScenesUpdatedCB(String[] masterSceneIDs)                                                                          { }
     public void applyMasterSceneReplyCB(ResponseCode responseCode, String masterSceneID)                                                { }
     public void masterScenesAppliedCB(String[] masterSceneIDs)                                                                          { }
+    public void createMasterSceneWithTrackingReplyCB(ResponseCode responseCode, String masterSceneID, long trackingID)                  { }
+    public void getMasterSceneVersionReplyCB(ResponseCode responseCode, String masterSceneID, long masterSceneVersion)                  { }
 
     // @Override
     @Override

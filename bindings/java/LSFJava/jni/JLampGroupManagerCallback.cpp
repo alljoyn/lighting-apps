@@ -188,4 +188,19 @@ void JLampGroupManagerCallback::TransitionLampGroupStateToPresetReplyCB(const LS
     XJavaDelegator::Call_Void_ResponseCode_String(jdelegate, __func__, responseCode, lampGroupID);
 }
 
+void JLampGroupManagerCallback::CreateLampGroupWithTrackingReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const uint32_t& trackingID)
+{
+    XJavaDelegator::Call_Void_ResponseCode_String_UInt32(jdelegate, __func__, responseCode, lampGroupID, trackingID);
+}
+
+void JLampGroupManagerCallback::GetLampGroupVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const uint32_t& lampGroupVersion)
+{
+    XJavaDelegator::Call_Void_ResponseCode_String_UInt32(jdelegate, __func__, responseCode, lampGroupID, lampGroupVersion);
+}
+
+void JLampGroupManagerCallback::SetLampGroupEffectReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const LSFString& effectID)
+{
+    XJavaDelegator::Call_Void_ResponseCode_String_String(jdelegate, __func__, responseCode, lampGroupID, effectID);
+}
+
 } /* namespace lsf */

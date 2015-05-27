@@ -17,23 +17,23 @@
 #import <Foundation/Foundation.h>
 #import "LSFSDKColorItem.h"
 #import "LSFSDKEffect.h"
-#import "LSFPulseEffectDataModel.h"
+#import "LSFPulseEffectDataModelV2.h"
+#import "LSFSDKLampState.h"
 
 @interface LSFSDKPulseEffect : LSFSDKColorItem <LSFSDKEffect>
+{
+    @protected LSFPulseEffectDataModelV2 *pulseEffectDataModel;
+}
 
--(id)initWithID: (NSString *)pulseEffectID;
--(id)initWithID: (NSString *)pulseEffectID name: (NSString *)name;
--(void)modifyFromState: (id<LSFSDKLampState>)fromState toState: (id<LSFSDKLampState>)toState period: (unsigned long)period duration: (unsigned long)duration count: (unsigned long)count;
+-(id)initWithPulseEffectID: (NSString *)pulseEffectID;
+-(id)initWithPulseEffectID: (NSString *)pulseEffectID pulseEffectName: (NSString *)pulseEffectName;
+-(void)modifyFromState: (id<LSFSDKLampState>)fromState toState: (id<LSFSDKLampState>)toState period: (unsigned int)period duration: (unsigned int)duration count: (unsigned int)count;
 -(void)deletePulseEffect;
--(void)setFromStatePower: (Power)power;
--(void)setFromStateColor: (LSFSDKColor *)color;
--(void)setToStatePower: (Power)power;
--(void)setToStateColor: (LSFSDKColor *)color;
 
 /**
  * <b>WARNING: This method is not intended to be used by clients, and may change or be
  * removed in subsequent releases of the SDK.</b>
  */
--(LSFPulseEffectDataModel *)getPulseEffectDataModel;
+-(LSFPulseEffectDataModelV2 *)getPulseEffectDataModel;
 
 @end

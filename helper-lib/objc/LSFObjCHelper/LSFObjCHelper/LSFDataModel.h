@@ -24,6 +24,9 @@
  * in subsequent releases of the SDK.
  */
 @interface LSFDataModel : LSFModel
+{
+    @protected BOOL stateInitialized;
+}
 
 @property (nonatomic, strong) LSFLampState *state;
 @property (nonatomic, strong) LSFCapabilityData *capability;

@@ -35,6 +35,8 @@ public class PresetManagerCallback extends DefaultNativeClassWrapper {
     public void getDefaultLampStateReplyCB(ResponseCode responseCode, LampState defaultLampState)                       { }
     public void setDefaultLampStateReplyCB(ResponseCode responseCode)                                                   { }
     public void defaultLampStateChangedCB()                                                                             { }
+    public void getPresetVersionReplyCB(ResponseCode responseCode, String presetID, long presetVersion)                 { }
+    public void createPresetWithTrackingReplyCB(ResponseCode responseCode, String presetID, long trackingID)            { }
 
     @Override
     protected native void createNativeObject();

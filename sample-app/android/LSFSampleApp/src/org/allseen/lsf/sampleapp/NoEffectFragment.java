@@ -17,7 +17,7 @@ package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.helper.model.ColorItemDataModel;
 import org.allseen.lsf.helper.model.NoEffectDataModel;
-import org.allseen.lsf.helper.model.SceneElementDataModelV10;
+import org.allseen.lsf.helper.model.SceneElementDataModel;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -67,7 +67,7 @@ public class NoEffectFragment extends BasicSceneElementInfoFragment {
     }
 
     @Override
-    protected SceneElementDataModelV10 getPendingSceneElementDataModel() {
+    protected SceneElementDataModel getPendingSceneElementDataModel() {
         return ((SampleAppActivity)getActivity()).pendingNoEffectModel;
     }
 

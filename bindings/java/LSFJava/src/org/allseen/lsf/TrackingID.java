@@ -16,5 +16,15 @@
 package org.allseen.lsf;
 
 public class TrackingID {
+    public static final long UNDEFINED = -1;
+
     public long value;
+
+    public TrackingID() {
+        this(UNDEFINED);
+    }
+
+    public TrackingID(long value) {
+        this.value = value;
+    }
 }

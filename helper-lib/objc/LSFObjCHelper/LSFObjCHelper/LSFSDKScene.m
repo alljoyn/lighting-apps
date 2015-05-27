@@ -15,57 +15,22 @@
  ******************************************************************************/
 
 #import "LSFSDKScene.h"
-#import "LSFSceneDataModel.h"
-#import "LSFAllJoynManager.h"
-
-@interface LSFSDKScene()
-
-@property (nonatomic, strong) LSFSceneDataModel *sceneDataModel;
-
-@end
+#import "LSFSDKAllJoynManager.h"
 
 @implementation LSFSDKScene
 
-@synthesize sceneDataModel = _sceneDataModel;
-
--(id)initWithSceneID: (NSString *)sceneID
-{
-    self = [super init];
-
-    if (self)
-    {
-        self.sceneDataModel = [[LSFSceneDataModel alloc] initWithSceneID: sceneID];
-    }
-
-    return self;
-}
-
 -(void)apply
 {
-    NSLog(@"LSFScene - apply() executing");
+    NSString *errorContext = @"LSFSDKScene apply: error";
 
-    LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
-    [ajManager.lsfSceneManager applySceneWithID: self.sceneDataModel.theID];
-}
-
--(void)modify: (NSArray *)sceneElements
-{
-    //TODO - implement
-}
-
--(void)add: (LSFSDKSceneElement *)sceneElement
-{
-    //TODO - implement
-}
-
--(void)remove: (LSFSDKSceneElement *)sceneElement
-{
-    //TODO - implement
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getSceneManager] applySceneWithID: [self theID]]];
 }
 
 -(void)deleteScene
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKScene delete: error";
+
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getSceneManager] deleteSceneWithID: [self theID]]];
 }
 
 /*
@@ -73,21 +38,12 @@
  */
 -(void)rename:(NSString *)name
 {
-    //TODO - implement
-}
+    NSString *errorContext = @"LSFSDKScene rename: error";
 
--(LSFModel *)getItemDataModel
-{
-    return [self getSceneDataModel];
-}
-
-/**
- * <b>WARNING: This method is not intended to be used by clients, and may change or be
- * removed in subsequent releases of the SDK.</b>
- */
--(LSFSceneDataModel *)getSceneDataModel
-{
-    return self.sceneDataModel;
+    if ([self postInvalidArgIfNull: errorContext object: name])
+    {
+        [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getSceneManager] setSceneNameWithID: [self theID] andSceneName: name]];
+    }
 }
 
 @end

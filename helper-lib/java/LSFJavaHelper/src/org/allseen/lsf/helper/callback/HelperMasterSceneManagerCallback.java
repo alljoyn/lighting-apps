@@ -15,9 +15,13 @@
  */
 package org.allseen.lsf.helper.callback;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.allseen.lsf.MasterScene;
 import org.allseen.lsf.MasterSceneManagerCallback;
 import org.allseen.lsf.ResponseCode;
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.manager.LightingSystemManager;
 import org.allseen.lsf.helper.model.MasterSceneDataModel;
@@ -28,11 +32,13 @@ import org.allseen.lsf.helper.model.MasterSceneDataModel;
  */
 public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback {
     protected LightingSystemManager manager;
+    protected Map<String, TrackingID> creationTrackingIDs;
 
     public HelperMasterSceneManagerCallback(LightingSystemManager manager) {
         super();
 
         this.manager = manager;
+        this.creationTrackingIDs = new HashMap<String, TrackingID>();
     }
 
     @Override
@@ -90,6 +96,15 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
     public void createMasterSceneReplyCB(ResponseCode responseCode, String masterSceneID) {
         if (!responseCode.equals(ResponseCode.OK)) {
             manager.getMasterSceneCollectionManager().sendErrorEvent("createMasterSceneReplyCB", responseCode, masterSceneID);
+        }
+    }
+
+    @Override
+    public void createMasterSceneWithTrackingReplyCB(ResponseCode responseCode, String masterSceneID, long trackingID) {
+        if (!responseCode.equals(ResponseCode.OK)) {
+            manager.getMasterSceneCollectionManager().sendErrorEvent("createMasterSceneWithTrackingReplyCB", responseCode, masterSceneID, new TrackingID(trackingID));
+        } else {
+            creationTrackingIDs.put(masterSceneID, new TrackingID(trackingID));
         }
     }
 
@@ -178,7 +193,11 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
                 MasterSceneDataModel masterSceneModel = manager.getMasterSceneCollectionManager().getModel(masterSceneID);
 
                 if (masterSceneModel != null) {
-                    masterSceneModel.masterScene = masterScene;
+                    boolean wasInitialized = masterSceneModel.isInitialized();
+                    masterSceneModel.setMasterScene(masterScene);
+                    if (wasInitialized != masterSceneModel.isInitialized()) {
+                        postSendMasterSceneInitialized(masterSceneID);
+                    }
                 }
             }
         });
@@ -193,7 +212,11 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
                 MasterSceneDataModel masterSceneModel = manager.getMasterSceneCollectionManager().getModel(masterSceneID);
 
                 if (masterSceneModel != null) {
+                    boolean wasInitialized = masterSceneModel.isInitialized();
                     masterSceneModel.setName(masterSceneName);
+                    if (wasInitialized != masterSceneModel.isInitialized()) {
+                        postSendMasterSceneInitialized(masterSceneID);
+                    }
                 }
             }
         });
@@ -217,6 +240,15 @@ public class HelperMasterSceneManagerCallback extends MasterSceneManagerCallback
             @Override
             public void run() {
                 manager.getMasterSceneCollectionManager().sendChangedEvent(masterSceneID);
+            }
+        });
+    }
+
+    protected void postSendMasterSceneInitialized(final String masterSceneID) {
+        manager.getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                manager.getMasterSceneCollectionManager().sendInitializedEvent(masterSceneID, creationTrackingIDs.remove(masterSceneID));
             }
         });
     }

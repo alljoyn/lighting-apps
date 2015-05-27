@@ -63,6 +63,7 @@ class XClass {
     static XClass *xTransitionEffect;
     static XClass *xPulseEffect;
     static XClass *xSceneElement;
+    static XClass *xSceneWithSceneElements;
 
     XClass(const char *name) { className = name; classRef = NULL; }
     ~XClass();

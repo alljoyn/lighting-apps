@@ -30,7 +30,8 @@ public class SceneElementManager extends BaseNativeClassWrapper {
     public native ControllerClientStatus deleteSceneElement(String sceneElementID);
     public native ControllerClientStatus getSceneElement(String sceneElementID);
     public native ControllerClientStatus applySceneElement(String sceneElementID);
-//TODO    public native ControllerClientStatus getSceneElementDataSet(String sceneElementID, String language);
+    public native ControllerClientStatus getSceneElementVersion(String sceneElementID);
+    public native ControllerClientStatus getSceneElementDataSet(String sceneElementID, String language);
 
     protected native void createNativeObject(ControllerClient controller, SceneElementManagerCallback callback);
 

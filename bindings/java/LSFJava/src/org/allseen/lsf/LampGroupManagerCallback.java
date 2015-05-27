@@ -48,6 +48,9 @@ public class LampGroupManagerCallback extends DefaultNativeClassWrapper {
     public void updateLampGroupReplyCB(ResponseCode responseCode, String lampGroupID)                                           { }
     public void lampGroupsUpdatedCB(String[] lampGroupIDs)                                                                      { }
     public void transitionLampGroupStateToPresetReplyCB(ResponseCode responseCode, String lampGroupID)                          { }
+    public void createLampGroupWithTrackingReplyCB(ResponseCode responseCode, String lampGroupID, long trackingID)              { }
+    public void getLampGroupVersionReplyCB(ResponseCode responseCode, String lampGroupID, long lampGroupVersion)                { }
+    public void setLampGroupEffectReplyCB(ResponseCode responseCode, String lampGroupID, String effectID)                       { }
 
     // @Override
     @Override

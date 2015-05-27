@@ -18,6 +18,11 @@
 
 @implementation LSFSDKPulseEffectAdapter
 
+-(void)onPulseEffectInitializedWithTrackingID: (LSFTrackingID *)trackingID andPulseEffect: (LSFSDKPulseEffect *)pulseEffect;
+{
+    //Intentionally left blank
+}
+
 -(void)onPulseEffectChanged: (LSFSDKPulseEffect *)pulseEffect
 {
     //Intentionally left blank

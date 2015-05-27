@@ -34,8 +34,10 @@ public class SceneDataModel extends LightingItemDataModel {
     public static String defaultName = "<Loading scene info...>";
 
     public List<NoEffectDataModel> noEffects;
-    public List<TransitionEffectDataModelV10> transitionEffects;
-    public List<PulseEffectDataModelV10> pulseEffects;
+    public List<TransitionEffectDataModel> transitionEffects;
+    public List<PulseEffectDataModel> pulseEffects;
+
+    protected boolean sceneInitialized;
 
     public SceneDataModel() {
         this((String)null);
@@ -49,16 +51,18 @@ public class SceneDataModel extends LightingItemDataModel {
         super(sceneID, TAG_PREFIX_SCENE, sceneName != null ? sceneName : defaultName);
 
         noEffects = new ArrayList<NoEffectDataModel>();
-        transitionEffects = new ArrayList<TransitionEffectDataModelV10>();
-        pulseEffects = new ArrayList<PulseEffectDataModelV10>();
+        transitionEffects = new ArrayList<TransitionEffectDataModel>();
+        pulseEffects = new ArrayList<PulseEffectDataModel>();
+        sceneInitialized = false;
     }
 
     public SceneDataModel(SceneDataModel other) {
         super(other);
 
         this.noEffects = new ArrayList<NoEffectDataModel>(other.noEffects);
-        this.transitionEffects = new ArrayList<TransitionEffectDataModelV10>(other.transitionEffects);
-        this.pulseEffects = new ArrayList<PulseEffectDataModelV10>(other.pulseEffects);
+        this.transitionEffects = new ArrayList<TransitionEffectDataModel>(other.transitionEffects);
+        this.pulseEffects = new ArrayList<PulseEffectDataModel>(other.pulseEffects);
+        this.sceneInitialized = other.sceneInitialized;
     }
 
     public boolean containsGroup(String groupID) {
@@ -68,13 +72,13 @@ public class SceneDataModel extends LightingItemDataModel {
             }
         }
 
-        for (TransitionEffectDataModelV10 transitionEffect : transitionEffects) {
+        for (TransitionEffectDataModel transitionEffect : transitionEffects) {
             if (transitionEffect.containsGroup(groupID)) {
                 return true;
             }
         }
 
-        for (PulseEffectDataModelV10 pulseEffect : pulseEffects) {
+        for (PulseEffectDataModel pulseEffect : pulseEffects) {
             if (pulseEffect.containsGroup(groupID)) {
                 return true;
             }
@@ -90,13 +94,13 @@ public class SceneDataModel extends LightingItemDataModel {
             }
         }
 
-        for (TransitionEffectDataModelV10 transitionEffect : transitionEffects) {
+        for (TransitionEffectDataModel transitionEffect : transitionEffects) {
             if (transitionEffect.containsPreset(presetID)) {
                 return true;
             }
         }
 
-        for (PulseEffectDataModelV10 pulseEffect : pulseEffects) {
+        for (PulseEffectDataModel pulseEffect : pulseEffects) {
             if (pulseEffect.containsPreset(presetID)) {
                 return true;
             }
@@ -109,11 +113,11 @@ public class SceneDataModel extends LightingItemDataModel {
         updateElement(noEffects, elementModel);
     }
 
-    public void updateTransitionEffect(TransitionEffectDataModelV10 elementModel) {
+    public void updateTransitionEffect(TransitionEffectDataModel elementModel) {
         updateElement(transitionEffects, elementModel);
     }
 
-    public void updatePulseEffect(PulseEffectDataModelV10 elementModel) {
+    public void updatePulseEffect(PulseEffectDataModel elementModel) {
         updateElement(pulseEffects, elementModel);
     }
 
@@ -121,7 +125,7 @@ public class SceneDataModel extends LightingItemDataModel {
         return removeElement(noEffects, elementID) || removeElement(transitionEffects, elementID) || removeElement(pulseEffects, elementID);
     }
 
-    protected <T extends SceneElementDataModelV10> void updateElement(List<T> elementModels, T elementModel) {
+    protected <T extends SceneElementDataModel> void updateElement(List<T> elementModels, T elementModel) {
         boolean updated = false;
 
         for (int i = 0; !updated && i < elementModels.size(); i++) {
@@ -136,7 +140,7 @@ public class SceneDataModel extends LightingItemDataModel {
         }
     }
 
-    protected <T extends SceneElementDataModelV10> boolean removeElement(List<T> elementModels, String elementID) {
+    protected <T extends SceneElementDataModel> boolean removeElement(List<T> elementModels, String elementID) {
         boolean removed = false;
 
         for (int i = 0; !removed && i < elementModels.size(); i++) {
@@ -182,7 +186,7 @@ public class SceneDataModel extends LightingItemDataModel {
         }
 
         for (int i = 0; i < transitionEffects.size(); i++) {
-            TransitionEffectDataModelV10 elementModel = transitionEffects.get(i);
+            TransitionEffectDataModel elementModel = transitionEffects.get(i);
 
             if (elementModel.presetID == null) {
                 StateTransitionEffect stateTransitionEffect = new StateTransitionEffect();
@@ -205,7 +209,7 @@ public class SceneDataModel extends LightingItemDataModel {
         }
 
         for (int i = 0; i < pulseEffects.size(); i++) {
-            PulseEffectDataModelV10 elementModel = pulseEffects.get(i);
+            PulseEffectDataModel elementModel = pulseEffects.get(i);
 
             if (elementModel.presetID == null || elementModel.endPresetID == null) {
                 StatePulseEffect statePulseEffect = new StatePulseEffect();
@@ -243,6 +247,8 @@ public class SceneDataModel extends LightingItemDataModel {
     }
 
     public void fromScene(Scene scene) {
+        sceneInitialized = true;
+
         StateTransitionEffect[] stateTransitionEffects = scene.getStateTransitionEffects();
         PresetTransitionEffect[] presetTransitionEffects = scene.getPresetTransitionEffects();
         StatePulseEffect[] statePulseEffects = scene.getStatePulseEffects();
@@ -266,7 +272,7 @@ public class SceneDataModel extends LightingItemDataModel {
 
                 noEffects.add(elementModel);
             } else {
-                TransitionEffectDataModelV10 elementModel = new TransitionEffectDataModelV10();
+                TransitionEffectDataModel elementModel = new TransitionEffectDataModel();
 
                 // The elementModel.presetID field is left at the default value
                 // set by the TransitionEffectDataModel constructor.
@@ -296,7 +302,7 @@ public class SceneDataModel extends LightingItemDataModel {
 
                 noEffects.add(elementModel);
             } else {
-                TransitionEffectDataModelV10 elementModel = new TransitionEffectDataModelV10();
+                TransitionEffectDataModel elementModel = new TransitionEffectDataModel();
 
                 // The elementModel.state field is left at the default value
                 // set by the TransitionEffectDataModel constructor.
@@ -314,7 +320,7 @@ public class SceneDataModel extends LightingItemDataModel {
 
         for (int i = 0; i < statePulseEffects.length; i++) {
             StatePulseEffect statePulseEffect = statePulseEffects[i];
-            PulseEffectDataModelV10 elementModel = new PulseEffectDataModelV10();
+            PulseEffectDataModel elementModel = new PulseEffectDataModel();
 
             // The elementModel.presetID and elementModel.endPresetID fields are
             // left at the default values set by the PulseEffectDataModel constructor.
@@ -332,7 +338,7 @@ public class SceneDataModel extends LightingItemDataModel {
 
         for (int i = 0; i < presetPulseEffects.length; i++) {
             PresetPulseEffect presetPulseEffect = presetPulseEffects[i];
-            PulseEffectDataModelV10 elementModel = new PulseEffectDataModelV10();
+            PulseEffectDataModel elementModel = new PulseEffectDataModel();
 
             // The elementModel.state and elementModel.endState fields are
             // left at the default values set by the PulseEffectDataModel
@@ -352,5 +358,10 @@ public class SceneDataModel extends LightingItemDataModel {
 
             pulseEffects.add(elementModel);
         }
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return super.isInitialized() && sceneInitialized;
     }
 }

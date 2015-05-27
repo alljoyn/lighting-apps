@@ -18,6 +18,11 @@
 
 @implementation LSFSDKGroupAdapter
 
+-(void)onGroupInitializedWithTrackingID: (LSFTrackingID *)trackingID andGroup: (LSFSDKGroup *)group
+{
+    //Intentionally left blank
+}
+
 -(void)onGroupChanged: (LSFSDKGroup *)group
 {
     //Intentionally left blank

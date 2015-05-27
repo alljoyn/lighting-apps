@@ -60,6 +60,12 @@
     return self.masterSceneManager->GetMasterSceneName(msid, lang);
 }
 
+-(ControllerClientStatus)getMasterSceneVersionWithID: (NSString *)masterSceneID
+{
+    std::string msid([masterSceneID UTF8String]);
+    return CONTROLLER_CLIENT_OK; //self.masterSceneManager->GetMasterSceneVersion(msid);
+}
+
 -(ControllerClientStatus)setMasterSceneNameWithID: (NSString *)masterSceneID andMasterSceneName: (NSString *)masterSceneName
 {
     std::string msid([masterSceneID UTF8String]);
@@ -86,6 +92,19 @@
     std::string name([masterSceneName UTF8String]);
     std::string lang([language UTF8String]);
     return self.masterSceneManager->CreateMasterScene(*(static_cast<lsf::MasterScene*>(masterScene.handle)), name, lang);
+}
+
+-(ControllerClientStatus)createMasterSceneWithTracking: (uint32_t *)trackingID masterScene: (LSFMasterScene *)masterScene withName: (NSString *)masterSceneName
+{
+    std::string name([masterSceneName UTF8String]);
+    return self.masterSceneManager->CreateMasterSceneWithTracking(*trackingID, *(static_cast<lsf::MasterScene*>(masterScene.handle)), name);
+}
+
+-(ControllerClientStatus)createMasterSceneWithTracking: (uint32_t *)trackingID masterScene: (LSFMasterScene *)masterScene withName: (NSString *)masterSceneName andLanguage: (NSString *)language
+{
+    std::string name([masterSceneName UTF8String]);
+    std::string lang([language UTF8String]);
+    return self.masterSceneManager->CreateMasterSceneWithTracking(*trackingID, *(static_cast<lsf::MasterScene*>(masterScene.handle)), name, lang);
 }
 
 -(ControllerClientStatus)updateMasterSceneWithID: (NSString *)masterSceneID andMasterScene: (LSFMasterScene *)masterScene

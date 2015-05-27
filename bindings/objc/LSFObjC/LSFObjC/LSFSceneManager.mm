@@ -60,6 +60,12 @@
     return self.sceneManager->GetSceneName(sid, lang);
 }
 
+-(ControllerClientStatus)getSceneVersionWithID: (NSString *)sceneID
+{
+    std::string sid([sceneID UTF8String]);
+    return CONTROLLER_CLIENT_OK; //self.sceneManager->GetSceneVersion(sid);
+}
+
 -(ControllerClientStatus)setSceneNameWithID: (NSString *)sceneID andSceneName: (NSString *)sceneName
 {
     std::string sid([sceneID UTF8String]);
@@ -88,10 +94,42 @@
     return self.sceneManager->CreateScene(*(static_cast<lsf::Scene*>(scene.handle)), name, lang);
 }
 
+-(ControllerClientStatus)createSceneWithTracking: (uint32_t *)trackingID scene: (LSFScene *)scene andSceneName: (NSString *)sceneName
+{
+    std::string name([sceneName UTF8String]);
+    return self.sceneManager->CreateSceneWithTracking(*trackingID, *(static_cast<lsf::Scene*>(scene.handle)), name);
+}
+
+-(ControllerClientStatus)createSceneWithTracking: (uint32_t *)trackingID scene: (LSFScene *)scene sceneName: (NSString *)sceneName andLanguage: (NSString *)language
+{
+    std::string name([sceneName UTF8String]);
+    std::string lang([language UTF8String]);
+    return self.sceneManager->CreateSceneWithTracking(*trackingID, *(static_cast<lsf::Scene*>(scene.handle)), name, lang);
+}
+
+-(ControllerClientStatus)createSceneWithSceneElementsWithTracking: (uint32_t *)trackingID sceneWithSceneElements: (LSFSceneWithSceneElements *)sceneWithSceneElements andSceneName: (NSString *)sceneName
+{
+    std::string name([sceneName UTF8String]);
+    return self.sceneManager->CreateSceneWithSceneElements(*trackingID, *(static_cast<lsf::SceneWithSceneElements*>(sceneWithSceneElements.handle)), name);
+}
+
+-(ControllerClientStatus)createSceneWithSceneElementsWithTracking: (uint32_t *)trackingID sceneWithSceneElements: (LSFSceneWithSceneElements *)sceneWithSceneElements sceneName: (NSString *)sceneName andLanguage: (NSString *)language
+{
+    std::string name([sceneName UTF8String]);
+    std::string lang([language UTF8String]);
+    return self.sceneManager->CreateSceneWithSceneElements(*trackingID, *(static_cast<lsf::SceneWithSceneElements*>(sceneWithSceneElements.handle)), name, lang);
+}
+
 -(ControllerClientStatus)updateSceneWithID: (NSString *)sceneID withScene: (LSFScene *)scene
 {
     std::string sid([sceneID UTF8String]);
     return self.sceneManager->UpdateScene(sid, *(static_cast<lsf::Scene*>(scene.handle)));
+}
+
+-(ControllerClientStatus)updateSceneWithSceneElementsWithID: (NSString *)sceneID withSceneWithSceneElements: (LSFSceneWithSceneElements *)sceneWithSceneElements
+{
+    std::string sid([sceneID UTF8String]);
+    return self.sceneManager->UpdateSceneWithSceneElements(sid, *(static_cast<lsf::SceneWithSceneElements*>(sceneWithSceneElements.handle)));
 }
 
 -(ControllerClientStatus)deleteSceneWithID: (NSString *)sceneID
@@ -104,6 +142,12 @@
 {
     std::string sid([sceneID UTF8String]);
     return self.sceneManager->GetScene(sid);
+}
+
+-(ControllerClientStatus)getSceneWithSceneElementsWithID: (NSString *)sceneID
+{
+    std::string sid([sceneID UTF8String]);
+    return self.sceneManager->GetSceneWithSceneElements(sid);
 }
 
 -(ControllerClientStatus)applySceneWithID: (NSString *)sceneID
@@ -123,6 +167,19 @@
     std::string sid([sceneID UTF8String]);
     std::string lang([language UTF8String]);
     return self.sceneManager->GetSceneDataSet(sid, lang);
+}
+
+-(ControllerClientStatus)getSceneWithSceneElementsDataWithID: (NSString *)sceneID
+{
+    std::string sid([sceneID UTF8String]);
+    return self.sceneManager->GetSceneWithSceneElementsDataSet(sid);
+}
+
+-(ControllerClientStatus)getSceneWithSceneElementsDataWithID: (NSString *)sceneID andLanguage: (NSString *)language
+{
+    std::string sid([sceneID UTF8String]);
+    std::string lang([language UTF8String]);
+    return self.sceneManager->GetSceneWithSceneElementsDataSet(sid, lang);
 }
 
 /*

@@ -26,6 +26,9 @@
  * to it.
  */
 @interface LSFSDKLamp : LSFSDKGroupMember
+{
+    @protected LSFLampModel *lampModel;
+}
 
 /** @name Creating LSFLamp */
 

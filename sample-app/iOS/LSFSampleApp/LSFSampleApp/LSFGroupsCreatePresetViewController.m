@@ -17,7 +17,7 @@
 #import "LSFGroupsCreatePresetViewController.h"
 #import "LSFGroupsInfoTableViewController.h"
 #import "LSFPresetModelContainer.h"
-#import "LSFPresetModel.h"
+#import "LSFSDKPreset.h"
 #import "LSFDispatchQueue.h"
 #import "LSFAllJoynManager.h"
 #import "LSFConstants.h"
@@ -217,12 +217,11 @@
  */
 -(BOOL)checkForDuplicateName: (NSString *)name
 {
-    LSFPresetModelContainer *container = [LSFPresetModelContainer getPresetModelContainer];
-    NSDictionary *presets = container.presetContainer;
+    NSDictionary *presets = [[LSFPresetModelContainer getPresetModelContainer] presetContainer];
     
-    for (LSFPresetModel *model in [presets allValues])
+    for (LSFSDKPreset *preset in [presets allValues])
     {
-        if ([name isEqualToString: model.name])
+        if ([name isEqualToString: [[preset getPresetDataModel] name]])
         {
             return YES;
         }

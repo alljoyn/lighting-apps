@@ -14,10 +14,7 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import <Foundation/Foundation.h>
 #import "LSFSDKLightingItem.h"
-#import "LSFSDKSceneElement.h"
-#import "LSFSceneDataModel.h"
 
 /**
  * An LSFSDKScene object represents a set of lamps and associated states in the lighting system, and can be
@@ -25,38 +22,7 @@
  */
 @interface LSFSDKScene : LSFSDKLightingItem
 
-/** @name Creating LSFLightingScene */
-
-/**
- * Constructs an instance of the LSFLightingScene class.
- *
- * @param sceneID The ID of the Scene.
- *
- * @return Instance of LSFLightingScene.
- *
- * @warning *Note:* This method is intended to be used internally. Client software should not instantiate
- * Groups directly, but should instead get them from the LSFLightingDirector using the [LSFLightingDirector getScenes]
- * method.
- */
--(id)initWithSceneID: (NSString *)sceneID;
-
-/** @name LSFLightingScene Controls */
-
-/**
- * Sends a command to apply this Scene, which sets the appropriate state for all
- * constituent lamps.
- */
 -(void)apply;
-
--(void)modify: (NSArray *)sceneElements;
--(void)add: (LSFSDKSceneElement *)sceneElement;
--(void)remove: (LSFSDKSceneElement *)sceneElement;
 -(void)deleteScene;
-
-/*
- * Note: This method is not intended to be used by clients, and may change or be
- * removed in subsequent releases of the SDK.
- */
--(LSFSceneDataModel *)getSceneDataModel;
 
 @end

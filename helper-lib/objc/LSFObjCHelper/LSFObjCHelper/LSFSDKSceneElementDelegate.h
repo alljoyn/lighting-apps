@@ -16,12 +16,14 @@
 
 #import <Foundation/Foundation.h>
 #import "LSFSDKLightingDelegate.h"
+#import "LSFTrackingID.h"
 
 @class LSFSDKSceneElement;
 @class LSFSDKLightingItemErrorEvent;
 
 @protocol LSFSDKSceneElementDelegate <LSFSDKLightingDelegate>
 
+-(void)onSceneElementInitializedWithTrackingID: (LSFTrackingID *)trackingID andSceneElement: (LSFSDKSceneElement *)sceneElement;
 -(void)onSceneElementChanged: (LSFSDKSceneElement *)sceneElement;
 -(void)onSceneElementRemoved: (LSFSDKSceneElement *)sceneElement;
 -(void)onSceneElementError: (LSFSDKLightingItemErrorEvent *)error;

@@ -32,7 +32,15 @@ public abstract class MutableColorItem extends ColorItem implements LampState {
     }
 
     public void setColorHsvt(int[] hsvt) {
-        setColorHsvt(hsvt[0], hsvt[1], hsvt[2], hsvt[3]);
+        String errorContext = "MutableColorItem.setColorHsvt() error";
+
+        if (postInvalidArgIfNull(errorContext, hsvt)) {
+            if (hsvt.length != 4) {
+                postInvalidArgIfNull(errorContext, null);
+            } else {
+                setColorHsvt(hsvt[0], hsvt[1], hsvt[2], hsvt[3]);
+            }
+        }
     }
 
     public void setPower(Power power) {
@@ -40,9 +48,15 @@ public abstract class MutableColorItem extends ColorItem implements LampState {
     }
 
     public void setColor(Color color) {
-        setColorHsvt(color.getHue(), color.getSaturation(), color.getBrightness(), color.getColorTemperature());
+        String errorContext = "MutableColorItem.setColor() error";
+
+        if (postInvalidArgIfNull(errorContext, color)) {
+            setColorHsvt(color.getHue(), color.getSaturation(), color.getBrightness(), color.getColorTemperature());
+        }
     }
 
+    @Override
     public abstract void setPowerOn(boolean powerOn);
+    @Override
     public abstract void setColorHsvt(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees);
 }

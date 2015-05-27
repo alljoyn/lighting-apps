@@ -22,11 +22,11 @@ import org.allseen.lsf.helper.model.LightingItemDataModel;
 public abstract class ColorItem extends LightingItem {
 
     public int[] getColorHsvt() {
-        return ColorStateConverter.convertModelToView(getColorDataModel().state);
+        return ColorStateConverter.convertModelToView(getColorDataModel().getState());
     }
 
     public boolean getPowerOn() {
-        return getColorDataModel().state.getOnOff();
+        return getColorDataModel().getState().getOnOff();
     }
 
     public Power getPower() {

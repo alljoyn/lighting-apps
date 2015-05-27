@@ -18,20 +18,14 @@
 
 @implementation LSFSDKMyLampState
 
+static LSFSDKColor *DEFAULT_COLOR = [LSFSDKColor white];
+
 @synthesize power = _power;
 @synthesize color = _color;
 
 -(id)initWithPower: (Power)power hue: (unsigned int)hue saturation: (unsigned int)sat brightness: (unsigned int)brightness colorTemp: (unsigned int)colorTemp;
 {
-    self = [super init];
-
-    if (self)
-    {
-        _power = power;
-        _color = [[LSFSDKColor alloc] initWithHue: hue saturation: sat brightness: brightness colorTemp: colorTemp];
-    }
-
-    return self;
+    return [self initWithPower: power color: [[LSFSDKColor alloc] initWithHue: hue saturation: sat brightness: brightness colorTemp: colorTemp]];
 }
 
 -(id)initWithPower: (Power)power color: (LSFSDKColor *)colorState
@@ -41,7 +35,7 @@
     if (self)
     {
         _power = power;
-        _color = [[LSFSDKColor alloc] initWithColor: colorState];
+        _color = (colorState != nil) ? colorState : DEFAULT_COLOR;
     }
 
     return self;
@@ -57,18 +51,25 @@
 
 -(void)setPowerOn: (BOOL)powerOn
 {
-    //TODO - implement
+    _power = (powerOn) ? ON : OFF;
 }
 
 -(NSArray *)getColorHsvt
 {
-    //TODO - implement
-    return nil;
+    NSNumber *hue = [[NSNumber alloc] initWithUnsignedInt: self.color.hue];
+    NSNumber *saturation = [[NSNumber alloc] initWithUnsignedInt: self.color.saturation];
+    NSNumber *brightness = [[NSNumber alloc] initWithUnsignedInt: self.color.brightness];
+    NSNumber *colorTemp = [[NSNumber alloc] initWithUnsignedInt: self.color.colorTemp];
+
+    return [NSArray arrayWithObjects: hue, saturation, brightness, colorTemp, nil];
 }
 
 -(void)setColorHsvtWithHue: (unsigned int)hueDegrees saturation: (unsigned int)saturationPercent brightness: (unsigned int)brightnessPercent colorTemp: (unsigned int)colorTempDegrees
 {
-    //TODO - implement
+    _color.hue = hueDegrees;
+    _color.saturation = saturationPercent;
+    _color.brightness = brightnessPercent;
+    _color.colorTemp = colorTempDegrees;
 }
 
 @end

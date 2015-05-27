@@ -15,14 +15,15 @@
  */
 package org.allseen.lsf.helper.facade;
 
+import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.model.ColorItemDataModel;
 import org.allseen.lsf.helper.model.LightingItemUtil;
-import org.allseen.lsf.helper.model.PulseEffectDataModel;
+import org.allseen.lsf.helper.model.PulseEffectDataModelV2;
 
 public class PulseEffect extends ColorItem implements Effect {
 
-    private PulseEffectDataModel pulseEffectModel;
+    private PulseEffectDataModelV2 pulseEffectModel;
 
     public PulseEffect(String pulseEffectId) {
         this(pulseEffectId, null);
@@ -31,44 +32,67 @@ public class PulseEffect extends ColorItem implements Effect {
     public PulseEffect(String pulseEffectId, String pulseEffectName) {
         super();
 
-        pulseEffectModel = new PulseEffectDataModel(pulseEffectId, pulseEffectName);
+        pulseEffectModel = new PulseEffectDataModelV2(pulseEffectId, pulseEffectName);
     }
 
+    @Override
     public void applyTo(GroupMember member) {
-//        member.applyEffect(this);
-     // TODO-FIX to use above impl
-        if (member instanceof Lamp) {
-            AllJoynManager.pulseEffectManager.applyPulseEffectOnLamps(pulseEffectModel.id, new String[] { member.getColorDataModel().id });
-        } else if (member instanceof Group) {
-            AllJoynManager.pulseEffectManager.applyPulseEffectOnLampGroups(pulseEffectModel.id, new String [] { member.getColorDataModel().id });
+        String errorContext = "PulseEffect.applyTo() error";
+
+        if (postInvalidArgIfNull(errorContext, member)) {
+            member.applyEffect(this);
         }
     }
 
     public void modify(LampState fromState, LampState toState, long period, long duration, long count) {
-        if (fromState instanceof Preset && toState instanceof Preset) {
-            AllJoynManager.pulseEffectManager.updatePulseEffect(pulseEffectModel.id,
-                    LightingItemUtil.createPulseEffect((Preset)fromState, (Preset)toState, period, duration, count));
-        } else {
-            AllJoynManager.pulseEffectManager.updatePulseEffect(pulseEffectModel.id,
-                    LightingItemUtil.createPulseEffect(fromState.getPowerOn(), fromState.getColorHsvt(), toState.getPowerOn(), toState.getColorHsvt(), period, duration, count));
+        String errorContext = "PulseEffect.modify() error";
+
+        if (postInvalidArgIfNull(errorContext, fromState) && postInvalidArgIfNull(errorContext, toState)) {
+            if (fromState instanceof Preset && toState instanceof Preset) {
+                postErrorIfFailure(errorContext,
+                    AllJoynManager.pulseEffectManager.updatePulseEffect(pulseEffectModel.id,
+                            LightingItemUtil.createPulseEffect((Preset)fromState, (Preset)toState, period, duration, count)));
+            } else {
+                postErrorIfFailure(errorContext,
+                    AllJoynManager.pulseEffectManager.updatePulseEffect(pulseEffectModel.id,
+                            LightingItemUtil.createPulseEffect(fromState.getPowerOn(), fromState.getColorHsvt(), toState.getPowerOn(), toState.getColorHsvt(), period, duration, count)));
+            }
         }
     }
 
     @Override
     public void rename(String effectName) {
-        AllJoynManager.pulseEffectManager.setPulseEffectName(pulseEffectModel.id, effectName, LightingDirector.get().getDefaultLanguage());
+        String errorContext = "PulseEffect.rename() error";
+
+        if (postInvalidArgIfNull(errorContext, effectName)) {
+            postErrorIfFailure(errorContext,
+                    AllJoynManager.pulseEffectManager.setPulseEffectName(pulseEffectModel.id, effectName, LightingDirector.get().getDefaultLanguage()));
+        }
     }
 
     public void delete() {
-        AllJoynManager.pulseEffectManager.deletePulseEffect(pulseEffectModel.id);
+        String errorContext = "PulseEffect.delete() error";
+
+        postErrorIfFailure(errorContext,
+                AllJoynManager.pulseEffectManager.deletePulseEffect(pulseEffectModel.id));
     }
 
-    public PulseEffectDataModel getPulseEffectDataModel() {
+    public PulseEffectDataModelV2 getPulseEffectDataModel() {
         return pulseEffectModel;
     }
 
     @Override
     protected ColorItemDataModel getColorDataModel() {
         return getPulseEffectDataModel();
+    }
+
+    @Override
+    protected void postError(final String name, final ResponseCode status) {
+        LightingDirector.get().getLightingSystemManager().getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                LightingDirector.get().getPulseEffectCollectionManager().sendErrorEvent(name, status, getId());
+            }
+        });
     }
 }

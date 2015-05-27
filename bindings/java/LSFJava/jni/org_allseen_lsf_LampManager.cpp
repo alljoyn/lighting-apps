@@ -236,6 +236,22 @@ jobject JNICALL Java_org_allseen_lsf_LampManager_getLampDataSet(JNIEnv *env, job
 }
 
 JNIEXPORT
+jobject JNICALL Java_org_allseen_lsf_LampManager_getLampVersion(JNIEnv *env, jobject thiz, jstring jLampID)
+{
+    // TODO-FIX uncomment once GetLampVersion has implementation in ControllerClient
+//    return XCppDelegator::Call_ControllerClientStatus_String<JLampManager>(env, thiz, jLampID, &JLampManager::GetLampVersion);
+    return NULL;
+}
+
+JNIEXPORT
+jobject JNICALL Java_org_allseen_lsf_LampManager_setLampEffect(JNIEnv *env, jobject thiz, jstring jLampID, jstring jEffectID)
+{
+    // TODO-FIX uncomment once SetLampEffect has implementation in ControllerClient
+//    return XCppDelegator::Call_ControllerClientStatus_String_String<JLampManager>(env, thiz, jLampID, jEffectID, &JLampManager::SetLampEffect);
+    return NULL;
+}
+
+JNIEXPORT
 void JNICALL Java_org_allseen_lsf_LampManager_createNativeObject(JNIEnv *env, jobject thiz, jobject controller, jobject callback)
 {
     JControllerClient *jcc = GetHandle<JControllerClient*>(controller);

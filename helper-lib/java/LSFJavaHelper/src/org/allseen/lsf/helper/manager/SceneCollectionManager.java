@@ -18,60 +18,72 @@ package org.allseen.lsf.helper.manager;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.allseen.lsf.helper.facade.Scene;
+import org.allseen.lsf.TrackingID;
+import org.allseen.lsf.helper.facade.SceneV1;
 import org.allseen.lsf.helper.listener.LightingItemErrorEvent;
 import org.allseen.lsf.helper.listener.SceneListener;
+import org.allseen.lsf.helper.model.LightingItemFilter;
 import org.allseen.lsf.helper.model.SceneDataModel;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class SceneCollectionManager extends LightingItemCollectionManager<Scene, SceneListener, SceneDataModel> {
+public class SceneCollectionManager extends LightingItemCollectionManager<SceneV1, SceneListener, SceneDataModel> {
 
     public SceneCollectionManager(LightingSystemManager director) {
         super(director);
     }
 
-    public Scene addScene(String sceneID) {
-        return addScene(sceneID, new Scene(sceneID));
+    public SceneV1 addScene(String sceneID) {
+        return addScene(sceneID, new SceneV1(sceneID));
     }
 
-    public Scene addScene(SceneDataModel sceneModel) {
-        return addScene(sceneModel.id, new Scene(sceneModel));
+    public SceneV1 addScene(SceneDataModel sceneModel) {
+        return addScene(sceneModel.id, new SceneV1(sceneModel));
     }
 
-    public Scene addScene(String sceneID, Scene scene) {
+    public SceneV1 addScene(String sceneID, SceneV1 scene) {
         return itemAdapters.put(sceneID, scene);
     }
 
-    public Scene getScene(String sceneID) {
+    public SceneV1 getScene(String sceneID) {
         return getAdapter(sceneID);
     }
 
-    public Scene[] getScenes() {
-        return getAdapters().toArray(new Scene[size()]);
+    public SceneV1[] getScenes() {
+        return getAdapters().toArray(new SceneV1[size()]);
     }
 
-    public Iterator<Scene> getSceneIterator() {
+    public SceneV1[] getScenes(LightingItemFilter<SceneV1> filter) {
+        Collection<SceneV1> filteredScenes = getAdapters(filter);
+        return filteredScenes.toArray(new SceneV1[filteredScenes.size()]);
+    }
+
+    public Iterator<SceneV1> getSceneIterator() {
         return getAdapters().iterator();
     }
 
-    public Collection<Scene> removeScenes() {
+    public Collection<SceneV1> removeScenes() {
         return removeAllAdapters();
     }
 
-    public Scene removeScene(String sceneID) {
+    public SceneV1 removeScene(String sceneID) {
         return removeAdapter(sceneID);
     }
 
     @Override
-    protected void sendChangedEvent(SceneListener listener, Scene scene) {
+    protected void sendInitializedEvent(SceneListener listener, SceneV1 scene, TrackingID trackingID) {
+        listener.onSceneInitialized(trackingID, scene);
+    }
+
+    @Override
+    protected void sendChangedEvent(SceneListener listener, SceneV1 scene) {
         listener.onSceneChanged(scene);
     }
 
     @Override
-    protected void sendRemovedEvent(SceneListener listener, Scene scene) {
+    protected void sendRemovedEvent(SceneListener listener, SceneV1 scene) {
         listener.onSceneRemoved(scene);
     }
 
@@ -82,7 +94,7 @@ public class SceneCollectionManager extends LightingItemCollectionManager<Scene,
 
     @Override
     public SceneDataModel getModel(String sceneID) {
-        Scene scene = getAdapter(sceneID);
+        SceneV1 scene = getAdapter(sceneID);
 
         return scene != null ? scene.getSceneDataModel() : null;
     }

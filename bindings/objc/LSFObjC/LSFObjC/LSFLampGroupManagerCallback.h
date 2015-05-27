@@ -28,9 +28,11 @@ class LSFLampGroupManagerCallback : public LampGroupManagerCallback {
     ~LSFLampGroupManagerCallback();    
     void GetAllLampGroupIDsReplyCB(const LSFResponseCode& responseCode, const LSFStringList& lampGroupIDs);
     void GetLampGroupNameReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const LSFString& language, const LSFString& lampGroupName);
+    void GetLampGroupVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const uint32_t& lampGroupVersion);
     void SetLampGroupNameReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const LSFString& language);
     void LampGroupsNameChangedCB(const LSFStringList& lampGroupIDs);
     void CreateLampGroupReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID);
+    void CreateLampGroupWithTrackingReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const uint32_t& trackingID);
     void LampGroupsCreatedCB(const LSFStringList& lampGroupIDs);
     void GetLampGroupReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const LampGroup& lampGroup);
     void DeleteLampGroupReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID);
@@ -52,6 +54,7 @@ class LSFLampGroupManagerCallback : public LampGroupManagerCallback {
     void UpdateLampGroupReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID);
     void LampGroupsUpdatedCB(const LSFStringList& lampGroupIDs);
     void TransitionLampGroupStateToPresetReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID);
+    void SetLampGroupEffectReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const LSFString& effectID);
 
   private:
     id<LSFLampGroupManagerCallbackDelegate> _lgmDelegate;

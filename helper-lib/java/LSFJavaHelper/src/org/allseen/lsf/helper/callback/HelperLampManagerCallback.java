@@ -326,7 +326,11 @@ public class HelperLampManagerCallback extends LampManagerCallback {
                 LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
 
                 if (lampModel != null) {
-                    lampModel.state = lampState;
+                    boolean wasInitialized = lampModel.isInitialized();
+                    lampModel.setState(lampState);
+                    if (wasInitialized != lampModel.isInitialized()) {
+                        postSendLampInitialized(lampID);
+                    }
                 }
             }
         });
@@ -378,7 +382,11 @@ public class HelperLampManagerCallback extends LampManagerCallback {
                 LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
 
                 if (lampModel != null) {
+                    boolean wasInitialized = lampModel.isInitialized();
                     lampModel.setDetails(lampDetails);
+                    if (wasInitialized != lampModel.isInitialized()) {
+                        postSendLampInitialized(lampID);
+                    }
                 }
             }
         });
@@ -404,7 +412,11 @@ public class HelperLampManagerCallback extends LampManagerCallback {
                 LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
 
                 if (lampModel != null) {
+                    boolean wasInitialized = lampModel.isInitialized();
                     lampModel.setName(lampName);
+                    if (wasInitialized != lampModel.isInitialized()) {
+                        postSendLampInitialized(lampID);
+                    }
                 }
             }
         });
@@ -419,7 +431,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
                 LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
 
                 if (lampModel != null) {
-                    lampModel.state.setOnOff(onOff);
+                    lampModel.getState().setOnOff(onOff);
                 }
             }
         });
@@ -445,7 +457,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
                 LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
 
                 if (lampModel != null) {
-                    lampModel.state.setHue(hue);
+                    lampModel.getState().setHue(hue);
                 }
             }
         });
@@ -471,7 +483,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
                 LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
 
                 if (lampModel != null) {
-                    lampModel.state.setSaturation(saturation);
+                    lampModel.getState().setSaturation(saturation);
                 }
             }
         });
@@ -497,7 +509,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
                 LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
 
                 if (lampModel != null) {
-                    lampModel.state.setBrightness(brightness);
+                    lampModel.getState().setBrightness(brightness);
                 }
             }
         });
@@ -523,7 +535,7 @@ public class HelperLampManagerCallback extends LampManagerCallback {
                 LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
 
                 if (lampModel != null) {
-                    lampModel.state.setColorTemp(colorTemp);
+                    lampModel.getState().setColorTemp(colorTemp);
                 }
             }
         });
@@ -547,6 +559,15 @@ public class HelperLampManagerCallback extends LampManagerCallback {
             @Override
             public void run() {
                 manager.getLampCollectionManager().sendChangedEvent(lampID);
+            }
+        });
+    }
+
+    protected void postSendLampInitialized(final String lampID) {
+        manager.getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                manager.getLampCollectionManager().sendInitializedEvent(lampID);
             }
         });
     }

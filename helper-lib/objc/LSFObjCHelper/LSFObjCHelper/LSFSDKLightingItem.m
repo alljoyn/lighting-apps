@@ -20,9 +20,41 @@
 
 @synthesize name = _name;
 
+-(NSString *)theID
+{
+    return [[self getItemDataModel] theID];
+}
+
 -(NSString *)name
 {
     return [[self getItemDataModel] name];
+}
+
+-(BOOL)isInitialized
+{
+    return [[self getItemDataModel] isInitialized];
+}
+
+-(BOOL)postInvalidArgIfNull: (NSString *)name object: (id)object
+{
+    if (object == nil)
+    {
+        [self postError: name status: LSF_ERR_INVALID_ARGS];
+        return NO;
+    }
+
+    return YES;
+}
+
+-(BOOL)postErrorIfFailure: (NSString *)name status: (ControllerClientStatus)status
+{
+    if (status != CONTROLLER_CLIENT_OK)
+    {
+        [self postError: name status: LSF_ERR_FAILURE];
+        return NO;
+    }
+
+    return YES;
 }
 
 -(void)rename: (NSString *)name
@@ -31,6 +63,11 @@
 }
 
 -(LSFModel *)getItemDataModel
+{
+    @throw [NSException exceptionWithName: NSInternalInconsistencyException reason: [NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)] userInfo: nil];
+}
+
+-(void)postError: (NSString *)name status: (LSFResponseCode)status
 {
     @throw [NSException exceptionWithName: NSInternalInconsistencyException reason: [NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)] userInfo: nil];
 }

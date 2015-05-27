@@ -19,6 +19,9 @@
 #import "LSFSDKScene.h"
 
 @interface LSFSDKMasterScene : LSFSDKLightingItem
+{
+    @protected LSFMasterSceneDataModel *masterSceneDataModel;
+}
 
 -(id)initWithMasterSceneID: (NSString *)masterSceneID;
 -(void)apply;

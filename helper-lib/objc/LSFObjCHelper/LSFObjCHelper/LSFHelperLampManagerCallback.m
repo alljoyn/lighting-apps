@@ -77,11 +77,11 @@
  */
 -(void)getAllLampIDsReplyWithCode: (LSFResponseCode)rc andLampIDs: (NSArray *)lampIDs
 {
-    NSLog(@"LSFSampleLampManagerCallback - getAllLampIDs(). LampIDs Count = %i", lampIDs.count);
+    NSLog(@"LSFHelperLampManagerCallback - getAllLampIDs(). LampIDs Count = %lu", (unsigned long)lampIDs.count);
 
     if (rc != LSF_OK)
     {
-        NSLog(@"LSFSampleLampGroupManager - GetAllLampIDs() returned an error code: %i", rc);
+        NSLog(@"LSFHelperLampManagerCallback - GetAllLampIDs() returned an error code: %i", rc);
     }
     else
     {
@@ -112,6 +112,11 @@
             [self postGetLampName: lampID];
         });
     }
+}
+
+-(void)getLampVersionReplyWithCode: (LSFResponseCode)rc lampID: (NSString*)lampID andVersion: (unsigned int)version
+{
+    //TODO - implement, may be unused
 }
 
 -(void)getLampManufacturerReplyWithCode: (LSFResponseCode)rc lampID: (NSString*)lampID language: (NSString*)language andManufacturer: (NSString*)manufacturer
@@ -446,6 +451,11 @@
     //TODO - unused at this point
 }
 
+-(void)setLampEffectReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID andEffectID: (NSString *)effectID
+{
+    //TODO - implement, may be unused
+}
+
 /*
  * Private function implementations
  */
@@ -478,7 +488,7 @@
 
     LSFLampModel *lampModel = [lamp getLampDataModel];
 
-    if ([lampModel.name isEqualToString: @"[Loading lamp info...]"])
+    if ([lampModel.name isEqualToString: @"<Loading lamp info...>"])
     {
         //NSLog(@"Getting data set for lamp: %@", lampModel.theID);
 

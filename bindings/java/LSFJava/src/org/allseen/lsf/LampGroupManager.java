@@ -44,6 +44,10 @@ public class LampGroupManager extends BaseNativeClassWrapper {
     public native ControllerClientStatus resetLampGroupStateSaturationField(String groupID);
     public native ControllerClientStatus resetLampGroupStateBrightnessField(String groupID);
     public native ControllerClientStatus resetLampGroupStateColorTempField(String groupID);
+    public native ControllerClientStatus getLampGroupVersion(String lampGroupID);
+    public native ControllerClientStatus createLampGroupWithTracking(TrackingID trackingID, LampGroup lampGroup, String lampGroupName, String language);
+    public native ControllerClientStatus getLampGroupDataSet(String lampGroupID, String language);
+    public native ControllerClientStatus setLampGroupEffect(String lampGroupID, String effectID);
 
     protected native void createNativeObject(ControllerClient controller, LampGroupManagerCallback callback);
 

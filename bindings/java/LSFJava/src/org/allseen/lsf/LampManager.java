@@ -55,6 +55,8 @@ public class LampManager extends BaseNativeClassWrapper {
     public native ControllerClientStatus clearLampFault(String lampID, long faultCode);
     public native ControllerClientStatus getLampSupportedLanguages(String lampID);
     public native ControllerClientStatus getLampDataSet(String lampID, String language);
+    public native ControllerClientStatus getLampVersion(String lampID);
+    public native ControllerClientStatus setLampEffect(String lampID, String effectID);
 
     protected native void createNativeObject(ControllerClient controller, LampManagerCallback callback);
 

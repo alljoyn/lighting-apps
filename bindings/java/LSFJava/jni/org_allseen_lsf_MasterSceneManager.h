@@ -23,6 +23,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#undef org_allseen_lsf_MasterSceneManager_MAX_MASTER_SCENES
+#define org_allseen_lsf_MasterSceneManager_MAX_MASTER_SCENES 100L
 /*
  * Class:     org_allseen_lsf_MasterSceneManager
  * Method:    getAllMasterSceneIDs
@@ -86,6 +88,30 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_MasterSceneManager_deleteMasterSc
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_MasterSceneManager_applyMasterScene
   (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     org_allseen_lsf_MasterSceneManager
+ * Method:    getMasterSceneVersion
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ */
+JNIEXPORT jobject JNICALL Java_org_allseen_lsf_MasterSceneManager_getMasterSceneVersion
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     org_allseen_lsf_MasterSceneManager
+ * Method:    createMasterSceneWithTracking
+ * Signature: (Lorg/allseen/lsf/TrackingID;Lorg/allseen/lsf/MasterScene;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ */
+JNIEXPORT jobject JNICALL Java_org_allseen_lsf_MasterSceneManager_createMasterSceneWithTracking
+  (JNIEnv *, jobject, jobject, jobject, jstring, jstring);
+
+/*
+ * Class:     org_allseen_lsf_MasterSceneManager
+ * Method:    getMasterSceneDataSet
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ */
+JNIEXPORT jobject JNICALL Java_org_allseen_lsf_MasterSceneManager_getMasterSceneDataSet
+  (JNIEnv *, jobject, jstring, jstring);
 
 /*
  * Class:     org_allseen_lsf_MasterSceneManager

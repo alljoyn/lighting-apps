@@ -18,6 +18,11 @@
 
 @implementation LSFSDKAllCollectionAdapter
 
+-(void)onLampInitialized: (LSFSDKLamp *)lamp
+{
+    //Intentionally left blank
+}
+
 -(void)onLampChanged: (LSFSDKLamp *)lamp
 {
     //Intentionally left blank
@@ -29,6 +34,11 @@
 }
 
 -(void)onLampError: (LSFSDKLightingItemErrorEvent *)error
+{
+    //Intentionally left blank
+}
+
+-(void)onGroupInitializedWithTrackingID: (LSFTrackingID *)trackingID andGroup: (LSFSDKGroup *)group
 {
     //Intentionally left blank
 }
@@ -47,6 +57,11 @@
     //Intentionally left blank
 }
 
+-(void)onPresetInitializedWithTrackingID: (LSFTrackingID *)trackingID andPreset: (LSFSDKPreset *)preset
+{
+    //Intentionally left blank
+}
+
 -(void)onPresetChanged: (LSFSDKPreset *)preset
 {
     //Intentionally left blank
@@ -57,6 +72,11 @@
 }
 
 -(void)onPresetError: (LSFSDKLightingItemErrorEvent *)error
+{
+    //Intentionally left blank
+}
+
+-(void)onTransitionEffectInitializedWithTrackingID: (LSFTrackingID *)trackingID andTransitionEffect: (LSFSDKTransitionEffect *)transitionEffect;
 {
     //Intentionally left blank
 }
@@ -76,6 +96,11 @@
     //Intentionally left blank
 }
 
+-(void)onPulseEffectInitializedWithTrackingID: (LSFTrackingID *)trackingID andPulseEffect: (LSFSDKPulseEffect *)pulseEffect;
+{
+    //Intentionally left blank
+}
+
 -(void)onPulseEffectChanged: (LSFSDKPulseEffect *)pulseEffect
 {
     //Intentionally left blank
@@ -87,6 +112,11 @@
 }
 
 -(void)onPulseEffectError: (LSFSDKLightingItemErrorEvent *)error
+{
+    //Intentionally left blank
+}
+
+-(void)onSceneElementInitializedWithTrackingID: (LSFTrackingID *)trackingID andSceneElement: (LSFSDKSceneElement *)sceneElement
 {
     //Intentionally left blank
 }
@@ -106,6 +136,11 @@
     //Intentionally left blank
 }
 
+-(void)onSceneInitializedWithTrackingID: (LSFTrackingID *)trackingID andScene: (LSFSDKScene *)scene
+{
+    //Intentionally left blank
+}
+
 -(void)onSceneChanged: (LSFSDKScene *)scene
 {
     //Intentionally left blank
@@ -117,6 +152,11 @@
 }
 
 -(void)onSceneError: (LSFSDKLightingItemErrorEvent *)error
+{
+    //Intentionally left blank
+}
+
+-(void)onMasterSceneInitializedWithTrackingID: (LSFTrackingID *)trackingID andMasterScene: (LSFSDKMasterScene *)masterScene
 {
     //Intentionally left blank
 }

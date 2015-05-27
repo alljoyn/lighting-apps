@@ -28,15 +28,20 @@ public:
     ~LSFSceneManagerCallback();
     void GetAllSceneIDsReplyCB(const LSFResponseCode& responseCode, const LSFStringList& sceneIDs);
     void GetSceneNameReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const LSFString& language, const LSFString& sceneName);
+    void GetSceneVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const uint32_t& sceneVersion);
     void SetSceneNameReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const LSFString& language);
     void ScenesNameChangedCB(const LSFStringList& sceneIDs);
     void CreateSceneReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID);
+    void CreateSceneWithTrackingReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const uint32_t& trackingID);
+    void CreateSceneWithSceneElementsReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const uint32_t& trackingID);
     void ScenesCreatedCB(const LSFStringList& sceneIDs);
     void UpdateSceneReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID);
+    void UpdateSceneWithSceneElementsReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID);
     void ScenesUpdatedCB(const LSFStringList& sceneIDs);
     void DeleteSceneReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID);
     void ScenesDeletedCB(const LSFStringList& sceneIDs);
     void GetSceneReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const Scene& data);
+    void GetSceneWithSceneElementsReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const SceneWithSceneElements& scene);
     void ApplySceneReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID);
     void ScenesAppliedCB(const LSFStringList& sceneIDs);
     

@@ -15,16 +15,11 @@
  ******************************************************************************/
 
 #import "LSFSDKMasterScene.h"
-
-@interface LSFSDKMasterScene()
-
-@property (nonatomic, strong) LSFMasterSceneDataModel *masterSceneDataModel;
-
-@end
+#import "LSFSDKAllJoynManager.h"
+#import "LSFSDKLightingItemUtil.h"
+#import "LSFSDKLightingDirector.h"
 
 @implementation LSFSDKMasterScene
-
-@synthesize masterSceneDataModel = _masterSceneDataModel;
 
 -(id)initWithMasterSceneID: (NSString *)masterSceneID
 {
@@ -32,7 +27,7 @@
 
     if (self)
     {
-        self.masterSceneDataModel = [[LSFMasterSceneDataModel alloc] initWithID: masterSceneID];
+        masterSceneDataModel = [[LSFMasterSceneDataModel alloc] initWithMasterSceneID: masterSceneID];
     }
 
     return self;
@@ -40,30 +35,63 @@
 
 -(void)apply
 {
-    NSLog(@"LSFMasterScene - apply() executing");
+    NSString *errorContext = @"LSFSDKMasterScene apply: error";
 
-    //LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
-    //[ajManager.lsfMasterSceneManager applyMasterSceneWithID: self.masterSceneDataModel.theID];
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getMasterSceneManager] applyMasterSceneWithID: masterSceneDataModel.theID]];
 }
 
 -(void)modify: (NSArray *)scenes
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKMasterScene modify: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: scenes])
+    {
+        NSMutableArray *sceneIDs = [[NSMutableArray alloc] init];
+
+        for (LSFSDKScene *scene in scenes)
+        {
+            [sceneIDs addObject: [scene theID]];
+        }
+
+        [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getMasterSceneManager] updateMasterSceneWithID: masterSceneDataModel.theID andMasterScene: [LSFSDKLightingItemUtil createMasterSceneFromSceneID: sceneIDs]]];
+    }
 }
 
 -(void)add: (LSFSDKScene *)scene
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKMasterScene add: error";
+    if ([self postInvalidArgIfNull: errorContext object: scene])
+    {
+        NSMutableSet *sceneIDsSet = [[NSMutableSet alloc] initWithArray: masterSceneDataModel.masterScene.sceneIDs];
+
+        if (![sceneIDsSet containsObject: scene.theID])
+        {
+            [sceneIDsSet addObject: scene.theID];
+            [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getMasterSceneManager] updateMasterSceneWithID: masterSceneDataModel.theID andMasterScene: [LSFSDKLightingItemUtil createMasterSceneFromSceneID: [sceneIDsSet allObjects]]]];
+        }
+    }
 }
 
 -(void)remove: (LSFSDKScene *)scene
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKMasterScene remove: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: scene])
+    {
+        NSMutableSet *sceneIDsSet = [[NSMutableSet alloc] initWithArray: masterSceneDataModel.masterScene.sceneIDs];
+
+        if ([sceneIDsSet containsObject: scene.theID])
+        {
+            [sceneIDsSet removeObject: scene.theID];
+            [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getMasterSceneManager] updateMasterSceneWithID: masterSceneDataModel.theID andMasterScene: [LSFSDKLightingItemUtil createMasterSceneFromSceneID: [sceneIDsSet allObjects]]]];
+        }
+    }
 }
 
 -(void)deleteMasterScene
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKMasterScene deleteMasterScene: error";
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getMasterSceneManager] deleteMasterSceneWithID: masterSceneDataModel.theID]];
 }
 
 /*
@@ -71,12 +99,24 @@
  */
 -(void)rename:(NSString *)name
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKMasterScene rename: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: name])
+    {
+        [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getMasterSceneManager] setMasterSceneNameWithID: masterSceneDataModel.theID andMasterSceneName: name]];
+    }
 }
 
 -(LSFModel *)getItemDataModel
 {
     return [self getMasterSceneDataModel];
+}
+
+-(void)postError:(NSString *)name status:(LSFResponseCode)status
+{
+    dispatch_async([[[LSFSDKLightingDirector getLightingDirector] lightingManager] dispatchQueue], ^{
+        [[[[LSFSDKLightingDirector getLightingDirector] lightingManager] masterSceneCollectionManager] sendErrorEvent: name statusCode: status itemID: masterSceneDataModel.theID];
+    });
 }
 
 /**
@@ -85,7 +125,7 @@
  */
 -(LSFMasterSceneDataModel *)getMasterSceneDataModel
 {
-    return self.masterSceneDataModel;
+    return masterSceneDataModel;
 }
 
 @end

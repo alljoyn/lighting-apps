@@ -16,6 +16,10 @@
 
 #import "LSFDataModel.h"
 
+@interface LSFDataModel()
+
+@end
+
 @implementation LSFDataModel
 
 @synthesize state = _state;
@@ -28,12 +32,24 @@
 
     if (self)
     {
-        self.state = [[LSFLampState alloc] initWithOnOff: NO brightness: 0 hue: 0 saturation: 0 colorTemp: 2700];
+        self.state = [[LSFLampState alloc] init];
         self.capability = [[LSFCapabilityData alloc] init];
         self.uniformity = [[LSFLampStateUniformity alloc] init];
+        stateInitialized = NO;
     }
 
     return self;
+}
+
+-(void)setState: (LSFLampState *)state
+{
+    _state = state;
+    stateInitialized = YES;
+}
+
+-(BOOL)isInitialized
+{
+    return ([super isInitialized] && stateInitialized);
 }
 
 @end

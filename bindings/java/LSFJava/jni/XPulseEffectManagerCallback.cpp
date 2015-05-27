@@ -122,4 +122,9 @@ void XPulseEffectManagerCallback::GetPulseEffectReplyCB(const LSFResponseCode& r
     XJavaDelegator::Call_Void_ResponseCode_String_Object<PulseEffect, XPulseEffect>(jdelegate, __func__, XClass::xPulseEffect, responseCode, pulseEffectID, pulseEffect);
 }
 
+void XPulseEffectManagerCallback::GetPulseEffectVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& pulseEffectID, const uint32_t& pulseEffectVersion)
+{
+    XJavaDelegator::Call_Void_ResponseCode_String_UInt32(jdelegate, __func__, responseCode, pulseEffectID, pulseEffectVersion);
+}
+
 } /* namespace lsf */

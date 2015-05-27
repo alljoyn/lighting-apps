@@ -164,6 +164,8 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
         }, 200);
     }
 
+    // Because of composite HelperSceneManagerCallback, this call will populate
+    // both SceneV1 and SceneWithSceneElements
     protected void postGetAllBasicSceneIDs() {
         manager.getQueue().postDelayed(new Runnable() {
             @Override

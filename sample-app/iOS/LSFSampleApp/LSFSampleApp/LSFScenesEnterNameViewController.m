@@ -21,7 +21,7 @@
 #import "LSFAllJoynManager.h"
 #import "LSFUtilityFunctions.h"
 #import "LSFEnums.h"
-#import "LSFSDKScene.h"
+#import "LSFSDKSceneV1.h"
 
 @interface LSFScenesEnterNameViewController ()
 
@@ -153,7 +153,7 @@
 {
     NSDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
 
-    for (LSFSDKScene *scene in [scenes allValues])
+    for (LSFSDKSceneV1 *scene in [scenes allValues])
     {
         LSFSceneDataModel *model = [scene getSceneDataModel];
 

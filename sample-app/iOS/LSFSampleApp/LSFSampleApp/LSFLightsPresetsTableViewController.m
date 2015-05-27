@@ -18,13 +18,12 @@
 #import "LSFLightsCreatePresetViewController.h"
 #import "LSFLampModelContainer.h"
 #import "LSFPresetModelContainer.h"
-#import "LSFLampModel.h"
-#import "LSFPresetModel.h"
 #import "LSFDispatchQueue.h"
 #import "LSFAllJoynManager.h"
 #import "LSFConstants.h"
 #import "LSFEnums.h"
 #import "LSFSDKLamp.h"
+#import "LSFSDKPreset.h"
 
 @interface LSFLightsPresetsTableViewController ()
 
@@ -169,7 +168,7 @@
     }
     else
     {
-        LSFPresetModel *data = [self.presetDataSorted objectAtIndex: [indexPath row]];
+        LSFPresetModel *data = [[self.presetDataSorted objectAtIndex: [indexPath row]] getPresetDataModel];
         BOOL stateMatchesPreset = [self checkIfLampStateMatchesPreset: data];
 
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"PresetCell" forIndexPath: indexPath];
@@ -203,7 +202,7 @@
         if (cell.accessoryType == UITableViewCellAccessoryNone)
         {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            LSFPresetModel *data = [self.presetDataSorted objectAtIndex: [indexPath row]];
+            LSFPresetModel *data = [[self.presetDataSorted objectAtIndex: [indexPath row]] getPresetDataModel];
 
             dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
                 LSFLampManager *lampManager = [[LSFAllJoynManager getAllJoynManager] lsfLampManager];
@@ -262,7 +261,7 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        LSFPresetModel *data = [self.presetDataSorted objectAtIndex: [indexPath row]];
+        LSFPresetModel *data = [[self.presetDataSorted objectAtIndex: [indexPath row]] getPresetDataModel];
         [self.presetDataSorted removeObjectAtIndex: indexPath.row];
         
         // Delete the row from the data source

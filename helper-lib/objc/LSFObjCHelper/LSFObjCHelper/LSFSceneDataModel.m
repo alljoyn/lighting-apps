@@ -34,7 +34,7 @@
 
     if (self)
     {
-        // Empty Constructor
+        sceneInitialized = NO;
     }
 
     return self;
@@ -49,6 +49,8 @@
         self.noEffects = [[NSMutableArray alloc] init];
         self.transitionEffects = [[NSMutableArray alloc] init];
         self.pulseEffects = [[NSMutableArray alloc] init];
+
+        sceneInitialized = NO;
     }
 
     return self;
@@ -202,6 +204,9 @@
 
 -(void)fromScene: (LSFScene *)scene
 {
+    //Set Scene Initialized to true so the initialized event will fire
+    sceneInitialized = YES;
+
     NSArray *stateTransitionEffects = scene.transitionToStateComponent;
     NSArray *statePulseEffects = scene.pulseWithStateComponent;
 
@@ -251,6 +256,11 @@
 
         [self.pulseEffects addObject: pedm];
     }
+}
+
+-(BOOL)isInitialized
+{
+    return ([super isInitialized] && sceneInitialized);
 }
 
 @end

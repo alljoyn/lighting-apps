@@ -60,12 +60,12 @@ public class LampManagerCallback extends DefaultNativeClassWrapper {
     public void resetLampStateColorTempFieldReplyCB(ResponseCode responseCode, String lampID)                                               { }
     public void transitionLampStateToPresetReplyCB(ResponseCode responseCode, String lampID)                                                { }
     public void getLampSupportedLanguagesReplyCB(ResponseCode responseCode, String lampID, String[] supportedLanguages)                     { }
+    public void getLampVersionReplyCB(ResponseCode responseCode, String lampID, long lampVersion)                                           { }
+    public void setLampEffectReplyCB(ResponseCode responseCode, String lampID, String effectID)                                             { }
 
-    // @Override
     @Override
     protected native void createNativeObject();
 
-    // @Override
     @Override
     protected native void destroyNativeObject();
 }

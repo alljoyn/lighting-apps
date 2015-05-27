@@ -23,6 +23,8 @@
 #import "LSFLampGroupManager.h"
 #import "LSFSceneManager.h"
 #import "LSFMasterSceneManager.h"
+#import "LSFTransitionEffectManager.h"
+#import "LSFPulseEffectManager.h"
 #import "LSFHelperControllerClientCallback.h"
 #import "LSFHelperControllerServiceManagerCallback.h"
 #import "LSFHelperLampManagerCallback.h"
@@ -30,9 +32,11 @@
 #import "LSFHelperPresetManagerCallback.h"
 #import "LSFHelperSceneManagerCallback.h"
 #import "LSFHelperMasterSceneManagerCallback.h"
+#import "LSFHelperTransitionEffectManagerCallback.h"
+#import "LSFHelperPulseEffectManagerCallback.h"
 #import "LSFLampAnnouncementData.h"
 #import "LSFAboutManager.h"
-#import "LSFLightingSystemManager.h"
+#import "LSFSDKLightingSystemManager.h"
 
 /**
  * @warning *Note:* This class is not intended to be used by clients, and its interface may change
@@ -40,7 +44,7 @@
  */
 @interface LSFAllJoynManager : NSObject
 
-@property (nonatomic, strong) LSFLightingSystemManager *director;
+@property (nonatomic, strong) LSFSDKLightingSystemManager *director;
 @property (nonatomic, readonly) ajn::BusAttachment *bus;
 @property (nonatomic, strong) LSFControllerClient *lsfControllerClient;
 @property (nonatomic, strong) LSFControllerServiceManager *lsfControllerServiceManager;
@@ -49,6 +53,8 @@
 @property (nonatomic, strong) LSFPresetManager *lsfPresetManager;
 @property (nonatomic, strong) LSFSceneManager *lsfSceneManager;
 @property (nonatomic, strong) LSFMasterSceneManager *lsfMasterSceneManager;
+@property (nonatomic, strong) LSFTransitionEffectManager *lsfTransitionEffectManager;
+@property (nonatomic, strong) LSFPulseEffectManager *lsfPulseEffectManager;
 @property (nonatomic, strong) LSFHelperControllerClientCallback *sccc;
 @property (nonatomic, strong) LSFHelperControllerServiceManagerCallback *scsmc;
 @property (nonatomic, strong) LSFHelperLampManagerCallback *slmc;
@@ -56,6 +62,8 @@
 @property (nonatomic, strong) LSFHelperPresetManagerCallback *spmc;
 @property (nonatomic, strong) LSFHelperSceneManagerCallback *ssmc;
 @property (nonatomic, strong) LSFHelperMasterSceneManagerCallback *smsmc;
+@property (nonatomic, strong) LSFHelperTransitionEffectManagerCallback *temc;
+@property (nonatomic, strong) LSFHelperPulseEffectManagerCallback *pemc;
 @property (nonatomic, strong) LSFAboutManager *aboutManager;
 @property (nonatomic) BOOL isConnectedToController;
 

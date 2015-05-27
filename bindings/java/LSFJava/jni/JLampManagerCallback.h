@@ -70,7 +70,9 @@ class JLampManagerCallback : public LampManagerCallback {
     virtual void ResetLampStateBrightnessFieldReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID) LSF_OVERRIDE;
     virtual void ResetLampStateColorTempFieldReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID) LSF_OVERRIDE;
     virtual void TransitionLampStateToPresetReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID) LSF_OVERRIDE;
-    virtual void GetLampSupportedLanguagesReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const LSFStringList& supportedLanguages) LSF_OVERRIDE;;
+    virtual void GetLampSupportedLanguagesReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const LSFStringList& supportedLanguages) LSF_OVERRIDE;
+    virtual void GetLampVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const uint32_t& lampVersion) LSF_OVERRIDE;
+    virtual void SetLampEffectReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const LSFString& effectID) LSF_OVERRIDE;
 
   protected:
     jweak jdelegate;

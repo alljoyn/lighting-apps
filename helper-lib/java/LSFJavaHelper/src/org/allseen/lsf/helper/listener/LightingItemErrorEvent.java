@@ -16,6 +16,7 @@
 package org.allseen.lsf.helper.listener;
 
 import org.allseen.lsf.ResponseCode;
+import org.allseen.lsf.TrackingID;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
@@ -25,10 +26,12 @@ public class LightingItemErrorEvent {
     public String name;
     public ResponseCode responseCode;
     public String itemID;
+    public TrackingID trackingID;
 
-    public LightingItemErrorEvent(String name, ResponseCode responseCode, String itemID) {
+    public LightingItemErrorEvent(String name, ResponseCode responseCode, String itemID, TrackingID trackingID) {
         this.name = name;
         this.responseCode = responseCode;
         this.itemID = itemID;
+        this.trackingID = trackingID;
     }
 }

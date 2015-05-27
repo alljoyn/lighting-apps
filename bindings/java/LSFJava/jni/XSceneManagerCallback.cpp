@@ -20,6 +20,7 @@
 #include "JEnum.h"
 #include "XJavaDelegator.h"
 #include "XScene.h"
+#include "XSceneWithSceneElements.h"
 #include "XSceneManagerCallback.h"
 
 #define QCC_MODULE "AJN-LSF-JNI"
@@ -120,6 +121,31 @@ void XSceneManagerCallback::ApplySceneReplyCB(const LSFResponseCode& responseCod
 void XSceneManagerCallback::ScenesAppliedCB(const LSFStringList& sceneIDs)
 {
     XJavaDelegator::Call_Void_StringList(jdelegate, __func__, sceneIDs);
+}
+
+void XSceneManagerCallback::CreateSceneWithTrackingReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const uint32_t& trackingID)
+{
+    XJavaDelegator::Call_Void_ResponseCode_String_UInt32(jdelegate, __func__, responseCode, sceneID, trackingID);
+}
+
+void XSceneManagerCallback::CreateSceneWithSceneElementsReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const uint32_t& trackingID)
+{
+    XJavaDelegator::Call_Void_ResponseCode_String_UInt32(jdelegate, __func__, responseCode, sceneID, trackingID);
+}
+
+void XSceneManagerCallback::UpdateSceneWithSceneElementsReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID)
+{
+    XJavaDelegator::Call_Void_ResponseCode_String(jdelegate, __func__, responseCode, sceneID);
+}
+
+void XSceneManagerCallback::GetSceneWithSceneElementsReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const SceneWithSceneElements& scene)
+{
+    XJavaDelegator::Call_Void_ResponseCode_String_Object<SceneWithSceneElements, XSceneWithSceneElements>(jdelegate, __func__, XClass::xSceneWithSceneElements, responseCode, sceneID, scene);
+}
+
+void XSceneManagerCallback::GetSceneVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const uint32_t& sceneVersion)
+{
+    XJavaDelegator::Call_Void_ResponseCode_String_UInt32(jdelegate, __func__, responseCode, sceneID, sceneVersion);
 }
 
 } /* namespace lsf */

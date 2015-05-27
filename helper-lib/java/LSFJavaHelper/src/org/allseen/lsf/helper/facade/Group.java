@@ -14,10 +14,12 @@
  */
 package org.allseen.lsf.helper.facade;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.allseen.lsf.LampState;
+import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.model.AllLampsDataModel;
 import org.allseen.lsf.helper.model.ColorItemDataModel;
@@ -71,7 +73,10 @@ public class Group extends GroupMember {
      */
     @Override
     public void setPowerOn(boolean powerOn) {
-        AllJoynManager.groupManager.transitionLampGroupStateOnOffField(groupModel.id, powerOn);
+        String errorContext = "Group.setPowerOn() error";
+
+        postErrorIfFailure(errorContext,
+                AllJoynManager.groupManager.transitionLampGroupStateOnOffField(groupModel.id, powerOn));
     }
 
     /**
@@ -90,56 +95,100 @@ public class Group extends GroupMember {
 
         ColorStateConverter.convertViewToModel(hueDegrees, saturationPercent, brightnessPercent, colorTempDegrees, lampState);
 
-        AllJoynManager.groupManager.transitionLampGroupState(groupModel.id, lampState, 0);
+        String errorContext = "Group.setColorHsvt() error";
+
+        postErrorIfFailure(errorContext,
+                AllJoynManager.groupManager.transitionLampGroupState(groupModel.id, lampState, 0));
     }
 
     public void add(GroupMember member) {
-        Set<String> lamps = new HashSet<String>(groupModel.getLamps());
-        Set<String> groups = new HashSet<String>(groupModel.getGroups());
+        String errorContext = "Group.add() error";
 
-        if (member instanceof Lamp) {
-            lamps.add(member.getColorDataModel().id);
-        } else if (member instanceof Group) {
-            groups.add(member.getColorDataModel().id);
+        if (postInvalidArgIfNull(errorContext, member)) {
+            Set<String> lamps = new HashSet<String>(Arrays.asList(groupModel.members.getLamps()));
+            Set<String> groups = new HashSet<String>(Arrays.asList(groupModel.members.getLampGroups()));
+
+            if (member instanceof Lamp) {
+                lamps.add(member.getColorDataModel().id);
+            } else if (member instanceof Group) {
+                groups.add(member.getColorDataModel().id);
+            }
+
+            postErrorIfFailure(errorContext,
+                AllJoynManager.groupManager.updateLampGroup(groupModel.id, LightingItemUtil.createLampGroup(
+                        lamps.toArray(new String[lamps.size()]), groups.toArray(new String[groups.size()]))));
         }
-
-        AllJoynManager.groupManager.updateLampGroup(groupModel.id, LightingItemUtil.createLampGroup(
-                (String[])lamps.toArray(), (String[])groups.toArray()));
     }
 
     public void remove(GroupMember member) {
-        Set<String> lamps = new HashSet<String>(groupModel.getLamps());
-        Set<String> groups = new HashSet<String>(groupModel.getGroups());
+        String errorContext = "Group.remove() error";
 
-        boolean didRemove = lamps.remove(member.getColorDataModel().id) || groups.remove(member.getColorDataModel().id);
+        if (postInvalidArgIfNull(errorContext, member)) {
+            Set<String> lamps = new HashSet<String>(Arrays.asList(groupModel.members.getLamps()));
+            Set<String> groups = new HashSet<String>(Arrays.asList(groupModel.members.getLampGroups()));
 
-        if (didRemove) {
-            AllJoynManager.groupManager.updateLampGroup(groupModel.id, LightingItemUtil.createLampGroup(
-                lamps.toArray(new String[lamps.size()]), groups.toArray(new String[groups.size()])));
+
+            boolean didRemove = lamps.remove(member.getColorDataModel().id) || groups.remove(member.getColorDataModel().id);
+
+            if (didRemove) {
+                postErrorIfFailure(errorContext,
+                    AllJoynManager.groupManager.updateLampGroup(groupModel.id, LightingItemUtil.createLampGroup(
+                            lamps.toArray(new String[lamps.size()]), groups.toArray(new String[groups.size()]))));
+            }
         }
     }
 
     public void modify(GroupMember[] members) {
-        AllJoynManager.groupManager.updateLampGroup(groupModel.id, LightingItemUtil.createLampGroup(members));
+        String errorContext = "Group.modify() error";
+
+        if (postInvalidArgIfNull(errorContext, members)) {
+            postErrorIfFailure(errorContext,
+                    AllJoynManager.groupManager.updateLampGroup(groupModel.id, LightingItemUtil.createLampGroup(members)));
+        }
     }
 
     public void delete() {
-        AllJoynManager.groupManager.deleteLampGroup(groupModel.id);
+        String errorContext = "Group.delete() error";
+
+        postErrorIfFailure(errorContext,
+                AllJoynManager.groupManager.deleteLampGroup(groupModel.id));
     }
 
     @Override
     public void applyPreset(Preset preset) {
-        AllJoynManager.groupManager.transitionLampGroupStateToPreset(groupModel.id, preset.getPresetDataModel().id, 0);
+        String errorContext = "Group.applyPreset() error";
+
+        if (postInvalidArgIfNull(errorContext, preset)) {
+            postErrorIfFailure(errorContext,
+                    AllJoynManager.groupManager.transitionLampGroupStateToPreset(groupModel.id, preset.getPresetDataModel().id, 0));
+        }
     }
 
     @Override
     public void applyEffect(Effect effect) {
-        // TODO-IMPL
+        String errorCotext = "Group.applyEffect() error";
+
+        if (postInvalidArgIfNull(errorCotext, effect)) {
+            if (effect instanceof Preset) {
+                applyPreset((Preset) effect);
+            } else if (effect instanceof TransitionEffect) {
+                postErrorIfFailure(errorCotext,
+                        AllJoynManager.transitionEffectManager.applyTransitionEffectOnLampGroups(effect.getId(), new String [] { groupModel.id }));
+            } else if (effect instanceof PulseEffect) {
+                postErrorIfFailure(errorCotext,
+                        AllJoynManager.pulseEffectManager.applyPulseEffectOnLampGroups(effect.getId(), new String [] { groupModel.id }));
+            }
+        }
     }
 
     @Override
     public void rename(String groupName) {
-        AllJoynManager.groupManager.setLampGroupName(groupModel.id, groupName, LightingDirector.get().getDefaultLanguage());
+        String errorContext = "Group.rename() error";
+
+        if (postInvalidArgIfNull(errorContext, groupName)) {
+            postErrorIfFailure(errorContext,
+                    AllJoynManager.groupManager.setLampGroupName(groupModel.id, groupName, LightingDirector.get().getDefaultLanguage()));
+        }
     }
 
     @Override
@@ -153,5 +202,15 @@ public class Group extends GroupMember {
      */
     public GroupDataModel getGroupDataModel() {
         return groupModel;
+    }
+
+    @Override
+    protected void postError(final String name, final ResponseCode status) {
+        LightingDirector.get().getLightingSystemManager().getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                LightingDirector.get().getGroupCollectionManager().sendErrorEvent(name, status, getId());
+            }
+        });
     }
 }

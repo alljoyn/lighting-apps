@@ -19,6 +19,7 @@
 #import "LSFControllerClient.h"
 #import "LSFSceneManagerCallbackDelegate.h"
 #import "LSFScene.h"
+#import "LSFSceneWithSceneElements.h"
 #import "SceneManager.h"
 
 @interface LSFSceneManager : LSFObject
@@ -27,15 +28,24 @@
 -(ControllerClientStatus)getAllSceneIDs;
 -(ControllerClientStatus)getSceneNameWithID: (NSString *)sceneID;
 -(ControllerClientStatus)getSceneNameWithID: (NSString *)sceneID andLanguage: (NSString *)language;
+-(ControllerClientStatus)getSceneVersionWithID: (NSString *)sceneID;
 -(ControllerClientStatus)setSceneNameWithID: (NSString *)sceneID andSceneName: (NSString *)sceneName;
 -(ControllerClientStatus)setSceneNameWithID: (NSString *)sceneID sceneName: (NSString *)sceneName andLanguage: (NSString *)language;
 -(ControllerClientStatus)createScene: (LSFScene *)scene andSceneName: (NSString *)sceneName;
 -(ControllerClientStatus)createScene: (LSFScene *)scene sceneName: (NSString *)sceneName andLanguage: (NSString *)language;
+-(ControllerClientStatus)createSceneWithTracking: (uint32_t *)trackingID scene: (LSFScene *)scene andSceneName: (NSString *)sceneName;
+-(ControllerClientStatus)createSceneWithTracking: (uint32_t *)trackingID scene: (LSFScene *)scene sceneName: (NSString *)sceneName andLanguage: (NSString *)language;
+-(ControllerClientStatus)createSceneWithSceneElementsWithTracking: (uint32_t *)trackingID sceneWithSceneElements: (LSFSceneWithSceneElements *)sceneWithSceneElements andSceneName: (NSString *)sceneName;
+-(ControllerClientStatus)createSceneWithSceneElementsWithTracking: (uint32_t *)trackingID sceneWithSceneElements: (LSFSceneWithSceneElements *)sceneWithSceneElements sceneName: (NSString *)sceneName andLanguage: (NSString *)language;
 -(ControllerClientStatus)updateSceneWithID: (NSString *)sceneID withScene: (LSFScene *)scene;
+-(ControllerClientStatus)updateSceneWithSceneElementsWithID: (NSString *)sceneID withSceneWithSceneElements: (LSFSceneWithSceneElements *)sceneWithSceneElements;
 -(ControllerClientStatus)deleteSceneWithID: (NSString *)sceneID;
 -(ControllerClientStatus)getSceneWithID: (NSString *)sceneID;
+-(ControllerClientStatus)getSceneWithSceneElementsWithID: (NSString *)sceneID;
 -(ControllerClientStatus)applySceneWithID: (NSString *)sceneID;
 -(ControllerClientStatus)getSceneDataWithID: (NSString *)sceneID;
 -(ControllerClientStatus)getSceneDataWithID: (NSString *)sceneID andLanguage: (NSString *)language;
+-(ControllerClientStatus)getSceneWithSceneElementsDataWithID: (NSString *)sceneID;
+-(ControllerClientStatus)getSceneWithSceneElementsDataWithID: (NSString *)sceneID andLanguage: (NSString *)language;
 
 @end

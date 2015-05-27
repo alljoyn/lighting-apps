@@ -18,7 +18,7 @@
 #import "LSFDispatchQueue.h"
 #import "LSFAllJoynManager.h"
 #import "LSFMasterSceneModelContainer.h"
-#import "LSFMasterSceneDataModel.h"
+#import "LSFSDKMasterScene.h"
 #import "LSFEnums.h"
 
 @interface LSFHelperMasterSceneManagerCallback()
@@ -84,6 +84,11 @@
     });
 }
 
+-(void)getMasterSceneVersionReplyWithCode: (LSFResponseCode)rc masterSceneID: (NSString *)masterSceneID andMasterSceneVersion: (unsigned int)masterSceneVersion
+{
+    //TODO - implement
+}
+
 -(void)setMasterSceneNameReplyWithCode: (LSFResponseCode)rc masterSceneID: (NSString *)masterSceneID andLanguage: (NSString *)language
 {
     //NSLog(@"LSFSampleMasterSceneManagerCallback - setMasterSceneNameReplyCB() executing. Response Code = %i", rc);
@@ -94,8 +99,7 @@
     }
 
     dispatch_async(self.queue, ^{
-        LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
-        [ajManager.lsfMasterSceneManager getMasterSceneNameWithID: masterSceneID];
+        [[[LSFAllJoynManager getAllJoynManager] lsfMasterSceneManager] getMasterSceneNameWithID: masterSceneID];
     });
 }
 
@@ -114,7 +118,7 @@
 
             if (model != nil)
             {
-                [ajManager.lsfMasterSceneManager getMasterSceneNameWithID: masterSceneID];
+                [[ajManager lsfMasterSceneManager] getMasterSceneNameWithID: masterSceneID];
             }
             else
             {
@@ -138,9 +142,14 @@
         //TODO - do something
     }
 
-    dispatch_async(self.queue, ^{
-        [self postProcessMasterSceneID: masterSceneID];
-    });
+//    dispatch_async(self.queue, ^{
+//        [self postProcessMasterSceneID: masterSceneID];
+//    });
+}
+
+-(void)createMasterSceneTrackingReplyWithCode: (LSFResponseCode)rc masterSceneID: (NSString *)masterSceneID andTrackingID: (unsigned int)trackingID
+{
+    //TODO - implement
 }
 
 -(void)masterScenesCreated: (NSArray *)masterSceneIDs
@@ -148,8 +157,7 @@
     //NSLog(@"LSFSampleMasterSceneManagerCallback - masterScenesCreatedReplyCB() executing");
 
     dispatch_async(self.queue, ^{
-        LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
-        [ajManager.lsfMasterSceneManager getAllMasterSceneIDs];
+        [[[LSFAllJoynManager getAllJoynManager] lsfMasterSceneManager] getAllMasterSceneIDs];
     });
 }
 
@@ -205,7 +213,7 @@
 
         for (NSString *masterSceneID in masterSceneIDs)
         {
-            [ajManager.lsfMasterSceneManager getMasterSceneWithID: masterSceneID];
+            [[ajManager lsfMasterSceneManager] getMasterSceneWithID: masterSceneID];
         }
     });
 }
@@ -232,17 +240,12 @@
 {
     //NSLog(@"postProcessMasterSceneID(): %@", masterSceneID);
 
-    LSFMasterSceneModelContainer *container = [LSFMasterSceneModelContainer getMasterSceneModelContainer];
-    LSFMasterSceneDataModel *masterSceneModel = [container.masterScenesContainer valueForKey: masterSceneID];
+    LSFSDKMasterScene *masterScene = [[[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer] valueForKey: masterSceneID];
 
-    if (masterSceneModel == nil)
+    if (masterScene == nil)
     {
-        //NSLog(@"Master Scene ID not found creating master scene model");
         [self postUpdateMasterSceneID: masterSceneID];
-
-        LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
-        [ajManager.lsfMasterSceneManager getMasterSceneNameWithID: masterSceneID];
-        [ajManager.lsfMasterSceneManager getMasterSceneWithID: masterSceneID];
+        [[[LSFAllJoynManager getAllJoynManager] lsfMasterSceneManager] getMasterSceneDataWithID: masterSceneID];
     }
 }
 
@@ -250,15 +253,14 @@
 {
     //NSLog(@"postUpdateMasterSceneID(): %@", masterSceneID);
 
-    LSFMasterSceneModelContainer *container = [LSFMasterSceneModelContainer getMasterSceneModelContainer];
-    LSFMasterSceneDataModel *masterSceneModel = [container.masterScenesContainer valueForKey: masterSceneID];
+    LSFSDKMasterScene *masterScene = [[[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer] valueForKey: masterSceneID];
 
-    if (masterSceneModel == nil)
+    if (masterScene == nil)
     {
         //NSLog(@"SceneModel not found. Creating scene model for %@", masterSceneID);
 
-        masterSceneModel = [[LSFMasterSceneDataModel alloc] initWithID: masterSceneID];
-        [container.masterScenesContainer setValue: masterSceneModel forKey: masterSceneID];
+        masterScene = [[LSFSDKMasterScene alloc] initWithMasterSceneID: masterSceneID];
+        [[[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer] setValue: masterScene forKey: masterSceneID];
 
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName: @"UpdateScenes" object: self userInfo: nil];
@@ -272,8 +274,7 @@
 {
     //NSLog(@"postUpdateMasterSceneName(): %@ and name: %@", masterSceneID, masterSceneName);
 
-    LSFMasterSceneModelContainer *container = [LSFMasterSceneModelContainer getMasterSceneModelContainer];
-    LSFMasterSceneDataModel *masterSceneModel = [container.masterScenesContainer valueForKey: masterSceneID];
+    LSFMasterSceneDataModel *masterSceneModel = [[[[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer] valueForKey: masterSceneID] getMasterSceneDataModel];
 
     if (masterSceneModel != nil)
     {
@@ -287,8 +288,7 @@
 {
     //NSLog(@"postUpdateMasterScene(): %@", masterSceneID);
 
-    LSFMasterSceneModelContainer *container = [LSFMasterSceneModelContainer getMasterSceneModelContainer];
-    LSFMasterSceneDataModel *masterSceneModel = [container.masterScenesContainer valueForKey: masterSceneID];
+    LSFMasterSceneDataModel *masterSceneModel = [[[[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer] valueForKey: masterSceneID] getMasterSceneDataModel];
 
     if (masterSceneModel != nil)
     {
@@ -308,7 +308,7 @@
     for (int i = 0; i < masterSceneIDs.count; i++)
     {
         NSString *masterSceneID = [masterSceneIDs objectAtIndex: i];
-        LSFMasterSceneDataModel *model = [masterScenes valueForKey: masterSceneID];
+        LSFMasterSceneDataModel *model = [[masterScenes valueForKey: masterSceneID] getMasterSceneDataModel];
 
         [masterSceneNames insertObject: model.name atIndex: i];
         [masterScenes removeObjectForKey: masterSceneID];

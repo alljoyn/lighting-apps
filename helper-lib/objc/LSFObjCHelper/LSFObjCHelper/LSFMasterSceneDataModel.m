@@ -16,44 +16,57 @@
 
 #import "LSFMasterSceneDataModel.h"
 
+const NSString *MASTER_SCENE_DEFAULT_NAME = @"<Loading master scene info...>";
+
 @implementation LSFMasterSceneDataModel
 
 @synthesize masterScene = _masterScene;
 
 -(id)init
 {
-    self = [self initWithID: @"" andName: @""];
-
-    if (self)
-    {
-        // Empty Constructor
-    }
-
-    return self;
+    return [self initWithMasterSceneID: nil];
 }
 
--(id)initWithID: (NSString *)masterSceneID
+-(id)initWithMasterSceneID: (NSString *)masterSceneID
 {
-    self = [self initWithID: masterSceneID andName: @"[Loading Master Scene Name....]"];
-
-    if (self)
-    {
-        // Empty Constructor
-    }
-
-    return self;
+    return [self initWithMasterSceneID: masterSceneID andMasterSceneName: nil];
 }
 
--(id)initWithID: (NSString *)masterSceneID andName: (NSString *)name
+-(id)initWithMasterSceneID: (NSString *)masterSceneID andMasterSceneName: (NSString *)masterSceneName
 {
-    self = [super initWithID: masterSceneID andName: name];
+    self = [super initWithID: masterSceneID andName: (masterSceneName != nil ? masterSceneName : MASTER_SCENE_DEFAULT_NAME)];
 
     if (self)
     {
         self.masterScene = [[LSFMasterScene alloc] init];
+        masterSceneInitialized = NO;
     }
 
     return self;
+}
+
+-(void)setMasterScene: (LSFMasterScene *)masterScene
+{
+    _masterScene = masterScene;
+    masterSceneInitialized = YES;
+}
+
+-(BOOL)containsSceneID: (NSString *)sceneID
+{
+    for (NSString *sid in [self.masterScene sceneIDs])
+    {
+        if ([sceneID isEqualToString: sid])
+        {
+            return YES;
+        }
+    }
+
+    return NO;
+}
+
+-(BOOL)isInitialized
+{
+    return ([super isInitialized] && masterSceneInitialized);
 }
 
 @end

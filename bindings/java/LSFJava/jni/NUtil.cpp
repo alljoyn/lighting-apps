@@ -15,6 +15,7 @@
  *
  ******************************************************************************/
 
+#include <alljoyn/Init.h>
 #include <qcc/Debug.h>
 #include <qcc/Log.h>
 
@@ -65,6 +66,7 @@ XClass *XClass::xPresetPulseEffect = new XClass("org/allseen/lsf/PresetPulseEffe
 XClass *XClass::xTransitionEffect = new XClass("org/allseen/lsf/TransitionEffect");
 XClass *XClass::xPulseEffect = new XClass("org/allseen/lsf/PulseEffect");
 XClass *XClass::xSceneElement = new XClass("org/allseen/lsf/SceneElement");
+XClass *XClass::xSceneWithSceneElements = new XClass("org/allseen/lsf/SceneWithSceneElements");
 
 /**
  * Implement the load hook for the alljoyn_java native library.
@@ -79,6 +81,15 @@ XClass *XClass::xSceneElement = new XClass("org/allseen/lsf/SceneElement");
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm,
                                   void* reserved)
 {
+    if (AllJoynInit() != ER_OK) {
+        return JNI_ERR;
+    }
+
+    if (AllJoynRouterInit() != ER_OK) {
+        AllJoynShutdown();
+        return JNI_ERR;
+    }
+
     QCC_UseOSLogging(true);
     QCC_SetDebugLevel("CONTROLLER_CLIENT", 7);
 
@@ -219,6 +230,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm,
         XClass::xTransitionEffect->doFind(env);
         XClass::xPulseEffect->doFind(env);
         XClass::xSceneElement->doFind(env);
+        XClass::xSceneWithSceneElements->doFind(env);
 
         // DCD: Workaround to make sure the Enum classes are loaded
         //      here with this class loader.
@@ -235,6 +247,14 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm,
 
         return JNI_VERSION_1_2;
     }
+}
+
+JNIEXPORT void JNI_OnUnload(JavaVM* vm, void * reserved)
+{
+    QCC_UNUSED(vm);
+    QCC_UNUSED(reserved);
+    AllJoynRouterShutdown();
+    AllJoynShutdown();
 }
 
 std::string GetJavaNativeMethodNameFromFunc(char const *func)

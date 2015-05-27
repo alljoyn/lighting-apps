@@ -26,5 +26,9 @@
 -(id)initWithHsvt: (NSArray *)hsvt;
 -(id)initWithHue: (unsigned int)hueValue saturation: (unsigned int)satValue brightness: (unsigned int)brightnessValue colorTemp: (unsigned int)colorTempValue;
 -(id)initWithColor: (LSFSDKColor *)color;
++(LSFSDKColor *)red;
++(LSFSDKColor *)green;
++(LSFSDKColor *)blue;
++(LSFSDKColor *)white;
 
 @end

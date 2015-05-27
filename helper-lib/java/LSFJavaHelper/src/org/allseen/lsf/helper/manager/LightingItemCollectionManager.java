@@ -23,7 +23,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.allseen.lsf.ResponseCode;
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.listener.LightingItemErrorEvent;
+import org.allseen.lsf.helper.model.LightingItemFilter;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
@@ -89,6 +91,18 @@ public abstract class LightingItemCollectionManager<ADAPTER, LISTENER, MODEL> ex
         return item;
     }
 
+    protected Collection<ADAPTER> getAdapters(LightingItemFilter<ADAPTER> filter) {
+        Collection<ADAPTER> filteredCollection = new ArrayList<ADAPTER>();
+
+        for (ADAPTER adapter : itemAdapters.values()) {
+            if (filter.passes(adapter)) {
+                filteredCollection.add(adapter);
+            }
+        }
+
+        return filteredCollection;
+    }
+
     protected Collection<ADAPTER> getAdapters() {
         return itemAdapters.values();
     }
@@ -101,6 +115,16 @@ public abstract class LightingItemCollectionManager<ADAPTER, LISTENER, MODEL> ex
 
         while (i.hasNext()) {
             sendChangedEvent(listener, i.next());
+        }
+    }
+
+    public void sendInitializedEvent(String itemID) {
+        sendInitializedEvent(itemID, null);
+    }
+
+    public void sendInitializedEvent(String itemID, TrackingID trackingID) {
+        for (LISTENER listener : itemListeners) {
+            sendInitializedEvent(listener, getAdapter(itemID), trackingID);
         }
     }
 
@@ -121,7 +145,11 @@ public abstract class LightingItemCollectionManager<ADAPTER, LISTENER, MODEL> ex
     }
 
     public void sendErrorEvent(String name, ResponseCode responseCode, String itemID) {
-        sendErrorEvent(new LightingItemErrorEvent(name, responseCode, itemID));
+        sendErrorEvent(new LightingItemErrorEvent(name, responseCode, itemID, null));
+    }
+
+    public void sendErrorEvent(String name, ResponseCode responseCode, String itemID, TrackingID trackingID) {
+        sendErrorEvent(new LightingItemErrorEvent(name, responseCode, itemID, trackingID));
     }
 
     public void sendErrorEvent(LightingItemErrorEvent errorEvent) {
@@ -130,6 +158,7 @@ public abstract class LightingItemCollectionManager<ADAPTER, LISTENER, MODEL> ex
         }
     }
 
+    protected abstract void sendInitializedEvent(LISTENER listener, ADAPTER item, TrackingID trackingID);
     protected abstract void sendChangedEvent(LISTENER listener, ADAPTER item);
     protected abstract void sendRemovedEvent(LISTENER listener, ADAPTER item);
     protected abstract void sendErrorEvent(LISTENER listener, LightingItemErrorEvent errorEvent);

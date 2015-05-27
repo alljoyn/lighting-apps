@@ -15,44 +15,97 @@
  ******************************************************************************/
 
 #import "LSFSDKSceneElement.h"
+#import "LSFSDKLamp.h"
+#import "LSFSDKGroup.h"
+#import "LSFSDKAllJoynManager.h"
+#import "LSFSDKLightingItemUtil.h"
+#import "LSFSDKLightingDirector.h"
 
 @implementation LSFSDKSceneElement
 
--(id)initWithID: (NSString *)sceneElementID
+-(id)initWithSceneElementID: (NSString *)sceneElementID
 {
-    //TODO - implement
-    return nil;
+    return [self initWithSceneElementID: sceneElementID sceneElementName: nil];
 }
 
--(id)initWithID: (NSString *)sceneElementID name: (NSString *)name
+-(id)initWithSceneElementID: (NSString *)sceneElementID sceneElementName: (NSString *)sceneElementName
 {
-    //TODO - implement
-    return nil;
+    self = [super init];
+
+    if (self)
+    {
+        sceneElementModel = [[LSFSceneElementDataModelV2 alloc] initWithSceneElementID: sceneElementID andSceneElementName: sceneElementName];
+    }
+
+    return self;
 }
 
 -(void)apply
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKSceneElement apply: error";
+
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getSceneElementManager] applySceneElementWithID: sceneElementModel.theID]];
 }
 
 -(void)modifyWithEffect: (id<LSFSDKEffect>)effect groupMembers: (NSArray *)members
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKSceneElement modify: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: effect] && [self postInvalidArgIfNull: errorContext object: members])
+    {
+        [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getSceneElementManager] updateSceneElementWithID: sceneElementModel.theID withSceneElement: [LSFSDKLightingItemUtil createSceneElementWithEffectID: [effect theID] groupMembers: members]]];
+    }
 }
 
 -(void)addMember: (LSFSDKGroupMember *)member
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKSceneElement addMember: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: member])
+    {
+        NSMutableSet *lamps = [[NSMutableSet alloc] initWithSet: sceneElementModel.lamps];
+        NSMutableSet *groups = [[NSMutableSet alloc] initWithSet: sceneElementModel.groups];
+
+        if ([member isKindOfClass: [LSFSDKLamp class]])
+        {
+            [lamps addObject: member.theID];
+        }
+        else if ([member isKindOfClass: [LSFSDKGroup class]])
+        {
+            [groups addObject: member.theID];
+        }
+
+        [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getSceneElementManager] updateSceneElementWithID: sceneElementModel.theID withSceneElement: [LSFSDKLightingItemUtil createSceneElementWithEffectID: sceneElementModel.effectID lampIDs: [lamps allObjects] groupIDs: [groups allObjects]]]];
+    }
 }
 
 -(void)removeMember: (LSFSDKGroupMember *)member
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKSceneElement removeMember: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: member])
+    {
+        NSMutableSet *lamps = [[NSMutableSet alloc] initWithSet: sceneElementModel.lamps];
+        NSMutableSet *groups = [[NSMutableSet alloc] initWithSet: sceneElementModel.groups];
+
+        if ([member isKindOfClass: [LSFSDKLamp class]])
+        {
+            [lamps removeObject: member.theID];
+        }
+        else if ([member isKindOfClass: [LSFSDKGroup class]])
+        {
+            [groups removeObject: member.theID];
+        }
+
+        [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getSceneElementManager] updateSceneElementWithID: sceneElementModel.theID withSceneElement: [LSFSDKLightingItemUtil createSceneElementWithEffectID: sceneElementModel.effectID lampIDs: [lamps allObjects] groupIDs: [groups allObjects]]]];
+    }
 }
 
 -(void)deleteSceneElement
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKSceneElement deleteSceneElement: error";
+
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getSceneElementManager] deleteSceneElementWithID: sceneElementModel.theID]];
 }
 
 /*
@@ -60,17 +113,33 @@
  */
 -(void)rename:(NSString *)name
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKSceneElement rename: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: name])
+    {
+        [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getSceneElementManager] setSceneElementNameWithID: sceneElementModel.theID andSceneElementName: name]];
+    }
+}
+
+-(LSFModel *)getItemDataModel
+{
+    return [self getSceneElementDataModel];
+}
+
+-(void)postError:(NSString *)name status:(LSFResponseCode)status
+{
+    dispatch_async([[[LSFSDKLightingDirector getLightingDirector] lightingManager] dispatchQueue], ^{
+        [[[[LSFSDKLightingDirector getLightingDirector] lightingManager] sceneElementCollectionManager] sendErrorEvent: name statusCode: status itemID: sceneElementModel.theID];
+    });
 }
 
 /**
  * <b>WARNING: This method is not intended to be used by clients, and may change or be
  * removed in subsequent releases of the SDK.</b>
  */
--(LSFSceneElementDataModel *)getSceneElementDataModel
+-(LSFSceneElementDataModelV2 *)getSceneElementDataModel
 {
-    //TODO - implement
-    return nil;
+    return sceneElementModel;
 }
 
 @end

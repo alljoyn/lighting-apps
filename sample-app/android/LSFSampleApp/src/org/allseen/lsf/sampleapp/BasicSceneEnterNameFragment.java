@@ -18,7 +18,7 @@ package org.allseen.lsf.sampleapp;
 import java.util.Iterator;
 
 import org.allseen.lsf.LampGroup;
-import org.allseen.lsf.helper.facade.Scene;
+import org.allseen.lsf.helper.facade.SceneV1;
 import org.allseen.lsf.helper.model.LampCapabilities;
 import org.allseen.lsf.helper.model.SceneDataModel;
 
@@ -56,7 +56,7 @@ public class BasicSceneEnterNameFragment extends EnterNameFragment {
 
     @Override
     protected boolean duplicateName(String name) {
-        Iterator<Scene> i = ((SampleAppActivity)getActivity()).systemManager.getSceneCollectionManager().getSceneIterator();
+        Iterator<SceneV1> i = ((SampleAppActivity)getActivity()).systemManager.getSceneCollectionManagerV1().getSceneIterator();
 
         while (i.hasNext()) {
             SceneDataModel sceneModel = i.next().getSceneDataModel();

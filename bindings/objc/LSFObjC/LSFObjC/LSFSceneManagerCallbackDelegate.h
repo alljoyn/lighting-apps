@@ -17,21 +17,27 @@
 #import <Foundation/Foundation.h>
 #import "LSFResponseCodes.h"
 #import "LSFScene.h"
+#import "LSFSceneWithSceneElements.h"
 
 @protocol LSFSceneManagerCallbackDelegate <NSObject>
 
 @required
 -(void)getAllSceneIDsReplyWithCode: (LSFResponseCode)rc andSceneIDs: (NSArray *)sceneIDs;
 -(void)getSceneNameReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID language: (NSString *)language andName: (NSString *)sceneName;
+-(void)getSceneVersionReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID andSceneVersion: (unsigned int)sceneVersion;
 -(void)setSceneNameReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID andLanguage: (NSString *)language;
 -(void)scenesNameChanged: (NSArray *)sceneIDs;
 -(void)createSceneReplyWithCode: (LSFResponseCode)rc andSceneID: (NSString *)sceneID;
+-(void)createSceneTrackingReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID andTrackingID: (unsigned int)trackingID;
+-(void)createSceneWithSceneElementsReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID andTrackingID: (unsigned int)trackingID;
 -(void)scenesCreated: (NSArray *)sceneIDs;
 -(void)updateSceneReplyWithCode: (LSFResponseCode)rc andSceneID: (NSString *)sceneID;
+-(void)updateSceneWithSceneElementsReplyWithCode: (LSFResponseCode)rc andSceneID: (NSString *)sceneID;
 -(void)scenesUpdated: (NSArray *)sceneIDs;
 -(void)deleteSceneReplyWithCode: (LSFResponseCode)rc andSceneID: (NSString *)sceneID;
 -(void)scenesDeleted: (NSArray *)sceneIDs;
 -(void)getSceneReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID andScene: (LSFScene *)scene;
+-(void)getSceneWithSceneElementsReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID andSceneWithSceneElements: (LSFSceneWithSceneElements *)sceneWithSceneElements;
 -(void)applySceneReplyWithCode: (LSFResponseCode)rc andSceneID: (NSString *)sceneID;
 -(void)scenesApplied: (NSArray *)sceneIDs;
 

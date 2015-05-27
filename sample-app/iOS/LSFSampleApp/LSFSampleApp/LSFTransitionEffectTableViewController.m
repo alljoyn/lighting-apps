@@ -24,6 +24,7 @@
 #import "LSFPresetModelContainer.h"
 #import "LSFPresetModel.h"
 #import "LSFEnums.h"
+#import "LSFSDKPreset.h"
 
 @interface LSFTransitionEffectTableViewController ()
 
@@ -253,35 +254,22 @@
     LSFConstants *constants = [LSFConstants getConstants];
 
     //Get Lamp State
-    unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)self.brightnessSlider.value withMax: 100];
+    unsigned int scaledBrightness = 0;
+
+    if (self.tedm.capability.dimmable == NONE && self.tedm.capability.color == NONE && self.tedm.capability.temp == NONE)
+    {
+        scaledBrightness = [constants scaleLampStateValue: 100 withMax: 100];
+    }
+    else
+    {
+        scaledBrightness = [constants scaleLampStateValue: (uint32_t)self.brightnessSlider.value withMax: 100];
+    }
+
     unsigned int scaledHue = [constants scaleLampStateValue: (uint32_t)self.hueSlider.value withMax: 360];
     unsigned int scaledSaturation = [constants scaleLampStateValue: (uint32_t)self.saturationSlider.value withMax: 100];
     unsigned int scaledColorTemp = [constants scaleColorTemp: (uint32_t)self.colorTempSlider.value];
 
-    if (self.tedm.capability.dimmable == NONE && self.tedm.capability.color == NONE && self.tedm.capability.temp == NONE)
-    {
-        self.tedm.state.onOff = YES;
-        self.tedm.state.brightness = [constants scaleLampStateValue: 100 withMax: 100];
-    }
-    else
-    {
-//        if (scaledBrightness == 0)
-//        {
-//            self.tedm.state.onOff = NO;
-//        }
-//        else
-//        {
-//            self.tedm.state.onOff = YES;
-//        }
-
-        self.tedm.state.onOff = YES;
-        self.tedm.state.brightness = scaledBrightness;
-    }
-
-    self.tedm.state.hue = scaledHue;
-    self.tedm.state.saturation = scaledSaturation;
-    self.tedm.state.colorTemp = scaledColorTemp;
-
+    self.tedm.state = [[LSFLampState alloc] initWithOnOff: YES brightness: scaledBrightness hue: scaledHue saturation: scaledSaturation colorTemp: scaledColorTemp];
     [self.sceneModel updateTransitionEffect: self.tedm];
 
     if (self.shouldUpdateSceneAndDismiss)
@@ -337,8 +325,9 @@
     NSArray *presets = [container.presetContainer allValues];
 
     BOOL presetMatched = NO;
-    for (LSFPresetModel *data in presets)
+    for (LSFSDKPreset *preset in presets)
     {
+        LSFPresetModel *data = [preset getPresetDataModel];
         BOOL matchesPreset = [self checkIfLampState: state matchesPreset: data];
 
         if (matchesPreset)

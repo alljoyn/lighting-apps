@@ -28,10 +28,13 @@
 -(ControllerClientStatus)getPresetWithID: (NSString *)presetID;
 -(ControllerClientStatus)getPresetNameWithID: (NSString *)presetID;
 -(ControllerClientStatus)getPresetNameWithID: (NSString *)presetID andLanguage: (NSString *)language;
+-(ControllerClientStatus)getPresetVersionWithID: (NSString *)presetID; //Not Implemented in PresetManager.cc
 -(ControllerClientStatus)setPresetNameWithID: (NSString *)presetID andPresetName: (NSString *)name;
 -(ControllerClientStatus)setPresetNameWithID: (NSString *)presetID presetName: (NSString *)name andLanguage: (NSString *)language;
 -(ControllerClientStatus)createPresetWithState: (LSFLampState *)preset andPresetName: (NSString *)name;
 -(ControllerClientStatus)createPresetWithState: (LSFLampState *)preset presetName: (NSString *)name andLanguage: (NSString *)language;
+-(ControllerClientStatus)createPresetWithTracking: (uint32_t *)trackingID state: (LSFLampState *)preset andPresetName: (NSString *)name;
+-(ControllerClientStatus)createPresetWithTracking: (uint32_t *)trackingID state: (LSFLampState *)preset presetName: (NSString *)name andLanguage: (NSString *)language;
 -(ControllerClientStatus)updatePresetWithID: (NSString *)presetID andState: (LSFLampState *)preset;
 -(ControllerClientStatus)deletePresetWithID: (NSString *)presetID;
 -(ControllerClientStatus)getDefaultLampState;

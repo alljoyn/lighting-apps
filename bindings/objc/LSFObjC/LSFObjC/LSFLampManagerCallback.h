@@ -28,6 +28,7 @@ class LSFLampManagerCallback : public LampManagerCallback {
     ~LSFLampManagerCallback();    
     void GetAllLampIDsReplyCB(const LSFResponseCode& responseCode, const LSFStringList& lampIDs);
     void GetLampNameReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const LSFString& language, const LSFString& lampName);
+    void GetLampVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const uint32_t& lampVersion);
     void GetLampManufacturerReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const LSFString& language, const LSFString& manufacturer);
     void SetLampNameReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const LSFString& language);
     void LampNameChangedCB(const LSFString& lampID, const LSFString& lampName);
@@ -63,6 +64,7 @@ class LSFLampManagerCallback : public LampManagerCallback {
     void ResetLampStateColorTempFieldReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID);
     void TransitionLampStateToPresetReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID);
     void GetLampSupportedLanguagesReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const LSFStringList& supportedLanguages);
+    void SetLampEffectReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const LSFString& effectID);
 
   private:
     id<LSFLampManagerCallbackDelegate> _lmDelegate;

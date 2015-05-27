@@ -18,13 +18,12 @@
 #import "LSFGroupsCreatePresetViewController.h"
 #import "LSFGroupModelContainer.h"
 #import "LSFPresetModelContainer.h"
-#import "LSFGroupModel.h"
-#import "LSFPresetModel.h"
 #import "LSFDispatchQueue.h"
 #import "LSFAllJoynManager.h"
 #import "LSFConstants.h"
 #import "LSFEnums.h"
 #import "LSFSDKGroup.h"
+#import "LSFSDKPreset.h"
 
 @interface LSFGroupsPresetsTableViewController ()
 
@@ -166,7 +165,7 @@
     }
     else
     {
-        LSFPresetModel *data = [self.presetDataSorted objectAtIndex: [indexPath row]];
+        LSFPresetModel *data = [[self.presetDataSorted objectAtIndex: [indexPath row]] getPresetDataModel];
         BOOL stateMatchesPreset = [self checkIfLampStateMatchesPreset: data];
 
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"GroupPresetCell" forIndexPath: indexPath];
@@ -200,7 +199,7 @@
         if (cell.accessoryType == UITableViewCellAccessoryNone)
         {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            LSFPresetModel *data = [self.presetDataSorted objectAtIndex: [indexPath row]];
+            LSFPresetModel *data = [[self.presetDataSorted objectAtIndex: [indexPath row]] getPresetDataModel];
 
             dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
                 LSFLampGroupManager *lampGroupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
@@ -263,7 +262,7 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        LSFPresetModel *data = [self.presetDataSorted objectAtIndex: [indexPath row]];
+        LSFPresetModel *data = [[self.presetDataSorted objectAtIndex: [indexPath row]] getPresetDataModel];
         [self.presetDataSorted removeObjectAtIndex: indexPath.row];
         
         // Delete the row from the data source

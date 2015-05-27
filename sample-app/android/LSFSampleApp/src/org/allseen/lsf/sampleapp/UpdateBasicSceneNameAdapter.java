@@ -17,7 +17,7 @@ package org.allseen.lsf.sampleapp;
 
 import java.util.Iterator;
 
-import org.allseen.lsf.helper.facade.Scene;
+import org.allseen.lsf.helper.facade.SceneV1;
 import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.model.SceneDataModel;
 
@@ -39,7 +39,7 @@ public class UpdateBasicSceneNameAdapter extends UpdateItemNameAdapter {
 
     @Override
     protected boolean duplicateName(String sceneName) {
-        Iterator<Scene> i = activity.systemManager.getSceneCollectionManager().getSceneIterator();
+        Iterator<SceneV1> i = activity.systemManager.getSceneCollectionManagerV1().getSceneIterator();
 
         while (i.hasNext()){
             SceneDataModel sceneModel = i.next().getSceneDataModel();

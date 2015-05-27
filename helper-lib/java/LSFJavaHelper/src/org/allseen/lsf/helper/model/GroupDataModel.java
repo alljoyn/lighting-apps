@@ -80,12 +80,22 @@ public class GroupDataModel extends ColorItemDataModel {
         capability = new LampCapabilities();
     }
 
+    public void setMembers(LampGroup members) {
+        this.members = members;
+        // a group's state is initialized when its LampGroup container is set
+        stateInitialized = true;
+    }
+
     public Set<String> getLamps() {
         return lamps;
     }
 
     public Set<String> getGroups() {
         return groups;
+    }
+
+    public LampGroup getMembers() {
+        return this.members;
     }
 
     // Only checks immediate child groups. To see if the group is a descendent (child, grandchild,
@@ -100,5 +110,10 @@ public class GroupDataModel extends ColorItemDataModel {
         }
 
         return false;
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return super.isInitialized();
     }
 }

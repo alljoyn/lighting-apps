@@ -50,6 +50,14 @@ void LSFSceneManagerCallback::GetSceneNameReplyCB(const LSFResponseCode& respons
     }
 }
 
+void LSFSceneManagerCallback::GetSceneVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const uint32_t& sceneVersion)
+{
+    if (_smDelegate != nil)
+    {
+        [_smDelegate getSceneVersionReplyWithCode: responseCode sceneID: [NSString stringWithUTF8String: sceneID.c_str()] andSceneVersion: sceneVersion];
+    }
+}
+
 void LSFSceneManagerCallback::SetSceneNameReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const LSFString& language)
 {
     if (_smDelegate != nil)
@@ -81,6 +89,22 @@ void LSFSceneManagerCallback::CreateSceneReplyCB(const LSFResponseCode& response
     }
 }
 
+void LSFSceneManagerCallback::CreateSceneWithTrackingReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const uint32_t& trackingID)
+{
+    if (_smDelegate != nil)
+    {
+        [_smDelegate createSceneTrackingReplyWithCode: responseCode sceneID: [NSString stringWithUTF8String: sceneID.c_str()] andTrackingID: trackingID];
+    }
+}
+
+void LSFSceneManagerCallback::CreateSceneWithSceneElementsReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const uint32_t& trackingID)
+{
+    if (_smDelegate != nil)
+    {
+        [_smDelegate createSceneWithSceneElementsReplyWithCode: responseCode sceneID: [NSString stringWithUTF8String: sceneID.c_str()] andTrackingID: trackingID];
+    }
+}
+
 void LSFSceneManagerCallback::ScenesCreatedCB(const LSFStringList& sceneIDs)
 {
     NSMutableArray *sceneIDsArray = [[NSMutableArray alloc] init];
@@ -101,6 +125,14 @@ void LSFSceneManagerCallback::UpdateSceneReplyCB(const LSFResponseCode& response
     if (_smDelegate != nil)
     {
         [_smDelegate updateSceneReplyWithCode: responseCode andSceneID: [NSString stringWithUTF8String: sceneID.c_str()]];
+    }
+}
+
+void LSFSceneManagerCallback::UpdateSceneWithSceneElementsReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID)
+{
+    if (_smDelegate != nil)
+    {
+        [_smDelegate updateSceneWithSceneElementsReplyWithCode: responseCode andSceneID: [NSString stringWithUTF8String: sceneID.c_str()]];
     }
 }
 
@@ -154,6 +186,17 @@ void LSFSceneManagerCallback::GetSceneReplyCB(const LSFResponseCode& responseCod
     if (_smDelegate != nil)
     {
         [_smDelegate getSceneReplyWithCode: responseCode sceneID: [NSString stringWithUTF8String: sceneID.c_str()] andScene: scene];
+    }
+}
+
+void LSFSceneManagerCallback::GetSceneWithSceneElementsReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const SceneWithSceneElements& scene)
+{
+    //TODO - implement to unpack sceneWithSceneElements argument
+
+    if (_smDelegate != nil)
+    {
+        //TODO - address nil argument passed to callback
+        [_smDelegate getSceneWithSceneElementsReplyWithCode: responseCode sceneID: [NSString stringWithUTF8String: sceneID.c_str()] andSceneWithSceneElements: nil];
     }
 }
 

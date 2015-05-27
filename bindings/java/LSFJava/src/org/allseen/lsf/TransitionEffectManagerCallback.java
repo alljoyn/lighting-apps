@@ -34,6 +34,8 @@ public class TransitionEffectManagerCallback extends DefaultNativeClassWrapper {
     public void transitionEffectsUpdatedCB(String[] transitionEffectIDs)                                                                            { }
     public void deleteTransitionEffectReplyCB(ResponseCode responseCode, String transitionEffectID)                                                 { }
     public void transitionEffectsDeletedCB(String[] transitionEffectIDs)                                                                            { }
+    public void getTransitionEffectVersionReplyCB(ResponseCode responseCode, String transitionEffectID, long transitionEffectVersion)               { }
+//  virtual void GetTransitionEffectVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& transitionEffectID, const uint32_t& transitionEffectVersion) { }
 
     @Override
     protected native void createNativeObject();

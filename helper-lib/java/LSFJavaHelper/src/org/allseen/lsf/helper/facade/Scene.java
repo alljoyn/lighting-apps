@@ -15,77 +15,31 @@
 package org.allseen.lsf.helper.facade;
 
 import org.allseen.lsf.helper.manager.AllJoynManager;
-import org.allseen.lsf.helper.model.LightingItemDataModel;
-import org.allseen.lsf.helper.model.SceneDataModel;
 
 /**
  * A Scene object represents a set of lamps and associated states in a lighting system, and can be
  * used to apply the states to the lamps.
  */
-public final class Scene extends LightingItem {
+public abstract class Scene extends LightingItem {
 
-    protected SceneDataModel sceneModel;
+     public void apply() {
+         String errorContext = "Scene.apply() error";
 
-    /**
-     * Constructs a Scene using the specified ID.
-     * <p>
-     * <b>WARNING: This method is intended to be used internally. Client software should not instantiate
-     * Scenes directly, but should instead get them from the {@link LightingDirector} using the
-     * {@link LightingDirector#getScenes()} method.</b>
-     *
-     * @param sceneID The ID of the scene
-     */
-    public Scene(String sceneID) {
-        this(new SceneDataModel(sceneID));
-    }
+         postErrorIfFailure(errorContext,
+                 AllJoynManager.sceneManager.applyScene(this.getId()));
+     }
 
-    public Scene(SceneDataModel sceneModel) {
-        super();
+     @Override
+     public void rename(String sceneName) {
+         String errorContext = "Scene.rename() error";
 
-        this.sceneModel = sceneModel;
-    }
+         if (postInvalidArgIfNull(errorContext, sceneName)) {
+             postErrorIfFailure(errorContext,
+                     AllJoynManager.sceneManager.setSceneName(this.getId(), sceneName, LightingDirector.get().getDefaultLanguage()));
+         }
+     }
 
-    /**
-     * Sends a command to apply this Scene, which sets the appropriate state for all
-     * constituent lamps.
-     */
-    public void apply() {
-        AllJoynManager.sceneManager.applyScene(sceneModel.id);
-    }
-
-    public void modify(SceneElement[] element) {
-        // TODO-IMPL
-    }
-
-    public void add(SceneElement element) {
-        // TODO-IMPL
-    }
-
-    public void remove(SceneElement element) {
-        // TODO-IMPl
-    }
-
-    @Override
-    public void rename(String sceneName) {
-        if (sceneName != null) {
-            AllJoynManager.sceneManager.setSceneName(sceneModel.id, sceneName, LightingDirector.get().getDefaultLanguage());
-        }
-    }
-
-    public void delete() {
-        AllJoynManager.sceneManager.deleteScene(sceneModel.id);
-    }
-
-    @Override
-    protected LightingItemDataModel getItemDataModel() {
-        return getSceneDataModel();
-    }
-
-    /**
-     * <b>WARNING: This method is not intended to be used by clients, and may change or be
-     * removed in subsequent releases of the SDK.</b>
-     */
-    public SceneDataModel getSceneDataModel() {
-        return sceneModel;
-    }
+     public void delete() {
+         AllJoynManager.sceneManager.deleteScene(this.getId());
+     }
 }

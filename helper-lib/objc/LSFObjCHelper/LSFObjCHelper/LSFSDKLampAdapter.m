@@ -18,6 +18,11 @@
 
 @implementation LSFSDKLampAdapter
 
+-(void)onLampInitialized: (LSFSDKLamp *)lamp
+{
+    //Intentionally left blank
+}
+
 -(void)onLampChanged: (LSFSDKLamp *)lamp
 {
     //Intentionally left blank

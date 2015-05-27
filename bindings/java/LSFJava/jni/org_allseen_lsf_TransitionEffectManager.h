@@ -97,13 +97,21 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_updateTra
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_deleteTransitionEffect
   (JNIEnv *, jobject, jstring);
 
-///*
-// * Class:     org_allseen_lsf_TransitionEffectManager
-// * Method:    getTransitionEffectDataSet
-// * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
-// */
-//JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_getTransitionEffectDataSet
-//  (JNIEnv *, jobject, jstring, jstring);
+/*
+ * Class:     org_allseen_lsf_TransitionEffectManager
+ * Method:    getTransitionEffectVersion
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ */
+JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_getTransitionEffectVersion
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     org_allseen_lsf_TransitionEffectManager
+ * Method:    getTransitionEffectDataSet
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ */
+JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_getTransitionEffectDataSet
+  (JNIEnv *, jobject, jstring, jstring);
 
 /*
  * Class:     org_allseen_lsf_TransitionEffectManager

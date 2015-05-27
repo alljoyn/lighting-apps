@@ -27,6 +27,8 @@ public class LampDataModel extends ColorItemDataModel {
 
     public static String defaultName = "<Loading lamp info...>";
 
+    protected boolean detailsInitialized;
+
     private LampDetails details;
     private LampParameters parameters;
     private LampAbout about;
@@ -41,11 +43,14 @@ public class LampDataModel extends ColorItemDataModel {
         details = new LampDetails();
         parameters = new LampParameters();
         about = new LampAbout();
+
+        detailsInitialized = false;
     }
 
     public void setDetails(LampDetails details) {
         this.details = details;
         setCapability(new LampCapabilities(details.isDimmable(), details.hasColor(), details.hasVariableColorTemp()));
+        detailsInitialized = true;
     }
 
     public void setParameters(LampParameters parameters) {
@@ -66,5 +71,10 @@ public class LampDataModel extends ColorItemDataModel {
 
     public LampAbout getAbout() {
         return about;
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return super.isInitialized() && detailsInitialized;
     }
 }

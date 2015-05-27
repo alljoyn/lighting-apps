@@ -122,4 +122,15 @@ void XMasterSceneManagerCallback::MasterScenesAppliedCB(const LSFStringList& mas
     XJavaDelegator::Call_Void_StringList(jdelegate, __func__, masterSceneIDs);
 }
 
+void XMasterSceneManagerCallback::CreateMasterSceneWithTrackingReplyCB(const LSFResponseCode& responseCode, const LSFString& masterSceneID, const uint32_t& trackingID)
+{
+    XJavaDelegator::Call_Void_ResponseCode_String_UInt32(jdelegate, __func__, responseCode, masterSceneID, trackingID);
+}
+
+void XMasterSceneManagerCallback::GetMasterSceneVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& masterSceneID, const uint32_t& masterSceneVersion)
+{
+    XJavaDelegator::Call_Void_ResponseCode_String_UInt32(jdelegate, __func__, responseCode, masterSceneID, masterSceneVersion);
+}
+
+
 } /* namespace lsf */

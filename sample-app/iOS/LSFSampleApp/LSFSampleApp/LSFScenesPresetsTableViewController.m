@@ -25,6 +25,7 @@
 #import "LSFTransitionEffectTableViewController.h"
 #import "LSFPulseEffectTableViewController.h"
 #import "LSFEnums.h"
+#import "LSFSDKPreset.h"
 
 @interface LSFScenesPresetsTableViewController ()
 
@@ -182,7 +183,7 @@
     }
     else
     {
-        LSFPresetModel *data = [self.presetDataSorted objectAtIndex: [indexPath row]];
+        LSFPresetModel *data = [[self.presetDataSorted objectAtIndex: [indexPath row]] getPresetDataModel];
         BOOL stateMatchesPreset = [self checkIfLampStateMatchesPreset: data];
 
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"ScenePresetCell" forIndexPath:indexPath];
@@ -216,7 +217,7 @@
         if (cell.accessoryType == UITableViewCellAccessoryNone)
         {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            LSFPresetModel *data = [self.presetDataSorted objectAtIndex: [indexPath row]];
+            LSFPresetModel *data = [[self.presetDataSorted objectAtIndex: [indexPath row]] getPresetDataModel];
 
             self.lampState.onOff = data.state.onOff;
             self.lampState.brightness = data.state.brightness;
@@ -305,7 +306,7 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        LSFPresetModel *data = [self.presetDataSorted objectAtIndex: [indexPath row]];
+        LSFPresetModel *data = [[self.presetDataSorted objectAtIndex: [indexPath row]] getPresetDataModel];
 
         LSFPresetModelContainer *container = [LSFPresetModelContainer getPresetModelContainer];
         [container.presetContainer removeObjectForKey: data.theID];

@@ -22,6 +22,7 @@
 #include "NUtil.h"
 #include "XCppDelegator.h"
 #include "XScene.h"
+#include "XSceneWithSceneElements.h"
 #include "XSceneManager.h"
 #include "XSceneManagerCallback.h"
 
@@ -78,6 +79,50 @@ JNIEXPORT
 jobject JNICALL Java_org_allseen_lsf_SceneManager_applyScene(JNIEnv *env, jobject thiz, jstring jSceneID)
 {
     return XCppDelegator::Call_ControllerClientStatus_String<XSceneManager>(env, thiz, jSceneID, &XSceneManager::ApplyScene);
+}
+
+JNIEXPORT
+jobject JNICALL Java_org_allseen_lsf_SceneManager_createSceneWithTracking(JNIEnv *env, jobject thiz, jobject jTrackingID, jobject jScene, jstring jSceneName, jstring jLanguage)
+{
+    return XCppDelegator::Call_ControllerClientStatus_TrackingID_Object_String_String<XSceneManager, XScene, Scene>(env, thiz, jTrackingID, jScene, jSceneName, jLanguage, &XSceneManager::CreateSceneWithTracking);
+}
+
+JNIEXPORT
+jobject JNICALL Java_org_allseen_lsf_SceneManager_createSceneWithSceneElements(JNIEnv *env, jobject thiz, jobject jTrackingID, jobject jSceneWithSceneElements, jstring jSceneName, jstring jLanguage)
+{
+    return XCppDelegator::Call_ControllerClientStatus_TrackingID_Object_String_String<XSceneManager, XSceneWithSceneElements, SceneWithSceneElements>(env, thiz, jTrackingID, jSceneWithSceneElements, jSceneName, jLanguage, &SceneManager::CreateSceneWithSceneElements);
+}
+
+JNIEXPORT
+jobject JNICALL Java_org_allseen_lsf_SceneManager_updateSceneWithSceneElements(JNIEnv *env, jobject thiz, jstring jSceneID, jobject jSceneWithSceneElements)
+{
+    return XCppDelegator::Call_ControllerClientStatus_String_Object<XSceneManager, XSceneWithSceneElements, SceneWithSceneElements>(env, thiz, jSceneID, jSceneWithSceneElements, &XSceneManager::UpdateSceneWithSceneElements);
+}
+
+JNIEXPORT
+jobject JNICALL Java_org_allseen_lsf_SceneManager_getSceneWithSceneElements(JNIEnv *env, jobject thiz, jstring jSceneID)
+{
+    return XCppDelegator::Call_ControllerClientStatus_String<XSceneManager>(env, thiz, jSceneID, &XSceneManager::GetSceneWithSceneElements);
+}
+
+JNIEXPORT
+jobject JNICALL Java_org_allseen_lsf_SceneManager_getSceneVersion(JNIEnv *env, jobject thiz, jstring jSceneID)
+{
+    // TODO-FIX uncomment once GetSceneVersion is implemented in ControllerClient
+//    return XCppDelegator::Call_ControllerClientStatus_String<XSceneManager>(env, thiz, jSceneID, &XSceneManager::GetSceneVersion);
+    return NULL;
+}
+
+JNIEXPORT
+jobject JNICALL Java_org_allseen_lsf_SceneManager_getSceneDataSet(JNIEnv *env, jobject thiz, jstring jSceneID, jstring jLanguage)
+{
+    return XCppDelegator::Call_ControllerClientStatus_String_String<XSceneManager>(env, thiz, jSceneID, jLanguage, &XSceneManager::GetSceneDataSet);
+}
+
+JNIEXPORT
+jobject JNICALL Java_org_allseen_lsf_SceneManager_getSceneWithSceneElementsDataSet(JNIEnv *env, jobject thiz, jstring jSceneID, jstring jLanguage)
+{
+    return XCppDelegator::Call_ControllerClientStatus_String_String<XSceneManager>(env, thiz, jSceneID, jLanguage, &XSceneManager::GetSceneWithSceneElementsDataSet);
 }
 
 JNIEXPORT

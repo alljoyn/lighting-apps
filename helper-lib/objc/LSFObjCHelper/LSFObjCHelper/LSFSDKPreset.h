@@ -14,14 +14,16 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFSDKColorItem.h"
-#import "LSFSDKLamp.h"
-#import "LSFSDKGroup.h"
+#import "LSFSDKMutableColorItem.h"
 #import "LSFPresetModel.h"
 #import "LSFSDKEffect.h"
 #import "LSFSDKPower.h"
+#import "LSFSDKColor.h"
 
-@interface LSFSDKPreset : LSFSDKColorItem <LSFSDKEffect>
+@interface LSFSDKPreset : LSFSDKMutableColorItem <LSFSDKEffect>
+{
+    @protected LSFPresetModel *presetModel;
+}
 
 -(id)initWithPresetID: (NSString *)presetID;
 -(id)initWithPresetID: (NSString *)presetID andName: (NSString *)presetName;

@@ -17,7 +17,7 @@
 #import "LSFMasterScenesInfoTableViewController.h"
 #import "LSFMasterSceneMembersTableViewController.h"
 #import "LSFMasterScenesChangeNameViewController.h"
-#import "LSFMasterSceneDataModel.h"
+#import "LSFSDKMasterScene.h"
 #import "LSFMasterSceneModelContainer.h"
 #import "LSFDispatchQueue.h"
 #import "LSFAllJoynManager.h"
@@ -117,9 +117,7 @@
 
 -(void)reloadMasterSceneWithID: (NSString *)masterSceneID
 {
-    LSFMasterSceneModelContainer *container = [LSFMasterSceneModelContainer getMasterSceneModelContainer];
-    NSMutableDictionary *masterSceneDictionary = container.masterScenesContainer;
-    self.masterSceneModel = [masterSceneDictionary valueForKey: self.masterSceneID];
+    self.masterSceneModel = [[[[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer] valueForKey: self.masterSceneID] getMasterSceneDataModel];
 
     if (self.masterSceneModel == nil)
     {

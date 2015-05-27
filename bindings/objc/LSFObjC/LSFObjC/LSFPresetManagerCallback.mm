@@ -64,6 +64,14 @@ void LSFPresetManagerCallback::GetPresetNameReplyCB(const LSFResponseCode& respo
     }
 }
 
+void LSFPresetManagerCallback::GetPresetVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& presetID, const uint32_t& presetVersion)
+{
+    if (_pmDelegate != nil)
+    {
+        [_pmDelegate getPresetVersionReplyWithCode: responseCode presetID: [NSString stringWithUTF8String: presetID.c_str()] andPresetVersion: presetVersion];
+    }
+}
+
 void LSFPresetManagerCallback::SetPresetNameReplyCB(const LSFResponseCode& responseCode, const LSFString& presetID, const LSFString& language)
 {
     if (_pmDelegate != nil)
@@ -92,6 +100,14 @@ void LSFPresetManagerCallback::CreatePresetReplyCB(const LSFResponseCode& respon
     if (_pmDelegate != nil)
     {
         [_pmDelegate createPresetReplyWithCode: responseCode andPresetID: [NSString stringWithUTF8String: presetID.c_str()]];
+    }
+}
+
+void LSFPresetManagerCallback::CreatePresetWithTrackingReplyCB(const LSFResponseCode& responseCode, const LSFString& presetID, const uint32_t& trackingID)
+{
+    if (_pmDelegate != nil)
+    {
+        [_pmDelegate createPresetTrackingReplyWithCode: responseCode presetID: [NSString stringWithUTF8String: presetID.c_str()] andTrackingID: trackingID];
     }
 }
 

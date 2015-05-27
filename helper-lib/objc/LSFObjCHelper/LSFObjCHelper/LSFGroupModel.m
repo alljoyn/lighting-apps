@@ -43,8 +43,8 @@
     if (self)
     {
         self.members = [[LSFLampGroup alloc] init];
-        self.groupColorTempMin = ([LSFConstants getConstants]).MIN_COLOR_TEMP;
-        self.groupColorTempMax = ([LSFConstants getConstants]).MAX_COLOR_TEMP;
+        self.groupColorTempMin = [[LSFConstants getConstants] MIN_COLOR_TEMP];
+        self.groupColorTempMax = [[LSFConstants getConstants] MAX_COLOR_TEMP];
     }
     
     return self;
@@ -70,6 +70,22 @@
 -(NSSet *)groups
 {
     return _groups;
+}
+
+-(void)setMembers:  (LSFLampGroup *)members
+{
+    _members = members;
+    stateInitialized = YES;
+}
+
+-(LSFLampGroup *)members
+{
+    return _members;
+}
+
+-(BOOL)isInitialized
+{
+    return [super isInitialized];
 }
 
 @end

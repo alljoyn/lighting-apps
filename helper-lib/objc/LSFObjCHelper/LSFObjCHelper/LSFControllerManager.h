@@ -14,7 +14,7 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFLightingItemListenerManager.h"
+#import "LSFSDKLightingItemListenerManager.h"
 #import "LSFControllerModel.h"
 #import "LSFSDKControllerErrorEvent.h"
 
@@ -22,7 +22,7 @@
  * @warning *Note:* This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK.
  */
-@interface LSFControllerManager : LSFLightingItemListenerManager
+@interface LSFControllerManager : LSFSDKLightingItemListenerManager
 
 -(id)init;
 -(LSFControllerModel *)getLeadControllerModel;

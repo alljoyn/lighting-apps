@@ -100,7 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="-5dp"
-                android:text="@string/controller_enable"
+                android:text="@string/controller_enable_stopped"
                 android:textColor="@color/detail_text"
                 android:textSize="@dimen/font_size_2" />
 

@@ -126,7 +126,7 @@ public abstract class DetailedItemTableFragment extends ScrollableTableFragment 
     protected void onClickRowText(String itemID) {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
 
-        if (activity.systemManager.getSceneCollectionManager().hasID(itemID)) {
+        if (activity.systemManager.getSceneCollectionManagerV1().hasID(itemID)) {
             activity.applyBasicScene(itemID);
         } else {
             activity.applyMasterScene(itemID);

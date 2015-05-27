@@ -14,6 +14,7 @@
  */
 package org.allseen.lsf.helper.facade;
 
+import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.model.ColorItemDataModel;
 import org.allseen.lsf.helper.model.LightingItemUtil;
@@ -26,7 +27,6 @@ import org.allseen.lsf.helper.model.PresetDataModel;
  * interface may change in subsequent releases of the SDK</b>.
  */
 public class Preset extends MutableColorItem implements Effect {
-
     protected PresetDataModel presetModel;
 
     public Preset(String presetID) {
@@ -41,22 +41,39 @@ public class Preset extends MutableColorItem implements Effect {
 
     @Override
     public void applyTo(GroupMember member) {
-        member.applyPreset(this);
+        String errorContext = "Preset.applyTo() error";
+
+        if (postInvalidArgIfNull(errorContext, member)) {
+            member.applyPreset(this);
+        }
     }
 
     public void modify(Power power, Color color) {
-        AllJoynManager.presetManager.updatePreset(presetModel.id, LightingItemUtil.createLampStateFromView(
-                power == Power.ON, color.getHue(), color.getSaturation(), color.getBrightness(),
-                color.getColorTemperature()));
+        String errorContext = "Preset.modify() error";
+
+        if (postInvalidArgIfNull(errorContext, power) && postInvalidArgIfNull(errorContext, color)) {
+            postErrorIfFailure(errorContext,
+                AllJoynManager.presetManager.updatePreset(presetModel.id, LightingItemUtil.createLampStateFromView(
+                    power == Power.ON, color.getHue(), color.getSaturation(), color.getBrightness(),
+                    color.getColorTemperature())));
+        }
     }
 
     @Override
     public void rename(String presetName) {
-        AllJoynManager.presetManager.setPresetName(presetModel.id, presetName, LightingDirector.get().getDefaultLanguage());
+        String errorContext = "Preset.rename() error";
+
+        if (postInvalidArgIfNull(errorContext, presetName)) {
+            postErrorIfFailure(errorContext,
+                    AllJoynManager.presetManager.setPresetName(presetModel.id, presetName, LightingDirector.get().getDefaultLanguage()));
+        }
     }
 
     public void delete() {
-        AllJoynManager.presetManager.deletePreset(presetModel.id);
+        String errorContext = "Preset.delete() error";
+
+        postErrorIfFailure(errorContext,
+                AllJoynManager.presetManager.deletePreset(presetModel.id));
     }
 
     public PresetDataModel getPresetDataModel() {
@@ -76,5 +93,15 @@ public class Preset extends MutableColorItem implements Effect {
     @Override
     protected ColorItemDataModel getColorDataModel() {
         return getPresetDataModel();
+    }
+
+    @Override
+    protected void postError(final String name, final ResponseCode status) {
+        LightingDirector.get().getLightingSystemManager().getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                LightingDirector.get().getPresetCollectionManager().sendErrorEvent(name, status, getId());
+            }
+        });
     }
 }

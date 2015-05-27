@@ -18,6 +18,9 @@
 
 @interface LSFTrackingID : NSObject
 
-@property (nonatomic) unsigned int value;
+@property (nonatomic) uint32_t value;
+
+-(id)init;
+-(id)initWithValue: (uint32_t)value;
 
 @end

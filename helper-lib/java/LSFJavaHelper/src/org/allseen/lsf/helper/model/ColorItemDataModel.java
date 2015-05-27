@@ -28,6 +28,7 @@ public class ColorItemDataModel extends LightingItemDataModel {
     public LampStateUniformity uniformity;
 
     protected LampCapabilities capability;
+    protected boolean stateInitialized;
 
     public ColorItemDataModel() {
         this(null, TAG_PREFIX_UNKNOWN, "");
@@ -46,6 +47,8 @@ public class ColorItemDataModel extends LightingItemDataModel {
         state.setHue(0);
         state.setSaturation(0);
         state.setColorTemp(0);
+
+        stateInitialized = false;
     }
 
     public ColorItemDataModel(ColorItemDataModel other) {
@@ -54,6 +57,7 @@ public class ColorItemDataModel extends LightingItemDataModel {
         this.state = new LampState(other.state);
         this.uniformity = new LampStateUniformity(other.uniformity);
         this.capability = other.getCapability();
+        this.stateInitialized = other.stateInitialized;
     }
 
     public boolean stateEquals(ColorItemDataModel that) {
@@ -81,5 +85,19 @@ public class ColorItemDataModel extends LightingItemDataModel {
 
     public LampCapabilities getCapability() {
         return capability;
+    }
+
+    public LampState getState() {
+        return state;
+    }
+
+    public void setState(LampState state) {
+        this.state = state;
+        stateInitialized = true;
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return super.isInitialized() && stateInitialized;
     }
 }

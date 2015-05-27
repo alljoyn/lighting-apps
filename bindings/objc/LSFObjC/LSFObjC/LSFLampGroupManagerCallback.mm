@@ -49,6 +49,14 @@ void LSFLampGroupManagerCallback::GetLampGroupNameReplyCB(const LSFResponseCode&
     }
 }
 
+void LSFLampGroupManagerCallback::GetLampGroupVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const uint32_t& lampGroupVersion)
+{
+    if (_lgmDelegate != nil)
+    {
+        [_lgmDelegate getLampGroupVersionReplyWithCode: responseCode groupID: [NSString stringWithUTF8String: lampGroupID.c_str()] andVersion: lampGroupVersion];
+    }
+}
+
 void LSFLampGroupManagerCallback::SetLampGroupNameReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const LSFString& language)
 {
     if (_lgmDelegate != nil)
@@ -77,6 +85,14 @@ void LSFLampGroupManagerCallback::CreateLampGroupReplyCB(const LSFResponseCode& 
     if (_lgmDelegate != nil)
     {
         [_lgmDelegate createLampGroupReplyWithCode: responseCode andGroupID: [NSString stringWithUTF8String: lampGroupID.c_str()]];
+    }
+}
+
+void LSFLampGroupManagerCallback::CreateLampGroupWithTrackingReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const uint32_t& trackingID)
+{
+    if (_lgmDelegate != nil)
+    {
+        [_lgmDelegate createLampGroupTrackingReplyWithCode: responseCode groupID: [NSString stringWithUTF8String: lampGroupID.c_str()] andTrackingID: trackingID];
     }
 }
 
@@ -286,5 +302,13 @@ void LSFLampGroupManagerCallback::TransitionLampGroupStateToPresetReplyCB(const 
     if (_lgmDelegate != nil)
     {
         [_lgmDelegate transitionLampGroupStateToPresetReplyWithCode: responseCode andGroupID: [NSString stringWithUTF8String: lampGroupID.c_str()]];
+    }
+}
+
+void LSFLampGroupManagerCallback::SetLampGroupEffectReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const LSFString& effectID)
+{
+    if (_lgmDelegate != nil)
+    {
+        [_lgmDelegate setLampGroupEffectReplyWithCode: responseCode groupID: [NSString stringWithUTF8String: lampGroupID.c_str()] andEffectID: [NSString stringWithUTF8String: effectID.c_str()]];
     }
 }

@@ -14,6 +14,8 @@
  */
 package org.allseen.lsf.helper.facade;
 
+import org.allseen.lsf.ControllerClientStatus;
+import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.helper.model.LightingItemDataModel;
 
 /**
@@ -33,6 +35,46 @@ public abstract class LightingItem implements LightingItemInterface {
         return getItemDataModel().id;
     }
 
+    public boolean isInitialized() {
+        return getItemDataModel().isInitialized();
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        boolean equivalent = false;
+
+        if (other != null && other instanceof LightingItem) {
+            equivalent = getId().equals(((LightingItem) other).getId());
+        }
+
+        return equivalent;
+    }
+
+
+    protected boolean postInvalidArgIfNull(String name, Object obj) {
+        if (obj == null) {
+            postError(name, ResponseCode.ERR_INVALID_ARGS);
+            return false;
+        }
+
+        return true;
+    }
+
+    protected boolean postErrorIfFailure(String name, ControllerClientStatus status) {
+        if (status != ControllerClientStatus.OK) {
+            postError(name, ResponseCode.ERR_FAILURE);
+            return false;
+        }
+
+        return true;
+    }
+
     public abstract void rename(String name);
     protected abstract LightingItemDataModel getItemDataModel();
+    protected abstract void postError(String name, ResponseCode status);
 }

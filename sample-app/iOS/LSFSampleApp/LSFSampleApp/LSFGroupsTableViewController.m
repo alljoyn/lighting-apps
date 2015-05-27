@@ -31,7 +31,7 @@
 #import "LSFWifiMonitor.h"
 #import "LSFEnums.h"
 #import "LSFSDKGroup.h"
-#import "LSFSDKScene.h"
+#import "LSFSDKSceneV1.h"
 
 @interface LSFGroupsTableViewController ()
 
@@ -609,7 +609,7 @@
 
     NSMutableArray *scenes = [[NSMutableArray alloc] initWithArray: [[[LSFSceneModelContainer getSceneModelContainer] sceneContainer] allValues]];
 
-    for (LSFSDKScene *scene in scenes)
+    for (LSFSDKSceneV1 *scene in scenes)
     {
         LSFSceneDataModel *model = [scene getSceneDataModel];
 

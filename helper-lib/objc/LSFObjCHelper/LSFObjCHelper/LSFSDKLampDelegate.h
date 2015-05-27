@@ -16,12 +16,14 @@
 
 #import <Foundation/Foundation.h>
 #import "LSFSDKLightingDelegate.h"
+#import "LSFTrackingID.h"
 
 @class LSFSDKLamp;
 @class LSFSDKLightingItemErrorEvent;
 
 @protocol LSFSDKLampDelegate <LSFSDKLightingDelegate>
 
+-(void)onLampInitialized: (LSFSDKLamp *)lamp;
 -(void)onLampChanged: (LSFSDKLamp *)lamp;
 -(void)onLampRemoved: (LSFSDKLamp *)lamp;
 -(void)onLampError: (LSFSDKLightingItemErrorEvent *)error;

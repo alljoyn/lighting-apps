@@ -18,11 +18,13 @@ package org.allseen.lsf.helper.manager;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.Group;
 import org.allseen.lsf.helper.listener.GroupListener;
 import org.allseen.lsf.helper.listener.LightingItemErrorEvent;
 import org.allseen.lsf.helper.model.GroupDataModel;
 import org.allseen.lsf.helper.model.GroupsFlattener;
+import org.allseen.lsf.helper.model.LightingItemFilter;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
@@ -52,6 +54,11 @@ public class GroupCollectionManager extends LightingItemCollectionManager<Group,
         return getAdapters().toArray(new Group[size()]);
     }
 
+    public Group[] getGroups(LightingItemFilter<Group> filter) {
+        Collection<Group> filteredGroups = getAdapters(filter);
+        return filteredGroups.toArray(new Group[filteredGroups.size()]);
+    }
+
     public Iterator<Group> getGroupIterator() {
         return getAdapters().iterator();
     }
@@ -70,6 +77,11 @@ public class GroupCollectionManager extends LightingItemCollectionManager<Group,
 
     public Group removeGroup(String groupID) {
         return removeAdapter(groupID);
+    }
+
+    @Override
+    protected void sendInitializedEvent(GroupListener listener, Group group, TrackingID trackingID) {
+        listener.onGroupInitialized(trackingID, group);
     }
 
     @Override

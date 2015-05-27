@@ -16,12 +16,14 @@
 
 #import <Foundation/Foundation.h>
 #import "LSFSDKLightingDelegate.h"
+#import "LSFTrackingID.h"
 
 @class LSFSDKPulseEffect;
 @class LSFSDKLightingItemErrorEvent;
 
 @protocol LSFSDKPulseEffectDelegate <LSFSDKLightingDelegate>
 
+-(void)onPulseEffectInitializedWithTrackingID: (LSFTrackingID *)trackingID andPulseEffect: (LSFSDKPulseEffect *)pulseEffect;
 -(void)onPulseEffectChanged: (LSFSDKPulseEffect *)pulseEffect;
 -(void)onPulseEffectRemoved: (LSFSDKPulseEffect *)pulseEffect;
 -(void)onPulseEffectError: (LSFSDKLightingItemErrorEvent *)error;

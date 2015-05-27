@@ -23,6 +23,7 @@
 #import "LSFUtilityFunctions.h"
 #import "LSFLightInfoTableViewController.h"
 #import "LSFEnums.h"
+#import "LSFSDKPreset.h"
 
 @interface LSFLightsCreatePresetViewController ()
 
@@ -232,8 +233,9 @@
 {
     NSDictionary *presets = [[LSFPresetModelContainer getPresetModelContainer] presetContainer];
     
-    for (LSFPresetModel *model in [presets allValues])
+    for (LSFSDKPreset *preset in [presets allValues])
     {
+        LSFPresetModel *model = [preset getPresetDataModel];
         if ([name isEqualToString: model.name])
         {
             return YES;

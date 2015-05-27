@@ -21,13 +21,12 @@
 #import "LSFDispatchQueue.h"
 #import "LSFAllJoynManager.h"
 #import "LSFConstants.h"
-#import "LSFPresetModel.h"
 #import "LSFPresetModelContainer.h"
 #import "LSFLampModelContainer.h"
 #import "LSFUtilityFunctions.h"
 #import "LSFEnums.h"
-#import "LSFLampModel.h"
 #import "LSFSDKLamp.h"
+#import "LSFSDKPreset.h"
 
 @interface LSFLightInfoTableViewController ()
 
@@ -276,13 +275,14 @@
 
     NSMutableArray *presetsArray = [[NSMutableArray alloc] init];
     BOOL presetMatched = NO;
-    for (LSFPresetModel *data in presets)
+    for (LSFSDKPreset *preset in presets)
     {
-        BOOL matchesPreset = [self checkIfLampState: self.lampModel.state matchesPreset: data];
+        LSFPresetModel *presetModel = [preset getPresetDataModel];
+        BOOL matchesPreset = [self checkIfLampState: self.lampModel.state matchesPreset: presetModel];
 
         if (matchesPreset)
         {
-            [presetsArray addObject: data.name];
+            [presetsArray addObject: presetModel.name];
             presetMatched = YES;
         }
     }

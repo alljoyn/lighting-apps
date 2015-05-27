@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFGroupModel.h"
+#import "LSFSDKGroup.h"
 
 /**
  * @warning *Note:* This class is not intended to be used by clients, and its interface may change
@@ -23,13 +23,8 @@
  */
 @interface LSFGroupsFlattener : NSObject
 
-@property (nonatomic, strong) NSMutableSet *lampIDSet;
-@property (nonatomic, strong) NSMutableSet *groupIDSet;
-@property (nonatomic) int duplicates;
-
 -(id)init;
 -(void)flattenGroups: (NSMutableDictionary *)groups;
--(void)flattenGroups: (NSMutableDictionary *)groups withGroupModel: (LSFGroupModel *)parentModel;
--(void)flattenLamps: (NSMutableDictionary *)groups;
+-(void)flattenGroups: (NSMutableDictionary *)groups withGroup: (LSFSDKGroup *)group;
 
 @end

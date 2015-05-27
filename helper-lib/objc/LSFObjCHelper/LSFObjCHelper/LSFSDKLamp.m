@@ -16,17 +16,10 @@
 
 #import "LSFSDKLamp.h"
 #import "LSFConstants.h"
-#import "LSFAllJoynManager.h"
-
-@interface LSFSDKLamp()
-
-@property (nonatomic, strong) LSFLampModel *lampModel;
-
-@end
+#import "LSFSDKAllJoynManager.h"
+#import "LSFSDKLightingDirector.h"
 
 @implementation LSFSDKLamp
-
-@synthesize lampModel = _lampModel;
 
 -(id)initWithLampID: (NSString *)lampID
 {
@@ -34,7 +27,7 @@
 
     if (self)
     {
-        self.lampModel = [[LSFLampModel alloc] initWithLampID: lampID];
+        lampModel = [[LSFLampModel alloc] initWithLampID: lampID];
     }
 
     return self;
@@ -46,7 +39,7 @@
 
     if (self)
     {
-        self.lampModel = [[LSFLampModel alloc] initWithLampID: lampID andLampName: lampName];
+        lampModel = [[LSFLampModel alloc] initWithLampID: lampID andLampName: lampName];
     }
 
     return self;
@@ -57,23 +50,15 @@
  */
 -(void)setPowerOn: (BOOL)powerOn
 {
-    NSLog(@"LSFLamps - powerOn() executing");
-    NSLog(@"Power is %@", powerOn ? @"On" : @"Off");
+    NSString *errorContext = @"LSFSDKLamp setPowerOn: error";
 
-    LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
-    [ajManager.lsfLampManager transitionLampID: self.lampModel.theID onOffField: powerOn];
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getLampManager] transitionLampID: lampModel.theID onOffField: powerOn]];
 }
 
 -(void)setColorHsvtWithHue:(unsigned int)hueDegrees saturation:(unsigned int)saturationPercent brightness:(unsigned int)brightnessPercent colorTemp:(unsigned int)colorTempDegrees
 {
-    NSLog(@"LSFLamps - setColor() executing");
-    NSLog(@"Hue = %u", hueDegrees);
-    NSLog(@"Saturation = %u", saturationPercent);
-    NSLog(@"Brightness = %u", brightnessPercent);
-    NSLog(@"ColorTemp = %u", colorTempDegrees);
-
+    NSString *errorContext = @"LSFSDKLamp setColorHsvt: error";
     LSFConstants *constants = [LSFConstants getConstants];
-    LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
 
     unsigned int scaledBrightness = [constants scaleLampStateValue: brightnessPercent withMax: 100];
     unsigned int scaledHue = [constants scaleLampStateValue: hueDegrees withMax: 360];
@@ -81,27 +66,61 @@
     unsigned int scaledColorTemp = [constants scaleColorTemp: colorTempDegrees];
 
     LSFLampState *lampState = [[LSFLampState alloc] initWithOnOff: YES brightness: scaledBrightness hue: scaledHue saturation: scaledSaturation colorTemp: scaledColorTemp];
-    [ajManager.lsfLampManager transitionLampID: self.lampModel.theID toLampState: lampState];
+
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getLampManager] transitionLampID: lampModel.theID toLampState: lampState]];
 }
 
 -(void)rename: (NSString *)name
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKLamp rename: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: name])
+    {
+        [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getLampManager] setLampNameWithID: lampModel.theID name: name andLanguage: [[LSFSDKLightingDirector getLightingDirector] defaultLanguage]]];
+    }
 }
 
 -(void)applyPreset: (LSFSDKPreset *)preset
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKLamp applyPreset: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: preset])
+    {
+        [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getLampManager] transitionLampID: lampModel.theID toPresetID: [[preset getPresetDataModel] theID]]];
+    }
 }
 
 -(void)applyEffect: (id<LSFSDKEffect>)effect
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKLamp applyEffect: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: effect])
+    {
+        if ([effect isKindOfClass: [LSFSDKPreset class]])
+        {
+            [self applyPreset: (LSFSDKPreset *)effect];
+        }
+        else if ([effect isKindOfClass: [LSFSDKTransitionEffect class]])
+        {
+            [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getTransitionEffectManager] applyTranstionEffectWithID: [effect theID] onLamps: [NSArray arrayWithObjects: lampModel.theID, nil]]];
+        }
+        else if ([effect isKindOfClass: [LSFSDKPulseEffect class]])
+        {
+            [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getPulseEffectManager] applyPulseEffectWithID: [effect theID] onLamps: [NSArray arrayWithObjects: lampModel.theID, nil]]];
+        }
+    }
 }
 
 -(LSFDataModel *)getColorDataModel
 {
     return [self getLampDataModel];
+}
+
+-(void)postError:(NSString *)name status:(LSFResponseCode)status
+{
+    dispatch_async([[[LSFSDKLightingDirector getLightingDirector] lightingManager] dispatchQueue], ^{
+        [[[[LSFSDKLightingDirector getLightingDirector] lightingManager] lampCollectionManager] sendErrorEvent: name statusCode: status itemID: lampModel.theID];
+    });
 }
 
 /**
@@ -110,7 +129,7 @@
  */
 -(LSFLampModel *)getLampDataModel
 {
-    return self.lampModel;
+    return lampModel;
 }
 
 @end

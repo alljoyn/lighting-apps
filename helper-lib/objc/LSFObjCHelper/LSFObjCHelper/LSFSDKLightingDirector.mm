@@ -15,15 +15,36 @@
  ******************************************************************************/
 
 #import "LSFSDKLightingDirector.h"
-#import "LSFLightingSystemManager.h"
-#import "LSFLampModelContainer.h"
-#import "LSFGroupModelContainer.h"
-#import "LSFSceneModelContainer.h"
-#import "LSFAllJoynManager.h"
+#import "LSFSDKLampCollectionManager.h"
+#import "LSFSDKPresetCollectionManager.h"
+#import "LSFSDKGroupCollectionManager.h"
+#import "LSFSDKTransitionEffectCollectionManager.h"
+#import "LSFSDKPulseEffectCollectionManager.h"
+#import "LSFSDKSceneElementCollectionManager.h"
+#import "LSFSDKSceneCollectionManager.h"
+#import "LSFSDKSceneCollectionManagerV2.h"
+#import "LSFSDKMasterSceneCollectionManager.h"
+#import "LSFSDKAllJoynManager.h"
+#import "LSFSDKLightingItemUtil.h"
+#import "LSFSDKLightingItemInitializedFilter.h"
+#import "LSFSDKTrackingIDDelegate.h"
+#import "LSFSDKLightingEventUtil.h"
+#import "Init.h"
+
+static NSString *LANGUAGE_DEFAULT = @"en";
 
 @interface LSFSDKLightingDirector()
 
-@property (nonatomic, strong) LSFLightingSystemManager *lightingManager;
+-(LSFSDKLampCollectionManager *)getLampCollectionManager;
+-(LSFSDKPresetCollectionManager *)getPresetCollectionManager;
+-(LSFSDKGroupCollectionManager *)getGroupCollectionManager;
+-(LSFSDKTransitionEffectCollectionManager *)getTransitionEffectCollectionManager;
+-(LSFSDKPulseEffectCollectionManager *)getPulseEffectCollectionManager;
+-(LSFSDKSceneElementCollectionManager *)getSceneElementCollectionManager;
+-(LSFSDKSceneCollectionManager *)getSceneCollectionManager;
+-(LSFSDKSceneCollectionManagerV2 *)getSceneCollectionManagerV2;
+-(LSFSDKMasterSceneCollectionManager *)getMasterSceneCollectionManager;
+-(LSFControllerManager *)getControllerManager;
 
 @end
 
@@ -32,14 +53,24 @@
 @synthesize version = _version;
 @synthesize busAttachment = _busAttachment;
 @synthesize lamps = _lamps;
+@synthesize initializedLamps = _initializedLamps;
 @synthesize groups = _groups;
+@synthesize initializedGroups = _initializedGroups;
 @synthesize presets = _presets;
+@synthesize initializedPresets = _initializedPresets;
 @synthesize transitionEffects = _transitionEffects;
+@synthesize initializedTransitionEffects = _initializedTransitionEffects;
 @synthesize pulseEffects = _pulseEffects;
+@synthesize initializedPulseEffects = _initializedPulseEffects;
 @synthesize sceneElements = _sceneElements;
+@synthesize initializedSceneElements = _initializedSceneElements;
 @synthesize scenes = _scenes;
+@synthesize initializedScenes = _initializedScenes;
 @synthesize masterScenes = _masterScenes;
+@synthesize initializedMasterScenes = _initializedMasterScenes;
 @synthesize defaultLanguage = _defaultLanguage;
+@synthesize controllerServiceEnabled = _controllerServiceEnabled;
+@synthesize isNetworkConnected = _isNetworkConnected;
 @synthesize lightingManager = _lightingManager;
 
 +(LSFSDKLightingDirector *)getLightingDirector
@@ -48,6 +79,8 @@
     static dispatch_once_t onceToken;
 
     dispatch_once(&onceToken, ^{
+        AllJoynInit();
+        AllJoynRouterInit();
         lightingDirector = [[self alloc] init];
     });
 
@@ -60,36 +93,43 @@
 
     if (self)
     {
-        self.lightingManager = [LSFLightingSystemManager getLightingSystemManager];
-        _version = 1;
+        _lightingManager = [[LSFSDKLightingSystemManager alloc] init];
+        _defaultLanguage = LANGUAGE_DEFAULT;
     }
 
     return self;
 }
 
+-(unsigned int)version
+{
+    return 2;
+}
+
 -(void)start
 {
-    [self.lightingManager start];
+    [self startWithApplicationName: @"LightingDirector"];
 }
 
 -(void)startWithApplicationName: (NSString *)applicationName
 {
-    //TODO - Implement
+    [self startWithApplicationName: applicationName dispatchQueue: nil];
 }
 
 -(void)startWithBusAttachment: (ajn::BusAttachment *)busAttachment
 {
-    //TODO - Implement
+    [self startWithBusAttachment: busAttachment dispatchQueue: nil];
 }
 
 -(void)startWithApplicationName: (NSString *)applicationName dispatchQueue: (dispatch_queue_t)queue
 {
-    //TODO - Implement
+    [self.lightingManager initializeWithApplicationName: applicationName dispatchQueue: queue andAllJoynDelegate: nil];
+    [self.lightingManager start];
 }
 
 -(void)startWithBusAttachment: (ajn::BusAttachment *)busAttachment dispatchQueue: (dispatch_queue_t)queue
 {
-    //TODO - Implement
+    [self.lightingManager initializeWithBusAttachment: busAttachment dispatchQueue: queue andAllJoynDelegate: nil];
+    [self.lightingManager start];
 }
 
 -(void)stop
@@ -97,225 +137,269 @@
     [self.lightingManager stop];
 }
 
--(NSArray *)lamps
+-(ajn::BusAttachment *)busAttachment
 {
-    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
-    return [lamps allValues];
+    return [LSFSDKAllJoynManager getBusAttachment];
 }
 
--(NSArray *)completeLamps
+-(NSArray *)lamps
 {
-    //TODO - Implement
-    return nil;
+    return [[self getLampCollectionManager] getLamps];
+}
+
+-(NSArray *)initializedLamps
+{
+    return [[self getLampCollectionManager] getLampsWithFilter: [[LSFSDKLightingItemInitializedFilter alloc] init]];
 }
 
 -(LSFSDKLamp *)getLampWithID: (NSString *)lampID
 {
-    //TODO - Implement
-    return nil;
+    return [[self getLampCollectionManager] getLampWithID: lampID];
 }
 
 -(NSArray *)groups
 {
-    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
-    return [groups allValues];
+    return [[self getGroupCollectionManager] getGroups];
 }
 
--(NSArray *)completeGroups
+-(NSArray *)initializedGroups
 {
-    //TODO - Implement
-    return nil;
+    return [[self getGroupCollectionManager] getGroupsWithFilter: [[LSFSDKLightingItemInitializedFilter alloc] init]];
 }
 
 -(LSFSDKGroup *)getGroupWithID: (NSString *)groupID
 {
-    //TODO - Implement
-    return nil;
+    return [[self getGroupCollectionManager] getGroupWithID: groupID];
 }
 
 -(NSArray *)presets
 {
-    //TODO - Implement
-    return nil;
+    return [[self getPresetCollectionManager] getPresets];
 }
 
--(NSArray *)completePresets
+-(NSArray *)initializedPresets
 {
-    //TODO - Implement
-    return nil;
+    return [[self getPresetCollectionManager] getPresetsWithFilter: [[LSFSDKLightingItemInitializedFilter alloc] init]];
 }
 
 -(LSFSDKPreset *)getPresetWithID: (NSString *)presetID
 {
-    //TODO - Implement
-    return nil;
+    return [[self getPresetCollectionManager] getPresetWithID: presetID];
 }
 
 -(NSArray *)transitionEffects
 {
-    //TODO - Implement
-    return nil;
+    return [[self getTransitionEffectCollectionManager] getTransitionEffects];
 }
 
--(NSArray *)completeTransitionEffects
+-(NSArray *)initializedTransitionEffects
 {
-    //TODO - Implement
-    return nil;
+    return [[self getTransitionEffectCollectionManager] getTransitionEffectsWithFilter: [[LSFSDKLightingItemInitializedFilter alloc] init]];
 }
 
 -(LSFSDKTransitionEffect *)getTransitionEffectWithID: (NSString *)transitionEffectID
 {
-    //TODO - Implement
-    return nil;
+    return [[self getTransitionEffectCollectionManager] getTransitionEffectWithID: transitionEffectID];
 }
 
 -(NSArray *)pulseEffects
 {
-    //TODO - Implement
-    return nil;
+    return [[self getPulseEffectCollectionManager] getPulseEffects];
 }
 
--(NSArray *)completePulseEffects
+-(NSArray *)initializedPulseEffects
 {
-    //TODO - Implement
-    return nil;
+    return [[self getPulseEffectCollectionManager] getPulseEffectsWithFilter: [[LSFSDKLightingItemInitializedFilter alloc] init]];
 }
 
 -(LSFSDKPulseEffect *)getPulseEffectWithID: (NSString *)pulseEffectID
 {
-    //TODO - Implement
-    return nil;
+    return [[self getPulseEffectCollectionManager] getPulseEffectWithID: pulseEffectID];
 }
 
 -(NSArray *)sceneElements
 {
-    //TODO - Implement
-    return nil;
+    return [[self getSceneElementCollectionManager] getSceneElements];
 }
 
--(NSArray *)completeSceneElements
+-(NSArray *)initializedSceneElements
 {
-    //TODO - Implement
-    return nil;
+    return [[self getSceneElementCollectionManager] getSceneElementsWithFilter: [[LSFSDKLightingItemInitializedFilter alloc] init]];
 }
 
 -(LSFSDKSceneElement *)getSceneElementWithID: (NSString *)sceneElementID
 {
-    //TODO - Implement
-    return nil;
+    return [[self getSceneElementCollectionManager] getSceneElementWithID: sceneElementID];
 }
 
 -(NSArray *)scenes
 {
-    NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
-    return [scenes allValues];
+    return [[self getSceneCollectionManagerV2] getScenes];
 }
 
--(NSArray *)completeScenes
+-(NSArray *)initializedScenes
 {
-    //TODO - Implement
-    return nil;
+    return [[self getSceneCollectionManagerV2] getScenesWithFilter: [[LSFSDKLightingItemInitializedFilter alloc] init]];
 }
 
 -(LSFSDKScene *)getSceneWithID: (NSString *)sceneID
 {
-    //TODO - Implement
-    return nil;
+    return [[self getSceneCollectionManagerV2] getSceneWithID: sceneID];
 }
 
 -(NSArray *)masterScenes
 {
-    //TODO - Implement
-    return nil;
+    return [[self getMasterSceneCollectionManager] getMasterScenes];
 }
 
--(NSArray *)completeMasterScenes
+-(NSArray *)initializedMasterScenes
 {
-    //TODO - Implement
-    return nil;
+    return [[self getMasterSceneCollectionManager] getMasterScenesWithFilter: [[LSFSDKLightingItemInitializedFilter alloc] init]];
 }
 
 -(LSFSDKMasterScene *)getMasterSceneWithID: (NSString *)masterSceneID
 {
-    //TODO - Implement
-    return nil;
+    return [[self getMasterSceneCollectionManager] getMasterSceneWithID: masterSceneID];
 }
 
--(LSFSDKGroup *)createGroupSyncWithMembers: (NSArray *)members groupName: (NSString *)groupName
+-(LSFTrackingID *)createGroupWithMembers: (NSArray *)members groupName: (NSString *)groupName delegate: (id<LSFSDKGroupDelegate>)delegate
 {
-    //TODO - Implement
-    return nil;
+    LSFTrackingID *trackingID = [[LSFTrackingID alloc] init];
+    uint32_t tid = 0;
+
+    if (delegate)
+    {
+        [LSFSDKLightingEventUtil listenForTrackingID: trackingID lightingDelegate: delegate objectType: GROUP];
+    }
+
+    [[LSFSDKAllJoynManager getGroupManager] createLampGroupWithTracking: &tid lampGroup: [LSFSDKLightingItemUtil createLampGroupFromGroupMembers: members] withName: groupName];
+    trackingID.value = tid;
+
+    return trackingID;
 }
 
--(void)createGroupWithMembers: (NSArray *)members groupName: (NSString *)groupName delegate: (id<LSFSDKGroupDelegate>)delegate
+-(LSFTrackingID *)createPresetWithPower: (Power)power color: (LSFSDKColor *)color presetName: (NSString *)presetName delegate: (id<LSFSDKPresetDelegate>)delegate
 {
-    //TODO - Implement
+    LSFTrackingID *trackingID = [[LSFTrackingID alloc] init];
+    uint32_t tid = 0;
+
+    if (delegate)
+    {
+        [LSFSDKLightingEventUtil listenForTrackingID: trackingID lightingDelegate: delegate objectType: PRESET];
+    }
+
+    [[LSFSDKAllJoynManager getPresetManager] createPresetWithTracking: &tid state: [LSFSDKLightingItemUtil createLampStateFromPower: (power ? ON : OFF) hue: color.hue saturation: color.saturation brightness: color.brightness colorTemp: color.colorTemp] andPresetName: presetName];
+    trackingID.value = tid;
+
+    return trackingID;
 }
 
--(LSFSDKPreset *)createPresetSyncWithPower: (Power)power color: (LSFSDKColor *)color presetName: (NSString *)presetName
+-(LSFTrackingID *)createTransitionEffectWithLampState: (id<LSFSDKLampState>)state duration: (unsigned int)duration name: (NSString *)effectName delegate: (id<LSFSDKTransitionEffectDelegate>)delegate
 {
-    //TODO - Implement
-    return nil;
+    LSFTrackingID *trackingID = [[LSFTrackingID alloc] init];
+    uint32_t tid = 0;
+
+    if (delegate)
+    {
+        [LSFSDKLightingEventUtil listenForTrackingID: trackingID lightingDelegate: delegate objectType: TRANSITION_EFFECT];
+    }
+
+    if ([state isKindOfClass: [LSFSDKPreset class]])
+    {
+        [[LSFSDKAllJoynManager getTransitionEffectManager] createTransitionEffectWithTracking: &tid transitionEffect: [LSFSDKLightingItemUtil createTransitionEffectFromPreset: (LSFSDKPreset *)state duration: duration] andTransitionEffectName: effectName];
+    }
+    else
+    {
+        [[LSFSDKAllJoynManager getTransitionEffectManager] createTransitionEffectWithTracking: &tid transitionEffect: [LSFSDKLightingItemUtil createTransitionEffectFromPower: [state getPowerOn] hsvt: [state getColorHsvt] duration: duration] andTransitionEffectName: effectName];
+    }
+
+    trackingID.value = tid;
+    return trackingID;
 }
 
--(void)createPresetWithPower: (Power)power color: (LSFSDKColor *)color presetName: (NSString *)presetName delegate: (id<LSFSDKPresetDelegate>)delegate
+-(LSFTrackingID *)createPulseEffectWithFromState: (id<LSFSDKLampState>)fromState toState: (id<LSFSDKLampState>)toState period: (unsigned int)period duration: (unsigned int)duration count: (unsigned int)count name: (NSString *)effectName delegate: (id<LSFSDKPulseEffectDelegate>)delegate
 {
-    //TODO - Implement
+    LSFTrackingID *trackingID = [[LSFTrackingID alloc] init];
+    uint32_t tid = 0;
+
+    if (delegate)
+    {
+        [LSFSDKLightingEventUtil listenForTrackingID: trackingID lightingDelegate: delegate objectType: PULSE_EFFECT];
+    }
+
+    if (([fromState isKindOfClass: [LSFSDKPreset class]]) && ([toState isKindOfClass: [LSFSDKPreset class]]))
+    {
+        [[LSFSDKAllJoynManager getPulseEffectManager] createPulseEffectWithTracking: &tid pulseEffect: [LSFSDKLightingItemUtil createPulseeffectFromPreset: (LSFSDKPreset *)fromState toPreset: (LSFSDKPreset *)toState period: period duration: duration count: count] andPulseEffectName: effectName];
+    }
+    else
+    {
+        [[LSFSDKAllJoynManager getPulseEffectManager] createPulseEffectWithTracking: &tid pulseEffect: [LSFSDKLightingItemUtil createPulseEffectWithFromPowerOn: [fromState getPowerOn] fromColorHsvt: [fromState getColorHsvt] toPowerOn: [toState getPowerOn] toColorHsvt: [toState getColorHsvt] period: period duration: duration count: count] andPulseEffectName:effectName];
+    }
+
+    trackingID.value = tid;
+    return trackingID;
 }
 
--(LSFSDKTransitionEffect *)createTransitionEffectSyncWithLampState: (id<LSFSDKLampState>)state duration: (unsigned long)duration name: (NSString *)effectName
+-(LSFTrackingID *)createSceneElementWithEffect: (id<LSFSDKEffect>)effect groupMembers: (NSArray *)members name: (NSString *)sceneElementName delegate: (id<LSFSDKSceneElementDelegate>)delegate
 {
-    //TODO - Implement
-    return nil;
+    LSFTrackingID *trackingID = [[LSFTrackingID alloc] init];
+    uint32_t tid = 0;
+
+    if (delegate)
+    {
+        [LSFSDKLightingEventUtil listenForTrackingID: trackingID lightingDelegate: delegate objectType: SCENE_ELEMENT];
+    }
+
+    [[LSFSDKAllJoynManager getSceneElementManager] createSceneElementWithTracking: &tid sceneElement: [LSFSDKLightingItemUtil createSceneElementWithEffectID: [effect theID] groupMembers: members] andSceneElementName:sceneElementName];
+
+    trackingID.value = tid;
+    return trackingID;
 }
 
--(void)createTransitionEffectWithLampState: (id<LSFSDKLampState>)state duration: (unsigned long)duration name: (NSString *)effectName delegate: (id<LSFSDKTransitionEffectDelegate>)delegate
+-(LSFTrackingID *)createSceneWithSceneElements: (NSArray *)sceneElements name: (NSString *)sceneName delegate: (id<LSFSDKSceneDelegate>)delegate
 {
-    //TODO - Implement
+    LSFTrackingID *trackingID = [[LSFTrackingID alloc] init];
+    uint32_t tid = 0;
+
+    if (delegate)
+    {
+        [LSFSDKLightingEventUtil listenForTrackingID: trackingID lightingDelegate: delegate objectType: SCENE];
+    }
+
+    NSMutableArray *sceneElementIDs = [[NSMutableArray alloc] initWithCapacity: [sceneElements count]];
+
+    for (LSFSDKSceneElement *sceneElement in sceneElements)
+    {
+        [sceneElementIDs addObject: [sceneElement theID]];
+    }
+
+    [[LSFSDKAllJoynManager getSceneManager] createSceneWithSceneElementsWithTracking: &tid sceneWithSceneElements: [LSFSDKLightingItemUtil createSceneWithSceneElements: sceneElementIDs] andSceneName: sceneName];
+
+    trackingID.value = tid;
+    return trackingID;
 }
 
--(LSFSDKPulseEffect *)createPulseEffectSyncWithFromState: (id<LSFSDKLampState>)fromState toState: (id<LSFSDKLampState>)toState period: (unsigned long)period duration: (unsigned long)duration count: (unsigned long)count name: (NSString *)effectName
+-(LSFTrackingID *)createMasterSceneWithScenes: (NSArray *)scenes name: (NSString *)masterSceneName delegate: (id<LSFSDKMasterSceneDelegate>)delegate
 {
-    //TODO - Implement
-    return nil;
-}
+    LSFTrackingID *trackingID = [[LSFTrackingID alloc] init];
+    uint32_t tid = 0;
 
--(void)createPulseEffectWithFromState: (id<LSFSDKLampState>)fromState toState: (id<LSFSDKLampState>)toState period: (unsigned long)period duration: (unsigned long)duration count: (unsigned long)count name: (NSString *)effectName delegate: (id<LSFSDKPulseEffectDelegate>)delegate
-{
-    //TODO - Implement
-}
+    if (delegate)
+    {
+        [LSFSDKLightingEventUtil listenForTrackingID: trackingID lightingDelegate: delegate objectType: MASTER_SCENE];
+    }
 
--(LSFSDKSceneElement *)createSceneElementSyncWithEffect: (id<LSFSDKEffect>)effect groupMembers: (NSArray *)members name: (NSString *)sceneElementName
-{
-    //TODO - Implement
-    return nil;
-}
+    NSMutableArray *sceneIDs = [[NSMutableArray alloc] initWithCapacity: [scenes count]];
 
--(void)createSceneElementWithEffect: (id<LSFSDKEffect>)effect groupMembers: (NSArray *)members name: (NSString *)sceneElementName delegate: (id<LSFSDKSceneElementDelegate>)delegate
-{
-    //TODO - Implement
-}
+    for (LSFSDKScene *scene in scenes)
+    {
+        [sceneIDs addObject: [scene theID]];
+    }
 
--(LSFSDKScene *)createSceneSyncWithSceneElements: (NSArray *)sceneElements name: (NSString *)sceneName
-{
-    //TODO - Implement
-    return nil;
-}
+    [[LSFSDKAllJoynManager getMasterSceneManager] createMasterSceneWithTracking: &tid masterScene: [LSFSDKLightingItemUtil createMasterSceneFromSceneID: sceneIDs] withName: masterSceneName];
 
--(void)createSceneWithSceneElements: (NSArray *)sceneElements name: (NSString *)sceneName delegate: (id<LSFSDKSceneDelegate>)delegate
-{
-    //TODO - Implement
-}
-
--(LSFSDKMasterScene *)createMasterSceneSyncWithScenes: (NSArray *)scenes name: (NSString *)masterSceneName
-{
-    //TODO - Implement
-    return nil;
-}
-
--(void)createMasterSceneWithScenes: (NSArray *)scenes name: (NSString *)masterSceneName delegate: (id<LSFSDKMasterSceneDelegate>)delegate
-{
-    //TODO - Implement
+    trackingID.value = tid;
+    return trackingID;
 }
 
 -(void)postOnNextControllerConnectionWithDelay: (unsigned int)delay delegate: (id<LSFSDKNextControllerConnectionDelegate>)delegate;
@@ -328,122 +412,206 @@
     //TODO - Implement
 }
 
--(void)waitForInitialSetCompletion
-{
-    //TODO - Implement
-}
-
 -(void)addDelegate: (id<LSFSDKLightingDelegate>)delegate
 {
-    //TODO - Implement
+    if ([delegate conformsToProtocol: @protocol(LSFSDKLampDelegate)])
+    {
+        [self addLampDelegate: (id<LSFSDKLampDelegate>)delegate];
+    }
+
+    if ([delegate conformsToProtocol: @protocol(LSFSDKGroupDelegate)])
+    {
+        [self addGroupDelegate: (id<LSFSDKGroupDelegate>)delegate];
+    }
+
+    if ([delegate conformsToProtocol: @protocol(LSFSDKPresetDelegate)])
+    {
+        [self addPresetDelegate: (id<LSFSDKPresetDelegate>)delegate];
+    }
+
+    if ([delegate conformsToProtocol: @protocol(LSFSDKTransitionEffectDelegate)])
+    {
+        [self addTransitionEffectDelegate: (id<LSFSDKTransitionEffectDelegate>)delegate];
+    }
+
+    if ([delegate conformsToProtocol: @protocol(LSFSDKPulseEffectDelegate)])
+    {
+        [self addPulseEffectDelegate: (id<LSFSDKPulseEffectDelegate>)delegate];
+    }
+
+    if ([delegate conformsToProtocol: @protocol(LSFSDKSceneElementDelegate)])
+    {
+        [self addSceneElementDelegate: (id<LSFSDKSceneElementDelegate>)delegate];
+    }
+
+    if ([delegate conformsToProtocol: @protocol(LSFSDKSceneDelegate)])
+    {
+        [self addSceneDelegate: (id<LSFSDKSceneDelegate>)delegate];
+    }
+
+    if ([delegate conformsToProtocol: @protocol(LSFSDKMasterSceneDelegate)])
+    {
+        [self addMasterSceneDelegate: (id<LSFSDKMasterSceneDelegate>)delegate];
+    }
+
+    if ([delegate conformsToProtocol: @protocol(LSFSDKControllerDelegate)])
+    {
+        [self addControllerDelegate: (id<LSFSDKControllerDelegate>)delegate];
+    }
 }
 
 -(void)addLampDelegate: (id<LSFSDKLampDelegate>)delegate
 {
-    //TODO - Implement
+    [[self getLampCollectionManager] addLampDelegate: delegate];
 }
 
 -(void)addGroupDelegate: (id<LSFSDKGroupDelegate>)delegate
 {
-    //TODO - Implement
+    [[self getGroupCollectionManager] addGroupDelegate: delegate];
 }
 
 -(void)addPresetDelegate: (id<LSFSDKPresetDelegate>)delegate
 {
-    //TODO - Implement
+    [[self getPresetCollectionManager] addPresetDelegate: delegate];
 }
 
 -(void)addTransitionEffectDelegate: (id<LSFSDKTransitionEffectDelegate>)delegate
 {
-    //TODO - Implement
+    [[self getTransitionEffectCollectionManager] addTransitionEffectDelegate: delegate];
 }
 
 -(void)addPulseEffectDelegate: (id<LSFSDKPulseEffectDelegate>)delegate
 {
-    //TODO - Implement
+    [[self getPulseEffectCollectionManager] addPulseEffectDelegate: delegate];
 }
 
 -(void)addSceneElementDelegate: (id<LSFSDKSceneElementDelegate>)delegate
 {
-    //TODO - Implement
+    [[self getSceneElementCollectionManager] addSceneElementDelegate: delegate];
 }
 
 -(void)addSceneDelegate: (id<LSFSDKSceneDelegate>)delegate
 {
-    //TODO - Implement
+    [[self getSceneCollectionManagerV2] addSceneDelegate: delegate];
 }
 
 -(void)addMasterSceneDelegate: (id<LSFSDKMasterSceneDelegate>)delegate
 {
-    //TODO - Implement
+    [[self getMasterSceneCollectionManager] addMasterSceneDelegate: delegate];
 }
 
 -(void)addControllerDelegate: (id<LSFSDKControllerDelegate>)delegate
 {
-    //TODO - Implement
-}
-
--(void)addInitialSetDelegate: (id<LSFSDKInitialSetDelegate>)delegate
-{
-    //TODO - Implements
+    [[self getControllerManager] addDelegate: delegate];
 }
 
 -(void)removeDelegate: (id<LSFSDKLightingDelegate>)delegate
 {
-    //TODO - Implement
+    if ([delegate conformsToProtocol: @protocol(LSFSDKLampDelegate)])
+    {
+        [self removeLampDelegate: (id<LSFSDKLampDelegate>)delegate];
+    }
+
+    if ([delegate conformsToProtocol: @protocol(LSFSDKGroupDelegate)])
+    {
+        [self removeGroupDelegate: (id<LSFSDKGroupDelegate>)delegate];
+    }
+
+    if ([delegate conformsToProtocol: @protocol(LSFSDKPresetDelegate)])
+    {
+        [self removePresetDelegate: (id<LSFSDKPresetDelegate>)delegate];
+    }
+
+    if ([delegate conformsToProtocol: @protocol(LSFSDKTransitionEffectDelegate)])
+    {
+        [self removeTransitionEffectDelegate: (id<LSFSDKTransitionEffectDelegate>)delegate];
+    }
+
+    if ([delegate conformsToProtocol: @protocol(LSFSDKPulseEffectDelegate)])
+    {
+        [self removePulseEffectDelegate: (id<LSFSDKPulseEffectDelegate>)delegate];
+    }
+
+    if ([delegate conformsToProtocol: @protocol(LSFSDKSceneElementDelegate)])
+    {
+        [self removeSceneElementDelegate: (id<LSFSDKSceneElementDelegate>)delegate];
+    }
+
+    if ([delegate conformsToProtocol: @protocol(LSFSDKSceneDelegate)])
+    {
+        [self removeSceneDelegate: (id<LSFSDKSceneDelegate>)delegate];
+    }
+
+    if ([delegate conformsToProtocol: @protocol(LSFSDKMasterSceneDelegate)])
+    {
+        [self removeMasterSceneDelegate: (id<LSFSDKMasterSceneDelegate>)delegate];
+    }
+
+    if ([delegate conformsToProtocol: @protocol(LSFSDKControllerDelegate)])
+    {
+        [self removeControllerDelegate: (id<LSFSDKControllerDelegate>)delegate];
+    }
 }
 
 -(void)removeLampDelegate: (id<LSFSDKLampDelegate>)delegate
 {
-    //TODO - Implement
+    [[self getLampCollectionManager] removeLampDelegate: delegate];
 }
 
 -(void)removeGroupDelegate: (id<LSFSDKGroupDelegate>)delegate
 {
-    //TODO - Implement
+    [[self getGroupCollectionManager] removeGroupDelegate: delegate];
 }
 
 -(void)removePresetDelegate: (id<LSFSDKPresetDelegate>)delegate
 {
-    //TODO - Implement
+    [[self getPresetCollectionManager] removePresetDelegate: delegate];
 }
 
 -(void)removeTransitionEffectDelegate: (id<LSFSDKTransitionEffectDelegate>)delegate
 {
-    //TODO - Implement
+    [[self getTransitionEffectCollectionManager] removeDelegate: delegate];
 }
 
 -(void)removePulseEffectDelegate: (id<LSFSDKPulseEffectDelegate>)delegate
 {
-    //TODO - Implement
+    [[self getPulseEffectCollectionManager] removePulseEffectDelegate: delegate];
 }
 
 -(void)removeSceneElementDelegate: (id<LSFSDKSceneElementDelegate>)delegate
 {
-    //TODO - Implement
+    [[self getSceneElementCollectionManager] removeSceneElementDelegate: delegate];
 }
 
 -(void)removeSceneDelegate: (id<LSFSDKSceneDelegate>)delegate
 {
-    //TODO - Implement
+    [[self getSceneCollectionManagerV2] removeSceneDelegate: delegate];
 }
 
 -(void)removeMasterSceneDelegate: (id<LSFSDKMasterSceneDelegate>)delegate
 {
-    //TODO - Implement
+    [[self getMasterSceneCollectionManager] removeMasterSceneDelegate: delegate];
 }
 
 -(void)removeControllerDelegate: (id<LSFSDKControllerDelegate>)delegate
 {
-    //TODO - Implement
+    [[self getControllerManager] removeDelegate: delegate];
+}
+
+-(void)setDefaultLanguage: (NSString *)defaultLanguage
+{
+    if (defaultLanguage != nil)
+    {
+        _defaultLanguage = defaultLanguage;
+    }
+}
+
+-(NSString *)defaultLanguage
+{
+    return _defaultLanguage;
 }
 
 -(void)setLocalControllerServiceEnabled: (BOOL)enabled
-{
-    //TODO - Implement
-}
-
--(void)removeInitialSetDelegate: (id<LSFSDKInitialSetDelegate>)delegate
 {
     //TODO - Implement
 }
@@ -453,37 +621,62 @@
     //TODO - Implement
 }
 
--(unsigned int)version
+/*
+ * Private Functions
+ */
+-(LSFSDKLampCollectionManager *)getLampCollectionManager
 {
-    //TODO - Implement
-    return 0;
+    return [self.lightingManager lampCollectionManager];
 }
 
--(ajn::BusAttachment *)busAttachment
+-(LSFSDKPresetCollectionManager *)getPresetCollectionManager
 {
-    return [[LSFAllJoynManager getAllJoynManager] bus];
+    return [self.lightingManager presetCollectionManager];
 }
 
--(void)setCreateSyncTimeout: (unsigned long)createSyncTimeout
+-(LSFSDKGroupCollectionManager *)getGroupCollectionManager
 {
-    //TODO - Implement
+    return [self.lightingManager groupCollectionManager];
 }
 
--(unsigned long)createSyncTimeout
+-(LSFSDKTransitionEffectCollectionManager *)getTransitionEffectCollectionManager
 {
-    //TODO - Implement
-    return 0;
+    return [self.lightingManager transitionEffectCollectionManager];
 }
 
--(void)setDefaultLanguage: (NSString *)defaultLanguage
+-(LSFSDKPulseEffectCollectionManager *)getPulseEffectCollectionManager
 {
-    //TODO - Impelement
+    return [self.lightingManager pulseEffectCollectionManager];
 }
 
--(NSString *)defaultLanguage
+-(LSFSDKSceneElementCollectionManager *)getSceneElementCollectionManager
 {
-    //TODO - Implement
-    return nil;
+    return [self.lightingManager sceneElementCollectionManager];
+}
+
+-(LSFSDKSceneCollectionManager *)getSceneCollectionManager
+{
+    return [self.lightingManager sceneCollectionManagerV1];
+}
+
+-(LSFSDKSceneCollectionManagerV2 *)getSceneCollectionManagerV2
+{
+    return [self.lightingManager sceneCollectionManager];
+}
+
+-(LSFSDKMasterSceneCollectionManager *)getMasterSceneCollectionManager
+{
+    return [self.lightingManager masterSceneCollectionManager];
+}
+
+-(LSFControllerManager *)getControllerManager
+{
+    return [self.lightingManager controllerManager];
+}
+
+-(LSFSDKLightingSystemManager *)lightingManager
+{
+    return _lightingManager;
 }
 
 @end

@@ -15,9 +15,9 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.alljoyn.lsf.tutorial"
+    package="org.allseen.lsf.tutorial"
     android:versionCode="1"
-    android:versionName="01_01_0096" >
+    android:versionName="01_01_0177" >
 
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="18" />
 

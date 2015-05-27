@@ -15,14 +15,17 @@
  */
 package org.allseen.lsf.helper.callback;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import org.allseen.lsf.LampDetails;
 import org.allseen.lsf.LampGroup;
 import org.allseen.lsf.LampGroupManagerCallback;
 import org.allseen.lsf.ResponseCode;
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.Group;
 import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.manager.GroupCollectionManager;
@@ -48,11 +51,13 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
 
     protected Set<String> groupIDsWithPendingMembers = new HashSet<String>();
     protected Set<String> groupIDsWithPendingFlatten = new HashSet<String>();
+    protected Map<String, TrackingID> creationTrackingIDs;
 
     public HelperGroupManagerCallback(LightingSystemManager manager) {
         super();
 
         this.manager = manager;
+        this.creationTrackingIDs = new HashMap<String, TrackingID>();
     }
 
     public void refreshAllLampGroupIDs() {
@@ -106,6 +111,15 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
     public void createLampGroupReplyCB(ResponseCode responseCode, String groupID) {
         if (!responseCode.equals(ResponseCode.OK)) {
             manager.getGroupCollectionManager().sendErrorEvent("createLampGroupReplyCB", responseCode, groupID);
+        }
+    }
+
+    @Override
+    public void createLampGroupWithTrackingReplyCB(ResponseCode responseCode, String groupID, long trackingID) {
+        if (!responseCode.equals(ResponseCode.OK)){
+            manager.getGroupCollectionManager().sendErrorEvent("", responseCode, groupID, new TrackingID(trackingID));
+        } else {
+            creationTrackingIDs.put(groupID,new TrackingID(trackingID));
         }
     }
 
@@ -213,7 +227,11 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
                 GroupDataModel groupModel = manager.getGroupCollectionManager().getModel(groupID);
 
                 if (groupModel != null) {
+                    boolean wasInitialized = groupModel.isInitialized();
                     groupModel.setName(groupName);
+                    if (wasInitialized != groupModel.isInitialized()) {
+                        postSendGroupInitialized(groupID);
+                    }
                 }
             }
         });
@@ -230,7 +248,11 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
                 groupIDsWithPendingMembers.remove(groupID);
 
                 if (groupModel != null) {
-                    groupModel.members = lampGroup;
+                    boolean wasInitialized = groupModel.isInitialized();
+                    groupModel.setMembers(lampGroup);
+                    if (wasInitialized != groupModel.isInitialized()) {
+                        postSendGroupInitialized(groupID);
+                    }
                 }
 
                 groupIDsWithPendingFlatten.add(groupID);
@@ -310,19 +332,19 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
 
                             capability.includeData(lampModel.getCapability());
 
-                            if ( lampModel.state.getOnOff()) {
+                            if ( lampModel.getState().getOnOff()) {
                                 countOn++;
                             } else {
                                 countOff++;
                             }
 
                             if (lampDetails.hasColor()) {
-                                averageHue.add(lampModel.state.getHue());
-                                averageSaturation.add(lampModel.state.getSaturation());
+                                averageHue.add(lampModel.getState().getHue());
+                                averageSaturation.add(lampModel.getState().getSaturation());
                             }
 
                             if (lampDetails.isDimmable()) {
-                                averageBrightness.add(lampModel.state.getBrightness());
+                                averageBrightness.add(lampModel.getState().getBrightness());
                             }
 
                             boolean hasVariableColorTemp = lampDetails.hasVariableColorTemp();
@@ -332,7 +354,7 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
                             boolean validColorTempLampMax = viewColorTempLampMax >= ColorStateConverter.VIEW_COLORTEMP_MIN && viewColorTempLampMax <= ColorStateConverter.VIEW_COLORTEMP_MAX;
 
                             if (hasVariableColorTemp) {
-                                averageColorTemp.add(lampModel.state.getColorTemp());
+                                averageColorTemp.add(lampModel.getState().getColorTemp());
                             } else if (validColorTempLampMin) {
                                 averageColorTemp.add(ColorStateConverter.convertColorTempViewToModel(viewColorTempLampMin));
                             }
@@ -354,11 +376,11 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
 
                 groupModel.setCapability(capability);
 
-                groupModel.state.setOnOff(countOn > 0);
-                groupModel.state.setHue(averageHue.getAverage());
-                groupModel.state.setSaturation(averageSaturation.getAverage());
-                groupModel.state.setBrightness(averageBrightness.getAverage());
-                groupModel.state.setColorTemp(averageColorTemp.getAverage());
+                groupModel.getState().setOnOff(countOn > 0);
+                groupModel.getState().setHue(averageHue.getAverage());
+                groupModel.getState().setSaturation(averageSaturation.getAverage());
+                groupModel.getState().setBrightness(averageBrightness.getAverage());
+                groupModel.getState().setColorTemp(averageColorTemp.getAverage());
 
                 groupModel.uniformity.power = countOn == 0 || countOff == 0;
                 groupModel.uniformity.hue = averageHue.isUniform();
@@ -390,6 +412,15 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
             @Override
             public void run() {
                 manager.getGroupCollectionManager().sendChangedEvent(groupID);
+            }
+        });
+    }
+
+    protected void postSendGroupInitialized(final String groupID) {
+        manager.getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                manager.getGroupCollectionManager().sendInitializedEvent(groupID, creationTrackingIDs.remove(groupID));
             }
         });
     }

@@ -15,7 +15,6 @@
  */
 package org.allseen.lsf.tutorial;
 
-import org.alljoyn.lsf.tutorial.R;
 import org.allseen.lsf.helper.facade.Color;
 import org.allseen.lsf.helper.facade.Group;
 import org.allseen.lsf.helper.facade.Lamp;

@@ -25,9 +25,11 @@ using namespace lsf;
 @required
 -(void)getAllLampGroupIDsReplyWithCode: (LSFResponseCode)rc andGroupIDs: (NSArray*)groupIDs;
 -(void)getLampGroupNameReplyWithCode: (LSFResponseCode)rc groupID: (NSString*)groupID language: (NSString *)language andGroupName: (NSString*)name;
+-(void)getLampGroupVersionReplyWithCode: (LSFResponseCode)rc groupID: (NSString *)groupID andVersion: (unsigned int)version;
 -(void)setLampGroupNameReplyWithCode: (LSFResponseCode)rc groupID: (NSString*)groupID andLanguage: (NSString *)language;
 -(void)lampGroupsNameChanged: (NSArray *)groupIDs;
 -(void)createLampGroupReplyWithCode: (LSFResponseCode)rc andGroupID: (NSString *)groupID;
+-(void)createLampGroupTrackingReplyWithCode: (LSFResponseCode)rc groupID: (NSString *)groupID andTrackingID: (unsigned int)trackingID;
 -(void)lampGroupsCreated: (NSArray *)groupIDs;
 -(void)getLampGroupReplyWithCode: (LSFResponseCode)rc groupID: (NSString *)groupID andLampGroup: (LSFLampGroup *)group;
 -(void)deleteLampGroupReplyWithCode: (LSFResponseCode)rc andGroupID: (NSString*)groupID;
@@ -49,5 +51,6 @@ using namespace lsf;
 -(void)updateLampGroupReplyWithCode: (LSFResponseCode)rc andGroupID: (NSString*)groupID;
 -(void)lampGroupsUpdated: (NSArray *)groupIDs;
 -(void)transitionLampGroupStateToPresetReplyWithCode: (LSFResponseCode)rc andGroupID: (NSString*)groupID;
+-(void)setLampGroupEffectReplyWithCode: (LSFResponseCode)rc groupID: (NSString *)groupID andEffectID: (NSString *)effectID;
 
 @end

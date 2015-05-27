@@ -81,6 +81,25 @@ jobject JNICALL Java_org_allseen_lsf_MasterSceneManager_applyMasterScene(JNIEnv 
 }
 
 JNIEXPORT
+jobject JNICALL Java_org_allseen_lsf_MasterSceneManager_getMasterSceneVersion(JNIEnv *env, jobject thiz, jstring jMasterSceneID)
+{
+    // TODO-FIX uncomment once GetMasterSceneVersion is implemented in ControllerClient
+//    return XCppDelegator::Call_ControllerClientStatus_String<XMasterSceneManager>(env, thiz, jMasterSceneID, &XMasterSceneManager::GetMasterSceneVersion);
+    return NULL;
+}
+
+JNIEXPORT
+jobject JNICALL Java_org_allseen_lsf_MasterSceneManager_createMasterSceneWithTracking(JNIEnv *env, jobject thiz, jobject jTrackingID, jobject jMasterScene, jstring jMasterSceneName, jstring jLanguage)
+{
+    return XCppDelegator::Call_ControllerClientStatus_TrackingID_Object_String_String<XMasterSceneManager, XMasterScene, MasterScene>(env, thiz, jTrackingID, jMasterScene, jMasterSceneName, jLanguage, &XMasterSceneManager::CreateMasterSceneWithTracking);
+}
+
+JNIEXPORT jobject JNICALL Java_org_allseen_lsf_MasterSceneManager_getMasterSceneDataSet(JNIEnv *env, jobject thiz, jstring jMasterSceneID, jstring jLanguage)
+{
+    return XCppDelegator::Call_ControllerClientStatus_String_String<XMasterSceneManager>(env, thiz, jMasterSceneID, jLanguage, &XMasterSceneManager::GetMasterSceneDataSet);
+}
+
+JNIEXPORT
 void JNICALL Java_org_allseen_lsf_MasterSceneManager_createNativeObject(JNIEnv *env, jobject thiz, jobject jController, jobject jCallback)
 {
     JControllerClient *xController = GetHandle<JControllerClient*>(jController);

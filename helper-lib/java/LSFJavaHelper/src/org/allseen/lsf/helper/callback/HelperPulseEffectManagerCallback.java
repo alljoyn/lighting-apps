@@ -15,12 +15,16 @@
  */
 package org.allseen.lsf.helper.callback;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.allseen.lsf.PulseEffect;
 import org.allseen.lsf.PulseEffectManagerCallback;
 import org.allseen.lsf.ResponseCode;
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.manager.LightingSystemManager;
-import org.allseen.lsf.helper.model.PulseEffectDataModel;
+import org.allseen.lsf.helper.model.PulseEffectDataModelV2;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
@@ -28,11 +32,13 @@ import org.allseen.lsf.helper.model.PulseEffectDataModel;
  */
 public class HelperPulseEffectManagerCallback extends PulseEffectManagerCallback {
     protected LightingSystemManager manager;
+    protected Map<String, TrackingID> creationTrackingIDs;
 
     public HelperPulseEffectManagerCallback(LightingSystemManager manager) {
         super();
 
         this.manager = manager;
+        this.creationTrackingIDs = new HashMap<String, TrackingID>();
     }
 
     @Override
@@ -112,7 +118,9 @@ public class HelperPulseEffectManagerCallback extends PulseEffectManagerCallback
     @Override
     public void createPulseEffectReplyCB(ResponseCode responseCode, String pulseEffectID, long trackingID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            manager.getPulseEffectCollectionManager().sendErrorEvent("createPulseEffectReplyCB", responseCode, pulseEffectID);
+            manager.getPulseEffectCollectionManager().sendErrorEvent("createPulseEffectReplyCB", responseCode, pulseEffectID, new TrackingID(trackingID));
+        } else {
+            creationTrackingIDs.put(pulseEffectID, new TrackingID(trackingID));
         }
     }
 
@@ -148,7 +156,6 @@ public class HelperPulseEffectManagerCallback extends PulseEffectManagerCallback
     }
 
     protected void postProcessPulseEffectID(final String pulseffectID) {
-        System.out.println("Process PulseEffect");
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
@@ -178,10 +185,14 @@ public class HelperPulseEffectManagerCallback extends PulseEffectManagerCallback
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
-                PulseEffectDataModel pulseEffectModel = manager.getPulseEffectCollectionManager().getModel(pulseEffectID);
+                PulseEffectDataModelV2 pulseEffectModel = manager.getPulseEffectCollectionManager().getModel(pulseEffectID);
 
                 if (pulseEffectModel != null) {
+                    boolean wasInitialized = pulseEffectModel.isInitialized();
                     pulseEffectModel.setName(pulseEffectName);
+                    if (wasInitialized != pulseEffectModel.isInitialized()) {
+                        postSendPulseEffectInitialized(pulseEffectID);
+                    }
                 }
             }
         });
@@ -193,16 +204,22 @@ public class HelperPulseEffectManagerCallback extends PulseEffectManagerCallback
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
-                PulseEffectDataModel pulseEffectModel = manager.getPulseEffectCollectionManager().getModel(pulseEffectID);
+                PulseEffectDataModelV2 pulseEffectModel = manager.getPulseEffectCollectionManager().getModel(pulseEffectID);
 
                 if (pulseEffectModel != null) {
-                    pulseEffectModel.state = pulseEffect.getToLampState();
-                    pulseEffectModel.setEndState(pulseEffect.getFromLampState());
+                    boolean wasInitialized = pulseEffectModel.isInitialized();
+
+                    pulseEffectModel.setState(pulseEffect.getFromLampState());
+                    pulseEffectModel.setEndState(pulseEffect.getToLampState());
                     pulseEffectModel.setStartPresetID(pulseEffect.getFromPresetID());
-                    pulseEffectModel.setStartPresetID(pulseEffect.getToPresetID());
+                    pulseEffectModel.setEndPresetID(pulseEffect.getToPresetID());
                     pulseEffectModel.setDuration(pulseEffect.getPulseDuration());
                     pulseEffectModel.setPeriod(pulseEffect.getPulsePeriod());
                     pulseEffectModel.setCount(pulseEffect.getNumPulses());
+
+                    if (wasInitialized != pulseEffectModel.isInitialized()) {
+                        postSendPulseEffectInitialized(pulseEffectID);
+                    }
                 }
 
                 postSendPulseEffectChanged(pulseEffectID);
@@ -226,6 +243,15 @@ public class HelperPulseEffectManagerCallback extends PulseEffectManagerCallback
             @Override
             public void run() {
                 manager.getPulseEffectCollectionManager().sendChangedEvent(pulseEffectID);
+            }
+        });
+    }
+
+    protected void postSendPulseEffectInitialized(final String pulseEffectID) {
+        manager.getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                manager.getPulseEffectCollectionManager().sendInitializedEvent(pulseEffectID, creationTrackingIDs.remove(pulseEffectID));
             }
         });
     }

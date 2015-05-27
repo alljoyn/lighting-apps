@@ -122,4 +122,9 @@ void XSceneElementManagerCallback::SceneElementsAppliedCB(const LSFStringList& s
     XJavaDelegator::Call_Void_StringList(jdelegate, __func__, sceneElementIDs);
 }
 
+void XSceneElementManagerCallback::GetSceneElementVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneElementID, const uint32_t& sceneElementVersion)
+{
+    XJavaDelegator::Call_Void_ResponseCode_String_UInt32(jdelegate, __func__, responseCode, sceneElementID, sceneElementVersion);
+}
+
 } /* namespace lsf */

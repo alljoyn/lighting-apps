@@ -18,45 +18,19 @@
 
 @implementation LSFSDKColorItem
 
--(void)turnOn
+-(NSArray *)getColorHsvt
 {
-    NSLog(@"LSFColorItem - turnOn() executing");
-    [self setPowerOn: YES];
+    return [NSArray arrayWithObjects: [NSNumber numberWithUnsignedInt: [[[self getColorDataModel] state] hue]], [NSNumber numberWithUnsignedInt: [[[self getColorDataModel] state] saturation]], [NSNumber numberWithUnsignedInt: [[[self getColorDataModel] state] brightness]], [NSNumber numberWithUnsignedInt: [[[self getColorDataModel] state] colorTemp]], nil];
 }
 
--(void)turnOff
+-(BOOL)getPowerOn
 {
-    NSLog(@"LSFColorItem - turnOff() executing");
-    [self setPowerOn: NO];
-}
-
--(void)setPower: (Power)power
-{
-    NSLog(@"LSFColorItem - setPower() executing");
-    [self setPowerOn: (power == ON)];
+    return [[[self getColorDataModel] state] onOff];
 }
 
 -(Power)getPower
 {
-    NSLog(@"LSFColorItem - getPower() executing");
     return (([self getPowerOn]) ? ON : OFF);
-}
-
--(void)setColorHsvt: (NSArray *)hsvt
-{
-    NSLog(@"LSFColorItem - setColorWithArray() executing");
-
-    unsigned int hue = [(NSNumber *)[hsvt objectAtIndex: 0] unsignedIntegerValue];
-    unsigned int saturation = [(NSNumber *)[hsvt objectAtIndex: 1] unsignedIntegerValue];
-    unsigned int brightness = [(NSNumber *)[hsvt objectAtIndex: 2] unsignedIntegerValue];
-    unsigned int colorTemp = [(NSNumber *)[hsvt objectAtIndex: 3] unsignedIntegerValue];
-
-    [self setColorHsvtWithHue: hue saturation: saturation brightness: brightness colorTemp: colorTemp];
-}
-
--(void)setColor: (LSFSDKColor *)color
-{
-    [self setColorHsvtWithHue: color.hue saturation: color.saturation brightness: color.brightness colorTemp: color.colorTemp];
 }
 
 -(LSFSDKColor *)getColor
@@ -69,34 +43,12 @@
     @throw [NSException exceptionWithName: NSInternalInconsistencyException reason: [NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)] userInfo: nil];
 }
 
-//Override from base class
+/*
+ * Overriden functions from base class
+ */
 -(LSFModel *)getItemDataModel
 {
     return [self getColorDataModel];
-}
-
-//LSFSDKLampState implementation
--(void)setPowerOn: (BOOL)powerOn
-{
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException reason: [NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)] userInfo: nil];
-}
-
--(BOOL)getPowerOn
-{
-    NSLog(@"LSFColorItem - getPowerOn() executing");
-    return [[[self getColorDataModel] state] onOff];
-}
-
--(void)setColorHsvtWithHue: (unsigned int)hueDegress saturation: (unsigned int)saturationPercent brightness: (unsigned int)brightnessPercent colorTemp: (unsigned int)colorTempDegrees
-{
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException reason: [NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)] userInfo: nil];
-}
-
--(NSArray *)getColorHsvt
-{
-    NSLog(@"LSFColorItem - getColorHsvt() executing");
-
-    return [NSArray arrayWithObjects: [NSNumber numberWithUnsignedInt: [[[self getColorDataModel] state] hue]], [NSNumber numberWithUnsignedInt: [[[self getColorDataModel] state] saturation]], [NSNumber numberWithUnsignedInt: [[[self getColorDataModel] state] brightness]], [NSNumber numberWithUnsignedInt: [[[self getColorDataModel] state] colorTemp]], nil];
 }
 
 @end

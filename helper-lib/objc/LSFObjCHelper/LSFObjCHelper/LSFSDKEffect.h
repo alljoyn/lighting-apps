@@ -15,11 +15,12 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
+#import "LSFSDKLightingItemProtocol.h"
 
 @class LSFSDKGroupMember;
 
-@protocol LSFSDKEffect <NSObject>
+@protocol LSFSDKEffect <LSFSDKLightingItemProtocol>
 
--(void)applyToGroupMember: (LSFSDKGroupMember *)group;
+-(void)applyToGroupMember: (LSFSDKGroupMember *)member;
 
 @end

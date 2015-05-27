@@ -38,7 +38,8 @@
 #import "LSFEnums.h"
 #import "LSFSDKLamp.h"
 #import "LSFSDKGroup.h"
-#import "LSFSDKScene.h"
+#import "LSFSDKSceneV1.h"
+#import "LSFSDKMasterScene.h"
 
 @interface LSFScenesTableViewController ()
 
@@ -115,13 +116,17 @@
     //Set the content of the default scene data array
     NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
 
-    for (LSFSDKScene *scene in [scenes allValues])
+    for (LSFSDKSceneV1 *scene in [scenes allValues])
     {
         [self.data addObject: [scene getSceneDataModel]];
     }
 
-    LSFMasterSceneModelContainer *masterScenesContainer = [LSFMasterSceneModelContainer getMasterSceneModelContainer];
-    [self.data addObjectsFromArray: [masterScenesContainer.masterScenesContainer allValues]];
+    NSMutableDictionary *masterScenes = [[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer];
+
+    for (LSFSDKMasterScene *masterScene in [masterScenes allValues])
+    {
+        [self.data addObject: [masterScene getMasterSceneDataModel]];
+    }
 
     if (self.data.count > 0)
     {
@@ -295,7 +300,7 @@
 -(void)addNewMasterScene: (NSString *)masterSceneID
 {
     NSMutableDictionary *masterScenes = [[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer];
-    LSFMasterSceneDataModel *model = [masterScenes valueForKey: masterSceneID];
+    LSFMasterSceneDataModel *model = [[masterScenes valueForKey: masterSceneID] getMasterSceneDataModel];
 
     NSUInteger existingIndex = [self checkIfModelExists: (LSFDataModel *)model];
 
@@ -311,7 +316,7 @@
 -(void)reorderMasterScene: (NSString *)masterSceneID
 {
     NSMutableDictionary *masterScenes = [[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer];
-    LSFMasterSceneDataModel *model = [masterScenes valueForKey: masterSceneID];
+    LSFMasterSceneDataModel *model = [[masterScenes valueForKey: masterSceneID] getMasterSceneDataModel];
 
     if (model != nil)
     {
@@ -340,7 +345,7 @@
 -(void)refreshMasterScene: (NSString *)masterSceneID
 {
     NSMutableDictionary *masterScenes = [[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer];
-    LSFMasterSceneDataModel *model = [masterScenes valueForKey: masterSceneID];
+    LSFMasterSceneDataModel *model = [[masterScenes valueForKey: masterSceneID] getMasterSceneDataModel];
 
     if (model != nil)
     {
@@ -360,7 +365,7 @@
 
     for (NSString *masterSceneID in masterSceneIDs)
     {
-        LSFMasterSceneDataModel *model = [masterScenes valueForKey: masterSceneID];
+        LSFMasterSceneDataModel *model = [[masterScenes valueForKey: masterSceneID] getMasterSceneDataModel];
 
         if (model == nil)
         {
@@ -862,8 +867,10 @@
     LSFMasterSceneModelContainer *container = [LSFMasterSceneModelContainer getMasterSceneModelContainer];
     NSMutableArray *masterScenes = [[NSMutableArray alloc] initWithArray: [container.masterScenesContainer allValues]];
 
-    for (LSFMasterSceneDataModel *model in masterScenes)
+    for (LSFSDKMasterScene *masterScene in masterScenes)
     {
+        LSFMasterSceneDataModel *model = [masterScene getMasterSceneDataModel];
+
         if ([model.masterScene.sceneIDs containsObject: sceneID])
         {
             NSLog(@"Master Scene %@ contains Scene ID %@", model.name, sceneID);

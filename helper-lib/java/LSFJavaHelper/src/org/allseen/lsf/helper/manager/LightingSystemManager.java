@@ -24,6 +24,7 @@ import org.allseen.lsf.PresetManager;
 import org.allseen.lsf.PulseEffectManager;
 import org.allseen.lsf.SceneElementManager;
 import org.allseen.lsf.SceneManager;
+import org.allseen.lsf.SceneManagerCallback;
 import org.allseen.lsf.TransitionEffectManager;
 import org.allseen.lsf.helper.callback.HelperControllerClientCallback;
 import org.allseen.lsf.helper.callback.HelperControllerServiceManagerCallback;
@@ -34,6 +35,8 @@ import org.allseen.lsf.helper.callback.HelperPresetManagerCallback;
 import org.allseen.lsf.helper.callback.HelperPulseEffectManagerCallback;
 import org.allseen.lsf.helper.callback.HelperSceneElementManagerCallback;
 import org.allseen.lsf.helper.callback.HelperSceneManagerCallback;
+import org.allseen.lsf.helper.callback.HelperSceneManagerCallbackV1;
+import org.allseen.lsf.helper.callback.HelperSceneManagerCallbackV2;
 import org.allseen.lsf.helper.callback.HelperTransitionEffectManagerCallback;
 import org.allseen.lsf.helper.listener.AllJoynListener;
 import org.allseen.lsf.helper.listener.ControllerAdapter;
@@ -64,6 +67,8 @@ public class LightingSystemManager {
     public final HelperTransitionEffectManagerCallback transitionEffectManagerCB;
     public final HelperPulseEffectManagerCallback pulseEffectManagerCB;
     public final HelperSceneElementManagerCallback sceneElementManagerCB;
+    public final HelperSceneManagerCallbackV1 sceneManagerCBV1;
+    public final HelperSceneManagerCallbackV2 sceneWithSceneElementsManagerCB;
     public final HelperSceneManagerCallback sceneManagerCB;
     public final HelperMasterSceneManagerCallback masterSceneManagerCB;
 
@@ -73,12 +78,17 @@ public class LightingSystemManager {
     private final TransitionEffectCollectionManager transitionEffectCollectionManager;
     private final PulseEffectCollectionManager pulseEffectCollectionManager;
     private final SceneElementCollectionManager sceneElementCollectionManager;
-    private final SceneCollectionManager sceneCollectionManager;
+    private final SceneCollectionManager sceneCollectionManagerV1;
+    private final SceneCollectionManagerV2 sceneCollectionManager;
     private final MasterSceneCollectionManager masterSceneCollectionManager;
     private final ControllerManager controllerManager;
 
     public LightingSystemManager() {
         AllLampsLampGroup.instance.setLightingSystemManager(this);
+
+        // local callback manager, not to be directly registered with ControllerClient
+        sceneManagerCBV1 = new HelperSceneManagerCallbackV1(this);
+        sceneWithSceneElementsManagerCB = new HelperSceneManagerCallbackV2(this);
 
         controllerClientCB = new HelperControllerClientCallback(this);
         controllerServiceManagerCB = new HelperControllerServiceManagerCallback(this);
@@ -88,16 +98,17 @@ public class LightingSystemManager {
         transitionEffectManagerCB = new HelperTransitionEffectManagerCallback(this);
         pulseEffectManagerCB = new HelperPulseEffectManagerCallback(this);
         sceneElementManagerCB = new HelperSceneElementManagerCallback(this);
-        sceneManagerCB = new HelperSceneManagerCallback(this);
         masterSceneManagerCB = new HelperMasterSceneManagerCallback(this);
-
+        // sceneManagerCB is a composition of the two different types of scenes
+        sceneManagerCB = new HelperSceneManagerCallback(new SceneManagerCallback[] { sceneWithSceneElementsManagerCB, sceneManagerCBV1 });
         lampCollectionManager = new LampCollectionManager(this);
         groupCollectionManager = new GroupCollectionManager(this);
         presetCollectionManager = new PresetCollectionManager(this);
         transitionEffectCollectionManager = new TransitionEffectCollectionManager(this);
         pulseEffectCollectionManager = new PulseEffectCollectionManager(this);
         sceneElementCollectionManager = new SceneElementCollectionManager(this);
-        sceneCollectionManager = new SceneCollectionManager(this);
+        sceneCollectionManagerV1 = new SceneCollectionManager(this);
+        sceneCollectionManager = new SceneCollectionManagerV2(this);
         masterSceneCollectionManager = new MasterSceneCollectionManager(this);
         controllerManager = new ControllerManager(this);
 
@@ -214,7 +225,11 @@ public class LightingSystemManager {
         return sceneElementCollectionManager;
     }
 
-    public SceneCollectionManager getSceneCollectionManager() {
+    public SceneCollectionManager getSceneCollectionManagerV1() {
+        return sceneCollectionManagerV1;
+    }
+
+    public SceneCollectionManagerV2 getSceneCollectionManager() {
         return sceneCollectionManager;
     }
 
@@ -288,6 +303,8 @@ public class LightingSystemManager {
         presetCollectionManager.removeAllAdapters();
         transitionEffectCollectionManager.removeAllAdapters();
         pulseEffectCollectionManager.removeAllAdapters();
+        sceneElementCollectionManager.removeAllAdapters();
+        sceneCollectionManagerV1.removeAllAdapters();
         sceneCollectionManager.removeAllAdapters();
         masterSceneCollectionManager.removeAllAdapters();
     }

@@ -48,6 +48,7 @@ class XPulseEffectManagerCallback : public PulseEffectManagerCallback {
     virtual void PulseEffectsUpdatedCB(const LSFStringList& pulseEffectIDs) LSF_OVERRIDE;
     virtual void DeletePulseEffectReplyCB(const LSFResponseCode& responseCode, const LSFString& pulseEffectID) LSF_OVERRIDE;
     virtual void PulseEffectsDeletedCB(const LSFStringList& pulseEffectIDs) LSF_OVERRIDE;
+    virtual void GetPulseEffectVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& pulseEffectID, const uint32_t& pulseEffectVersion) LSF_OVERRIDE;
 
   protected:
     jweak jdelegate;

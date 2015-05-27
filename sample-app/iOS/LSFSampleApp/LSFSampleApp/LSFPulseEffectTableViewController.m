@@ -25,6 +25,7 @@
 #import "LSFPresetModelContainer.h"
 #import "LSFPresetModel.h"
 #import "LSFEnums.h"
+#import "LSFSDKPreset.h"
 
 @interface LSFPulseEffectTableViewController ()
 
@@ -910,8 +911,9 @@
 
     NSMutableArray *presetsArray = [[NSMutableArray alloc] init];
     BOOL presetMatched = NO;
-    for (LSFPresetModel *data in presets)
+    for (LSFSDKPreset *preset in presets)
     {
+        LSFPresetModel *data = [preset getPresetDataModel];
         BOOL matchesPreset = [self checkIfLampState: state matchesPreset: data];
 
         if (matchesPreset)

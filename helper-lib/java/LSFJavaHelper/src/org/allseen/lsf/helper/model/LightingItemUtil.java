@@ -20,8 +20,10 @@ import java.util.Set;
 
 import org.allseen.lsf.LampGroup;
 import org.allseen.lsf.LampState;
+import org.allseen.lsf.MasterScene;
 import org.allseen.lsf.PulseEffect;
 import org.allseen.lsf.SceneElement;
+import org.allseen.lsf.SceneWithSceneElements;
 import org.allseen.lsf.TransitionEffect;
 import org.allseen.lsf.helper.facade.Group;
 import org.allseen.lsf.helper.facade.GroupMember;
@@ -162,5 +164,27 @@ public class LightingItemUtil {
         }
 
         return sceneElement;
+    }
+
+    public static MasterScene createMasterScene(String[] sceneIds) {
+        MasterScene masterScene = null;
+
+        if (sceneIds != null) {
+            masterScene = new MasterScene();
+            masterScene.setScenes(sceneIds);
+        }
+
+        return masterScene;
+    }
+
+    public static SceneWithSceneElements createSceneWithSceneElements(String[] sceneElementIds) {
+        SceneWithSceneElements sceneWithElements = null;
+
+        if (sceneElementIds != null) {
+            sceneWithElements = new SceneWithSceneElements();
+            sceneWithElements.setSceneElements(sceneElementIds);
+        }
+
+        return sceneWithElements;
     }
 }

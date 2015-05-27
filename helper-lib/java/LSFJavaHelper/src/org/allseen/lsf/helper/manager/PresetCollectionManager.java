@@ -18,9 +18,11 @@ package org.allseen.lsf.helper.manager;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.Preset;
 import org.allseen.lsf.helper.listener.LightingItemErrorEvent;
 import org.allseen.lsf.helper.listener.PresetListener;
+import org.allseen.lsf.helper.model.LightingItemFilter;
 import org.allseen.lsf.helper.model.PresetDataModel;
 
 /**
@@ -49,6 +51,11 @@ public class PresetCollectionManager extends LightingItemCollectionManager<Prese
         return getAdapters().toArray(new Preset[size()]);
     }
 
+    public Preset[] getPresets(LightingItemFilter<Preset> filter) {
+        Collection<Preset> filteredPresets = getAdapters(filter);
+        return filteredPresets.toArray(new Preset[filteredPresets.size()]);
+    }
+
     public Iterator<Preset> getPresetIterator() {
         return getAdapters().iterator();
     }
@@ -59,6 +66,11 @@ public class PresetCollectionManager extends LightingItemCollectionManager<Prese
 
     public Preset removePreset(String presetID) {
         return removeAdapter(presetID);
+    }
+
+    @Override
+    protected void sendInitializedEvent(PresetListener listener, Preset preset, TrackingID trackingID) {
+        listener.onPresetInitialized(trackingID, preset);
     }
 
     @Override

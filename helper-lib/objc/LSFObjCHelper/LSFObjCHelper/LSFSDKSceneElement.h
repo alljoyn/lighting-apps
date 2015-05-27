@@ -18,12 +18,15 @@
 #import "LSFSDKLightingItem.h"
 #import "LSFSDKEffect.h"
 #import "LSFSDKGroupMember.h"
-#import "LSFSceneElementDataModel.h"
+#import "LSFSceneElementDataModelV2.h"
 
 @interface LSFSDKSceneElement : LSFSDKLightingItem
+{
+    @protected LSFSceneElementDataModelV2 *sceneElementModel;
+}
 
--(id)initWithID: (NSString *)sceneElementID;
--(id)initWithID: (NSString *)sceneElementID name: (NSString *)name;
+-(id)initWithSceneElementID: (NSString *)sceneElementID;
+-(id)initWithSceneElementID: (NSString *)sceneElementID sceneElementName: (NSString *)sceneElementName;
 -(void)apply;
 -(void)modifyWithEffect: (id<LSFSDKEffect>)effect groupMembers: (NSArray *)members;
 -(void)addMember: (LSFSDKGroupMember *)member;
@@ -34,6 +37,6 @@
  * <b>WARNING: This method is not intended to be used by clients, and may change or be
  * removed in subsequent releases of the SDK.</b>
  */
--(LSFSceneElementDataModel *)getSceneElementDataModel;
+-(LSFSceneElementDataModelV2 *)getSceneElementDataModel;
 
 @end

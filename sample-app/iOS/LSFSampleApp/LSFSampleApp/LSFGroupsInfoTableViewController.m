@@ -19,17 +19,15 @@
 #import "LSFGroupsPresetsTableViewController.h"
 #import "LSFGroupsMembersTableViewController.h"
 #import "LSFLampState.h"
-#import "LSFPresetModel.h"
 #import "LSFDispatchQueue.h"
 #import "LSFAllJoynManager.h"
 #import "LSFConstants.h"
-#import "LSFGroupModel.h"
 #import "LSFGroupModelContainer.h"
 #import "LSFPresetModelContainer.h"
-#import "LSFPresetModel.h"
 #import "LSFUtilityFunctions.h"
 #import "LSFEnums.h"
 #import "LSFSDKGroup.h"
+#import "LSFSDKPreset.h"
 
 @interface LSFGroupsInfoTableViewController ()
 
@@ -380,13 +378,13 @@
 
     self.presetButton.enabled = YES;
 
-    LSFPresetModelContainer *presetContainer = [LSFPresetModelContainer getPresetModelContainer];
-    NSArray *presets = [presetContainer.presetContainer allValues];
-
+    NSArray *presets = [[[LSFPresetModelContainer getPresetModelContainer] presetContainer] allValues];
     NSMutableArray *presetsArray = [[NSMutableArray alloc] init];
     BOOL presetMatched = NO;
-    for (LSFPresetModel *data in presets)
+
+    for (LSFSDKPreset *preset in presets)
     {
+        LSFPresetModel *data = [preset getPresetDataModel];
         BOOL matchesPreset = [self checkIfLampState: self.groupModel.state matchesPreset: data];
 
         if (matchesPreset)

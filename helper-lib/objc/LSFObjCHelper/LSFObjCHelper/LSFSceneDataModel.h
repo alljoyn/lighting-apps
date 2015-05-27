@@ -25,6 +25,9 @@
  * in subsequent releases of the SDK.
  */
 @interface LSFSceneDataModel : LSFModel
+{
+    @protected BOOL sceneInitialized;
+}
 
 @property (nonatomic, strong) NSMutableArray *noEffects;
 @property (nonatomic, strong) NSMutableArray *transitionEffects;

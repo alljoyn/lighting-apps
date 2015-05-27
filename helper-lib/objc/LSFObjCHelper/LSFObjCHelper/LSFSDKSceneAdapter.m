@@ -18,6 +18,11 @@
 
 @implementation LSFSDKSceneAdapter
 
+-(void)onSceneInitializedWithTrackingID: (LSFTrackingID *)trackingID andScene: (LSFSDKScene *)scene
+{
+    //Intentionally left blank
+}
+
 -(void)onSceneChanged: (LSFSDKScene *)scene
 {
     //Intentionally left blank

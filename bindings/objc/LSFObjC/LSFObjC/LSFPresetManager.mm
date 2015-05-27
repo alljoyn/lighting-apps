@@ -66,6 +66,12 @@
     return self.presetManager->GetPresetName(pid, lang);
 }
 
+-(ControllerClientStatus)getPresetVersionWithID: (NSString *)presetID
+{
+    std::string pid([presetID UTF8String]);
+    return CONTROLLER_CLIENT_OK; //self.presetManager->GetPresetVersion(pid);
+}
+
 -(ControllerClientStatus)setPresetNameWithID: (NSString *)presetID andPresetName: (NSString *)name
 {
     std::string pid([presetID UTF8String]);
@@ -92,6 +98,19 @@
     std::string presetName([name UTF8String]);
     std::string lang([language UTF8String]);
     return self.presetManager->CreatePreset(*static_cast<lsf::LampState*>(preset.handle), presetName, lang);
+}
+
+-(ControllerClientStatus)createPresetWithTracking: (uint32_t *)trackingID state: (LSFLampState *)preset andPresetName: (NSString *)name
+{
+    std::string presetName([name UTF8String]);
+    return self.presetManager->CreatePresetWithTracking(*trackingID, *static_cast<lsf::LampState*>(preset.handle), presetName);
+}
+
+-(ControllerClientStatus)createPresetWithTracking: (uint32_t *)trackingID state: (LSFLampState *)preset presetName: (NSString *)name andLanguage: (NSString *)language
+{
+    std::string presetName([name UTF8String]);
+    std::string lang([language UTF8String]);
+    return self.presetManager->CreatePresetWithTracking(*trackingID, *static_cast<lsf::LampState*>(preset.handle), presetName, lang);
 }
 
 -(ControllerClientStatus)updatePresetWithID: (NSString *)presetID andState: (LSFLampState *)preset

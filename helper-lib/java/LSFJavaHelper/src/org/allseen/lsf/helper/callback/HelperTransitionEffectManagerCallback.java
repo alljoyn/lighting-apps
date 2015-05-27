@@ -15,12 +15,16 @@
  */
 package org.allseen.lsf.helper.callback;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.allseen.lsf.ResponseCode;
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.TransitionEffect;
 import org.allseen.lsf.TransitionEffectManagerCallback;
 import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.manager.LightingSystemManager;
-import org.allseen.lsf.helper.model.TransitionEffectDataModel;
+import org.allseen.lsf.helper.model.TransitionEffectDataModelV2;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
@@ -28,11 +32,13 @@ import org.allseen.lsf.helper.model.TransitionEffectDataModel;
  */
 public class HelperTransitionEffectManagerCallback extends TransitionEffectManagerCallback {
     protected LightingSystemManager manager;
+    protected Map<String, TrackingID> creationTrackingIDs;
 
     public HelperTransitionEffectManagerCallback(LightingSystemManager manager) {
         super();
 
         this.manager = manager;
+        this.creationTrackingIDs = new HashMap<String, TrackingID>();
     }
 
     @Override
@@ -111,7 +117,9 @@ public class HelperTransitionEffectManagerCallback extends TransitionEffectManag
     @Override
     public void createTransitionEffectReplyCB(ResponseCode responseCode, String transitionEffectID, long trackingID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            manager.getTransitionEffectCollectionManager().sendErrorEvent("createTransitionEffectReplyCB", responseCode, transitionEffectID);
+            manager.getTransitionEffectCollectionManager().sendErrorEvent("createTransitionEffectReplyCB", responseCode, transitionEffectID, new TrackingID(trackingID));
+        } else {
+            creationTrackingIDs.put(transitionEffectID, new TrackingID(trackingID));
         }
     }
 
@@ -160,7 +168,6 @@ public class HelperTransitionEffectManagerCallback extends TransitionEffectManag
     }
 
     protected void postUpdateTransitionEffectID(final String transitionEffectID) {
-        System.out.println("postUpdateTransitionEffectID");
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
@@ -177,10 +184,14 @@ public class HelperTransitionEffectManagerCallback extends TransitionEffectManag
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
-                TransitionEffectDataModel transitionEffectModel = manager.getTransitionEffectCollectionManager().getModel(transitionEffectID);
+                TransitionEffectDataModelV2 transitionEffectModel = manager.getTransitionEffectCollectionManager().getModel(transitionEffectID);
 
                 if (transitionEffectModel != null) {
+                    boolean wasInitialized = transitionEffectModel.isInitialized();
                     transitionEffectModel.setName(transitionEffectName);
+                    if (wasInitialized != transitionEffectModel.isInitialized()) {
+                        postSendTransitionEffectInitialized(transitionEffectID);
+                    }
                 }
             }
         });
@@ -192,12 +203,18 @@ public class HelperTransitionEffectManagerCallback extends TransitionEffectManag
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
-                TransitionEffectDataModel transitionEffectModel = manager.getTransitionEffectCollectionManager().getModel(transitionEffectID);
+                TransitionEffectDataModelV2 transitionEffectModel = manager.getTransitionEffectCollectionManager().getModel(transitionEffectID);
 
                 if (transitionEffectModel != null) {
-                    transitionEffectModel.state = transitionEffect.getLampState();
+                    boolean wasInitialized = transitionEffectModel.isInitialized();
+
+                    transitionEffectModel.setState(transitionEffect.getLampState());
                     transitionEffectModel.setPresetID(transitionEffect.getPresetID());
                     transitionEffectModel.setDuration(transitionEffect.getTransitionPeriod());
+
+                    if (wasInitialized != transitionEffectModel.isInitialized()) {
+                        postSendTransitionEffectInitialized(transitionEffectID);
+                    }
                 }
 
                 postSendTransitionEffectChanged(transitionEffectID);
@@ -210,7 +227,8 @@ public class HelperTransitionEffectManagerCallback extends TransitionEffectManag
             @Override
             public void run() {
                 for (String transitionEffectID : transitionEffectIDs) {
-                    manager.getTransitionEffectCollectionManager().removeTransitionEffect(transitionEffectID);
+                    manager.getTransitionEffectCollectionManager().sendRemovedEvent(
+                            manager.getTransitionEffectCollectionManager().removeTransitionEffect(transitionEffectID));
                 }
             }
         });
@@ -221,6 +239,15 @@ public class HelperTransitionEffectManagerCallback extends TransitionEffectManag
             @Override
             public void run() {
                 manager.getTransitionEffectCollectionManager().sendChangedEvent(transitionEffectID);
+            }
+        });
+    }
+
+    protected void postSendTransitionEffectInitialized(final String transitionEffectID) {
+        manager.getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                manager.getTransitionEffectCollectionManager().sendInitializedEvent(transitionEffectID, creationTrackingIDs.remove(transitionEffectID));
             }
         });
     }

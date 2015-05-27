@@ -28,9 +28,9 @@ import org.allseen.lsf.helper.model.GroupDataModel;
 import org.allseen.lsf.helper.model.LampDataModel;
 import org.allseen.lsf.helper.model.NoEffectDataModel;
 import org.allseen.lsf.helper.model.PresetDataModel;
-import org.allseen.lsf.helper.model.PulseEffectDataModelV10;
+import org.allseen.lsf.helper.model.PulseEffectDataModel;
 import org.allseen.lsf.helper.model.SceneDataModel;
-import org.allseen.lsf.helper.model.TransitionEffectDataModelV10;
+import org.allseen.lsf.helper.model.TransitionEffectDataModel;
 
 public class Util {
 
@@ -45,13 +45,13 @@ public class Util {
         }
 
         if (basicSceneModel.transitionEffects != null) {
-            for (TransitionEffectDataModelV10 elementModel : basicSceneModel.transitionEffects) {
+            for (TransitionEffectDataModel elementModel : basicSceneModel.transitionEffects) {
                 details = createMemberNamesString(activity, details, elementModel.members, separator, R.string.basic_scene_members_none);
             }
         }
 
         if (basicSceneModel.pulseEffects != null) {
-            for (PulseEffectDataModelV10 elementModel : basicSceneModel.pulseEffects) {
+            for (PulseEffectDataModel elementModel : basicSceneModel.pulseEffects) {
                 details = createMemberNamesString(activity, details, elementModel.members, separator, R.string.basic_scene_members_none);
             }
         }
@@ -137,7 +137,7 @@ public class Util {
         List<String> basicSceneNames = new ArrayList<String>();
 
         for (String basicSceneID : masterScene.getScenes()) {
-            SceneDataModel basicSceneModel = activity.systemManager.getSceneCollectionManager().getModel(basicSceneID);
+            SceneDataModel basicSceneModel = activity.systemManager.getSceneCollectionManagerV1().getModel(basicSceneID);
             basicSceneNames.add(basicSceneModel != null ? basicSceneModel.getName() : String.format(activity.getString(R.string.member_scene_not_found), basicSceneID));
         }
 

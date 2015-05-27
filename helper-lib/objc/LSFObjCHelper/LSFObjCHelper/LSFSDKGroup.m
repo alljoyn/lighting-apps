@@ -14,20 +14,15 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
+#import "LSFSDKLamp.h"
 #import "LSFSDKGroup.h"
 #import "LSFGroupModel.h"
 #import "LSFConstants.h"
-#import "LSFAllJoynManager.h"
-
-@interface LSFSDKGroup()
-
-@property (nonatomic, strong) LSFGroupModel *groupModel;
-
-@end
+#import "LSFSDKAllJoynManager.h"
+#import "LSFSDKLightingItemUtil.h"
+#import "LSFSDKLightingDirector.h"
 
 @implementation LSFSDKGroup
-
-@synthesize groupModel = _groupModel;
 
 -(id)initWithGroupID: (NSString *)groupID
 {
@@ -35,7 +30,7 @@
 
     if (self)
     {
-        self.groupModel = [[LSFGroupModel alloc] initWithGroupID: groupID];
+        groupModel = [[LSFGroupModel alloc] initWithGroupID: groupID];
     }
 
     return self;
@@ -47,7 +42,7 @@
 
     if (self)
     {
-        self.groupModel = [[LSFGroupModel alloc] initWithGroupID: groupID andGroupName: groupName];
+        groupModel = [[LSFGroupModel alloc] initWithGroupID: groupID andGroupName: groupName];
     }
 
     return self;
@@ -55,22 +50,66 @@
 
 -(void)add: (LSFSDKGroupMember *)member
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKGroup add: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: member])
+    {
+        NSMutableSet *lamps = [[NSMutableSet alloc] initWithArray: [[groupModel members] lamps]];
+        NSMutableSet *groups = [[NSMutableSet alloc] initWithArray: [[groupModel members] lampGroups]];
+
+        if ([member isKindOfClass: [LSFSDKLamp class]])
+        {
+            LSFSDKLamp *lamp = (LSFSDKLamp *)member;
+            [lamps addObject: [[lamp getLampDataModel] theID]];
+        }
+        else if ([member isKindOfClass: [LSFSDKGroup class]])
+        {
+            LSFSDKGroup *group = (LSFSDKGroup *)member;
+            [groups addObject: [[group getLampGroupDataModel] theID]];
+        }
+
+        [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getGroupManager] updateLampGroupWithID: groupModel.theID andLampGroup: [LSFSDKLightingItemUtil createLampGroupFromLampIDs: [lamps allObjects] groupIDs: [groups allObjects]]]];
+    }
 }
 
 -(void)remove: (LSFSDKGroupMember *)member
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKGroup remove: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: member])
+    {
+        NSMutableSet *lamps = [[NSMutableSet alloc] initWithArray: [[groupModel members] lamps]];
+        NSMutableSet *groups = [[NSMutableSet alloc] initWithArray: [[groupModel members] lampGroups]];
+
+        if ([member isKindOfClass: [LSFSDKLamp class]])
+        {
+            LSFSDKLamp *lamp = (LSFSDKLamp *)member;
+            [lamps removeObject: [[lamp getLampDataModel] theID]];
+        }
+        else if ([member isKindOfClass: [LSFSDKGroup class]])
+        {
+            LSFSDKGroup *group = (LSFSDKGroup *)member;
+            [groups removeObject: [[group getLampGroupDataModel] theID]];
+        }
+
+        [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getGroupManager] updateLampGroupWithID: groupModel.theID andLampGroup: [LSFSDKLightingItemUtil createLampGroupFromLampIDs: [lamps allObjects] groupIDs: [groups allObjects]]]];
+    }
 }
 
 -(void)modify: (NSArray *)members
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKGroup modify: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: members])
+    {
+        [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getGroupManager] updateLampGroupWithID: groupModel.theID andLampGroup: [LSFSDKLightingItemUtil createLampGroupFromGroupMembers: members]]];
+    }
 }
 
 -(void)deleteGroup
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKGroup deleteGroup: error";
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getGroupManager] deleteLampGroupWithID: groupModel.theID]];
 }
 
 /*
@@ -78,23 +117,14 @@
  */
 -(void)setPowerOn: (BOOL)powerOn
 {
-    NSLog(@"LSFGroups - powerOn() executing");
-    NSLog(@"Power is %@", powerOn ? @"On" : @"Off");
-
-    LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
-    [ajManager.lsfLampGroupManager transitionLampGroupID: self.groupModel.theID onOffField: powerOn];
+    NSString *errorContext = @"LSFSDKGroup setPowerOn: error";
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getGroupManager] transitionLampGroupID: groupModel.theID onOffField: powerOn]];
 }
 
 -(void)setColorHsvtWithHue:(unsigned int)hueDegrees saturation:(unsigned int)saturationPercent brightness:(unsigned int)brightnessPercent colorTemp:(unsigned int)colorTempDegrees
 {
-    NSLog(@"LSFGroups - setColor() executing");
-    NSLog(@"Hue = %u", hueDegrees);
-    NSLog(@"Saturation = %u", saturationPercent);
-    NSLog(@"Brightness = %u", brightnessPercent);
-    NSLog(@"ColorTemp = %u", colorTempDegrees);
-
+    NSString *errorContext = @"LSFSDKGroup setColorHsvt: error";
     LSFConstants *constants = [LSFConstants getConstants];
-    LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
 
     unsigned int scaledBrightness = [constants scaleLampStateValue: brightnessPercent withMax: 100];
     unsigned int scaledHue = [constants scaleLampStateValue: hueDegrees withMax: 360];
@@ -102,27 +132,61 @@
     unsigned int scaledColorTemp = [constants scaleColorTemp: colorTempDegrees];
 
     LSFLampState *lampState = [[LSFLampState alloc] initWithOnOff: YES brightness: scaledBrightness hue: scaledHue saturation: scaledSaturation colorTemp: scaledColorTemp];
-    [ajManager.lsfLampGroupManager transitionLampGroupID: self.groupModel.theID toState: lampState];
+
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getGroupManager] transitionLampGroupID: groupModel.theID toState: lampState]];
 }
 
 -(void)rename: (NSString *)name
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKGroup rename: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: name])
+    {
+        [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getGroupManager] setLampGroupNameForID: groupModel.theID andName: name]];
+    }
 }
 
 -(void)applyPreset: (LSFSDKPreset *)preset
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKGroup applyPreset: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: preset])
+    {
+        [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getGroupManager] transitionLampGroupID: groupModel.theID toPreset: [[preset getPresetDataModel] theID]]];
+    }
 }
 
 -(void)applyEffect: (id<LSFSDKEffect>)effect
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKGroup applyEffect: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: effect])
+    {
+        if ([effect isKindOfClass: [LSFSDKPreset class]])
+        {
+            [self applyPreset: (LSFSDKPreset *)effect];
+        }
+        else if ([effect isKindOfClass: [LSFSDKTransitionEffect class]])
+        {
+            [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getTransitionEffectManager] applyTranstionEffectWithID: [effect theID] onLampGroups: [NSArray arrayWithObjects: groupModel.theID, nil]]];
+        }
+        else if ([effect isKindOfClass: [LSFSDKPulseEffect class]])
+        {
+            [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getPulseEffectManager] applyPulseEffectWithID: [effect theID] onLampGroups: [NSArray arrayWithObjects: groupModel.theID, nil]]];
+        }
+    }
 }
 
 -(LSFDataModel *)getColorDataModel
 {
     return [self getLampGroupDataModel];
+}
+
+-(void)postError:(NSString *)name status:(LSFResponseCode)status
+{
+    dispatch_async([[[LSFSDKLightingDirector getLightingDirector] lightingManager] dispatchQueue], ^{
+        [[[[LSFSDKLightingDirector getLightingDirector] lightingManager] groupCollectionManager] sendErrorEvent: name statusCode: status itemID: groupModel.theID];
+    });
 }
 
 /**
@@ -131,7 +195,7 @@
  */
 -(LSFGroupModel *)getLampGroupDataModel
 {
-    return self.groupModel;
+    return groupModel;
 }
 
 @end

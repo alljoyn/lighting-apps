@@ -15,9 +15,13 @@
  */
 package org.allseen.lsf.helper.callback;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.allseen.lsf.LampState;
 import org.allseen.lsf.PresetManagerCallback;
 import org.allseen.lsf.ResponseCode;
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.manager.LightingSystemManager;
 import org.allseen.lsf.helper.model.PresetDataModel;
@@ -28,11 +32,13 @@ import org.allseen.lsf.helper.model.PresetDataModel;
  */
 public class HelperPresetManagerCallback extends PresetManagerCallback {
     protected LightingSystemManager manager;
+    protected Map<String, TrackingID> creationTrackingIDs;
 
     public HelperPresetManagerCallback(LightingSystemManager manager) {
         super();
 
         this.manager = manager;
+        this.creationTrackingIDs = new HashMap<String, TrackingID>();
     }
 
     @Override
@@ -102,6 +108,15 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
         }
 
         // Currently nothing to do
+    }
+
+    @Override
+    public void createPresetWithTrackingReplyCB(ResponseCode responseCode, String presetID, long trackingID) {
+        if (!responseCode.equals(ResponseCode.OK)) {
+            manager.getPresetCollectionManager().sendErrorEvent("createPresetWithTrackingReplyCB", responseCode, presetID, new TrackingID(trackingID));
+        } else {
+            creationTrackingIDs.put(presetID, new TrackingID(trackingID));
+        }
     }
 
     @Override
@@ -195,7 +210,11 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
                 PresetDataModel presetModel = manager.getPresetCollectionManager().getModel(presetID);
 
                 if (presetModel != null) {
+                    boolean wasInitialized = presetModel.isInitialized();
                     presetModel.setName(presetName);
+                    if (wasInitialized != presetModel.isInitialized()) {
+                        postSendPresetInitialized(presetID);
+                    }
                 }
             }
         });
@@ -210,7 +229,11 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
                 PresetDataModel presetModel = manager.getPresetCollectionManager().getModel(presetID);
 
                 if (presetModel != null) {
-                    presetModel.state = preset;
+                    boolean wasInitialized = presetModel.isInitialized();
+                    presetModel.setState(preset);
+                    if (wasInitialized != presetModel.isInitialized()) {
+                        postSendPresetInitialized(presetID);
+                    }
                 }
             }
         });
@@ -234,6 +257,15 @@ public class HelperPresetManagerCallback extends PresetManagerCallback {
             @Override
             public void run() {
                 manager.getPresetCollectionManager().sendChangedEvent(presetID);
+            }
+        });
+    }
+
+    protected void postSendPresetInitialized(final String presetID) {
+        manager.getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                manager.getPresetCollectionManager().sendInitializedEvent(presetID, creationTrackingIDs.remove(presetID));
             }
         });
     }

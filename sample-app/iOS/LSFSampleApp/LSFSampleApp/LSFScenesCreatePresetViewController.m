@@ -26,6 +26,7 @@
 #import "LSFAllJoynManager.h"
 #import "LSFPresetModel.h"
 #import "LSFEnums.h"
+#import "LSFSDKPreset.h"
 
 @interface LSFScenesCreatePresetViewController ()
 
@@ -226,8 +227,9 @@
 {
     NSDictionary *presets = [[LSFPresetModelContainer getPresetModelContainer] presetContainer];
 
-    for (LSFPresetModel *model in [presets allValues])
+    for (LSFSDKPreset *preset in [presets allValues])
     {
+        LSFPresetModel *model = [preset getPresetDataModel];
         if ([name isEqualToString: model.name])
         {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Duplicate Name"

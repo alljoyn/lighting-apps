@@ -15,6 +15,7 @@
 package org.allseen.lsf.helper.facade;
 
 import org.allseen.lsf.LampState;
+import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.model.ColorItemDataModel;
 import org.allseen.lsf.helper.model.ColorStateConverter;
@@ -59,12 +60,29 @@ public final class Lamp extends GroupMember {
 
     @Override
     public void applyPreset(Preset preset) {
-        AllJoynManager.lampManager.transitionLampStateToPreset(lampModel.id, preset.getPresetDataModel().id, 0);
+        String errorContext = "Lamp.applyPreset error";
+
+        if (postInvalidArgIfNull(errorContext, preset)) {
+            postErrorIfFailure(errorContext,
+                    AllJoynManager.lampManager.transitionLampStateToPreset(lampModel.id, preset.getPresetDataModel().id, 0));
+        }
     }
 
     @Override
     public void applyEffect(Effect effect) {
-        // TODO-IMPL
+        String errorContext = "Lamp.applyEffect() error";
+
+        if (postInvalidArgIfNull(errorContext, effect)) {
+            if (effect instanceof Preset) {
+                applyPreset((Preset) effect);
+            } else if (effect instanceof TransitionEffect) {
+                postErrorIfFailure(errorContext,
+                        AllJoynManager.transitionEffectManager.applyTransitionEffectOnLamps(effect.getId(), new String[] { lampModel.id }));
+            } else if (effect instanceof PulseEffect) {
+                postErrorIfFailure(errorContext,
+                        AllJoynManager.pulseEffectManager.applyPulseEffectOnLamps(effect.getId(), new String[] { lampModel.id }));
+            }
+        }
     }
 
     /**
@@ -74,7 +92,10 @@ public final class Lamp extends GroupMember {
      */
     @Override
     public void setPowerOn(boolean powerOn) {
-        AllJoynManager.lampManager.transitionLampStateOnOffField(lampModel.id, powerOn);
+        String errorContext = "Lamp.setPowerOn() error";
+
+        postErrorIfFailure(errorContext,
+                AllJoynManager.lampManager.transitionLampStateOnOffField(lampModel.id, powerOn));
     }
 
     /**
@@ -93,12 +114,20 @@ public final class Lamp extends GroupMember {
 
         ColorStateConverter.convertViewToModel(hueDegrees, saturationPercent, brightnessPercent, colorTempDegrees, lampState);
 
-        AllJoynManager.lampManager.transitionLampState(lampModel.id, lampState, 0);
+        String errorContext = "Lamp.setColorHsvt() error";
+
+        postErrorIfFailure(errorContext,
+                AllJoynManager.lampManager.transitionLampState(lampModel.id, lampState, 0));
     }
 
     @Override
     public void rename(String lampName) {
-        AllJoynManager.lampManager.setLampName(lampModel.id, lampName, LightingDirector.get().getDefaultLanguage());
+        String errorContext = "Lamp.rename() error";
+
+        if (postInvalidArgIfNull(errorContext, lampName)) {
+            postErrorIfFailure(errorContext,
+                    AllJoynManager.lampManager.setLampName(lampModel.id, lampName, LightingDirector.get().getDefaultLanguage()));
+        }
     }
 
     @Override
@@ -112,5 +141,15 @@ public final class Lamp extends GroupMember {
      */
     public LampDataModel getLampDataModel() {
         return lampModel;
+    }
+
+    @Override
+    protected void postError(final String name, final ResponseCode status) {
+        LightingDirector.get().getLightingSystemManager().getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                LightingDirector.get().getLampCollectionManager().sendErrorEvent(name, status, getId());
+            }
+        });
     }
 }

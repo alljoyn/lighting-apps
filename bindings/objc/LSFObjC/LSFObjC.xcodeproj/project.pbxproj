@@ -38,7 +38,13 @@
 		871F207F18D2168400784E84 /* LSFControllerClientCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 871F207E18D2168400784E84 /* LSFControllerClientCallback.mm */; };
 		871F208618D2274300784E84 /* LSFLampGroupManagerCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 871F208518D2274300784E84 /* LSFLampGroupManagerCallback.mm */; };
 		871F208D18D259E500784E84 /* LSFLampManagerCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 871F208C18D259E500784E84 /* LSFLampManagerCallback.mm */; };
-		87221C521AFC573E00813C5A /* LSFTrackingID.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87221C511AFC571C00813C5A /* LSFTrackingID.h */; };
+		8737DD9D1AFBB7B7003833B3 /* LSFTransitionEffectManagerCallbackDelegate.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87474B521AF964470068FFF4 /* LSFTransitionEffectManagerCallbackDelegate.h */; };
+		8737DD9E1AFBB7B7003833B3 /* LSFPulseEffectV2.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87474B4C1AF942F60068FFF4 /* LSFPulseEffectV2.h */; };
+		8737DD9F1AFBB7B7003833B3 /* LSFTransitionEffectManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87474B4F1AF963950068FFF4 /* LSFTransitionEffectManager.h */; };
+		8737DDA01AFBB7B7003833B3 /* LSFTrackingID.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 875BEA861AFAA99C0079C9EB /* LSFTrackingID.h */; };
+		8737DDA11AFBB7CF003833B3 /* SceneElementManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 875155951ADC5FF400B540E6 /* SceneElementManager.h */; };
+		8737DDB51AFBC7E6003833B3 /* LSFPulseEffectManagerCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8737DDB31AFBC7E6003833B3 /* LSFPulseEffectManagerCallback.mm */; };
+		8737DDB81AFBCA78003833B3 /* LSFPulseEffectManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8737DDB71AFBCA78003833B3 /* LSFPulseEffectManager.mm */; };
 		87443D25195C5AF5008EEF36 /* LSFControllerClientCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 871F207D18D2168400784E84 /* LSFControllerClientCallback.h */; };
 		87443D26195C5AF5008EEF36 /* LSFControllerServiceManagerCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87C2D21418EB547E00E3D895 /* LSFControllerServiceManagerCallback.h */; };
 		87443D27195C5AF5008EEF36 /* LSFLampGroupManagerCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 871F208418D2274300784E84 /* LSFLampGroupManagerCallback.h */; };
@@ -57,6 +63,11 @@
 		87443D46195C5AF5008EEF36 /* LSFHandle.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8719C95A18DCB0640011CD45 /* LSFHandle.h */; };
 		87443D49195C5AF5008EEF36 /* LSFObject.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8719C95B18DCB1F00011CD45 /* LSFObject.h */; };
 		87443D4B195C5AF5008EEF36 /* LSFUtils.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8771850418E4BC7A0085D153 /* LSFUtils.h */; };
+		87474B421AF922240068FFF4 /* LSFTransitionEffectV2.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87474B411AF922240068FFF4 /* LSFTransitionEffectV2.mm */; };
+		87474B461AF93B140068FFF4 /* LSFTransitionEffectV2.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87474B401AF922240068FFF4 /* LSFTransitionEffectV2.h */; };
+		87474B4E1AF942F60068FFF4 /* LSFPulseEffectV2.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87474B4D1AF942F60068FFF4 /* LSFPulseEffectV2.mm */; };
+		87474B511AF963950068FFF4 /* LSFTransitionEffectManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87474B501AF963950068FFF4 /* LSFTransitionEffectManager.mm */; };
+		87474B551AF967910068FFF4 /* LSFTransitionEffectManagerCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87474B531AF967910068FFF4 /* LSFTransitionEffectManagerCallback.mm */; };
 		8747E73F18E5C5BD00900199 /* LSFLampParametersTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8747E73E18E5C5BD00900199 /* LSFLampParametersTests.mm */; };
 		874B22F018F855D300C486CC /* MockControllerServiceManagerCallbackDelegateHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 874B22EF18F855D300C486CC /* MockControllerServiceManagerCallbackDelegateHandler.mm */; };
 		874B22F518F857FB00C486CC /* LSFControllerServiceManagerCallbackTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 874B22F418F857FB00C486CC /* LSFControllerServiceManagerCallbackTests.mm */; };
@@ -74,8 +85,13 @@
 		874CFEE319723C8F00E30A48 /* MockMasterSceneManagerCallbackDelegateHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 874CFEE219723C8F00E30A48 /* MockMasterSceneManagerCallbackDelegateHandler.mm */; };
 		875155971ADC600400B540E6 /* SceneElementManager.cc in Sources */ = {isa = PBXBuildFile; fileRef = 875155961ADC600400B540E6 /* SceneElementManager.cc */; };
 		875155991ADC610E00B540E6 /* SceneElementManager.cc in Sources */ = {isa = PBXBuildFile; fileRef = 875155981ADC610E00B540E6 /* SceneElementManager.cc */; };
+		8751A4F41AFC39510007AD3C /* LSFPulseEffectManagerCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8737DDB41AFBC7E6003833B3 /* LSFPulseEffectManagerCallback.h */; };
+		8751A4F51AFC39510007AD3C /* LSFTransitionEffectManagerCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87474B541AF967910068FFF4 /* LSFTransitionEffectManagerCallback.h */; };
+		8751A4F61AFC39510007AD3C /* LSFPulseEffectManagerCallbackDelegate.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8737DDB21AFBC44C003833B3 /* LSFPulseEffectManagerCallbackDelegate.h */; };
+		8751A4F71AFC39510007AD3C /* LSFPulseEffectManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8737DDB61AFBCA78003833B3 /* LSFPulseEffectManager.h */; };
 		8755907A18F43C9100CA8715 /* LSFControllerClientCallbackTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8755907918F43C9100CA8715 /* LSFControllerClientCallbackTests.mm */; };
 		8755907E18F4426B00CA8715 /* MockControllerClientCallbackDelegateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8755907D18F4426B00CA8715 /* MockControllerClientCallbackDelegateHandler.m */; };
+		875BEA881AFAA99C0079C9EB /* LSFTrackingID.m in Sources */ = {isa = PBXBuildFile; fileRef = 875BEA871AFAA99C0079C9EB /* LSFTrackingID.m */; };
 		87677E811AC0B0D80033B8C6 /* Controller.cc in Sources */ = {isa = PBXBuildFile; fileRef = 87677E7D1AC0B0D80033B8C6 /* Controller.cc */; };
 		87677E821AC0B0D80033B8C6 /* LSFObjCMain.cc in Sources */ = {isa = PBXBuildFile; fileRef = 87677E7F1AC0B0D80033B8C6 /* LSFObjCMain.cc */; };
 		87677E831AC0B0D80033B8C6 /* LSFObjCOEM_CS_Config.cc in Sources */ = {isa = PBXBuildFile; fileRef = 87677E801AC0B0D80033B8C6 /* LSFObjCOEM_CS_Config.cc */; };
@@ -87,6 +103,8 @@
 		877184FB18E342980085D153 /* LSFLampParameters.mm in Sources */ = {isa = PBXBuildFile; fileRef = 877184FA18E342980085D153 /* LSFLampParameters.mm */; };
 		8771850018E4B3400085D153 /* LSFLampDetailsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 877184FF18E4B3400085D153 /* LSFLampDetailsTest.mm */; };
 		8771850618E4BC7A0085D153 /* LSFUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8771850518E4BC7A0085D153 /* LSFUtils.mm */; };
+		877D1FE41AFD5603009F064C /* LSFSceneWithSceneElements.mm in Sources */ = {isa = PBXBuildFile; fileRef = 877D1FE31AFD5603009F064C /* LSFSceneWithSceneElements.mm */; };
+		878DBA781AFD3BEC001570C3 /* LSFSceneElement.mm in Sources */ = {isa = PBXBuildFile; fileRef = 878DBA771AFD3BEB001570C3 /* LSFSceneElement.mm */; };
 		878EC57118E88A0F0023C1B7 /* LSFLampManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 878EC57018E88A0F0023C1B7 /* LSFLampManager.mm */; };
 		878EC57418E8912D0023C1B7 /* LSFLampGroupManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 878EC57318E8912D0023C1B7 /* LSFLampGroupManager.mm */; };
 		879694F519711C5700C4C81D /* LSFSceneTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 879694F419711C5700C4C81D /* LSFSceneTests.mm */; };
@@ -187,6 +205,13 @@
 		87AD9F2818F48EF6000D0608 /* MockLampManagerCallbackDelegateHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87AD9F2718F48EF6000D0608 /* MockLampManagerCallbackDelegateHandler.mm */; };
 		87C2D21618EB547E00E3D895 /* LSFControllerServiceManagerCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87C2D21518EB547E00E3D895 /* LSFControllerServiceManagerCallback.mm */; };
 		87C2D21918EB5B8900E3D895 /* LSFControllerServiceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87C2D21818EB5B8900E3D895 /* LSFControllerServiceManager.mm */; };
+		87C7D8F31B00FFA1006A6487 /* LSFSceneElementManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87C7D8F21B00FFA1006A6487 /* LSFSceneElementManager.mm */; };
+		87C7D8F41B011F25006A6487 /* LSFSceneElementManagerCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87DF6EED1B006B21001D82FE /* LSFSceneElementManagerCallback.h */; };
+		87C7D8F51B011F25006A6487 /* LSFSceneElementManagerCallbackDelegate.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87DF6EEB1B0067B3001D82FE /* LSFSceneElementManagerCallbackDelegate.h */; };
+		87C7D8F61B011F25006A6487 /* LSFSceneElement.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 878DBA761AFD3BEB001570C3 /* LSFSceneElement.h */; };
+		87C7D8F71B011F25006A6487 /* LSFSceneWithSceneElements.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 877D1FE21AFD5602009F064C /* LSFSceneWithSceneElements.h */; };
+		87C7D8F81B011F25006A6487 /* LSFSceneElementManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87C7D8F11B00FFA1006A6487 /* LSFSceneElementManager.h */; };
+		87CC1B311B13E13400D31739 /* AJInitializer.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87E778591B13ACC7003444EE /* AJInitializer.h */; };
 		87D8139B18CA483C00903D59 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87D8139A18CA483C00903D59 /* Foundation.framework */; };
 		87D813A018CA483C00903D59 /* LSFControllerClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87D8139F18CA483C00903D59 /* LSFControllerClient.h */; };
 		87D813A218CA483C00903D59 /* LSFControllerClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87D813A118CA483C00903D59 /* LSFControllerClient.mm */; };
@@ -196,6 +221,8 @@
 		87D813AF18CA483D00903D59 /* libLSFObjC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87D8139718CA483C00903D59 /* libLSFObjC.a */; };
 		87D813B518CA483D00903D59 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 87D813B318CA483D00903D59 /* InfoPlist.strings */; };
 		87D813D318CA4B8300903D59 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87D813D218CA4B8300903D59 /* SystemConfiguration.framework */; };
+		87DF6EEE1B006B21001D82FE /* LSFSceneElementManagerCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87DF6EEC1B006B21001D82FE /* LSFSceneElementManagerCallback.mm */; };
+		87E7785B1B13ACD4003444EE /* AJInitializer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 87E7785A1B13ACD4003444EE /* AJInitializer.cc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -257,6 +284,7 @@
 			dstPath = "include/$(PRODUCT_NAME)/lsf/controllerservice";
 			dstSubfolderSpec = 16;
 			files = (
+				8737DDA11AFBB7CF003833B3 /* SceneElementManager.h in CopyFiles */,
 				87A1371B1AD5E45D007A4429 /* Condition.h in CopyFiles */,
 				87A1371C1AD5E45D007A4429 /* ControllerService.h in CopyFiles */,
 				87A1371D1AD5E45D007A4429 /* ControllerServiceRank.h in CopyFiles */,
@@ -286,7 +314,21 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				87221C521AFC573E00813C5A /* LSFTrackingID.h in CopyFiles */,
+				87CC1B311B13E13400D31739 /* AJInitializer.h in CopyFiles */,
+				87C7D8F41B011F25006A6487 /* LSFSceneElementManagerCallback.h in CopyFiles */,
+				87C7D8F51B011F25006A6487 /* LSFSceneElementManagerCallbackDelegate.h in CopyFiles */,
+				87C7D8F61B011F25006A6487 /* LSFSceneElement.h in CopyFiles */,
+				87C7D8F71B011F25006A6487 /* LSFSceneWithSceneElements.h in CopyFiles */,
+				87C7D8F81B011F25006A6487 /* LSFSceneElementManager.h in CopyFiles */,
+				8751A4F41AFC39510007AD3C /* LSFPulseEffectManagerCallback.h in CopyFiles */,
+				8751A4F51AFC39510007AD3C /* LSFTransitionEffectManagerCallback.h in CopyFiles */,
+				8751A4F61AFC39510007AD3C /* LSFPulseEffectManagerCallbackDelegate.h in CopyFiles */,
+				8751A4F71AFC39510007AD3C /* LSFPulseEffectManager.h in CopyFiles */,
+				8737DD9D1AFBB7B7003833B3 /* LSFTransitionEffectManagerCallbackDelegate.h in CopyFiles */,
+				8737DD9E1AFBB7B7003833B3 /* LSFPulseEffectV2.h in CopyFiles */,
+				8737DD9F1AFBB7B7003833B3 /* LSFTransitionEffectManager.h in CopyFiles */,
+				8737DDA01AFBB7B7003833B3 /* LSFTrackingID.h in CopyFiles */,
+				87474B461AF93B140068FFF4 /* LSFTransitionEffectV2.h in CopyFiles */,
 				87A137041AD5E3ED007A4429 /* LampResponseCodes.h in CopyFiles */,
 				87A137051AD5E3ED007A4429 /* LampValues.h in CopyFiles */,
 				87A137061AD5E3ED007A4429 /* Alarm.h in CopyFiles */,
@@ -382,7 +424,11 @@
 		871F208B18D259E500784E84 /* LSFLampManagerCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFLampManagerCallback.h; sourceTree = "<group>"; };
 		871F208C18D259E500784E84 /* LSFLampManagerCallback.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFLampManagerCallback.mm; sourceTree = "<group>"; };
 		871F208E18D2630E00784E84 /* LSFLampManagerCallbackDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSFLampManagerCallbackDelegate.h; sourceTree = "<group>"; };
-		87221C511AFC571C00813C5A /* LSFTrackingID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFTrackingID.h; sourceTree = "<group>"; };
+		8737DDB21AFBC44C003833B3 /* LSFPulseEffectManagerCallbackDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFPulseEffectManagerCallbackDelegate.h; sourceTree = "<group>"; };
+		8737DDB31AFBC7E6003833B3 /* LSFPulseEffectManagerCallback.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFPulseEffectManagerCallback.mm; sourceTree = "<group>"; };
+		8737DDB41AFBC7E6003833B3 /* LSFPulseEffectManagerCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFPulseEffectManagerCallback.h; sourceTree = "<group>"; };
+		8737DDB61AFBCA78003833B3 /* LSFPulseEffectManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFPulseEffectManager.h; sourceTree = "<group>"; };
+		8737DDB71AFBCA78003833B3 /* LSFPulseEffectManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFPulseEffectManager.mm; sourceTree = "<group>"; };
 		874024E51943861E0081E21A /* libc++.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.1.dylib"; path = "usr/lib/libc++.1.dylib"; sourceTree = SDKROOT; };
 		874024E61943861E0081E21A /* libc++abi.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++abi.dylib"; path = "usr/lib/libc++abi.dylib"; sourceTree = SDKROOT; };
 		874024E71943861E0081E21A /* libstdc++.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.dylib"; path = "usr/lib/libstdc++.6.dylib"; sourceTree = SDKROOT; };
@@ -390,6 +436,15 @@
 		87443CC3195B826F008EEF36 /* libAllJoynFramework_iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAllJoynFramework_iOS.a; path = ../../../../../alljoyn/build/darwin/arm/iphoneos/release/dist/about/lib/libAllJoynFramework_iOS.a; sourceTree = "<group>"; };
 		87443CCA195B8444008EEF36 /* liballjoyn_about_cpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liballjoyn_about_cpp.a; path = ../../../../../alljoyn/build/darwin/arm/iphoneos/debug/dist/about/lib/liballjoyn_about_cpp.a; sourceTree = "<group>"; };
 		87443CCB195B8444008EEF36 /* libAllJoynFramework_iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAllJoynFramework_iOS.a; path = ../../../../../alljoyn/build/darwin/arm/iphoneos/debug/dist/about/lib/libAllJoynFramework_iOS.a; sourceTree = "<group>"; };
+		87474B401AF922240068FFF4 /* LSFTransitionEffectV2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFTransitionEffectV2.h; sourceTree = "<group>"; };
+		87474B411AF922240068FFF4 /* LSFTransitionEffectV2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFTransitionEffectV2.mm; sourceTree = "<group>"; };
+		87474B4C1AF942F60068FFF4 /* LSFPulseEffectV2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFPulseEffectV2.h; sourceTree = "<group>"; };
+		87474B4D1AF942F60068FFF4 /* LSFPulseEffectV2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFPulseEffectV2.mm; sourceTree = "<group>"; };
+		87474B4F1AF963950068FFF4 /* LSFTransitionEffectManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFTransitionEffectManager.h; sourceTree = "<group>"; };
+		87474B501AF963950068FFF4 /* LSFTransitionEffectManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFTransitionEffectManager.mm; sourceTree = "<group>"; };
+		87474B521AF964470068FFF4 /* LSFTransitionEffectManagerCallbackDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFTransitionEffectManagerCallbackDelegate.h; sourceTree = "<group>"; };
+		87474B531AF967910068FFF4 /* LSFTransitionEffectManagerCallback.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFTransitionEffectManagerCallback.mm; sourceTree = "<group>"; };
+		87474B541AF967910068FFF4 /* LSFTransitionEffectManagerCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFTransitionEffectManagerCallback.h; sourceTree = "<group>"; };
 		8747E73D18E5C5BD00900199 /* LSFLampParametersTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFLampParametersTests.h; sourceTree = "<group>"; };
 		8747E73E18E5C5BD00900199 /* LSFLampParametersTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFLampParametersTests.mm; sourceTree = "<group>"; };
 		874B22EE18F855D300C486CC /* MockControllerServiceManagerCallbackDelegateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockControllerServiceManagerCallbackDelegateHandler.h; sourceTree = "<group>"; };
@@ -429,6 +484,8 @@
 		8755907918F43C9100CA8715 /* LSFControllerClientCallbackTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFControllerClientCallbackTests.mm; sourceTree = "<group>"; };
 		8755907C18F4426B00CA8715 /* MockControllerClientCallbackDelegateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockControllerClientCallbackDelegateHandler.h; sourceTree = "<group>"; };
 		8755907D18F4426B00CA8715 /* MockControllerClientCallbackDelegateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MockControllerClientCallbackDelegateHandler.m; sourceTree = "<group>"; };
+		875BEA861AFAA99C0079C9EB /* LSFTrackingID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFTrackingID.h; sourceTree = "<group>"; };
+		875BEA871AFAA99C0079C9EB /* LSFTrackingID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFTrackingID.m; sourceTree = "<group>"; };
 		87677E7C1AC0B0BF0033B8C6 /* LSFControllerServiceDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFControllerServiceDelegate.h; sourceTree = "<group>"; };
 		87677E7D1AC0B0D80033B8C6 /* Controller.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Controller.cc; sourceTree = "<group>"; };
 		87677E7E1AC0B0D80033B8C6 /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Controller.h; sourceTree = "<group>"; };
@@ -447,6 +504,10 @@
 		877184FF18E4B3400085D153 /* LSFLampDetailsTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFLampDetailsTest.mm; sourceTree = "<group>"; };
 		8771850418E4BC7A0085D153 /* LSFUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFUtils.h; sourceTree = "<group>"; };
 		8771850518E4BC7A0085D153 /* LSFUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFUtils.mm; sourceTree = "<group>"; };
+		877D1FE21AFD5602009F064C /* LSFSceneWithSceneElements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSceneWithSceneElements.h; sourceTree = "<group>"; };
+		877D1FE31AFD5603009F064C /* LSFSceneWithSceneElements.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFSceneWithSceneElements.mm; sourceTree = "<group>"; };
+		878DBA761AFD3BEB001570C3 /* LSFSceneElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSceneElement.h; sourceTree = "<group>"; };
+		878DBA771AFD3BEB001570C3 /* LSFSceneElement.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFSceneElement.mm; sourceTree = "<group>"; };
 		878EC56F18E88A0F0023C1B7 /* LSFLampManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFLampManager.h; sourceTree = "<group>"; };
 		878EC57018E88A0F0023C1B7 /* LSFLampManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFLampManager.mm; sourceTree = "<group>"; };
 		878EC57218E8912D0023C1B7 /* LSFLampGroupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFLampGroupManager.h; sourceTree = "<group>"; };
@@ -565,6 +626,8 @@
 		87C2D21518EB547E00E3D895 /* LSFControllerServiceManagerCallback.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFControllerServiceManagerCallback.mm; sourceTree = "<group>"; };
 		87C2D21718EB5B8900E3D895 /* LSFControllerServiceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFControllerServiceManager.h; sourceTree = "<group>"; };
 		87C2D21818EB5B8900E3D895 /* LSFControllerServiceManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFControllerServiceManager.mm; sourceTree = "<group>"; };
+		87C7D8F11B00FFA1006A6487 /* LSFSceneElementManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSceneElementManager.h; sourceTree = "<group>"; };
+		87C7D8F21B00FFA1006A6487 /* LSFSceneElementManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFSceneElementManager.mm; sourceTree = "<group>"; };
 		87D5E4B3197083190038B494 /* LSFLampMemberList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSFLampMemberList.h; sourceTree = "<group>"; };
 		87D5E4B4197084A90038B494 /* LSFTransitionEffect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSFTransitionEffect.h; sourceTree = "<group>"; };
 		87D8139718CA483C00903D59 /* libLSFObjC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLSFObjC.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -580,6 +643,11 @@
 		87D813B618CA483D00903D59 /* LSFObjCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSFObjCTests.m; sourceTree = "<group>"; };
 		87D813D218CA4B8300903D59 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		87D813D418CA4B8B00903D59 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
+		87DF6EEB1B0067B3001D82FE /* LSFSceneElementManagerCallbackDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSceneElementManagerCallbackDelegate.h; sourceTree = "<group>"; };
+		87DF6EEC1B006B21001D82FE /* LSFSceneElementManagerCallback.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFSceneElementManagerCallback.mm; sourceTree = "<group>"; };
+		87DF6EED1B006B21001D82FE /* LSFSceneElementManagerCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSceneElementManagerCallback.h; sourceTree = "<group>"; };
+		87E778591B13ACC7003444EE /* AJInitializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AJInitializer.h; sourceTree = "<group>"; };
+		87E7785A1B13ACD4003444EE /* AJInitializer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AJInitializer.cc; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -628,12 +696,20 @@
 				879A3FE91970BDE70082B204 /* LSFPresetPulseEffect.mm */,
 				879A3FDB1970A3DA0082B204 /* LSFPresetTransitionEffect.h */,
 				879A3FDC1970A3DA0082B204 /* LSFPresetTransitionEffect.mm */,
+				87474B4C1AF942F60068FFF4 /* LSFPulseEffectV2.h */,
+				87474B4D1AF942F60068FFF4 /* LSFPulseEffectV2.mm */,
 				879A3FEE1970DBA80082B204 /* LSFScene.h */,
 				879A3FEF1970DBA80082B204 /* LSFScene.mm */,
+				878DBA761AFD3BEB001570C3 /* LSFSceneElement.h */,
+				878DBA771AFD3BEB001570C3 /* LSFSceneElement.mm */,
 				879A3FE21970ACAD0082B204 /* LSFStatePulseEffect.h */,
 				879A3FE31970ACAD0082B204 /* LSFStatePulseEffect.mm */,
 				879A3FD5197085E60082B204 /* LSFStateTransitionEffect.h */,
 				879A3FD6197085E60082B204 /* LSFStateTransitionEffect.mm */,
+				87474B401AF922240068FFF4 /* LSFTransitionEffectV2.h */,
+				87474B411AF922240068FFF4 /* LSFTransitionEffectV2.mm */,
+				877D1FE21AFD5602009F064C /* LSFSceneWithSceneElements.h */,
+				877D1FE31AFD5603009F064C /* LSFSceneWithSceneElements.mm */,
 			);
 			name = DataClasses;
 			sourceTree = "<group>";
@@ -653,8 +729,14 @@
 				874CFED11971D44600E30A48 /* LSFMasterSceneManagerCallback.mm */,
 				870C0B15196A2928009E1408 /* LSFPresetManagerCallback.h */,
 				870C0B16196A2928009E1408 /* LSFPresetManagerCallback.mm */,
+				8737DDB41AFBC7E6003833B3 /* LSFPulseEffectManagerCallback.h */,
+				8737DDB31AFBC7E6003833B3 /* LSFPulseEffectManagerCallback.mm */,
+				87DF6EED1B006B21001D82FE /* LSFSceneElementManagerCallback.h */,
+				87DF6EEC1B006B21001D82FE /* LSFSceneElementManagerCallback.mm */,
 				874CFECB1971BDC900E30A48 /* LSFSceneManagerCallback.h */,
 				874CFECC1971BDC900E30A48 /* LSFSceneManagerCallback.mm */,
+				87474B541AF967910068FFF4 /* LSFTransitionEffectManagerCallback.h */,
+				87474B531AF967910068FFF4 /* LSFTransitionEffectManagerCallback.mm */,
 			);
 			name = CallbackClasses;
 			sourceTree = "<group>";
@@ -668,7 +750,10 @@
 				871F208E18D2630E00784E84 /* LSFLampManagerCallbackDelegate.h */,
 				874CFECF1971D0AA00E30A48 /* LSFMasterSceneManagerCallbackDelegate.h */,
 				870C0B18196A2F7C009E1408 /* LSFPresetManagerCallbackDelegate.h */,
+				8737DDB21AFBC44C003833B3 /* LSFPulseEffectManagerCallbackDelegate.h */,
+				87DF6EEB1B0067B3001D82FE /* LSFSceneElementManagerCallbackDelegate.h */,
 				874CFECE1971BE5000E30A48 /* LSFSceneManagerCallbackDelegate.h */,
+				87474B521AF964470068FFF4 /* LSFTransitionEffectManagerCallbackDelegate.h */,
 			);
 			name = Delegates;
 			sourceTree = "<group>";
@@ -686,7 +771,8 @@
 				8719C95B18DCB1F00011CD45 /* LSFObject.h */,
 				8719C95C18DCB1F00011CD45 /* LSFObject.m */,
 				879A3FE11970AB9A0082B204 /* LSFPulseEffect.h */,
-				87221C511AFC571C00813C5A /* LSFTrackingID.h */,
+				875BEA861AFAA99C0079C9EB /* LSFTrackingID.h */,
+				875BEA871AFAA99C0079C9EB /* LSFTrackingID.m */,
 				87D5E4B4197084A90038B494 /* LSFTransitionEffect.h */,
 				8771850418E4BC7A0085D153 /* LSFUtils.h */,
 				8771850518E4BC7A0085D153 /* LSFUtils.mm */,
@@ -773,8 +859,14 @@
 				874CFED41971D97C00E30A48 /* LSFMasterSceneManager.mm */,
 				870C0B19196A3586009E1408 /* LSFPresetManager.h */,
 				870C0B1A196A3586009E1408 /* LSFPresetManager.mm */,
+				8737DDB61AFBCA78003833B3 /* LSFPulseEffectManager.h */,
+				8737DDB71AFBCA78003833B3 /* LSFPulseEffectManager.mm */,
+				87C7D8F11B00FFA1006A6487 /* LSFSceneElementManager.h */,
+				87C7D8F21B00FFA1006A6487 /* LSFSceneElementManager.mm */,
 				874CFEC81971BD6100E30A48 /* LSFSceneManager.h */,
 				874CFEC91971BD6100E30A48 /* LSFSceneManager.mm */,
+				87474B4F1AF963950068FFF4 /* LSFTransitionEffectManager.h */,
+				87474B501AF963950068FFF4 /* LSFTransitionEffectManager.mm */,
 			);
 			name = ManagerClasses;
 			sourceTree = "<group>";
@@ -828,6 +920,7 @@
 		87A4F3EE1AD5BAB00059F3B6 /* inc */ = {
 			isa = PBXGroup;
 			children = (
+				87E778591B13ACC7003444EE /* AJInitializer.h */,
 				87A4F3EF1AD5BAB00059F3B6 /* Alarm.h */,
 				87A4F3F01AD5BAB00059F3B6 /* LSFKeyListener.h */,
 				87A4F3F11AD5BAB00059F3B6 /* LSFResponseCodes.h */,
@@ -843,6 +936,7 @@
 		87A4F3F71AD5BAB00059F3B6 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				87E7785A1B13ACD4003444EE /* AJInitializer.cc */,
 				87A4F3F81AD5BAB00059F3B6 /* Alarm.cc */,
 				87A4F3F91AD5BAB00059F3B6 /* LSFKeyListener.cc */,
 				87A4F3FA1AD5BAB00059F3B6 /* LSFResponseCodes.cc */,
@@ -1214,10 +1308,13 @@
 				871F207F18D2168400784E84 /* LSFControllerClientCallback.mm in Sources */,
 				87C2D21918EB5B8900E3D895 /* LSFControllerServiceManager.mm in Sources */,
 				87A4F7331AD5BAB20059F3B6 /* ControllerClientDefs.cc in Sources */,
+				8737DDB51AFBC7E6003833B3 /* LSFPulseEffectManagerCallback.mm in Sources */,
 				87C2D21618EB547E00E3D895 /* LSFControllerServiceManagerCallback.mm in Sources */,
 				87A4F7481AD5BAB20059F3B6 /* LSFAboutDataStore.cc in Sources */,
 				87A4F7281AD5BAB20059F3B6 /* Alarm.cc in Sources */,
+				8737DDB81AFBCA78003833B3 /* LSFPulseEffectManager.mm in Sources */,
 				878EC57118E88A0F0023C1B7 /* LSFLampManager.mm in Sources */,
+				878DBA781AFD3BEC001570C3 /* LSFSceneElement.mm in Sources */,
 				87A4F7471AD5BAB20059F3B6 /* LeaderElectionObject.cc in Sources */,
 				87D813A218CA483C00903D59 /* LSFControllerClient.mm in Sources */,
 				87A4F74B1AD5BAB20059F3B6 /* MasterSceneManager.cc in Sources */,
@@ -1227,10 +1324,12 @@
 				87A4F7371AD5BAB20059F3B6 /* Manager.cc in Sources */,
 				87A4F7321AD5BAB20059F3B6 /* ControllerClient.cc in Sources */,
 				87A4F7461AD5BAB20059F3B6 /* LampManager.cc in Sources */,
+				877D1FE41AFD5603009F064C /* LSFSceneWithSceneElements.mm in Sources */,
 				877184F618E3359A0085D153 /* LSFLampDetails.mm in Sources */,
 				87AAF0AC18E2228C00742828 /* LSFLampGroup.mm in Sources */,
 				87A4F72F1AD5BAB20059F3B6 /* Thread.cc in Sources */,
 				878EC57418E8912D0023C1B7 /* LSFLampGroupManager.mm in Sources */,
+				87E7785B1B13ACD4003444EE /* AJInitializer.cc in Sources */,
 				87A4F7401AD5BAB20059F3B6 /* ControllerService.cc in Sources */,
 				87A4F72A1AD5BAB20059F3B6 /* LSFResponseCodes.cc in Sources */,
 				87A4F7341AD5BAB20059F3B6 /* ControllerServiceManager.cc in Sources */,
@@ -1239,6 +1338,7 @@
 				877184FB18E342980085D153 /* LSFLampParameters.mm in Sources */,
 				8719C90C18D8C3740011CD45 /* LSFLampState.mm in Sources */,
 				874CFEC41971AD6000E30A48 /* LSFMasterScene.mm in Sources */,
+				875BEA881AFAA99C0079C9EB /* LSFTrackingID.m in Sources */,
 				874CFED51971D97C00E30A48 /* LSFMasterSceneManager.mm in Sources */,
 				874CFED21971D44600E30A48 /* LSFMasterSceneManagerCallback.mm in Sources */,
 				87A4F73B1AD5BAB20059F3B6 /* SceneManager.cc in Sources */,
@@ -1251,8 +1351,10 @@
 				87A4F7411AD5BAB20059F3B6 /* ControllerServiceRank.cc in Sources */,
 				87A4F74F1AD5BAB20059F3B6 /* PulseEffectManager.cc in Sources */,
 				875155991ADC610E00B540E6 /* SceneElementManager.cc in Sources */,
+				87DF6EEE1B006B21001D82FE /* LSFSceneElementManagerCallback.mm in Sources */,
 				870C0B1B196A3586009E1408 /* LSFPresetManager.mm in Sources */,
 				87A4F74E1AD5BAB20059F3B6 /* PresetManager.cc in Sources */,
+				87474B421AF922240068FFF4 /* LSFTransitionEffectV2.mm in Sources */,
 				870C0B17196A2928009E1408 /* LSFPresetManagerCallback.mm in Sources */,
 				87A4F7291AD5BAB20059F3B6 /* LSFKeyListener.cc in Sources */,
 				87A4F7451AD5BAB20059F3B6 /* LampGroupManager.cc in Sources */,
@@ -1260,6 +1362,7 @@
 				879A3FEA1970BDE70082B204 /* LSFPresetPulseEffect.mm in Sources */,
 				879A3FDD1970A3DA0082B204 /* LSFPresetTransitionEffect.mm in Sources */,
 				874CFECA1971BD6100E30A48 /* LSFSceneManager.mm in Sources */,
+				87474B511AF963950068FFF4 /* LSFTransitionEffectManager.mm in Sources */,
 				87A4F72B1AD5BAB20059F3B6 /* LSFSemaphore.cc in Sources */,
 				87A4F72D1AD5BAB20059F3B6 /* Mutex.cc in Sources */,
 				879A3FE41970ACAD0082B204 /* LSFStatePulseEffect.mm in Sources */,
@@ -1272,7 +1375,10 @@
 				87A4F72E1AD5BAB20059F3B6 /* Rank.cc in Sources */,
 				87A4F73F1AD5BAB20059F3B6 /* Condition.cc in Sources */,
 				87A4F7421AD5BAB20059F3B6 /* DeviceIcon.cc in Sources */,
+				87474B551AF967910068FFF4 /* LSFTransitionEffectManagerCallback.mm in Sources */,
+				87C7D8F31B00FFA1006A6487 /* LSFSceneElementManager.mm in Sources */,
 				875155971ADC600400B540E6 /* SceneElementManager.cc in Sources */,
+				87474B4E1AF942F60068FFF4 /* LSFPulseEffectV2.mm in Sources */,
 				87A4F7511AD5BAB20059F3B6 /* ServiceDescription.cc in Sources */,
 				87A4F7501AD5BAB20059F3B6 /* SceneManager.cc in Sources */,
 			);
@@ -1471,6 +1577,7 @@
 					"DEBUG=1",
 					LSF_OS_DARWIN,
 					LSF_BINDINGS,
+					ROUTER,
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1501,7 +1608,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				USE_HEADERMAP = No;
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 arm64";
 			};
 			name = Debug;
 		};
@@ -1518,6 +1625,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					LSF_OS_DARWIN,
 					LSF_BINDINGS,
+					ROUTER,
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1549,7 +1657,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				USE_HEADERMAP = No;
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 arm64";
 			};
 			name = Release;
 		};

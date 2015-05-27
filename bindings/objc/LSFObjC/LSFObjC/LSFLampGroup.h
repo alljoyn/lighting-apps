@@ -16,13 +16,11 @@
 
 #import "LSFObject.h"
 #import "LSFResponseCodes.h"
+#import "LSFLampMemberList.h"
 
 using namespace lsf;
 
-@interface LSFLampGroup : LSFObject
-
-@property (nonatomic, strong) NSArray *lamps;
-@property (nonatomic, strong) NSArray *lampGroups;
+@interface LSFLampGroup : LSFObject <LSFLampMemberList>
 
 -(id)init;
 -(LSFResponseCode)isDependentLampGroup: (NSString *)groupID;

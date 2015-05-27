@@ -19,9 +19,9 @@ import org.allseen.lsf.LampGroup;
 import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.model.LampCapabilities;
 import org.allseen.lsf.helper.model.NoEffectDataModel;
-import org.allseen.lsf.helper.model.PulseEffectDataModelV10;
+import org.allseen.lsf.helper.model.PulseEffectDataModel;
 import org.allseen.lsf.helper.model.SceneDataModel;
-import org.allseen.lsf.helper.model.TransitionEffectDataModelV10;
+import org.allseen.lsf.helper.model.TransitionEffectDataModel;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -88,7 +88,7 @@ public class BasicSceneInfoFragment extends PageFrameChildFragment implements Vi
 
         if (activity.pendingBasicSceneModel.id != null && !activity.pendingBasicSceneModel.hasDefaultID()) {
             AllJoynManager.sceneManager.updateScene(activity.pendingBasicSceneModel.id, activity.pendingBasicSceneModel.toScene());
-            activity.systemManager.getSceneCollectionManager().addScene(activity.pendingBasicSceneModel);
+            activity.systemManager.getSceneCollectionManagerV1().addScene(activity.pendingBasicSceneModel);
         } else {
             AllJoynManager.sceneManager.createScene(activity.pendingBasicSceneModel.toScene(), activity.pendingBasicSceneModel.getName(), SampleAppActivity.LANGUAGE);
         }
@@ -136,12 +136,12 @@ public class BasicSceneInfoFragment extends PageFrameChildFragment implements Vi
         }
 
         if (basicSceneModel.transitionEffects != null) {
-            for (TransitionEffectDataModelV10 elementModel : basicSceneModel.transitionEffects) {
+            for (TransitionEffectDataModel elementModel : basicSceneModel.transitionEffects) {
                 if (elementID.equals(elementModel.id)) {
                     activity.pendingBasicSceneElementMembers = new LampGroup(elementModel.members);
                     activity.pendingBasicSceneElementCapability = new LampCapabilities(elementModel.getCapability());
                     activity.pendingNoEffectModel = null;
-                    activity.pendingTransitionEffectModel = new TransitionEffectDataModelV10(elementModel);
+                    activity.pendingTransitionEffectModel = new TransitionEffectDataModel(elementModel);
                     activity.pendingPulseEffectModel = null;
 
                     ((ScenesPageFragment)parent).showSelectMembersChildFragment();
@@ -151,13 +151,13 @@ public class BasicSceneInfoFragment extends PageFrameChildFragment implements Vi
         }
 
         if (basicSceneModel.pulseEffects != null) {
-            for (PulseEffectDataModelV10 elementModel : basicSceneModel.pulseEffects) {
+            for (PulseEffectDataModel elementModel : basicSceneModel.pulseEffects) {
                 if (elementID.equals(elementModel.id)) {
                     activity.pendingBasicSceneElementMembers = new LampGroup(elementModel.members);
                     activity.pendingBasicSceneElementCapability = new LampCapabilities(elementModel.getCapability());
                     activity.pendingNoEffectModel = null;
                     activity.pendingTransitionEffectModel = null;
-                    activity.pendingPulseEffectModel = new PulseEffectDataModelV10(elementModel);
+                    activity.pendingPulseEffectModel = new PulseEffectDataModel(elementModel);
 
                     ((ScenesPageFragment)parent).showSelectMembersChildFragment();
                     return;
@@ -190,13 +190,13 @@ public class BasicSceneInfoFragment extends PageFrameChildFragment implements Vi
         }
 
         if (basicSceneModel.transitionEffects != null) {
-            for (TransitionEffectDataModelV10 elementModel : basicSceneModel.transitionEffects) {
+            for (TransitionEffectDataModel elementModel : basicSceneModel.transitionEffects) {
                 addElementRow(activity, elementsTable, R.drawable.list_transition_icon, elementModel.id, elementModel.members, R.string.effect_name_transition);
             }
         }
 
         if (basicSceneModel.pulseEffects != null) {
-            for (PulseEffectDataModelV10 elementModel : basicSceneModel.pulseEffects) {
+            for (PulseEffectDataModel elementModel : basicSceneModel.pulseEffects) {
                 addElementRow(activity, elementsTable, R.drawable.list_pulse_icon, elementModel.id, elementModel.members, R.string.effect_name_pulse);
             }
         }

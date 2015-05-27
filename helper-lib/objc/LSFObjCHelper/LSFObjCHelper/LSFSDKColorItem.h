@@ -17,7 +17,6 @@
 #import "LSFSDKLightingItem.h"
 #import "LSFDataModel.h"
 #import "LSFSDKPower.h"
-#import "LSFSDKLampState.h"
 #import "LSFSDKColor.h"
 
 /**
@@ -26,14 +25,11 @@
  * @warning *Note:* This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK.
  */
-@interface LSFSDKColorItem : LSFSDKLightingItem <LSFSDKLampState>
+@interface LSFSDKColorItem : LSFSDKLightingItem
 
--(void)turnOn;
--(void)turnOff;
--(void)setPower: (Power)power;
+-(NSArray *)getColorHsvt;
+-(BOOL)getPowerOn;
 -(Power)getPower;
--(void)setColorHsvt: (NSArray *)hsvt;
--(void)setColor: (LSFSDKColor *)color;
 -(LSFSDKColor *)getColor;
 -(LSFDataModel *)getColorDataModel;
 

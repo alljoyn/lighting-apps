@@ -50,7 +50,7 @@ public class ScenesTableFragment extends DetailedItemTableFragment {
             addElement(masterSceneIterator.next());
         }
 
-        Iterator<String> sceneIterator = activity.systemManager.getSceneCollectionManager().getIDIterator();
+        Iterator<String> sceneIterator = activity.systemManager.getSceneCollectionManagerV1().getIDIterator();
 
         while (sceneIterator.hasNext()) {
             addElement(sceneIterator.next());
@@ -68,7 +68,7 @@ public class ScenesTableFragment extends DetailedItemTableFragment {
     @Override
     public void addElement(String id) {
         SampleAppActivity activity = (SampleAppActivity) getActivity();
-        SceneDataModel basicSceneModel = activity.systemManager.getSceneCollectionManager().getModel(id);
+        SceneDataModel basicSceneModel = activity.systemManager.getSceneCollectionManagerV1().getModel(id);
         MasterSceneDataModel masterSceneModel = activity.systemManager.getMasterSceneCollectionManager().getModel(id);
 
         if (basicSceneModel != null) {
@@ -86,7 +86,7 @@ public class ScenesTableFragment extends DetailedItemTableFragment {
     public void updateLoading() {
         super.updateLoading();
 
-        if (AllJoynManager.controllerConnected && ((SampleAppActivity) getActivity()).systemManager.getSceneCollectionManager().size() == 0) {
+        if (AllJoynManager.controllerConnected && ((SampleAppActivity) getActivity()).systemManager.getSceneCollectionManagerV1().size() == 0) {
             // connected but no scenes found; display create scenes screen, hide the scroll table
             layout.findViewById(R.id.scrollLoadingView).setVisibility(View.VISIBLE);
             layout.findViewById(R.id.scrollScrollView).setVisibility(View.GONE);

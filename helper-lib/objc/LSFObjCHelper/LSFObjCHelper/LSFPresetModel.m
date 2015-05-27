@@ -35,4 +35,9 @@
     return self;
 }
 
+-(BOOL)isInitialized
+{
+    return [super isInitialized];
+}
+
 @end

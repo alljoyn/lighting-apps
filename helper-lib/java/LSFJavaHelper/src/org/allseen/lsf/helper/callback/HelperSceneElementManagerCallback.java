@@ -16,14 +16,17 @@
 package org.allseen.lsf.helper.callback;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.SceneElement;
 import org.allseen.lsf.SceneElementManagerCallback;
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.manager.LightingSystemManager;
-import org.allseen.lsf.helper.model.SceneElementDataModel;
+import org.allseen.lsf.helper.model.SceneElementDataModelV2;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
@@ -31,11 +34,13 @@ import org.allseen.lsf.helper.model.SceneElementDataModel;
  */
 public class HelperSceneElementManagerCallback extends SceneElementManagerCallback {
     protected LightingSystemManager manager;
+    protected Map<String, TrackingID> creationTrackingIDs;
 
     public HelperSceneElementManagerCallback(LightingSystemManager manager) {
         super();
 
         this.manager = manager;
+        this.creationTrackingIDs = new HashMap<String, TrackingID>();
     }
 
     @Override
@@ -92,7 +97,9 @@ public class HelperSceneElementManagerCallback extends SceneElementManagerCallba
     @Override
     public void createSceneElementReplyCB(ResponseCode responseCode, String sceneElementID, long trackingID) {
         if (!responseCode.equals(ResponseCode.OK)){
-            manager.getPulseEffectCollectionManager().sendErrorEvent("createSceneElementReplyCB", responseCode, sceneElementID);
+            manager.getPulseEffectCollectionManager().sendErrorEvent("createSceneElementReplyCB", responseCode, sceneElementID, new TrackingID(trackingID));
+        } else {
+            creationTrackingIDs.put(sceneElementID, new TrackingID(trackingID));
         }
     }
 
@@ -178,10 +185,14 @@ public class HelperSceneElementManagerCallback extends SceneElementManagerCallba
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
-                SceneElementDataModel sceneElementModel = manager.getSceneElementCollectionManager().getModel(sceneElementID);
+                SceneElementDataModelV2 sceneElementModel = manager.getSceneElementCollectionManager().getModel(sceneElementID);
 
                 if (sceneElementModel != null) {
+                    boolean wasInitialized = sceneElementModel.isInitialized();
                     sceneElementModel.setName(sceneElementName);
+                    if (wasInitialized != sceneElementModel.isInitialized()) {
+                        postSendSceneElementInitialized(sceneElementID);
+                    }
                 }
             }
         });
@@ -193,12 +204,18 @@ public class HelperSceneElementManagerCallback extends SceneElementManagerCallba
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
-                SceneElementDataModel basicSceneElementModel = manager.getSceneElementCollectionManager().getModel(sceneElementID);
+                SceneElementDataModelV2 basicSceneElementModel = manager.getSceneElementCollectionManager().getModel(sceneElementID);
 
                 if (basicSceneElementModel != null) {
+                    boolean wasInitialized = basicSceneElementModel.isInitialized();
+
                     basicSceneElementModel.setEffectId(sceneElement.getEffectID());
                     basicSceneElementModel.setLamps(new HashSet<String>(Arrays.asList(sceneElement.getLamps())));
                     basicSceneElementModel.setGroups(new HashSet<String>(Arrays.asList(sceneElement.getLampGroups())));
+
+                    if (wasInitialized != basicSceneElementModel.isInitialized()) {
+                        postSendSceneElementInitialized(sceneElementID);
+                    }
                 }
             }
         });
@@ -222,6 +239,15 @@ public class HelperSceneElementManagerCallback extends SceneElementManagerCallba
             @Override
             public void run() {
                 manager.getSceneElementCollectionManager().sendChangedEvent(sceneElementID);
+            }
+        });
+    }
+
+    protected void postSendSceneElementInitialized(final String sceneElementID) {
+        manager.getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                manager.getSceneElementCollectionManager().sendInitializedEvent(sceneElementID, creationTrackingIDs.remove(sceneElementID));
             }
         });
     }

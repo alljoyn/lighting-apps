@@ -21,6 +21,7 @@ import org.allseen.lsf.helper.listener.AllJoynListener;
 import org.allseen.lsf.helper.listener.ControllerListener;
 import org.allseen.lsf.helper.listener.GroupListener;
 import org.allseen.lsf.helper.listener.LampListener;
+import org.allseen.lsf.helper.listener.LightingItemErrorEvent;
 import org.allseen.lsf.helper.listener.LightingListener;
 import org.allseen.lsf.helper.listener.MasterSceneListener;
 import org.allseen.lsf.helper.listener.NextControllerConnectionListener;
@@ -28,6 +29,7 @@ import org.allseen.lsf.helper.listener.PresetListener;
 import org.allseen.lsf.helper.listener.PulseEffectListener;
 import org.allseen.lsf.helper.listener.SceneElementListener;
 import org.allseen.lsf.helper.listener.SceneListener;
+import org.allseen.lsf.helper.listener.TrackingIDListener;
 import org.allseen.lsf.helper.listener.TransitionEffectListener;
 import org.allseen.lsf.helper.manager.AllJoynManager;
 import org.allseen.lsf.helper.manager.ControllerManager;
@@ -39,8 +41,11 @@ import org.allseen.lsf.helper.manager.MasterSceneCollectionManager;
 import org.allseen.lsf.helper.manager.PresetCollectionManager;
 import org.allseen.lsf.helper.manager.PulseEffectCollectionManager;
 import org.allseen.lsf.helper.manager.SceneCollectionManager;
+import org.allseen.lsf.helper.manager.SceneCollectionManagerV2;
 import org.allseen.lsf.helper.manager.SceneElementCollectionManager;
 import org.allseen.lsf.helper.manager.TransitionEffectCollectionManager;
+import org.allseen.lsf.helper.model.LightingEventUtil;
+import org.allseen.lsf.helper.model.LightingItemInitializedFilter;
 import org.allseen.lsf.helper.model.LightingItemUtil;
 
 /**
@@ -88,7 +93,7 @@ public class LightingDirector {
      * @return The version number
      */
     public int getVersion() {
-        return 1;
+        return 2;
     }
 
     /**
@@ -253,8 +258,7 @@ public class LightingDirector {
      * @return Array of active Lamps
      */
     public Lamp[] getInitializedLamps() {
-        // TODO-IMPL
-        return null;
+        return getLampCollectionManager().getLamps(new LightingItemInitializedFilter<Lamp>());
     }
 
     /**
@@ -290,13 +294,13 @@ public class LightingDirector {
      * system that have received all the data from the controller.
      * <p>
      * The contents of this array may change in subsequent calls to this method
-     * as new groups are created or existing groups are deleted. This array may be empty.
+     * as new groups are discovered or existing groups are determined to be
+     * offline. This array may be empty.
      *
      * @return Array of active Groups
      */
     public Group[] getInitializedGroups() {
-        // TODO-IMPL
-        return null;
+        return getGroupCollectionManager().getGroups(new LightingItemInitializedFilter<Group>());
     }
 
     /**
@@ -338,8 +342,7 @@ public class LightingDirector {
      * @return An array of active Presets
      */
     public Preset[] getInitializedPresets() {
-        // TODO-IMPL
-        return null;
+        return getPresetCollectionManager().getPresets(new LightingItemInitializedFilter<Preset>());
     }
 
     /**
@@ -381,8 +384,7 @@ public class LightingDirector {
      * @return An array of active TransitionEffects
      */
     public TransitionEffect[] getInitializedTransitionEffects() {
-        // TODO-IMPL
-        return null;
+        return getTransitionEffectCollectionManager().getTransitionEffects(new LightingItemInitializedFilter<TransitionEffect>());
     }
 
     /**
@@ -410,7 +412,7 @@ public class LightingDirector {
      * @return An array of active PulseEffects
      */
     public PulseEffect[] getPulseEffects() {
-        return getPulseEffectCollectionManager().getPulseEffect();
+        return getPulseEffectCollectionManager().getPulseEffects();
     }
 
     /**
@@ -424,8 +426,7 @@ public class LightingDirector {
      * @return An array of active PulseEffects
      */
     public PulseEffect[] getInitializedPulseEffects() {
-        // TODO-IMPL
-        return null;
+        return getPulseEffectCollectionManager().getPulseEffects(new LightingItemInitializedFilter<PulseEffect>());
     }
 
     /**
@@ -453,8 +454,7 @@ public class LightingDirector {
      * @return An array of active SceneElements
      */
     public SceneElement[] getSceneElements() {
-        // TODO-IMPL
-        return null;
+        return getSceneElementCollectionManager().getSceneElements();
     }
 
     /**
@@ -468,8 +468,7 @@ public class LightingDirector {
      * @return An array of active SceneElements
      */
     public SceneElement[] getInitializedSceneElements() {
-        // TODO-IMPL
-        return null;
+        return getSceneElementCollectionManager().getSceneElements(new LightingItemInitializedFilter<SceneElement>());
     }
 
     /**
@@ -482,8 +481,7 @@ public class LightingDirector {
      * @return Instance of SceneElement or null if SceneElement does not exist.
      */
     public SceneElement getSceneElement(String sceneElementId) {
-        // TODO-IMPL
-        return null;
+        return getSceneElementCollectionManager().getSceneElement(sceneElementId);
     }
 
     /**
@@ -498,7 +496,7 @@ public class LightingDirector {
      * @return An array of active Scenes
      */
     public Scene[] getScenes() {
-        return getSceneCollectionManager().getScenes();
+        return getSceneCollectionManagerV2().getScenes();
     }
 
     /**
@@ -512,8 +510,7 @@ public class LightingDirector {
      * @return An array of active Scenes
      */
     public Scene[] getInitializedScenes() {
-        // TODO-IMPL
-        return null;
+        return getSceneCollectionManagerV2().getScenes(new LightingItemInitializedFilter<SceneV2>());
     }
 
     /**
@@ -526,7 +523,7 @@ public class LightingDirector {
      * @return Instance of Scene or null if Scene does not exist.
      */
     public Scene getScene(String sceneId) {
-        return getSceneCollectionManager().getScene(sceneId);
+        return getSceneCollectionManagerV2().getScene(sceneId);
     }
 
     /**
@@ -556,8 +553,7 @@ public class LightingDirector {
      * @return An array of active MasterScenes
      */
     public MasterScene[] getInitializedMasterScenes() {
-        // TODO-IMPL
-        return null;
+        return getMasterSceneCollectionManager().getMasterScenes(new LightingItemInitializedFilter<MasterScene>());
     }
 
     /**
@@ -621,13 +617,25 @@ public class LightingDirector {
      *
      * @return TrackingID associated with the creation of the Group
      */
-    public TrackingID createGroup(GroupMember[] members, String groupName, GroupListener listener) {
-        // TODO-Handle one-shot listener impl
+    public TrackingID createGroup(GroupMember[] members, String groupName, final GroupListener listener) {
+        TrackingID trackingId = new TrackingID(TrackingID.UNDEFINED);
 
-        AllJoynManager.groupManager.createLampGroup(LightingItemUtil.createLampGroup(members),
-                groupName, getDefaultLanguage());
+        if (listener != null) {
+            LightingEventUtil.listenFor(trackingId, new TrackingIDListener() {
+                @Override
+                public void onTrackingIDReceived(TrackingID trackingID, LightingItem item) {
+                    listener.onGroupInitialized(trackingID, (Group)item);
+                }
 
-        return null; // TODO-FIX
+                @Override
+                public void onTrackingIDError(LightingItemErrorEvent error) {
+                    listener.onGroupError(error);
+                }
+            });
+        }
+
+        AllJoynManager.groupManager.createLampGroupWithTracking(trackingId, LightingItemUtil.createLampGroup(members), groupName, getDefaultLanguage());
+        return trackingId;
     }
 
     /**
@@ -642,16 +650,30 @@ public class LightingDirector {
      * @param listener
      *            Specifies the callback that's invoked only for the Preset being created.
      *
-     * @return TrackingID associated with the creation of the Preset
+     * @return TrackingID associated with the create of the Preset
      */
-    public TrackingID createPreset(Power power, Color color, String presetName, PresetListener listener) {
-        // TODO-Handle one-shot listener impl
+    public TrackingID createPreset(Power power, Color color, String presetName, final PresetListener listener) {
+        TrackingID trackingId = new TrackingID(TrackingID.UNDEFINED);
 
-        AllJoynManager.presetManager.createPreset(LightingItemUtil.createLampStateFromView(
+        if (listener != null) {
+            LightingEventUtil.listenFor(trackingId, new TrackingIDListener() {
+                @Override
+                public void onTrackingIDReceived(TrackingID trackingID, LightingItem item) {
+                    listener.onPresetInitialized(trackingID, (Preset)item);
+                }
+
+                @Override
+                public void onTrackingIDError(LightingItemErrorEvent error) {
+                    listener.onPresetError(error);
+                }
+            });
+        }
+
+        AllJoynManager.presetManager.createPresetWithTracking(trackingId, LightingItemUtil.createLampStateFromView(
                 power == Power.ON, color.getHue(), color.getSaturation(), color.getBrightness(), color.getColorTemperature()),
                 presetName, getDefaultLanguage());
 
-        return null; // TODO-FIX
+        return trackingId;
     }
 
     /**
@@ -666,21 +688,35 @@ public class LightingDirector {
      * @param listener
      *            Specifies a callback that's invoked only for the TransitionEffect being created
      *
-     * @return TrackingID associated with the creation of the TrasitionEffect
+     * @return TrackingID associated with the creation of the TransitionEffect
      */
-    public TrackingID createTransitionEffect(LampState state, long duration, String effectName, TransitionEffectListener listener) {
-        // TODO-IMPL handle one-shot listener
+    public TrackingID createTransitionEffect(LampState state, long duration, String effectName, final TransitionEffectListener listener) {
+        TrackingID trackingId = new TrackingID(TrackingID.UNDEFINED);
+
+        if (listener != null) {
+            LightingEventUtil.listenFor(trackingId, new TrackingIDListener() {
+                @Override
+                public void onTrackingIDReceived(TrackingID trackingID, LightingItem item) {
+                    listener.onTransitionEffectInitialized(trackingID, (TransitionEffect)item);
+                }
+
+                @Override
+                public void onTrackingIDError(LightingItemErrorEvent error) {
+                    listener.onTransitionEffectError(error);
+                }
+            });
+        }
 
         if (state instanceof Preset) {
-            AllJoynManager.transitionEffectManager.createTransitionEffect(new TrackingID(),
+            AllJoynManager.transitionEffectManager.createTransitionEffect(trackingId,
                     LightingItemUtil.createTransitionEffect((Preset)state, duration), effectName, getDefaultLanguage());
         } else {
-            AllJoynManager.transitionEffectManager.createTransitionEffect(new TrackingID(),
+            AllJoynManager.transitionEffectManager.createTransitionEffect(trackingId,
                     LightingItemUtil.createTransitionEffect(state.getPowerOn(), state.getColorHsvt(), duration),
                     effectName, getDefaultLanguage());
         }
 
-        return null; // TODO-FIX
+        return trackingId;
     }
 
     /**
@@ -703,20 +739,34 @@ public class LightingDirector {
      *
      * @return TrackingID associated with the creation of the PulseEffect
      */
-    public TrackingID createPulseEffect(LampState fromState, LampState toState, long period, long duration, long count, String effectName, PulseEffectListener listener) {
-        // TODO-IMPL handle one-shot listener
+    public TrackingID createPulseEffect(LampState fromState, LampState toState, long period, long duration, long count, String effectName, final PulseEffectListener listener) {
+        TrackingID trackingId = new TrackingID(TrackingID.UNDEFINED);
+
+        if (listener != null) {
+            LightingEventUtil.listenFor(trackingId, new TrackingIDListener() {
+                @Override
+                public void onTrackingIDReceived(TrackingID trackingID, LightingItem item) {
+                    listener.onPulseEffectInitialized(trackingID, (PulseEffect)item);
+                }
+
+                @Override
+                public void onTrackingIDError(LightingItemErrorEvent error) {
+                    listener.onPulseEffectError(error);
+                }
+            });
+        }
 
         if (fromState instanceof Preset && toState instanceof Preset) {
-            AllJoynManager.pulseEffectManager.createPulseEffect(new TrackingID(),
+            AllJoynManager.pulseEffectManager.createPulseEffect(trackingId,
                     LightingItemUtil.createPulseEffect((Preset)fromState, (Preset)toState, period, duration, count),
                     effectName, getDefaultLanguage());
         } else {
-            AllJoynManager.pulseEffectManager.createPulseEffect(new TrackingID(),
+            AllJoynManager.pulseEffectManager.createPulseEffect(trackingId,
                     LightingItemUtil.createPulseEffect(fromState.getPowerOn(), fromState.getColorHsvt(), toState.getPowerOn(), toState.getColorHsvt(), period, duration, count),
                     effectName, getDefaultLanguage());
         }
 
-        return null; // TODO-FIX
+        return trackingId;
     }
 
     /**
@@ -733,13 +783,27 @@ public class LightingDirector {
      *
      * @return TrackingID associated with the creation of the SceneElement
      */
-    public TrackingID createSceneElement(Effect effect, GroupMember[] members, String sceneElementName, SceneElementListener listener) {
-        // TODO-IMPL handle one-shot listener
+    public TrackingID createSceneElement(Effect effect, GroupMember[] members, String sceneElementName, final SceneElementListener listener) {
+        TrackingID trackingId = new TrackingID(TrackingID.UNDEFINED);
 
-        AllJoynManager.sceneElementManager.createSceneElement(new TrackingID(),
+        if (listener != null) {
+            LightingEventUtil.listenFor(trackingId, new TrackingIDListener() {
+                @Override
+                public void onTrackingIDReceived(TrackingID trackingID, LightingItem item) {
+                    listener.onSceneElementInitialized(trackingID, (SceneElement)item);
+                }
+
+                @Override
+                public void onTrackingIDError(LightingItemErrorEvent error) {
+                    listener.onSceneElementError(error);
+                }
+            });
+        }
+
+        AllJoynManager.sceneElementManager.createSceneElement(trackingId,
                 LightingItemUtil.createSceneElement(effect.getId(), members), sceneElementName, getDefaultLanguage());
 
-        return null; // TODO-FIX
+        return trackingId;
     }
 
     /**
@@ -754,9 +818,31 @@ public class LightingDirector {
      *
      * @return TrackingID associated with the creation of the Scene
      */
-    public TrackingID createScene(SceneElement[] sceneElements, String sceneName, SceneListener listener) {
-        // TODO-IMPL
-        return null;
+    public TrackingID createScene(SceneElement[] sceneElements, String sceneName, final SceneListener listener) {
+        TrackingID trackingId = new TrackingID(TrackingID.UNDEFINED);
+
+        if (listener != null) {
+            LightingEventUtil.listenFor(trackingId, new TrackingIDListener() {
+                @Override
+                public void onTrackingIDReceived(TrackingID trackingID, LightingItem item) {
+                    listener.onSceneInitialized(trackingID, (Scene)item);
+                }
+
+                @Override
+                public void onTrackingIDError(LightingItemErrorEvent error) {
+                    listener.onSceneError(error);
+                }
+            });
+        }
+
+        String[] sceneElementIds = new String[sceneElements.length];
+        for (int i = 0; i < sceneElements.length; i++) {
+            sceneElementIds[i] = sceneElements[i].getId();
+        }
+
+        AllJoynManager.sceneManager.createSceneWithSceneElements(trackingId, LightingItemUtil.createSceneWithSceneElements(sceneElementIds), sceneName, getDefaultLanguage());
+
+        return trackingId;
     }
 
     /**
@@ -769,11 +855,33 @@ public class LightingDirector {
      * @param listener
      *            Specifies a callback that's invoked only for the MasterScene being created.
      *
-     * @return TrackingID associated with the creation of the MasterScene
+     * @return TrackingID associate with the creation of the MasterScene
      */
-    public TrackingID createMasterScene(Scene[] scenes, String masterSceneName, MasterSceneListener listener) {
-        // TODO-IMPL
-        return null;
+    public TrackingID createMasterScene(Scene[] scenes, String masterSceneName, final MasterSceneListener listener) {
+        TrackingID trackingId = new TrackingID(TrackingID.UNDEFINED);
+
+        if (listener != null) {
+            LightingEventUtil.listenFor(trackingId, new TrackingIDListener() {
+                @Override
+                public void onTrackingIDReceived(TrackingID trackingID, LightingItem item) {
+                    listener.onMasterSceneInitialized(trackingID, (MasterScene)item);
+                }
+
+                @Override
+                public void onTrackingIDError(LightingItemErrorEvent error) {
+                    listener.onMasterSceneError(error);
+                }
+            });
+        }
+
+        String[] sceneIds = new String[scenes.length];
+        for (int i = 0; i < scenes.length; i++) {
+            sceneIds[i] = scenes[i].getId();
+        }
+
+        AllJoynManager.masterSceneManager.createMasterSceneWithTracking(trackingId, LightingItemUtil.createMasterScene(sceneIds), masterSceneName, getDefaultLanguage());
+
+        return trackingId;
     }
 
     /**
@@ -888,7 +996,7 @@ public class LightingDirector {
      *            The listener to receive all Scene events.
      */
     public void addSceneListener(SceneListener listener) {
-        getSceneCollectionManager().addListener(listener);
+        getSceneCollectionManagerV2().addListener(listener);
     }
 
     /**
@@ -1023,7 +1131,7 @@ public class LightingDirector {
      *            The listener that receives all Scene events.
      */
     public void removeSceneListener(SceneListener listener) {
-        getSceneCollectionManager().removeListener(listener);
+        getSceneCollectionManagerV2().removeListener(listener);
     }
 
     /**
@@ -1068,29 +1176,6 @@ public class LightingDirector {
     public String getDefaultLanguage() {
         return defaultLanguage;
     }
-
-    /**
-     * Toggles the state of the bundled Lighting Controller Service.
-     *
-     * @param enabled
-     *            Specifies whether the Lighting Controller should be enables or disabled.
-     */
-    public void setLocalControllerServiceEnabled(boolean enabled) {
-        // TODO-IMPL
-    }
-
-    /**
-     * Specifies whether there is an active network connection. Used when the
-     * Lighting Controller Service is enabled.
-     *
-     * @param connected
-     *            Specifies whether the device has an active network connection.
-     */
-    public void setNetworkConnected(boolean connected) {
-        // TODO-IMPL
-    }
-
-    // TODO: What else needs to be exposed for ControllerService functionality?
 
     /**
      * <b>WARNING: This method is not intended to be used by clients, and may change or be
@@ -1145,6 +1230,14 @@ public class LightingDirector {
      * removed in subsequent releases of the SDK.</b>
      */
     protected SceneCollectionManager getSceneCollectionManager() {
+        return lightingManager.getSceneCollectionManagerV1();
+    }
+
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
+    protected SceneCollectionManagerV2 getSceneCollectionManagerV2() {
         return lightingManager.getSceneCollectionManager();
     }
 
@@ -1162,5 +1255,13 @@ public class LightingDirector {
      */
     protected ControllerManager getControllerManager() {
         return lightingManager.getControllerManager();
+    }
+
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
+    protected LightingSystemManager getLightingSystemManager() {
+        return lightingManager;
     }
 }

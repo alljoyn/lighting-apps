@@ -20,10 +20,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Queue;
 
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.Lamp;
 import org.allseen.lsf.helper.listener.LampListener;
 import org.allseen.lsf.helper.listener.LightingItemErrorEvent;
 import org.allseen.lsf.helper.model.LampDataModel;
+import org.allseen.lsf.helper.model.LightingItemFilter;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
@@ -62,6 +64,11 @@ public class LampCollectionManager extends LightingItemCollectionManager<Lamp, L
         return getAdapters().toArray(new Lamp[size()]);
     }
 
+    public Lamp[] getLamps(LightingItemFilter<Lamp> filter) {
+        Collection<Lamp> filteredLamps = getAdapters(filter);
+        return filteredLamps.toArray(new Lamp[filteredLamps.size()]);
+    }
+
     public Iterator<Lamp> getLampIterator() {
         return getAdapters().iterator();
     }
@@ -74,6 +81,11 @@ public class LampCollectionManager extends LightingItemCollectionManager<Lamp, L
         lampIDs.remove(lampID);
 
         return removeAdapter(lampID);
+    }
+
+    @Override
+    protected void sendInitializedEvent(LampListener listener, Lamp lamp, TrackingID trackingID) {
+        listener.onLampInitialized(lamp);
     }
 
     @Override

@@ -63,4 +63,25 @@ public class MyLampState implements LampState {
     public void setColorHsvt(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees) {
         color = new Color(hueDegrees, saturationPercent, brightnessPercent, colorTempDegrees);
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((color == null) ? 0 : color.hashCode());
+        result = prime * result + ((power == null) ? 0 : power.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other != null && other instanceof MyLampState) {
+            MyLampState otherMyLampState = (MyLampState) other;
+
+            return this.getColor().equals(otherMyLampState.getColor()) &&
+                   this.getPower().equals(otherMyLampState.getPower());
+        }
+
+        return false;
+    }
 }

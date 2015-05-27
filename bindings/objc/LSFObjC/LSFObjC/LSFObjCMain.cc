@@ -15,6 +15,7 @@
  ******************************************************************************/
 
 #include "controller.h"
+#include "AJInitializer.h"
 
 #define QCC_MODULE "MAIN"
 
@@ -145,7 +146,7 @@ void RunService(bool listenToInterrupts)
         signal(SIGTERM, SigTermHandler);
     }
 
-    const char* res = getControllerDefaultDeviceId(); //The device id is computed by the Java part
+    const char* res = getControllerDefaultDeviceId(); //The device id is computed by the objective-c part
     QCC_DbgTrace(("%s deviceId: %s", __func__, res));
     printf("Device ID returned from iOS App level %s\n", res);
     luminaireDS = new lsf::controllerservice::LSFAboutDataStore(factoryConfigFilePath.c_str(), configFilePath.c_str(), res);
@@ -229,6 +230,11 @@ void RunAndMonitor()
 
 int runMain(int argc, char** argv)
 {
+    AJInitializer ajInitializer;
+    if (ajInitializer.Initialize() != ER_OK) {
+        return -1;
+    }
+
     QCC_DbgTrace(("%s", __func__));
 
     parseCommandLine(argc, argv);

@@ -26,7 +26,7 @@
 @property (nonatomic, strong) NSSet *lamps;
 @property (nonatomic, strong) NSSet *groups;
 @property (nonatomic) int duplicates;
-@property (nonatomic) unsigned int delay;
+@property (nonatomic) unsigned long delay;
 @property (nonatomic) unsigned int groupColorTempMin;
 @property (nonatomic) unsigned int groupColorTempMax;
 

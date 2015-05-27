@@ -26,10 +26,13 @@
 -(ControllerClientStatus)getAllMasterSceneIDs;
 -(ControllerClientStatus)getMasterSceneNameWithID: (NSString *)masterSceneID;
 -(ControllerClientStatus)getMasterSceneNameWithID: (NSString *)masterSceneID andLanguage: (NSString *)language;
+-(ControllerClientStatus)getMasterSceneVersionWithID: (NSString *)masterSceneID;
 -(ControllerClientStatus)setMasterSceneNameWithID: (NSString *)masterSceneID andMasterSceneName: (NSString *)masterSceneName;
 -(ControllerClientStatus)setMasterSceneNameWithID: (NSString *)masterSceneID masterSceneName: (NSString *)masterSceneName andLanguage: (NSString *)language;
 -(ControllerClientStatus)createMasterScene: (LSFMasterScene *)masterScene withName: (NSString *)masterSceneName;
 -(ControllerClientStatus)createMasterScene: (LSFMasterScene *)masterScene withName: (NSString *)masterSceneName andLanguage: (NSString *)language;
+-(ControllerClientStatus)createMasterSceneWithTracking: (uint32_t *)trackingID masterScene: (LSFMasterScene *)masterScene withName: (NSString *)masterSceneName;
+-(ControllerClientStatus)createMasterSceneWithTracking: (uint32_t *)trackingID masterScene: (LSFMasterScene *)masterScene withName: (NSString *)masterSceneName andLanguage: (NSString *)language;
 -(ControllerClientStatus)updateMasterSceneWithID: (NSString *)masterSceneID andMasterScene: (LSFMasterScene *)masterScene;
 -(ControllerClientStatus)getMasterSceneWithID: (NSString *)masterSceneID;
 -(ControllerClientStatus)deleteMasterSceneWithID: (NSString *)masterSceneID;

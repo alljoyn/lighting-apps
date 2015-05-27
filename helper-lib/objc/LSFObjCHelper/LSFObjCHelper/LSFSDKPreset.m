@@ -15,13 +15,9 @@
  ******************************************************************************/
 
 #import "LSFSDKPreset.h"
-#import "LSFAllJoynManager.h"
-
-@interface LSFSDKPreset()
-
-@property (nonatomic, strong) LSFPresetModel *presetModel;
-
-@end
+#import "LSFSDKAllJoynManager.h"
+#import "LSFSDKLightingItemUtil.h"
+#import "LSFSDKLightingDirector.h"
 
 @implementation LSFSDKPreset
 
@@ -36,7 +32,7 @@
 
     if (self)
     {
-        self.presetModel = [[LSFPresetModel alloc] initWithPresetID: presetID andName: presetName];
+        presetModel = [[LSFPresetModel alloc] initWithPresetID: presetID andName: presetName];
     }
 
     return self;
@@ -44,20 +40,32 @@
 
 -(void)modifyWithPower: (Power)power color: (LSFSDKColor *)color
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKPreset modify: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: color])
+    {
+        [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getPresetManager] updatePresetWithID: presetModel.theID andState: [LSFSDKLightingItemUtil createLampStateFromPower: power hue: color.hue saturation: color.saturation brightness: color.brightness colorTemp: color.colorTemp]]];
+    }
 }
 
 -(void)deletePreset
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKPreset rename: error";
+
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getPresetManager] deletePresetWithID: presetModel.theID]];
 }
 
 /*
  * LSFSDKEffect implementation
  */
--(void)applyToGroupMember: (LSFSDKGroupMember *)group
+-(void)applyToGroupMember: (LSFSDKGroupMember *)member
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKPreset applyToGroupMember: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: member])
+    {
+        [member applyPreset: self];
+    }
 }
 
 /*
@@ -65,22 +73,35 @@
  */
 -(void)setPowerOn: (BOOL)powerOn
 {
-    //TODO - implement
+    [self modifyWithPower: (powerOn ? ON : OFF) color: [self getColor]];
 }
 
 -(void)setColorHsvtWithHue: (unsigned int)hueDegrees saturation: (unsigned int)saturationPercent brightness: (unsigned int)brightnessPercent colorTemp: (unsigned int)colorTempDegrees
 {
-    //TODO - implement
+    LSFSDKColor *color = [[LSFSDKColor alloc] initWithHue: hueDegrees saturation: saturationPercent brightness: brightnessPercent colorTemp: colorTempDegrees];
+    [self modifyWithPower: [self getPower] color: color];
 }
 
 -(void)rename:(NSString *)name
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKPreset rename: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: name])
+    {
+        [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getPresetManager] setPresetNameWithID: presetModel.theID andPresetName: name]];
+    }
 }
 
 -(LSFDataModel *)getColorDataModel
 {
     return [self getPresetDataModel];
+}
+
+-(void)postError:(NSString *)name status:(LSFResponseCode)status
+{
+    dispatch_async([[[LSFSDKLightingDirector getLightingDirector] lightingManager] dispatchQueue], ^{
+        [[[[LSFSDKLightingDirector getLightingDirector] lightingManager] presetCollectionManager] sendErrorEvent: name statusCode: status itemID: presetModel.theID];
+    });
 }
 
 /**
@@ -89,7 +110,7 @@
  */
 -(LSFPresetModel *)getPresetDataModel
 {
-    return self.presetModel;
+    return presetModel;
 }
 
 @end

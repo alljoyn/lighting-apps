@@ -72,6 +72,12 @@
     return self.lampManager->GetLampName(lid, lang);
 }
 
+-(ControllerClientStatus)getLampVersion: (NSString *)lampID
+{
+    std::string lid([lampID UTF8String]);
+    return CONTROLLER_CLIENT_OK; //self.lampManager->GetLampVersion(lid);
+}
+
 -(ControllerClientStatus)setLampNameWithID: (NSString *)lampID andName: (NSString *)name
 {
     std::string lid([lampID UTF8String]);
@@ -92,12 +98,6 @@
     std::string lid([lampID UTF8String]);
     return self.lampManager->GetLampDetails(lid);
 }
-
-//-(ControllerClientStatus)pingLampWithID: (NSString *)lampID
-//{
-//    std::string lid([lampID UTF8String]);
-//    return self.lampManager->PingLamp(lid);
-//}
 
 -(ControllerClientStatus)getLampParametersForID: (NSString *)lampID
 {
@@ -331,6 +331,13 @@
     std::string lid([lampID UTF8String]);
     std::string lang([language UTF8String]);
     return self.lampManager->GetLampDataSet(lid, lang);
+}
+
+-(ControllerClientStatus)setLampEffectForID: (NSString *)lampID withEffectID: (NSString *)effectID
+{
+    std::string lid([lampID UTF8String]);
+    std::string eid([effectID UTF8String]);
+    return CONTROLLER_CLIENT_OK; //self.lampManager->SetLampEffect(lid, eid);
 }
 
 /*

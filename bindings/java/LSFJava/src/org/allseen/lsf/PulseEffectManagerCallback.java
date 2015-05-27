@@ -34,6 +34,7 @@ public class PulseEffectManagerCallback extends DefaultNativeClassWrapper {
     public void pulseEffectsUpdatedCB(String[] pulseEffectIDs)                                                                      { }
     public void deletePulseEffectReplyCB(ResponseCode responseCode, String pulseEffectID)                                           { }
     public void pulseEffectsDeletedCB(String[] pulseEffectIDs)                                                                      { }
+    public void getPulseEffectVersionReplyCB(ResponseCode responseCode, String pulseEffectID, long pulseEffectVersion)              { }
 
     @Override
     protected native void createNativeObject();

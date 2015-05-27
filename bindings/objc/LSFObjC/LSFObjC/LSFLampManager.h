@@ -30,10 +30,10 @@ using namespace lsf;
 -(ControllerClientStatus)getLampManufacturerForID: (NSString *)lampID andLanguage: (NSString *)language;
 -(ControllerClientStatus)getLampName: (NSString *)lampID;
 -(ControllerClientStatus)getLampName: (NSString *)lampID andLanguage: (NSString *)language;
+-(ControllerClientStatus)getLampVersion: (NSString *)lampID;
 -(ControllerClientStatus)setLampNameWithID: (NSString *)lampID andName: (NSString *)name;
 -(ControllerClientStatus)setLampNameWithID: (NSString *)lampID name: (NSString *)name andLanguage: (NSString *)language;
 -(ControllerClientStatus)getLampDetailsForID: (NSString *)lampID;
-//-(ControllerClientStatus)pingLampWithID: (NSString *)lampID;
 -(ControllerClientStatus)getLampParametersForID: (NSString *)lampID;
 -(ControllerClientStatus)getLampParameterEnergyUsageMilliwattsFieldForID: (NSString *)lampID;
 -(ControllerClientStatus)getLampParameterLumensFieldForID: (NSString *)lampID;
@@ -72,5 +72,6 @@ using namespace lsf;
 -(ControllerClientStatus)getLampSupportedLanguagesForID: (NSString *) lampID;
 -(ControllerClientStatus)getLampDataSetForID: (NSString *)lampID;
 -(ControllerClientStatus)getLampDataSetForID: (NSString *)lampID andLanguage: (NSString *)language;
+-(ControllerClientStatus)setLampEffectForID: (NSString *)lampID withEffectID: (NSString *)effectID;
 
 @end

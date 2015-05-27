@@ -27,6 +27,7 @@
 #import "LSFPresetModelContainer.h"
 #import "LSFPresetModel.h"
 #import "LSFEnums.h"
+#import "LSFSDKPreset.h"
 
 @interface LSFNoEffectTableViewController()
 
@@ -251,35 +252,22 @@
     LSFConstants *constants = [LSFConstants getConstants];
 
     //Get Lamp State
-    unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)self.brightnessSlider.value withMax: 100];
+    unsigned int scaledBrightness = 0;
+
+    if (self.nedm.capability.dimmable == NONE && self.nedm.capability.color == NONE && self.nedm.capability.temp == NONE)
+    {
+        scaledBrightness = [constants scaleLampStateValue: 100 withMax: 100];
+    }
+    else
+    {
+        scaledBrightness = [constants scaleLampStateValue: (uint32_t)self.brightnessSlider.value withMax: 100];
+    }
+
     unsigned int scaledHue = [constants scaleLampStateValue: (uint32_t)self.hueSlider.value withMax: 360];
     unsigned int scaledSaturation = [constants scaleLampStateValue: (uint32_t)self.saturationSlider.value withMax: 100];
     unsigned int scaledColorTemp = [constants scaleColorTemp: (uint32_t)self.colorTempSlider.value];
 
-    if (self.nedm.capability.dimmable == NONE && self.nedm.capability.color == NONE && self.nedm.capability.temp == NONE)
-    {
-        self.nedm.state.onOff = YES;
-        self.nedm.state.brightness = [constants scaleLampStateValue: 100 withMax: 100];
-    }
-    else
-    {
-//        if (scaledBrightness == 0)
-//        {
-//            self.nedm.state.onOff = NO;
-//        }
-//        else
-//        {
-//            self.nedm.state.onOff = YES;
-//        }
-
-        self.nedm.state.onOff = YES;
-        self.nedm.state.brightness = scaledBrightness;
-    }
-
-    self.nedm.state.hue = scaledHue;
-    self.nedm.state.saturation = scaledSaturation;
-    self.nedm.state.colorTemp = scaledColorTemp;
-
+    self.nedm.state = [[LSFLampState alloc] initWithOnOff: YES brightness: scaledBrightness hue: scaledHue saturation: scaledSaturation colorTemp: scaledColorTemp];
     [self.sceneModel updateNoEffect: self.nedm];
 
     if (self.shouldUpdateSceneAndDismiss)
@@ -324,8 +312,9 @@
 
     NSMutableArray *presetsArray = [[NSMutableArray alloc] init];
     BOOL presetMatched = NO;
-    for (LSFPresetModel *data in presets)
+    for (LSFSDKPreset *preset in presets)
     {
+        LSFPresetModel *data = [preset getPresetDataModel];
         BOOL matchesPreset = [self checkIfLampState: state matchesPreset: data];
 
         if (matchesPreset)

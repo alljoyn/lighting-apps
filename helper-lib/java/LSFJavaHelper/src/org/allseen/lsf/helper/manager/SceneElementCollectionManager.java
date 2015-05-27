@@ -18,16 +18,18 @@ package org.allseen.lsf.helper.manager;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.SceneElement;
 import org.allseen.lsf.helper.listener.LightingItemErrorEvent;
 import org.allseen.lsf.helper.listener.SceneElementListener;
-import org.allseen.lsf.helper.model.SceneElementDataModel;
+import org.allseen.lsf.helper.model.LightingItemFilter;
+import org.allseen.lsf.helper.model.SceneElementDataModelV2;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class SceneElementCollectionManager extends LightingItemCollectionManager<SceneElement, SceneElementListener, SceneElementDataModel> {
+public class SceneElementCollectionManager extends LightingItemCollectionManager<SceneElement, SceneElementListener, SceneElementDataModelV2> {
 
     public SceneElementCollectionManager(LightingSystemManager director) {
         super(director);
@@ -49,6 +51,11 @@ public class SceneElementCollectionManager extends LightingItemCollectionManager
         return getAdapters().toArray(new SceneElement[size()]);
     }
 
+    public SceneElement[] getSceneElements(LightingItemFilter<SceneElement> filter) {
+        Collection<SceneElement> filteredSceneElements = getAdapters(filter);
+        return filteredSceneElements.toArray(new SceneElement[filteredSceneElements.size()]);
+    }
+
     public Iterator<SceneElement> getSceneElementIterator() {
         return getAdapters().iterator();
     }
@@ -59,6 +66,11 @@ public class SceneElementCollectionManager extends LightingItemCollectionManager
 
     public SceneElement removeSceneElement(String sceneElementId) {
         return removeAdapter(sceneElementId);
+    }
+
+    @Override
+    protected void sendInitializedEvent(SceneElementListener listener, SceneElement sceneElement, TrackingID trackingID) {
+        listener.onSceneElementInitialized(trackingID, sceneElement);
     }
 
     @Override
@@ -77,7 +89,7 @@ public class SceneElementCollectionManager extends LightingItemCollectionManager
     }
 
     @Override
-    public SceneElementDataModel getModel(String sceneElementId) {
+    public SceneElementDataModelV2 getModel(String sceneElementId) {
         SceneElement sceneElement = getAdapter(sceneElementId);
 
         return sceneElement != null ? sceneElement.getSceneElementDataModel() : null;

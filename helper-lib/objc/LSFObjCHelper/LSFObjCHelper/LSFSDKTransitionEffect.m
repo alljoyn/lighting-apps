@@ -17,55 +17,77 @@
 #import "LSFSDKTransitionEffect.h"
 #import "LSFSDKLamp.h"
 #import "LSFSDKGroup.h"
+#import "LSFSDKAllJoynManager.h"
+#import "LSFSDKLightingItemUtil.h"
+#import "LSFSDKLightingDirector.h"
 
 @implementation LSFSDKTransitionEffect
 
--(id)initWithID: (NSString *)transitionEffectID
+-(id)initWithTransitionEffectID: (NSString *)transitionEffectID
 {
-    //TODO - implement
-    return nil;
+    return [self initWithTransitionEffectID: transitionEffectID transitionEffectName: nil];
 }
 
--(id)initWithID: (NSString *)transitionEffectID name: (NSString *)name
+-(id)initWithTransitionEffectID: (NSString *)transitionEffectID transitionEffectName: (NSString *)transitionEffectName
 {
-    //TODO - implement
-    return nil;
+    self = [super init];
+
+    if (self)
+    {
+        transitionEffectDataModel = [[LSFTransitionEffectDataModelV2 alloc] initWithTransitionEffectID: transitionEffectID andTransitionEffectName: transitionEffectName];
+    }
+
+    return self;
 }
 
--(void)modify: (id<LSFSDKLampState>)state duration: (unsigned long)duration
+-(void)modify: (id<LSFSDKLampState>)state duration: (unsigned int)duration
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKTransitionEffect modify: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: state])
+    {
+        if ([state isKindOfClass: [LSFSDKPreset class]])
+        {
+            [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getTransitionEffectManager] updateTransitionEffectWithID: transitionEffectDataModel.theID andTransitionEffect: [LSFSDKLightingItemUtil createTransitionEffectFromPreset:(LSFSDKPreset *)state duration: duration]]];
+        }
+        else
+        {
+            [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getTransitionEffectManager] updateTransitionEffectWithID: transitionEffectDataModel.theID andTransitionEffect: [LSFSDKLightingItemUtil createTransitionEffectFromPower: [state getPowerOn] hsvt: [state getColorHsvt] duration: duration]]];
+        }
+    }
 }
 
 -(void)deleteTransitionEffect
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKTransitionEffect deleteTransitionEffect: error";
+
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getTransitionEffectManager] deleteTransitionEffectWithID: transitionEffectDataModel.theID]];
 }
 
 /*
  * LSFSDKEffect implementation
  */
--(void)applyToGroupMember: (LSFSDKGroupMember *)group
+-(void)applyToGroupMember: (LSFSDKGroupMember *)member
 {
-    //TODO - Implement
+    NSString *errorContext = @"LSFSDKTransitionEffect applyToGroupMember: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: member])
+    {
+        [member applyEffect: self];
+    }
 }
 
 /*
  * Override base class functions
  */
--(void)setPowerOn:(BOOL)powerOn
-{
-    //TODO - implement
-}
-
--(void)setColorHsvtWithHue:(unsigned int)hueDegrees saturation:(unsigned int)saturationPercent brightness:(unsigned int)brightnessPercent colorTemp:(unsigned int)colorTempDegrees
-{
-    //TODO - implement
-}
-
 -(void)rename:(NSString *)name
 {
-    //TODO - implement
+    NSString *errorContext = @"LSFSDKTransitionEffect rename: error";
+
+    if ([self postInvalidArgIfNull: errorContext object: name])
+    {
+        [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getTransitionEffectManager] setTransitionEffectNameWithID: transitionEffectDataModel.theID transitionEffectName: name]];
+    }
 }
 
 -(LSFDataModel *)getColorDataModel
@@ -73,14 +95,20 @@
     return [self getTransitionEffectDataModel];
 }
 
+-(void)postError:(NSString *)name status:(LSFResponseCode)status
+{
+    dispatch_async([[[LSFSDKLightingDirector getLightingDirector] lightingManager] dispatchQueue], ^{
+        [[[[LSFSDKLightingDirector getLightingDirector] lightingManager] transitionEffectCollectionManager] sendErrorEvent: name statusCode: status itemID: transitionEffectDataModel.theID];
+    });
+}
+
 /**
  * <b>WARNING: This method is not intended to be used by clients, and may change or be
  * removed in subsequent releases of the SDK.</b>
  */
--(LSFTransitionEffectDataModel *)getTransitionEffectDataModel
+-(LSFTransitionEffectDataModelV2 *)getTransitionEffectDataModel
 {
-    //TODO - implement
-    return nil;
+    return transitionEffectDataModel;
 }
 
 @end

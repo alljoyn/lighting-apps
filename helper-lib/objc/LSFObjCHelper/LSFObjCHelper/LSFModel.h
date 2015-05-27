@@ -21,11 +21,15 @@
  * in subsequent releases of the SDK.
  */
 @interface LSFModel : NSObject
+{
+    @protected BOOL nameInitialized;
+}
 
 @property (nonatomic, strong) NSString *theID;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic) long long timestamp;
 
 -(id)initWithID: (NSString *)theID andName: (NSString *)name;
+-(BOOL)isInitialized;
 
 @end

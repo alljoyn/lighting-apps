@@ -99,6 +99,22 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_deletePulseEff
 
 /*
  * Class:     org_allseen_lsf_PulseEffectManager
+ * Method:    getPulseEffectVersion
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ */
+JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_getPulseEffectVersion
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     org_allseen_lsf_PulseEffectManager
+ * Method:    getPulseEffectDataSet
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ */
+JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_getPulseEffectDataSet
+  (JNIEnv *, jobject, jstring, jstring);
+
+/*
+ * Class:     org_allseen_lsf_PulseEffectManager
  * Method:    createNativeObject
  * Signature: (Lorg/allseen/lsf/ControllerClient;Lorg/allseen/lsf/PulseEffectManagerCallback;)V
  */

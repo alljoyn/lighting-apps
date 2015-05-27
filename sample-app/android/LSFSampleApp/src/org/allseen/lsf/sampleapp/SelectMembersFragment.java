@@ -25,7 +25,7 @@ import java.util.Set;
 import org.allseen.lsf.LampGroup;
 import org.allseen.lsf.helper.facade.Group;
 import org.allseen.lsf.helper.facade.Lamp;
-import org.allseen.lsf.helper.facade.Scene;
+import org.allseen.lsf.helper.facade.SceneV1;
 import org.allseen.lsf.helper.model.AllLampsDataModel;
 import org.allseen.lsf.helper.model.GroupDataModel;
 import org.allseen.lsf.helper.model.LampCapabilities;
@@ -110,7 +110,7 @@ public abstract class SelectMembersFragment extends SelectableItemTableFragment 
         }
 
         if (showScenes()) {
-            Iterator<Scene> i = activity.systemManager.getSceneCollectionManager().getSceneIterator();
+            Iterator<SceneV1> i = activity.systemManager.getSceneCollectionManagerV1().getSceneIterator();
 
             while (i.hasNext()){
                 SceneDataModel sceneModel = i.next().getSceneDataModel();
@@ -202,7 +202,7 @@ public abstract class SelectMembersFragment extends SelectableItemTableFragment 
     }
 
     protected boolean processSceneID(SampleAppActivity activity, String sceneID, List<String> sceneIDs, LampCapabilities capability) {
-        SceneDataModel sceneModel = activity.systemManager.getSceneCollectionManager().getModel(sceneID);
+        SceneDataModel sceneModel = activity.systemManager.getSceneCollectionManagerV1().getModel(sceneID);
         boolean found = sceneModel != null;
 
         if (found) {

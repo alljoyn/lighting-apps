@@ -18,16 +18,18 @@ package org.allseen.lsf.helper.manager;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.helper.facade.TransitionEffect;
 import org.allseen.lsf.helper.listener.LightingItemErrorEvent;
 import org.allseen.lsf.helper.listener.TransitionEffectListener;
-import org.allseen.lsf.helper.model.TransitionEffectDataModel;
+import org.allseen.lsf.helper.model.LightingItemFilter;
+import org.allseen.lsf.helper.model.TransitionEffectDataModelV2;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class TransitionEffectCollectionManager extends LightingItemCollectionManager<TransitionEffect, TransitionEffectListener, TransitionEffectDataModel> {
+public class TransitionEffectCollectionManager extends LightingItemCollectionManager<TransitionEffect, TransitionEffectListener, TransitionEffectDataModelV2> {
 
     public TransitionEffectCollectionManager(LightingSystemManager director) {
         super(director);
@@ -49,6 +51,11 @@ public class TransitionEffectCollectionManager extends LightingItemCollectionMan
         return getAdapters().toArray(new TransitionEffect[size()]);
     }
 
+    public TransitionEffect[] getTransitionEffects(LightingItemFilter<TransitionEffect> filter) {
+        Collection<TransitionEffect> filteredTransitionEffect = getAdapters(filter);
+        return filteredTransitionEffect.toArray(new TransitionEffect[filteredTransitionEffect.size()]);
+    }
+
     public Iterator<TransitionEffect> getTransitionEffectIterator() {
         return getAdapters().iterator();
     }
@@ -59,6 +66,11 @@ public class TransitionEffectCollectionManager extends LightingItemCollectionMan
 
     public TransitionEffect removeTransitionEffect(String transitionEffectId) {
         return removeAdapter(transitionEffectId);
+    }
+
+    @Override
+    protected void sendInitializedEvent(TransitionEffectListener listener, TransitionEffect transitionEffect, TrackingID trackingID) {
+        listener.onTransitionEffectInitialized(trackingID, transitionEffect);
     }
 
     @Override
@@ -77,7 +89,7 @@ public class TransitionEffectCollectionManager extends LightingItemCollectionMan
     }
 
     @Override
-    public TransitionEffectDataModel getModel(String transitionEffectID) {
+    public TransitionEffectDataModelV2 getModel(String transitionEffectID) {
         TransitionEffect transitionEffect = getAdapter(transitionEffectID);
 
         return transitionEffect != null ? transitionEffect.getTransitionEffectDataModel() : null;

@@ -17,19 +17,23 @@
 #import <Foundation/Foundation.h>
 #import "LSFSDKColorItem.h"
 #import "LSFSDKEffect.h"
-#import "LSFTransitionEffectDataModel.h"
+#import "LSFTransitionEffectDataModelV2.h"
+#import "LSFSDKLampState.h"
 
 @interface LSFSDKTransitionEffect : LSFSDKColorItem <LSFSDKEffect>
+{
+    @protected LSFTransitionEffectDataModelV2 *transitionEffectDataModel;
+}
 
--(id)initWithID: (NSString *)transitionEffectID;
--(id)initWithID: (NSString *)transitionEffectID name: (NSString *)name;
--(void)modify: (id<LSFSDKLampState>)state duration: (unsigned long)duration;
+-(id)initWithTransitionEffectID: (NSString *)transitionEffectID;
+-(id)initWithTransitionEffectID: (NSString *)transitionEffectID transitionEffectName: (NSString *)transitionEffectName;
+-(void)modify: (id<LSFSDKLampState>)state duration: (unsigned int)duration;
 -(void)deleteTransitionEffect;
 
 /**
  * <b>WARNING: This method is not intended to be used by clients, and may change or be
  * removed in subsequent releases of the SDK.</b>
  */
--(LSFTransitionEffectDataModel *)getTransitionEffectDataModel;
+-(LSFTransitionEffectDataModelV2 *)getTransitionEffectDataModel;
 
 @end

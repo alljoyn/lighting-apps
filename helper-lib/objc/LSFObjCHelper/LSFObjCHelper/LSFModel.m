@@ -31,9 +31,22 @@
         self.theID = theID;
         self.name = name;
         self.timestamp = 0;
+
+        nameInitialized = NO;
     }
     
     return self;
+}
+
+-(void)setName: (NSString *)name
+{
+    _name = name;
+    nameInitialized = YES;
+}
+
+-(BOOL)isInitialized
+{
+    return nameInitialized;
 }
 
 @end
