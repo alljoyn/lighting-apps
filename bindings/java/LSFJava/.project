@@ -133,17 +133,17 @@
 		<link>
 			<name>links/jni/Base/config/inc</name>
 			<type>2</type>
-			<locationURI>CONFIG_HOME/config/inc</locationURI>
+			<locationURI>CONFIG_CPP_HOME/config/inc</locationURI>
 		</link>
 		<link>
 			<name>links/jni/Base/notification/inc</name>
 			<type>2</type>
-			<locationURI>NOTIFICATION_HOME/notification/inc</locationURI>
+			<locationURI>NOTIFICATION_CPP_HOME/notification/inc</locationURI>
 		</link>
 		<link>
 			<name>links/jni/Base/services_common/inc</name>
 			<type>2</type>
-			<locationURI>CONFIG_HOME/services_common/inc</locationURI>
+			<locationURI>CONFIG_CPP_HOME/services_common/inc</locationURI>
 		</link>
 		<link>
 			<name>links/jni/LSF/common/inc</name>

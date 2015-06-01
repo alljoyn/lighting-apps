@@ -24,12 +24,18 @@ MY_ALLJOYN_OBJ         := obj/local/armeabi/objs-debug/alljoyn
 #$(info ALLJOYN_INC    = $(MY_ALLJOYN_INC))
 #$(info ALLJOYN_LIB    = $(MY_ALLJOYN_LIB))
 
+MY_CONFIG_HOME         := $(shell $(LOCAL_PATH)/../project_var CONFIG_CPP_HOME $(ECLIPSE_WORKSPACE_PATH))
+ifeq ($(strip $(MY_CONFIG_HOME)),)
 MY_CONFIG_HOME         := $(shell $(LOCAL_PATH)/../project_var CONFIG_HOME $(ECLIPSE_WORKSPACE_PATH))
+endif
 MY_CONFIG_INC          := $(MY_CONFIG_HOME)/config/inc
 MY_CONFIG_LIB          := $(MY_CONFIG_HOME)/config/lib
 #$(info CONFIG_INC       = $(MY_CONFIG_INC))
 
+MY_NOTIFICATION_HOME   := $(shell $(LOCAL_PATH)/../project_var NOTIFICATION_CPP_HOME $(ECLIPSE_WORKSPACE_PATH))
+ifeq ($(strip $(MY_NOTIFICATION_HOME)),)
 MY_NOTIFICATION_HOME   := $(shell $(LOCAL_PATH)/../project_var NOTIFICATION_HOME $(ECLIPSE_WORKSPACE_PATH))
+endif
 MY_NOTIFICATION_INC    := $(MY_NOTIFICATION_HOME)/notification/inc
 MY_NOTIFICATION_LIB    := $(MY_NOTIFICATION_HOME)/notification/lib
 #$(info NOTIFICATION_INC = $(MY_NOTIFICATION_INC))

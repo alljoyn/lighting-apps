@@ -24,10 +24,10 @@ The following steps will show you how to add the required variables to Eclipse.
     folder of the Android NDK (e.g., "<path_to_downloads_folder>/android-ndk-r9c").
  9) Repeat steps 3-7 to create another variable named "JAVA_HOME" that points to the root
     folder of the Java SDK (e.g., "<path_to_downloads_folder>/jdk1.6.0_45").
-10) Repeat steps 3-7 to create another variable named "CONFIG_HOME" that points to the dist
+10) Repeat steps 3-7 to create another variable named "CONFIG_CPP_HOME" that points to the dist
     folder of an AllJoyn Config Service build for Android (e.g.,
     "<path_to_git_clones_folder>/base/config/build/android/arm/debug/dist").
-11) Repeat steps 3-7 to create another variable named "NOTIFICATION_HOME" that points to
+11) Repeat steps 3-7 to create another variable named "NOTIFICATION_CPP_HOME" that points to
     the dist folder of an AllJoyn Notification Service build for Android (e.g.,
     "<path_to_git_clones_folder>/base/notification/build/android/arm/debug/dist").
 12) Repeat steps 3-7 to create another variable named "LSF_HOME" that points to

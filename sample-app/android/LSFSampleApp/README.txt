@@ -26,24 +26,27 @@ The following steps will show you how to add the required variables to Eclipse.
     of the Android NDK (e.g., "<path_to_downloads_folder>/android-ndk-r9c").
  9) Repeat steps 3-7 to create another variable named "ANDROID_HOME" that points to the root folder
     of the Android SDK (e.g., "<path_to_downloads_folder>/adt-bundle-linux-x86_64-20131030/sdk")
-10) Repeat steps 3-7 to create another variable named "CONFIG_HOME" that points to the dist
-    folder of an AllJoyn Config Service build for Android (e.g.,
-    "<path_to_git_clones_folder>/base/config/build/android/arm/debug/dist").
-11) Repeat steps 3-7 to create another variable named "NOTIFICATION_HOME" that points to
-    the dist folder of an AllJoyn Notification Service build for Android (e.g.,
-    "<path_to_git_clones_folder>/base/notification/build/android/arm/debug/dist").
-12) Repeat steps 3-7 to create another variable named "CONTROLPANEL_HOME" that points to
-    the dist folder of an AllJoyn ControlPanel Service build for Android (e.g.,
-    "<path_to_git_clones_folder>/base/controlpanel/build/android/arm/debug/dist").
-13) Repeat steps 3-7 to create another variable named "ONBOARDING_HOME" that points to
-    the dist folder of an AllJoyn Onboarding Service build for Android (e.g.,
-    "<path_to_git_clones_folder>/base/onboarding/build/android/arm/debug/dist").
-14) Repeat steps 3-7 to create another variable named "LSF_JAVA_HOME" that points to
+10) Repeat steps 3-7 to create another variable named "CONFIG_HOME" that points to
+    the top level folder of an AllJoyn Config Service SDK release for Android (e.g.,
+    "<path_to_git_downloads_folder>/alljoyn-config-14.12.00a-rel").
+11) Repeat steps 3-7 to create another variable named "CONFIG_CLIENT_SAMPLE_HOME" that points to
+    the ConfigClientSample folder of an AllJoyn Config Service SDK release for Android (e.g.,
+    "<path_to_git_downloads_folder>/alljoyn-config-14.12.00a-rel/samples/ConfigClientSample").
+12) Repeat steps 3-7 to create another variable named "NOTIFICATION_HOME" that points to
+    the top level folder of an AllJoyn Notification Service SDK release for Android (e.g.,
+    "<path_to_git_downloads_folder>/alljoyn-notification-14.12.00a-rel").
+13) Repeat steps 3-7 to create another variable named "CONTROLPANEL_HOME" that points to
+    the top level folder of an AllJoyn ControlPanel Service SDK release for Android (e.g.,
+    "<path_to_git_downloads_folder>/alljoyn-controlpanel-14.12.00a-rel").
+14) Repeat steps 3-7 to create another variable named "ONBOARDING_HOME" that points to
+    the top level folder of an AllJoyn Onboarding Service SDK release for Android (e.g.,
+    "<path_to_git_downloads_folder>/alljoyn-onboarding-14.12.00a-rel").
+15) Repeat steps 3-7 to create another variable named "LSF_JAVA_HOME" that points to
     the root folder of LSF Java bindings project (e.g.,
     "<path_to_git_clones_folder>/apps/bindings/java/LSFJava"), or to the appropriate
     Libraries subfolder in the Lighting SDK for Android (e.g.,
     "<path_to_Lighting_SDK_root_folder>/tutorial-app/android/Libraries/LSFJava").
-15) Repeat steps 3-7 to create another variable named "LSF_JAVA_HELPER_HOME" that points to
+16) Repeat steps 3-7 to create another variable named "LSF_JAVA_HELPER_HOME" that points to
     the root folder of LSF Java Helper library project (e.g.,
     "<path_to_git_clones_folder>/apps/helper-lib/java/LSFJavaHelper"), or to the appropriate
     Libraries subfolder in the Lighting SDK for Android (e.g.,
