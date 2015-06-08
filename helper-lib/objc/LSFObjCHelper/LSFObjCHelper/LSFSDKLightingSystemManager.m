@@ -16,7 +16,6 @@
 
 #import "LSFSDKLightingSystemManager.h"
 #import "LSFSDKAllJoynManager.h"
-#import "LSFSDKControllerAdapter.h"
 #import "LSFSDKLampCollectionManager.h"
 #import "LSFSDKAllLampsLampGroup.h"
 
@@ -27,8 +26,9 @@
 
 @property (nonatomic, weak) id<LSFSDKNextControllerConnectionDelegate> delegate;
 @property (nonatomic, strong) LSFSDKLightingSystemManager *manager;
+@property (nonatomic) unsigned int delay;
 
--(id)initWithNextControlleConnectionDelegate: (id<LSFSDKNextControllerConnectionDelegate>)nccd andLightingSystemManager: (LSFSDKLightingSystemManager *)lsm;
+-(id)initWithNextControlleConnectionDelegate: (id<LSFSDKNextControllerConnectionDelegate>)nccd lightingSystemManager: (LSFSDKLightingSystemManager *)lsm andDelay: (unsigned int)delay;
 
 @end
 
@@ -36,8 +36,9 @@
 
 @synthesize delegate = _delegate;
 @synthesize manager = _manager;
+@synthesize delay = _delay;
 
--(id)initWithNextControlleConnectionDelegate: (id<LSFSDKNextControllerConnectionDelegate>)nccd andLightingSystemManager: (LSFSDKLightingSystemManager *)lsm
+-(id)initWithNextControlleConnectionDelegate: (id<LSFSDKNextControllerConnectionDelegate>)nccd lightingSystemManager: (LSFSDKLightingSystemManager *)lsm andDelay: (unsigned int)delay
 {
     self = [super init];
 
@@ -45,6 +46,7 @@
     {
         self.delegate = nccd;
         self.manager = lsm;
+        self.delay = (delay / 1000);
     }
 
     return self;
@@ -54,7 +56,7 @@
 {
     NSLog(@"MyControllerAdapter - onLeaderModelChanged() callback executing");
 
-    dispatch_async(self.manager.dispatchQueue, ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.delay * NSEC_PER_SEC)), self.manager.dispatchQueue, ^{
         if ([leadModel connected])
         {
             NSLog(@"MyControllerAdapter - Controller is connected, firing next controller connection delegate");
@@ -270,9 +272,9 @@
     return _controllerManager;
 }
 
--(void)postOnNextControllerConnection: (id<LSFSDKNextControllerConnectionDelegate>)delegate
+-(void)postOnNextControllerConnection: (id<LSFSDKNextControllerConnectionDelegate>)delegate withDelay: (unsigned int)delay
 {
-    MyControllerAdapter *controllerAdapter = [[MyControllerAdapter alloc] initWithNextControlleConnectionDelegate: delegate andLightingSystemManager: self];
+    MyControllerAdapter *controllerAdapter = [[MyControllerAdapter alloc] initWithNextControlleConnectionDelegate: delegate lightingSystemManager: self andDelay: delay];
     [_controllerManager addDelegate: controllerAdapter];
 }
 

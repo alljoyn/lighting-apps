@@ -93,6 +93,6 @@
 -(void)initializeWithBusAttachment: (ajn::BusAttachment *)busAttachment dispatchQueue: (dispatch_queue_t)queue andAllJoynDelegate: (id<LSFSDKAllJoynDelegate>)alljoynDelegate;
 -(void)start;
 -(void)stop;
--(void)postOnNextControllerConnection: (id<LSFSDKNextControllerConnectionDelegate>)delegate;
+-(void)postOnNextControllerConnection: (id<LSFSDKNextControllerConnectionDelegate>)delegate withDelay: (unsigned int)delay;
 
 @end

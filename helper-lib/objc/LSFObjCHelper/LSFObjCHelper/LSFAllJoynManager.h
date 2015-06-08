@@ -38,6 +38,12 @@
 #import "LSFAboutManager.h"
 #import "LSFSDKLightingSystemManager.h"
 
+#ifdef __aarch64__
+#define AJ_ARCH_STR @"64-bit"
+#else
+#define AJ_ARCH_STR @"32-bit"
+#endif
+
 /**
  * @warning *Note:* This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK.

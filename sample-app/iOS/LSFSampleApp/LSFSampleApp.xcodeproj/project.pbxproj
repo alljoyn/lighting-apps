@@ -28,7 +28,6 @@
 		872217B11982ED9B00F59863 /* lamps_off_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 872217AE1982ED9B00F59863 /* lamps_off_icon.png */; };
 		872217B21982ED9B00F59863 /* lamps_off_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 872217AF1982ED9B00F59863 /* lamps_off_icon@2x.png */; };
 		872AFE2019D9B48E0002350B /* LSFRootTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872AFE1F19D9B48E0002350B /* LSFRootTableViewController.m */; };
-		873D8B111A38D7480054DE4F /* libLSFObjCHelper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 873D8B0C1A38D6E00054DE4F /* libLSFObjCHelper.a */; };
 		87426C021989DAEB00BFE3CD /* LSFSceneEffectsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87426C011989DAEB00BFE3CD /* LSFSceneEffectsTableViewController.m */; };
 		87426C0A1989DC0300BFE3CD /* list_constant_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 87426C041989DC0300BFE3CD /* list_constant_icon.png */; };
 		87426C0B1989DC0300BFE3CD /* list_constant_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 87426C051989DC0300BFE3CD /* list_constant_icon@2x.png */; };
@@ -119,27 +118,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		873D8B0B1A38D6E00054DE4F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 873D8B051A38D6DF0054DE4F /* LSFObjCHelper.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 87E6302019BF9A0700F447A1;
-			remoteInfo = LSFObjCHelper;
-		};
-		873D8B0D1A38D6E00054DE4F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 873D8B051A38D6DF0054DE4F /* LSFObjCHelper.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 87E6303019BF9A0700F447A1;
-			remoteInfo = LSFObjCHelperTests;
-		};
-		873D8B0F1A38D7390054DE4F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 873D8B051A38D6DF0054DE4F /* LSFObjCHelper.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 87E6301F19BF9A0700F447A1;
-			remoteInfo = LSFObjCHelper;
-		};
 		87D8140D18CA536800903D59 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 87D813E518CA536700903D59 /* Project object */;
@@ -182,7 +160,6 @@
 		872217AF1982ED9B00F59863 /* lamps_off_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "lamps_off_icon@2x.png"; path = "images/lamps_off_icon@2x.png"; sourceTree = "<group>"; };
 		872AFE1E19D9B48E0002350B /* LSFRootTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFRootTableViewController.h; sourceTree = "<group>"; };
 		872AFE1F19D9B48E0002350B /* LSFRootTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFRootTableViewController.m; sourceTree = "<group>"; };
-		873D8B051A38D6DF0054DE4F /* LSFObjCHelper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LSFObjCHelper.xcodeproj; path = "../../../helper-lib/objc/LSFObjCHelper/LSFObjCHelper.xcodeproj"; sourceTree = "<group>"; };
 		873D8B121A38D7490054DE4F /* libLSFObjC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLSFObjC.a; path = "../../../../../../../Library/Developer/Xcode/DerivedData/LSFSampleApp-dzubuvtokkfhomewxfafviqegpic/Build/Products/Debug-iphoneos/libLSFObjC.a"; sourceTree = "<group>"; };
 		87426C001989DAEB00BFE3CD /* LSFSceneEffectsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSceneEffectsTableViewController.h; sourceTree = "<group>"; };
 		87426C011989DAEB00BFE3CD /* LSFSceneEffectsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSceneEffectsTableViewController.m; sourceTree = "<group>"; };
@@ -327,7 +304,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				873D8B111A38D7480054DE4F /* libLSFObjCHelper.a in Frameworks */,
 				1903F52C198F953D00E9B302 /* QuartzCore.framework in Frameworks */,
 				87D8143918CA72B000903D59 /* SystemConfiguration.framework in Frameworks */,
 				87B6F51018F71F2B0078E72B /* libstdc++.6.0.9.dylib in Frameworks */,
@@ -372,15 +348,6 @@
 				87FB2792198ECAB80004DE02 /* LSFTransitionEffectTableViewController.m */,
 			);
 			name = GenericViewControllers;
-			sourceTree = "<group>";
-		};
-		873D8B061A38D6DF0054DE4F /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				873D8B0C1A38D6E00054DE4F /* libLSFObjCHelper.a */,
-				873D8B0E1A38D6E00054DE4F /* LSFObjCHelperTests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		8771D677195207800027D3A1 /* Utilities */ = {
@@ -524,7 +491,6 @@
 				87D8140F18CA536800903D59 /* LSFSampleAppTests */,
 				87D813EF18CA536700903D59 /* Frameworks */,
 				87D813EE18CA536700903D59 /* Products */,
-				873D8B051A38D6DF0054DE4F /* LSFObjCHelper.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -666,7 +632,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				873D8B101A38D7390054DE4F /* PBXTargetDependency */,
 			);
 			name = LSFSampleApp;
 			productName = LSFSampleController;
@@ -719,12 +684,6 @@
 			mainGroup = 87D813E418CA536700903D59;
 			productRefGroup = 87D813EE18CA536700903D59 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 873D8B061A38D6DF0054DE4F /* Products */;
-					ProjectRef = 873D8B051A38D6DF0054DE4F /* LSFObjCHelper.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				87D813EC18CA536700903D59 /* LSFSampleApp */,
@@ -732,23 +691,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		873D8B0C1A38D6E00054DE4F /* libLSFObjCHelper.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libLSFObjCHelper.a;
-			remoteRef = 873D8B0B1A38D6E00054DE4F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		873D8B0E1A38D6E00054DE4F /* LSFObjCHelperTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = LSFObjCHelperTests.xctest;
-			remoteRef = 873D8B0D1A38D6E00054DE4F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		87D813EB18CA536700903D59 /* Resources */ = {
@@ -879,11 +821,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		873D8B101A38D7390054DE4F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = LSFObjCHelper;
-			targetProxy = 873D8B0F1A38D7390054DE4F /* PBXContainerItemProxy */;
-		};
 		87D8140E18CA536800903D59 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 87D813EC18CA536700903D59 /* LSFSampleApp */;
@@ -1000,20 +937,17 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
-					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
-					"\"$(LSF_HOME)/standard_core_library/lighting_controller_client/inc\"",
-					"\"$(LSF_HOME)/standard_core_library/common/inc\"",
-					"\"$(LSF_HOME)/common/inc\"",
-					"\"$(APPS_HOME)/apps/bindings/objc/LSFObjC/LSFObjC\"",
-					"\"$(APPS_HOME)/apps/helper-lib/objc/LSFObjCHelper/LSFObjCHelper\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjC/include/LSFObjC\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/LSFSampleApp/LSFSampleApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(ALLJOYN_HOME)/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/lib\"",
-					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/about/lib\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/lib\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/lib/$(CONFIGURATION)-$(PLATFORM_NAME)\"",
 					"\"$(OPENSSL_ROOT)/build/$(CONFIGURATION)-$(PLATFORM_NAME)\"",
 				);
 				ONLY_ACTIVE_ARCH = NO;
@@ -1027,6 +961,7 @@
 					"-lajrouter",
 					"-lssl",
 					"-lcrypto",
+					"-lLSFObjCHelper",
 				);
 				PRODUCT_NAME = LSFSampleApp;
 				PROVISIONING_PROFILE = "";
@@ -1051,20 +986,17 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
-					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
-					"\"$(LSF_HOME)/standard_core_library/lighting_controller_client/inc\"",
-					"\"$(LSF_HOME)/standard_core_library/common/inc\"",
-					"\"$(LSF_HOME)/common/inc\"",
-					"\"$(APPS_HOME)/apps/bindings/objc/LSFObjC/LSFObjC\"",
-					"\"$(APPS_HOME)/apps/helper-lib/objc/LSFObjCHelper/LSFObjCHelper\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjC/include/LSFObjC\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/LSFSampleApp/LSFSampleApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(ALLJOYN_HOME)/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/lib\"",
-					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/about/lib\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/lib\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/lib/$(CONFIGURATION)-$(PLATFORM_NAME)\"",
 					"\"$(OPENSSL_ROOT)/build/$(CONFIGURATION)-$(PLATFORM_NAME)\"",
 				);
 				ONLY_ACTIVE_ARCH = NO;
@@ -1079,6 +1011,7 @@
 					"-lajrouter",
 					"-lssl",
 					"-lcrypto",
+					"-lLSFObjCHelper",
 				);
 				PRODUCT_NAME = LSFSampleApp;
 				PROVISIONING_PROFILE = "";

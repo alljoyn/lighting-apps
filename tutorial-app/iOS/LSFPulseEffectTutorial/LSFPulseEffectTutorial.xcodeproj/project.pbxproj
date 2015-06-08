@@ -1,0 +1,545 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		87DFF81A1B17B27800B0F321 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 87DFF8191B17B27800B0F321 /* main.m */; };
+		87DFF81D1B17B27900B0F321 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87DFF81C1B17B27900B0F321 /* AppDelegate.m */; };
+		87DFF8201B17B27900B0F321 /* LSFPulseEffectTutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87DFF81F1B17B27900B0F321 /* LSFPulseEffectTutorialViewController.m */; };
+		87DFF8231B17B27900B0F321 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87DFF8211B17B27900B0F321 /* Main.storyboard */; };
+		87DFF8251B17B27900B0F321 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 87DFF8241B17B27900B0F321 /* Images.xcassets */; };
+		87DFF8281B17B27900B0F321 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87DFF8261B17B27900B0F321 /* LaunchScreen.xib */; };
+		87DFF8341B17B27900B0F321 /* LSFPulseEffectTutorialTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 87DFF8331B17B27900B0F321 /* LSFPulseEffectTutorialTests.m */; };
+		87DFF83E1B17BCA400B0F321 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87DFF83D1B17BCA400B0F321 /* Foundation.framework */; };
+		87DFF8401B17BCA700B0F321 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87DFF83F1B17BCA700B0F321 /* UIKit.framework */; };
+		87DFF8421B17BCAC00B0F321 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87DFF8411B17BCAC00B0F321 /* CoreGraphics.framework */; };
+		87DFF8441B17BCB200B0F321 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87DFF8431B17BCB200B0F321 /* SystemConfiguration.framework */; };
+		87DFF84B1B17BCB900B0F321 /* libc++.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87DFF8451B17BCB900B0F321 /* libc++.1.dylib */; };
+		87DFF84C1B17BCB900B0F321 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87DFF8461B17BCB900B0F321 /* libc++.dylib */; };
+		87DFF84D1B17BCB900B0F321 /* libc++abi.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87DFF8471B17BCB900B0F321 /* libc++abi.dylib */; };
+		87DFF84E1B17BCB900B0F321 /* libstdc++.6.0.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87DFF8481B17BCB900B0F321 /* libstdc++.6.0.9.dylib */; };
+		87DFF84F1B17BCB900B0F321 /* libstdc++.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87DFF8491B17BCB900B0F321 /* libstdc++.6.dylib */; };
+		87DFF8501B17BCB900B0F321 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87DFF84A1B17BCB900B0F321 /* libstdc++.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		87DFF82E1B17B27900B0F321 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 87DFF80C1B17B27800B0F321 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 87DFF8131B17B27800B0F321;
+			remoteInfo = LSFPulseEffectTutorial;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		87DFF8141B17B27800B0F321 /* LSFPulseEffectTutorial.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LSFPulseEffectTutorial.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		87DFF8181B17B27800B0F321 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		87DFF8191B17B27800B0F321 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		87DFF81B1B17B27900B0F321 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		87DFF81C1B17B27900B0F321 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		87DFF81E1B17B27900B0F321 /* LSFPulseEffectTutorialViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSFPulseEffectTutorialViewController.h; sourceTree = "<group>"; };
+		87DFF81F1B17B27900B0F321 /* LSFPulseEffectTutorialViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSFPulseEffectTutorialViewController.m; sourceTree = "<group>"; };
+		87DFF8221B17B27900B0F321 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		87DFF8241B17B27900B0F321 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		87DFF8271B17B27900B0F321 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		87DFF82D1B17B27900B0F321 /* LSFPulseEffectTutorialTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LSFPulseEffectTutorialTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		87DFF8321B17B27900B0F321 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		87DFF8331B17B27900B0F321 /* LSFPulseEffectTutorialTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSFPulseEffectTutorialTests.m; sourceTree = "<group>"; };
+		87DFF83D1B17BCA400B0F321 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		87DFF83F1B17BCA700B0F321 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		87DFF8411B17BCAC00B0F321 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		87DFF8431B17BCB200B0F321 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		87DFF8451B17BCB900B0F321 /* libc++.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.1.dylib"; path = "usr/lib/libc++.1.dylib"; sourceTree = SDKROOT; };
+		87DFF8461B17BCB900B0F321 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		87DFF8471B17BCB900B0F321 /* libc++abi.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++abi.dylib"; path = "usr/lib/libc++abi.dylib"; sourceTree = SDKROOT; };
+		87DFF8481B17BCB900B0F321 /* libstdc++.6.0.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.0.9.dylib"; path = "usr/lib/libstdc++.6.0.9.dylib"; sourceTree = SDKROOT; };
+		87DFF8491B17BCB900B0F321 /* libstdc++.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.dylib"; path = "usr/lib/libstdc++.6.dylib"; sourceTree = SDKROOT; };
+		87DFF84A1B17BCB900B0F321 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		87DFF8111B17B27800B0F321 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				87DFF84E1B17BCB900B0F321 /* libstdc++.6.0.9.dylib in Frameworks */,
+				87DFF84F1B17BCB900B0F321 /* libstdc++.6.dylib in Frameworks */,
+				87DFF8501B17BCB900B0F321 /* libstdc++.dylib in Frameworks */,
+				87DFF84D1B17BCB900B0F321 /* libc++abi.dylib in Frameworks */,
+				87DFF84B1B17BCB900B0F321 /* libc++.1.dylib in Frameworks */,
+				87DFF84C1B17BCB900B0F321 /* libc++.dylib in Frameworks */,
+				87DFF8441B17BCB200B0F321 /* SystemConfiguration.framework in Frameworks */,
+				87DFF8421B17BCAC00B0F321 /* CoreGraphics.framework in Frameworks */,
+				87DFF8401B17BCA700B0F321 /* UIKit.framework in Frameworks */,
+				87DFF83E1B17BCA400B0F321 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		87DFF82A1B17B27900B0F321 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		87DFF80B1B17B27800B0F321 = {
+			isa = PBXGroup;
+			children = (
+				87DFF8161B17B27800B0F321 /* LSFPulseEffectTutorial */,
+				87DFF8301B17B27900B0F321 /* LSFPulseEffectTutorialTests */,
+				87DFF8511B17BCC600B0F321 /* Frameworks */,
+				87DFF8151B17B27800B0F321 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		87DFF8151B17B27800B0F321 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				87DFF8141B17B27800B0F321 /* LSFPulseEffectTutorial.app */,
+				87DFF82D1B17B27900B0F321 /* LSFPulseEffectTutorialTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		87DFF8161B17B27800B0F321 /* LSFPulseEffectTutorial */ = {
+			isa = PBXGroup;
+			children = (
+				87DFF81B1B17B27900B0F321 /* AppDelegate.h */,
+				87DFF81C1B17B27900B0F321 /* AppDelegate.m */,
+				87DFF81E1B17B27900B0F321 /* LSFPulseEffectTutorialViewController.h */,
+				87DFF81F1B17B27900B0F321 /* LSFPulseEffectTutorialViewController.m */,
+				87DFF8211B17B27900B0F321 /* Main.storyboard */,
+				87DFF8241B17B27900B0F321 /* Images.xcassets */,
+				87DFF8261B17B27900B0F321 /* LaunchScreen.xib */,
+				87DFF8171B17B27800B0F321 /* Supporting Files */,
+			);
+			path = LSFPulseEffectTutorial;
+			sourceTree = "<group>";
+		};
+		87DFF8171B17B27800B0F321 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				87DFF8181B17B27800B0F321 /* Info.plist */,
+				87DFF8191B17B27800B0F321 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		87DFF8301B17B27900B0F321 /* LSFPulseEffectTutorialTests */ = {
+			isa = PBXGroup;
+			children = (
+				87DFF8331B17B27900B0F321 /* LSFPulseEffectTutorialTests.m */,
+				87DFF8311B17B27900B0F321 /* Supporting Files */,
+			);
+			path = LSFPulseEffectTutorialTests;
+			sourceTree = "<group>";
+		};
+		87DFF8311B17B27900B0F321 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				87DFF8321B17B27900B0F321 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		87DFF8511B17BCC600B0F321 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				87DFF8451B17BCB900B0F321 /* libc++.1.dylib */,
+				87DFF8461B17BCB900B0F321 /* libc++.dylib */,
+				87DFF8471B17BCB900B0F321 /* libc++abi.dylib */,
+				87DFF8481B17BCB900B0F321 /* libstdc++.6.0.9.dylib */,
+				87DFF8491B17BCB900B0F321 /* libstdc++.6.dylib */,
+				87DFF84A1B17BCB900B0F321 /* libstdc++.dylib */,
+				87DFF8431B17BCB200B0F321 /* SystemConfiguration.framework */,
+				87DFF8411B17BCAC00B0F321 /* CoreGraphics.framework */,
+				87DFF83F1B17BCA700B0F321 /* UIKit.framework */,
+				87DFF83D1B17BCA400B0F321 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		87DFF8131B17B27800B0F321 /* LSFPulseEffectTutorial */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 87DFF8371B17B27900B0F321 /* Build configuration list for PBXNativeTarget "LSFPulseEffectTutorial" */;
+			buildPhases = (
+				87DFF8101B17B27800B0F321 /* Sources */,
+				87DFF8111B17B27800B0F321 /* Frameworks */,
+				87DFF8121B17B27800B0F321 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LSFPulseEffectTutorial;
+			productName = LSFPulseEffectTutorial;
+			productReference = 87DFF8141B17B27800B0F321 /* LSFPulseEffectTutorial.app */;
+			productType = "com.apple.product-type.application";
+		};
+		87DFF82C1B17B27900B0F321 /* LSFPulseEffectTutorialTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 87DFF83A1B17B27900B0F321 /* Build configuration list for PBXNativeTarget "LSFPulseEffectTutorialTests" */;
+			buildPhases = (
+				87DFF8291B17B27900B0F321 /* Sources */,
+				87DFF82A1B17B27900B0F321 /* Frameworks */,
+				87DFF82B1B17B27900B0F321 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				87DFF82F1B17B27900B0F321 /* PBXTargetDependency */,
+			);
+			name = LSFPulseEffectTutorialTests;
+			productName = LSFPulseEffectTutorialTests;
+			productReference = 87DFF82D1B17B27900B0F321 /* LSFPulseEffectTutorialTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		87DFF80C1B17B27800B0F321 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0620;
+				ORGANIZATIONNAME = "AllSeen Alliance";
+				TargetAttributes = {
+					87DFF8131B17B27800B0F321 = {
+						CreatedOnToolsVersion = 6.2;
+					};
+					87DFF82C1B17B27900B0F321 = {
+						CreatedOnToolsVersion = 6.2;
+						TestTargetID = 87DFF8131B17B27800B0F321;
+					};
+				};
+			};
+			buildConfigurationList = 87DFF80F1B17B27800B0F321 /* Build configuration list for PBXProject "LSFPulseEffectTutorial" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 87DFF80B1B17B27800B0F321;
+			productRefGroup = 87DFF8151B17B27800B0F321 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				87DFF8131B17B27800B0F321 /* LSFPulseEffectTutorial */,
+				87DFF82C1B17B27900B0F321 /* LSFPulseEffectTutorialTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		87DFF8121B17B27800B0F321 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				87DFF8231B17B27900B0F321 /* Main.storyboard in Resources */,
+				87DFF8281B17B27900B0F321 /* LaunchScreen.xib in Resources */,
+				87DFF8251B17B27900B0F321 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		87DFF82B1B17B27900B0F321 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		87DFF8101B17B27800B0F321 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				87DFF8201B17B27900B0F321 /* LSFPulseEffectTutorialViewController.m in Sources */,
+				87DFF81D1B17B27900B0F321 /* AppDelegate.m in Sources */,
+				87DFF81A1B17B27800B0F321 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		87DFF8291B17B27900B0F321 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				87DFF8341B17B27900B0F321 /* LSFPulseEffectTutorialTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		87DFF82F1B17B27900B0F321 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 87DFF8131B17B27800B0F321 /* LSFPulseEffectTutorial */;
+			targetProxy = 87DFF82E1B17B27900B0F321 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		87DFF8211B17B27900B0F321 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				87DFF8221B17B27900B0F321 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		87DFF8261B17B27900B0F321 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				87DFF8271B17B27900B0F321 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		87DFF8351B17B27900B0F321 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		87DFF8361B17B27900B0F321 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		87DFF8381B17B27900B0F321 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjC/include/LSFObjC\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
+				);
+				INFOPLIST_FILE = LSFPulseEffectTutorial/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/lib\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/lib/$(CONFIGURATION)-$(PLATFORM_NAME)\"",
+					"\"$(OPENSSL_ROOT)/build/$(CONFIGURATION)-$(PLATFORM_NAME)\"",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-DQCC_OS_GROUP_POSIX",
+					"-DQCC_OS_DARWIN",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lalljoyn",
+					"-lajrouter",
+					"-lssl",
+					"-lcrypto",
+					"-lLSFObjCHelper",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "armv7 arm64";
+			};
+			name = Debug;
+		};
+		87DFF8391B17B27900B0F321 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjC/include/LSFObjC\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
+				);
+				INFOPLIST_FILE = LSFPulseEffectTutorial/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/lib\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/lib/$(CONFIGURATION)-$(PLATFORM_NAME)\"",
+					"\"$(OPENSSL_ROOT)/build/$(CONFIGURATION)-$(PLATFORM_NAME)\"",
+				);
+				OTHER_CFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"-DQCC_OS_GROUP_POSIX",
+					"-DQCC_OS_DARWIN",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lalljoyn",
+					"-lajrouter",
+					"-lssl",
+					"-lcrypto",
+					"-lLSFObjCHelper",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "armv7 arm64";
+			};
+			name = Release;
+		};
+		87DFF83B1B17B27900B0F321 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = LSFPulseEffectTutorialTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LSFPulseEffectTutorial.app/LSFPulseEffectTutorial";
+			};
+			name = Debug;
+		};
+		87DFF83C1B17B27900B0F321 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = LSFPulseEffectTutorialTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LSFPulseEffectTutorial.app/LSFPulseEffectTutorial";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		87DFF80F1B17B27800B0F321 /* Build configuration list for PBXProject "LSFPulseEffectTutorial" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				87DFF8351B17B27900B0F321 /* Debug */,
+				87DFF8361B17B27900B0F321 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		87DFF8371B17B27900B0F321 /* Build configuration list for PBXNativeTarget "LSFPulseEffectTutorial" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				87DFF8381B17B27900B0F321 /* Debug */,
+				87DFF8391B17B27900B0F321 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		87DFF83A1B17B27900B0F321 /* Build configuration list for PBXNativeTarget "LSFPulseEffectTutorialTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				87DFF83B1B17B27900B0F321 /* Debug */,
+				87DFF83C1B17B27900B0F321 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 87DFF80C1B17B27800B0F321 /* Project object */;
+}

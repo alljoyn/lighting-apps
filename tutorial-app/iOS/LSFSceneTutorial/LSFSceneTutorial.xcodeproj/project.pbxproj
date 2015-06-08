@@ -1,0 +1,545 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		87DFF8611B18AFB500B0F321 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 87DFF8601B18AFB500B0F321 /* main.m */; };
+		87DFF8641B18AFB500B0F321 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 87DFF8631B18AFB500B0F321 /* AppDelegate.m */; };
+		87DFF8671B18AFB500B0F321 /* LSFSceneTutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87DFF8661B18AFB500B0F321 /* LSFSceneTutorialViewController.m */; };
+		87DFF86A1B18AFB500B0F321 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87DFF8681B18AFB500B0F321 /* Main.storyboard */; };
+		87DFF86C1B18AFB500B0F321 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 87DFF86B1B18AFB500B0F321 /* Images.xcassets */; };
+		87DFF86F1B18AFB500B0F321 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87DFF86D1B18AFB500B0F321 /* LaunchScreen.xib */; };
+		87DFF87B1B18AFB500B0F321 /* LSFSceneTutorialTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 87DFF87A1B18AFB500B0F321 /* LSFSceneTutorialTests.m */; };
+		87DFF8851B18B1B900B0F321 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87DFF8841B18B1B900B0F321 /* Foundation.framework */; };
+		87DFF8871B18B1BD00B0F321 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87DFF8861B18B1BD00B0F321 /* UIKit.framework */; };
+		87DFF8891B18B1C300B0F321 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87DFF8881B18B1C300B0F321 /* CoreGraphics.framework */; };
+		87DFF88B1B18B1C900B0F321 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87DFF88A1B18B1C900B0F321 /* SystemConfiguration.framework */; };
+		87DFF8921B18B1CF00B0F321 /* libc++.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87DFF88C1B18B1CF00B0F321 /* libc++.1.dylib */; };
+		87DFF8931B18B1CF00B0F321 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87DFF88D1B18B1CF00B0F321 /* libc++.dylib */; };
+		87DFF8941B18B1CF00B0F321 /* libc++abi.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87DFF88E1B18B1CF00B0F321 /* libc++abi.dylib */; };
+		87DFF8951B18B1CF00B0F321 /* libstdc++.6.0.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87DFF88F1B18B1CF00B0F321 /* libstdc++.6.0.9.dylib */; };
+		87DFF8961B18B1CF00B0F321 /* libstdc++.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87DFF8901B18B1CF00B0F321 /* libstdc++.6.dylib */; };
+		87DFF8971B18B1CF00B0F321 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 87DFF8911B18B1CF00B0F321 /* libstdc++.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		87DFF8751B18AFB500B0F321 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 87DFF8531B18AFB500B0F321 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 87DFF85A1B18AFB500B0F321;
+			remoteInfo = LSFSceneTutorial;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		87DFF85B1B18AFB500B0F321 /* LSFSceneTutorial.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LSFSceneTutorial.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		87DFF85F1B18AFB500B0F321 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		87DFF8601B18AFB500B0F321 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		87DFF8621B18AFB500B0F321 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		87DFF8631B18AFB500B0F321 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		87DFF8651B18AFB500B0F321 /* LSFSceneTutorialViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSFSceneTutorialViewController.h; sourceTree = "<group>"; };
+		87DFF8661B18AFB500B0F321 /* LSFSceneTutorialViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSFSceneTutorialViewController.m; sourceTree = "<group>"; };
+		87DFF8691B18AFB500B0F321 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		87DFF86B1B18AFB500B0F321 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		87DFF86E1B18AFB500B0F321 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		87DFF8741B18AFB500B0F321 /* LSFSceneTutorialTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LSFSceneTutorialTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		87DFF8791B18AFB500B0F321 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		87DFF87A1B18AFB500B0F321 /* LSFSceneTutorialTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSFSceneTutorialTests.m; sourceTree = "<group>"; };
+		87DFF8841B18B1B900B0F321 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		87DFF8861B18B1BD00B0F321 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		87DFF8881B18B1C300B0F321 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		87DFF88A1B18B1C900B0F321 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		87DFF88C1B18B1CF00B0F321 /* libc++.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.1.dylib"; path = "usr/lib/libc++.1.dylib"; sourceTree = SDKROOT; };
+		87DFF88D1B18B1CF00B0F321 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		87DFF88E1B18B1CF00B0F321 /* libc++abi.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++abi.dylib"; path = "usr/lib/libc++abi.dylib"; sourceTree = SDKROOT; };
+		87DFF88F1B18B1CF00B0F321 /* libstdc++.6.0.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.0.9.dylib"; path = "usr/lib/libstdc++.6.0.9.dylib"; sourceTree = SDKROOT; };
+		87DFF8901B18B1CF00B0F321 /* libstdc++.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.dylib"; path = "usr/lib/libstdc++.6.dylib"; sourceTree = SDKROOT; };
+		87DFF8911B18B1CF00B0F321 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		87DFF8581B18AFB500B0F321 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				87DFF8951B18B1CF00B0F321 /* libstdc++.6.0.9.dylib in Frameworks */,
+				87DFF8961B18B1CF00B0F321 /* libstdc++.6.dylib in Frameworks */,
+				87DFF8971B18B1CF00B0F321 /* libstdc++.dylib in Frameworks */,
+				87DFF8941B18B1CF00B0F321 /* libc++abi.dylib in Frameworks */,
+				87DFF8921B18B1CF00B0F321 /* libc++.1.dylib in Frameworks */,
+				87DFF8931B18B1CF00B0F321 /* libc++.dylib in Frameworks */,
+				87DFF88B1B18B1C900B0F321 /* SystemConfiguration.framework in Frameworks */,
+				87DFF8891B18B1C300B0F321 /* CoreGraphics.framework in Frameworks */,
+				87DFF8871B18B1BD00B0F321 /* UIKit.framework in Frameworks */,
+				87DFF8851B18B1B900B0F321 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		87DFF8711B18AFB500B0F321 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		87DFF8521B18AFB500B0F321 = {
+			isa = PBXGroup;
+			children = (
+				87DFF85D1B18AFB500B0F321 /* LSFSceneTutorial */,
+				87DFF8771B18AFB500B0F321 /* LSFSceneTutorialTests */,
+				87DFF8981B18B1E000B0F321 /* Frameworks */,
+				87DFF85C1B18AFB500B0F321 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		87DFF85C1B18AFB500B0F321 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				87DFF85B1B18AFB500B0F321 /* LSFSceneTutorial.app */,
+				87DFF8741B18AFB500B0F321 /* LSFSceneTutorialTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		87DFF85D1B18AFB500B0F321 /* LSFSceneTutorial */ = {
+			isa = PBXGroup;
+			children = (
+				87DFF8621B18AFB500B0F321 /* AppDelegate.h */,
+				87DFF8631B18AFB500B0F321 /* AppDelegate.m */,
+				87DFF8651B18AFB500B0F321 /* LSFSceneTutorialViewController.h */,
+				87DFF8661B18AFB500B0F321 /* LSFSceneTutorialViewController.m */,
+				87DFF8681B18AFB500B0F321 /* Main.storyboard */,
+				87DFF86B1B18AFB500B0F321 /* Images.xcassets */,
+				87DFF86D1B18AFB500B0F321 /* LaunchScreen.xib */,
+				87DFF85E1B18AFB500B0F321 /* Supporting Files */,
+			);
+			path = LSFSceneTutorial;
+			sourceTree = "<group>";
+		};
+		87DFF85E1B18AFB500B0F321 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				87DFF85F1B18AFB500B0F321 /* Info.plist */,
+				87DFF8601B18AFB500B0F321 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		87DFF8771B18AFB500B0F321 /* LSFSceneTutorialTests */ = {
+			isa = PBXGroup;
+			children = (
+				87DFF87A1B18AFB500B0F321 /* LSFSceneTutorialTests.m */,
+				87DFF8781B18AFB500B0F321 /* Supporting Files */,
+			);
+			path = LSFSceneTutorialTests;
+			sourceTree = "<group>";
+		};
+		87DFF8781B18AFB500B0F321 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				87DFF8791B18AFB500B0F321 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		87DFF8981B18B1E000B0F321 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				87DFF88C1B18B1CF00B0F321 /* libc++.1.dylib */,
+				87DFF88D1B18B1CF00B0F321 /* libc++.dylib */,
+				87DFF88E1B18B1CF00B0F321 /* libc++abi.dylib */,
+				87DFF88F1B18B1CF00B0F321 /* libstdc++.6.0.9.dylib */,
+				87DFF8901B18B1CF00B0F321 /* libstdc++.6.dylib */,
+				87DFF8911B18B1CF00B0F321 /* libstdc++.dylib */,
+				87DFF88A1B18B1C900B0F321 /* SystemConfiguration.framework */,
+				87DFF8881B18B1C300B0F321 /* CoreGraphics.framework */,
+				87DFF8861B18B1BD00B0F321 /* UIKit.framework */,
+				87DFF8841B18B1B900B0F321 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		87DFF85A1B18AFB500B0F321 /* LSFSceneTutorial */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 87DFF87E1B18AFB500B0F321 /* Build configuration list for PBXNativeTarget "LSFSceneTutorial" */;
+			buildPhases = (
+				87DFF8571B18AFB500B0F321 /* Sources */,
+				87DFF8581B18AFB500B0F321 /* Frameworks */,
+				87DFF8591B18AFB500B0F321 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LSFSceneTutorial;
+			productName = LSFSceneTutorial;
+			productReference = 87DFF85B1B18AFB500B0F321 /* LSFSceneTutorial.app */;
+			productType = "com.apple.product-type.application";
+		};
+		87DFF8731B18AFB500B0F321 /* LSFSceneTutorialTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 87DFF8811B18AFB500B0F321 /* Build configuration list for PBXNativeTarget "LSFSceneTutorialTests" */;
+			buildPhases = (
+				87DFF8701B18AFB500B0F321 /* Sources */,
+				87DFF8711B18AFB500B0F321 /* Frameworks */,
+				87DFF8721B18AFB500B0F321 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				87DFF8761B18AFB500B0F321 /* PBXTargetDependency */,
+			);
+			name = LSFSceneTutorialTests;
+			productName = LSFSceneTutorialTests;
+			productReference = 87DFF8741B18AFB500B0F321 /* LSFSceneTutorialTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		87DFF8531B18AFB500B0F321 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0620;
+				ORGANIZATIONNAME = "AllSeen Alliance";
+				TargetAttributes = {
+					87DFF85A1B18AFB500B0F321 = {
+						CreatedOnToolsVersion = 6.2;
+					};
+					87DFF8731B18AFB500B0F321 = {
+						CreatedOnToolsVersion = 6.2;
+						TestTargetID = 87DFF85A1B18AFB500B0F321;
+					};
+				};
+			};
+			buildConfigurationList = 87DFF8561B18AFB500B0F321 /* Build configuration list for PBXProject "LSFSceneTutorial" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 87DFF8521B18AFB500B0F321;
+			productRefGroup = 87DFF85C1B18AFB500B0F321 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				87DFF85A1B18AFB500B0F321 /* LSFSceneTutorial */,
+				87DFF8731B18AFB500B0F321 /* LSFSceneTutorialTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		87DFF8591B18AFB500B0F321 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				87DFF86A1B18AFB500B0F321 /* Main.storyboard in Resources */,
+				87DFF86F1B18AFB500B0F321 /* LaunchScreen.xib in Resources */,
+				87DFF86C1B18AFB500B0F321 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		87DFF8721B18AFB500B0F321 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		87DFF8571B18AFB500B0F321 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				87DFF8671B18AFB500B0F321 /* LSFSceneTutorialViewController.m in Sources */,
+				87DFF8641B18AFB500B0F321 /* AppDelegate.m in Sources */,
+				87DFF8611B18AFB500B0F321 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		87DFF8701B18AFB500B0F321 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				87DFF87B1B18AFB500B0F321 /* LSFSceneTutorialTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		87DFF8761B18AFB500B0F321 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 87DFF85A1B18AFB500B0F321 /* LSFSceneTutorial */;
+			targetProxy = 87DFF8751B18AFB500B0F321 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		87DFF8681B18AFB500B0F321 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				87DFF8691B18AFB500B0F321 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		87DFF86D1B18AFB500B0F321 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				87DFF86E1B18AFB500B0F321 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		87DFF87C1B18AFB500B0F321 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		87DFF87D1B18AFB500B0F321 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		87DFF87F1B18AFB500B0F321 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjC/include/LSFObjC\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
+				);
+				INFOPLIST_FILE = LSFSceneTutorial/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/lib\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/lib/$(CONFIGURATION)-$(PLATFORM_NAME)\"",
+					"\"$(OPENSSL_ROOT)/build/$(CONFIGURATION)-$(PLATFORM_NAME)\"",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-DQCC_OS_GROUP_POSIX",
+					"-DQCC_OS_DARWIN",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lalljoyn",
+					"-lajrouter",
+					"-lssl",
+					"-lcrypto",
+					"-lLSFObjCHelper",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "armv7 arm64";
+			};
+			name = Debug;
+		};
+		87DFF8801B18AFB500B0F321 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjC/include/LSFObjC\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
+				);
+				INFOPLIST_FILE = LSFSceneTutorial/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/lib\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/lib/$(CONFIGURATION)-$(PLATFORM_NAME)\"",
+					"\"$(OPENSSL_ROOT)/build/$(CONFIGURATION)-$(PLATFORM_NAME)\"",
+				);
+				OTHER_CFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"-DQCC_OS_GROUP_POSIX",
+					"-DQCC_OS_DARWIN",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lalljoyn",
+					"-lajrouter",
+					"-lssl",
+					"-lcrypto",
+					"-lLSFObjCHelper",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "armv7 arm64";
+			};
+			name = Release;
+		};
+		87DFF8821B18AFB500B0F321 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = LSFSceneTutorialTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LSFSceneTutorial.app/LSFSceneTutorial";
+			};
+			name = Debug;
+		};
+		87DFF8831B18AFB500B0F321 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = LSFSceneTutorialTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LSFSceneTutorial.app/LSFSceneTutorial";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		87DFF8561B18AFB500B0F321 /* Build configuration list for PBXProject "LSFSceneTutorial" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				87DFF87C1B18AFB500B0F321 /* Debug */,
+				87DFF87D1B18AFB500B0F321 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		87DFF87E1B18AFB500B0F321 /* Build configuration list for PBXNativeTarget "LSFSceneTutorial" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				87DFF87F1B18AFB500B0F321 /* Debug */,
+				87DFF8801B18AFB500B0F321 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		87DFF8811B18AFB500B0F321 /* Build configuration list for PBXNativeTarget "LSFSceneTutorialTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				87DFF8821B18AFB500B0F321 /* Debug */,
+				87DFF8831B18AFB500B0F321 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 87DFF8531B18AFB500B0F321 /* Project object */;
+}

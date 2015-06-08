@@ -38,6 +38,12 @@
 #import "LSFSDKLightingSystemManager.h"
 #import "LSFTrackingID.h"
 
+#ifdef __aarch64__
+#define ARCH_STR @"64-bit"
+#else
+#define ARCH_STR @"32-bit"
+#endif
+
 /**
  * LSFSDKLightingDirector is the main class in the facade interface of the iOS Lighting SDK.
  * It provides access to instances of other facade classes that represent active components

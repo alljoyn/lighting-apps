@@ -35,12 +35,15 @@
 {
     [super viewDidLoad];
 
+    //Display the version number
     NSMutableString *appVersion = [NSMutableString stringWithFormat: @"Version: %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
     [appVersion appendString: [NSString stringWithFormat: @".%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]]];
+    [appVersion appendString: [NSString stringWithFormat: @" (%@)", ARCH_STR]];
     [self.versionLabel setText: appVersion];
 
+    //Instantiate the director and wait for the connection
     self.lightingDirector = [LSFSDKLightingDirector getLightingDirector];
-    [self.lightingDirector postOnNextControllerConnectionWithDelay: 0 delegate: self];
+    [self.lightingDirector postOnNextControllerConnectionWithDelay: 5000 delegate: self];
     [self.lightingDirector start];
 }
 

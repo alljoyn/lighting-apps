@@ -75,7 +75,7 @@
     
     if (self)
     {
-        //NSLog(@"LSFAllJoynManager - init() function executing");
+        NSLog(@"LSFAllJoynManager - init(). Static Library Slice Used = %@", AJ_ARCH_STR);
         
         self.isConnectedToController = NO;
         

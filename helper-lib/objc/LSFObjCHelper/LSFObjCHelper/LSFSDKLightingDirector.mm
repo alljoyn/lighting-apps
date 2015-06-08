@@ -93,6 +93,8 @@ static NSString *LANGUAGE_DEFAULT = @"en";
 
     if (self)
     {
+        NSLog(@"LSFSDKLightingDirector - init(). Static Library Slice Used = %@", ARCH_STR);
+
         _lightingManager = [[LSFSDKLightingSystemManager alloc] init];
         _defaultLanguage = LANGUAGE_DEFAULT;
     }
@@ -404,7 +406,7 @@ static NSString *LANGUAGE_DEFAULT = @"en";
 
 -(void)postOnNextControllerConnectionWithDelay: (unsigned int)delay delegate: (id<LSFSDKNextControllerConnectionDelegate>)delegate;
 {
-    [self.lightingManager postOnNextControllerConnection: delegate];
+    [self.lightingManager postOnNextControllerConnection: delegate withDelay: delay];
 }
 
 -(void)postOnNextControllerConnectionWithDelay: (unsigned int)delay block: (void (^)(void))block;
