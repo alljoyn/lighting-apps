@@ -556,6 +556,43 @@ jobject XCppDelegator::Call_ControllerClientStatus_TrackingID_Object_String_Stri
     return controllerClientStatus;
 }
 
+template <typename T>
+void XCppDelegator::Call_Void(JNIEnv *env, jobject thiz, void (T::*cMethod)(void))
+{
+    T *xDelegate = GetHandle<T*>(thiz);
+    if (env->ExceptionCheck() || !xDelegate) {
+        QCC_LogError(ER_FAIL, ("GetHandle() failed"));
+        return;
+    }
+
+    (xDelegate->*cMethod)();
+}
+
+template <typename T>
+void XCppDelegator::Call_Void_String(JNIEnv *env, jobject thiz, jstring jString, void (T::*cMethod)(const std::string&))
+{
+    T *xDelegate = GetHandle<T*>(thiz);
+    if (env->ExceptionCheck() || !xDelegate) {
+        QCC_LogError(ER_FAIL, ("GetHandle() failed"));
+        return;
+    }
+
+    JString xString(jString);
+    if (env->ExceptionCheck()) {
+        QCC_LogError(ER_FAIL, ("JString failed"));
+        return;
+    }
+
+    if (!xString.c_str()) {
+        QCC_LogError(ER_FAIL, ("JString invalid"));
+        return;
+    }
+
+    std::string cString = xString.c_str();
+
+    (xDelegate->*cMethod)(cString);
+}
+
 } // namespace lsf
 
 #undef QCC_MODULE

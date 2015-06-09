@@ -20,7 +20,7 @@ import java.util.Map;
 
 import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.TransitionEffect;
+import org.allseen.lsf.TransitionEffectV2;
 import org.allseen.lsf.TransitionEffectManagerCallback;
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 import org.allseen.lsf.sdk.manager.LightingSystemManager;
@@ -42,7 +42,7 @@ public class HelperTransitionEffectManagerCallback extends TransitionEffectManag
     }
 
     @Override
-    public void getTransitionEffectReplyCB(ResponseCode responseCode, String transitionEffectID, TransitionEffect transitionEffect) {
+    public void getTransitionEffectReplyCB(ResponseCode responseCode, String transitionEffectID, TransitionEffectV2 transitionEffect) {
         if (!responseCode.equals(ResponseCode.OK)) {
             manager.getTransitionEffectCollectionManager().sendErrorEvent("getTransitionEffectReplyCB", responseCode, transitionEffectID);
         }
@@ -199,7 +199,7 @@ public class HelperTransitionEffectManagerCallback extends TransitionEffectManag
         postSendTransitionEffectChanged(transitionEffectID);
     }
 
-    protected void postUpdateTransitionEffect(final String transitionEffectID, final TransitionEffect transitionEffect) {
+    protected void postUpdateTransitionEffect(final String transitionEffectID, final TransitionEffectV2 transitionEffect) {
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {

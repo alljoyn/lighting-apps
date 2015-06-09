@@ -1,5 +1,5 @@
 /*
- * Copyright AllSeen Alliance. All rights reserved.
+ * Copyright (c) AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -15,27 +15,27 @@
  */
 package org.allseen.lsf;
 
-public abstract class ControllerService extends DefaultNativeClassWrapper {
-    private static final NativeLibraryLoader LIBS = NativeLibraryLoader.LIBS;
-
-    public ControllerService() {
+public class TransitionEffectV2 extends DefaultNativeClassWrapper {
+    public TransitionEffectV2() {
         createNativeObject();
     }
 
-    public abstract String getControllerDefaultDeviceId(String generatedDeviceId);
-    public abstract String getControllerDefaultAppId(String generatedAppId);
-    public abstract String getMacAddress(String generatedMacAddress);
-    public abstract boolean isNetworkConnected();
-    public abstract RankPower getRankPower();
-    public abstract RankMobility getRankMobility();
-    public abstract RankAvailability getRankAvailability();
-    public abstract RankNodeType getRankNodeType();
+    public TransitionEffectV2(TransitionEffectV2 other) {
+        this();
 
-    public native void start(String keyStorePath);
-    public native void stop();
-    public native void reset();
-    public native void sendNetworkConnected();
-    public native void sendNetworkDisconnected();
+        this.setLampState(other.getLampState());
+        this.setPresetID(other.getPresetID());
+        this.setTransitionPeriod(other.getTransitionPeriod());
+    }
+
+    public native void setLampState(LampState lampState);
+    public native LampState getLampState();
+
+    public native void setPresetID(String presetID);
+    public native String getPresetID();
+
+    public native void setTransitionPeriod(long transitionPeriod);
+    public native long getTransitionPeriod();
 
     @Override
     protected native void createNativeObject();
@@ -43,4 +43,3 @@ public abstract class ControllerService extends DefaultNativeClassWrapper {
     @Override
     protected native void destroyNativeObject();
 }
-

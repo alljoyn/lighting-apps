@@ -35,6 +35,11 @@ class JEnum {
     static JEnum * jLampTypeEnum;
     static JEnum * jBaseTypeEnum;
 
+    static JEnum * jRankPowerEnum;
+    static JEnum * jRankMobilityEnum;
+    static JEnum * jRankAvailabilityEnum;
+    static JEnum * jRankNodeTypeEnum;
+
     JEnum(char const *className);
     JEnum(char const *className, char const *objMethodName, char const *intMethodName);
     virtual ~JEnum();

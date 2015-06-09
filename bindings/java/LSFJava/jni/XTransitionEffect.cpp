@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) AllSeen Alliance. All rights reserved.
+ * Copyright AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -15,23 +15,46 @@
  *
  ******************************************************************************/
 
+// This .cpp file is #include'd in the .h file because some templated
+// methods must be defined there. The following #ifdef allows the
+// templated code to be visible there.
+#ifdef LSF_JNI_XTRANSITIONEFFECT_H_INCLUDE_TEMPLATE_METHODS
+
+#include <qcc/Debug.h>
+
+#include "NDefs.h"
 #include "XTransitionEffect.h"
+
+#define QCC_MODULE LSF_QCC_MODULE
 
 namespace lsf {
 
-XTransitionEffect::XTransitionEffect(jobject jobj)
+template <typename T>
+void XTransitionEffect::SetTransitionPeriod(JNIEnv *env, jobject thiz, jlong jTransitionPeriod)
 {
-    // Currently nothing to do
+    T *xDelegate = GetHandle<T*>(thiz);
+    if (env->ExceptionCheck() || !xDelegate) {
+        QCC_LogError(ER_FAIL, ("GetHandle() failed"));
+        return;
+    }
+
+    xDelegate->transitionPeriod = (uint32_t)jTransitionPeriod;
 }
 
-XTransitionEffect::~XTransitionEffect()
+template <typename T>
+jlong XTransitionEffect::GetTransitionPeriod(JNIEnv *env, jobject thiz)
 {
-    // Currently nothing to do
+    T *xDelegate = GetHandle<T*>(thiz);
+    if (env->ExceptionCheck() || !xDelegate) {
+        QCC_LogError(ER_FAIL, ("GetHandle() failed"));
+        return (jint)0;
+    }
+
+    return (jlong)xDelegate->transitionPeriod;
 }
 
-XTransitionEffect& XTransitionEffect::operator=(const TransitionEffect& other)
-{
-    TransitionEffect::operator=(other);
-    return *this;
-}
 } /* namespace lsf */
+
+#undef QCC_MODULE
+
+#endif /* LSF_JNI_XTRANSITIONEFFECT_H_INCLUDE_TEMPLATE_METHODS */

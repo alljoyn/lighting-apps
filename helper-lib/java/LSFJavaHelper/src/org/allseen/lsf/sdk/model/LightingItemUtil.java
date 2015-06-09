@@ -21,10 +21,10 @@ import java.util.Set;
 import org.allseen.lsf.LampGroup;
 import org.allseen.lsf.LampState;
 import org.allseen.lsf.MasterScene;
-import org.allseen.lsf.PulseEffect;
+import org.allseen.lsf.PulseEffectV2;
 import org.allseen.lsf.SceneElement;
 import org.allseen.lsf.SceneWithSceneElements;
-import org.allseen.lsf.TransitionEffect;
+import org.allseen.lsf.TransitionEffectV2;
 import org.allseen.lsf.sdk.Group;
 import org.allseen.lsf.sdk.GroupMember;
 import org.allseen.lsf.sdk.Lamp;
@@ -41,18 +41,16 @@ public class LightingItemUtil {
     }
 
     public static LampGroup createLampGroup(GroupMember[] groupMembers) {
-        if (groupMembers == null) {
-            return null;
-        }
-
         Set<String> lamps = new HashSet<String>();
         Set<String> groups = new HashSet<String>();
 
-        for (GroupMember member : groupMembers) {
-            if (member instanceof Lamp) {
-                lamps.add(((Lamp)member).getLampDataModel().id);
-            } else if (member instanceof Group) {
-                groups.add(((Group)member).getGroupDataModel().id);
+        if (groupMembers != null) {
+            for (GroupMember member : groupMembers) {
+                if (member instanceof Lamp) {
+                    lamps.add(((Lamp)member).getLampDataModel().id);
+                } else if (member instanceof Group) {
+                    groups.add(((Group)member).getGroupDataModel().id);
+                }
             }
         }
 
@@ -60,10 +58,9 @@ public class LightingItemUtil {
     }
 
     public static LampGroup createLampGroup(String[] lampIds, String[] groupIds) {
-        LampGroup lampGroup = null;
+        LampGroup lampGroup = new LampGroup();
 
         if ((lampIds != null) && (groupIds != null)) {
-            lampGroup = new LampGroup();
             lampGroup.setLamps(lampIds);
             lampGroup.setLampGroups(groupIds);
         }
@@ -71,15 +68,15 @@ public class LightingItemUtil {
         return lampGroup;
     }
 
-    public static TransitionEffect createTransitionEffect(boolean powerOn, int[] colorHsvt, long duration) {
+    public static TransitionEffectV2 createTransitionEffect(boolean powerOn, int[] colorHsvt, long duration) {
         return createTransitionEffect(createLampStateFromView(powerOn, colorHsvt[0], colorHsvt[1], colorHsvt[2], colorHsvt[3]), duration);
     }
 
-    public static TransitionEffect createTransitionEffect(LampState lampState, long duration) {
-        TransitionEffect transitionEffect = null;
+    public static TransitionEffectV2 createTransitionEffect(LampState lampState, long duration) {
+        TransitionEffectV2 transitionEffect = null;
 
         if ((lampState != null) && (duration >= 0)) {
-            transitionEffect = new TransitionEffect();
+            transitionEffect = new TransitionEffectV2();
             transitionEffect.setLampState(lampState);
             transitionEffect.setTransitionPeriod(duration);
         }
@@ -87,11 +84,11 @@ public class LightingItemUtil {
         return transitionEffect;
     }
 
-    public static TransitionEffect createTransitionEffect(Preset preset, long duration) {
-        TransitionEffect transitionEffect = null;
+    public static TransitionEffectV2 createTransitionEffect(Preset preset, long duration) {
+        TransitionEffectV2 transitionEffect = null;
 
         if ((preset != null) && (duration >= 0)) {
-            transitionEffect = new TransitionEffect();
+            transitionEffect = new TransitionEffectV2();
             transitionEffect.setPresetID(preset.getPresetDataModel().id);
             transitionEffect.setTransitionPeriod(duration);
         }
@@ -99,18 +96,18 @@ public class LightingItemUtil {
         return transitionEffect;
     }
 
-    public static PulseEffect createPulseEffect(boolean fromPowerOn, int[] fromColorHsvt, boolean toPowerOn, int[] toColorHsvt, long period, long duration, long count) {
+    public static PulseEffectV2 createPulseEffect(boolean fromPowerOn, int[] fromColorHsvt, boolean toPowerOn, int[] toColorHsvt, long period, long duration, long count) {
         return createPulseEffect(
                 createLampStateFromView(fromPowerOn, fromColorHsvt[0], fromColorHsvt[1], fromColorHsvt[2], fromColorHsvt[3]),
                 createLampStateFromView(toPowerOn, toColorHsvt[0], toColorHsvt[1], toColorHsvt[2], toColorHsvt[3]),
                 period, duration, count);
     }
 
-    public static PulseEffect createPulseEffect(LampState fromState, LampState toState, long period, long duration, long count) {
-        PulseEffect pulseEffect = null;
+    public static PulseEffectV2 createPulseEffect(LampState fromState, LampState toState, long period, long duration, long count) {
+        PulseEffectV2 pulseEffect = null;
 
         if (fromState != null && toState != null && period > 0 && duration > 0 && count > 0) {
-            pulseEffect = new PulseEffect();
+            pulseEffect = new PulseEffectV2();
             pulseEffect.setFromLampState(fromState);
             pulseEffect.setToLampState(toState);
 
@@ -122,11 +119,11 @@ public class LightingItemUtil {
         return pulseEffect;
     }
 
-    public static PulseEffect createPulseEffect(Preset fromPreset, Preset toPreset, long period, long duration, long count) {
-        PulseEffect pulseEffect = null;
+    public static PulseEffectV2 createPulseEffect(Preset fromPreset, Preset toPreset, long period, long duration, long count) {
+        PulseEffectV2 pulseEffect = null;
 
         if (fromPreset != null && toPreset != null && period > 0 && duration > 0 && count > 0) {
-            pulseEffect = new PulseEffect();
+            pulseEffect = new PulseEffectV2();
             pulseEffect.setFromPresetID(fromPreset.getPresetDataModel().id);
             pulseEffect.setToPresetID(toPreset.getPresetDataModel().id);
 

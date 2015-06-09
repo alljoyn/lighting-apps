@@ -484,6 +484,140 @@ void XJavaDelegator::Call_Void_Variadic(JScopedEnv& env, const jweak jdelegate, 
     }
 }
 
+LSFString XJavaDelegator::Call_String_String(const jweak jdelegate, char const *func, const LSFString &strValue, const LSFString &strDefault)
+{
+    // Get the JNIEnv for the current native thread
+    JScopedEnv env;
+
+    /*
+     * The weak reference to the Java delegate cannot be directly used.  We have to get
+     * a "hard" reference to it and then use that. If you try to use a weak reference
+     * directly you will crash and burn.
+     */
+    jobject jobj = env->NewLocalRef(jdelegate);
+    if (env->ExceptionCheck() || !jobj) {
+        QCC_LogError(ER_FAIL, ("NewLocalRef() failed"));
+        return strDefault;
+    }
+
+    jclass clazz = env->GetObjectClass(jobj);
+    if (env->ExceptionCheck() || !clazz) {
+        QCC_LogError(ER_FAIL, ("GetObjectClass() failed"));
+        return strDefault;
+    }
+
+    std::string jfunc = GetJavaMethodNameFromCPPMethodName(func);
+    jmethodID mid = env->GetMethodID(clazz, jfunc.c_str(), "(Ljava/lang/String;)Ljava/lang/String;");
+    if (env->ExceptionCheck() || !mid) {
+        QCC_LogError(ER_FAIL, ("GetMethodID() failed"));
+        return strDefault;
+    }
+
+    jstring jstrValue = env->NewStringUTF(strValue.c_str());
+    if (env->ExceptionCheck() || !jstrValue) {
+        QCC_LogError(ER_FAIL, ("NewStringUTF() failed"));
+        return strDefault;
+    }
+
+    jstring jstrReturn = (jstring)env->CallObjectMethod(jobj, mid, jstrValue);
+    if (env->ExceptionCheck() || !jstrReturn) {
+        QCC_LogError(ER_FAIL, ("CallObjectMethod() exception"));
+        return strDefault;
+    }
+
+    const char *cstrReturn = env->GetStringUTFChars(jstrReturn, NULL);
+    LSFString strReturn = cstrReturn;
+    env->ReleaseStringUTFChars(jstrReturn, cstrReturn);
+
+    return strReturn;
+}
+
+bool XJavaDelegator::Call_Boolean(const jweak jdelegate, char const *func, const bool &boolDefault)
+{
+    // Get the JNIEnv for the current native thread
+    JScopedEnv env;
+
+    /*
+     * The weak reference to the Java delegate cannot be directly used.  We have to get
+     * a "hard" reference to it and then use that. If you try to use a weak reference
+     * directly you will crash and burn.
+     */
+    jobject jobj = env->NewLocalRef(jdelegate);
+    if (env->ExceptionCheck() || !jobj) {
+        QCC_LogError(ER_FAIL, ("NewLocalRef() failed"));
+        return boolDefault;
+    }
+
+    jclass clazz = env->GetObjectClass(jobj);
+    if (env->ExceptionCheck() || !clazz) {
+        QCC_LogError(ER_FAIL, ("GetObjectClass() failed"));
+        return boolDefault;
+    }
+
+    std::string jfunc = GetJavaMethodNameFromCPPMethodName(func);
+    jmethodID mid = env->GetMethodID(clazz, jfunc.c_str(), "()Z");
+    if (env->ExceptionCheck() || !mid) {
+        QCC_LogError(ER_FAIL, ("GetMethodID() failed"));
+        return boolDefault;
+    }
+
+    jboolean jboolReturn = env->CallBooleanMethod(jobj, mid);
+    if (env->ExceptionCheck()) {
+        QCC_LogError(ER_FAIL, ("CallBooleanMethod() exception"));
+        return boolDefault;
+    }
+
+    return jboolReturn == JNI_TRUE;
+}
+
+#endif //LSF_JNI_XJAVADELEGATOR_H_INCLUDE_TEMPLATE_METHODS
+
+// This .cpp file is #include'd in the .h file because some templated
+// methods must be defined there. The following #ifdef allows the
+// templated code to be visible there.
+#ifdef LSF_JNI_XJAVADELEGATOR_H_INCLUDE_TEMPLATE_METHODS
+template <typename CTYPE>
+CTYPE XJavaDelegator::Call_Enum(const jweak jdelegate, char const *func, JEnum *xEnum, const CTYPE &enumDefault)
+{
+    // Get the JNIEnv for the current native thread
+    JScopedEnv env;
+
+    /*
+     * The weak reference to the Java delegate cannot be directly used.  We have to get
+     * a "hard" reference to it and then use that. If you try to use a weak reference
+     * directly you will crash and burn.
+     */
+    jobject jobj = env->NewLocalRef(jdelegate);
+    if (env->ExceptionCheck() || !jobj) {
+        QCC_LogError(ER_FAIL, ("NewLocalRef() failed"));
+        return enumDefault;
+    }
+
+    jclass clazz = env->GetObjectClass(jobj);
+    if (env->ExceptionCheck() || !clazz) {
+        QCC_LogError(ER_FAIL, ("GetObjectClass() failed"));
+        return enumDefault;
+    }
+
+    char sig[512];
+    snprintf(sig, sizeof(sig), "()L%s;", xEnum->getClassName());
+
+    std::string jfunc = GetJavaMethodNameFromCPPMethodName(func);
+    jmethodID mid = env->GetMethodID(clazz, jfunc.c_str(), sig);
+    if (env->ExceptionCheck() || !mid) {
+        QCC_LogError(ER_FAIL, ("GetMethodID() failed"));
+        return enumDefault;
+    }
+
+    jobject jenumReturn = env->CallObjectMethod(jobj, mid);
+    if (env->ExceptionCheck() || !jenumReturn) {
+        QCC_LogError(ER_FAIL, ("CallObjectMethod() exception"));
+        return enumDefault;
+    }
+
+    return (CTYPE)xEnum->getValue(jenumReturn);
+}
+
 #endif //LSF_JNI_XJAVADELEGATOR_H_INCLUDE_TEMPLATE_METHODS
 
 } //namespace lsf

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) AllSeen Alliance. All rights reserved.
+ * Copyright AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -15,13 +15,30 @@
  */
 package org.allseen.lsf;
 
-public interface PulseEffect extends LampMemberList {
-    public void setPulsePeriod(long pulsePeriod);
-    public long getPulsePeriod();
+public enum RankPower {
+    BATTERY_POWERED_NOT_CHARGABLE,
+    BATTERY_POWERED_CHARGABLE,
+    ALWAYS_AC_POWERED,
+    /** If OEMs return this value, the Controller Service will use BATTERY_POWERED_NOT_CHARGABLE as this is not a valid value */
+    OEM_CS_RANKPARAM_POWER_LAST_VALUE;
 
-    public void setPulseDuration(long pulseDuration);
-    public long getPulseDuration();
+    /** Static lookup, used by the native code */
+    @SuppressWarnings("unused")
+    private static RankPower fromValue(int value) {
+        for (RankPower r : RankPower.values()) {
+            if (r.getValue() == value) {
+                return r;
+            }
+        }
 
-    public void setPulseCount(long pulseCount);
-    public long getPulseCount();
+        return null;
+    }
+
+    /**
+     * Gets the integer value.
+     *
+     * @return the integer value
+     */
+    public int getValue() { return ordinal(); }
 }
+

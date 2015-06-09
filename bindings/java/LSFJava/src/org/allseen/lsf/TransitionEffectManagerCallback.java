@@ -21,7 +21,7 @@ public class TransitionEffectManagerCallback extends DefaultNativeClassWrapper {
         createNativeObject();
     }
 
-    public void getTransitionEffectReplyCB(ResponseCode responseCode, String transitionEffectID, TransitionEffect transitionEffect)                 { }
+    public void getTransitionEffectReplyCB(ResponseCode responseCode, String transitionEffectID, TransitionEffectV2 transitionEffect)                 { }
     public void applyTransitionEffectOnLampsReplyCB(ResponseCode responseCode, String transitionEffectID, String[] lampIDs)                         { }
     public void applyTransitionEffectOnLampGroupsReplyCB(ResponseCode responseCode, String transitionEffectID, String[] lampGroupIDs)               { }
     public void getAllTransitionEffectIDsReplyCB(ResponseCode responseCode, String[] transitionEffectIDs)                                           { }

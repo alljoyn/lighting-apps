@@ -20,7 +20,7 @@
 #include "XLampMemberList.h"
 #include "XObject.h"
 #include "XPresetPulseEffect.h"
-#include "XPulseEffectV10.h"
+#include "XPulseEffect.h"
 
 #include "org_allseen_lsf_PresetPulseEffect.h"
 
@@ -56,37 +56,37 @@ jobjectArray JNICALL Java_org_allseen_lsf_PresetPulseEffect_getLampGroups(JNIEnv
 JNIEXPORT
 void JNICALL Java_org_allseen_lsf_PresetPulseEffect_setPulsePeriod(JNIEnv *env, jobject thiz, jlong jPulsePeriod)
 {
-    XPulseEffectV10::SetPulsePeriod<XPresetPulseEffect>(env, thiz, jPulsePeriod);
+    XPulseEffect::SetPulsePeriod<XPresetPulseEffect>(env, thiz, jPulsePeriod);
 }
 
 JNIEXPORT
 jlong JNICALL Java_org_allseen_lsf_PresetPulseEffect_getPulsePeriod(JNIEnv *env, jobject thiz)
 {
-    return XPulseEffectV10::GetPulsePeriod<XPresetPulseEffect>(env, thiz);
+    return XPulseEffect::GetPulsePeriod<XPresetPulseEffect>(env, thiz);
 }
 
 JNIEXPORT
 void JNICALL Java_org_allseen_lsf_PresetPulseEffect_setPulseDuration(JNIEnv *env, jobject thiz, jlong jPulseDuration)
 {
-    XPulseEffectV10::SetPulseDuration<XPresetPulseEffect>(env, thiz, jPulseDuration);
+    XPulseEffect::SetPulseDuration<XPresetPulseEffect>(env, thiz, jPulseDuration);
 }
 
 JNIEXPORT
 jlong JNICALL Java_org_allseen_lsf_PresetPulseEffect_getPulseDuration(JNIEnv *env, jobject thiz)
 {
-    return XPulseEffectV10::GetPulseDuration<XPresetPulseEffect>(env, thiz);
+    return XPulseEffect::GetPulseDuration<XPresetPulseEffect>(env, thiz);
 }
 
 JNIEXPORT
 void JNICALL Java_org_allseen_lsf_PresetPulseEffect_setPulseCount(JNIEnv *env, jobject thiz, jlong jPulseCount)
 {
-    XPulseEffectV10::SetPulseCount<XPresetPulseEffect>(env, thiz, jPulseCount);
+    XPulseEffect::SetPulseCount<XPresetPulseEffect>(env, thiz, jPulseCount);
 }
 
 JNIEXPORT
 jlong JNICALL Java_org_allseen_lsf_PresetPulseEffect_getPulseCount(JNIEnv *env, jobject thiz)
 {
-    return XPulseEffectV10::GetPulseCount<XPresetPulseEffect>(env, thiz);
+    return XPulseEffect::GetPulseCount<XPresetPulseEffect>(env, thiz);
 }
 
 JNIEXPORT

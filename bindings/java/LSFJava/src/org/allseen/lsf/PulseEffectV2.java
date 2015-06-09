@@ -15,56 +15,43 @@
  */
 package org.allseen.lsf;
 
-public class StatePulseEffect extends DefaultNativeClassWrapper implements PulseEffect {
-    public StatePulseEffect() {
+public class PulseEffectV2 extends DefaultNativeClassWrapper {
+    public PulseEffectV2() {
         createNativeObject();
     }
 
-    public StatePulseEffect(StatePulseEffect other) {
+    public PulseEffectV2(PulseEffectV2 other) {
         this();
 
-        this.setLamps(other.getLamps());
-        this.setLampGroups(other.getLampGroups());
+        this.setToLampState(other.getToLampState());
+        this.setFromLampState(other.getFromLampState());
+        this.setToPresetID(other.getToPresetID());
+        this.setFromPresetID(other.getFromPresetID());
         this.setPulsePeriod(other.getPulsePeriod());
         this.setPulseDuration(other.getPulseDuration());
-        this.setPulseCount(other.getPulseCount());
-        this.setFromLampState(other.getFromLampState());
-        this.setToLampState(other.getToLampState());
+        this.setNumPulses(this.getNumPulses());
     }
-
-    @Override
-    public native void setLamps(String[] lampIDs);
-    @Override
-    public native String[] getLamps();
-
-    @Override
-    public native void setLampGroups(String[] lampGroupIDs);
-    @Override
-    public native String[] getLampGroups();
-
-    @Override
-    public native void setPulsePeriod(long pulsePeriod);
-    @Override
-    public native long getPulsePeriod();
-
-    @Override
-    public native void setPulseDuration(long pulseDuration);
-    @Override
-    public native long getPulseDuration();
-
-    @Override
-    public native void setPulseCount(long pulseCount);
-    @Override
-    public native long getPulseCount();
-
-    public native void setFromLampState(LampState lampState);
-    public native LampState getFromLampState();
 
     public native void setToLampState(LampState lampState);
     public native LampState getToLampState();
 
-    @Override
-    public native String toString();
+    public native void setFromLampState(LampState lampState);
+    public native LampState getFromLampState();
+
+    public native void setToPresetID(String presetID);
+    public native String getToPresetID();
+
+    public native void setFromPresetID(String presetID);
+    public native String getFromPresetID();
+
+    public native void setPulsePeriod(long pulsePeriod);
+    public native long getPulsePeriod();
+
+    public native void setPulseDuration(long pulseDuration);
+    public native long getPulseDuration();
+
+    public native void setNumPulses(long numPulses);
+    public native long getNumPulses();
 
     @Override
     protected native void createNativeObject();

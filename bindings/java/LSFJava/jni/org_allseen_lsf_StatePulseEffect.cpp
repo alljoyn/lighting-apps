@@ -20,7 +20,7 @@
 #include "NUtil.h"
 #include "XLampMemberList.h"
 #include "XObject.h"
-#include "XPulseEffectV10.h"
+#include "XPulseEffect.h"
 #include "XStatePulseEffect.h"
 
 #include "org_allseen_lsf_StatePulseEffect.h"
@@ -56,37 +56,37 @@ jobjectArray JNICALL Java_org_allseen_lsf_StatePulseEffect_getLampGroups(JNIEnv 
 JNIEXPORT
 void JNICALL Java_org_allseen_lsf_StatePulseEffect_setPulsePeriod(JNIEnv *env, jobject thiz, jlong jPulsePeriod)
 {
-    XPulseEffectV10::SetPulsePeriod<XStatePulseEffect>(env, thiz, jPulsePeriod);
+    XPulseEffect::SetPulsePeriod<XStatePulseEffect>(env, thiz, jPulsePeriod);
 }
 
 JNIEXPORT
 jlong JNICALL Java_org_allseen_lsf_StatePulseEffect_getPulsePeriod(JNIEnv *env, jobject thiz)
 {
-    return XPulseEffectV10::GetPulsePeriod<XStatePulseEffect>(env, thiz);
+    return XPulseEffect::GetPulsePeriod<XStatePulseEffect>(env, thiz);
 }
 
 JNIEXPORT
 void JNICALL Java_org_allseen_lsf_StatePulseEffect_setPulseDuration(JNIEnv *env, jobject thiz, jlong jPulseDuration)
 {
-    XPulseEffectV10::SetPulseDuration<XStatePulseEffect>(env, thiz, jPulseDuration);
+    XPulseEffect::SetPulseDuration<XStatePulseEffect>(env, thiz, jPulseDuration);
 }
 
 JNIEXPORT
 jlong JNICALL Java_org_allseen_lsf_StatePulseEffect_getPulseDuration(JNIEnv *env, jobject thiz)
 {
-    return XPulseEffectV10::GetPulseDuration<XStatePulseEffect>(env, thiz);
+    return XPulseEffect::GetPulseDuration<XStatePulseEffect>(env, thiz);
 }
 
 JNIEXPORT
 void JNICALL Java_org_allseen_lsf_StatePulseEffect_setPulseCount(JNIEnv *env, jobject thiz, jlong jPulseCount)
 {
-    XPulseEffectV10::SetPulseCount<XStatePulseEffect>(env, thiz, jPulseCount);
+    XPulseEffect::SetPulseCount<XStatePulseEffect>(env, thiz, jPulseCount);
 }
 
 JNIEXPORT
 jlong JNICALL Java_org_allseen_lsf_StatePulseEffect_getPulseCount(JNIEnv *env, jobject thiz)
 {
-    return XPulseEffectV10::GetPulseCount<XStatePulseEffect>(env, thiz);
+    return XPulseEffect::GetPulseCount<XStatePulseEffect>(env, thiz);
 }
 
 JNIEXPORT

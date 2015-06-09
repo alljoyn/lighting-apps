@@ -20,7 +20,7 @@
 #include "JControllerClient.h"
 #include "NUtil.h"
 #include "XCppDelegator.h"
-#include "XTransitionEffect.h"
+#include "XTransitionEffectV2.h"
 #include "XTransitionEffectManager.h"
 #include "XTransitionEffectManagerCallback.h"
 
@@ -63,12 +63,12 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_setTransi
 
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_createTransitionEffect(JNIEnv *env, jobject thiz, jobject jTrackingID, jobject jTransitionEffect, jstring jTransitionEffectName, jstring jLanguage)
 {
-    return XCppDelegator::Call_ControllerClientStatus_TrackingID_Object_String_String<XTransitionEffectManager, XTransitionEffect, TransitionEffect>(env, thiz, jTrackingID, jTransitionEffect, jTransitionEffectName, jLanguage, &XTransitionEffectManager::CreateTransitionEffect);
+    return XCppDelegator::Call_ControllerClientStatus_TrackingID_Object_String_String<XTransitionEffectManager, XTransitionEffectV2, TransitionEffect>(env, thiz, jTrackingID, jTransitionEffect, jTransitionEffectName, jLanguage, &XTransitionEffectManager::CreateTransitionEffect);
 }
 
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_updateTransitionEffect(JNIEnv *env, jobject thiz, jstring jTransitionEffectID, jobject jTransitionEffect)
 {
-    return XCppDelegator::Call_ControllerClientStatus_String_Object<XTransitionEffectManager, XTransitionEffect, TransitionEffect>(env, thiz, jTransitionEffectID, jTransitionEffect, &XTransitionEffectManager::UpdateTransitionEffect);
+    return XCppDelegator::Call_ControllerClientStatus_String_Object<XTransitionEffectManager, XTransitionEffectV2, TransitionEffect>(env, thiz, jTransitionEffectID, jTransitionEffect, &XTransitionEffectManager::UpdateTransitionEffect);
 }
 
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_deleteTransitionEffect(JNIEnv *env, jobject thiz, jstring jTransitionEffectID)

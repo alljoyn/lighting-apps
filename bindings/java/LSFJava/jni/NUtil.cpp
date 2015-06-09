@@ -245,6 +245,11 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm,
         lsf::JEnum::jLampTypeEnum->getObject(0);
         lsf::JEnum::jBaseTypeEnum->getObject(0);
 
+        lsf::JEnum::jRankPowerEnum->getObject(0);
+        lsf::JEnum::jRankMobilityEnum->getObject(0);
+        lsf::JEnum::jRankAvailabilityEnum->getObject(0);
+        lsf::JEnum::jRankNodeTypeEnum->getObject(0);
+
         return JNI_VERSION_1_2;
     }
 }

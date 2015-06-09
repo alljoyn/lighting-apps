@@ -28,9 +28,7 @@ public abstract class EnterNumberFragment extends PageFrameChildFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_enter_number, container, false);
 
-        if (view != null) {
-            setTextViewValue(view, R.id.enterNumberLabel, getString(getLabelID()), 0);
-        }
+        setTextViewValue(view, R.id.enterNumberLabel, getString(getLabelID()), 0);
 
         ((EditText)view.findViewById(R.id.enterNumberText)).setInputType(getInputType());
 

@@ -33,6 +33,7 @@ private:
     XCppDelegator();
 
 public:
+    // Calls that return ControllerClientStatus
     template <typename T> static jobject Call_ControllerClientStatus(JNIEnv *env, jobject thiz, ControllerClientStatus (T::*cMethod)(void));
     template <typename T> static jobject Call_ControllerClientStatus_String(JNIEnv *env, jobject thiz, jstring jString, ControllerClientStatus (T::*cMethod)(const std::string&));
     template <typename T> static jobject Call_ControllerClientStatus_String_String(JNIEnv *env, jobject thiz, jstring jString1, jstring jString2, ControllerClientStatus (T::*cMethod)(const std::string&, const std::string&));
@@ -53,6 +54,10 @@ public:
     template <typename T1, typename T2, typename T3> static jobject Call_ControllerClientStatus_Object_String_String(JNIEnv *env, jobject thiz, jobject jObject, jstring jString1, jstring jString2, ControllerClientStatus (T1::*cMethod)(const T3&, const std::string&, const std::string&));
 
     template <typename T1, typename T2, typename T3> static jobject Call_ControllerClientStatus_TrackingID_Object_String_String(JNIEnv *env, jobject thiz, jobject jTrackingID, jobject jObject, jstring jString1, jstring jString2, ControllerClientStatus (T1::*cMethod)(uint32_t&, const T3&, const std::string&, const std::string&));
+
+    // Calls that return void
+    template <typename T> static void Call_Void(JNIEnv *env, jobject thiz, void (T::*cMethod)(void));
+    template <typename T> static void Call_Void_String(JNIEnv *env, jobject thiz, jstring jString, void (T::*cMethod)(const std::string&));
 };
 
 } /* namespace lsf */

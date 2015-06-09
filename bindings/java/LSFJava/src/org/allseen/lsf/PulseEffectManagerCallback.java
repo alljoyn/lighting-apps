@@ -21,7 +21,7 @@ public class PulseEffectManagerCallback extends DefaultNativeClassWrapper {
         createNativeObject();
     }
 
-    public void getPulseEffectReplyCB(ResponseCode responseCode, String pulseEffectID, PulseEffect pulseEffect)                     { }
+    public void getPulseEffectReplyCB(ResponseCode responseCode, String pulseEffectID, PulseEffectV2 pulseEffect)                     { }
     public void applyPulseEffectOnLampsReplyCB(ResponseCode responseCode, String pulseEffectID, String[] lampIDs)                   { }
     public void applyPulseEffectOnLampGroupsReplyCB(ResponseCode responseCode, String pulseEffectID, String[] lampGroupIDs)         { }
     public void getAllPulseEffectIDsReplyCB(ResponseCode responseCode, String[] pulseEffectIDs)                                     { }

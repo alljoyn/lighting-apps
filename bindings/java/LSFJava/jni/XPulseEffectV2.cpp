@@ -1,4 +1,4 @@
-/*
+/******************************************************************************
  * Copyright (c) AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
@@ -12,16 +12,26 @@
  *    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
  *    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- */
-package org.allseen.lsf;
+ *
+ ******************************************************************************/
 
-public interface PulseEffect extends LampMemberList {
-    public void setPulsePeriod(long pulsePeriod);
-    public long getPulsePeriod();
+#include "XPulseEffectV2.h"
 
-    public void setPulseDuration(long pulseDuration);
-    public long getPulseDuration();
+namespace lsf {
 
-    public void setPulseCount(long pulseCount);
-    public long getPulseCount();
+XPulseEffectV2::XPulseEffectV2(jobject jobj)
+{
+    // Currently nothing to do
 }
+
+XPulseEffectV2::~XPulseEffectV2()
+{
+    // Currently nothing to do
+}
+
+XPulseEffectV2& XPulseEffectV2::operator=(const PulseEffect& other)
+{
+	PulseEffect::operator=(other);
+    return *this;
+}
+} /* namespace lsf */

@@ -1,5 +1,5 @@
-/*
- * Copyright (c) AllSeen Alliance. All rights reserved.
+/******************************************************************************
+ * Copyright AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -12,16 +12,13 @@
  *    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
  *    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- */
-package org.allseen.lsf;
+ *
+ ******************************************************************************/
 
-public interface PulseEffect extends LampMemberList {
-    public void setPulsePeriod(long pulsePeriod);
-    public long getPulsePeriod();
+#ifndef XOEMCSCONFIG_H_
+#define XOEMCSCONFIG_H_
 
-    public void setPulseDuration(long pulseDuration);
-    public long getPulseDuration();
+#include "LSFTypes.h"
+#include "OEM_CS_Config.h"
 
-    public void setPulseCount(long pulseCount);
-    public long getPulseCount();
-}
+#endif /* XOEMCSCONFIG_H_ */

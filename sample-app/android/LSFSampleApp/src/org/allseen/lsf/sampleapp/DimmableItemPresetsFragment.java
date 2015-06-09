@@ -210,15 +210,16 @@ public abstract class DimmableItemPresetsFragment extends SelectableItemTableFra
         if ((presetName != null) && (!presetName.isEmpty()) && (presetState != null)) {
             AllJoynManager.presetManager.createPreset(presetState, presetName, SampleAppActivity.LANGUAGE);
         }
+
         if (getActivity() != null) {
-            ((SampleAppActivity)getActivity()).onBackPressed();
+            getActivity().onBackPressed();
         }
     }
 
     protected void doApplyPreset(String presetID) {
         doApplyPreset(((SampleAppActivity)getActivity()).systemManager.getPresetCollectionManager().getModel(presetID));
 
-        ((SampleAppActivity)getActivity()).onBackPressed();
+        getActivity().onBackPressed();
     }
 
     protected abstract void doApplyPreset(PresetDataModel presetModel);

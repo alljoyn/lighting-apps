@@ -22,11 +22,14 @@
 #include <LampValues.h>             // lighting/service_framework
 #include <ControllerClientDefs.h>   // lighting/service_framework
 #include <LSFResponseCodes.h>       // lighting/service_framework
+#include <OEM_CS_Config.h>          // lighting/service_framework
 
 #include "NUtil.h"
 #include "JEnum.h"
 
 #define QCC_MODULE "AJN-LSF-JNI"
+
+using namespace lsf::controllerservice;
 
 namespace lsf {
 
@@ -42,6 +45,10 @@ namespace lsf {
 #define HAS_LAST_VALUE_CHANGED_IN_ERROR_CODE                            (ERROR_LAST_VALUE                ==  8)
 #define HAS_LAST_VALUE_CHANGED_IN_CONTROLLER_CLIENT_STATUS              (CONTROLLER_CLIENT_LAST_VALUE    ==  4)
 #define HAS_LAST_VALUE_CHANGED_IN_RESPONSE_CODE                         (LSF_RESPONSE_CODE_LAST          == 20)
+#define HAS_LAST_VALUE_CHANGED_IN_RANK_POWER                            (OEM_CS_RANKPARAM_POWER_LAST_VALUE == 4)
+#define HAS_LAST_VALUE_CHANGED_IN_RANK_MOBILITY                         (OEM_CS_RANKPARAM_MOBILITY_LAST_VALUE == 4)
+#define HAS_LAST_VALUE_CHANGED_IN_RANK_AVAILABILITY                     (OEM_CS_RANKPARAM_AVAILABILITY_LAST_VALUE == 8)
+#define HAS_LAST_VALUE_CHANGED_IN_RANK_NODETYPE                         (OEM_CS_RANKPARAM_NODETYPE_LAST_VALUE == 4)
 
 // You should get compilation failures here if the enums in LampValues.h,
 // ControllerClientDefs.h, or LSFResponseCodes.h change (see comment above on
@@ -54,7 +61,13 @@ typedef char Need_to_update_enum_values_in_BaseType_java                [HAS_LAS
 typedef char Need_to_update_enum_values_in_ErrorCode_java               [HAS_LAST_VALUE_CHANGED_IN_ERROR_CODE               ? 1 : -1];
 typedef char Need_to_update_enum_values_in_ControllerClientStatus_java  [HAS_LAST_VALUE_CHANGED_IN_CONTROLLER_CLIENT_STATUS ? 1 : -1];
 typedef char Need_to_update_enum_values_in_ResponseCode_java            [HAS_LAST_VALUE_CHANGED_IN_RESPONSE_CODE            ? 1 : -1];
+typedef char Need_to_update_enum_values_in_RankPower_java               [HAS_LAST_VALUE_CHANGED_IN_RANK_POWER               ? 1 : -1];
+typedef char Need_to_update_enum_values_in_RankMobility_java            [HAS_LAST_VALUE_CHANGED_IN_RANK_MOBILITY            ? 1 : -1];
+typedef char Need_to_update_enum_values_in_RankAvailability_java        [HAS_LAST_VALUE_CHANGED_IN_RANK_AVAILABILITY        ? 1 : -1];
+typedef char Need_to_update_enum_values_in_RankNodeType_java            [HAS_LAST_VALUE_CHANGED_IN_RANK_NODETYPE            ? 1 : -1];
 
+// When adding a new Enum, make sure to also add initialization work around in
+// NUtil.cpp in order to ensure that the Enum gets loaded. (See comment in NUtil.)
 JEnum* JEnum::jLampMakeEnum = new JEnum("org/allseen/lsf/LampMake");
 JEnum* JEnum::jLampModelEnum = new JEnum("org/allseen/lsf/LampModel");
 JEnum* JEnum::jDeviceTypeEnum = new JEnum("org/allseen/lsf/DeviceType");
@@ -66,6 +79,11 @@ JEnum* JEnum::jControllerClientStatusEnum = new JEnum("org/allseen/lsf/Controlle
 JEnum* JEnum::jResponseCodeEnum = new JEnum("org/allseen/lsf/ResponseCode");
 
 JEnum* JEnum::jStatusCodeEnum = new JEnum("org/alljoyn/bus/Status", "create", "getErrorCode");
+
+JEnum* JEnum::jRankPowerEnum = new JEnum("org/allseen/lsf/RankPower");
+JEnum* JEnum::jRankMobilityEnum = new JEnum("org/allseen/lsf/RankMobility");
+JEnum* JEnum::jRankAvailabilityEnum = new JEnum("org/allseen/lsf/RankAvailability");
+JEnum* JEnum::jRankNodeTypeEnum = new JEnum("org/allseen/lsf/RankNodeType");
 
 JEnum::JEnum(char const *className)
 {

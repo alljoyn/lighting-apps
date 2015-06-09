@@ -264,7 +264,9 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
 
                     groupIDsWithPendingFlatten.clear();
 
-                    postUpdateLampGroupState(groupModel);
+                    if (groupModel != null) {
+                        postUpdateLampGroupState(groupModel);
+                    }
                 }
             }
         });

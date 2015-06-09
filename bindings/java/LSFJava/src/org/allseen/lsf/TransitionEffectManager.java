@@ -28,8 +28,8 @@ public class TransitionEffectManager extends BaseNativeClassWrapper {
     public native ControllerClientStatus applyTransitionEffectOnLampGroups(String transitionEffectID, String[] lampGroupIDs);
     public native ControllerClientStatus getTransitionEffectName(String transitionEffectID, String language);
     public native ControllerClientStatus setTransitionEffectName(String transitionEffectID, String transitionEffectName, String language);
-    public native ControllerClientStatus createTransitionEffect(TrackingID trackingID, TransitionEffect transitionEffect, String transitionEffectName, String language);
-    public native ControllerClientStatus updateTransitionEffect(String transitionEffectID, TransitionEffect transitionEffect);
+    public native ControllerClientStatus createTransitionEffect(TrackingID trackingID, TransitionEffectV2 transitionEffect, String transitionEffectName, String language);
+    public native ControllerClientStatus updateTransitionEffect(String transitionEffectID, TransitionEffectV2 transitionEffect);
     public native ControllerClientStatus deleteTransitionEffect(String transitionEffectID);
     public native ControllerClientStatus getTransitionEffectVersion(String transitionEffectID);
     public native ControllerClientStatus getTransitionEffectDataSet(String transitionEffectID, String language);

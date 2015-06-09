@@ -1,5 +1,5 @@
 /*
- * Copyright (c) AllSeen Alliance. All rights reserved.
+ * Copyright AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -15,31 +15,7 @@
  */
 package org.allseen.lsf;
 
-public class TransitionEffect extends DefaultNativeClassWrapper {
-    public TransitionEffect() {
-        createNativeObject();
-    }
-
-    public TransitionEffect(TransitionEffect other) {
-        this();
-
-        this.setLampState(other.getLampState());
-        this.setPresetID(other.getPresetID());
-        this.setTransitionPeriod(other.getTransitionPeriod());
-    }
-
-    public native void setLampState(LampState lampState);
-    public native LampState getLampState();
-
-    public native void setPresetID(String presetID);
-    public native String getPresetID();
-
-    public native void setTransitionPeriod(long transitionPeriod);
-    public native long getTransitionPeriod();
-
-    @Override
-    protected native void createNativeObject();
-
-    @Override
-    protected native void destroyNativeObject();
+public interface TransitionEffect extends LampMemberList {
+    public void setTransitionPeriod(long transitionPeriod);
+    public long getTransitionPeriod();
 }

@@ -22,7 +22,7 @@
 #include "XLampMemberList.h"
 #include "XObject.h"
 #include "XStateTransitionEffect.h"
-#include "XTransitionEffectV10.h"
+#include "XTransitionEffect.h"
 
 #include "org_allseen_lsf_StateTransitionEffect.h"
 
@@ -58,13 +58,13 @@ jobjectArray JNICALL Java_org_allseen_lsf_StateTransitionEffect_getLampGroups(JN
 JNIEXPORT
 void JNICALL Java_org_allseen_lsf_StateTransitionEffect_setTransitionPeriod(JNIEnv *env, jobject thiz, jlong jTransitionPeriod)
 {
-    XTransitionEffectV10::SetTransitionPeriod<XStateTransitionEffect>(env, thiz, jTransitionPeriod);
+    XTransitionEffect::SetTransitionPeriod<XStateTransitionEffect>(env, thiz, jTransitionPeriod);
 }
 
 JNIEXPORT
 jlong JNICALL Java_org_allseen_lsf_StateTransitionEffect_getTransitionPeriod(JNIEnv *env, jobject thiz)
 {
-    return XTransitionEffectV10::GetTransitionPeriod<XStateTransitionEffect>(env, thiz);
+    return XTransitionEffect::GetTransitionPeriod<XStateTransitionEffect>(env, thiz);
 }
 
 JNIEXPORT

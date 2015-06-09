@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
 
-import org.allseen.lsf.ControllerService;
 import org.allseen.lsf.ErrorCode;
 import org.allseen.lsf.LampGroup;
 import org.allseen.lsf.LampGroupManager;
@@ -38,6 +37,7 @@ import org.allseen.lsf.sdk.AllJoynListener;
 import org.allseen.lsf.sdk.ControllerErrorEvent;
 import org.allseen.lsf.sdk.Group;
 import org.allseen.lsf.sdk.Lamp;
+import org.allseen.lsf.sdk.LightingController;
 import org.allseen.lsf.sdk.LightingItemErrorEvent;
 import org.allseen.lsf.sdk.MasterScene;
 import org.allseen.lsf.sdk.Preset;
@@ -77,9 +77,10 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -112,6 +113,8 @@ public class SampleAppActivity extends FragmentActivity implements
     public static final long FIELD_TRANSITION_DURATION = 0;
     public static final long FIELD_CHANGE_HOLDOFF = 25;
 
+    private static final String CONTROLLER_ENABLED = "CONTROLLER_ENABLED_KEY";
+
     private static long lastFieldChangeMillis = 0;
 
     public enum Type {
@@ -125,7 +128,7 @@ public class SampleAppActivity extends FragmentActivity implements
     public volatile Queue<Runnable> runInForeground;
 
     public LightingSystemManager systemManager;
-    private ControllerService controllerService;
+    private LightingController controllerService;
     private boolean controllerServiceEnabled;
     private volatile boolean controllerServiceStarted;
 
@@ -157,7 +160,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
     private String popupItemID;
     private String popupSubItemID;
-	private Toast toast;
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,17 +228,10 @@ public class SampleAppActivity extends FragmentActivity implements
             this);
 
         // Controller service support
-        controllerServiceEnabled = true;
-        controllerService = new ControllerService() {
-            @Override
-            public long getMacAddressAsDecimal(String generatedMacAddress) {
-                return getMacAddress(generatedMacAddress);
-            }
-
-            @Override
-            public boolean isNetworkConnected() {
-                return isWifiConnected();
-            }};
+        controllerServiceEnabled = getSharedPreferences("PREFS_READ", Context.MODE_PRIVATE).getBoolean(CONTROLLER_ENABLED, true);
+        controllerService = LightingController.get();
+        controllerService.init(new SampleAppControllerConfiguration(
+                getApplicationContext().getFileStreamPath("").getAbsolutePath(), getApplicationContext()));
     }
 
     @Override
@@ -255,19 +251,15 @@ public class SampleAppActivity extends FragmentActivity implements
 
     private void setControllerServiceStarted(final boolean startControllerService) {
         if (controllerService != null) {
-            new Thread() {
-                @Override
-                public void run() {
-                    if (startControllerService) {
-                        if (!controllerServiceStarted) {
-                            controllerServiceStarted = true;
-                            controllerService.start(getApplicationContext().getFileStreamPath("").getAbsolutePath());
-                            controllerServiceStarted = false;
-                        }
-                    } else {
-                        controllerService.stop();
-                    }
-                }}.start();
+            if (startControllerService) {
+                if (!controllerServiceStarted) {
+                    controllerServiceStarted = true;
+                    controllerService.start();
+                }
+            } else {
+                controllerService.stop();
+                controllerServiceStarted = false;
+            }
         }
     }
 
@@ -276,7 +268,13 @@ public class SampleAppActivity extends FragmentActivity implements
     }
 
     public void setControllerServiceEnabled(final boolean enableControllerService) {
+
         if (enableControllerService != controllerServiceStarted) {
+            SharedPreferences prefs = getSharedPreferences("PREFS_READ", Context.MODE_PRIVATE);
+            Editor e = prefs.edit();
+            e.putBoolean(CONTROLLER_ENABLED, enableControllerService);
+            e.commit();
+
             setControllerServiceStarted(enableControllerService);
         }
 
@@ -300,28 +298,6 @@ public class SampleAppActivity extends FragmentActivity implements
         Log.d(SampleAppActivity.TAG, "Connectivity state " + wifiNetworkInfo.getState().name() + " - connected:" + wifiNetworkInfo.isConnected() + " hotspot:" + isWifiApEnabled);
 
         return wifiNetworkInfo.isConnected() || isWifiApEnabled;
-    }
-
-    protected long getMacAddress(String generatedMacAddress) {
-        WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        WifiInfo wInfo = wifiManager.getConnectionInfo();
-        String originalMacAddress = wInfo.getMacAddress();
-
-        if (originalMacAddress == null) {
-            // If we don't have mac address, create one of length 12 which is
-            // the usual length of mac address.
-            originalMacAddress = generatedMacAddress;
-        }
-
-        originalMacAddress = originalMacAddress.replace(":", "");
-
-        // Mac address is in hex format. so convert it to decimal. since Mac
-        // address length is 12, its max values can be 16^12
-        Long decimal = Long.decode("0x" + originalMacAddress);
-
-        Log.d(SampleAppActivity.TAG, "getMacAddresAsDecimal returns: " + decimal);
-
-        return decimal;
     }
 
     @Override
@@ -1377,18 +1353,18 @@ public class SampleAppActivity extends FragmentActivity implements
 
     public void showToast(int resId){
 
-    	toast = Toast.makeText(this, resId, Toast.LENGTH_LONG);
-    	toast.show();
+        toast = Toast.makeText(this, resId, Toast.LENGTH_LONG);
+        toast.show();
     }
 
     public void showToast(String text){
 
-    	toast = Toast.makeText(this, text, Toast.LENGTH_LONG);
-    	toast.show();
+        toast = Toast.makeText(this, text, Toast.LENGTH_LONG);
+        toast.show();
     }
 
     public Toast getToast(){
-    	return toast;
+        return toast;
     }
 
     @Override
@@ -1483,25 +1459,23 @@ public class SampleAppActivity extends FragmentActivity implements
 
         Log.d(SampleAppActivity.TAG, "onGroupChanged() " + groupModel.id);
 
-        if (groupModel != null) {
-            Fragment pageFragment = getSupportFragmentManager().findFragmentByTag(GroupsPageFragment.TAG);
+        Fragment pageFragment = getSupportFragmentManager().findFragmentByTag(GroupsPageFragment.TAG);
 
-            if (pageFragment != null) {
-                GroupsTableFragment tableFragment = (GroupsTableFragment)pageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
+        if (pageFragment != null) {
+            GroupsTableFragment tableFragment = (GroupsTableFragment)pageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
 
-                if (tableFragment != null) {
-                    tableFragment.addElement(groupModel.id);
+            if (tableFragment != null) {
+                tableFragment.addElement(groupModel.id);
 
-                    if (isSwipeable()) {
-                        resetActionBar();
-                    }
+                if (isSwipeable()) {
+                    resetActionBar();
                 }
+            }
 
-                GroupInfoFragment infoFragment = (GroupInfoFragment)pageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
+            GroupInfoFragment infoFragment = (GroupInfoFragment)pageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
 
-                if (infoFragment != null) {
-                    infoFragment.updateInfoFields(groupModel);
-                }
+            if (infoFragment != null) {
+                infoFragment.updateInfoFields(groupModel);
             }
         }
     }

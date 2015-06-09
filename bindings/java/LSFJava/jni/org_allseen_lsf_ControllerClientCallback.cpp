@@ -20,6 +20,8 @@
 #include "NUtil.h"
 #include "JControllerClientCallback.h"
 
+#include "org_allseen_lsf_ControllerClientCallback.h"
+
 using namespace lsf;
 
 #ifdef __cplusplus
@@ -27,13 +29,13 @@ extern "C" {
 #endif
 
 JNIEXPORT
-void JNICALL Java_org_allseen_lsf_ControllerClientCallback_createNativeObject(JNIEnv*env, jobject thiz)
+void JNICALL Java_org_allseen_lsf_ControllerClientCallback_createNativeObject(JNIEnv *env, jobject thiz)
 {
     CreateHandle<JControllerClientCallback>(thiz);
 }
 
 JNIEXPORT
-void JNICALL Java_org_allseen_lsf_ControllerClientCallback_destroyNativeObject(JNIEnv*env, jobject thiz)
+void JNICALL Java_org_allseen_lsf_ControllerClientCallback_destroyNativeObject(JNIEnv *env, jobject thiz)
 {
     DestroyHandle<JControllerClientCallback>(thiz);
 }

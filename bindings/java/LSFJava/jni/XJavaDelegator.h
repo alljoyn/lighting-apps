@@ -31,16 +31,16 @@ class XJavaDelegator {
     XJavaDelegator();
 
   public:
-    // 0 Arg
+    // Void / 0 Arg
     static void Call_Void(const jweak jdelegate, char const *func);
 
-    // 1 Arg
+    // Void / 1 Arg
     static void Call_Void_UInt32(const jweak jdelegate, char const *func, const uint32_t &uint32Value);
     static void Call_Void_ResponseCode(const jweak jdelegate, char const *func, const LSFResponseCode &responseCode);
     static void Call_Void_EnumList(const jweak jdelegate, char const *func, const jobjectArray &enumList, char const *enumClass);
     static void Call_Void_StringList(const jweak jdelegate, char const *func, const LSFStringList &strList);
 
-    // 2 Args
+    // Void / 2 Args
     static void Call_Void_ResponseCode_String(const jweak jdelegate, char const *func, const LSFResponseCode &responseCode, const LSFString &strValue);
     static void Call_Void_ResponseCode_StringList(const jweak jdelegate, char const *func, const LSFResponseCode &responseCode, const LSFStringList &strList);
 
@@ -49,7 +49,7 @@ class XJavaDelegator {
     template <typename CTYPE, typename XTYPE>
     static void Call_Void_String_Object(const jweak jdelegate, char const *func, XClass *xClass, const LSFString &strValue, const CTYPE &objValue);
 
-    // 3 Args
+    // Void / 3 Args
     static void Call_Void_ResponseCode_String_Boolean(const jweak jdelegate, char const *func, const LSFResponseCode &responseCode, const LSFString &strValue, const bool &boolValue);
     static void Call_Void_ResponseCode_String_SInt32(const jweak jdelegate, char const *func, const LSFResponseCode &responseCode, const LSFString &strValue, const uint32_t &uint32Value);
     static void Call_Void_ResponseCode_String_UInt32(const jweak jdelegate, char const *func, const LSFResponseCode &responseCode, const LSFString &strValue, const uint32_t &uint32Value);
@@ -62,11 +62,18 @@ class XJavaDelegator {
     static void Call_Void_ResponseCode_String_UInt32List(const jweak jdelegate, char const *func, const LSFResponseCode &responseCode, const LSFString &strValue, const UInt32List& uint32List);
     static void Call_Void_ResponseCode_String_StringList(const jweak jdelegate, char const *func, const LSFResponseCode &responseCode, const LSFString &strValue, const LSFStringList& strList);
 
-    // 4 Args
+    // Void / 4 Args
     static void Call_Void_ResponseCode_String_String_String(const jweak jdelegate, char const *func, const LSFResponseCode &responseCode, const LSFString &strValue1, const LSFString &strValue2, const LSFString &strValue3);
 
-    // N Args
+    // Void / N Args
     static void Call_Void_Variadic(JScopedEnv& env, const jweak jdelegate, char const *func, char const * const sig, ...);
+
+    // Non-Void / Misc
+    static LSFString Call_String_String(const jweak jdelegate, char const *func, const LSFString &strValue, const LSFString &strDefault);
+    static bool Call_Boolean(const jweak jdelegate, char const *func, const bool &boolDefault);
+
+    template <typename CTYPE>
+    static CTYPE Call_Enum(const jweak jdelegate, char const *func, JEnum *xEnum, const CTYPE &enumDefault);
 };
 
 } // namespace lsf

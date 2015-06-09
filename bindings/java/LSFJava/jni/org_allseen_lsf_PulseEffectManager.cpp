@@ -20,7 +20,7 @@
 #include "JControllerClient.h"
 #include "NUtil.h"
 #include "XCppDelegator.h"
-#include "XPulseEffect.h"
+#include "XPulseEffectV2.h"
 #include "XPulseEffectManager.h"
 #include "XPulseEffectManagerCallback.h"
 
@@ -63,12 +63,12 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_setPulseEffect
 
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_createPulseEffect(JNIEnv *env, jobject thiz, jobject jTrackingID, jobject jPulseEffect, jstring jPulseEffectName, jstring jLanguage)
 {
-    return XCppDelegator::Call_ControllerClientStatus_TrackingID_Object_String_String<XPulseEffectManager, XPulseEffect, PulseEffect>(env, thiz, jTrackingID, jPulseEffect, jPulseEffectName, jLanguage, &XPulseEffectManager::CreatePulseEffect);
+    return XCppDelegator::Call_ControllerClientStatus_TrackingID_Object_String_String<XPulseEffectManager, XPulseEffectV2, PulseEffect>(env, thiz, jTrackingID, jPulseEffect, jPulseEffectName, jLanguage, &XPulseEffectManager::CreatePulseEffect);
 }
 
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_updatePulseEffect(JNIEnv *env, jobject thiz, jstring jPulseEffectID, jobject jPulseEffect)
 {
-    return XCppDelegator::Call_ControllerClientStatus_String_Object<XPulseEffectManager, XPulseEffect, PulseEffect>(env, thiz, jPulseEffectID, jPulseEffect, &XPulseEffectManager::UpdatePulseEffect);
+    return XCppDelegator::Call_ControllerClientStatus_String_Object<XPulseEffectManager, XPulseEffectV2, PulseEffect>(env, thiz, jPulseEffectID, jPulseEffect, &XPulseEffectManager::UpdatePulseEffect);
 }
 
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_deletePulseEffect(JNIEnv *env, jobject thiz, jstring jPulseEffectID)

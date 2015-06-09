@@ -195,10 +195,10 @@ MY_CLIENT_SRC_FILES   := $(MY_LSF_STD_CLIENT_SRC)/ControllerClient.cc \
                          org_allseen_lsf_SceneManagerCallback.cpp \
                          org_allseen_lsf_StatePulseEffect.cpp \
                          org_allseen_lsf_StateTransitionEffect.cpp \
-                         org_allseen_lsf_TransitionEffect.cpp \
+                         org_allseen_lsf_TransitionEffectV2.cpp \
                          org_allseen_lsf_TransitionEffectManager.cpp \
                          org_allseen_lsf_TransitionEffectManagerCallback.cpp \
-                         org_allseen_lsf_PulseEffect.cpp \
+                         org_allseen_lsf_PulseEffectV2.cpp \
                          org_allseen_lsf_PulseEffectManager.cpp \
                          org_allseen_lsf_PulseEffectManagerCallback.cpp \
                          org_allseen_lsf_SceneElement.cpp \
@@ -220,7 +220,7 @@ MY_CLIENT_SRC_FILES   := $(MY_LSF_STD_CLIENT_SRC)/ControllerClient.cc \
                          XPresetPulseEffect.cpp \
                          XPresetTransitionEffect.cpp \
                          XPulseEffect.cpp \
-                         XPulseEffectV10.cpp \
+                         XPulseEffectV2.cpp \
                          XPulseEffectManager.cpp \
                          XPulseEffectManagerCallback.cpp \
                          XSceneElement.cpp \
@@ -234,7 +234,7 @@ MY_CLIENT_SRC_FILES   := $(MY_LSF_STD_CLIENT_SRC)/ControllerClient.cc \
                          XStateTransitionEffect.cpp \
                          XTrackingID.cpp \
                          XTransitionEffect.cpp \
-                         XTransitionEffectV10.cpp \
+                         XTransitionEffectV2.cpp \
                          XTransitionEffectManager.cpp \
                          XTransitionEffectManagerCallback.cpp
 
@@ -258,6 +258,7 @@ MY_SERVICE_SRC_FILES  := $(MY_LSF_STD_SERVICE_SRC)/ControllerService.cc \
                          $(MY_LSF_STD_SERVICE_SRC)/LampGroupManager.cc \
                          $(MY_LSF_STD_SERVICE_SRC)/LampManager.cc \
                          $(MY_LSF_STD_SERVICE_SRC)/LeaderElectionObject.cc \
+                         $(MY_LSF_STD_SERVICE_SRC)/Main.cc \
                          $(MY_LSF_STD_SERVICE_SRC)/Manager.cc \
                          $(MY_LSF_STD_SERVICE_SRC)/MasterSceneManager.cc \
                          $(MY_LSF_STD_SERVICE_SRC)/PersistenceThread.cc \
@@ -267,10 +268,12 @@ MY_SERVICE_SRC_FILES  := $(MY_LSF_STD_SERVICE_SRC)/ControllerService.cc \
                          $(MY_LSF_STD_SERVICE_SRC)/SceneManager.cc \
                          $(MY_LSF_STD_SERVICE_SRC)/ServiceDescription.cc \
                          $(MY_LSF_STD_SERVICE_SRC)/TransitionEffectManager.cc \
+                         $(MY_LSF_STD_COMMON_SRC)/AJInitializer.cc \
                          $(MY_LSF_STD_COMMON_SRC)/Alarm.cc \
-                         controllerservice/ControllerServiceJNI.cpp \
-                         controllerservice/ControllerServiceOEM_CS_Config.cpp\
-                         controllerservice/ControllerServiceMain.cpp
+                         org_allseen_lsf_ControllerService.cpp \
+                         XControllerService.cpp \
+                         XOEMCSConfig.cpp
+
 
 # ----------------------------------------------------------------------------
 include $(CLEAR_VARS)

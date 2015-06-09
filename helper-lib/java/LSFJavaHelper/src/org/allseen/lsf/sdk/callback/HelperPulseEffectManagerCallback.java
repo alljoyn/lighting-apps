@@ -18,7 +18,7 @@ package org.allseen.lsf.sdk.callback;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.allseen.lsf.PulseEffect;
+import org.allseen.lsf.PulseEffectV2;
 import org.allseen.lsf.PulseEffectManagerCallback;
 import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.TrackingID;
@@ -42,7 +42,7 @@ public class HelperPulseEffectManagerCallback extends PulseEffectManagerCallback
     }
 
     @Override
-    public void getPulseEffectReplyCB(ResponseCode responseCode, String pulseEffectID, PulseEffect pulseEffect) {
+    public void getPulseEffectReplyCB(ResponseCode responseCode, String pulseEffectID, PulseEffectV2 pulseEffect) {
         if (!responseCode.equals(ResponseCode.OK)){
             manager.getPulseEffectCollectionManager().sendErrorEvent("getPulseEffectReplyCB", responseCode, pulseEffectID);
         }
@@ -200,7 +200,7 @@ public class HelperPulseEffectManagerCallback extends PulseEffectManagerCallback
         postSendPulseEffectChanged(pulseEffectID);
     }
 
-    protected void postUpdatePulseEffect(final String pulseEffectID, final PulseEffect pulseEffect) {
+    protected void postUpdatePulseEffect(final String pulseEffectID, final PulseEffectV2 pulseEffect) {
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {

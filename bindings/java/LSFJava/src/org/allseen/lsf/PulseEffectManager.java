@@ -29,8 +29,8 @@ public class PulseEffectManager extends BaseNativeClassWrapper {
     public native ControllerClientStatus applyPulseEffectOnLampGroups(String pulseEffectID, String[] lampGroupIDs);
     public native ControllerClientStatus getPulseEffectName(String pulseEffectID, String language);
     public native ControllerClientStatus setPulseEffectName(String pulseEffectID, String pulseEffectName, String language);
-    public native ControllerClientStatus createPulseEffect(TrackingID trackingID, PulseEffect pulseEffect, String pulseEffectName, String language);
-    public native ControllerClientStatus updatePulseEffect(String pulseEffectID, PulseEffect pulseEffect);
+    public native ControllerClientStatus createPulseEffect(TrackingID trackingID, PulseEffectV2 pulseEffect, String pulseEffectName, String language);
+    public native ControllerClientStatus updatePulseEffect(String pulseEffectID, PulseEffectV2 pulseEffect);
     public native ControllerClientStatus deletePulseEffect(String pulseEffectID);
     public native ControllerClientStatus getPulseEffectVersion(String pulseEffectID);
     public native ControllerClientStatus getPulseEffectDataSet(String pulseEffectID, String language);

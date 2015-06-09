@@ -1,5 +1,5 @@
 /*
- * Copyright (c) AllSeen Alliance. All rights reserved.
+ * Copyright AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -13,15 +13,11 @@
  *    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-package org.allseen.lsf;
+package org.allseen.lsf.sdk;
 
-public interface PulseEffectV10 extends LampMemberList {
-    public void setPulsePeriod(long pulsePeriod);
-    public long getPulsePeriod();
-
-    public void setPulseDuration(long pulseDuration);
-    public long getPulseDuration();
-
-    public void setPulseCount(long pulseCount);
-    public long getPulseCount();
+public enum LightingControllerStatus {
+    OK,
+    ERROR,
+    ERROR_ALREADY_RUNNING,
+    ERROR_INIT
 }

@@ -30,6 +30,7 @@ import org.alljoyn.bus.SessionListener;
 import org.alljoyn.bus.SessionOpts;
 import org.alljoyn.bus.Status;
 import org.alljoyn.bus.Variant;
+import org.allseen.lsf.ResponseCode;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
@@ -166,7 +167,7 @@ public class AboutManager implements AboutListener {
                 //TODO-FIX Log.e("AboutManager", "join session failed " + status);
             }
         } catch (BusException e) {
-            //TODO-FIX Log.e("AboutManager", "About data retrieval failed: " + e.getMessage());
+            manager.getLampCollectionManager().sendErrorEvent("getLampQueriedAboutData", ResponseCode.ERR_FAILURE, lampID);
         }
     }
 
@@ -188,6 +189,7 @@ public class AboutManager implements AboutListener {
                     value = variant.getObject(String.class);
                 }
             } catch (BusException e) {
+                value = defaultValue;
                 //TODO-FIX Log.e(SampleAppActivity.TAG, "Announce parsing failed: key: " + key + ": " + e.getMessage());
             }
         }
@@ -219,6 +221,7 @@ public class AboutManager implements AboutListener {
                     value = sb.toString();
                 }
             } catch (BusException e) {
+                value = defaultValue;
                 //TODO-FIX Log.e(SampleAppActivity.TAG, "Announce parsing failed: key: " + key + ": " + e.getMessage());
             }
         }

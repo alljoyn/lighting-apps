@@ -1,5 +1,5 @@
-/*
- * Copyright AllSeen Alliance. All rights reserved.
+/******************************************************************************
+ * Copyright (c) AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -12,10 +12,26 @@
  *    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
  *    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- */
-package org.allseen.lsf;
+ *
+ ******************************************************************************/
 
-public interface TransitionEffectV10 extends LampMemberList {
-    public void setTransitionPeriod(long transitionPeriod);
-    public long getTransitionPeriod();
+#include "XTransitionEffectV2.h"
+
+namespace lsf {
+
+XTransitionEffectV2::XTransitionEffectV2(jobject jobj)
+{
+    // Currently nothing to do
 }
+
+XTransitionEffectV2::~XTransitionEffectV2()
+{
+    // Currently nothing to do
+}
+
+XTransitionEffectV2& XTransitionEffectV2::operator=(const TransitionEffect& other)
+{
+    TransitionEffect::operator=(other);
+    return *this;
+}
+} /* namespace lsf */
