@@ -17,23 +17,19 @@ package org.allseen.lsf.sampleapp;
 
 import java.lang.reflect.Method;
 
-import org.allseen.lsf.sdk.DefaultLightingControllerConfiguration;
+import org.allseen.lsf.AboutData;
+import org.allseen.lsf.sdk.LightingControllerConfigurationBase;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 
-public class SampleAppControllerConfiguration extends DefaultLightingControllerConfiguration {
+public class SampleAppControllerConfiguration extends LightingControllerConfigurationBase {
 
-    private static final String DEVICE_ID_KEY = "CONTROLLER_DEVICE_ID";
-    private static final String APP_ID_KEY = "CONTROLLER_APP_ID";
-
-    private Context appContext;
+    private final Context appContext;
 
     public SampleAppControllerConfiguration(String keystorePath) {
         this(keystorePath, null);
@@ -46,13 +42,10 @@ public class SampleAppControllerConfiguration extends DefaultLightingControllerC
     }
 
     @Override
-    public String getDefaultDeviceId(String generatedDeviceId) {
-        return getSavedPreference(DEVICE_ID_KEY, generatedDeviceId);
-    }
+    public void populateDefaultProperties(AboutData aboutData) {
+        super.populateDefaultProperties(aboutData);
 
-    @Override
-    public String getDefaultAppId(String generatedAppId) {
-        return getSavedPreference(APP_ID_KEY, generatedAppId);
+        // Overriding any about data values could be done here
     }
 
     @Override
@@ -83,25 +76,6 @@ public class SampleAppControllerConfiguration extends DefaultLightingControllerC
         }
 
         return isWifiConnected();
-    }
-
-    private String getSavedPreference(String key, String generatedValue) {
-        if (appContext == null) {
-            return generatedValue;
-        }
-
-        SharedPreferences prefs = appContext.getSharedPreferences("PREFS_READ", Context.MODE_PRIVATE);
-        String prefString = prefs.getString(key, null);
-
-        if (prefString == null) {
-            prefString = generatedValue;
-
-            Editor e = prefs.edit();
-            e.putString(key, prefString);
-            e.commit();
-        }
-
-        return prefString;
     }
 
     private boolean isWifiConnected() {

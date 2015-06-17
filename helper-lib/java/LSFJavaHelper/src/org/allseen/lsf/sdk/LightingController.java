@@ -16,6 +16,7 @@
 package org.allseen.lsf.sdk;
 
 import org.allseen.lsf.sdk.model.BasicControllerService;
+import org.allseen.lsf.sdk.model.LightingControllerConfiguration;
 
 public class LightingController {
 
@@ -70,9 +71,15 @@ public class LightingController {
         return LightingControllerStatus.OK;
     }
 
-    public LightingControllerStatus reset() {
+    public LightingControllerStatus lightingReset() {
         stop();
-        controllerService.reset();
+        controllerService.lightingReset();
+        return LightingControllerStatus.OK;
+    }
+
+    public LightingControllerStatus factoryReset() {
+        stop();
+        controllerService.factoryReset();
         return LightingControllerStatus.OK;
     }
 

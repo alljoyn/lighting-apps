@@ -13,8 +13,9 @@
  *    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-package org.allseen.lsf.sdk;
+package org.allseen.lsf.sdk.model;
 
+import org.allseen.lsf.AboutData;
 import org.allseen.lsf.RankAvailability;
 import org.allseen.lsf.RankMobility;
 import org.allseen.lsf.RankNodeType;
@@ -37,28 +38,13 @@ public interface LightingControllerConfiguration {
     public String getKeystorePath();
 
     /**
-     * Gets the Device ID string used to identify the device running the
-     * LightingController.
+     * Populates the AllJoyn AboutData properties to be used for the LightingController.
      *
-     * @param generatedDeviceId
-     *      A generated device ID that can be saved upon the first controller
-     *      initialization and re-used for all subsequent controller initializations.
-     * @return
+     * @param aboutData
+     *      AllJoyn AboutData object that will be filled with the default values within
+     *      this method.
      */
-    public String getDefaultDeviceId(String generatedDeviceId);
-
-    /**
-     * Gets the Application ID string used to identify the Controller
-     * application.
-     *
-     * @param generatedAppId
-     *      A generated application ID that can be saved upon the first
-     *      controller initialization and re-used for all subsequent
-     *      controller initializations.
-     *
-     * @return the Application ID of the LightingController
-     */
-    public String getDefaultAppId(String generatedAppId);
+    public void populateDefaultProperties(AboutData aboutData);
 
     /**
      * Get the MAC Address of the device running the LightingController. The

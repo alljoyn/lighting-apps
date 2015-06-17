@@ -270,8 +270,10 @@ MY_SERVICE_SRC_FILES  := $(MY_LSF_STD_SERVICE_SRC)/ControllerService.cc \
                          $(MY_LSF_STD_SERVICE_SRC)/TransitionEffectManager.cc \
                          $(MY_LSF_STD_COMMON_SRC)/AJInitializer.cc \
                          $(MY_LSF_STD_COMMON_SRC)/Alarm.cc \
+                         org_allseen_lsf_AboutData.cpp \
                          org_allseen_lsf_ControllerService.cpp \
                          XControllerService.cpp \
+                         XControllerServiceManagerInit.cpp \
                          XOEMCSConfig.cpp
 
 
