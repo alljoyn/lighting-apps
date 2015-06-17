@@ -15,7 +15,6 @@
  ******************************************************************************/
 
 #include "controller.h"
-#include "AJInitializer.h"
 
 #define QCC_MODULE "MAIN"
 
@@ -157,7 +156,7 @@ void RunService(bool listenToInterrupts)
         exit(-1);
     }
 
-    lsf::controllerservice::ControllerServiceManager* controllerSvcManagerPtr = new lsf::controllerservice::ControllerServiceManager(*luminaireDS, factoryConfigFilePath, configFilePath, lampGroupFilePath, presetFilePath, transitionEffectFilePath, pulseEffectFilePath, sceneElementFilePath, sceneFilePath, sceneWithSceneElementFilePath, masterSceneFilePath);
+    lsf::controllerservice::ControllerServiceManager* controllerSvcManagerPtr = InitializeControllerServiceManager(factoryConfigFilePath, configFilePath, lampGroupFilePath, presetFilePath, transitionEffectFilePath, pulseEffectFilePath, sceneElementFilePath, sceneFilePath, sceneWithSceneElementFilePath, masterSceneFilePath);
 
     if (controllerSvcManagerPtr == NULL) {
         QCC_LogError(ER_OUT_OF_MEMORY, ("%s: Failed to start the Controller Service Manager", __func__));
@@ -225,6 +224,15 @@ void RunAndMonitor()
             QCC_DbgPrintf(("%s: Exited child PID %d", __func__, pid));
             lsf_Sleep(1000);
         }
+    }
+}
+
+void ControllerServiceStop()
+{
+    SigIntHandler(SIGINT);
+
+    while (isRunning) {
+        lsf_Sleep(1000);
     }
 }
 

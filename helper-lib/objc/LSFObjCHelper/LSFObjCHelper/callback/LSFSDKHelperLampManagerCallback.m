@@ -403,7 +403,7 @@ static const unsigned int RETRY_DELAY = 1;
     [self postUpdateLampID: lampID withAboutData: nil andDelay: delay];
 }
 
--(void)postUpdateLampID: (NSString *)lampID withAboutData: (LSFAboutData *)aboutData andDelay:(unsigned int)delay
+-(void)postUpdateLampID: (NSString *)lampID withAboutData: (LSFSDKAboutData *)aboutData andDelay:(unsigned int)delay
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), self.manager.dispatchQueue, ^{
         LSFSDKLamp *lamp = [[self.manager lampCollectionManager] getLampWithID: lampID];

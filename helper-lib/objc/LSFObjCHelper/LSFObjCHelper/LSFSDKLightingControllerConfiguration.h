@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) AllSeen Alliance. All rights reserved.
+ * Copyright AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -14,15 +14,24 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "LSFControllerServiceDelegate.h"
+#import "lsf/controllerservice/OEM_CS_Config.h"
+#import "LSFAboutData.h"
 
-@interface LSFControllerSystemManager : NSObject <LSFControllerServiceDelegate>
+using namespace lsf;
 
-@property (nonatomic) BOOL controllerStarted;
+#ifdef LSF_BINDINGS
+using namespace controllerservice;
+#endif
 
-+(LSFControllerSystemManager *)getControllerSystemManager;
--(void)startController;
--(void)stopController;
+@protocol LSFSDKLightingControllerConfiguration <NSObject>
+
+-(NSString *)getKeystorePath;
+-(NSString *)getMacAddress: (NSString *)generatedMacAddress;
+-(BOOL)isNetworkConnected;
+-(OEM_CS_RankParam_Mobility)getRankMobility;
+-(OEM_CS_RankParam_Power)getRankPower;
+-(OEM_CS_RankParam_Availability)getRankAvailability;
+-(OEM_CS_RankParam_NodeType)getRankNodeType;
+-(void)populateDefaultProperties:(LSFAboutData *)aboutData;
 
 @end

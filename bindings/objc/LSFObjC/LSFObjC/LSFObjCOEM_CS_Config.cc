@@ -167,38 +167,7 @@ namespace lsf {
             printf("LSFObjCOEM_CS_Config - OEM_CS_PopulateDefaultProperties() executing\n");
             QCC_DbgTrace(("%s", __func__));
 
-            aboutData->SetDateOfManufacture("10/1/2199");
-            aboutData->SetDefaultLanguage("en");
-            aboutData->SetHardwareVersion("355.499. b");
-            aboutData->SetModelNumber("100");
-            aboutData->SetSoftwareVersion("1");
-            aboutData->SetSupportUrl("http://www.company_a.com");
-            aboutData->SetSupportedLanguage("en");
-            aboutData->SetSupportedLanguage("de-AT");
-            aboutData->SetAppName("LightingControllerService", "en");
-            aboutData->SetAppName("LightingControllerService", "de-AT");
-            aboutData->SetDescription("Controller Service", "en");
-            aboutData->SetDescription("Controller Service", "de-AT");
-            aboutData->SetDeviceName(controllerName.c_str(), "en");
-            aboutData->SetDeviceName(controllerName.c_str(), "de-AT");
-            aboutData->SetManufacturer("Company A (EN)", "en");
-            aboutData->SetManufacturer("Firma A (DE-AT)", "de-AT");
-
-            //Generate a new app id as hex string
-            qcc::String app_id = qcc::RandHexString(16);
-            QCC_DbgTrace(("%s random app_id: %s ", __func__, app_id.c_str()));
-            //get from Java the persisted app id (if any) or the new app id we just created.
-            qcc::String* retAppId = getControllerDefaultAppId(app_id.c_str());
-
-            if (retAppId) {
-                printf("app_id after returned from iOS: %s\n",(*retAppId).c_str());
-                aboutData->SetAppId(retAppId->c_str());
-            } else {
-                printf("app_id after returned from iOS is invalid. Using randomly generated appId: %s\n", app_id.c_str());
-                aboutData->SetAppId(app_id.c_str());
-            }
-
-            delete retAppId;
+            populateDefaultProperties(aboutData);
         }
 
     OPTIONAL_NAMESPACE_CLOSE

@@ -19,7 +19,7 @@
 #import "LSFControllerModel.h"
 #import "LSFDispatchQueue.h"
 #import "LSFAllJoynManager.h"
-#import "LSFControllerSystemManager.h"
+#import "LSFSDKLightingController.h"
 
 @interface LSFSettingsTableViewController ()
 
@@ -44,7 +44,7 @@
 
     [self.controllerNameLabel setText: [[LSFControllerModel getControllerModel] name]];
 
-    if ([[LSFControllerSystemManager getControllerSystemManager] controllerStarted])
+    if ([[LSFSDKLightingController getLightingController] isRunning])
     {
         self.startControllerLabel.text = @"Stop Controller";
     }
@@ -135,13 +135,13 @@
     {
         NSLog(@"Starting Controller...");
         self.startControllerLabel.text = @"Stop Controller";
-        [[LSFControllerSystemManager getControllerSystemManager] startController];
+        [[LSFSDKLightingController getLightingController] start];
     }
     else
     {
         NSLog(@"Stopping Controller...");
         self.startControllerLabel.text = @"Start Controller";
-        [[LSFControllerSystemManager getControllerSystemManager] stopController];
+        [[LSFSDKLightingController getLightingController] stop];
     }
 }
 

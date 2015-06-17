@@ -15,17 +15,16 @@
  ******************************************************************************/
 
 #import "LSFObject.h"
-#import "LSFControllerServiceDelegate.h"
+#import "AboutData.h"
 
-@interface LSFController : LSFObject
+@interface LSFAboutData : LSFObject
 
--(id)init;
--(void)initializeWithControllerServiceDelegate: (id<LSFControllerServiceDelegate>)csd;
--(void)startControllerWithKeyStoreFilePath: (NSString *)keyStoreFilePath;
--(void)stopController;
--(void)factoryResetController;
--(void)lightingResetController;
--(void)sendNetworkConnected;
--(void)sendNetworkDisconnected;
+-(id)initWithAboutData: (ajn::AboutData *)aboutData;
+-(void)putKey: (NSString *)key withStringValue: (NSString *)value;
+-(void)putKey: (NSString *)key withStringValue: (NSString *)value andLanguage: (NSString *)language;
+-(void)putKey: (NSString *)key withStringArrayValue: (NSArray *)value;
+-(void)putKey: (NSString *)key withStringArrayValue: (NSArray *)value andLanguage: (NSString *)language;
+-(void)putKey: (NSString *)key witDataValue: (NSData *)value;
+-(void)putKey: (NSString *)key witDataValue: (NSData *)value andLanguage: (NSString *)language;
 
 @end

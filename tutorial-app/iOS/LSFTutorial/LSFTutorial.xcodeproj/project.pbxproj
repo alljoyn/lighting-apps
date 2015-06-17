@@ -421,12 +421,12 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/callback\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/manager\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/model\"",
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjC/include/LSFObjC\"",
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/services/about/cpp/inc\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/services/about/ios/inc\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/alljoyn_objc/AllJoynFramework/AllJoynFramework\"",
 				);
 				INFOPLIST_FILE = "LSFTutorial/LSFTutorial-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -476,12 +476,12 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/callback\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/manager\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/model\"",
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjC/include/LSFObjC\"",
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/services/about/cpp/inc\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/services/about/ios/inc\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/alljoyn_objc/AllJoynFramework/AllJoynFramework\"",
 				);
 				INFOPLIST_FILE = "LSFTutorial/LSFTutorial-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;

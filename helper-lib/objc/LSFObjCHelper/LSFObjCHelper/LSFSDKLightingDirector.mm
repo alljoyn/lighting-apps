@@ -69,8 +69,6 @@ static NSString *LANGUAGE_DEFAULT = @"en";
 @synthesize masterScenes = _masterScenes;
 @synthesize initializedMasterScenes = _initializedMasterScenes;
 @synthesize defaultLanguage = _defaultLanguage;
-@synthesize controllerServiceEnabled = _controllerServiceEnabled;
-@synthesize isNetworkConnected = _isNetworkConnected;
 @synthesize lightingManager = _lightingManager;
 
 +(LSFSDKLightingDirector *)getLightingDirector
@@ -611,16 +609,6 @@ static NSString *LANGUAGE_DEFAULT = @"en";
 -(NSString *)defaultLanguage
 {
     return _defaultLanguage;
-}
-
--(void)setLocalControllerServiceEnabled: (BOOL)enabled
-{
-    //TODO - Implement
-}
-
--(void)setNetworkConnected: (BOOL)connected
-{
-    //TODO - Implement
 }
 
 /*

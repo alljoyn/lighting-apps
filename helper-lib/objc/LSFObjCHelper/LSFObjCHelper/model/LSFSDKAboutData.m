@@ -14,9 +14,9 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFAboutData.h"
+#import "LSFSDKAboutData.h"
 
-@implementation LSFAboutData
+@implementation LSFSDKAboutData
 
 @synthesize appID = _appID;
 @synthesize defaultLanguage = _defaultLanguage;

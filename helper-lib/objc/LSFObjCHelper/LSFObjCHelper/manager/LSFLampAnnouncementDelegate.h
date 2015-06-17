@@ -14,18 +14,11 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFObject.h"
-#import "LSFControllerServiceDelegate.h"
+@class LSFSDKAboutData;
 
-@interface LSFController : LSFObject
+@protocol LSFLampAnnouncementDelegate <NSObject>
 
--(id)init;
--(void)initializeWithControllerServiceDelegate: (id<LSFControllerServiceDelegate>)csd;
--(void)startControllerWithKeyStoreFilePath: (NSString *)keyStoreFilePath;
--(void)stopController;
--(void)factoryResetController;
--(void)lightingResetController;
--(void)sendNetworkConnected;
--(void)sendNetworkDisconnected;
+-(void)lampAnnouncementReceivedFromLamp: (NSString *)lampID onBus: (NSString *)busName onPort: (uint16_t)port;
+-(void)saveAboutData: (LSFSDKAboutData *)myAboutData;
 
 @end

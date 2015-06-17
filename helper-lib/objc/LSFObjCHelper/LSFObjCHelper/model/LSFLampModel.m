@@ -44,7 +44,7 @@ NSString *LAMP_DEFAULT_NAME = @"<Loading lamp info...>";
     {
         self.lampDetails = [[LSFLampDetails alloc] init];
         self.lampParameters = [[LSFLampParameters alloc] init];
-        self.aboutData = [[LSFAboutData alloc] init];
+        self.aboutData = [[LSFSDKAboutData alloc] init];
         self.detailsInitialized = NO;
     }
 

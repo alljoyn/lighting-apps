@@ -223,6 +223,10 @@
 		87D813D318CA4B8300903D59 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87D813D218CA4B8300903D59 /* SystemConfiguration.framework */; };
 		87DF6EEE1B006B21001D82FE /* LSFSceneElementManagerCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 87DF6EEC1B006B21001D82FE /* LSFSceneElementManagerCallback.mm */; };
 		87E7785B1B13ACD4003444EE /* AJInitializer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 87E7785A1B13ACD4003444EE /* AJInitializer.cc */; };
+		FA2343D21B2F9CFB005C8F68 /* ControllerServiceManagerInit.cc in Sources */ = {isa = PBXBuildFile; fileRef = FA2343D11B2F9CFB005C8F68 /* ControllerServiceManagerInit.cc */; };
+		FA2343D31B2FC02C005C8F68 /* ControllerServiceManagerInit.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA2343D01B2F9CE7005C8F68 /* ControllerServiceManagerInit.h */; };
+		FAC2C30E1B307A6D00BE35AF /* LSFAboutData.mm in Sources */ = {isa = PBXBuildFile; fileRef = FAC2C30D1B307A6D00BE35AF /* LSFAboutData.mm */; };
+		FAFBBF671B30F1E50078CAF3 /* LSFAboutData.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC2C30C1B307A6D00BE35AF /* LSFAboutData.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -284,6 +288,7 @@
 			dstPath = "include/$(PRODUCT_NAME)/lsf/controllerservice";
 			dstSubfolderSpec = 16;
 			files = (
+				FA2343D31B2FC02C005C8F68 /* ControllerServiceManagerInit.h in CopyFiles */,
 				8737DDA11AFBB7CF003833B3 /* SceneElementManager.h in CopyFiles */,
 				87A1371B1AD5E45D007A4429 /* Condition.h in CopyFiles */,
 				87A1371C1AD5E45D007A4429 /* ControllerService.h in CopyFiles */,
@@ -314,6 +319,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				FAFBBF671B30F1E50078CAF3 /* LSFAboutData.h in CopyFiles */,
 				87CC1B311B13E13400D31739 /* AJInitializer.h in CopyFiles */,
 				87C7D8F41B011F25006A6487 /* LSFSceneElementManagerCallback.h in CopyFiles */,
 				87C7D8F51B011F25006A6487 /* LSFSceneElementManagerCallbackDelegate.h in CopyFiles */,
@@ -648,6 +654,10 @@
 		87DF6EED1B006B21001D82FE /* LSFSceneElementManagerCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSceneElementManagerCallback.h; sourceTree = "<group>"; };
 		87E778591B13ACC7003444EE /* AJInitializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AJInitializer.h; sourceTree = "<group>"; };
 		87E7785A1B13ACD4003444EE /* AJInitializer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AJInitializer.cc; sourceTree = "<group>"; };
+		FA2343D01B2F9CE7005C8F68 /* ControllerServiceManagerInit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControllerServiceManagerInit.h; sourceTree = "<group>"; };
+		FA2343D11B2F9CFB005C8F68 /* ControllerServiceManagerInit.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ControllerServiceManagerInit.cc; sourceTree = "<group>"; };
+		FAC2C30C1B307A6D00BE35AF /* LSFAboutData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFAboutData.h; sourceTree = "<group>"; };
+		FAC2C30D1B307A6D00BE35AF /* LSFAboutData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFAboutData.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -776,6 +786,8 @@
 				87D5E4B4197084A90038B494 /* LSFTransitionEffect.h */,
 				8771850418E4BC7A0085D153 /* LSFUtils.h */,
 				8771850518E4BC7A0085D153 /* LSFUtils.mm */,
+				FAC2C30C1B307A6D00BE35AF /* LSFAboutData.h */,
+				FAC2C30D1B307A6D00BE35AF /* LSFAboutData.mm */,
 			);
 			name = UtilityClasses;
 			sourceTree = "<group>";
@@ -1008,6 +1020,7 @@
 		87A4F4271AD5BAB00059F3B6 /* inc */ = {
 			isa = PBXGroup;
 			children = (
+				FA2343D01B2F9CE7005C8F68 /* ControllerServiceManagerInit.h */,
 				87A4F4281AD5BAB00059F3B6 /* Condition.h */,
 				87A4F4291AD5BAB00059F3B6 /* ControllerService.h */,
 				87A4F42A1AD5BAB00059F3B6 /* ControllerServiceRank.h */,
@@ -1036,6 +1049,7 @@
 		87A4F6FE1AD5BAB20059F3B6 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				FA2343D11B2F9CFB005C8F68 /* ControllerServiceManagerInit.cc */,
 				87A4F6FF1AD5BAB20059F3B6 /* Condition.cc */,
 				87A4F7001AD5BAB20059F3B6 /* ControllerService.cc */,
 				87A4F7011AD5BAB20059F3B6 /* ControllerServiceRank.cc */,
@@ -1345,12 +1359,14 @@
 				87677E821AC0B0D80033B8C6 /* LSFObjCMain.cc in Sources */,
 				8719C95D18DCB1F00011CD45 /* LSFObject.m in Sources */,
 				879A3FF01970DBA80082B204 /* LSFScene.mm in Sources */,
+				FA2343D21B2F9CFB005C8F68 /* ControllerServiceManagerInit.cc in Sources */,
 				87A4F74A1AD5BAB20059F3B6 /* Manager.cc in Sources */,
 				874CFECD1971BDC900E30A48 /* LSFSceneManagerCallback.mm in Sources */,
 				87A4F7351AD5BAB20059F3B6 /* LampGroupManager.cc in Sources */,
 				87A4F7411AD5BAB20059F3B6 /* ControllerServiceRank.cc in Sources */,
 				87A4F74F1AD5BAB20059F3B6 /* PulseEffectManager.cc in Sources */,
 				875155991ADC610E00B540E6 /* SceneElementManager.cc in Sources */,
+				FAC2C30E1B307A6D00BE35AF /* LSFAboutData.mm in Sources */,
 				87DF6EEE1B006B21001D82FE /* LSFSceneElementManagerCallback.mm in Sources */,
 				870C0B1B196A3586009E1408 /* LSFPresetManager.mm in Sources */,
 				87A4F74E1AD5BAB20059F3B6 /* PresetManager.cc in Sources */,

@@ -27,16 +27,21 @@
 
 @synthesize controller = _controller;
 
--(id)initWithControllerServiceDelegate: (id<LSFControllerServiceDelegate>)csd
+-(id)init
 {
     self = [super init];
 
     if (self)
     {
-        self.handle = new Controller(csd);
+        self.handle = new Controller();
     }
 
     return self;
+}
+
+-(void)initializeWithControllerServiceDelegate: (id<LSFControllerServiceDelegate>)csd;
+{
+    self.controller->SetControllerCallback(csd);
 }
 
 -(void)dealloc
@@ -63,6 +68,26 @@
     NSLog(@"LSFController.mm - stop method exectuing");
 
     self.controller->StopController();
+}
+
+-(void)factoryResetController
+{
+    self.controller->FactoryResetController();
+}
+
+-(void)lightingResetController
+{
+    self.controller->LightingResetController();
+}
+
+-(void)sendNetworkConnected
+{
+    self.controller->SendNetworkConnected();
+}
+
+-(void)sendNetworkDisconnected
+{
+    self.controller->SendNetworkDisconnected();
 }
 
 /*

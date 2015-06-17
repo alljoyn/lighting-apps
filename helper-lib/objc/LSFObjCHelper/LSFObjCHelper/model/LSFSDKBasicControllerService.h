@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) AllSeen Alliance. All rights reserved.
+ * Copyright AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -14,23 +14,17 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "BusAttachment.h"
-#import "LSFAboutData.h"
-#import "LSFLampAnnouncementDelegate.h"
+#import "LSFSDKLightingControllerConfiguration.h"
+#import "LSFController.h"
+#import "lsf/controllerservice/OEM_CS_Config.h"
+#import "LSFControllerServiceDelegate.h"
 
-/**
- * @warning *Note:* This class is not intended to be used by clients, and its interface may change
- * in subsequent releases of the SDK.
- */
+using namespace lsf;
 
-using namespace ajn;
+@interface LSFSDKBasicControllerService : LSFController <LSFControllerServiceDelegate>
 
-@interface LSFAboutManager : NSObject <LSFLampAnnouncementDelegate>
+@property (nonatomic, weak, readonly) id<LSFSDKLightingControllerConfiguration> controllerConfiguration;
 
--(id)initWithBusAttachment: (BusAttachment *)bus;
--(void)unregisterAnnouncementHandler;
--(void)registerAnnouncementHandler;
--(void)getAboutDataFromBusName: (NSString *)busName onPort: (unsigned int)port;
+-(id)initWithControllerConfiguration: (id<LSFSDKLightingControllerConfiguration>)configuration;
 
 @end

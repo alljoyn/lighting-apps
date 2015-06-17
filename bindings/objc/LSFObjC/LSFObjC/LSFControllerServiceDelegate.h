@@ -14,12 +14,24 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import <Foundation/Foundation.h>
+#import "lsf/controllerservice/OEM_CS_Config.h"
+#import "LSFAboutData.h"
+
+using namespace lsf;
+
+#ifdef LSF_BINDINGS
+using namespace controllerservice;
+#endif
 
 @protocol LSFControllerServiceDelegate <NSObject>
 
--(NSString *)getControllerDefaultDeviceID: (NSString *)randomDeviceID;
--(NSString *)getControllerDefaultAppID: (NSString *)randomAppID;
--(uint64_t)getMacAddress;
+-(NSString *)getControllerDefaultDeviceID: (NSString *)generatedDeviceID;
+-(unsigned long long)getMacAddressAsDecimal: (NSString *)generatedMacAddress;
+-(BOOL)isNetworkConnected;
+-(OEM_CS_RankParam_Mobility)getControllerRankMobility;
+-(OEM_CS_RankParam_Power)getControllerRankPower;
+-(OEM_CS_RankParam_Availability)getControllerRankAvailability;
+-(OEM_CS_RankParam_NodeType)getControllerRankNodeType;
+-(void)populateDefaultProperties: (LSFAboutData *)aboutData;
 
 @end

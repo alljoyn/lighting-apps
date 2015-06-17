@@ -14,11 +14,21 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-@class LSFAboutData;
+#import <Foundation/Foundation.h>
+#import "LSFLampDetails.h"
+#import "LSFLampParameters.h"
+#import "LSFSDKAboutData.h"
+#import "LSFDataModel.h"
 
-@protocol LSFLampAnnouncementDelegate <NSObject>
+extern NSString *LAMP_DEFAULT_NAME;
 
--(void)lampAnnouncementReceivedFromLamp: (NSString *)lampID onBus: (NSString *)busName onPort: (uint16_t)port;
--(void)saveAboutData: (LSFAboutData *)myAboutData;
+@interface LSFLampModel : LSFDataModel
+
+@property (nonatomic, strong) LSFLampDetails *lampDetails;
+@property (nonatomic, strong) LSFLampParameters *lampParameters;
+@property (nonatomic, strong) LSFSDKAboutData *aboutData;
+
+-(id)initWithLampID: (NSString *)lampID;
+-(id)initWithLampID: (NSString *)lampID andLampName: (NSString *)name;
 
 @end

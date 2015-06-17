@@ -27,23 +27,9 @@ using namespace controllerservice;
 id<LSFControllerServiceDelegate> controllerServiceDelegate = NULL;
 OEM_CS_NetworkCallback* networkCallbackReference = NULL;
 
-void LuminaireSleep(uint32_t msec)
+void ControllerServiceSleep(uint32_t msec)
 {
     usleep(1000 * msec);
-}
-
-//For now, not in use
-long getNTPOffset()
-{
-    printf("Controller.cc - getNTPOffset() executing\n");
-    return 0;
-}
-
-//For now, not in use
-uint64_t getNTPTimeFromJava()
-{
-    printf("Controller.cc - getNTPTimeFromJava() executing\n");
-    return 0;
 }
 
 const char* getControllerDefaultDeviceId()
@@ -57,64 +43,65 @@ const char* getControllerDefaultDeviceId()
     return deviceID;
 }
 
-qcc::String* getControllerDefaultAppId(const char* str)
-{
-    printf("Controller.cc - getControllerDefaultAppId() executing\n");
-
-    NSString *randomAppID = [NSString stringWithUTF8String: str];
-    const char *appID = [[controllerServiceDelegate getControllerDefaultAppID: randomAppID] UTF8String];
-    qcc::String *stringAppID = new qcc::String(appID);
-
-    return stringAppID;
-}
-
 uint64_t getMacAddress()
 {
     printf("Controller.cc - getMacAddress() executing\n");
-    return [controllerServiceDelegate getMacAddress];
+
+    qcc::String mac = qcc::RandHexString(12);
+    NSString *generatedMacAddress = [NSString stringWithUTF8String: mac.c_str()];
+    return [controllerServiceDelegate getMacAddressAsDecimal: generatedMacAddress];
 }
 
 bool isNetworkConnected()
 {
     printf("Controller.cc - isNetworkConnected() executing\n");
-    return true;
+    return [controllerServiceDelegate isNetworkConnected];
 }
 
 OEM_CS_RankParam_Power getRankPower()
 {
     printf("Controller.cc - getRankPower() executing\n");
-    return BATTERY_POWERED_CHARGABLE;
+    return [controllerServiceDelegate getControllerRankPower];
 }
 
 OEM_CS_RankParam_Mobility getRankMobility()
 {
     printf("Controller.cc - getRankMobility() executing\n");
-    return HIGH_MOBILITY;
+    return [controllerServiceDelegate getControllerRankMobility];
 }
 
 OEM_CS_RankParam_Availability getRankAvailability()
 {
     printf("Controller.cc - getRankAvailability() executing\n");
-    return SIX_TO_NINE_HOURS;
+    return [controllerServiceDelegate getControllerRankAvailability];
 }
 
 OEM_CS_RankParam_NodeType getRankNodeType()
 {
     printf("Controller.cc - getRankNodeType() executing\n");
-    return WIRELESS;
+    return [controllerServiceDelegate getControllerRankNodeType];
 }
 
-Controller::Controller(id<LSFControllerServiceDelegate> delegate)
+void populateDefaultProperties(ajn::AboutData* aboutData)
+{
+    printf("Controller.cc - populateDefaultProperties() executing\n");
+    LSFAboutData *myAboutData = [[LSFAboutData alloc] initWithAboutData: aboutData];
+    return [controllerServiceDelegate populateDefaultProperties: myAboutData];
+}
+
+Controller::Controller()
 {
     printf("Controller.cc - Controller() constructor executing\n");
+}
 
+void Controller::SetControllerCallback(id<LSFControllerServiceDelegate> delegate)
+{
     controllerServiceDelegate = delegate;
 }
 
 void Controller::StartController(const char *keyStoreFilePath)
 {
-    printf("controller.cc :: startControllerService\n");
-    printf("keyStore: %s\n", keyStoreFilePath);
+    printf("controller.cc :: startControllerService keyStore: %s\n", keyStoreFilePath);
     int argc = 5;
     char* argv[argc];
     argv[0] = const_cast <char*>("controllerService");
@@ -131,29 +118,49 @@ void Controller::StopController()
 {
     printf("stopping ControllerService. g_running=%d\n", g_running);
 
-    if(g_running == 0)
-    {
-        //if it is not running, do nothing, otherwise, stop the controller.
-        printf("controller g_running is already false. do nothing\n");
-    }
-    else
-    {
-        printf("controller g_running=true. convert it to false\n");
-        g_running = false;
+    g_running = false;
 
-        while (true)
-        {
-            LuminaireSleep(1000);
-            if(isRunning == 0)
-            {
-                //means the controller has fully stopped.
-                printf("controller has fully stopped\n");
-                break;
-            }
-            else
-            {
-                printf("controller is in process of stopping\n");
-            }
-        }
+    while (g_running && isRunning)
+    {
+        ControllerServiceSleep(1000);
+        printf("Controller is in process of stopping\n");
+    }
+
+    printf("Controller has fully stopped\n");
+}
+
+void Controller::FactoryResetController()
+{
+    printf("resetting the controller service");
+
+    if (controllerSvcManagerPtrForLuminaire != NULL)
+    {
+        controllerSvcManagerPtrForLuminaire->GetControllerServicePtr()->FactoryResetAPI();
+    }
+}
+
+void Controller::LightingResetController()
+{
+    printf("factory resetting the controller service");
+
+    if (controllerSvcManagerPtrForLuminaire != NULL)
+    {
+        controllerSvcManagerPtrForLuminaire->GetControllerServicePtr()->LightingResetAPI();
+    }
+}
+
+void Controller::SendNetworkConnected()
+{
+    if (networkCallbackReference)
+    {
+        networkCallbackReference->Connected();
+    }
+}
+
+void Controller::SendNetworkDisconnected()
+{
+    if (networkCallbackReference)
+    {
+        networkCallbackReference->Disconnected();
     }
 }

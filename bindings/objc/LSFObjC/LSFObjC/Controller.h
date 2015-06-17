@@ -42,6 +42,8 @@
 #include <time.h>
 #include <unistd.h>
 #import "LSFControllerServiceDelegate.h"
+#include "AJInitializer.h"
+#include "ControllerServiceManagerInit.h"
 
 using namespace ajn;
 
@@ -56,7 +58,7 @@ extern qcc::String controllerName;
 extern long getNTPOffset();
 extern uint64_t getNTPTimeFromJava();
 extern const char* getControllerDefaultDeviceId();
-extern qcc::String* getControllerDefaultAppId(const char* str);
+//extern qcc::String* getControllerDefaultAppId(const char* str);
 extern uint64_t getMacAddress();
 extern bool isNetworkConnected();
 extern lsf::controllerservice::OEM_CS_NetworkCallback* networkCallbackReference;
@@ -64,12 +66,18 @@ extern lsf::controllerservice::OEM_CS_RankParam_Power getRankPower();
 extern lsf::controllerservice::OEM_CS_RankParam_Mobility getRankMobility();
 extern lsf::controllerservice::OEM_CS_RankParam_Availability getRankAvailability();
 extern lsf::controllerservice::OEM_CS_RankParam_NodeType getRankNodeType();
+extern void populateDefaultProperties(ajn::AboutData* aboutData);
 
 class Controller {
     public:
-        Controller(id<LSFControllerServiceDelegate> delegate);
+        Controller();
+        void SetControllerCallback(id<LSFControllerServiceDelegate> delegate);
         void StartController(const char *keyStoreFilePath);
         void StopController();
+        void FactoryResetController();
+        void LightingResetController();
+        void SendNetworkConnected();
+        void SendNetworkDisconnected();
 };
 
 #endif

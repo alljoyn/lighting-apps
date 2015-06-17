@@ -22,7 +22,7 @@
 #import "LSFLampModel.h"
 #import "LSFConstants.h"
 #import "LSFDispatchQueue.h"
-#import "LSFAboutData.h"
+#import "LSFSDKAboutData.h"
 #import "LSFEnums.h"
 #import "LSFSDKLamp.h"
 
@@ -464,7 +464,7 @@
     [self postUpdateLampID: lampID withAboutData: nil];
 }
 
--(void)postUpdateLampID: (NSString *)lampID withAboutData: (LSFAboutData *)aboutData
+-(void)postUpdateLampID: (NSString *)lampID withAboutData: (LSFSDKAboutData *)aboutData
 {
     LSFLampManager *lampManager = [[LSFAllJoynManager getAllJoynManager] lsfLampManager];
     NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];

@@ -296,7 +296,7 @@
 
         for (NSString *lampID in groupModel.lamps)
         {
-            LSFLampModel *lampModel = [lamps valueForKey: lampID];
+            LSFLampModel *lampModel = [[lamps valueForKey: lampID] getLampDataModel];
 
             if (lampModel.lampDetails.hasEffects)
             {

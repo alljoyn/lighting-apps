@@ -14,15 +14,18 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFLampManagerCallbackDelegate.h"
-#import "LSFAboutData.h"
+#import <Foundation/Foundation.h>
+#import "BusAttachment.h"
+#import "LSFSDKAboutData.h"
+#import "LSFLampAnnouncementDelegate.h"
 
-@class LSFSDKLightingSystemManager;
+using namespace ajn;
 
-@interface LSFSDKHelperLampManagerCallback : NSObject <LSFLampManagerCallbackDelegate>
+@interface LSFSDKAboutManager : NSObject <LSFLampAnnouncementDelegate>
 
--(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)manager;
--(void)clear;
--(void)postUpdateLampID: (NSString *)lampID withAboutData: (LSFAboutData *)aboutData andDelay: (unsigned int)delay;
+-(id)initWithBusAttachment: (BusAttachment *)bus;
+-(void)unregisterAnnouncementHandler;
+-(void)registerAnnouncementHandler;
+-(void)getAboutDataFromBusName: (NSString *)busName onPort: (unsigned int)port;
 
 @end

@@ -401,6 +401,9 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/callback\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/manager\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/model\"",
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjC/include/LSFObjC\"",
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
@@ -446,6 +449,9 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/callback\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/manager\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/model\"",
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjC/include/LSFObjC\"",
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
@@ -530,6 +536,7 @@
 				87DFF7F21B178B2F00B0F321 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		87DFF7F31B178B2F00B0F321 /* Build configuration list for PBXNativeTarget "LSFTransitionEffectTutorialTests" */ = {
 			isa = XCConfigurationList;
@@ -538,6 +545,7 @@
 				87DFF7F51B178B2F00B0F321 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

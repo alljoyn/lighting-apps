@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) AllSeen Alliance. All rights reserved.
+ * Copyright AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -14,17 +14,24 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFObject.h"
-#import "LSFControllerServiceDelegate.h"
+#import "LSFSDKLightingControllerConfiguration.h"
+#import "LSFSDKLightingControllerStatus.h"
+#import "LSFSDKBasicControllerService.h"
 
-@interface LSFController : LSFObject
+@interface LSFSDKLightingController : NSObject
+{
+    @private BOOL controllerRunning;
+    @private LSFSDKBasicControllerService *controllerService;
+}
 
--(id)init;
--(void)initializeWithControllerServiceDelegate: (id<LSFControllerServiceDelegate>)csd;
--(void)startControllerWithKeyStoreFilePath: (NSString *)keyStoreFilePath;
--(void)stopController;
--(void)factoryResetController;
--(void)lightingResetController;
+@property (nonatomic, readonly) BOOL isRunning;
+
++(LSFSDKLightingController *)getLightingController;
+-(LightingControllerStatus)initializeWithControllerConfiguration: (id<LSFSDKLightingControllerConfiguration>)configuration;
+-(LightingControllerStatus)start;
+-(LightingControllerStatus)stop;
+-(LightingControllerStatus)factoryReset;
+-(LightingControllerStatus)lightingReset;
 -(void)sendNetworkConnected;
 -(void)sendNetworkDisconnected;
 

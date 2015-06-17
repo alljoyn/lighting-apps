@@ -257,18 +257,6 @@
  */
 @property (nonatomic, strong) NSString *defaultLanguage;
 
-/**
- * Toggles the state of the bundled Lighting Controller Service.
- */
-@property (nonatomic) BOOL controllerServiceEnabled;
-
-/**
- * Specifies whether there is an active network connection.
- *
- * *Note:* This is only used for the bundled lighting controller service.
- */
-@property (nonatomic) BOOL isNetworkConnected;
-
 @property (nonatomic, strong, readonly) LSFSDKLightingSystemManager *lightingManager;
 
 /** @name Creating LSFSDKLightingDirector */

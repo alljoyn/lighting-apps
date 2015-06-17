@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) AllSeen Alliance. All rights reserved.
+ * Copyright AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -14,18 +14,13 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFObject.h"
-#import "LSFControllerServiceDelegate.h"
+#import "LSFSDKLightingControllerConfiguration.h"
 
-@interface LSFController : LSFObject
+@interface LSFSDKLightingControllerConfigurationBase : NSObject <LSFSDKLightingControllerConfiguration>
+{
+    @private NSString *keystoreFilePath;
+}
 
--(id)init;
--(void)initializeWithControllerServiceDelegate: (id<LSFControllerServiceDelegate>)csd;
--(void)startControllerWithKeyStoreFilePath: (NSString *)keyStoreFilePath;
--(void)stopController;
--(void)factoryResetController;
--(void)lightingResetController;
--(void)sendNetworkConnected;
--(void)sendNetworkDisconnected;
+-(id)initWithKeystorePath: (NSString *)keystorePath;
 
 @end

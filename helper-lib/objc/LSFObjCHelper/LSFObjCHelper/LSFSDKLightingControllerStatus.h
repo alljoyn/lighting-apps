@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) AllSeen Alliance. All rights reserved.
+ * Copyright AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -14,18 +14,9 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "BusAttachment.h"
-#import "LSFAboutData.h"
-#import "LSFLampAnnouncementDelegate.h"
-
-using namespace ajn;
-
-@interface LSFSDKAboutManager : NSObject <LSFLampAnnouncementDelegate>
-
--(id)initWithBusAttachment: (BusAttachment *)bus;
--(void)unregisterAnnouncementHandler;
--(void)registerAnnouncementHandler;
--(void)getAboutDataFromBusName: (NSString *)busName onPort: (unsigned int)port;
-
-@end
+typedef enum {
+    OK,
+    ERROR,
+    ERROR_ALREADY_RUNNING,
+    ERROR_INIT
+} LightingControllerStatus;

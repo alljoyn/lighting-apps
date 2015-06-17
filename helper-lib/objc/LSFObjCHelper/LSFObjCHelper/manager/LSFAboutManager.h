@@ -15,16 +15,22 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFLampManagerCallbackDelegate.h"
-#import "LSFAboutData.h"
+#import "BusAttachment.h"
+#import "LSFSDKAboutData.h"
+#import "LSFLampAnnouncementDelegate.h"
 
 /**
  * @warning *Note:* This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK.
  */
-@interface LSFHelperLampManagerCallback : NSObject <LSFLampManagerCallbackDelegate>
 
--(id)init;
--(void)postUpdateLampID: (NSString *)lampID withAboutData: (LSFAboutData *)aboutData;
+using namespace ajn;
+
+@interface LSFAboutManager : NSObject <LSFLampAnnouncementDelegate>
+
+-(id)initWithBusAttachment: (BusAttachment *)bus;
+-(void)unregisterAnnouncementHandler;
+-(void)registerAnnouncementHandler;
+-(void)getAboutDataFromBusName: (NSString *)busName onPort: (unsigned int)port;
 
 @end

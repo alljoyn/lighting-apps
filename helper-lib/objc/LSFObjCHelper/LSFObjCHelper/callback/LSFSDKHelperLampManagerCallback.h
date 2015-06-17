@@ -14,18 +14,15 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFObject.h"
-#import "LSFControllerServiceDelegate.h"
+#import "LSFLampManagerCallbackDelegate.h"
+#import "LSFSDKAboutData.h"
 
-@interface LSFController : LSFObject
+@class LSFSDKLightingSystemManager;
 
--(id)init;
--(void)initializeWithControllerServiceDelegate: (id<LSFControllerServiceDelegate>)csd;
--(void)startControllerWithKeyStoreFilePath: (NSString *)keyStoreFilePath;
--(void)stopController;
--(void)factoryResetController;
--(void)lightingResetController;
--(void)sendNetworkConnected;
--(void)sendNetworkDisconnected;
+@interface LSFSDKHelperLampManagerCallback : NSObject <LSFLampManagerCallbackDelegate>
+
+-(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)manager;
+-(void)clear;
+-(void)postUpdateLampID: (NSString *)lampID withAboutData: (LSFSDKAboutData *)aboutData andDelay: (unsigned int)delay;
 
 @end

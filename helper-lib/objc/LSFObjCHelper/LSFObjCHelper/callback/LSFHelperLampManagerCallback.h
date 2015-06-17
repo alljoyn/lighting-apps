@@ -15,20 +15,16 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFLampDetails.h"
-#import "LSFLampParameters.h"
-#import "LSFAboutData.h"
-#import "LSFDataModel.h"
+#import "LSFLampManagerCallbackDelegate.h"
+#import "LSFSDKAboutData.h"
 
-extern NSString *LAMP_DEFAULT_NAME;
+/**
+ * @warning *Note:* This class is not intended to be used by clients, and its interface may change
+ * in subsequent releases of the SDK.
+ */
+@interface LSFHelperLampManagerCallback : NSObject <LSFLampManagerCallbackDelegate>
 
-@interface LSFLampModel : LSFDataModel
-
-@property (nonatomic, strong) LSFLampDetails *lampDetails;
-@property (nonatomic, strong) LSFLampParameters *lampParameters;
-@property (nonatomic, strong) LSFAboutData *aboutData;
-
--(id)initWithLampID: (NSString *)lampID;
--(id)initWithLampID: (NSString *)lampID andLampName: (NSString *)name;
+-(id)init;
+-(void)postUpdateLampID: (NSString *)lampID withAboutData: (LSFSDKAboutData *)aboutData;
 
 @end

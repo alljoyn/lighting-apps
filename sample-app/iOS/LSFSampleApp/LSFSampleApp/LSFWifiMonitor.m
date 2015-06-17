@@ -18,7 +18,8 @@
 #import "LSFConstants.h"
 #import "LSFAllJoynManager.h"
 #import "LSFDispatchQueue.h"
-#import "LSFControllerSystemManager.h"
+#import "LSFSDKLightingController.h"
+#import "LSFSDKLightingControllerConfigurationBase.h"
 
 #import <arpa/inet.h>
 #import <ifaddrs.h>
@@ -29,6 +30,7 @@
 @interface LSFWifiMonitor()
 
 @property (nonatomic, strong) NSString *lastKnownSSID;
+@property (nonatomic, strong) LSFSDKLightingControllerConfigurationBase *configuration;
 
 -(void)startController;
 -(void)stopController;
@@ -51,6 +53,7 @@ static void NetworkStatusCallback(SCNetworkReachabilityRef target, SCNetworkReac
 
 @synthesize isWifiConnected = _isWifiConnected;
 @synthesize lastKnownSSID = _lastKnownSSID;
+@synthesize configuration = _configuration;
 
 +(id)getWifiMonitor
 {
@@ -79,6 +82,11 @@ static void NetworkStatusCallback(SCNetworkReachabilityRef target, SCNetworkReac
         localWifiAddress.sin_addr.s_addr = htonl(IN_LINKLOCALNETNUM);
 
         _nrr = SCNetworkReachabilityCreateWithAddress(kCFAllocatorDefault, (const struct sockaddr *)&localWifiAddress);
+
+        //Initialize Controller configuration and controller
+        self.configuration = [[LSFSDKLightingControllerConfigurationBase alloc] initWithKeystorePath: @"Documents"];
+        LSFSDKLightingController *lightingController = [LSFSDKLightingController getLightingController];
+        [lightingController initializeWithControllerConfiguration: self.configuration];
 
         if ([self currentNetworkStatus] == NotReachable)
         {
@@ -225,7 +233,7 @@ static void NetworkStatusCallback(SCNetworkReachabilityRef target, SCNetworkReac
 
     //Start controller service by default
     dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-        [[LSFControllerSystemManager getControllerSystemManager] startController];
+        [[LSFSDKLightingController getLightingController] start];
     });
 }
 
@@ -247,7 +255,7 @@ static void NetworkStatusCallback(SCNetworkReachabilityRef target, SCNetworkReac
 
     //Stop controller service
     dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-        [[LSFControllerSystemManager getControllerSystemManager] stopController];
+        [[LSFSDKLightingController getLightingController] stop];
     });
 }
 

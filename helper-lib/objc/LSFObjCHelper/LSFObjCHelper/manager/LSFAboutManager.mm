@@ -169,7 +169,7 @@ void LSFAboutManagerCpp::GetAboutData(const char* busName, uint16_t port)
         if (status != ER_OK) {
             NSLog(@"Failed 5 attempts to get about data from lamp (%s)", busName);
         } else {
-            LSFAboutData *myAboutData = [[LSFAboutData alloc] init];
+            LSFSDKAboutData *myAboutData = [[LSFSDKAboutData alloc] init];
 
             QStatus status;
             char* stringContent;
@@ -350,7 +350,7 @@ void LSFAboutManagerCpp::Announced(const char* busName, uint16_t version, Sessio
     });
 }
 
--(void)saveAboutData: (LSFAboutData *)myAboutData
+-(void)saveAboutData: (LSFSDKAboutData *)myAboutData
 {
     LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
     [ajManager.slmc postUpdateLampID: myAboutData.deviceID withAboutData: myAboutData];
