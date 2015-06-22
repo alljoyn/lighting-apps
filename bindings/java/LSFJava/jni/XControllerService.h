@@ -36,13 +36,14 @@ public:
     // Methods called from Java
     void Start(const LSFString &keyStorePath);
     void Stop();
-    void Reset();
+    void LightingReset();
+    void FactoryReset();
 
     void SendNetworkConnected();
     void SendNetworkDisconnected();
 
     // Methods calling into Java
-    LSFString GetControllerDefaultAppId(const LSFString &defaultAppId);
+    void PopulateDefaultProperties(const AboutData *aboutData);
     LSFString GetMacAddress(const LSFString &defaultMacAddress);
     bool IsNetworkConnected(const bool &defaultIsNetworkConnected);
     OEM_CS_RankParam_Power GetRankPower(const OEM_CS_RankParam_Power &defaultRankPower);

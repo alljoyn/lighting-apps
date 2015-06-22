@@ -534,6 +534,7 @@ public class SampleAppActivity extends FragmentActivity implements
                             systemManager.start();
 
                             if (controllerServiceEnabled) {
+                                Log.d(SampleAppActivity.TAG_TRACE, "Starting bundled controller service");
                                 setControllerServiceStarted(true);
                             }
 

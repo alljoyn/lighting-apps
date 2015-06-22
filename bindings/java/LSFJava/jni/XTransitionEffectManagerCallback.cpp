@@ -119,7 +119,7 @@ void XTransitionEffectManagerCallback::TransitionEffectsDeletedCB(const LSFStrin
 
 void XTransitionEffectManagerCallback::GetTransitionEffectReplyCB(const LSFResponseCode& responseCode, const LSFString& transitionEffectID, const TransitionEffect& transitionEffect)
 {
-    XJavaDelegator::Call_Void_ResponseCode_String_Object<TransitionEffect, XTransitionEffectV2>(jdelegate, __func__, XClass::xTransitionEffect, responseCode, transitionEffectID, transitionEffect);
+    XJavaDelegator::Call_Void_ResponseCode_String_Object<TransitionEffect, XTransitionEffectV2>(jdelegate, __func__, XClass::xTransitionEffectV2, responseCode, transitionEffectID, transitionEffect);
 }
 
 void XTransitionEffectManagerCallback::GetTransitionEffectVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& transitionEffectID, const uint32_t& transitionEffectVersion)

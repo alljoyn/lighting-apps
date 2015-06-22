@@ -17,11 +17,15 @@
 
 #include <jni.h>
 
+#include <qcc/Debug.h>
+
 #include "NUtil.h"
 #include "XControllerService.h"
 #include "XCppDelegator.h"
 
 #include "org_allseen_lsf_ControllerService.h"
+
+#define QCC_MODULE LSF_QCC_MODULE
 
 using namespace lsf;
 
@@ -42,9 +46,15 @@ void JNICALL Java_org_allseen_lsf_ControllerService_stop(JNIEnv *env, jobject th
 }
 
 JNIEXPORT
-void JNICALL Java_org_allseen_lsf_ControllerService_reset(JNIEnv *env, jobject thiz)
+void JNICALL Java_org_allseen_lsf_ControllerService_lightingReset(JNIEnv *env, jobject thiz)
 {
-    XCppDelegator::Call_Void<XControllerService>(env, thiz, &XControllerService::Reset);
+    XCppDelegator::Call_Void<XControllerService>(env, thiz, &XControllerService::LightingReset);
+}
+
+JNIEXPORT
+void JNICALL Java_org_allseen_lsf_ControllerService_factoryReset(JNIEnv *env, jobject thiz)
+{
+    XCppDelegator::Call_Void<XControllerService>(env, thiz, &XControllerService::FactoryReset);
 }
 
 JNIEXPORT

@@ -165,34 +165,11 @@ void OEM_CS_PopulateDefaultProperties(AboutData* aboutData)
 {
     QCC_DbgTrace(("%s", __func__));
 
-    aboutData->SetDateOfManufacture("10/1/2199");
-    aboutData->SetDefaultLanguage("en");
-    aboutData->SetHardwareVersion("355.499. b");
-    aboutData->SetModelNumber("LSF-SDK-CS");
-    aboutData->SetSoftwareVersion("1");
-    aboutData->SetSupportUrl("http://www.company_a.com");
-    aboutData->SetSupportedLanguage("en");
-    aboutData->SetSupportedLanguage("de-AT");
-    aboutData->SetAppName("LightingControllerService", "en");
-    aboutData->SetAppName("LightingControllerService", "de-AT");
-    aboutData->SetDescription("Controller Service", "en");
-    aboutData->SetDescription("Controller Service", "de-AT");
-    aboutData->SetDeviceName("Device Name", "en");
-    aboutData->SetDeviceName("Device Name", "de-AT");
-    aboutData->SetManufacturer("Company A (EN)", "en");
-    aboutData->SetManufacturer("Firma A (DE-AT)", "de-AT");
-
     XControllerService *activeController = XControllerService::getActive();
-    LSFString defaultAppId = qcc::RandHexString(16).c_str();
-    LSFString returnedAppId = activeController ? activeController->GetControllerDefaultAppId(defaultAppId) : defaultAppId;
 
-    if (returnedAppId.length() != 32) {
-        QCC_LogError(ER_FAIL, ("Invalid App ID: %s", returnedAppId.c_str()));
-        QCC_LogError(ER_FAIL, ("Using default App ID: %s", defaultAppId.c_str()));
-        returnedAppId = defaultAppId;
+    if (activeController != NULL) {
+        activeController->PopulateDefaultProperties(aboutData);
     }
-
-    aboutData->SetAppId(returnedAppId.c_str());
 }
 
 }

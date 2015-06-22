@@ -22,8 +22,7 @@ public abstract class ControllerService extends DefaultNativeClassWrapper {
         createNativeObject();
     }
 
-    public abstract String getControllerDefaultDeviceId(String generatedDeviceId);
-    public abstract String getControllerDefaultAppId(String generatedAppId);
+    public abstract void populateDefaultProperties(AboutData aboutData);
     public abstract String getMacAddress(String generatedMacAddress);
     public abstract boolean isNetworkConnected();
     public abstract RankPower getRankPower();
@@ -33,9 +32,14 @@ public abstract class ControllerService extends DefaultNativeClassWrapper {
 
     public native void start(String keyStorePath);
     public native void stop();
-    public native void reset();
+    public native void lightingReset();
+    public native void factoryReset();
     public native void sendNetworkConnected();
     public native void sendNetworkDisconnected();
+
+    protected void populateDefaultProperties(long nativeAboutDataHandle) {
+        populateDefaultProperties(new AboutData(nativeAboutDataHandle));
+    }
 
     @Override
     protected native void createNativeObject();

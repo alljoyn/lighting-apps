@@ -47,6 +47,14 @@ void XJavaDelegator::Call_Void_UInt32(const jweak jdelegate, char const *func, c
     Call_Void_Variadic(env, jdelegate, func, "(J)V", (jlong)uint32Value);
 }
 
+void XJavaDelegator::Call_Void_VoidPointer(const jweak jdelegate, char const *func, const void *voidPointer)
+{
+    // Get the JNIEnv for the current native thread
+    JScopedEnv env;
+
+    Call_Void_Variadic(env, jdelegate, func, "(J)V", (jlong)voidPointer);
+}
+
 void XJavaDelegator::Call_Void_ResponseCode(const jweak jdelegate, char const *func, const LSFResponseCode &responseCode)
 {
     // Get the JNIEnv for the current native thread

@@ -15,16 +15,21 @@
  */
 package org.allseen.lsf.sdk;
 
+import java.util.Random;
+
+import org.alljoyn.bus.AboutKeys;
+import org.allseen.lsf.AboutData;
 import org.allseen.lsf.RankAvailability;
 import org.allseen.lsf.RankMobility;
 import org.allseen.lsf.RankNodeType;
 import org.allseen.lsf.RankPower;
+import org.allseen.lsf.sdk.model.LightingControllerConfiguration;
 
-public class DefaultLightingControllerConfiguration implements LightingControllerConfiguration {
+public class LightingControllerConfigurationBase implements LightingControllerConfiguration {
 
     private final String keystorePath;
 
-    public DefaultLightingControllerConfiguration(String keystorePath) {
+    public LightingControllerConfigurationBase(String keystorePath) {
         this.keystorePath = keystorePath;
     }
 
@@ -34,13 +39,29 @@ public class DefaultLightingControllerConfiguration implements LightingControlle
     }
 
     @Override
-    public String getDefaultDeviceId(String generatedDeviceId) {
-        return generatedDeviceId;
-    }
+    public void populateDefaultProperties(AboutData aboutData) {
+        byte[] randomAppID = new byte[16];
+        Random random = new Random();
 
-    @Override
-    public String getDefaultAppId(String generatedAppId) {
-        return generatedAppId;
+        random.nextBytes(randomAppID);
+
+        aboutData.put(AboutKeys.ABOUT_APP_ID, randomAppID);
+        aboutData.put(AboutKeys.ABOUT_DATE_OF_MANUFACTURE, "10/1/2199");
+        aboutData.put(AboutKeys.ABOUT_DEFAULT_LANGUAGE, "en");
+        aboutData.put(AboutKeys.ABOUT_HARDWARE_VERSION, "355.499. b");
+        aboutData.put(AboutKeys.ABOUT_MODEL_NUMBER, "LSF-SDK-CS");
+        aboutData.put(AboutKeys.ABOUT_SOFTWARE_VERSION, "12.20.44 build 44454");
+        aboutData.put(AboutKeys.ABOUT_SUPPORT_URL, "http://www.company_a.com");
+
+        aboutData.put(AboutKeys.ABOUT_SUPPORTED_LANGUAGES, new String[] {"en, de-AT"});
+        aboutData.put(AboutKeys.ABOUT_APP_NAME, "LightingControllerService", "en");
+        aboutData.put(AboutKeys.ABOUT_APP_NAME, "LightingControllerService", "de-AT");
+        aboutData.put(AboutKeys.ABOUT_DESCRIPTION, "Controller Service", "en");
+        aboutData.put(AboutKeys.ABOUT_DESCRIPTION, "Controller Service", "de-AT");
+        aboutData.put(AboutKeys.ABOUT_DEVICE_NAME, "My device name", "en");
+        aboutData.put(AboutKeys.ABOUT_DEVICE_NAME, "Mein Gerätename", "de-AT");
+        aboutData.put(AboutKeys.ABOUT_MANUFACTURER, "Company A (EN)", "en");
+        aboutData.put(AboutKeys.ABOUT_MANUFACTURER, "Firma A (DE-AT)", "de-AT");
     }
 
     @Override

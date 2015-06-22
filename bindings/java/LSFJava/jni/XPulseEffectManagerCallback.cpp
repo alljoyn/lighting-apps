@@ -119,7 +119,7 @@ void XPulseEffectManagerCallback::PulseEffectsDeletedCB(const LSFStringList& pul
 
 void XPulseEffectManagerCallback::GetPulseEffectReplyCB(const LSFResponseCode& responseCode, const LSFString& pulseEffectID, const PulseEffect& pulseEffect)
 {
-    XJavaDelegator::Call_Void_ResponseCode_String_Object<PulseEffect, XPulseEffectV2>(jdelegate, __func__, XClass::xPulseEffect, responseCode, pulseEffectID, pulseEffect);
+    XJavaDelegator::Call_Void_ResponseCode_String_Object<PulseEffect, XPulseEffectV2>(jdelegate, __func__, XClass::xPulseEffectV2, responseCode, pulseEffectID, pulseEffect);
 }
 
 void XPulseEffectManagerCallback::GetPulseEffectVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& pulseEffectID, const uint32_t& pulseEffectVersion)

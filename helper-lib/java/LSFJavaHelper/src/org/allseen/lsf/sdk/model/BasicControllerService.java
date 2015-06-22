@@ -15,12 +15,12 @@
  */
 package org.allseen.lsf.sdk.model;
 
+import org.allseen.lsf.AboutData;
 import org.allseen.lsf.ControllerService;
 import org.allseen.lsf.RankAvailability;
 import org.allseen.lsf.RankMobility;
 import org.allseen.lsf.RankNodeType;
 import org.allseen.lsf.RankPower;
-import org.allseen.lsf.sdk.LightingControllerConfiguration;
 
 public class BasicControllerService extends ControllerService {
 
@@ -35,13 +35,8 @@ public class BasicControllerService extends ControllerService {
     }
 
     @Override
-    public String getControllerDefaultDeviceId(String generatedDeviceId) {
-        return controllerConfiguration.getDefaultDeviceId(generatedDeviceId);
-    }
-
-    @Override
-    public String getControllerDefaultAppId(String generatedAppId) {
-        return controllerConfiguration.getDefaultAppId(generatedAppId);
+    public void populateDefaultProperties(AboutData aboutData) {
+        controllerConfiguration.populateDefaultProperties(aboutData);
     }
 
     @Override

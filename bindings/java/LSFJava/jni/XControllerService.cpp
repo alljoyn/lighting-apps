@@ -21,6 +21,7 @@
 
 #include "NUtil.h"
 #include "XControllerService.h"
+#include "XControllerServiceManagerInit.h"
 #include "XJavaDelegator.h"
 
 // Global functions defined by the Controller Service in Main.cc
@@ -113,14 +114,34 @@ void XControllerService::Stop()
     ControllerServiceStop();
 }
 
-void XControllerService::Reset()
+void XControllerService::LightingReset()
 {
     if (cActive != this) {
         QCC_DbgPrintf(("Inactive"));
         return;
     }
 
-    //TODO-IMPL: not currently implemented, might be removed
+    if (managerInstance == NULL) {
+        QCC_DbgPrintf(("Invalid manager"));
+        return;
+    }
+
+    managerInstance->GetControllerServicePtr()->LightingResetAPI();
+}
+
+void XControllerService::FactoryReset()
+{
+    if (cActive != this) {
+        QCC_DbgPrintf(("Inactive"));
+        return;
+    }
+
+    if (managerInstance == NULL) {
+        QCC_DbgPrintf(("Invalid manager"));
+        return;
+    }
+
+    managerInstance->GetControllerServicePtr()->FactoryResetAPI();
 }
 
 void XControllerService::SendNetworkConnected()
@@ -153,9 +174,9 @@ void XControllerService::SendNetworkDisconnected()
     cNetworkCallback->Disconnected();
 }
 
-LSFString XControllerService::GetControllerDefaultAppId(const LSFString &defaultAppId)
+void XControllerService::PopulateDefaultProperties(const AboutData *aboutData)
 {
-    return XJavaDelegator::Call_String_String(jdelegate, __func__, defaultAppId, defaultAppId);
+    return XJavaDelegator::Call_Void_VoidPointer(jdelegate, __func__, (void *)aboutData);
 }
 
 LSFString XControllerService::GetMacAddress(const LSFString &defaultMacAddress)

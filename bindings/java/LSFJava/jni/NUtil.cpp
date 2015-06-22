@@ -52,6 +52,7 @@ static jmethodID MID_Object_equals = NULL;
 static jmethodID MID_BusException_log = NULL;
 
 // Also need to call do_find() for these below in JNI_OnLoad()
+XClass *XClass::xMsgArg = new XClass("org/alljoyn/bus/MsgArg");
 XClass *XClass::xTrackingID = new XClass("org/allseen/lsf/TrackingID");
 XClass *XClass::xLampState = new XClass("org/allseen/lsf/LampState");
 XClass *XClass::xLampDetails = new XClass("org/allseen/lsf/LampDetails");
@@ -63,8 +64,8 @@ XClass *XClass::xStateTransitionEffect = new XClass("org/allseen/lsf/StateTransi
 XClass *XClass::xPresetTransitionEffect = new XClass("org/allseen/lsf/PresetTransitionEffect");
 XClass *XClass::xStatePulseEffect = new XClass("org/allseen/lsf/StatePulseEffect");
 XClass *XClass::xPresetPulseEffect = new XClass("org/allseen/lsf/PresetPulseEffect");
-XClass *XClass::xTransitionEffect = new XClass("org/allseen/lsf/TransitionEffect");
-XClass *XClass::xPulseEffect = new XClass("org/allseen/lsf/PulseEffect");
+XClass *XClass::xTransitionEffectV2 = new XClass("org/allseen/lsf/TransitionEffectV2");
+XClass *XClass::xPulseEffectV2 = new XClass("org/allseen/lsf/PulseEffectV2");
 XClass *XClass::xSceneElement = new XClass("org/allseen/lsf/SceneElement");
 XClass *XClass::xSceneWithSceneElements = new XClass("org/allseen/lsf/SceneWithSceneElements");
 
@@ -214,6 +215,8 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm,
 //        }
 //        CLS_SessionOpts = (jclass)env->NewGlobalRef(clazz);
 
+        XClass::xMsgArg->doFind(env);
+
         XClass::xTrackingID->doFind(env);
 
         XClass::xLampState->doFind(env);
@@ -227,8 +230,8 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm,
         XClass::xPresetTransitionEffect->doFind(env);
         XClass::xStatePulseEffect->doFind(env);
         XClass::xPresetPulseEffect->doFind(env);
-        XClass::xTransitionEffect->doFind(env);
-        XClass::xPulseEffect->doFind(env);
+        XClass::xTransitionEffectV2->doFind(env);
+        XClass::xPulseEffectV2->doFind(env);
         XClass::xSceneElement->doFind(env);
         XClass::xSceneWithSceneElements->doFind(env);
 
