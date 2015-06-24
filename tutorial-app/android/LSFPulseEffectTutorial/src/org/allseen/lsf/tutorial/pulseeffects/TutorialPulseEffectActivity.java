@@ -20,6 +20,8 @@ import org.allseen.lsf.sdk.AllCollectionAdapter;
 import org.allseen.lsf.sdk.Color;
 import org.allseen.lsf.sdk.Group;
 import org.allseen.lsf.sdk.Lamp;
+import org.allseen.lsf.sdk.LightingController;
+import org.allseen.lsf.sdk.LightingControllerConfigurationBase;
 import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.MyLampState;
 import org.allseen.lsf.sdk.NextControllerConnectionListener;
@@ -49,28 +51,31 @@ public class TutorialPulseEffectActivity extends Activity implements NextControl
     private class MyLightingListener extends AllCollectionAdapter {
         @Override
         public void onGroupInitialized(TrackingID trackingId, Group group) {
+            // STEP 4: Use the group initialization as a trigger to create parameters
+            // for a PulseEffect and create it.
             if (trackingId != null && groupCreationId != null && trackingId.value == groupCreationId.value) {
                 // Save the ID of the Group; to be used later
                 tutorialGroupId = group.getId();
 
-                // STEP 3: Use the Group creation event as a trigger to create the PulseEffect
+                //Variable parameters
                 Color pulseFromColor = Color.GREEN;
                 Color pulseToColor = Color.BLUE;
                 Power pulsePowerState = Power.ON;
                 long period = 1000;
                 long duration = 500;
                 long numPulses = 10;
+                MyLampState lampFrom = new MyLampState(pulsePowerState, pulseFromColor);
+                MyLampState lampTo = new MyLampState(pulsePowerState, pulseToColor);
 
                 // boilerplate code, alter parameters above to change effect color, length, etc.
-                lightingDirector.createPulseEffect(new MyLampState(pulsePowerState, pulseFromColor),
-                        new MyLampState(pulsePowerState, pulseToColor), period, duration, numPulses,
-                        "TutorialPulseEffect", null);
+                lightingDirector.createPulseEffect(lampFrom, lampTo, period, duration, numPulses, "TutorialPulseEffect", null);
             }
         }
 
         @Override
         public void onPulseEffectInitialized(TrackingID trackingId, PulseEffect effect) {
-            // STEP4: All the PulseEffect
+            // STEP 5: Use the pulse effect initialization as a trigger to apply it
+            // to all the lamps in the defined group.
             if (tutorialGroupId != null) {
                 effect.applyTo(lightingDirector.getGroup(tutorialGroupId));
             }
@@ -88,10 +93,14 @@ public class TutorialPulseEffectActivity extends Activity implements NextControl
         try { version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName; } catch (Exception e) {}
         ((TextView)findViewById(R.id.appTextVersion)).setText(version);
 
-        // Instantiate the director and wait for the connection
-        lightingDirector = LightingDirector.get();
+        // STEP 1: Initialize a lighting controller with default configuration.
+        LightingController lightingController = LightingController.get();
+        lightingController.init(new LightingControllerConfigurationBase(getApplicationContext().getFileStreamPath("").getAbsolutePath()));
+        lightingController.start();
 
-        // STEP 1: Register a global listener to handle Lighting events and Controller connection
+        // STEP 2: Instantiate the director and wait for the connection, register a
+        // global listener to handle Lighting events
+        lightingDirector = LightingDirector.get();
         lightingDirector.addListener(new MyLightingListener());
         lightingDirector.postOnNextControllerConnection(this, CONTROLLER_CONNECTION_DELAY);
         lightingDirector.start("TutorialApp");
@@ -105,7 +114,7 @@ public class TutorialPulseEffectActivity extends Activity implements NextControl
 
     @Override
     public void onControllerConnected() {
-        // STEP 2: Create a Group consisting of all the connected Lamps
+        // STEP 3: Create a Group consisting of all the connected Lamps
         Lamp[] lamps = lightingDirector.getLamps();
         groupCreationId = lightingDirector.createGroup(lamps, "TutorialGroup", null);
     }

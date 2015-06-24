@@ -16,18 +16,17 @@
 package org.allseen.lsf.tutorial.scenes;
 
 import org.allseen.lsf.TrackingID;
+import org.allseen.lsf.sdk.AllCollectionAdapter;
 import org.allseen.lsf.sdk.Color;
-import org.allseen.lsf.sdk.GroupMember;
+import org.allseen.lsf.sdk.LightingController;
+import org.allseen.lsf.sdk.LightingControllerConfigurationBase;
 import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.MyLampState;
 import org.allseen.lsf.sdk.NextControllerConnectionListener;
 import org.allseen.lsf.sdk.Power;
 import org.allseen.lsf.sdk.PulseEffect;
-import org.allseen.lsf.sdk.PulseEffectAdapter;
 import org.allseen.lsf.sdk.Scene;
-import org.allseen.lsf.sdk.SceneAdapter;
 import org.allseen.lsf.sdk.SceneElement;
-import org.allseen.lsf.sdk.SceneElementAdapter;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -43,6 +42,33 @@ public class TutorialSceneActivity extends Activity implements NextControllerCon
 
     private LightingDirector lightingDirector;
 
+    /*
+     *  The following defined global listener utilizes the initializations of certain objects as
+     *  triggers in order to sequentially place a created PulseEffect into a SceneElement,
+     *  and then to place that SceneElement into a Scene and apply it to the light bulbs
+     *  known to the LightingDirector.
+     */
+    private class MyLightingListener extends AllCollectionAdapter {
+        @Override
+        public void onPulseEffectInitialized(TrackingID trackingID, PulseEffect effect) {
+            // STEP 4: Create SceneElement using onPulseEffectInitialized as a trigger.
+            lightingDirector.createSceneElement(effect, lightingDirector.getLamps(), "TutorialSceneElement", null);
+        }
+
+        @Override
+        public void onSceneElementInitialized(TrackingID trackingId, SceneElement element) {
+            // STEP 5: Create Scene using onSceneElementInitialized as a trigger.
+            lightingDirector.createScene(new SceneElement[] { element }, "TutorialScene", null);
+        }
+
+        @Override
+        public void onSceneInitialized( TrackingID trackingId, Scene scene) {
+            // STEP 6: Apply Scene using onSceneInitialized as a trigger.
+            scene.apply();
+        }
+
+    }
+
     @Override
     protected void onCreate(Bundle savedState) {
         super.onCreate(savedState);
@@ -54,59 +80,37 @@ public class TutorialSceneActivity extends Activity implements NextControllerCon
         try { version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName; } catch (Exception e) {}
         ((TextView)findViewById(R.id.appTextVersion)).setText(version);
 
-        // Instantiate the director and wait for the connection
-        lightingDirector = LightingDirector.get();
+        // STEP 1: Initialize a lighting controller with default configuration.
+        LightingController lightingController = LightingController.get();
+        lightingController.init(new LightingControllerConfigurationBase(getApplicationContext().getFileStreamPath("").getAbsolutePath()));
+        lightingController.start();
 
-        // STEP 1: Register a listener for when the Controller connects and start the LightingDirector
+        // STEP 2: Instantiate the director and wait for the connection, register a
+        // global listener to handle Lighting events
+        lightingDirector = LightingDirector.get();
+        lightingDirector.addListener(new MyLightingListener());
         lightingDirector.postOnNextControllerConnection(this, CONTROLLER_CONNECTION_DELAY);
         lightingDirector.start("TutorialApp");
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy(){
         lightingDirector.stop();
         super.onDestroy();
     }
 
     @Override
     public void onControllerConnected() {
-        // STEP 2: Define all parameters used in creating a Scene.
+        // STEP 3: Define all parameters used in creating a Scene.
         final Color pulseFromColor = Color.GREEN;
         final Color pulseToColor = Color.BLUE;
         final Power pulsePowerState = Power.ON;
         final long period = 1000;
         final long duration = 500;
         final long numPulses = 10;
-        final GroupMember[] members = lightingDirector.getLamps();
+        final MyLampState lampFrom = new MyLampState(pulsePowerState, pulseFromColor);
+        final MyLampState lampTo = new MyLampState(pulsePowerState, pulseToColor);
 
-        // STEP 3: Start Scene creation process, creating all intermediate objects necessary along
-        // the way.
-        // boilerplate code, alter parameters in STEP 2 to change effect color, length, etc.
-
-        // STEP 3A: Create PulseEffect
-        lightingDirector.createPulseEffect(new MyLampState(pulsePowerState, pulseFromColor),
-                new MyLampState(pulsePowerState, pulseToColor), period, duration, numPulses,
-                "TutorialPulseEffect", new PulseEffectAdapter() {
-
-            @Override
-            public void onPulseEffectInitialized(TrackingID trackingId, PulseEffect effect) {
-                // STEP 3B: Create SceneElement with newly created PulseEffect
-                lightingDirector.createSceneElement(effect, members, "TutorialSceneElement", new SceneElementAdapter() {
-
-                    @Override
-                    public void onSceneElementInitialized(TrackingID trackingId, SceneElement element) {
-                        // STEP 3C: Create Scene using newly created SceneElement
-                        lightingDirector.createScene(new SceneElement[] { element }, "TutorialScene", new SceneAdapter() {
-
-                            @Override
-                            public void onSceneInitialized(TrackingID trackingId, Scene scene) {
-                                // STEP 4: Apply The scene
-                                scene.apply();
-                            }
-                        });
-                    }
-                });
-            }
-        });
+        lightingDirector.createPulseEffect(lampFrom, lampTo, period, duration, numPulses, "TutorialPulseEffect", null);
     }
 }

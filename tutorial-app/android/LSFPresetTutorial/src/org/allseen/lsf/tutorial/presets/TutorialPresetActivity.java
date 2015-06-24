@@ -19,6 +19,8 @@ import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.sdk.AllCollectionAdapter;
 import org.allseen.lsf.sdk.Color;
 import org.allseen.lsf.sdk.Lamp;
+import org.allseen.lsf.sdk.LightingController;
+import org.allseen.lsf.sdk.LightingControllerConfigurationBase;
 import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.Power;
 import org.allseen.lsf.sdk.Preset;
@@ -41,14 +43,14 @@ public class TutorialPresetActivity extends Activity {
     private class MyLightingListener extends AllCollectionAdapter {
         @Override
         public void onLampInitialized(Lamp lamp) {
-            // STEP 2: Use the discovery of a Lamp as a trigger for creating
+            // STEP 3: Use the discovery of a Lamp as a trigger for creating
             // the Preset. We define a preset that changes the color to red.
             lightingDirector.createPreset(Power.ON, Color.RED, "TutorialPreset", null);
         }
 
         @Override
         public void onPresetInitialized(TrackingID trackingId, Preset preset) {
-            // STEP3: With the Preset is created, apply the Preset to all the Lamps on the network
+            // STEP 4: With the Preset is created, apply the Preset to all the Lamps on the network
             for (Lamp lamp : lightingDirector.getLamps()) {
                 preset.applyTo(lamp);
             }
@@ -66,10 +68,14 @@ public class TutorialPresetActivity extends Activity {
         try { version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName; } catch (Exception e) {}
         ((TextView)findViewById(R.id.appTextVersion)).setText(version);
 
-        // Instantiate the director and wait for the connection
-        lightingDirector = LightingDirector.get();
+        // STEP 1: Initialize a lighting controller with default configuration.
+        LightingController lightingController = LightingController.get();
+        lightingController.init(new LightingControllerConfigurationBase(getApplicationContext().getFileStreamPath("").getAbsolutePath()));
+        lightingController.start();
 
-        // STEP 1: Register a global listener to handle Lighting events and start the LightingDirector
+        // STEP 2: Instantiate the director and wait for the connection, register a
+        // global listener to handle Lighting events
+        lightingDirector = LightingDirector.get();
         lightingDirector.addListener(new MyLightingListener());
         lightingDirector.start("TutorialApp");
     }

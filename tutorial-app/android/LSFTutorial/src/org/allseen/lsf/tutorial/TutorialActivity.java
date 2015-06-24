@@ -18,6 +18,8 @@ package org.allseen.lsf.tutorial;
 import org.allseen.lsf.sdk.Color;
 import org.allseen.lsf.sdk.Group;
 import org.allseen.lsf.sdk.Lamp;
+import org.allseen.lsf.sdk.LightingController;
+import org.allseen.lsf.sdk.LightingControllerConfigurationBase;
 import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.NextControllerConnectionListener;
 import org.allseen.lsf.sdk.Scene;
@@ -27,6 +29,8 @@ import android.support.v4.app.FragmentActivity;
 import android.widget.TextView;
 
 public class TutorialActivity extends FragmentActivity implements NextControllerConnectionListener {
+    private static final int CONTROLLER_CONNECTION_DELAY = 5000;
+
     private LightingDirector lightingDirector;
 
     @Override
@@ -40,9 +44,15 @@ public class TutorialActivity extends FragmentActivity implements NextController
         try { version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName; } catch (Exception e) {}
         ((TextView)findViewById(R.id.appTextVersion)).setText(version);
 
-        // Instantiate the director and wait for the connection
+        // STEP 1: Initialize a lighting controller with default configuration.
+        LightingController lightingController = LightingController.get();
+        lightingController.init(new LightingControllerConfigurationBase(getApplicationContext().getFileStreamPath("").getAbsolutePath()));
+        lightingController.start();
+
+        // STEP 2: Instantiate the director and wait for the connection, register a
+        // global listener to handle Lighting events
         lightingDirector = LightingDirector.get();
-        lightingDirector.postOnNextControllerConnection(this, 5000);
+        lightingDirector.postOnNextControllerConnection(this, CONTROLLER_CONNECTION_DELAY);
         lightingDirector.start("TutorialApp");
     }
 
