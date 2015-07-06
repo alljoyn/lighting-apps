@@ -17,12 +17,12 @@ package org.allseen.lsf.tutorial.sceneUI;
 
 import java.util.ArrayList;
 
-import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.sdk.AllCollectionAdapter;
+import org.allseen.lsf.sdk.AllLightingItemListenerBase;
 import org.allseen.lsf.sdk.LightingController;
 import org.allseen.lsf.sdk.LightingControllerConfigurationBase;
 import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.Scene;
+import org.allseen.lsf.sdk.TrackingID;
 
 import android.app.ListActivity;
 import android.os.Bundle;
@@ -39,7 +39,7 @@ public class TutorialSceneUIActivity extends ListActivity {
 
 
     // A global Listener that updates the UI when a Scene is initialized or removed.
-    private class MyLightingListener extends AllCollectionAdapter {
+    private class MyLightingListener extends AllLightingItemListenerBase {
         @Override
         public void onSceneInitialized(TrackingID trackingId, Scene scene) {
             //Update UI when a Scene is initialized.

@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class EnterCountFragment extends EnterNumberFragment {
+    public static long count;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,10 +49,7 @@ public class EnterCountFragment extends EnterNumberFragment {
 
     @Override
     protected String getNumberString() {
-        SampleAppActivity activity = (SampleAppActivity)getActivity();
-        long count = activity.pendingPulseEffectModel.count;
-
-        return String.valueOf(count);
+        return String.valueOf(EnterCountFragment.count);
     }
 
     @Override
@@ -61,12 +59,10 @@ public class EnterCountFragment extends EnterNumberFragment {
 
     @Override
     protected boolean setNumberValue(long numberValue) {
-        SampleAppActivity activity = (SampleAppActivity)getActivity();
-
-        activity.pendingPulseEffectModel.count = numberValue;
+        EnterCountFragment.count = numberValue;
 
         // Go back to the effect info display
-        activity.onBackPressed();
+        ((SampleAppActivity)getActivity()).onBackPressed();
 
         return true;
     }

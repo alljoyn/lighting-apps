@@ -18,10 +18,10 @@ package org.allseen.lsf.sdk.manager;
 import java.util.Iterator;
 
 import org.allseen.lsf.ControllerClient;
-import org.allseen.lsf.ControllerClientStatus;
 import org.allseen.lsf.LampGroupManager;
 import org.allseen.lsf.LampState;
-import org.allseen.lsf.ResponseCode;
+import org.allseen.lsf.sdk.ControllerClientStatus;
+import org.allseen.lsf.sdk.ResponseCode;
 import org.allseen.lsf.sdk.callback.HelperGroupManagerCallback;
 import org.allseen.lsf.sdk.model.AllLampsDataModel;
 import org.allseen.lsf.sdk.model.AllLampsLampGroup;
@@ -31,9 +31,9 @@ import org.allseen.lsf.sdk.model.AllLampsLampGroup;
  * in subsequent releases of the SDK</b>.
  */
 public class SampleGroupManager extends LampGroupManager {
-    protected HelperGroupManagerCallback callback;
+    protected HelperGroupManagerCallback<?> callback;
 
-    public SampleGroupManager(ControllerClient controller, HelperGroupManagerCallback callback) {
+    public SampleGroupManager(ControllerClient controller, HelperGroupManagerCallback<?> callback) {
         super(controller, callback);
 
         this.callback = callback;

@@ -29,12 +29,36 @@ public abstract class ColorItem extends LightingItem {
         return getColorDataModel().getState().getOnOff();
     }
 
+    public boolean isOn() {
+        return getPowerOn();
+    }
+
+    public boolean isOff() {
+        return !isOn();
+    }
+
     public Power getPower() {
         return (getPowerOn())? Power.ON : Power.OFF;
     }
 
     public Color getColor() {
         return new Color(getColorHsvt());
+    }
+
+    public MyLampState getState() {
+        return new MyLampState(getPower(), getColor());
+    }
+
+    public LampStateUniformity getUniformity() {
+        return new LampStateUniformity(getColorDataModel().uniformity);
+    }
+
+    public LampCapabilities getCapability() {
+        return new LampCapabilities(getColorDataModel().getCapability());
+    }
+
+    public void setCapability(LampCapabilities capability) {
+        getColorDataModel().setCapability(capability);
     }
 
     @Override

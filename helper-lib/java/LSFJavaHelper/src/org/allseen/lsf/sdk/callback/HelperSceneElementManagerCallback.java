@@ -20,10 +20,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.SceneElement;
 import org.allseen.lsf.SceneElementManagerCallback;
-import org.allseen.lsf.TrackingID;
+import org.allseen.lsf.sdk.ResponseCode;
+import org.allseen.lsf.sdk.TrackingID;
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 import org.allseen.lsf.sdk.manager.LightingSystemManager;
 import org.allseen.lsf.sdk.model.SceneElementDataModelV2;
@@ -32,11 +32,11 @@ import org.allseen.lsf.sdk.model.SceneElementDataModelV2;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class HelperSceneElementManagerCallback extends SceneElementManagerCallback {
-    protected LightingSystemManager manager;
+public class HelperSceneElementManagerCallback<SCENEELEMENT> extends SceneElementManagerCallback {
+    protected LightingSystemManager<?, ?, ?, ?, ?, SCENEELEMENT, ?, ?, ?, ?, ?> manager;
     protected Map<String, TrackingID> creationTrackingIDs;
 
-    public HelperSceneElementManagerCallback(LightingSystemManager manager) {
+    public HelperSceneElementManagerCallback(LightingSystemManager<?, ?, ?, ?, ?, SCENEELEMENT, ?, ?, ?, ?, ?> manager) {
         super();
 
         this.manager = manager;

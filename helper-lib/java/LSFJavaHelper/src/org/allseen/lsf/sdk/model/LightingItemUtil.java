@@ -15,9 +15,6 @@
  */
 package org.allseen.lsf.sdk.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.allseen.lsf.LampGroup;
 import org.allseen.lsf.LampState;
 import org.allseen.lsf.MasterScene;
@@ -25,10 +22,6 @@ import org.allseen.lsf.PulseEffectV2;
 import org.allseen.lsf.SceneElement;
 import org.allseen.lsf.SceneWithSceneElements;
 import org.allseen.lsf.TransitionEffectV2;
-import org.allseen.lsf.sdk.Group;
-import org.allseen.lsf.sdk.GroupMember;
-import org.allseen.lsf.sdk.Lamp;
-import org.allseen.lsf.sdk.Preset;
 
 public class LightingItemUtil {
 
@@ -40,22 +33,6 @@ public class LightingItemUtil {
         return lampState;
     }
 
-    public static LampGroup createLampGroup(GroupMember[] groupMembers) {
-        Set<String> lamps = new HashSet<String>();
-        Set<String> groups = new HashSet<String>();
-
-        if (groupMembers != null) {
-            for (GroupMember member : groupMembers) {
-                if (member instanceof Lamp) {
-                    lamps.add(((Lamp)member).getLampDataModel().id);
-                } else if (member instanceof Group) {
-                    groups.add(((Group)member).getGroupDataModel().id);
-                }
-            }
-        }
-
-        return createLampGroup(lamps.toArray(new String[lamps.size()]), groups.toArray(new String[groups.size()]));
-    }
 
     public static LampGroup createLampGroup(String[] lampIds, String[] groupIds) {
         LampGroup lampGroup = new LampGroup();
@@ -84,12 +61,12 @@ public class LightingItemUtil {
         return transitionEffect;
     }
 
-    public static TransitionEffectV2 createTransitionEffect(Preset preset, long duration) {
+    public static TransitionEffectV2 createTransitionEffect(PresetDataModel presetModel, long duration) {
         TransitionEffectV2 transitionEffect = null;
 
-        if ((preset != null) && (duration >= 0)) {
+        if ((presetModel != null) && (duration >= 0)) {
             transitionEffect = new TransitionEffectV2();
-            transitionEffect.setPresetID(preset.getPresetDataModel().id);
+            transitionEffect.setPresetID(presetModel.id);
             transitionEffect.setTransitionPeriod(duration);
         }
 
@@ -119,13 +96,13 @@ public class LightingItemUtil {
         return pulseEffect;
     }
 
-    public static PulseEffectV2 createPulseEffect(Preset fromPreset, Preset toPreset, long period, long duration, long count) {
+    public static PulseEffectV2 createPulseEffect(PresetDataModel fromPresetModel, PresetDataModel toPresetModel, long period, long duration, long count) {
         PulseEffectV2 pulseEffect = null;
 
-        if (fromPreset != null && toPreset != null && period > 0 && duration > 0 && count > 0) {
+        if (fromPresetModel != null && toPresetModel != null && period > 0 && duration > 0 && count > 0) {
             pulseEffect = new PulseEffectV2();
-            pulseEffect.setFromPresetID(fromPreset.getPresetDataModel().id);
-            pulseEffect.setToPresetID(toPreset.getPresetDataModel().id);
+            pulseEffect.setFromPresetID(fromPresetModel.id);
+            pulseEffect.setToPresetID(toPresetModel.id);
 
             pulseEffect.setPulsePeriod(period);
             pulseEffect.setPulseDuration(duration);
@@ -135,19 +112,8 @@ public class LightingItemUtil {
         return pulseEffect;
     }
 
-    public static SceneElement createSceneElement(String effectId, GroupMember[] members) {
-        SceneElement sceneElement = null;
-
-        if (effectId != null && members != null) {
-            LampGroup groupMembers = createLampGroup(members);
-
-            sceneElement = new SceneElement();
-            sceneElement.setEffectID(effectId);
-            sceneElement.setLamps(groupMembers.getLamps());
-            sceneElement.setLampGroups(groupMembers.getLampGroups());
-        }
-
-        return sceneElement;
+    public static SceneElement createSceneElement(String effectId, LampGroup groupMembers) {
+        return groupMembers != null ? createSceneElement(effectId, groupMembers.getLamps(), groupMembers.getLampGroups()) : null;
     }
 
     public static SceneElement createSceneElement(String effectId, String[] lampIds, String[] lampGroupIds) {

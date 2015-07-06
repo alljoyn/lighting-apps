@@ -15,8 +15,8 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.sdk.model.MasterSceneDataModel;
-
+import org.allseen.lsf.sdk.LightingDirector;
+import org.allseen.lsf.sdk.MasterScene;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,11 +26,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class MasterSceneInfoFragment extends PageFrameChildFragment implements View.OnClickListener {
+    public static PendingMasterScene pendingMasterScene = new PendingMasterScene();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SampleAppActivity activity = (SampleAppActivity) getActivity();
-        MasterSceneDataModel masterSceneModel = activity.systemManager.getMasterSceneCollectionManager().getModel(key);
+        MasterScene masterScene = LightingDirector.get().getMasterScene(key);
 
         view = inflater.inflate(R.layout.fragment_master_scene_info, container, false);
 
@@ -55,7 +56,7 @@ public class MasterSceneInfoFragment extends PageFrameChildFragment implements V
 
         setTextViewValue(rowMembers, R.id.sceneMembersRowLabel, getString(R.string.master_scene_info_members), 0);
 
-        updateInfoFields(activity, masterSceneModel);
+        updateMasterSceneInfoFields(activity, masterScene);
 
         return view;
     }
@@ -78,27 +79,24 @@ public class MasterSceneInfoFragment extends PageFrameChildFragment implements V
 
     protected void onHeaderClick() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        MasterSceneDataModel masterSceneModel = activity.systemManager.getMasterSceneCollectionManager().getModel(key);
+        MasterScene masterScene = LightingDirector.get().getMasterScene(key);
 
-        activity.showItemNameDialog(R.string.title_master_scene_rename, new UpdateMasterSceneNameAdapter(masterSceneModel, activity));
+        activity.showItemNameDialog(R.string.title_master_scene_rename, new UpdateMasterSceneNameAdapter(masterScene, activity));
     }
 
     protected void onMembersClick() {
-        SampleAppActivity activity = (SampleAppActivity)getActivity();
-
-        activity.pendingMasterSceneModel = new MasterSceneDataModel(activity.systemManager.getMasterSceneCollectionManager().getModel(key));
+        pendingMasterScene.init(LightingDirector.get().getMasterScene(key));
 
         ((ScenesPageFragment)parent).showSelectMembersChildFragment();
     }
 
     public void updateInfoFields() {
-        SampleAppActivity activity = (SampleAppActivity)getActivity();
-        updateInfoFields(activity, activity.systemManager.getMasterSceneCollectionManager().getModel(key));
+        updateMasterSceneInfoFields((SampleAppActivity)getActivity(), LightingDirector.get().getMasterScene(key));
     }
 
-    public void updateInfoFields(SampleAppActivity activity, MasterSceneDataModel masterSceneModel) {
+    protected void updateMasterSceneInfoFields(SampleAppActivity activity, MasterScene masterScene) {
         // Update name and members
-        setTextViewValue(view, R.id.statusTextName, masterSceneModel.getName(), 0);
-        setTextViewValue(view.findViewById(R.id.sceneInfoRowMembers), R.id.sceneMembersRowText, Util.createSceneNamesString(activity, masterSceneModel.masterScene), 0);
+        setTextViewValue(view, R.id.statusTextName, masterScene.getName(), 0);
+        setTextViewValue(view.findViewById(R.id.sceneInfoRowMembers), R.id.sceneMembersRowText, Util.createSceneNamesString(activity, masterScene), 0);
     }
 }

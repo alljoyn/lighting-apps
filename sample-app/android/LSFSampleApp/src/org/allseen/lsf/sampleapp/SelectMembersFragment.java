@@ -17,21 +17,16 @@ package org.allseen.lsf.sampleapp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.allseen.lsf.LampGroup;
+import org.allseen.lsf.sdk.ColorItem;
 import org.allseen.lsf.sdk.Group;
-import org.allseen.lsf.sdk.Lamp;
-import org.allseen.lsf.sdk.SceneV1;
-import org.allseen.lsf.sdk.model.AllLampsDataModel;
-import org.allseen.lsf.sdk.model.GroupDataModel;
-import org.allseen.lsf.sdk.model.LampCapabilities;
-import org.allseen.lsf.sdk.model.LampDataModel;
-import org.allseen.lsf.sdk.model.SceneDataModel;
-
+import org.allseen.lsf.sdk.LampCapabilities;
+import org.allseen.lsf.sdk.LightingDirector;
+import org.allseen.lsf.sdk.LightingItem;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -40,6 +35,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+//TODO-DEL Needs cleanup
 public abstract class SelectMembersFragment extends SelectableItemTableFragment {
 
     protected int labelStringID;
@@ -49,12 +45,28 @@ public abstract class SelectMembersFragment extends SelectableItemTableFragment 
         this.labelStringID = labelStringID;
     }
 
-    protected boolean showGroups() {
-        return !showScenes();
+    protected boolean showLamps() {
+        return !(showPresets() || showTransitionEffects() || showPulseEffects() || showScenes() || showSceneElements());
     }
 
-    protected boolean showLamps() {
-        return !showScenes();
+    protected boolean showGroups() {
+        return showLamps();
+    }
+
+    protected boolean showPresets() {
+        return false;
+    }
+
+    protected boolean showTransitionEffects() {
+        return false;
+    }
+
+    protected boolean showPulseEffects() {
+        return false;
+    }
+
+    protected boolean showSceneElements() {
+        return false;
     }
 
     protected boolean showScenes() {
@@ -66,62 +78,72 @@ public abstract class SelectMembersFragment extends SelectableItemTableFragment 
     }
 
     @Override
-    protected boolean isItemSelected(String groupID) {
-        return (selectedItems != null) && (selectedItems.contains(groupID));
+    protected boolean isItemSelected(String itemID) {
+        return (selectedItems != null) && (selectedItems.contains(itemID));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
-        String itemID = getPendingItemID();
-        SampleAppActivity activity = (SampleAppActivity) getActivity();
+        LightingDirector director = LightingDirector.get();
+        String pendingItemID = getPendingItemID();
 
-        if (itemID == null) {
-            itemID = "";
+        if (pendingItemID == null) {
+            pendingItemID = "";
         }
 
         getPendingSelection();
 
-        if (showGroups()) {
-            Iterator<Group> i = activity.systemManager.getGroupCollectionManager().getGroupIterator();
-
-            while(i.hasNext()) {
-                GroupDataModel groupModel = i.next().getGroupDataModel();
-                GroupDataModel pendingGroupModel = ((SampleAppActivity)getActivity()).pendingGroupModel;
-                String pendingGroupModelID = pendingGroupModel != null ? pendingGroupModel.id : "";
-                boolean otherIsParent = pendingGroupModelID != null && groupModel.getGroups() != null && groupModel.getGroups().contains(pendingGroupModelID);
-
-                if (groupModel != null && !itemID.equals(groupModel.id) && !AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupModel.id) && !otherIsParent) {
-                    updateSelectableItemRow(inflater, root, groupModel.id, groupModel.tag, R.drawable.scene_lightbulbs_icon, groupModel.getName(), isItemSelected(groupModel.id));
-                }
-            }
+        if (showLamps()) {
+            addItems(director.getLamps(), pendingItemID, inflater, root, R.drawable.group_lightbulb_icon);
         }
 
-        if (showLamps()) {
-            Iterator<Lamp> i = activity.systemManager.getLampCollectionManager().getLampIterator();
+        if (showGroups()) {
+            addGroups(director.getGroups(), pendingItemID, inflater, root, R.drawable.scene_lightbulbs_icon);
+        }
 
-            while (i.hasNext()){
-                LampDataModel lampModel = i.next().getLampDataModel();
+        if (showPresets()) {
+            addItems(director.getPresets(), pendingItemID, inflater, root, R.drawable.list_constant_icon);
+        }
 
-                if (lampModel != null && !itemID.equals(lampModel.id)) {
-                    updateSelectableItemRow(inflater, root, lampModel.id, lampModel.tag, R.drawable.group_lightbulb_icon, lampModel.getName(), isItemSelected(lampModel.id));
-                }
-            }
+        if (showTransitionEffects()) {
+            addItems(director.getTransitionEffects(), pendingItemID, inflater, root, R.drawable.list_transition_icon);
+        }
+
+        if (showPulseEffects()) {
+            addItems(director.getPulseEffects(), pendingItemID, inflater, root, R.drawable.list_pulse_icon);
+        }
+
+        if (showSceneElements()) {
+            addItems(director.getSceneElements(), pendingItemID, inflater, root, R.drawable.scene_element_set_icon);
         }
 
         if (showScenes()) {
-            Iterator<SceneV1> i = activity.systemManager.getSceneCollectionManagerV1().getSceneIterator();
-
-            while (i.hasNext()){
-                SceneDataModel sceneModel = i.next().getSceneDataModel();
-
-                if (sceneModel != null && !itemID.equals(sceneModel.id)) {
-                    updateSelectableItemRow(inflater, root, sceneModel.id, sceneModel.tag, R.drawable.scene_set_icon, sceneModel.getName(), isItemSelected(sceneModel.id));
-                }
-            }
+            addItems(director.getScenes(), pendingItemID, inflater, root, R.drawable.scene_set_icon);
         }
 
         return root;
+    }
+
+    protected void addGroups(Group[] groups, String pendingItemID, LayoutInflater inflater, View view, int iconID) {
+        for (Group group : groups) {
+            String groupID = group.getId();
+
+            // Filter out the All Lamps group and any parent groups
+            if (!pendingItemID.equals(groupID) && !group.isAllLampsGroup() && !isParentOfPendingGroup(group)) {
+                updateSelectableItemRow(inflater, view, groupID, group.getTag(), iconID, group.getName(), isItemSelected(groupID));
+            }
+        }
+    }
+
+    protected void addItems(LightingItem[] items, String pendingItemID, LayoutInflater inflater, View view, int iconID) {
+        for (LightingItem item : items) {
+            String itemID = item.getId();
+
+            if (!pendingItemID.equals(itemID)) {
+                updateSelectableItemRow(inflater, view, itemID, item.getTag(), iconID, item.getName(), isItemSelected(itemID));
+            }
+        }
     }
 
     @Override
@@ -131,45 +153,81 @@ public abstract class SelectMembersFragment extends SelectableItemTableFragment 
         }
     }
 
+    protected boolean isParentOfPendingGroup(Group group) {
+        return false;
+    }
+
     protected void getPendingSelection() {
         selectedItems = null;
 
-        if (showGroups() || showLamps()) {
-            LampGroup pendingMembers = getPendingMembers();
+        if (showLamps()) {
+            addToSelection(getPendingLampIDs());
+        }
 
-            if (pendingMembers != null) {
-                if (selectedItems == null) {
-                    selectedItems = new HashSet<String>();
-                }
+        if (showGroups()) {
+            addToSelection(getPendingGroupIDs());
+        }
 
-                if (showGroups()) {
-                    selectedItems.addAll(Arrays.asList(pendingMembers.getLampGroups()));
-                }
+        if (showPresets()) {
+            addToSelection(getPendingPresetIDs());
+        }
 
-                if (showLamps()) {
-                    selectedItems.addAll(Arrays.asList(pendingMembers.getLamps()));
-                }
-            }
+        if (showTransitionEffects()) {
+            addToSelection(getPendingTransitionEffectIDs());
+        }
+
+        if (showPulseEffects()) {
+            addToSelection(getPendingPulseEffectIDs());
+        }
+
+        if (showSceneElements()) {
+            addToSelection(getPendingSceneElements());
         }
 
         if (showScenes()) {
-            String[] pendingScenes = getPendingScenes();
-
-            if (pendingScenes != null) {
-                if (selectedItems == null) {
-                    selectedItems = new HashSet<String>();
-                }
-
-                selectedItems.addAll(Arrays.asList(pendingScenes));
-            }
+            addToSelection(getPendingScenes());
         }
     }
 
-    protected LampGroup getPendingMembers() {
-        return null;
+    protected void addToSelection(String[] pendingItemIDs) {
+        addToSelection(pendingItemIDs != null ? Arrays.asList(pendingItemIDs) : null);
+    }
+
+    protected void addToSelection(Collection<String> pendingItemIDs) {
+        if (pendingItemIDs != null) {
+            if (selectedItems == null) {
+                selectedItems = new HashSet<String>();
+            }
+
+            selectedItems.addAll(pendingItemIDs);
+        }
     }
 
     protected String getPendingItemID() {
+        return null;
+    }
+
+    protected Collection<String> getPendingLampIDs() {
+        return null;
+    }
+
+    protected Collection<String> getPendingGroupIDs() {
+        return null;
+    }
+
+    protected Collection<String> getPendingPresetIDs() {
+        return null;
+    }
+
+    protected Collection<String> getPendingTransitionEffectIDs() {
+        return null;
+    }
+
+    protected Collection<String> getPendingPulseEffectIDs() {
+        return null;
+    }
+
+    protected String[] getPendingSceneElements() {
         return null;
     }
 
@@ -178,36 +236,48 @@ public abstract class SelectMembersFragment extends SelectableItemTableFragment 
     }
 
     protected boolean processLampID(SampleAppActivity activity, String lampID, List<String> lampIDs, LampCapabilities capability) {
-        LampDataModel lampModel = activity.systemManager.getLampCollectionManager().getModel(lampID);
-        boolean found = lampModel != null;
-
-        if (found) {
-            lampIDs.add(lampID);
-            capability.includeData(lampModel.getCapability());
-        }
-
-        return found;
+        return processCapabilityItem(LightingDirector.get().getLamp(lampID), lampIDs, capability);
     }
 
     protected boolean processGroupID(SampleAppActivity activity, String groupID, List<String> groupIDs, LampCapabilities capability) {
-        GroupDataModel groupModel = activity.systemManager.getGroupCollectionManager().getModel(groupID);
-        boolean found = groupModel != null;
+        return processCapabilityItem(LightingDirector.get().getGroup(groupID), groupIDs, capability);
+    }
+
+    protected boolean processPresetID(SampleAppActivity activity, String presetID, List<String> presetIDs, LampCapabilities capability) {
+        return processLightingItem(LightingDirector.get().getPreset(presetID), presetIDs);
+    }
+
+    protected boolean processTransitionEffectID(SampleAppActivity activity, String transitionEffectID, List<String> transitionEffectIDs, LampCapabilities capability) {
+        return processLightingItem(LightingDirector.get().getTransitionEffect(transitionEffectID), transitionEffectIDs);
+    }
+
+    protected boolean processPulseEffectID(SampleAppActivity activity, String pulseEffectID, List<String> pulseEffectIDs, LampCapabilities capability) {
+        return processLightingItem(LightingDirector.get().getPulseEffect(pulseEffectID), pulseEffectIDs);
+    }
+
+    protected boolean processSceneElementID(SampleAppActivity activity, String sceneElementID, List<String> sceneElementIDs, LampCapabilities capability) {
+        return processLightingItem(LightingDirector.get().getSceneElement(sceneElementID), sceneElementIDs);
+    }
+
+    protected boolean processSceneID(SampleAppActivity activity, String sceneID, List<String> sceneIDs, LampCapabilities capability) {
+        return processLightingItem(LightingDirector.get().getScene(sceneID), sceneIDs);
+    }
+
+    protected boolean processCapabilityItem(ColorItem item, List<String> itemIDs, LampCapabilities capability) {
+        boolean found = processLightingItem(item, itemIDs);
 
         if (found) {
-            groupIDs.add(groupID);
-            capability.includeData(groupModel.getCapability());
+            capability.includeData(item.getCapability());
         }
 
         return found;
     }
 
-    protected boolean processSceneID(SampleAppActivity activity, String sceneID, List<String> sceneIDs, LampCapabilities capability) {
-        SceneDataModel sceneModel = activity.systemManager.getSceneCollectionManagerV1().getModel(sceneID);
-        boolean found = sceneModel != null;
+    protected boolean processLightingItem(LightingItem item, List<String> itemIDs) {
+        boolean found = item != null;
 
         if (found) {
-            sceneIDs.add(sceneID);
-            //TODO-FIX capability.includeData(sceneModel.getCapability());
+            itemIDs.add(item.getId());
         }
 
         return found;
@@ -221,6 +291,10 @@ public abstract class SelectMembersFragment extends SelectableItemTableFragment 
 
         List<String> lampIDs = new ArrayList<String>();
         List<String> groupIDs = new ArrayList<String>();
+        List<String> presetIDs = new ArrayList<String>();
+        List<String> transitionEffectIDs = new ArrayList<String>();
+        List<String> pulseEffectIDs = new ArrayList<String>();
+        List<String> sceneElementIDs = new ArrayList<String>();
         List<String> sceneIDs = new ArrayList<String>();
 
         for (int index = 0; index < selectedItemIDs.size(); index++) {
@@ -230,6 +304,14 @@ public abstract class SelectMembersFragment extends SelectableItemTableFragment 
                 Log.d(SampleAppActivity.TAG, "Adding lamp ID: " + itemID);
             } else if (processGroupID(activity, itemID, groupIDs, capability)) {
                 Log.d(SampleAppActivity.TAG, "Adding group ID: " + itemID);
+            } else if (processPresetID(activity, itemID, presetIDs, capability)) {
+                Log.d(SampleAppActivity.TAG, "Adding preset ID: " + itemID);
+            } else if (processTransitionEffectID(activity, itemID, transitionEffectIDs, capability)) {
+                Log.d(SampleAppActivity.TAG, "Adding transition effect ID: " + itemID);
+            } else if (processPulseEffectID(activity, itemID, pulseEffectIDs, capability)) {
+                Log.d(SampleAppActivity.TAG, "Adding pulse effect ID: " + itemID);
+            } else if (processSceneElementID(activity, itemID, sceneElementIDs, capability)) {
+                Log.d(SampleAppActivity.TAG, "Adding scene element ID: " + itemID);
             } else if (processSceneID(activity, itemID, sceneIDs, capability)) {
                 Log.d(SampleAppActivity.TAG, "Adding scene ID: " + itemID);
             } else {
@@ -237,11 +319,11 @@ public abstract class SelectMembersFragment extends SelectableItemTableFragment 
             }
         }
 
-        int count = lampIDs.size() + groupIDs.size() + sceneIDs.size();
+        int count = lampIDs.size() + groupIDs.size() + presetIDs.size() + transitionEffectIDs.size() + pulseEffectIDs.size() + sceneElementIDs.size() + sceneIDs.size();
         boolean valid = count > 0;
 
         if (valid) {
-            processSelection(activity, lampIDs, groupIDs, sceneIDs, capability);
+            processSelection(activity, lampIDs, groupIDs, presetIDs, transitionEffectIDs, pulseEffectIDs, sceneElementIDs, sceneIDs, capability);
         } else {
             String text = String.format(getResources().getString(R.string.toast_members_missing), getResources().getString(labelStringID));
             activity.showToast(text);
@@ -250,7 +332,7 @@ public abstract class SelectMembersFragment extends SelectableItemTableFragment 
         return valid;
     }
 
-    protected void processSelection(final SampleAppActivity activity, final List<String> lampIDs, final List<String> groupIDs, final List<String> sceneIDs, LampCapabilities capability) {
+    protected void processSelection(final SampleAppActivity activity, final List<String> lampIDs, final List<String> groupIDs, final List<String> presetIDs, final List<String> transitionEffectIDs, final List<String> pulseEffectIDs, final List<String> sceneElementIDs, final List<String> sceneIDs, LampCapabilities capability) {
         if (confirmMixedSelection() && capability.isMixed()) {
             // detected a mixed group of lamps
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
@@ -259,7 +341,7 @@ public abstract class SelectMembersFragment extends SelectableItemTableFragment 
             alertDialogBuilder.setPositiveButton(getMixedSelectionPositiveButtonID(), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
-                    processSelection(activity, lampIDs, groupIDs, sceneIDs);
+                    processSelection(activity, lampIDs, presetIDs, transitionEffectIDs, pulseEffectIDs, groupIDs, sceneElementIDs, sceneIDs);
                 }
             });
             alertDialogBuilder.setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
@@ -273,11 +355,11 @@ public abstract class SelectMembersFragment extends SelectableItemTableFragment 
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
         } else {
-            processSelection(activity, lampIDs, groupIDs, sceneIDs);
+            processSelection(activity, lampIDs, groupIDs, presetIDs, transitionEffectIDs, pulseEffectIDs, sceneElementIDs, sceneIDs);
         }
     }
 
-    protected abstract void processSelection(SampleAppActivity activity, List<String> lampIDs, List<String> groupIDs, List<String> sceneIDs);
+    protected abstract void processSelection(SampleAppActivity activity, List<String> lampIDs, List<String> groupIDs, final List<String> presetIDs, final List<String> transitionEffectIDs, final List<String> pulseEffectIDs, List<String> sceneElementIDs, List<String> sceneIDs);
     protected abstract int getMixedSelectionMessageID();
     protected abstract int getMixedSelectionPositiveButtonID();
 }

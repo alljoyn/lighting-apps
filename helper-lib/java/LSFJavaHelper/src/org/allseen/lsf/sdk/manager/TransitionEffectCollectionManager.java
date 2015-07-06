@@ -18,10 +18,9 @@ package org.allseen.lsf.sdk.manager;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.sdk.LightingItemErrorEvent;
-import org.allseen.lsf.sdk.TransitionEffect;
-import org.allseen.lsf.sdk.TransitionEffectListener;
+import org.allseen.lsf.sdk.TrackingID;
+import org.allseen.lsf.sdk.factory.TransitionEffectFactory;
+import org.allseen.lsf.sdk.listener.TransitionEffectCollectionListener;
 import org.allseen.lsf.sdk.model.LightingItemFilter;
 import org.allseen.lsf.sdk.model.TransitionEffectDataModelV2;
 
@@ -29,69 +28,80 @@ import org.allseen.lsf.sdk.model.TransitionEffectDataModelV2;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class TransitionEffectCollectionManager extends LightingItemCollectionManager<TransitionEffect, TransitionEffectListener, TransitionEffectDataModelV2> {
+public class TransitionEffectCollectionManager<TRANSITIONEFFECT, ERROR> extends LightingItemCollectionManager<TRANSITIONEFFECT, TransitionEffectCollectionListener<? super TRANSITIONEFFECT, ? super ERROR>, TransitionEffectDataModelV2, ERROR> {
 
-    public TransitionEffectCollectionManager(LightingSystemManager director) {
-        super(director);
+    private final TransitionEffectFactory<TRANSITIONEFFECT, ERROR> factory;
+
+    public TransitionEffectCollectionManager(LightingSystemManager<?, ?, ?, TRANSITIONEFFECT, ?, ?, ?, ?, ?, ?, ?> manager, TransitionEffectFactory<TRANSITIONEFFECT, ERROR> factory) {
+        super(manager, factory);
+
+        this.factory = factory;
     }
 
-    public TransitionEffect addTransitionEffect(String transitionEffectId) {
-        return addTransitionEffect(transitionEffectId, new TransitionEffect(transitionEffectId));
+    public TRANSITIONEFFECT addTransitionEffect(String transitionEffectID) {
+        return addTransitionEffect(transitionEffectID, factory.createTransitionEffect(transitionEffectID));
     }
 
-    public TransitionEffect addTransitionEffect(String transitionEffectId, TransitionEffect transistionEffect) {
-        return itemAdapters.put(transitionEffectId, transistionEffect);
+    public TRANSITIONEFFECT addTransitionEffect(String transitionEffectID, TRANSITIONEFFECT transistionEffect) {
+        return itemAdapters.put(transitionEffectID, transistionEffect);
     }
 
-    public TransitionEffect getTransistionEffect(String transitionEffectId) {
-        return getAdapter(transitionEffectId);
+    public TRANSITIONEFFECT getTransistionEffect(String transitionEffectID) {
+        return getAdapter(transitionEffectID);
     }
 
-    public TransitionEffect[] getTransitionEffects() {
-        return getAdapters().toArray(new TransitionEffect[size()]);
+    public TRANSITIONEFFECT[] getTransitionEffects() {
+        return getAdapters().toArray(factory.createTransitionEffects(size()));
     }
 
-    public TransitionEffect[] getTransitionEffects(LightingItemFilter<TransitionEffect> filter) {
-        Collection<TransitionEffect> filteredTransitionEffect = getAdapters(filter);
-        return filteredTransitionEffect.toArray(new TransitionEffect[filteredTransitionEffect.size()]);
+    public TRANSITIONEFFECT[] getTransitionEffects(LightingItemFilter<TRANSITIONEFFECT> filter) {
+        Collection<TRANSITIONEFFECT> filteredTransitionEffect = getTransitionEffectsCollection(filter);
+        return filteredTransitionEffect.toArray(factory.createTransitionEffects(filteredTransitionEffect.size()));
     }
 
-    public Iterator<TransitionEffect> getTransitionEffectIterator() {
+    public Collection<TRANSITIONEFFECT> getTransitionEffectsCollection(LightingItemFilter<TRANSITIONEFFECT> filter) {
+        return getAdapters(filter);
+    }
+
+    public Iterator<TRANSITIONEFFECT> getTransitionEffectIterator() {
         return getAdapters().iterator();
     }
 
-    public Collection<TransitionEffect> removeTransitionEffects() {
+    public Collection<TRANSITIONEFFECT> removeTransitionEffects() {
         return removeAllAdapters();
     }
 
-    public TransitionEffect removeTransitionEffect(String transitionEffectId) {
+    public TRANSITIONEFFECT removeTransitionEffect(String transitionEffectId) {
         return removeAdapter(transitionEffectId);
     }
 
     @Override
-    protected void sendInitializedEvent(TransitionEffectListener listener, TransitionEffect transitionEffect, TrackingID trackingID) {
+    protected void sendInitializedEvent(TransitionEffectCollectionListener<? super TRANSITIONEFFECT, ? super ERROR> listener, TRANSITIONEFFECT transitionEffect, TrackingID trackingID) {
         listener.onTransitionEffectInitialized(trackingID, transitionEffect);
     }
 
     @Override
-    protected void sendChangedEvent(TransitionEffectListener listener, TransitionEffect transitionEffect) {
+    protected void sendChangedEvent(TransitionEffectCollectionListener<? super TRANSITIONEFFECT, ? super ERROR> listener, TRANSITIONEFFECT transitionEffect) {
         listener.onTransitionEffectChanged(transitionEffect);
     }
 
     @Override
-    protected void sendRemovedEvent(TransitionEffectListener listener, TransitionEffect transitionEffect) {
+    protected void sendRemovedEvent(TransitionEffectCollectionListener<? super TRANSITIONEFFECT, ? super ERROR> listener, TRANSITIONEFFECT transitionEffect) {
         listener.onTransitionEffectRemoved(transitionEffect);
     }
 
     @Override
-    protected void sendErrorEvent(TransitionEffectListener listener, LightingItemErrorEvent errorEvent) {
-        listener.onTransitionEffectError(errorEvent);
+    protected void sendErrorEvent(TransitionEffectCollectionListener<? super TRANSITIONEFFECT, ? super ERROR> listener, ERROR error) {
+        listener.onTransitionEffectError(error);
     }
 
     @Override
     public TransitionEffectDataModelV2 getModel(String transitionEffectID) {
-        TransitionEffect transitionEffect = getAdapter(transitionEffectID);
+        return getModel(getAdapter(transitionEffectID));
+    }
 
-        return transitionEffect != null ? transitionEffect.getTransitionEffectDataModel() : null;
+    @Override
+    public TransitionEffectDataModelV2 getModel(TRANSITIONEFFECT transitionEffect) {
+        return transitionEffect != null ? factory.findTransitionEffectDataModel(transitionEffect) : null;
     }
 }

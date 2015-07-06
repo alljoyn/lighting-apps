@@ -14,6 +14,8 @@
  */
 package org.allseen.lsf.sdk;
 
+import org.allseen.lsf.sdk.model.ColorStateConverter;
+
 public class MyLampState implements LampState {
 
     private static final Color DEFAULT_COLOR = Color.WHITE;
@@ -21,6 +23,15 @@ public class MyLampState implements LampState {
 
     private Power power;
     private Color color;
+
+    public MyLampState(org.allseen.lsf.LampState lampState) {
+        this(
+            lampState.getOnOff() ? Power.ON : Power.OFF,
+            ColorStateConverter.convertHueModelToView(lampState.getHue()),
+            ColorStateConverter.convertSaturationModelToView(lampState.getHue()),
+            ColorStateConverter.convertBrightnessModelToView(lampState.getHue()),
+            ColorStateConverter.convertColorTempModelToView(lampState.getHue()));
+    }
 
     public MyLampState(Power lampPower, int hue, int sat, int brightness, int colorTemp) {
         this(lampPower, new Color(hue, sat, brightness, colorTemp));
@@ -52,6 +63,14 @@ public class MyLampState implements LampState {
     @Override
     public void setPowerOn(boolean powerOn) {
         power = (powerOn)? Power.ON : Power.OFF;
+    }
+
+    public boolean isOn() {
+        return getPowerOn();
+    }
+
+    public boolean isOff() {
+        return !isOn();
     }
 
     @Override

@@ -76,7 +76,6 @@ public abstract class EnterNameFragment extends PageFrameChildFragment {
                 // check for duplicate names
                 if (duplicateName(name)) {
                     // create an alert
-
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle(R.string.duplicate_name);
                     builder.setMessage(String.format(getDuplicateNameMessage(), name));
@@ -84,7 +83,7 @@ public abstract class EnterNameFragment extends PageFrameChildFragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             setName(name);
-                            ((PageMainContainerFragment)parent).showSelectMembersChildFragment();
+                            showNextFragment();
                         }
                     });
                     builder.setNegativeButton(R.string.dialog_cancel, new OnClickListener() {
@@ -98,15 +97,18 @@ public abstract class EnterNameFragment extends PageFrameChildFragment {
 
                 } else {
                     // we can go ahead and use this name
-
                     setName(name);
-                    ((PageMainContainerFragment)parent).showSelectMembersChildFragment();
+                    showNextFragment();
                 }
             }
         } else {
             String text = String.format(getResources().getString(R.string.toast_name_missing), getResources().getString(labelStringID));
             ((SampleAppActivity)getActivity()).showToast(text);
         }
+    }
+
+    protected void showNextFragment() {
+        ((PageMainContainerFragment)parent).showSelectMembersChildFragment();
     }
 
     protected abstract void setName(String name);

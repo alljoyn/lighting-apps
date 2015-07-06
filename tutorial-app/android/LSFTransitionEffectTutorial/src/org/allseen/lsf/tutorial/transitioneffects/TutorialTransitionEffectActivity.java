@@ -15,8 +15,7 @@
  */
 package org.allseen.lsf.tutorial.transitioneffects;
 
-import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.sdk.AllCollectionAdapter;
+import org.allseen.lsf.sdk.AllLightingItemListenerBase;
 import org.allseen.lsf.sdk.Color;
 import org.allseen.lsf.sdk.LightingController;
 import org.allseen.lsf.sdk.LightingControllerConfigurationBase;
@@ -25,6 +24,7 @@ import org.allseen.lsf.sdk.MyLampState;
 import org.allseen.lsf.sdk.NextControllerConnectionListener;
 import org.allseen.lsf.sdk.Power;
 import org.allseen.lsf.sdk.TransitionEffect;
+import org.allseen.lsf.sdk.TrackingID;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -44,7 +44,7 @@ public class TutorialTransitionEffectActivity extends Activity implements NextCo
      *  transition effect in order to apply it to the first bulb found found in the
      *  LightingDirector.
      */
-    private class MyLightingListener extends AllCollectionAdapter {
+    private class MyLightingListener extends AllLightingItemListenerBase {
         @Override
         public void onTransitionEffectInitialized(TrackingID trackingId, TransitionEffect effect){
             // STEP 4: Apply the TransitionEffect using onTransitionEffectInitialized as a trigger.

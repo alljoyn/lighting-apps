@@ -15,8 +15,6 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.sdk.manager.AllJoynManager;
-
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -50,7 +48,9 @@ public class ScrollableTableFragment extends PageFrameChildFragment {
     }
 
     public void updateLoading() {
-        if (!AllJoynManager.controllerConnected) {
+        SampleAppActivity activity = (SampleAppActivity)getActivity();
+
+        if (!activity.isControllerConnected()) {
             // display loading controller service screen, hide the scroll table
             layout.findViewById(R.id.scrollLoadingView).setVisibility(View.VISIBLE);
             layout.findViewById(R.id.scrollScrollView).setVisibility(View.GONE);
@@ -62,8 +62,8 @@ public class ScrollableTableFragment extends PageFrameChildFragment {
             if (ssid == null) {
                 ssid = "<unknown ssid>";
             }
-            ((TextView) loadingView.findViewById(R.id.loadingText1)).setText(getActivity().getText(R.string.no_controller) + " " + ssid);
-            ((TextView) loadingView.findViewById(R.id.loadingText2)).setText(getActivity().getText(R.string.loading_controller));
+            ((TextView) loadingView.findViewById(R.id.loadingText1)).setText(activity.getText(R.string.no_controller) + " " + ssid);
+            ((TextView) loadingView.findViewById(R.id.loadingText2)).setText(activity.getText(R.string.loading_controller));
 
         } else {
             // remove the loading view, and resume showing the scroll table

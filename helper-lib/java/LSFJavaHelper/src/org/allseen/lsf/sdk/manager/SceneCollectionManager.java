@@ -18,10 +18,9 @@ package org.allseen.lsf.sdk.manager;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.sdk.LightingItemErrorEvent;
-import org.allseen.lsf.sdk.SceneListener;
-import org.allseen.lsf.sdk.SceneV1;
+import org.allseen.lsf.sdk.TrackingID;
+import org.allseen.lsf.sdk.factory.SceneV1Factory;
+import org.allseen.lsf.sdk.listener.SceneCollectionListener;
 import org.allseen.lsf.sdk.model.LightingItemFilter;
 import org.allseen.lsf.sdk.model.SceneDataModel;
 
@@ -29,73 +28,80 @@ import org.allseen.lsf.sdk.model.SceneDataModel;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class SceneCollectionManager extends LightingItemCollectionManager<SceneV1, SceneListener, SceneDataModel> {
+public class SceneCollectionManager<SCENEV1, ERROR> extends LightingItemCollectionManager<SCENEV1, SceneCollectionListener<? super SCENEV1, ? super ERROR>, SceneDataModel, ERROR> {
 
-    public SceneCollectionManager(LightingSystemManager director) {
-        super(director);
+    protected final SceneV1Factory<SCENEV1, ERROR> factory;
+
+    public SceneCollectionManager(LightingSystemManager<?, ?, ?, ?, ?, ?, SCENEV1, ?, ?, ?, ?> manager, SceneV1Factory<SCENEV1, ERROR> factory) {
+        super(manager, factory);
+
+        this.factory = factory;
     }
 
-    public SceneV1 addScene(String sceneID) {
-        return addScene(sceneID, new SceneV1(sceneID));
+    public SCENEV1 addScene(String sceneID) {
+        return addScene(sceneID, factory.createSceneV1(sceneID));
     }
 
-    public SceneV1 addScene(SceneDataModel sceneModel) {
-        return addScene(sceneModel.id, new SceneV1(sceneModel));
-    }
-
-    public SceneV1 addScene(String sceneID, SceneV1 scene) {
+    public SCENEV1 addScene(String sceneID, SCENEV1 scene) {
         return itemAdapters.put(sceneID, scene);
     }
 
-    public SceneV1 getScene(String sceneID) {
+    public SCENEV1 getScene(String sceneID) {
         return getAdapter(sceneID);
     }
 
-    public SceneV1[] getScenes() {
-        return getAdapters().toArray(new SceneV1[size()]);
+    public SCENEV1[] getScenes() {
+        return getAdapters().toArray(factory.createScenesV1(size()));
     }
 
-    public SceneV1[] getScenes(LightingItemFilter<SceneV1> filter) {
-        Collection<SceneV1> filteredScenes = getAdapters(filter);
-        return filteredScenes.toArray(new SceneV1[filteredScenes.size()]);
+    public SCENEV1[] getScenes(LightingItemFilter<SCENEV1> filter) {
+        Collection<SCENEV1> filteredScenes = getScenesCollection(filter);
+        return filteredScenes.toArray(factory.createScenesV1(filteredScenes.size()));
     }
 
-    public Iterator<SceneV1> getSceneIterator() {
+    public Collection<SCENEV1> getScenesCollection(LightingItemFilter<SCENEV1> filter) {
+        return getAdapters(filter);
+    }
+
+    public Iterator<SCENEV1> getSceneIterator() {
         return getAdapters().iterator();
     }
 
-    public Collection<SceneV1> removeScenes() {
+    public Collection<SCENEV1> removeScenes() {
         return removeAllAdapters();
     }
 
-    public SceneV1 removeScene(String sceneID) {
+    public SCENEV1 removeScene(String sceneID) {
         return removeAdapter(sceneID);
     }
 
     @Override
-    protected void sendInitializedEvent(SceneListener listener, SceneV1 scene, TrackingID trackingID) {
+    protected void sendInitializedEvent(SceneCollectionListener<? super SCENEV1, ? super ERROR> listener, SCENEV1 scene, TrackingID trackingID) {
         listener.onSceneInitialized(trackingID, scene);
     }
 
     @Override
-    protected void sendChangedEvent(SceneListener listener, SceneV1 scene) {
+    protected void sendChangedEvent(SceneCollectionListener<? super SCENEV1, ? super ERROR> listener, SCENEV1 scene) {
         listener.onSceneChanged(scene);
     }
 
     @Override
-    protected void sendRemovedEvent(SceneListener listener, SceneV1 scene) {
+    protected void sendRemovedEvent(SceneCollectionListener<? super SCENEV1, ? super ERROR> listener, SCENEV1 scene) {
         listener.onSceneRemoved(scene);
     }
 
     @Override
-    protected void sendErrorEvent(SceneListener listener, LightingItemErrorEvent errorEvent) {
-        listener.onSceneError(errorEvent);
+    protected void sendErrorEvent(SceneCollectionListener<? super SCENEV1, ? super ERROR> listener, ERROR error) {
+        listener.onSceneError(error);
     }
 
     @Override
     public SceneDataModel getModel(String sceneID) {
-        SceneV1 scene = getAdapter(sceneID);
+        return getModel(getAdapter(sceneID));
+    }
 
-        return scene != null ? scene.getSceneDataModel() : null;
+    @Override
+    public SceneDataModel getModel(SCENEV1 scene) {
+        return scene != null ? factory.findSceneDataModelV1(scene) : null;
     }
 }

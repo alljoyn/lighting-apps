@@ -15,11 +15,7 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import java.util.Iterator;
-
-import org.allseen.lsf.sdk.Group;
-import org.allseen.lsf.sdk.model.GroupDataModel;
-
+import org.allseen.lsf.sdk.LightingDirector;
 import android.util.Log;
 
 public class GroupEnterNameFragment extends EnterNameFragment {
@@ -35,13 +31,9 @@ public class GroupEnterNameFragment extends EnterNameFragment {
 
     @Override
     protected void setName(String name) {
-        GroupDataModel groupModel = new GroupDataModel();
-        groupModel.setName(name);
+        GroupInfoFragment.pendingGroupName = name;
 
-        SampleAppActivity activity = (SampleAppActivity)getActivity();
-        activity.pendingGroupModel = groupModel;
-
-        Log.d(SampleAppActivity.TAG, "Pending lamp group name: " + activity.pendingGroupModel.getName());
+        Log.d(SampleAppActivity.TAG, "Pending lamp group name: " + GroupInfoFragment.pendingGroupName);
     }
 
     @Override
@@ -50,15 +42,7 @@ public class GroupEnterNameFragment extends EnterNameFragment {
     }
 
     @Override
-    protected boolean duplicateName(String name) {
-        Iterator<Group> i = ((SampleAppActivity)getActivity()).systemManager.getGroupCollectionManager().getGroupIterator();
-
-        while(i.hasNext()) {
-            if (i.next().getGroupDataModel().getName().equals(name)) {
-                return true;
-            }
-        }
-
-        return false;
+    protected boolean duplicateName(String groupName) {
+        return Util.isDuplicateName(LightingDirector.get().getGroups(), groupName);
     }
 }

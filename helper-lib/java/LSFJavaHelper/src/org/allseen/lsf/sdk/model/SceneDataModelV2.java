@@ -18,7 +18,7 @@ package org.allseen.lsf.sdk.model;
 import org.allseen.lsf.SceneWithSceneElements;
 
 public class SceneDataModelV2 extends LightingItemDataModel {
-    public static final char TAG_PREFIX_SCENE_WITH_ELEMENTS = 'e';
+    public static final char TAG_PREFIX_SCENE_WITH_ELEMENTS = 'V';
 
     public static String defaultName = "<Loading scene info ...>";
 
@@ -56,6 +56,18 @@ public class SceneDataModelV2 extends LightingItemDataModel {
     public void setSceneWithSceneElements(SceneWithSceneElements scene) {
         sceneWithSceneElements = scene;
         sceneWithSceneElementsInitialized = true;
+    }
+
+    public boolean containsSceneElement(String sceneElementID) {
+        String[] childIDs = sceneWithSceneElements.getSceneElements();
+
+        for (String childID : childIDs) {
+            if (childID.equals(sceneElementID)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

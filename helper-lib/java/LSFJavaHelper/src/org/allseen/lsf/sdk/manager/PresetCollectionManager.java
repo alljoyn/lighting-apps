@@ -18,10 +18,9 @@ package org.allseen.lsf.sdk.manager;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.sdk.LightingItemErrorEvent;
-import org.allseen.lsf.sdk.Preset;
-import org.allseen.lsf.sdk.PresetListener;
+import org.allseen.lsf.sdk.TrackingID;
+import org.allseen.lsf.sdk.factory.PresetFactory;
+import org.allseen.lsf.sdk.listener.PresetCollectionListener;
 import org.allseen.lsf.sdk.model.LightingItemFilter;
 import org.allseen.lsf.sdk.model.PresetDataModel;
 
@@ -29,69 +28,80 @@ import org.allseen.lsf.sdk.model.PresetDataModel;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class PresetCollectionManager extends LightingItemCollectionManager<Preset, PresetListener, PresetDataModel> {
+public class PresetCollectionManager<PRESET, ERROR> extends LightingItemCollectionManager<PRESET, PresetCollectionListener<? super PRESET, ? super ERROR>, PresetDataModel, ERROR> {
 
-    public PresetCollectionManager(LightingSystemManager director) {
-        super(director);
+    private final PresetFactory<PRESET, ERROR> factory;
+
+    public PresetCollectionManager(LightingSystemManager<?, ?, PRESET, ?, ?, ?, ?, ?, ?, ?, ?> manager, PresetFactory<PRESET, ERROR> factory) {
+        super(manager, factory);
+
+        this.factory = factory;
     }
 
-    public Preset addPreset(String presetID) {
-        return addPreset(presetID, new Preset(presetID));
+    public PRESET addPreset(String presetID) {
+        return addPreset(presetID, factory.createPreset(presetID));
     }
 
-    public Preset addPreset(String presetID, Preset preset) {
+    public PRESET addPreset(String presetID, PRESET preset) {
         return itemAdapters.put(presetID, preset);
     }
 
-    public Preset getPreset(String presetID) {
+    public PRESET getPreset(String presetID) {
         return getAdapter(presetID);
     }
 
-    public Preset[] getPresets() {
-        return getAdapters().toArray(new Preset[size()]);
+    public PRESET[] getPresets() {
+        return getAdapters().toArray(factory.createPresets(size()));
     }
 
-    public Preset[] getPresets(LightingItemFilter<Preset> filter) {
-        Collection<Preset> filteredPresets = getAdapters(filter);
-        return filteredPresets.toArray(new Preset[filteredPresets.size()]);
+    public PRESET[] getPresets(LightingItemFilter<PRESET> filter) {
+        Collection<PRESET> filteredPresets = getPresetsCollection(filter);
+        return filteredPresets.toArray(factory.createPresets(filteredPresets.size()));
     }
 
-    public Iterator<Preset> getPresetIterator() {
+    public Collection<PRESET> getPresetsCollection(LightingItemFilter<PRESET> filter) {
+        return getAdapters(filter);
+    }
+
+    public Iterator<PRESET> getPresetIterator() {
         return getAdapters().iterator();
     }
 
-    public Collection<Preset> removePresets() {
+    public Collection<PRESET> removePresets() {
         return removeAllAdapters();
     }
 
-    public Preset removePreset(String presetID) {
+    public PRESET removePreset(String presetID) {
         return removeAdapter(presetID);
     }
 
     @Override
-    protected void sendInitializedEvent(PresetListener listener, Preset preset, TrackingID trackingID) {
+    protected void sendInitializedEvent(PresetCollectionListener<? super PRESET, ? super ERROR> listener, PRESET preset, TrackingID trackingID) {
         listener.onPresetInitialized(trackingID, preset);
     }
 
     @Override
-    protected void sendChangedEvent(PresetListener listener, Preset preset) {
+    protected void sendChangedEvent(PresetCollectionListener<? super PRESET, ? super ERROR> listener, PRESET preset) {
         listener.onPresetChanged(preset);
     }
 
     @Override
-    protected void sendRemovedEvent(PresetListener listener, Preset preset) {
+    protected void sendRemovedEvent(PresetCollectionListener<? super PRESET, ? super ERROR> listener, PRESET preset) {
         listener.onPresetRemoved(preset);
     }
 
     @Override
-    protected void sendErrorEvent(PresetListener listener, LightingItemErrorEvent errorEvent) {
-        listener.onPresetError(errorEvent);
+    protected void sendErrorEvent(PresetCollectionListener<? super PRESET, ? super ERROR> listener, ERROR error) {
+        listener.onPresetError(error);
     }
 
     @Override
     public PresetDataModel getModel(String presetID) {
-        Preset preset = getAdapter(presetID);
+        return getModel(getAdapter(presetID));
+    }
 
-        return preset != null ? preset.getPresetDataModel() : null;
+    @Override
+    public PresetDataModel getModel(PRESET preset) {
+        return preset != null ? factory.findPresetDataModel(preset) : null;
     }
 }

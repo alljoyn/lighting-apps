@@ -20,10 +20,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Queue;
 
-import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.sdk.Lamp;
-import org.allseen.lsf.sdk.LampListener;
-import org.allseen.lsf.sdk.LightingItemErrorEvent;
+import org.allseen.lsf.sdk.TrackingID;
+import org.allseen.lsf.sdk.factory.LampFactory;
+import org.allseen.lsf.sdk.listener.LampCollectionListener;
 import org.allseen.lsf.sdk.model.LampDataModel;
 import org.allseen.lsf.sdk.model.LightingItemFilter;
 
@@ -31,12 +30,14 @@ import org.allseen.lsf.sdk.model.LightingItemFilter;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class LampCollectionManager extends LightingItemCollectionManager<Lamp, LampListener, LampDataModel> {
+public class LampCollectionManager<LAMP, ERROR> extends LightingItemCollectionManager<LAMP, LampCollectionListener<? super LAMP, ? super ERROR>, LampDataModel, ERROR> {
 
+    protected final LampFactory<LAMP, ERROR> factory;
     protected final Queue<String> lampIDs = new ArrayDeque<String>();
 
-    public LampCollectionManager(LightingSystemManager director) {
-        super(director);
+    public LampCollectionManager(LightingSystemManager<LAMP, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> manager, LampFactory<LAMP, ERROR> factory) {
+        super(manager, factory);
+        this.factory = factory;
     }
 
     @Override
@@ -45,68 +46,75 @@ public class LampCollectionManager extends LightingItemCollectionManager<Lamp, L
         return lampIDs;
     }
 
-    public Lamp addLamp(String lampID) {
-        return addLamp(lampID, new Lamp(lampID));
+    public LAMP addLamp(String lampID) {
+        return addLamp(lampID, factory.createLamp(lampID));
     }
 
-    public Lamp addLamp(String lampID, Lamp lamp) {
+    public LAMP addLamp(String lampID, LAMP lamp) {
         itemAdapters.put(lampID, lamp);
         lampIDs.add(lampID);
 
         return lamp;
     }
 
-    public Lamp getLamp(String lampID) {
+    public LAMP getLamp(String lampID) {
         return getAdapter(lampID);
     }
 
-    public Lamp[] getLamps() {
-        return getAdapters().toArray(new Lamp[size()]);
+    public LAMP[] getLamps() {
+        return getAdapters().toArray(factory.createLamps(size()));
     }
 
-    public Lamp[] getLamps(LightingItemFilter<Lamp> filter) {
-        Collection<Lamp> filteredLamps = getAdapters(filter);
-        return filteredLamps.toArray(new Lamp[filteredLamps.size()]);
+    public LAMP[] getLamps(LightingItemFilter<LAMP> filter) {
+        Collection<LAMP> filteredLamps = getLampsCollection(filter);
+        return filteredLamps.toArray(factory.createLamps(filteredLamps.size()));
     }
 
-    public Iterator<Lamp> getLampIterator() {
+    public Collection<LAMP> getLampsCollection(LightingItemFilter<LAMP> filter) {
+        return getAdapters(filter);
+    }
+
+    public Iterator<LAMP> getLampIterator() {
         return getAdapters().iterator();
     }
 
-    public Collection<Lamp> removeAllLamps() {
+    public Collection<LAMP> removeAllLamps() {
         return removeAllAdapters();
     }
 
-    public Lamp removeLamp(String lampID) {
+    public LAMP removeLamp(String lampID) {
         lampIDs.remove(lampID);
 
         return removeAdapter(lampID);
     }
 
     @Override
-    protected void sendInitializedEvent(LampListener listener, Lamp lamp, TrackingID trackingID) {
+    protected void sendInitializedEvent(LampCollectionListener<? super LAMP, ? super ERROR> listener, LAMP lamp, TrackingID trackingID) {
         listener.onLampInitialized(lamp);
     }
 
     @Override
-    protected void sendChangedEvent(LampListener listener, Lamp lamp) {
+    protected void sendChangedEvent(LampCollectionListener<? super LAMP, ? super ERROR> listener, LAMP lamp) {
         listener.onLampChanged(lamp);
     }
 
     @Override
-    protected void sendRemovedEvent(LampListener listener, Lamp lamp) {
+    protected void sendRemovedEvent(LampCollectionListener<? super LAMP, ? super ERROR> listener, LAMP lamp) {
         listener.onLampRemoved(lamp);
     }
 
     @Override
-    protected void sendErrorEvent(LampListener listener, LightingItemErrorEvent errorEvent) {
-        listener.onLampError(errorEvent);
+    protected void sendErrorEvent(LampCollectionListener<? super LAMP, ? super ERROR> listener, ERROR error) {
+        listener.onLampError(error);
     }
 
     @Override
     public LampDataModel getModel(String lampID) {
-        Lamp lamp = getAdapter(lampID);
+        return getModel(getAdapter(lampID));
+    }
 
-        return lamp != null ? lamp.getLampDataModel() : null;
+    @Override
+    public LampDataModel getModel(LAMP lamp) {
+        return lamp != null ? factory.findLampDataModel(lamp) : null;
     }
 }

@@ -15,8 +15,7 @@
  */
 package org.allseen.lsf.tutorial.presets;
 
-import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.sdk.AllCollectionAdapter;
+import org.allseen.lsf.sdk.AllLightingItemListenerBase;
 import org.allseen.lsf.sdk.Color;
 import org.allseen.lsf.sdk.Lamp;
 import org.allseen.lsf.sdk.LightingController;
@@ -24,6 +23,7 @@ import org.allseen.lsf.sdk.LightingControllerConfigurationBase;
 import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.Power;
 import org.allseen.lsf.sdk.Preset;
+import org.allseen.lsf.sdk.TrackingID;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -40,7 +40,7 @@ public class TutorialPresetActivity extends Activity {
      * Global Lighting event listener. Responsible for handling any callbacks that
      * the user is interested in acting on.
      */
-    private class MyLightingListener extends AllCollectionAdapter {
+    private class MyLightingListener extends AllLightingItemListenerBase {
         @Override
         public void onLampInitialized(Lamp lamp) {
             // STEP 3: Use the discovery of a Lamp as a trigger for creating

@@ -20,6 +20,7 @@ package org.allseen.lsf.sdk.model;
  * in subsequent releases of the SDK</b>.
  */
 public class LampCapabilities {
+    public static final LampCapabilities allCapabilities = new LampCapabilities(true, true, true);
 
     public static final int UNSET = -1;
     public static final int NONE = 0;

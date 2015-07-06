@@ -15,6 +15,8 @@
  */
 package org.allseen.lsf;
 
+import org.allseen.lsf.sdk.ControllerClientStatus;
+
 public class ControllerServiceManager extends BaseNativeClassWrapper {
     public ControllerServiceManager(ControllerClient controller, ControllerServiceManagerCallback callback) {
         createNativeObject(controller, callback);

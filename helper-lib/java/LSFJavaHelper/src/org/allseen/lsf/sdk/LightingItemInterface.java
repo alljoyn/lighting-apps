@@ -17,4 +17,7 @@ package org.allseen.lsf.sdk;
 public interface LightingItemInterface {
     public String getId();
     public String getName();
+
+    public LightingItem[] getDependents();
+    public LightingItem[] getComponents();
 }

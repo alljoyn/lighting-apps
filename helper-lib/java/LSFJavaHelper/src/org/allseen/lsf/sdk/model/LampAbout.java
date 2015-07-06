@@ -17,7 +17,7 @@ package org.allseen.lsf.sdk.model;
 
 import java.util.Map;
 
-import org.alljoyn.about.AboutKeys;
+import org.alljoyn.bus.AboutKeys;
 import org.alljoyn.bus.Variant;
 import org.allseen.lsf.sdk.manager.AboutManager;
 
@@ -66,6 +66,26 @@ public class LampAbout {
         aboutSoftwareVersion = dataNotFound;
         aboutHardwareVersion = dataNotFound;
         aboutSupportUrl = dataNotFound;
+    }
+
+    public LampAbout(LampAbout that) {
+        this.aboutPeer = that.aboutPeer;
+        this.aboutPort = that.aboutPort;
+        this.aboutQuery = that.aboutQuery;
+
+        this.aboutDeviceID = that.aboutDeviceID;
+        this.aboutAppID = that.aboutAppID;
+        this.aboutDeviceName = that.aboutDeviceName;
+        this.aboutDefaultLanguage = that.aboutDefaultLanguage;
+        this.aboutAppName = that.aboutAppName;
+        this.aboutManufacturer = that.aboutManufacturer;
+        this.aboutModelNumber = that.aboutModelNumber;
+
+        this.aboutDescription = that.aboutDescription;
+        this.aboutDateOfManufacture = that.aboutDateOfManufacture;
+        this.aboutSoftwareVersion = that.aboutSoftwareVersion;
+        this.aboutHardwareVersion = that.aboutHardwareVersion;
+        this.aboutSupportUrl = that.aboutSupportUrl;
     }
 
     public void setAnnouncedData(String peer, short port, Map<String, Variant> announcedData) {

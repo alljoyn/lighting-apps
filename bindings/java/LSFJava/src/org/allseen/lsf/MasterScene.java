@@ -16,6 +16,8 @@
 
 package org.allseen.lsf;
 
+import org.allseen.lsf.sdk.ResponseCode;
+
 public class MasterScene extends DefaultNativeClassWrapper {
     public MasterScene() {
         createNativeObject();

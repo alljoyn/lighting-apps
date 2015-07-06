@@ -16,6 +16,8 @@
 
 package org.allseen.lsf;
 
+import org.allseen.lsf.sdk.ResponseCode;
+
 public class MasterSceneManagerCallback extends DefaultNativeClassWrapper {
 
     public MasterSceneManagerCallback() {

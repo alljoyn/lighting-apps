@@ -57,7 +57,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_allseen_lsf_LampGroup_getLampGroups
 /*
  * Class:     org_allseen_lsf_LampGroup
  * Method:    isDependentLampGroup
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ResponseCode;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ResponseCode;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroup_isDependentLampGroup
   (JNIEnv *, jobject, jstring);

@@ -15,8 +15,7 @@
  */
 package org.allseen.lsf.tutorial.scenes;
 
-import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.sdk.AllCollectionAdapter;
+import org.allseen.lsf.sdk.AllLightingItemListenerBase;
 import org.allseen.lsf.sdk.Color;
 import org.allseen.lsf.sdk.LightingController;
 import org.allseen.lsf.sdk.LightingControllerConfigurationBase;
@@ -27,6 +26,7 @@ import org.allseen.lsf.sdk.Power;
 import org.allseen.lsf.sdk.PulseEffect;
 import org.allseen.lsf.sdk.Scene;
 import org.allseen.lsf.sdk.SceneElement;
+import org.allseen.lsf.sdk.TrackingID;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -48,7 +48,7 @@ public class TutorialSceneActivity extends Activity implements NextControllerCon
      *  and then to place that SceneElement into a Scene and apply it to the light bulbs
      *  known to the LightingDirector.
      */
-    private class MyLightingListener extends AllCollectionAdapter {
+    private class MyLightingListener extends AllLightingItemListenerBase {
         @Override
         public void onPulseEffectInitialized(TrackingID trackingID, PulseEffect effect) {
             // STEP 4: Create SceneElement using onPulseEffectInitialized as a trigger.

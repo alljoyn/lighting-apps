@@ -15,13 +15,12 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.LampDetails;
-import org.allseen.lsf.LampMake;
-import org.allseen.lsf.sdk.manager.AllJoynManager;
-import org.allseen.lsf.sdk.model.EmptyLampDetails;
-import org.allseen.lsf.sdk.model.LampAbout;
-import org.allseen.lsf.sdk.model.LampDataModel;
-
+import org.allseen.lsf.sdk.EmptyLampDetails;
+import org.allseen.lsf.sdk.Lamp;
+import org.allseen.lsf.sdk.LampAbout;
+import org.allseen.lsf.sdk.LampDetails;
+import org.allseen.lsf.sdk.LampMake;
+import org.allseen.lsf.sdk.LightingDirector;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,15 +34,10 @@ public class LampDetailsFragment extends PageFrameChildFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_lamp_details, container, false);
 
-        LampDataModel lampModel = ((SampleAppActivity)getActivity()).systemManager.getLampCollectionManager().getModel(key);
-        LampAbout lampAbout = lampModel.getAbout();
-
-        if (!lampAbout.aboutQuery && lampAbout.aboutPeer != null) {
-            AllJoynManager.aboutManager.getLampQueriedAboutData(key, lampAbout.aboutPeer, lampAbout.aboutPort);
-        }
+        Lamp lamp = LightingDirector.get().getLamp(key);
 
         if (view != null) {
-            updateDetailFields(lampModel);
+            updateDetailFields(lamp);
         }
 
         return view;
@@ -54,8 +48,8 @@ public class LampDetailsFragment extends PageFrameChildFragment {
         ((SampleAppActivity)getActivity()).updateActionBar(R.string.title_lamp_details, false, false, false, false, true);
     }
 
-    public void updateDetailFields(LampDataModel lampModel) {
-        LampDetails lampDetails = (lampModel != null) && (lampModel.getDetails() != null) ? lampModel.getDetails() : EmptyLampDetails.instance;
+    public void updateDetailFields(Lamp lamp) {
+        LampDetails lampDetails = lamp != null ? lamp.getDetails() : EmptyLampDetails.instance;
         LampMake lampMake = lampDetails.getMake();
         String lampMakeName = null;
 
@@ -87,8 +81,8 @@ public class LampDetailsFragment extends PageFrameChildFragment {
         setTextViewValue(view, R.id.lampDetailsTextTempMin, lampDetails.getMinTemperature(), R.string.units_kelvin);
         setTextViewValue(view, R.id.lampDetailsTextTempMax, lampDetails.getMaxTemperature(), R.string.units_kelvin);
 
-        if (lampModel != null) {
-            LampAbout lampAbout = lampModel.getAbout();
+        if (lamp != null) {
+            LampAbout lampAbout = lamp.getAbout();
 
 	        setTextViewValue(view, R.id.lampAboutTextDeviceID, lampAbout.aboutDeviceID, 0);
 	        setTextViewValue(view, R.id.lampAboutTextAppID, lampAbout.aboutAppID, 0);

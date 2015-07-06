@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class SceneElementDataModelV2 extends LightingItemDataModel {
-    public static final char TAG_PREFIX_SCENE_ELEMENT = 'E';
+    public static final char TAG_PREFIX_SCENE_ELEMENT = 'v';
 
     public static String defaultName = "<Loading scene element info...>";
 
@@ -88,6 +88,20 @@ public class SceneElementDataModelV2 extends LightingItemDataModel {
     public void setEffectId(String effectId) {
         this.effectId = effectId;
         effectIdInitialized = true;
+    }
+
+    // Only checks immediate child lamps.
+    public boolean containsLamp(String lampID) {
+        return lamps.contains(lampID);
+    }
+
+    // Only checks immediate child groups.
+    public boolean containsGroup(String groupID) {
+        return groups.contains(groupID);
+    }
+
+    public boolean containsEffect(String effectID) {
+        return effectID.equals(this.effectId);
     }
 
     @Override

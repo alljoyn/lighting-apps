@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.alljoyn.about.AboutKeys;
+import org.alljoyn.bus.AboutKeys;
 import org.alljoyn.bus.AboutListener;
 import org.alljoyn.bus.AboutObjectDescription;
 import org.alljoyn.bus.AboutProxy;
@@ -30,7 +30,7 @@ import org.alljoyn.bus.SessionListener;
 import org.alljoyn.bus.SessionOpts;
 import org.alljoyn.bus.Status;
 import org.alljoyn.bus.Variant;
-import org.allseen.lsf.ResponseCode;
+import org.allseen.lsf.sdk.ResponseCode;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
@@ -38,7 +38,7 @@ import org.allseen.lsf.ResponseCode;
  */
 public class AboutManager implements AboutListener {
     private BusAttachment bus;
-    private final LightingSystemManager manager;
+    private final LightingSystemManager<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> manager;
 
     private static final String[] LAMP_SERVICE_INTERFACE_NAMES = {
         "org.allseen.LSF.LampService",
@@ -52,7 +52,7 @@ public class AboutManager implements AboutListener {
         "org.allseen.LSF.ControllerService.Scene",
         "org.allseen.LSF.ControllerService.MasterScene" };
 
-    public AboutManager(LightingSystemManager manager) {
+    public AboutManager(LightingSystemManager<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> manager) {
         this.bus = null;
         this.manager = manager;
     }
@@ -87,7 +87,7 @@ public class AboutManager implements AboutListener {
 
     @Override
     public void announced(String busName, int version, short port, AboutObjectDescription[] aboutObjects, Map<String, Variant> announcedData) {
-        //TODO-FIX Log.d("AboutManager", "Announcement received from AboutService");
+        //Log.d("AboutManager", "Announcement received from AboutService");
 
         // Flatten the interfaces
         List<String> allInterfaces = new ArrayList<String>();
@@ -98,10 +98,10 @@ public class AboutManager implements AboutListener {
         }
 
         if (containsLampInterfaces(allInterfaces)) {
-            //TODO-FIX Log.d("AboutManager", "announcement: lamp ifaces found");
+            //Log.d("AboutManager", "announcement: lamp ifaces found");
             addLampAnnouncedAboutData(busName, port, announcedData);
         } else if (containsControllerInterfaces(allInterfaces)) {
-            //TODO-FIX Log.d("AboutManager", "announcement: controller ifaces found");
+            //Log.d("AboutManager", "announcement: controller ifaces found");
             addControllerAnnouncedAboutData(announcedData);
         }
     }
@@ -109,7 +109,8 @@ public class AboutManager implements AboutListener {
     protected boolean containsLampInterfaces(List<String> allInterfaces) {
         for (String iface : AboutManager.LAMP_SERVICE_INTERFACE_NAMES) {
             if (!allInterfaces.contains(iface)) {
-                // this does not have a necessary lamp interface
+                // This does not have a necessary lamp interface
+                //Log.d("AboutManager", "containsLampInterfaces: iface missing");
                 return false;
             }
         }
@@ -120,7 +121,8 @@ public class AboutManager implements AboutListener {
     protected boolean containsControllerInterfaces(List<String> allInterfaces) {
         for (String iface : AboutManager.CONTROLLER_SERVICE_INTERFACE_NAMES) {
             if (!allInterfaces.contains(iface)) {
-                // this does not have a necessary controller interface
+                // This does not have a necessary controller interface
+                //Log.d("AboutManager", "containsControllerInterfaces: iface missing");
                 return false;
             }
         }
@@ -132,10 +134,10 @@ public class AboutManager implements AboutListener {
         String lampID = getStringFromVariantMap(AboutKeys.ABOUT_DEVICE_ID, announcedData, null);
 
         if (lampID != null) {
-            //TODO-FIX Log.d("AboutManager", "Announce received: " + lampID);
+            //Log.d("AboutManager", "Announce received: " + lampID);
             manager.lampManagerCB.postOnLampAnnouncedAboutData(lampID, busName, port, announcedData, 0);
         } else {
-            //TODO-FIX Log.e("AboutManager", "Announcement lacks device ID");
+            //Log.e("AboutManager", "Announcement lacks device ID");
         }
     }
 
@@ -152,22 +154,22 @@ public class AboutManager implements AboutListener {
             Status status = bus.joinSession(busName, port, sessionId, sessionOpts, new SessionListener() {
                 @Override
                 public void sessionLost(int sessionId, int reason) {
-                    //TODO-FIX Log.d("AboutManager", "Session Lost : " + sessionId + " reason: " + reason);
+                    //Log.d("AboutManager", "Session Lost : " + sessionId + " reason: " + reason);
                 }});
 
-            //TODO-FIX Log.d("AboutManager", "bus " + busName + ", port " + port + ", session " + sessionId.value);
+            //Log.d("AboutManager", "bus " + busName + ", port " + port + ", session " + sessionId.value);
 
             if (status == Status.OK) {
-                //TODO-FIX Log.d("AboutManager", "join session success");
+                //Log.d("AboutManager", "join session success");
                 AboutProxy aboutProxy = new AboutProxy(bus, busName, sessionId.value);
                 Map<String, Variant> queriedData = aboutProxy.getAboutData(LightingSystemManager.LANGUAGE);
 
                 manager.lampManagerCB.postOnLampQueriedAboutData(lampID, queriedData, 0);
             } else {
-                //TODO-FIX Log.e("AboutManager", "join session failed " + status);
+                manager.getLampCollectionManager().sendErrorEvent("getLampQueriedAboutData(): " + status.name(), ResponseCode.ERR_FAILURE, lampID);
             }
         } catch (BusException e) {
-            manager.getLampCollectionManager().sendErrorEvent("getLampQueriedAboutData", ResponseCode.ERR_FAILURE, lampID);
+            manager.getLampCollectionManager().sendErrorEvent("getLampQueriedAboutData(): " + e.getMessage(), ResponseCode.ERR_FAILURE, lampID);
         }
     }
 

@@ -175,13 +175,11 @@ MY_CLIENT_SRC_FILES   := $(MY_LSF_STD_CLIENT_SRC)/ControllerClient.cc \
                          org_allseen_lsf_ControllerClientCallback.cpp \
                          org_allseen_lsf_ControllerServiceManager.cpp \
                          org_allseen_lsf_ControllerServiceManagerCallback.cpp \
-                         org_allseen_lsf_LampDetails.cpp \
                          org_allseen_lsf_LampGroup.cpp \
                          org_allseen_lsf_LampGroupManager.cpp \
                          org_allseen_lsf_LampGroupManagerCallback.cpp \
                          org_allseen_lsf_LampManager.cpp \
                          org_allseen_lsf_LampManagerCallback.cpp \
-                         org_allseen_lsf_LampParameters.cpp \
                          org_allseen_lsf_LampState.cpp \
                          org_allseen_lsf_MasterScene.cpp \
                          org_allseen_lsf_MasterSceneManager.cpp \
@@ -205,6 +203,8 @@ MY_CLIENT_SRC_FILES   := $(MY_LSF_STD_CLIENT_SRC)/ControllerClient.cc \
                          org_allseen_lsf_SceneElementManager.cpp \
                          org_allseen_lsf_SceneElementManagerCallback.cpp \
                          org_allseen_lsf_SceneWithSceneElements.cpp \
+                         org_allseen_lsf_sdk_LampDetails.cpp \
+                         org_allseen_lsf_sdk_LampParameters.cpp \
                          XControllerServiceManager.cpp \
                          XControllerServiceManagerCallback.cpp \
                          XCppDelegator.cpp \

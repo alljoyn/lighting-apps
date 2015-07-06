@@ -18,10 +18,9 @@ package org.allseen.lsf.sdk.manager;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.sdk.LightingItemErrorEvent;
-import org.allseen.lsf.sdk.PulseEffect;
-import org.allseen.lsf.sdk.PulseEffectListener;
+import org.allseen.lsf.sdk.TrackingID;
+import org.allseen.lsf.sdk.factory.PulseEffectFactory;
+import org.allseen.lsf.sdk.listener.PulseEffectCollectionListener;
 import org.allseen.lsf.sdk.model.LightingItemFilter;
 import org.allseen.lsf.sdk.model.PulseEffectDataModelV2;
 
@@ -29,69 +28,81 @@ import org.allseen.lsf.sdk.model.PulseEffectDataModelV2;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class PulseEffectCollectionManager extends LightingItemCollectionManager<PulseEffect, PulseEffectListener, PulseEffectDataModelV2> {
+public class PulseEffectCollectionManager<PULSEEFFECT, ERROR> extends LightingItemCollectionManager<PULSEEFFECT, PulseEffectCollectionListener<? super PULSEEFFECT, ? super ERROR>, PulseEffectDataModelV2, ERROR> {
 
-    public PulseEffectCollectionManager(LightingSystemManager director) {
-        super(director);
+    protected final PulseEffectFactory<PULSEEFFECT, ERROR> factory;
+
+    public PulseEffectCollectionManager(LightingSystemManager<?, ?, ?, ?, PULSEEFFECT, ?, ?, ?, ?, ?, ?> manager, PulseEffectFactory<PULSEEFFECT, ERROR> factory) {
+        super(manager, factory);
+
+        this.factory = factory;
     }
 
-    public PulseEffect addPulseEffect(String pulseEffectId) {
-        return addPulseEffect(pulseEffectId, new PulseEffect(pulseEffectId));
+    public PULSEEFFECT addPulseEffect(String pulseEffectID) {
+        return addPulseEffect(pulseEffectID, factory.createPulseEffect(pulseEffectID));
     }
 
-    public PulseEffect addPulseEffect(String pulseEffectId, PulseEffect pulseEffect) {
-        return itemAdapters.put(pulseEffectId, pulseEffect);
+    public PULSEEFFECT addPulseEffect(String pulseEffectID, PULSEEFFECT pulseEffect) {
+        return itemAdapters.put(pulseEffectID, pulseEffect);
     }
 
-    public PulseEffect getPulseEffect(String pulseEffectId) {
-        return getAdapter(pulseEffectId);
+    public PULSEEFFECT getPulseEffect(String pulseEffectID) {
+        return getAdapter(pulseEffectID);
     }
 
-    public PulseEffect[] getPulseEffects() {
-        return getAdapters().toArray(new PulseEffect[size()]);
+    public PULSEEFFECT[] getPulseEffects() {
+        return getAdapters().toArray(factory.createPulseEffects(size()));
     }
 
-    public PulseEffect[] getPulseEffects(LightingItemFilter<PulseEffect> filter) {
-        Collection<PulseEffect> filteredPulseEffects = getAdapters(filter);
-        return filteredPulseEffects.toArray(new PulseEffect[filteredPulseEffects.size()]);
+    public PULSEEFFECT[] getPulseEffects(LightingItemFilter<PULSEEFFECT> filter) {
+        Collection<PULSEEFFECT> filteredPulseEffects = getPulseEffectsCollection(filter);
+        return filteredPulseEffects.toArray(factory.createPulseEffects(filteredPulseEffects.size()));
     }
 
-    public Iterator<PulseEffect> getPulseEffectIterator() {
+    public Collection<PULSEEFFECT> getPulseEffectsCollection(LightingItemFilter<PULSEEFFECT> filter) {
+        return getAdapters(filter);
+    }
+
+    public Iterator<PULSEEFFECT> getPulseEffectIterator() {
         return getAdapters().iterator();
     }
 
-    public Collection<PulseEffect> removePulseEffect() {
+    public Collection<PULSEEFFECT> removePulseEffect() {
         return removeAllAdapters();
     }
 
-    public PulseEffect removePulseEffect(String pulseEffectId) {
+    public PULSEEFFECT removePulseEffect(String pulseEffectId) {
         return removeAdapter(pulseEffectId);
     }
 
     @Override
-    protected void sendInitializedEvent(PulseEffectListener listener, PulseEffect pulseEffect, TrackingID trackingID) {
+    protected void sendInitializedEvent(PulseEffectCollectionListener<? super PULSEEFFECT, ? super ERROR> listener, PULSEEFFECT pulseEffect, TrackingID trackingID) {
         listener.onPulseEffectInitialized(trackingID, pulseEffect);
     }
 
     @Override
-    protected void sendChangedEvent(PulseEffectListener listener, PulseEffect pulseEffect) {
+    protected void sendChangedEvent(PulseEffectCollectionListener<? super PULSEEFFECT, ? super ERROR> listener, PULSEEFFECT pulseEffect) {
         listener.onPulseEffectChanged(pulseEffect);
     }
 
     @Override
-    protected void sendRemovedEvent(PulseEffectListener listener, PulseEffect pulseEffect) {
+    protected void sendRemovedEvent(PulseEffectCollectionListener<? super PULSEEFFECT, ? super ERROR> listener, PULSEEFFECT pulseEffect) {
         listener.onPulseEffectRemoved(pulseEffect);
     }
 
     @Override
-    protected void sendErrorEvent(PulseEffectListener listener, LightingItemErrorEvent errorEvent) {
-        listener.onPulseEffectError(errorEvent);
+    protected void sendErrorEvent(PulseEffectCollectionListener<? super PULSEEFFECT, ? super ERROR> listener, ERROR error) {
+        listener.onPulseEffectError(error);
     }
 
     @Override
     public PulseEffectDataModelV2 getModel(String pulseEffectID) {
-        PulseEffect pulseEffect = getAdapter(pulseEffectID);
-
-        return pulseEffect != null ? pulseEffect.getPulseEffectDataModel() : null;
+        return getModel(getAdapter(pulseEffectID));
     }
+
+    @Override
+    public PulseEffectDataModelV2 getModel(PULSEEFFECT pulseEffect) {
+        return pulseEffect != null ? factory.findPulseEffectDataModel(pulseEffect) : null;
+    }
+
 }

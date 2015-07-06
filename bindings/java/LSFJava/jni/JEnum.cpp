@@ -68,22 +68,22 @@ typedef char Need_to_update_enum_values_in_RankNodeType_java            [HAS_LAS
 
 // When adding a new Enum, make sure to also add initialization work around in
 // NUtil.cpp in order to ensure that the Enum gets loaded. (See comment in NUtil.)
-JEnum* JEnum::jLampMakeEnum = new JEnum("org/allseen/lsf/LampMake");
-JEnum* JEnum::jLampModelEnum = new JEnum("org/allseen/lsf/LampModel");
-JEnum* JEnum::jDeviceTypeEnum = new JEnum("org/allseen/lsf/DeviceType");
-JEnum* JEnum::jLampTypeEnum = new JEnum("org/allseen/lsf/LampType");
-JEnum* JEnum::jBaseTypeEnum = new JEnum("org/allseen/lsf/BaseType");
+JEnum* JEnum::jLampMakeEnum = new JEnum("org/allseen/lsf/sdk/LampMake");
+JEnum* JEnum::jLampModelEnum = new JEnum("org/allseen/lsf/sdk/LampModel");
+JEnum* JEnum::jDeviceTypeEnum = new JEnum("org/allseen/lsf/sdk/DeviceType");
+JEnum* JEnum::jLampTypeEnum = new JEnum("org/allseen/lsf/sdk/LampType");
+JEnum* JEnum::jBaseTypeEnum = new JEnum("org/allseen/lsf/sdk/BaseType");
 
-JEnum* JEnum::jErrorCodeEnum = new JEnum("org/allseen/lsf/ErrorCode");
-JEnum* JEnum::jControllerClientStatusEnum = new JEnum("org/allseen/lsf/ControllerClientStatus");
-JEnum* JEnum::jResponseCodeEnum = new JEnum("org/allseen/lsf/ResponseCode");
+JEnum* JEnum::jErrorCodeEnum = new JEnum("org/allseen/lsf/sdk/ErrorCode");
+JEnum* JEnum::jControllerClientStatusEnum = new JEnum("org/allseen/lsf/sdk/ControllerClientStatus");
+JEnum* JEnum::jResponseCodeEnum = new JEnum("org/allseen/lsf/sdk/ResponseCode");
 
 JEnum* JEnum::jStatusCodeEnum = new JEnum("org/alljoyn/bus/Status", "create", "getErrorCode");
 
-JEnum* JEnum::jRankPowerEnum = new JEnum("org/allseen/lsf/RankPower");
-JEnum* JEnum::jRankMobilityEnum = new JEnum("org/allseen/lsf/RankMobility");
-JEnum* JEnum::jRankAvailabilityEnum = new JEnum("org/allseen/lsf/RankAvailability");
-JEnum* JEnum::jRankNodeTypeEnum = new JEnum("org/allseen/lsf/RankNodeType");
+JEnum* JEnum::jRankPowerEnum = new JEnum("org/allseen/lsf/sdk/RankPower");
+JEnum* JEnum::jRankMobilityEnum = new JEnum("org/allseen/lsf/sdk/RankMobility");
+JEnum* JEnum::jRankAvailabilityEnum = new JEnum("org/allseen/lsf/sdk/RankAvailability");
+JEnum* JEnum::jRankNodeTypeEnum = new JEnum("org/allseen/lsf/sdk/RankNodeType");
 
 JEnum::JEnum(char const *className)
 {

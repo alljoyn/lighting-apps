@@ -15,21 +15,28 @@
  */
 package org.allseen.lsf.sdk;
 
-import org.allseen.lsf.ResponseCode;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 import org.allseen.lsf.sdk.model.ColorItemDataModel;
 import org.allseen.lsf.sdk.model.LightingItemUtil;
 import org.allseen.lsf.sdk.model.PulseEffectDataModelV2;
 
 public class PulseEffect extends ColorItem implements Effect {
+    public static void setDefaultName(String defaultName) {
+        if (defaultName != null) {
+            PulseEffectDataModelV2.defaultName = defaultName;
+        }
+    }
 
-    private PulseEffectDataModelV2 pulseEffectModel;
+    protected PulseEffectDataModelV2 pulseEffectModel;
 
-    public PulseEffect(String pulseEffectId) {
+    protected PulseEffect(String pulseEffectId) {
         this(pulseEffectId, null);
     }
 
-    public PulseEffect(String pulseEffectId, String pulseEffectName) {
+    protected PulseEffect(String pulseEffectId, String pulseEffectName) {
         super();
 
         pulseEffectModel = new PulseEffectDataModelV2(pulseEffectId, pulseEffectName);
@@ -51,11 +58,11 @@ public class PulseEffect extends ColorItem implements Effect {
             if (fromState instanceof Preset && toState instanceof Preset) {
                 postErrorIfFailure(errorContext,
                     AllJoynManager.pulseEffectManager.updatePulseEffect(pulseEffectModel.id,
-                            LightingItemUtil.createPulseEffect((Preset)fromState, (Preset)toState, period, duration, count)));
+                        LightingItemUtil.createPulseEffect(((Preset)fromState).getPresetDataModel(), ((Preset)toState).getPresetDataModel(), period, duration, count)));
             } else {
                 postErrorIfFailure(errorContext,
                     AllJoynManager.pulseEffectManager.updatePulseEffect(pulseEffectModel.id,
-                            LightingItemUtil.createPulseEffect(fromState.getPowerOn(), fromState.getColorHsvt(), toState.getPowerOn(), toState.getColorHsvt(), period, duration, count)));
+                        LightingItemUtil.createPulseEffect(fromState.getPowerOn(), fromState.getColorHsvt(), toState.getPowerOn(), toState.getColorHsvt(), period, duration, count)));
             }
         }
     }
@@ -70,6 +77,7 @@ public class PulseEffect extends ColorItem implements Effect {
         }
     }
 
+    @Override
     public void delete() {
         String errorContext = "PulseEffect.delete() error";
 
@@ -77,7 +85,70 @@ public class PulseEffect extends ColorItem implements Effect {
                 AllJoynManager.pulseEffectManager.deletePulseEffect(pulseEffectModel.id));
     }
 
-    public PulseEffectDataModelV2 getPulseEffectDataModel() {
+    public boolean isStartWithCurrent() {
+        return pulseEffectModel.isStartWithCurrent();
+    }
+    public MyLampState getStartState() {
+        return getState();
+    }
+
+    public MyLampState getEndState() {
+        return new MyLampState(pulseEffectModel.getEndState());
+    }
+
+    public Preset getStartPreset() {
+        return LightingDirector.get().getPreset(getStartPresetID());
+    }
+
+    public Preset getEndPreset() {
+        return LightingDirector.get().getPreset(getEndPresetID());
+    }
+
+    public String getStartPresetID() {
+        return pulseEffectModel.getStartPresetID();
+    }
+
+    public String getEndPresetID() {
+        return pulseEffectModel.getEndPresetID();
+    }
+
+    public long getPeriod() {
+        return pulseEffectModel.getPeriod();
+    }
+
+    public long getDuration() {
+        return pulseEffectModel.getDuration();
+    }
+
+    public long getCount() {
+        return pulseEffectModel.getCount();
+    }
+
+    @Override
+    public boolean hasComponent(LightingItem item) {
+        String errorContext = "PulseEffect.hasComponent() error";
+        return postInvalidArgIfNull(errorContext, item) ? hasPreset(item.getId()) : false;
+    }
+
+    public boolean hasPreset(Preset preset) {
+        String errorContext = "PulseEffect.hasPreset() error";
+        return postInvalidArgIfNull(errorContext, preset) ? hasPreset(preset.getId()) : false;
+    }
+
+    protected boolean hasPreset(String presetID) {
+        return pulseEffectModel.containsPreset(presetID);
+    }
+
+    @Override
+    protected Collection<LightingItem> getDependentCollection() {
+        Collection<LightingItem> dependents = new ArrayList<LightingItem>();
+
+        dependents.addAll(LightingDirector.get().getSceneElementCollectionManager().getSceneElementsCollection(new LightingItemHasComponentFilter<SceneElement>(PulseEffect.this)));
+
+        return dependents;
+    }
+
+    protected PulseEffectDataModelV2 getPulseEffectDataModel() {
         return pulseEffectModel;
     }
 

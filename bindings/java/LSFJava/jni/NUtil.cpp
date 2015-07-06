@@ -53,10 +53,7 @@ static jmethodID MID_BusException_log = NULL;
 
 // Also need to call do_find() for these below in JNI_OnLoad()
 XClass *XClass::xMsgArg = new XClass("org/alljoyn/bus/MsgArg");
-XClass *XClass::xTrackingID = new XClass("org/allseen/lsf/TrackingID");
 XClass *XClass::xLampState = new XClass("org/allseen/lsf/LampState");
-XClass *XClass::xLampDetails = new XClass("org/allseen/lsf/LampDetails");
-XClass *XClass::xLampParameters = new XClass("org/allseen/lsf/LampParameters");
 XClass *XClass::xLampGroup = new XClass("org/allseen/lsf/LampGroup");
 XClass *XClass::xScene = new XClass("org/allseen/lsf/Scene");
 XClass *XClass::xMasterScene = new XClass("org/allseen/lsf/MasterScene");
@@ -68,6 +65,10 @@ XClass *XClass::xTransitionEffectV2 = new XClass("org/allseen/lsf/TransitionEffe
 XClass *XClass::xPulseEffectV2 = new XClass("org/allseen/lsf/PulseEffectV2");
 XClass *XClass::xSceneElement = new XClass("org/allseen/lsf/SceneElement");
 XClass *XClass::xSceneWithSceneElements = new XClass("org/allseen/lsf/SceneWithSceneElements");
+
+XClass *XClass::xLampDetails = new XClass("org/allseen/lsf/sdk/LampDetails");
+XClass *XClass::xLampParameters = new XClass("org/allseen/lsf/sdk/LampParameters");
+XClass *XClass::xTrackingID = new XClass("org/allseen/lsf/sdk/TrackingID");
 
 /**
  * Implement the load hook for the alljoyn_java native library.

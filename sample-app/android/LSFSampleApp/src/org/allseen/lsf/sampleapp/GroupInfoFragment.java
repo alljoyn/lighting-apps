@@ -15,10 +15,12 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.sdk.model.AllLampsDataModel;
-import org.allseen.lsf.sdk.model.ColorItemDataModel;
-import org.allseen.lsf.sdk.model.ColorStateConverter;
-import org.allseen.lsf.sdk.model.GroupDataModel;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.allseen.lsf.sdk.Group;
+import org.allseen.lsf.sdk.LightingDirector;
+import org.allseen.lsf.sdk.MyLampState;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,11 +31,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class GroupInfoFragment extends DimmableItemInfoFragment {
+    public static String pendingGroupID;
+    public static String pendingGroupName;
+    public static List<String> pendingGroupContainedGroups;
+    public static List<String> pendingGroupContainedLamps;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        String groupID = key;
 
         itemType = SampleAppActivity.Type.GROUP;
 
@@ -49,7 +54,7 @@ public class GroupInfoFragment extends DimmableItemInfoFragment {
         membersValue.setClickable(true);
         membersValue.setOnClickListener(this);
 
-        updateInfoFields(((SampleAppActivity)getActivity()).systemManager.getGroupCollectionManager().getModel(groupID));
+        updateInfoFields(LightingDirector.get().getGroup(key));
 
         return view;
     }
@@ -64,11 +69,15 @@ public class GroupInfoFragment extends DimmableItemInfoFragment {
         int viewID = view.getId();
 
         if (viewID == R.id.nameValueNameText || viewID == R.id.nameValueValueText) {
-            if ((parent != null) && (!AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(key))) {
-                GroupDataModel groupModel = ((SampleAppActivity)getActivity()).systemManager.getGroupCollectionManager().getModel(key);
+            if (parent != null) {
+                Group group = LightingDirector.get().getGroup(key);
 
-                if (groupModel != null) {
-                    ((SampleAppActivity)getActivity()).pendingGroupModel = new GroupDataModel(groupModel);
+                if ((group != null) && (!group.isAllLampsGroup())) {
+                    pendingGroupID = group.getId();
+                    pendingGroupName = group.getName();
+                    pendingGroupContainedGroups = new ArrayList<String>();
+                    pendingGroupContainedLamps = new ArrayList<String>();
+
                     ((PageMainContainerFragment)parent).showSelectMembersChildFragment();
                 }
             }
@@ -77,12 +86,12 @@ public class GroupInfoFragment extends DimmableItemInfoFragment {
         }
     }
 
-    public void updateInfoFields(GroupDataModel groupModel) {
-        if (groupModel.id.equals(key)) {
-            stateAdapter.setCapability(groupModel.getCapability());
-            super.updateInfoFields(groupModel);
+    public void updateInfoFields(Group group) {
+        if (group.getId().equals(key)) {
+            stateAdapter.setCapability(group.getCapability());
+            super.updateInfoFields(group);
 
-            String details = Util.createMemberNamesString((SampleAppActivity)getActivity(), groupModel.members, ", ", R.string.group_info_members_none);
+            String details = Util.createMemberNamesString((SampleAppActivity)getActivity(), group, ", ", R.string.group_info_members_none);
             TextView membersValue = (TextView)(view.findViewById(R.id.groupInfoMembers).findViewById(R.id.nameValueValueText));
 
             if (details != null && !details.isEmpty()) {
@@ -98,40 +107,42 @@ public class GroupInfoFragment extends DimmableItemInfoFragment {
 
     @Override
     protected int getColorTempMin() {
-        SampleAppActivity activity = (SampleAppActivity)getActivity();
-        GroupDataModel groupModel = activity.systemManager.getGroupCollectionManager().getModel(key);
+        Group group = LightingDirector.get().getGroup(key);
+        int colorTempMin = group != null ? group.getColorTempMin() : LightingDirector.COLORTEMP_MIN;
 
-        return groupModel != null ? groupModel.viewColorTempMin : ColorStateConverter.VIEW_COLORTEMP_MIN;
+        return colorTempMin;
     }
 
     @Override
     protected int getColorTempSpan() {
-        SampleAppActivity activity = (SampleAppActivity)getActivity();
-        GroupDataModel groupModel = activity.systemManager.getGroupCollectionManager().getModel(key);
+        Group group = LightingDirector.get().getGroup(key);
+        int colorTempMin = group != null ? group.getColorTempMin() : LightingDirector.COLORTEMP_MIN;
+        int colorTempMax = group != null ? group.getColorTempMax() : LightingDirector.COLORTEMP_MAX;
 
-        return groupModel != null ? groupModel.viewColorTempMax - groupModel.viewColorTempMin : ColorStateConverter.VIEW_COLORTEMP_SPAN;
+        return colorTempMax - colorTempMin;
     }
 
     @Override
-    protected long getColorTempDefault() {
-        SampleAppActivity activity = (SampleAppActivity)getActivity();
-        GroupDataModel groupModel = activity.systemManager.getGroupCollectionManager().getModel(key);
+    protected int getColorTempDefault() {
+        Group group = LightingDirector.get().getGroup(key);
 
-        return groupModel.state.getColorTemp();
+        return group != null ? group.getColor().getColorTemperature() : LightingDirector.COLORTEMP_MIN;
     }
 
     @Override
     protected void onHeaderClick() {
-        if (!AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(key)) {
-            SampleAppActivity activity = (SampleAppActivity)getActivity();
-            GroupDataModel groupModel = activity.systemManager.getGroupCollectionManager().getModel(key);
+        Group group = LightingDirector.get().getGroup(key);
 
-            activity.showItemNameDialog(R.string.title_group_rename, new UpdateGroupNameAdapter(groupModel, (SampleAppActivity) getActivity()));
+        if (!group.isAllLampsGroup()) {
+            SampleAppActivity activity = (SampleAppActivity)getActivity();
+
+            activity.showItemNameDialog(R.string.title_group_rename, new UpdateGroupNameAdapter(group, activity));
         }
     }
 
     @Override
-    protected ColorItemDataModel getColorItemDataModel(String groupID){
-        return ((SampleAppActivity)getActivity()).systemManager.getGroupCollectionManager().getModel(groupID);
+    protected MyLampState getItemLampState(String groupID){
+        Group group = LightingDirector.get().getGroup(groupID);
+        return group != null ? group.getState() : null;
     }
 }

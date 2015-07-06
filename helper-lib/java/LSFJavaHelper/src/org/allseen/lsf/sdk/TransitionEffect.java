@@ -15,21 +15,28 @@
  */
 package org.allseen.lsf.sdk;
 
-import org.allseen.lsf.ResponseCode;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 import org.allseen.lsf.sdk.model.ColorItemDataModel;
 import org.allseen.lsf.sdk.model.LightingItemUtil;
 import org.allseen.lsf.sdk.model.TransitionEffectDataModelV2;
 
 public class TransitionEffect extends ColorItem implements Effect {
+    public static void setDefaultName(String defaultName) {
+        if (defaultName != null) {
+            TransitionEffectDataModelV2.defaultName = defaultName;
+        }
+    }
 
-    private TransitionEffectDataModelV2 transitionEffectModel;
+    protected TransitionEffectDataModelV2 transitionEffectModel;
 
-    public TransitionEffect(String transitionEffectId) {
+    protected TransitionEffect(String transitionEffectId) {
         this(transitionEffectId, null);
     }
 
-    public TransitionEffect(String transitionEffectId, String transitionEffectName) {
+    protected TransitionEffect(String transitionEffectId, String transitionEffectName) {
         super();
 
         transitionEffectModel = new TransitionEffectDataModelV2(transitionEffectId, transitionEffectName);
@@ -50,11 +57,12 @@ public class TransitionEffect extends ColorItem implements Effect {
         if (postInvalidArgIfNull(errorContext, state)) {
             if (state instanceof Preset) {
                 postErrorIfFailure(errorContext,
-                        AllJoynManager.transitionEffectManager.updateTransitionEffect(transitionEffectModel.id, LightingItemUtil.createTransitionEffect((Preset) state, duration)));
+                    AllJoynManager.transitionEffectManager.updateTransitionEffect(transitionEffectModel.id,
+                        LightingItemUtil.createTransitionEffect(((Preset)state).getPresetDataModel(), duration)));
             } else {
                 postErrorIfFailure(errorContext,
                     AllJoynManager.transitionEffectManager.updateTransitionEffect(transitionEffectModel.id,
-                            LightingItemUtil.createTransitionEffect(state.getPowerOn(), state.getColorHsvt(), duration)));
+                        LightingItemUtil.createTransitionEffect(state.getPowerOn(), state.getColorHsvt(), duration)));
             }
         }
     }
@@ -70,6 +78,7 @@ public class TransitionEffect extends ColorItem implements Effect {
         }
     }
 
+    @Override
     public void delete() {
         String errorContext = "TransitionEffect.delete() error";
 
@@ -77,8 +86,44 @@ public class TransitionEffect extends ColorItem implements Effect {
                 AllJoynManager.transitionEffectManager.deleteTransitionEffect(transitionEffectModel.id));
     }
 
-    public TransitionEffectDataModelV2 getTransitionEffectDataModel() {
+    public Preset getPreset() {
+        return LightingDirector.get().getPreset(getPresetID());
+    }
+
+    public String getPresetID() {
+        return transitionEffectModel.getPresetID();
+    }
+
+    public long getDuration() {
+        return transitionEffectModel.getDuration();
+    }
+
+    @Override
+    public boolean hasComponent(LightingItem item) {
+        String errorContext = "TransitionEffect.hasComponent() error";
+        return postInvalidArgIfNull(errorContext, item) ? hasPreset(item.getId()) : false;
+    }
+
+    public boolean hasPreset(Preset preset) {
+        String errorContext = "TransitionEffect.hasPreset() error";
+        return postInvalidArgIfNull(errorContext, preset) ? hasPreset(preset.getId()) : false;
+    }
+
+    protected boolean hasPreset(String presetID) {
+        return transitionEffectModel.containsPreset(presetID);
+    }
+
+    protected TransitionEffectDataModelV2 getTransitionEffectDataModel() {
         return transitionEffectModel;
+    }
+
+    @Override
+    protected Collection<LightingItem> getDependentCollection() {
+        Collection<LightingItem> dependents = new ArrayList<LightingItem>();
+
+        dependents.addAll(LightingDirector.get().getSceneElementCollectionManager().getSceneElementsCollection(new LightingItemHasComponentFilter<SceneElement>(TransitionEffect.this)));
+
+        return dependents;
     }
 
     @Override

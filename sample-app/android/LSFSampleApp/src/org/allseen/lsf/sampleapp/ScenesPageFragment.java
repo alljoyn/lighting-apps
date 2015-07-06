@@ -15,16 +15,32 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import org.allseen.lsf.sampleapp.scenesv1.BasicSceneElementPresetsFragment;
+import org.allseen.lsf.sampleapp.scenesv1.BasicSceneV1SelectEffectTypeFragment;
+import org.allseen.lsf.sampleapp.scenesv1.NoEffectFragment;
+import org.allseen.lsf.sampleapp.scenesv1.PulseEffectFragment;
+import org.allseen.lsf.sampleapp.scenesv1.TransitionEffectFragment;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 public class ScenesPageFragment extends PageMainContainerFragment {
+    public static enum Mode {
+        ELEMENT,
+        BASIC,
+        MASTER
+    }
+
     public static final String CHILD_TAG_SELECT_EFFECT = "SELECT_EFFECT";
+    public static final String CHILD_TAG_SELECT_EFFECT_TYPE = "SELECT_EFFECT_TYPE";
+
     public static final String CHILD_TAG_CONSTANT_EFFECT = "CONSTANT_EFFECT";
     public static final String CHILD_TAG_TRANSITION_EFFECT = "TRANSITION_EFFECT";
     public static final String CHILD_TAG_PULSE_EFFECT = "PULSE_EFFECT";
+
+    public static final String CHILD_TAG_EFFECT_NAME = "EFFECT_NAME";
 
     public static final String CHILD_TAG_EFFECT_DURATION = "EFFECT_DURATION";
     public static final String CHILD_TAG_EFFECT_PERIOD = "EFFECT_PERIOD";
@@ -32,44 +48,66 @@ public class ScenesPageFragment extends PageMainContainerFragment {
 
     public static String TAG;
 
-    protected boolean isMasterMode;
+    protected Mode mode = Mode.BASIC;
 
-    public void setMasterMode(boolean isMasterMode) {
-        this.isMasterMode = isMasterMode;
+    public void setMode(Mode mode) {
+        this.mode = mode;
+    }
+
+    public boolean isElementMode() {
+        return mode == Mode.ELEMENT;
+    }
+
+    public boolean isBasicMode() {
+        return mode == Mode.BASIC;
     }
 
     public boolean isMasterMode() {
-        return isMasterMode;
+        return mode == Mode.MASTER;
     }
 
     public void showSelectEffectChildFragment() {
         showChildFragment(CHILD_TAG_SELECT_EFFECT, null);
     }
 
-    public void showNoEffectChildFragment() {
-        showChildFragment(CHILD_TAG_CONSTANT_EFFECT, ((SampleAppActivity)getActivity()).pendingNoEffectModel.id);
+    public void showSelectEffectTypeChildFragment() {
+        showChildFragment(CHILD_TAG_SELECT_EFFECT_TYPE, null);
+    }
+
+    public void showEnterEffectNameChildFragment() {
+        showChildFragment(CHILD_TAG_EFFECT_NAME, null);
+    }
+
+    public void showConstantEffectChildFragment() {
+        showChildFragment(CHILD_TAG_CONSTANT_EFFECT, isBasicMode() ? NoEffectFragment.pendingNoEffectModel.id : PresetEffectFragment.pendingPresetEffect.id);
     }
 
     public void showTransitionEffectChildFragment() {
-        showChildFragment(CHILD_TAG_TRANSITION_EFFECT, ((SampleAppActivity)getActivity()).pendingTransitionEffectModel.id);
+        showChildFragment(CHILD_TAG_TRANSITION_EFFECT, isBasicMode() ? TransitionEffectFragment.pendingTransitionEffectModel.id : TransitionEffectV2Fragment.pendingTransitionEffect.id);
     }
 
     public void showPulseEffectChildFragment() {
-        showChildFragment(CHILD_TAG_PULSE_EFFECT, ((SampleAppActivity)getActivity()).pendingPulseEffectModel.id);
+        showChildFragment(CHILD_TAG_PULSE_EFFECT, isBasicMode() ? PulseEffectFragment.pendingPulseEffectModel.id : PulseEffectV2Fragment.pendingPulseEffect.id);
     }
 
     public void showEnterDurationChildFragment() {
-        SampleAppActivity activity = (SampleAppActivity)getActivity();
-        String tag = activity.pendingTransitionEffectModel != null ? activity.pendingTransitionEffectModel.id : activity.pendingPulseEffectModel.id;
+        String tag;
+
+        if (isBasicMode()) {
+            tag = TransitionEffectFragment.pendingTransitionEffectModel != null ? TransitionEffectFragment.pendingTransitionEffectModel.id : PulseEffectFragment.pendingPulseEffectModel.id;
+        } else {
+            tag = TransitionEffectV2Fragment.pendingTransitionEffect != null ? TransitionEffectV2Fragment.pendingTransitionEffect.id : PulseEffectV2Fragment.pendingPulseEffect.id;
+        }
+
         showChildFragment(CHILD_TAG_EFFECT_DURATION, tag);
     }
 
     public void showEnterPeriodChildFragment() {
-        showChildFragment(CHILD_TAG_EFFECT_PERIOD, ((SampleAppActivity)getActivity()).pendingPulseEffectModel.id);
+        showChildFragment(CHILD_TAG_EFFECT_PERIOD, isBasicMode() ? PulseEffectFragment.pendingPulseEffectModel.id : PulseEffectV2Fragment.pendingPulseEffect.id);
     }
 
     public void showEnterCountChildFragment() {
-        showChildFragment(CHILD_TAG_EFFECT_COUNT, ((SampleAppActivity)getActivity()).pendingPulseEffectModel.id);
+        showChildFragment(CHILD_TAG_EFFECT_COUNT, isBasicMode() ? PulseEffectFragment.pendingPulseEffectModel.id : PulseEffectV2Fragment.pendingPulseEffect.id);
     }
 
     @Override
@@ -77,12 +115,16 @@ public class ScenesPageFragment extends PageMainContainerFragment {
     {
         if (tag == CHILD_TAG_SELECT_EFFECT) {
             return createSelectEffectChildFragment();
+        } else if (tag == CHILD_TAG_SELECT_EFFECT_TYPE) {
+            return createSelectEffectTypeChildFragment();
         } else if (tag == CHILD_TAG_CONSTANT_EFFECT) {
             return createConstantEffectChildFragment();
         } else if (tag == CHILD_TAG_TRANSITION_EFFECT) {
             return createTransitionEffectChildFragment();
         } else if (tag == CHILD_TAG_PULSE_EFFECT) {
             return createPulseEffectChildFragment();
+        } else if (tag == CHILD_TAG_EFFECT_NAME) {
+            return createEnterEffectNameChildFragment();
         } else if (tag == CHILD_TAG_EFFECT_DURATION) {
             return createEnterDurationChildFragment();
         } else if (tag == CHILD_TAG_EFFECT_PERIOD) {
@@ -101,7 +143,11 @@ public class ScenesPageFragment extends PageMainContainerFragment {
 
     @Override
     public PageFrameChildFragment createInfoChildFragment() {
-        return isMasterMode ? new MasterSceneInfoFragment() : new BasicSceneInfoFragment();
+        return
+            isMasterMode()  ? new MasterSceneInfoFragment() :
+            isBasicMode()   ? new BasicSceneV2InfoFragment() :
+            isElementMode() ? new SceneElementV2InfoFragment() :
+            null;
     }
 
     @Override
@@ -111,28 +157,64 @@ public class ScenesPageFragment extends PageMainContainerFragment {
 
     @Override
     public PageFrameChildFragment createEnterNameChildFragment() {
-        return isMasterMode ? new MasterSceneEnterNameFragment() : new BasicSceneEnterNameFragment();
+        return
+            isMasterMode()  ? new MasterSceneEnterNameFragment() :
+            isBasicMode()   ? new BasicSceneV2EnterNameFragment() :
+            isElementMode() ? new SceneElementV2EnterNameFragment() :
+            null;
     }
 
     @Override
     public PageFrameChildFragment createSelectMembersChildFragment() {
-        return isMasterMode ? new MasterSceneSelectMembersFragment() : new BasicSceneSelectMembersFragment();
+        return
+            isMasterMode()  ? new MasterSceneSelectMembersFragment() :
+            isBasicMode()   ? new BasicSceneV2SelectMembersFragment() :
+            isElementMode() ? new SceneElementV2SelectMembersFragment() :
+            null;
     }
 
     public PageFrameChildFragment createSelectEffectChildFragment() {
-        return isMasterMode ? null : new BasicSceneSelectEffectFragment();
+        return new SceneElementV2SelectEffectFragment();
+    }
+
+    public PageFrameChildFragment createEnterEffectNameChildFragment() {
+        return
+            PresetEffectFragment.pendingPresetEffect           != null ? new PresetEffectEnterNameFragment() :
+            TransitionEffectV2Fragment.pendingTransitionEffect != null ? new TransitionEffectV2EnterNameFragment() :
+            PulseEffectV2Fragment.pendingPulseEffect           != null ? new PulseEffectV2EnterNameFragment() :
+            null;
+    }
+
+    public PageFrameChildFragment createSelectEffectTypeChildFragment() {
+        return
+            isMasterMode()  ? null :
+            isBasicMode()   ? new BasicSceneV1SelectEffectTypeFragment() :
+            isElementMode() ? new SceneElementV2SelectEffectTypeFragment() :
+            null;
     }
 
     public PageFrameChildFragment createConstantEffectChildFragment() {
-        return isMasterMode ? null : new NoEffectFragment();
+        return
+            isMasterMode()  ? null :
+            isBasicMode()   ? new NoEffectFragment() :
+            isElementMode() ? new PresetEffectFragment() :
+            null;
     }
 
     public PageFrameChildFragment createTransitionEffectChildFragment() {
-        return isMasterMode ? null : new TransitionEffectFragment();
+        return
+            isMasterMode()  ? null :
+            isBasicMode()   ? new TransitionEffectFragment() :
+            isElementMode() ? new TransitionEffectV2Fragment() :
+            null;
     }
 
     public PageFrameChildFragment createPulseEffectChildFragment() {
-        return isMasterMode ? null : new PulseEffectFragment();
+        return
+            isMasterMode()  ? null :
+            isBasicMode()   ? new PulseEffectFragment() :
+            isElementMode() ? new PulseEffectV2Fragment() :
+            null;
     }
 
     public PageFrameChildFragment createEnterDurationChildFragment() {
@@ -161,12 +243,14 @@ public class ScenesPageFragment extends PageMainContainerFragment {
         String startingChildTag = child.getTag();
         int backStackCount = super.onBackPressed();
 
-        if (!isMasterMode && CHILD_TAG_ENTER_NAME.equals(startingChildTag)) {
+        if (isBasicMode() && CHILD_TAG_ENTER_NAME.equals(startingChildTag)) {
             // To support the basic scene creation workflow, when going backwards
             // from the enter name fragment we have to skip over the dummy scene
             // info fragment (see SampleAppActivity.doAddScene()). So we queue up
             // a second back press here.
-            ((SampleAppActivity)getActivity()).postOnBackPressed();
+
+            // TODO-FIX: need to execute the next line only if V2 scenes are not supported by the controller
+            //((SampleAppActivity)getActivity()).postOnBackPressed();
         }
 
         return backStackCount;

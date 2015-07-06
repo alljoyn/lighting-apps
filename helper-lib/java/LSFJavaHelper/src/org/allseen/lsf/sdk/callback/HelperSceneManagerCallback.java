@@ -15,10 +15,10 @@
  */
 package org.allseen.lsf.sdk.callback;
 
-import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.Scene;
 import org.allseen.lsf.SceneManagerCallback;
 import org.allseen.lsf.SceneWithSceneElements;
+import org.allseen.lsf.sdk.ResponseCode;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change

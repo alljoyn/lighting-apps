@@ -20,8 +20,8 @@ import java.util.Map;
 
 import org.allseen.lsf.PulseEffectV2;
 import org.allseen.lsf.PulseEffectManagerCallback;
-import org.allseen.lsf.ResponseCode;
-import org.allseen.lsf.TrackingID;
+import org.allseen.lsf.sdk.ResponseCode;
+import org.allseen.lsf.sdk.TrackingID;
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 import org.allseen.lsf.sdk.manager.LightingSystemManager;
 import org.allseen.lsf.sdk.model.PulseEffectDataModelV2;
@@ -30,11 +30,11 @@ import org.allseen.lsf.sdk.model.PulseEffectDataModelV2;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class HelperPulseEffectManagerCallback extends PulseEffectManagerCallback {
-    protected LightingSystemManager manager;
+public class HelperPulseEffectManagerCallback<PULSEEFFECT> extends PulseEffectManagerCallback {
+    protected LightingSystemManager<?, ?, ?, ?, PULSEEFFECT, ?, ?, ?, ?, ?, ?> manager;
     protected Map<String, TrackingID> creationTrackingIDs;
 
-    public HelperPulseEffectManagerCallback(LightingSystemManager manager) {
+    public HelperPulseEffectManagerCallback(LightingSystemManager<?, ?, ?, ?, PULSEEFFECT, ?, ?, ?, ?, ?, ?> manager) {
         super();
 
         this.manager = manager;

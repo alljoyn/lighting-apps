@@ -42,7 +42,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_allseen_lsf_SceneWithSceneElements_getSc
 /*
  * Class:     org_allseen_lsf_SceneWithSceneElements
  * Method:    isDependentOnSceneElement
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ResponseCode;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ResponseCode;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneWithSceneElements_isDependentOnSceneElement
   (JNIEnv *, jobject, jstring);

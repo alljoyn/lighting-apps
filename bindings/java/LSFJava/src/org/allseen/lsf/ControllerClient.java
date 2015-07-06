@@ -17,6 +17,7 @@
 package org.allseen.lsf;
 
 import org.alljoyn.bus.BusAttachment;
+import org.allseen.lsf.sdk.ControllerClientStatus;
 
 public class ControllerClient extends BaseNativeClassWrapper {
     private static final NativeLibraryLoader LIBS = NativeLibraryLoader.LIBS;

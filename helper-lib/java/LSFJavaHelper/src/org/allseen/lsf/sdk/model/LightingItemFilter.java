@@ -15,6 +15,6 @@
  */
 package org.allseen.lsf.sdk.model;
 
-public interface LightingItemFilter<ADAPTER> {
-    public boolean passes(ADAPTER adapter);
+public interface LightingItemFilter<ITEM> {
+    public boolean passes(ITEM item);
 }

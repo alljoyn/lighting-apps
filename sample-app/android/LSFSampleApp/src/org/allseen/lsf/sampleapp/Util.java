@@ -16,75 +16,58 @@
 package org.allseen.lsf.sampleapp;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
-import org.allseen.lsf.LampGroup;
-import org.allseen.lsf.LampState;
-import org.allseen.lsf.MasterScene;
+import org.allseen.lsf.sdk.Group;
+import org.allseen.lsf.sdk.Lamp;
+import org.allseen.lsf.sdk.LightingDirector;
+import org.allseen.lsf.sdk.LightingItem;
+import org.allseen.lsf.sdk.MasterScene;
+import org.allseen.lsf.sdk.MyLampState;
 import org.allseen.lsf.sdk.Preset;
-import org.allseen.lsf.sdk.model.GroupDataModel;
-import org.allseen.lsf.sdk.model.LampDataModel;
-import org.allseen.lsf.sdk.model.NoEffectDataModel;
-import org.allseen.lsf.sdk.model.PresetDataModel;
-import org.allseen.lsf.sdk.model.PulseEffectDataModel;
-import org.allseen.lsf.sdk.model.SceneDataModel;
-import org.allseen.lsf.sdk.model.TransitionEffectDataModel;
+import org.allseen.lsf.sdk.SceneElement;
+import org.allseen.lsf.sdk.SceneV2;
 
 public class Util {
-
-    // Creates a details string, containing a list of all lamps and groups in a basic scene
-    public static String createMemberNamesString(SampleAppActivity activity, SceneDataModel basicSceneModel, String separator) {
-        String details = null;
-
-        if (basicSceneModel.noEffects != null) {
-            for (NoEffectDataModel elementModel : basicSceneModel.noEffects) {
-                details = createMemberNamesString(activity, details, elementModel.members, separator, R.string.basic_scene_members_none);
+    public static boolean isDuplicateName(LightingItem[] items, String itemName) {
+        for (LightingItem item : items) {
+            if (item.getName().equals(itemName)) {
+                return true;
             }
         }
 
-        if (basicSceneModel.transitionEffects != null) {
-            for (TransitionEffectDataModel elementModel : basicSceneModel.transitionEffects) {
-                details = createMemberNamesString(activity, details, elementModel.members, separator, R.string.basic_scene_members_none);
-            }
-        }
-
-        if (basicSceneModel.pulseEffects != null) {
-            for (PulseEffectDataModel elementModel : basicSceneModel.pulseEffects) {
-                details = createMemberNamesString(activity, details, elementModel.members, separator, R.string.basic_scene_members_none);
-            }
-        }
-
-        return details;
-    }
-
-    // Creates a details string, appending a list of all lamps and subgroups in a lamp group to a previously created detail string
-    protected static String createMemberNamesString(SampleAppActivity activity, String previous, LampGroup members, String separator, int noMembersStringID) {
-        String current = createMemberNamesString(activity, members, separator, noMembersStringID);
-
-        if (previous != null && !previous.isEmpty()) {
-            current = previous + separator + current;
-        }
-
-        return current;
+        return false;
     }
 
     // Creates a details string, containing a list of all lamps and subgroups in a lamp group
-    public static String createMemberNamesString(SampleAppActivity activity, LampGroup members, String separator, int noMembersStringID) {
+    public static String createMemberNamesString(SampleAppActivity activity, Group group, String separator, int noMembersStringID) {
+        return createMemberNamesString(activity, group.getGroupIDs(), group.getLampIDs(), separator, R.string.member_group_not_found, R.string.member_lamp_not_found, noMembersStringID);
+    }
+
+    public static String createMemberNamesString(SampleAppActivity activity, SceneElement sceneElement, String separator, int noMembersStringID) {
+        return createMemberNamesString(activity, sceneElement.getGroupIDs(), sceneElement.getLampIDs(), separator, R.string.member_group_not_found, R.string.member_lamp_not_found, noMembersStringID);
+    }
+
+    public static String createMemberNamesString(SampleAppActivity activity, Collection<String> groupIDs, Collection<String> lampIDs, String separator, int groupNotFoundStringID, int lampNotFoundStringID, int noMembersStringID) {
         List<String> groupNames = new ArrayList<String>();
         List<String> lampNames = new ArrayList<String>();
 
-        for (String groupID : members.getLampGroups()) {
-            GroupDataModel groupModel = activity.systemManager.getGroupCollectionManager().getModel(groupID);
-            groupNames.add(groupModel != null ? groupModel.getName() : String.format(activity.getString(R.string.member_group_not_found), groupID));
+        for (String groupID : groupIDs) {
+            Group group = LightingDirector.get().getGroup(groupID);
+            groupNames.add(group != null ? group.getName() : String.format(activity.getString(groupNotFoundStringID), groupID));
         }
 
-        for (String lampID : members.getLamps()) {
-            LampDataModel lampModel = activity.systemManager.getLampCollectionManager().getModel(lampID);
-            lampNames.add(lampModel != null ? lampModel.getName() : String.format(activity.getString(R.string.member_lamp_not_found), lampID));
+        for (String lampID : lampIDs) {
+            Lamp lamp = LightingDirector.get().getLamp(lampID);
+            lampNames.add(lamp != null ? lamp.getName() : String.format(activity.getString(lampNotFoundStringID), lampID));
         }
 
+        return createMemberNamesString(activity, groupNames, lampNames, separator, noMembersStringID);
+    }
+
+    public static String createMemberNamesString(SampleAppActivity activity, List<String> groupNames, List<String> lampNames, String separator, int noMembersStringID) {
         Collections.sort(groupNames);
         Collections.sort(lampNames);
 
@@ -113,17 +96,13 @@ public class Util {
     }
 
     // Creates a string containing a sorted comma-separated list of preset names that match the specified state
-    public static String createPresetNamesString(SampleAppActivity activity, LampState itemState) {
+    public static String createPresetNamesString(SampleAppActivity activity, MyLampState itemState) {
         List<String> presetNames = new ArrayList<String>();
-        Iterator<Preset> i = activity.systemManager.getPresetCollectionManager().getPresetIterator();
+        Preset[] presets = LightingDirector.get().getPresets();
 
-        while (i.hasNext()) {
-            PresetDataModel presetModel = i.next().getPresetDataModel();
-
-            if (presetModel.state != null) {
-                if (presetModel.stateEquals(itemState)) {
-                    presetNames.add(presetModel.getName());
-                }
+        for (Preset preset : presets) {
+            if (preset.stateEquals(itemState)) {
+                presetNames.add(preset.getName());
             }
         }
 
@@ -134,16 +113,23 @@ public class Util {
 
     // Creates a details string, containing a list of all scenes
     public static String createSceneNamesString(SampleAppActivity activity, MasterScene masterScene) {
-        List<String> basicSceneNames = new ArrayList<String>();
+        return createSceneItemNamesString(activity, masterScene.getScenes(), R.string.member_scene_not_found, R.string.master_scene_members_none);
+    }
 
-        for (String basicSceneID : masterScene.getScenes()) {
-            SceneDataModel basicSceneModel = activity.systemManager.getSceneCollectionManagerV1().getModel(basicSceneID);
-            basicSceneNames.add(basicSceneModel != null ? basicSceneModel.getName() : String.format(activity.getString(R.string.member_scene_not_found), basicSceneID));
+    public static String createSceneElementNamesString(SampleAppActivity activity, SceneV2 basicScene) {
+        return createSceneItemNamesString(activity, basicScene.getSceneElements(), R.string.member_scene_element_not_found, R.string.basic_scene_members_none);
+    }
+
+    public static String createSceneItemNamesString(SampleAppActivity activity, LightingItem[] sceneItems, int notFoundID, int noMembersID) {
+        List<String> sceneItemNames = new ArrayList<String>();
+
+        for (LightingItem lightingItem : sceneItems) {
+            sceneItemNames.add(lightingItem.isInitialized() ? lightingItem.getName() : String.format(activity.getString(notFoundID), lightingItem.getId()));
         }
 
-        String flattenedSceneNames = sortAndFlattenNameList(basicSceneNames);
+        String flattenedItemNames = sortAndFlattenNameList(sceneItemNames);
 
-        return !flattenedSceneNames.isEmpty() ? flattenedSceneNames : activity.getString(R.string.master_scene_members_none);
+        return !flattenedItemNames.isEmpty() ? flattenedItemNames : activity.getString(noMembersID);
     }
 
     public static String sortAndFlattenNameList(List<String> names) {

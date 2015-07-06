@@ -98,6 +98,20 @@ public class GroupDataModel extends ColorItemDataModel {
         return this.members;
     }
 
+    // Only checks immediate child lamps. To see if the lamp is in a descendent (child, grandchild,
+    // great-grandchild, etc.) group, you can use getLamps().contains(lampID);
+    public boolean containsLamp(String lampID) {
+        String[] childIDs = members.getLamps();
+
+        for (String childID : childIDs) {
+            if (childID.equals(lampID)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     // Only checks immediate child groups. To see if the group is a descendent (child, grandchild,
     // great-grandchild, etc.) you can use getGroups().contains(groupID);
     public boolean containsGroup(String groupID) {

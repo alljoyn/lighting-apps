@@ -27,7 +27,7 @@ extern "C" {
 /*
  * Class:     org_allseen_lsf_ControllerServiceManager
  * Method:    getControllerServiceVersion
- * Signature: ()Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: ()Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_ControllerServiceManager_getControllerServiceVersion
   (JNIEnv *, jobject);
@@ -35,7 +35,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_ControllerServiceManager_getContr
 /*
  * Class:     org_allseen_lsf_ControllerServiceManager
  * Method:    lightingResetControllerService
- * Signature: ()Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: ()Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_ControllerServiceManager_lightingResetControllerService
   (JNIEnv *, jobject);

@@ -20,8 +20,8 @@ import java.util.Map;
 
 import org.allseen.lsf.LampState;
 import org.allseen.lsf.PresetManagerCallback;
-import org.allseen.lsf.ResponseCode;
-import org.allseen.lsf.TrackingID;
+import org.allseen.lsf.sdk.ResponseCode;
+import org.allseen.lsf.sdk.TrackingID;
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 import org.allseen.lsf.sdk.manager.LightingSystemManager;
 import org.allseen.lsf.sdk.model.PresetDataModel;
@@ -30,11 +30,11 @@ import org.allseen.lsf.sdk.model.PresetDataModel;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class HelperPresetManagerCallback extends PresetManagerCallback {
-    protected LightingSystemManager manager;
+public class HelperPresetManagerCallback<PRESET> extends PresetManagerCallback {
+    protected LightingSystemManager<?, ?, PRESET, ?, ?, ?, ?, ?, ?, ?, ?> manager;
     protected Map<String, TrackingID> creationTrackingIDs;
 
-    public HelperPresetManagerCallback(LightingSystemManager manager) {
+    public HelperPresetManagerCallback(LightingSystemManager<?, ?, PRESET, ?, ?, ?, ?, ?, ?, ?, ?> manager) {
         super();
 
         this.manager = manager;

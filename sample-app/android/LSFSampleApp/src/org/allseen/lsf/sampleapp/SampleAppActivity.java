@@ -17,57 +17,41 @@
 package org.allseen.lsf.sampleapp;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
 
-import org.allseen.lsf.ErrorCode;
-import org.allseen.lsf.LampGroup;
-import org.allseen.lsf.LampGroupManager;
-import org.allseen.lsf.MasterSceneManager;
-import org.allseen.lsf.ResponseCode;
-import org.allseen.lsf.SceneManager;
-import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.sdk.AllCollectionListener;
-import org.allseen.lsf.sdk.AllJoynListener;
-import org.allseen.lsf.sdk.ControllerErrorEvent;
+import org.allseen.lsf.sampleapp.scenesv1.BasicSceneV1InfoFragment;
+import org.allseen.lsf.sampleapp.scenesv1.BasicScenePlugin;
+import org.allseen.lsf.sampleapp.scenesv1.NoEffectFragment;
+import org.allseen.lsf.sampleapp.scenesv1.PulseEffectFragment;
+import org.allseen.lsf.sampleapp.scenesv1.TransitionEffectFragment;
+import org.allseen.lsf.sdk.AllLightingItemListener;
+import org.allseen.lsf.sdk.Color;
+import org.allseen.lsf.sdk.Controller;
+import org.allseen.lsf.sdk.DeletableItem;
+import org.allseen.lsf.sdk.ErrorCode;
 import org.allseen.lsf.sdk.Group;
 import org.allseen.lsf.sdk.Lamp;
+import org.allseen.lsf.sdk.LampAbout;
 import org.allseen.lsf.sdk.LightingController;
+import org.allseen.lsf.sdk.LightingDirector;
+import org.allseen.lsf.sdk.LightingItem;
 import org.allseen.lsf.sdk.LightingItemErrorEvent;
+import org.allseen.lsf.sdk.LightingSystemQueue;
 import org.allseen.lsf.sdk.MasterScene;
+import org.allseen.lsf.sdk.MutableColorItem;
 import org.allseen.lsf.sdk.Preset;
 import org.allseen.lsf.sdk.PulseEffect;
+import org.allseen.lsf.sdk.ResponseCode;
 import org.allseen.lsf.sdk.Scene;
 import org.allseen.lsf.sdk.SceneElement;
+import org.allseen.lsf.sdk.SceneItem;
 import org.allseen.lsf.sdk.SceneV1;
+import org.allseen.lsf.sdk.SceneV2;
+import org.allseen.lsf.sdk.TrackingID;
 import org.allseen.lsf.sdk.TransitionEffect;
-import org.allseen.lsf.sdk.manager.AllJoynManager;
-import org.allseen.lsf.sdk.manager.GroupCollectionManager;
-import org.allseen.lsf.sdk.manager.LampCollectionManager;
-import org.allseen.lsf.sdk.manager.LightingSystemManager;
-import org.allseen.lsf.sdk.manager.LightingSystemQueue;
-import org.allseen.lsf.sdk.manager.MasterSceneCollectionManager;
-import org.allseen.lsf.sdk.manager.SceneCollectionManager;
-import org.allseen.lsf.sdk.model.AllLampsDataModel;
-import org.allseen.lsf.sdk.model.ColorAverager;
-import org.allseen.lsf.sdk.model.ColorStateConverter;
-import org.allseen.lsf.sdk.model.ControllerDataModel;
-import org.allseen.lsf.sdk.model.GroupDataModel;
-import org.allseen.lsf.sdk.model.LampAbout;
-import org.allseen.lsf.sdk.model.LampCapabilities;
-import org.allseen.lsf.sdk.model.LampDataModel;
-import org.allseen.lsf.sdk.model.MasterSceneDataModel;
-import org.allseen.lsf.sdk.model.NoEffectDataModel;
-import org.allseen.lsf.sdk.model.PresetDataModel;
-import org.allseen.lsf.sdk.model.PulseEffectDataModel;
-import org.allseen.lsf.sdk.model.SceneDataModel;
-import org.allseen.lsf.sdk.model.TransitionEffectDataModel;
-
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
@@ -100,8 +84,7 @@ import android.widget.Toast;
 public class SampleAppActivity extends FragmentActivity implements
         ActionBar.TabListener,
         PopupMenu.OnMenuItemClickListener,
-        AllCollectionListener,
-        AllJoynListener {
+        AllLightingItemListener {
     public static final String TAG = "LSFSampleApp";
     public static final String TAG_TRACE = "LSFSampleApp########";
     public static final String LANGUAGE = "en";
@@ -127,25 +110,10 @@ public class SampleAppActivity extends FragmentActivity implements
     public volatile boolean isForeground;
     public volatile Queue<Runnable> runInForeground;
 
-    public LightingSystemManager systemManager;
     private LightingController controllerService;
+    private boolean controllerClientConnected;
     private boolean controllerServiceEnabled;
     private volatile boolean controllerServiceStarted;
-
-    public GroupDataModel pendingGroupModel;
-    public SceneDataModel pendingBasicSceneModel;
-    public MasterSceneDataModel pendingMasterSceneModel;
-
-    public LampGroup pendingBasicSceneElementMembers;
-    public LampCapabilities pendingBasicSceneElementCapability;
-    public ColorAverager pendingBasicSceneElementColorTempAverager = new ColorAverager();
-    public boolean pendingBasicSceneElementMembersHaveEffects;
-    public int pendingBasicSceneElementMembersMinColorTemp;
-    public int pendingBasicSceneElementMembersMaxColorTemp;
-
-    public NoEffectDataModel pendingNoEffectModel;
-    public TransitionEffectDataModel pendingTransitionEffectModel;
-    public PulseEffectDataModel pendingPulseEffectModel;
 
     public PageFrameParentFragment pageFrameParent;
 
@@ -176,39 +144,24 @@ public class SampleAppActivity extends FragmentActivity implements
         runInForeground = new LinkedList<Runnable>();
 
         // Setup localized strings in data models
-        ControllerDataModel.defaultName = this.getString(R.string.default_controller_name);
+        Controller.setDefaultName(this.getString(R.string.default_controller_name));
 
-        LampAbout.dataNotFound = this.getString(R.string.data_not_found);
+        LampAbout.setDataNotFound(this.getString(R.string.data_not_found));
 
-        LampDataModel.defaultName = this.getString(R.string.default_lamp_name);
-        GroupDataModel.defaultName = this.getString(R.string.default_group_name);
-        PresetDataModel.defaultName = this.getString(R.string.default_preset_name);
-
-        NoEffectDataModel.defaultName = this.getString(R.string.effect_name_none);
-        TransitionEffectDataModel.defaultName = this.getString(R.string.effect_name_transition);
-        PulseEffectDataModel.defaultName = this.getString(R.string.effect_name_pulse);
-
-        SceneDataModel.defaultName = this.getString(R.string.default_basic_scene_name);
-        MasterSceneDataModel.defaultName = this.getString(R.string.default_master_scene_name);
+        Lamp.setDefaultName(this.getString(R.string.default_lamp_name));
+        Group.setDefaultName(this.getString(R.string.default_group_name));
+        Preset.setDefaultName(this.getString(R.string.default_preset_name));
+        TransitionEffect.setDefaultName(this.getString(R.string.default_transition_effect_name));
+        PulseEffect.setDefaultName(this.getString(R.string.default_pulse_effect_name));
+        SceneElement.setDefaultName(this.getString(R.string.default_scene_element_name));
+        SceneV2.setDefaultName(this.getString(R.string.default_basic_scene_name));
+        MasterScene.setDefaultName(this.getString(R.string.default_master_scene_name));
 
         // Start up the LightingSystemManager
         Log.d(SampleAppActivity.TAG, "===========================================");
         Log.d(SampleAppActivity.TAG, "Creating LightingSystemManager");
 
-        systemManager = new LightingSystemManager();
-
-        systemManager.getLampCollectionManager().addListener(this);
-        systemManager.getGroupCollectionManager().addListener(this);
-        systemManager.getPresetCollectionManager().addListener(this);
-        systemManager.getSceneCollectionManagerV1().addListener(this);
-        systemManager.getMasterSceneCollectionManager().addListener(this);
-        systemManager.getControllerManager().addListener(this);
-
-        // We initialize the dashboard plugin first to avoid an apparent
-        // race condition with processing about announcements.
-        initDashboard();
-
-        systemManager.init(
+        LightingDirector.get().start(
             "SampleApp",
             new LightingSystemQueue() {
                 @Override
@@ -224,8 +177,26 @@ public class SampleAppActivity extends FragmentActivity implements
                 @Override
                 public void stop() {
                     // Currently nothing to do
-                }},
-            this);
+                }
+            });
+
+        LightingDirector.get().addListener(this);
+
+        // We initialize the dashboard plugin first to avoid an apparent
+        // race condition with processing about announcements.
+        initDashboard();
+
+        // Handle wifi disconnect errors
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(final Context context, Intent intent) {
+                postUpdateControllerDisplay();
+                wifiConnectionStateUpdate(isWifiConnected());
+            }
+        }, filter);
 
         // Controller service support
         controllerServiceEnabled = getSharedPreferences("PREFS_READ", Context.MODE_PRIVATE).getBoolean(CONTROLLER_ENABLED, true);
@@ -236,9 +207,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
     @Override
     protected void onDestroy() {
-        if (systemManager != null) {
-            systemManager.stop();
-        }
+        LightingDirector.get().stop();
 
         setControllerServiceStarted(false);
 
@@ -300,23 +269,6 @@ public class SampleAppActivity extends FragmentActivity implements
         return wifiNetworkInfo.isConnected() || isWifiApEnabled;
     }
 
-    @Override
-    public void onAllJoynInitialized() {
-        Log.d(SampleAppActivity.TAG, "onAllJoynInitialized()");
-
-        // Handle wifi disconnect errors
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-
-        registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(final Context context, Intent intent) {
-                postUpdateControllerDisplay();
-                wifiConnectionStateUpdate(isWifiConnected());
-            }
-        }, filter);
-    }
-
     private boolean actionBarHasAdd() {
         boolean hasAdd = false;
         int tabIndex = viewPager.getCurrentItem();
@@ -324,12 +276,12 @@ public class SampleAppActivity extends FragmentActivity implements
         if (tabIndex != 0) {
             if (tabIndex == 1) {
                 // Groups tab
-                hasAdd = (systemManager.getGroupCollectionManager().size() < LampGroupManager.MAX_LAMP_GROUPS);
+                hasAdd = (LightingDirector.get().getGroupCount() < LightingDirector.MAX_GROUPS);
             } else if (tabIndex == 2) {
                 // Scenes tab
                 hasAdd =
-                    (systemManager.getSceneCollectionManagerV1().size() < SceneManager.MAX_SCENES) ||
-                    (systemManager.getMasterSceneCollectionManager().size() < MasterSceneManager.MAX_MASTER_SCENES);
+                    (LightingDirector.get().getSceneCount() < LightingDirector.MAX_SCENES) ||
+                    (LightingDirector.get().getMasterSceneCount() < LightingDirector.MAX_MASTER_SCENES);
             }
         }
 
@@ -493,28 +445,28 @@ public class SampleAppActivity extends FragmentActivity implements
         parent.showInfoChildFragment(itemID);
     }
 
-    public void applyBasicScene(String basicSceneID) {
-        SceneDataModel basicSceneModel = systemManager.getSceneCollectionManagerV1().getModel(basicSceneID);
-
-        if (basicSceneModel != null) {
-            String message = String.format(this.getString(R.string.toast_basic_scene_apply), basicSceneModel.getName());
-
-            AllJoynManager.sceneManager.applyScene(basicSceneID);
-
-            showToast(message);
-        }
+    public boolean applySceneElement(String sceneElementID) {
+        return applySceneItem(LightingDirector.get().getSceneElement(sceneElementID), R.string.toast_scene_element_apply);
     }
 
-    public void applyMasterScene(String masterSceneID) {
-        MasterSceneDataModel masterSceneModel = systemManager.getMasterSceneCollectionManager().getModel(masterSceneID);
+    public boolean applyBasicScene(String basicSceneID) {
+        return applySceneItem(LightingDirector.get().getScene(basicSceneID), R.string.toast_basic_scene_apply);
+    }
 
-        if (masterSceneModel != null) {
-            String message = String.format(this.getString(R.string.toast_master_scene_apply), masterSceneModel.getName());
+    public boolean applyMasterScene(String masterSceneID) {
+        return applySceneItem(LightingDirector.get().getMasterScene(masterSceneID), R.string.toast_master_scene_apply);
+    }
 
-            AllJoynManager.masterSceneManager.applyMasterScene(masterSceneID);
+    private boolean applySceneItem(SceneItem sceneItem, int messageID) {
+        boolean doApply = sceneItem != null;
 
-            showToast(message);
+        if (doApply) {
+            sceneItem.apply();
+
+            showToast(String.format(this.getString(messageID), sceneItem.getName()));
         }
+
+        return doApply;
     }
 
     public void wifiConnectionStateUpdate(boolean connected) {
@@ -528,10 +480,9 @@ public class SampleAppActivity extends FragmentActivity implements
                     postInForeground(new Runnable() {
                         @Override
                         public void run() {
-                            Log.d(SampleAppActivity.TAG_TRACE, "Restarting system");
+                            Log.d(SampleAppActivity.TAG_TRACE, "Starting system");
 
-                            systemManager.stop();
-                            systemManager.start();
+                            LightingDirector.get().setNetworkConnectionStatus(true);
 
                             if (controllerServiceEnabled) {
                                 Log.d(SampleAppActivity.TAG_TRACE, "Starting bundled controller service");
@@ -558,7 +509,7 @@ public class SampleAppActivity extends FragmentActivity implements
                             if (wifiDisconnectAlertDialog == null) {
                                 Log.d(SampleAppActivity.TAG, "Stopping system");
 
-                                systemManager.stop();
+                                LightingDirector.get().setNetworkConnectionStatus(false);
 
                                 setControllerServiceStarted(false);
 
@@ -580,16 +531,14 @@ public class SampleAppActivity extends FragmentActivity implements
         }
     }
 
-    public void showErrorResponseCode(Enum code, String source) {
+    private void showErrorResponseCode(Enum code, String source, final boolean dependency) {
         final SampleAppActivity activity = this;
         // creates a message about the error
         StringBuilder sb = new StringBuilder();
 
-        final boolean dependencyError = (code instanceof ResponseCode) && (code == ResponseCode.ERR_DEPENDENCY);
-        if (dependencyError) {
+        if (dependency) {
             // dependency error
             sb.append(this.getString(R.string.error_dependency));
-
         } else {
             String name = code.name();
 
@@ -598,8 +547,8 @@ public class SampleAppActivity extends FragmentActivity implements
             sb.append(" ");
             sb.append(name != null ? name : code.ordinal());
             sb.append(source != null ? " - " + source : "");
-
         }
+
         final String message = sb.toString();
 
         Log.w(SampleAppActivity.TAG, message);
@@ -620,7 +569,7 @@ public class SampleAppActivity extends FragmentActivity implements
                     });
 
                     errorCodeAlertDialog = alertDialogBuilder.create();
-                    if (ERROR_CODE_VERBOSE || (!ERROR_CODE_VERBOSE && dependencyError)) {
+                    if (ERROR_CODE_VERBOSE || (!ERROR_CODE_VERBOSE && dependency)) {
                         if (errorCodeAlertDialogMessage == null) {
                             errorCodeAlertDialogMessage = message;
                             errorCodeAlertDialog.setMessage(errorCodeAlertDialogMessage);
@@ -658,137 +607,110 @@ public class SampleAppActivity extends FragmentActivity implements
         }
     }
 
+    private void showConfirmDeleteItemDialog(final DeletableItem item, int confirmTitleID, int confirmLableID, int errorTitleID, int errorMessageID) {
+        if (item != null) {
+            final String itemName = item.getName();
+            final LightingItem[] dependents = item.getDependents();
+
+            if (dependents.length == 0) {
+                showConfirmDeleteDialog(confirmTitleID, confirmLableID, itemName, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        Log.d(SampleAppActivity.TAG, "Delete item: " + itemName);
+
+                        item.delete();
+                    }});
+            } else {
+                String memberNames = MemberNamesString.format(this, dependents, MemberNamesOptions.en, 3, "");
+                String message = String.format(getString(errorMessageID), itemName, memberNames);
+
+                showPositiveErrorDialog(errorTitleID, message);
+            }
+        }
+    }
+
+    private void showConfirmDeleteSceneElementDialog(final String sceneElementID) {
+        if (sceneElementID != null) {
+            showConfirmDeleteItemDialog(
+                LightingDirector.get().getSceneElement(sceneElementID),
+                R.string.menu_scene_element_delete,
+                R.string.label_scene_element,
+                R.string.error_dependency_scene_element_title,
+                R.string.error_dependency_scene_element_text);
+        }
+    }
+
     private void showConfirmDeleteBasicSceneDialog(final String basicSceneID) {
         if (basicSceneID != null) {
-            SceneDataModel basicSceneModel = systemManager.getSceneCollectionManagerV1().getModel(basicSceneID);
-
-            if (basicSceneModel != null) {
-                List<String> parentSceneNames = new ArrayList<String>();
-                Iterator<MasterScene> i = systemManager.getMasterSceneCollectionManager().getMasterSceneIterator();
-
-                while (i.hasNext()) {
-                    MasterSceneDataModel nextMasterSceneModel = i.next().getMasterSceneDataModel();
-
-                    if (nextMasterSceneModel.containsBasicScene(basicSceneID)) {
-                        parentSceneNames.add(nextMasterSceneModel.getName());
-                    }
-                }
-
-                if (parentSceneNames.size() == 0) {
-                    showConfirmDeleteDialog(R.string.menu_basic_scene_delete, R.string.label_basic_scene, basicSceneModel.getName(), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            Log.d(SampleAppActivity.TAG, "Delete basic scene ID: " + basicSceneID);
-                            AllJoynManager.sceneManager.deleteScene(basicSceneID);
-                        }});
-                } else {
-                    String memberNames =  MemberNamesString.format(this, parentSceneNames, MemberNamesOptions.en, 3, "");
-                    String message = String.format(getString(R.string.error_dependency_scene_text), basicSceneModel.getName(), memberNames);
-
-                    showPositiveErrorDialog(R.string.error_dependency_scene_title, message);
-                }
-            }
+            showConfirmDeleteItemDialog(
+                LightingDirector.get().getScene(basicSceneID),
+                R.string.menu_basic_scene_delete,
+                R.string.label_basic_scene,
+                R.string.error_dependency_scene_title,
+                R.string.error_dependency_scene_text);
         }
     }
 
     private void doDeleteSceneElement(String basicSceneID, String elementID ) {
-        if (pendingBasicSceneModel != null) {
-            pendingBasicSceneModel.removeElement(elementID);
+        if (BasicSceneV1InfoFragment.pendingBasicSceneModel != null) {
+            BasicSceneV1InfoFragment.pendingBasicSceneModel.removeElement(elementID);
         }
 
-        refreshScene(basicSceneID);
+        refreshScene(LightingDirector.get().getScene(basicSceneID));
     }
 
     private void showConfirmDeleteMasterSceneDialog(final String masterSceneID) {
         if (masterSceneID != null) {
-            MasterSceneDataModel masterSceneModel = systemManager.getMasterSceneCollectionManager().getModel(masterSceneID);
-
-            if (masterSceneModel != null) {
-                showConfirmDeleteDialog(R.string.menu_master_scene_delete, R.string.label_master_scene, masterSceneModel.getName(), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        Log.d(SampleAppActivity.TAG, "Delete master scene ID: " + masterSceneID);
-                        AllJoynManager.masterSceneManager.deleteMasterScene(masterSceneID);
-                    }});
-            }
+            showConfirmDeleteItemDialog(
+                LightingDirector.get().getMasterScene(masterSceneID),
+                R.string.menu_master_scene_delete,
+                R.string.label_master_scene,
+                0,
+                0);
         }
     }
 
     private void showConfirmDeleteGroupDialog(final String groupID) {
         if (groupID != null) {
-            GroupDataModel groupModel = systemManager.getGroupCollectionManager().getModel(groupID);
-
-            if (groupModel != null) {
-                List<String> parentGroupNames = new ArrayList<String>();
-                List<String> parentSceneNames = new ArrayList<String>();
-                Iterator<Group> groupIterator = systemManager.getGroupCollectionManager().getGroupIterator();
-
-                while(groupIterator.hasNext()) {
-                    GroupDataModel nextGroupModel = groupIterator.next().getGroupDataModel();
-
-                    if (nextGroupModel.containsGroup(groupID)) {
-                        parentGroupNames.add(nextGroupModel.getName());
-                    }
-                }
-
-                Iterator<SceneV1> sceneIterator = systemManager.getSceneCollectionManagerV1().getSceneIterator();
-
-                while (sceneIterator.hasNext()) {
-                    SceneDataModel nextSceneModel = sceneIterator.next().getSceneDataModel();
-
-                    if (nextSceneModel.containsGroup(groupID)) {
-                        parentSceneNames.add(nextSceneModel.getName());
-                    }
-                }
-
-                if ((parentGroupNames.size() == 0) && (parentSceneNames.size() == 0)) {
-                    showConfirmDeleteDialog(R.string.menu_group_delete, R.string.label_group, groupModel.getName(), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            Log.d(SampleAppActivity.TAG, "Delete group ID: " + groupID);
-                            AllJoynManager.groupManager.deleteLampGroup(groupID);
-                        }
-                    });
-                } else {
-                    String memberNames =  MemberNamesString.format(this, parentGroupNames, parentSceneNames, MemberNamesOptions.en, 3, "");
-                    String message = String.format(getString(R.string.error_dependency_group_text), groupModel.getName(), memberNames);
-
-                    showPositiveErrorDialog(R.string.error_dependency_group_title, message);
-                }
-            }
+            showConfirmDeleteItemDialog(
+                LightingDirector.get().getGroup(groupID),
+                R.string.menu_group_delete,
+                R.string.label_group,
+                R.string.error_dependency_group_title,
+                R.string.error_dependency_group_text);
         }
     }
 
     private void showConfirmDeletePresetDialog(final String presetID) {
         if (presetID != null) {
-            PresetDataModel presetModel = systemManager.getPresetCollectionManager().getModel(presetID);
+            showConfirmDeleteItemDialog(
+                LightingDirector.get().getPreset(presetID),
+                R.string.menu_preset_delete,
+                R.string.label_preset,
+                R.string.error_dependency_preset_title,
+                R.string.error_dependency_preset_text);
+        }
+    }
 
-            if (presetModel != null) {
-                List<String> parentSceneNames = new ArrayList<String>();
-                Iterator<SceneV1> i = systemManager.getSceneCollectionManagerV1().getSceneIterator();
+    private void showConfirmDeleteTransitionEffectDialog(final String transitionEffectID) {
+        if (transitionEffectID != null) {
+            showConfirmDeleteItemDialog(
+                LightingDirector.get().getTransitionEffect(transitionEffectID),
+                R.string.menu_preset_delete,
+                R.string.label_transition_effect,
+                R.string.error_dependency_transition_effect_title,
+                R.string.error_dependency_transition_effect_text);
+        }
+    }
 
-                while (i.hasNext()) {
-                    SceneDataModel nextSceneModel = i.next().getSceneDataModel();
-
-                    if (nextSceneModel.containsPreset(presetID)) {
-                        parentSceneNames.add(nextSceneModel.getName());
-                    }
-                }
-
-                if (parentSceneNames.size() == 0) {
-                    showConfirmDeleteDialog(R.string.menu_preset_delete, R.string.label_preset, presetModel.getName(), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            Log.d(SampleAppActivity.TAG, "Delete preset ID: " + presetID);
-                            AllJoynManager.presetManager.deletePreset(presetID);
-                        }});
-                } else {
-                    String memberNames =  MemberNamesString.format(this, parentSceneNames, MemberNamesOptions.en, 3, "");
-                    String message = String.format(getString(R.string.error_dependency_preset_text), presetModel.getName(), memberNames);
-
-                    showPositiveErrorDialog(R.string.error_dependency_preset_title, message);
-                }
-            }
+    private void showConfirmDeletePulseEffectDialog(final String pulseEffectID) {
+        if (pulseEffectID != null) {
+            showConfirmDeleteItemDialog(
+                LightingDirector.get().getPulseEffect(pulseEffectID),
+                R.string.menu_pulse_effect_delete,
+                R.string.label_pulse_effect,
+                R.string.error_dependency_pulse_effect_title,
+                R.string.error_dependency_pulse_effect_text);
         }
     }
 
@@ -828,15 +750,14 @@ public class SampleAppActivity extends FragmentActivity implements
         alertDialogBuilder.show();
     }
 
-    private void showSceneInfo(boolean isMaster) {
+    //TODO-FIX
+    private void showSceneInfo(ScenesPageFragment.Mode mode) {
         ScenesPageFragment scenesPageFragment = (ScenesPageFragment)getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
-        scenesPageFragment.setMasterMode(isMaster);
+        scenesPageFragment.setMode(mode);
 
-        if (!isMaster) {
+        if (scenesPageFragment.isBasicMode()) {
             // Copy the selected scene into the pending state
-            pendingBasicSceneModel = new SceneDataModel(systemManager.getSceneCollectionManagerV1().getModel(popupItemID));
-            pendingBasicSceneElementMembers = new LampGroup();
-            pendingBasicSceneElementCapability = new LampCapabilities(true, true, true);
+            BasicScenePlugin.resetPendingData(popupItemID);
         }
 
         showInfoFragment(scenesPageFragment, popupItemID);
@@ -855,11 +776,12 @@ public class SampleAppActivity extends FragmentActivity implements
     }
 
     public void showGroupMorePopup(View anchor, String groupID) {
+        Group group = LightingDirector.get().getGroup(groupID);
         popupItemID = groupID;
 
         PopupMenu popup = new PopupMenu(this, anchor);
         popup.inflate(R.menu.group_more);
-        popup.getMenu().findItem(R.id.group_delete).setEnabled(groupID != AllLampsDataModel.ALL_LAMPS_GROUP_ID);
+        popup.getMenu().findItem(R.id.group_delete).setEnabled(!group.isAllLampsGroup());
         popup.setOnMenuItemClickListener(this);
         popup.show();
     }
@@ -868,24 +790,38 @@ public class SampleAppActivity extends FragmentActivity implements
         return (pageFrameParent == null);
     }
 
-    public void showSceneMorePopup(View anchor, String sceneID) {
-        boolean basicScene = systemManager.getSceneCollectionManagerV1().hasID(sceneID);
+    public void showSceneMorePopup(View anchor, String sceneItemID) {
+        int menuID = 0;
 
-        popupItemID = sceneID;
+        if (LightingDirector.get().getSceneElement(sceneItemID) != null) {
+            menuID = R.menu.scene_element_more;
+        } else if (LightingDirector.get().getScene(sceneItemID) != null) {
+            menuID = R.menu.basic_scene_more;
+        } else if (LightingDirector.get().getMasterScene(sceneItemID) != null) {
+            menuID = R.menu.master_scene_more;
+        } else {
+            Log.e(SampleAppActivity.TAG, "showSceneMorePopup() failed: Invalid ID: " + sceneItemID);
+        }
+
+        popupItemID = sceneItemID;
 
         PopupMenu popup = new PopupMenu(this, anchor);
-        popup.inflate(basicScene ? R.menu.basic_scene_more : R.menu.master_scene_more);
+        popup.inflate(menuID);
         popup.setOnMenuItemClickListener(this);
         popup.show();
     }
 
     public void showSceneAddPopup(View anchor) {
+        int sceneCount = LightingDirector.get().getSceneCount();
+        int masterSceneCount = LightingDirector.get().getMasterSceneCount();
+
         popupItemID = null;
 
         PopupMenu popup = new PopupMenu(this, anchor);
         popup.inflate(R.menu.scene_add);
-        popup.getMenu().findItem(R.id.scene_add_basic).setEnabled(systemManager.getSceneCollectionManagerV1().size() < SceneManager.MAX_SCENES);
-        popup.getMenu().findItem(R.id.scene_add_master).setEnabled(systemManager.getMasterSceneCollectionManager().size() < MasterSceneManager.MAX_MASTER_SCENES);
+        popup.getMenu().findItem(R.id.scene_add_element).setEnabled(sceneCount < LightingDirector.MAX_SCENE_ELEMENTS);
+        popup.getMenu().findItem(R.id.scene_add_basic).setEnabled(sceneCount < LightingDirector.MAX_SCENES);
+        popup.getMenu().findItem(R.id.scene_add_master).setEnabled(masterSceneCount < LightingDirector.MAX_MASTER_SCENES);
         popup.setOnMenuItemClickListener(this);
         popup.show();
     }
@@ -906,6 +842,26 @@ public class SampleAppActivity extends FragmentActivity implements
 
         PopupMenu popup = new PopupMenu(this, anchor);
         popup.inflate(R.menu.preset_more);
+        popup.setOnMenuItemClickListener(this);
+        popup.show();
+    }
+
+    public void showTransitionEffectMorePopup(View anchor, String itemID) {
+        popupItemID = itemID;
+        popupSubItemID = null;
+
+        PopupMenu popup = new PopupMenu(this, anchor);
+        popup.inflate(R.menu.transition_effect_more);
+        popup.setOnMenuItemClickListener(this);
+        popup.show();
+    }
+
+    public void showPulseEffectMorePopup(View anchor, String itemID) {
+        popupItemID = itemID;
+        popupSubItemID = null;
+
+        PopupMenu popup = new PopupMenu(this, anchor);
+        popup.inflate(R.menu.pulse_effect_more);
         popup.setOnMenuItemClickListener(this);
         popup.show();
     }
@@ -1004,8 +960,17 @@ public class SampleAppActivity extends FragmentActivity implements
             case R.id.group_delete:
                 showConfirmDeleteGroupDialog(popupItemID);
                 break;
+            case R.id.scene_element_info:
+                showSceneInfo(ScenesPageFragment.Mode.ELEMENT);
+                break;
+            case R.id.scene_element_apply:
+                applySceneElement(popupItemID);
+                break;
+            case R.id.scene_element_delete:
+                showConfirmDeleteSceneElementDialog(popupItemID);
+                break;
             case R.id.basic_scene_info:
-                showSceneInfo(false);
+                showSceneInfo(ScenesPageFragment.Mode.BASIC);
                 break;
             case R.id.basic_scene_apply:
                 applyBasicScene(popupItemID);
@@ -1017,7 +982,7 @@ public class SampleAppActivity extends FragmentActivity implements
                 doDeleteSceneElement(popupItemID, popupSubItemID);
                 break;
             case R.id.master_scene_info:
-                showSceneInfo(true);
+                showSceneInfo(ScenesPageFragment.Mode.MASTER);
                 break;
             case R.id.master_scene_apply:
                 applyMasterScene(popupItemID);
@@ -1028,11 +993,20 @@ public class SampleAppActivity extends FragmentActivity implements
             case R.id.preset_delete:
                 showConfirmDeletePresetDialog(popupItemID);
                 break;
+            case R.id.transition_effect_delete:
+                showConfirmDeleteTransitionEffectDialog(popupItemID);
+                break;
+            case R.id.pulse_effect_delete:
+                showConfirmDeletePulseEffectDialog(popupItemID);
+                break;
+            case R.id.scene_add_element:
+                doAddScene((ScenesPageFragment)(getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG)), ScenesPageFragment.Mode.ELEMENT);
+                break;
             case R.id.scene_add_basic:
-                doAddScene((ScenesPageFragment)(getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG)), false);
+                doAddScene((ScenesPageFragment)(getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG)), ScenesPageFragment.Mode.BASIC);
                 break;
             case R.id.scene_add_master:
-                doAddScene((ScenesPageFragment)(getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG)), true);
+                doAddScene((ScenesPageFragment)(getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG)), ScenesPageFragment.Mode.MASTER);
                 break;
             default:
                 result = false;
@@ -1042,26 +1016,27 @@ public class SampleAppActivity extends FragmentActivity implements
         return result;
     }
 
-    public void doAddScene(ScenesPageFragment parent, boolean isMaster) {
+    public void doAddScene(ScenesPageFragment parent, ScenesPageFragment.Mode mode) {
         if (parent != null) {
-            pendingNoEffectModel = null;
-            pendingTransitionEffectModel = null;
-            pendingPulseEffectModel = null;
+            NoEffectFragment.pendingNoEffectModel = null;
+            TransitionEffectFragment.pendingTransitionEffectModel = null;
+            PulseEffectFragment.pendingPulseEffectModel = null;
+
+            BasicSceneV2InfoFragment.pendingSceneV2 = new PendingSceneV2();
 
             pageFrameParent = parent;
-            parent.setMasterMode(isMaster);
+            parent.setMode(mode);
 
-            if (!isMaster) {
+            if (parent.isBasicMode()) {
                 // Create a dummy scene so that we can momentarily display the info fragment.
                 // This makes sure the info fragment is on the back stack so that we can more
                 // easily support the scene creation workflow. Note that if the user backs out
                 // of the scene creation process, we have to skip over the dummy info fragment
                 // (see ScenesPageFragment.onBackPressed())
-                pendingBasicSceneModel = new SceneDataModel();
-                pendingBasicSceneElementMembers = new LampGroup();
-                pendingBasicSceneElementCapability = new LampCapabilities(true, true, true);
+                BasicScenePlugin.resetPendingData(null);
 
-                parent.showInfoChildFragment(null);
+                // TODO-FIX: need to execute the next line only if V2 scenes are not supported by the controller
+                //parent.showInfoChildFragment(null);
             }
 
             parent.showEnterNameChildFragment();
@@ -1117,45 +1092,36 @@ public class SampleAppActivity extends FragmentActivity implements
         }
     }
 
+    private MutableColorItem getMutableColorItem(Type type, String itemID) {
+        MutableColorItem colorItem;
+
+        if (type == Type.LAMP) {
+            colorItem = LightingDirector.get().getLamp(itemID);
+        } else if (type == Type.GROUP) {
+            colorItem = LightingDirector.get().getGroup(itemID);
+        } else {
+            Log.e(SampleAppActivity.TAG, "getMutableColorItem() failed: unsupported type: " + type.name());
+            colorItem = null;
+        }
+
+        return colorItem;
+    }
+
     public void togglePower(SampleAppActivity.Type type, String itemID) {
-        // determines the action to take, based on the type
-        switch (type) {
-        case LAMP:
-            LampDataModel lampModel = systemManager.getLampCollectionManager().getModel(itemID);
-            if (lampModel != null) {
-                // raise brightness to 25% if needed
-                if (!lampModel.state.getOnOff() && lampModel.state.getBrightness() == 0) {
-                    setBrightness(type, itemID, 25);
-                }
+        MutableColorItem colorItem = getMutableColorItem(type, itemID);
 
-                Log.d(SampleAppActivity.TAG, "Toggle power for " + itemID);
+        if (colorItem != null) {
+            if (colorItem.isOff() && colorItem.getColor().getBrightness() == 0) {
+                // Raise brightness to 25% if needed
+                Color color = colorItem.getColor();
 
-                AllJoynManager.lampManager.transitionLampStateOnOffField(lampModel.id, !lampModel.state.getOnOff());
+                color.setBrightness(25);
+                colorItem.setColor(color);
             }
-            break;
 
-        case GROUP:
-            GroupDataModel groupModel = systemManager.getGroupCollectionManager().getModel(itemID);
-            if (groupModel != null) {
-                // raise brightness to 25% if needed
-                if (!groupModel.state.getOnOff() && groupModel.state.getBrightness() == 0) {
-                    setBrightness(type, itemID, 25);
-                }
+            Log.d(SampleAppActivity.TAG, "Toggle power for " + colorItem.getName());
 
-                Log.d(SampleAppActivity.TAG, "Toggle power for " + itemID);
-
-                // Group fields cannot be read back directly, so set it here
-                groupModel.state.setOnOff(!groupModel.state.getOnOff());
-
-                AllJoynManager.groupManager.transitionLampGroupStateOnOffField(groupModel.id, groupModel.state.getOnOff());
-            }
-            break;
-
-        case SCENE:
-        case ELEMENT:
-
-            break;
-
+            colorItem.togglePower();
         }
     }
 
@@ -1171,149 +1137,71 @@ public class SampleAppActivity extends FragmentActivity implements
         return allow;
     }
 
-    public void setBrightness(SampleAppActivity.Type type, String itemID, int viewBrightness) {
-        long modelBrightness = ColorStateConverter.convertBrightnessViewToModel(viewBrightness);
-
-        Log.d(SampleAppActivity.TAG, "Set brightness for " + itemID + " to " + viewBrightness + "(" + modelBrightness + ")");
-
-        // determines the action to take, based on the type
+    public void setBrightness(SampleAppActivity.Type type, String itemID, int newViewBrightness) {
         if (allowFieldChange()) {
-            switch (type) {
-                case LAMP:
-                    LampDataModel lampModel = systemManager.getLampCollectionManager().getModel(itemID);
-                    if (lampModel != null) {
-                        AllJoynManager.lampManager.transitionLampStateBrightnessField(itemID, modelBrightness, FIELD_TRANSITION_DURATION);
+            MutableColorItem colorItem = getMutableColorItem(type, itemID);
 
-                        if (viewBrightness == 0) {
-                            AllJoynManager.lampManager.transitionLampStateOnOffField(lampModel.id, false);
-                        } else {
-                            if (ColorStateConverter.convertBrightnessModelToView(lampModel.state.getBrightness()) == 0 && lampModel.state.getOnOff() == false) {
-                                AllJoynManager.lampManager.transitionLampStateOnOffField(lampModel.id, true);
-                            }
-                        }
-                    }
-                    break;
+            if (colorItem != null) {
+                Color color = colorItem.getColor();
+                int oldViewBrightness = color.getBrightness();
 
-                case GROUP:
-                    GroupDataModel groupModel = systemManager.getGroupCollectionManager().getModel(itemID);
-                    if (groupModel != null) {
-                        AllJoynManager.groupManager.transitionLampGroupStateBrightnessField(itemID, modelBrightness, FIELD_TRANSITION_DURATION);
+                Log.d(SampleAppActivity.TAG, "Set brightness for " + colorItem.getName() + " to " + newViewBrightness);
 
-                        if (viewBrightness == 0) {
-                            AllJoynManager.groupManager.transitionLampGroupStateOnOffField(groupModel.id, false);
-                        } else {
-                            if (ColorStateConverter.convertBrightnessModelToView(groupModel.state.getBrightness()) == 0 && groupModel.state.getOnOff() == false) {
-                                AllJoynManager.groupManager.transitionLampGroupStateOnOffField(groupModel.id, true);
-                            }
-                        }
+                color.setBrightness(newViewBrightness);
+                colorItem.setColor(color);
 
-                        // Group fields cannot be read back directly, so set it here
-                        groupModel.state.setBrightness(modelBrightness);
-                    }
-                    break;
-
-                case SCENE:
-                case ELEMENT:
-                    break;
-
+                if (newViewBrightness == 0) {
+                    // Setting brightness to zero forces the power off
+                    colorItem.turnOff();
+                } else if (oldViewBrightness == 0 && colorItem.isOff()) {
+                    // Raising the brightness on a dark item forces the power on
+                    colorItem.turnOn();
+                }
             }
         }
     }
 
     public void setHue(SampleAppActivity.Type type, String itemID, int viewHue) {
-        long modelHue = ColorStateConverter.convertHueViewToModel(viewHue);
-
-        Log.d(SampleAppActivity.TAG, "Set hue for " + itemID + " to " + viewHue + "(" + modelHue + ")");
-
-        // determines the action to take, based on the type
         if (allowFieldChange()) {
-            switch (type) {
-            case LAMP:
-                LampDataModel lampModel = systemManager.getLampCollectionManager().getModel(itemID);
-                if (lampModel != null) {
-                    AllJoynManager.lampManager.transitionLampStateHueField(itemID, modelHue, FIELD_TRANSITION_DURATION);
-                }
-                break;
+            MutableColorItem colorItem = getMutableColorItem(type, itemID);
 
-            case GROUP:
-                GroupDataModel groupModel = systemManager.getGroupCollectionManager().getModel(itemID);
-                if (groupModel != null) {
-                    // Group fields cannot be read back directly, so set it here
-                    groupModel.state.setHue(modelHue);
+            if (colorItem != null) {
+                Color color = colorItem.getColor();
 
-                    AllJoynManager.groupManager.transitionLampGroupStateHueField(itemID, modelHue, FIELD_TRANSITION_DURATION);
-                }
-                break;
+                Log.d(SampleAppActivity.TAG, "Set hue for " + colorItem.getName() + " to " + viewHue);
 
-            case SCENE:
-            case ELEMENT:
-                break;
-
+                color.setHue(viewHue);
+                colorItem.setColor(color);
             }
         }
     }
 
     public void setSaturation(SampleAppActivity.Type type, String itemID, int viewSaturation) {
-        long modelSaturation = ColorStateConverter.convertSaturationViewToModel(viewSaturation);
-
-        Log.d(SampleAppActivity.TAG, "Set saturation for " + itemID + " to " + viewSaturation + "(" + modelSaturation + ")");
-
-        // determines the action to take, based on the type
         if (allowFieldChange()) {
-            switch (type) {
-            case LAMP:
-                LampDataModel lampModel = systemManager.getLampCollectionManager().getModel(itemID);
-                if (lampModel != null) {
-                    AllJoynManager.lampManager.transitionLampStateSaturationField(itemID, modelSaturation, FIELD_TRANSITION_DURATION);
-                }
-                break;
+            MutableColorItem colorItem = getMutableColorItem(type, itemID);
 
-            case GROUP:
-                GroupDataModel groupModel = systemManager.getGroupCollectionManager().getModel(itemID);
-                if (groupModel != null) {
-                    // Group fields cannot be read back directly, so set it here
-                    groupModel.state.setSaturation(modelSaturation);
+            if (colorItem != null) {
+                Color color = colorItem.getColor();
 
-                    AllJoynManager.groupManager.transitionLampGroupStateSaturationField(itemID, modelSaturation, FIELD_TRANSITION_DURATION);
-                }
-                break;
+                Log.d(SampleAppActivity.TAG, "Set saturation for " + colorItem.getName() + " to " + viewSaturation);
 
-            case SCENE:
-            case ELEMENT:
-                break;
-
+                color.setSaturation(viewSaturation);
+                colorItem.setColor(color);
             }
         }
     }
 
     public void setColorTemp(SampleAppActivity.Type type, String itemID, int viewColorTemp) {
-        long modelColorTemp = ColorStateConverter.convertColorTempViewToModel(viewColorTemp);
-
-        Log.d(SampleAppActivity.TAG, "Set color temp for " + itemID + " to " + viewColorTemp + "(" + modelColorTemp + ")");
-
-        // determines the action to take, based on the type
         if (allowFieldChange()) {
-            switch(type) {
-            case LAMP:
-                LampDataModel lampModel = systemManager.getLampCollectionManager().getModel(itemID);
-                if (lampModel != null) {
-                    AllJoynManager.lampManager.transitionLampStateColorTempField(itemID, modelColorTemp, FIELD_TRANSITION_DURATION);
-                }
-                break;
+            MutableColorItem colorItem = getMutableColorItem(type, itemID);
 
-            case GROUP:
-                GroupDataModel groupModel = systemManager.getGroupCollectionManager().getModel(itemID);
-                if (groupModel != null) {
-                    // Group fields cannot be read back directly, so set it here
-                    groupModel.state.setColorTemp(modelColorTemp);
+            if (colorItem != null) {
+                Color color = colorItem.getColor();
 
-                    AllJoynManager.groupManager.transitionLampGroupStateColorTempField(itemID, modelColorTemp, FIELD_TRANSITION_DURATION);
-                }
-                break;
+                Log.d(SampleAppActivity.TAG, "Set color temp for " + colorItem.getName() + " to " + viewColorTemp);
 
-            case SCENE:
-            case ELEMENT:
-                break;
+                color.setColorTemperature(viewColorTemp);
+                colorItem.setColor(color);
             }
         }
     }
@@ -1336,15 +1224,15 @@ public class SampleAppActivity extends FragmentActivity implements
         CharSequence title;
 
         if (index == 0) {
-            LampCollectionManager lampCollection = systemManager != null ? systemManager.getLampCollectionManager() : null;
-            title = getString(R.string.title_tab_lamps, lampCollection != null ? lampCollection.size() : 0).toUpperCase(locale);
+            int lampCount = LightingDirector.get().getLampCount();
+            title = getString(R.string.title_tab_lamps, lampCount).toUpperCase(locale);
         } else if (index == 1) {
-            GroupCollectionManager groupCollection = systemManager != null ? systemManager.getGroupCollectionManager() : null;
-            title = getString(R.string.title_tab_groups, groupCollection != null ? groupCollection.size() : 0).toUpperCase(locale);
+            int groupCount = LightingDirector.get().getGroupCount();
+            title = getString(R.string.title_tab_groups, groupCount).toUpperCase(locale);
         } else if (index == 2) {
-            SceneCollectionManager sceneCollection = systemManager != null ? systemManager.getSceneCollectionManagerV1() : null;
-            MasterSceneCollectionManager masterCollection = systemManager != null ? systemManager.getMasterSceneCollectionManager() : null;
-            title = getString(R.string.title_tab_scenes, (sceneCollection != null ? sceneCollection.size() : 0) + (masterCollection != null ? masterCollection.size() : 0)).toUpperCase(locale);
+            int sceneCount = LightingDirector.get().getSceneCount();
+            int masterSceneCount = LightingDirector.get().getMasterSceneCount();
+            title = getString(R.string.title_tab_scenes, sceneCount + masterSceneCount).toUpperCase(locale);
         } else {
             title = null;
         }
@@ -1375,9 +1263,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
     @Override
     public void onLampChanged(final Lamp lamp) {
-        final LampDataModel lampModel = lamp.getLampDataModel();
-
-        Log.d(SampleAppActivity.TAG, "onLampChanged() " + lampModel.id);
+        Log.d(SampleAppActivity.TAG, "onLampChanged() " + lamp.getName());
 
         handler.post(new Runnable() {
             @Override
@@ -1388,23 +1274,21 @@ public class SampleAppActivity extends FragmentActivity implements
                     LampsTableFragment tableFragment = (LampsTableFragment)lampsPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
 
                     if (tableFragment != null) {
-                        tableFragment.addElement(lampModel.id);
+                        tableFragment.addItem(lamp);
                     }
 
                     LampInfoFragment infoFragment = (LampInfoFragment)lampsPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
 
                     if (infoFragment != null) {
-                        infoFragment.updateInfoFields(lampModel);
+                        infoFragment.updateInfoFields(lamp);
                     }
 
                     LampDetailsFragment detailsFragment = (LampDetailsFragment)lampsPageFragment.getChildFragmentManager().findFragmentByTag(LampsPageFragment.CHILD_TAG_DETAILS);
 
                     if (detailsFragment != null) {
-                        detailsFragment.updateDetailFields(lampModel);
+                        detailsFragment.updateDetailFields(lamp);
                     }
                 }
-
-                systemManager.groupManagerCB.postUpdateDependentLampGroups(lampModel.id);
 
                 refreshScene(null);
             }
@@ -1413,7 +1297,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
     @Override
     public void onLampRemoved(final Lamp lamp) {
-        final String lampID = lamp.getLampDataModel().id;
+        final String lampID = lamp.getId();
 
         Log.d(SampleAppActivity.TAG, "onLampRemoved() " + lampID);
 
@@ -1428,7 +1312,7 @@ public class SampleAppActivity extends FragmentActivity implements
                     if (tableFragment != null) {
                         tableFragment.removeElement(lampID);
 
-                        if (systemManager.getLampCollectionManager().size() == 0) {
+                        if (LightingDirector.get().getLampCount() == 0) {
                             tableFragment.updateLoading();
                         }
                     }
@@ -1444,7 +1328,7 @@ public class SampleAppActivity extends FragmentActivity implements
         handler.post(new Runnable() {
             @Override
             public void run() {
-                showErrorResponseCode(error.responseCode, error.name);
+                showErrorResponseCode(error.responseCode, error.name, error.responseCode == ResponseCode.ERR_DEPENDENCY);
             }
         });
     }
@@ -1456,9 +1340,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
     @Override
     public void onGroupChanged(Group group) {
-        GroupDataModel groupModel = group.getGroupDataModel();
-
-        Log.d(SampleAppActivity.TAG, "onGroupChanged() " + groupModel.id);
+        Log.d(SampleAppActivity.TAG, "onGroupChanged() " + group.getName());
 
         Fragment pageFragment = getSupportFragmentManager().findFragmentByTag(GroupsPageFragment.TAG);
 
@@ -1466,7 +1348,7 @@ public class SampleAppActivity extends FragmentActivity implements
             GroupsTableFragment tableFragment = (GroupsTableFragment)pageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
 
             if (tableFragment != null) {
-                tableFragment.addElement(groupModel.id);
+                tableFragment.addItem(group);
 
                 if (isSwipeable()) {
                     resetActionBar();
@@ -1476,14 +1358,14 @@ public class SampleAppActivity extends FragmentActivity implements
             GroupInfoFragment infoFragment = (GroupInfoFragment)pageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
 
             if (infoFragment != null) {
-                infoFragment.updateInfoFields(groupModel);
+                infoFragment.updateInfoFields(group);
             }
         }
     }
 
     @Override
     public void onGroupRemoved(Group group) {
-        String groupID = group.getGroupDataModel().id;
+        String groupID = group.getId();
 
         Log.d(SampleAppActivity.TAG, "onGroupRemoved() " + groupID);
 
@@ -1512,7 +1394,7 @@ public class SampleAppActivity extends FragmentActivity implements
         handler.post(new Runnable() {
             @Override
             public void run() {
-                showErrorResponseCode(error.responseCode, error.name);
+                showErrorResponseCode(error.responseCode, error.name, error.responseCode == ResponseCode.ERR_DEPENDENCY);
             }
         });
     }
@@ -1524,7 +1406,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
     @Override
     public void onPresetChanged(Preset preset) {
-        String presetID = preset.getPresetDataModel().id;
+        String presetID = preset.getId();
 
         Log.d(SampleAppActivity.TAG, "onPresetChanged() " + presetID);
 
@@ -1541,7 +1423,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
     @Override
     public void onPresetRemoved(Preset preset) {
-        String presetID = preset.getPresetDataModel().id;
+        String presetID = preset.getId();
 
         Log.d(SampleAppActivity.TAG, "onPresetRemoved() " + presetID);
 
@@ -1557,7 +1439,7 @@ public class SampleAppActivity extends FragmentActivity implements
         handler.post(new Runnable() {
             @Override
             public void run() {
-                showErrorResponseCode(error.responseCode, error.name);
+                showErrorResponseCode(error.responseCode, error.name, error.responseCode == ResponseCode.ERR_DEPENDENCY);
             }
         });
     }
@@ -1617,39 +1499,34 @@ public class SampleAppActivity extends FragmentActivity implements
     }
 
     @Override
-    public void onSceneChanged(Scene scene) {
-        if (scene instanceof SceneV1) {
-            String sceneID = ((SceneV1)scene).getSceneDataModel().id;
+    public void onSceneChanged(Scene basicScene) {
+        if (basicScene instanceof SceneV1) {
+            Log.d(SampleAppActivity.TAG, "onSceneChanged() " + basicScene.getName());
 
-            Log.d(SampleAppActivity.TAG, "onSceneChanged() " + sceneID);
-
-            refreshScene(sceneID);
+            refreshScene(basicScene);
         }
     }
 
     @Override
-    public void onSceneRemoved(Scene scene) {
-        if (scene instanceof SceneV1) {
-            SceneDataModel sceneModel = ((SceneV1)scene).getSceneDataModel();
-            String sceneID = sceneModel.id;
-
-            Log.d(SampleAppActivity.TAG, "onSceneRemoved() " + sceneID);
+    public void onSceneRemoved(Scene basicScene) {
+        if (basicScene instanceof SceneV1) {
+            Log.d(SampleAppActivity.TAG, "onSceneRemoved() " + basicScene.getName());
 
             Fragment pageFragment = getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
             FragmentManager childManager = pageFragment != null ? pageFragment.getChildFragmentManager() : null;
             ScenesTableFragment tableFragment = childManager != null ? (ScenesTableFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE) : null;
-            BasicSceneInfoFragment infoFragment = childManager != null ? (BasicSceneInfoFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO) : null;
+            BasicSceneV1InfoFragment infoFragment = childManager != null ? (BasicSceneV1InfoFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO) : null;
 
             if (tableFragment != null) {
-                tableFragment.removeElement(sceneID);
+                tableFragment.removeElement(basicScene.getId());
 
                 if (isSwipeable()) {
                     resetActionBar();
                 }
             }
 
-            if ((infoFragment != null) && (infoFragment.key.equals(sceneID))) {
-                createLostConnectionErrorDialog(sceneModel.getName());
+            if ((infoFragment != null) && (infoFragment.key.equals(basicScene.getId()))) {
+                createLostConnectionErrorDialog(basicScene.getName());
             }
         }
     }
@@ -1661,27 +1538,27 @@ public class SampleAppActivity extends FragmentActivity implements
         handler.post(new Runnable() {
             @Override
             public void run() {
-                showErrorResponseCode(error.responseCode, error.name);
+                showErrorResponseCode(error.responseCode, error.name, error.responseCode == ResponseCode.ERR_DEPENDENCY);
             }
         });
     }
 
-    private void refreshScene(String sceneID) {
+    private void refreshScene(Scene basicScene) {
         ScenesPageFragment scenesPageFragment = (ScenesPageFragment)getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
 
         if (scenesPageFragment != null) {
             ScenesTableFragment basicSceneTableFragment = (ScenesTableFragment)scenesPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
 
-            if (basicSceneTableFragment != null && sceneID != null) {
-                basicSceneTableFragment.addElement(sceneID);
+            if (basicSceneTableFragment != null && basicScene != null) {
+                basicSceneTableFragment.addBasicScene(this, basicScene);
 
                 if (isSwipeable()) {
                     resetActionBar();
                 }
             }
 
-            if (!scenesPageFragment.isMasterMode()) {
-                BasicSceneInfoFragment basicSceneInfoFragment = (BasicSceneInfoFragment)scenesPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
+            if (scenesPageFragment.isBasicMode()) {
+                BasicSceneV1InfoFragment basicSceneInfoFragment = (BasicSceneV1InfoFragment)scenesPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
 
                 if (basicSceneInfoFragment != null) {
                     basicSceneInfoFragment.updateInfoFields();
@@ -1697,9 +1574,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
     @Override
     public void onMasterSceneChanged(MasterScene masterScene) {
-        String masterSceneID = masterScene.getMasterSceneDataModel().id;
-
-        Log.d(SampleAppActivity.TAG, "onMasterSceneChanged() " + masterSceneID);
+        Log.d(SampleAppActivity.TAG, "onMasterSceneChanged() " + masterScene.getName());
 
         ScenesPageFragment scenesPageFragment = (ScenesPageFragment)getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
 
@@ -1707,7 +1582,7 @@ public class SampleAppActivity extends FragmentActivity implements
             ScenesTableFragment scenesTableFragment = (ScenesTableFragment)scenesPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
 
             if (scenesTableFragment != null) {
-                scenesTableFragment.addElement(masterSceneID);
+                scenesTableFragment.addMasterScene(this, masterScene);
 
                 if (isSwipeable()) {
                     resetActionBar();
@@ -1726,10 +1601,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
     @Override
     public void onMasterSceneRemoved(MasterScene masterScene) {
-        MasterSceneDataModel masterSceneModel = masterScene.getMasterSceneDataModel();
-        String masterSceneID = masterSceneModel.id;
-
-        Log.d(SampleAppActivity.TAG, "onMasterSceneRemoved() " + masterSceneID);
+        Log.d(SampleAppActivity.TAG, "onMasterSceneRemoved() " + masterScene.getName());
 
         Fragment pageFragment = getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
         FragmentManager childManager = pageFragment != null ? pageFragment.getChildFragmentManager() : null;
@@ -1737,15 +1609,15 @@ public class SampleAppActivity extends FragmentActivity implements
         MasterSceneInfoFragment infoFragment = childManager != null ? (MasterSceneInfoFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO) : null;
 
         if (tableFragment != null) {
-            tableFragment.removeElement(masterSceneID);
+            tableFragment.removeElement(masterScene.getId());
 
             if (isSwipeable()) {
                 resetActionBar();
             }
         }
 
-        if ((infoFragment != null) && (infoFragment.key.equals(masterSceneID))) {
-            createLostConnectionErrorDialog(masterSceneModel.getName());
+        if ((infoFragment != null) && (infoFragment.key.equals(masterScene.getId()))) {
+            createLostConnectionErrorDialog(masterScene.getName());
         }
     }
 
@@ -1756,24 +1628,31 @@ public class SampleAppActivity extends FragmentActivity implements
         handler.post(new Runnable() {
             @Override
             public void run() {
-                showErrorResponseCode(error.responseCode, error.name);
+                showErrorResponseCode(error.responseCode, error.name, error.responseCode == ResponseCode.ERR_DEPENDENCY);
             }
         });
     }
 
     @Override
-    public void onLeaderModelChange(ControllerDataModel leadModel) {
+    public void onLeaderChange(Controller leader) {
+        controllerClientConnected = leader.isConnected();
         postUpdateControllerDisplay();
     }
 
+    public boolean isControllerConnected() {
+        return controllerClientConnected;
+    }
+
     @Override
-    public void onControllerErrors(final ControllerErrorEvent errorEvent) {
+    public void onControllerErrors(final LightingItemErrorEvent event) {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                for (ErrorCode ec : errorEvent.errorCodes) {
-                    if (!ec.equals(ErrorCode.NONE)) {
-                        showErrorResponseCode(ec, errorEvent.name);
+                if (event.errorCodes != null) {
+                    for (ErrorCode ec : event.errorCodes) {
+                        if (!ec.equals(ErrorCode.NONE)) {
+                            showErrorResponseCode(ec, event.name, false);
+                        }
                     }
                 }
             }
@@ -1793,7 +1672,7 @@ public class SampleAppActivity extends FragmentActivity implements
                 if (lampsPageFragment != null) {
                     ScrollableTableFragment tableFragment = (ScrollableTableFragment) lampsPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
 
-                    if (!AllJoynManager.controllerConnected) {
+                    if (controllerClientConnected) {
                         lampsPageFragment.clearBackStack();
                     }
 
@@ -1809,7 +1688,7 @@ public class SampleAppActivity extends FragmentActivity implements
                 if (groupsPageFragment != null) {
                     ScrollableTableFragment tableFragment = (ScrollableTableFragment) groupsPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
 
-                    if (!AllJoynManager.controllerConnected) {
+                    if (controllerClientConnected) {
                         groupsPageFragment.clearBackStack();
                     }
 
@@ -1825,7 +1704,7 @@ public class SampleAppActivity extends FragmentActivity implements
                 if (scenesPageFragment != null) {
                     ScrollableTableFragment tableFragment = (ScrollableTableFragment) scenesPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
 
-                    if (!AllJoynManager.controllerConnected) {
+                    if (controllerClientConnected) {
                         scenesPageFragment.clearBackStack();
                     }
 
@@ -1852,20 +1731,17 @@ public class SampleAppActivity extends FragmentActivity implements
 
     @Override
     public void onTransitionEffectChanged(TransitionEffect effect) {
-        // TODO Auto-generated method stub
-
+        // TODO-IMPL
     }
 
     @Override
     public void onTransitionEffectError(LightingItemErrorEvent error) {
-        // TODO Auto-generated method stub
-
+        // TODO-IMPL
     }
 
     @Override
     public void onTransitionEffectRemoved(TransitionEffect effect) {
-        // TODO Auto-generated method stub
-
+        // TODO-IMPL
     }
 
     @Override
@@ -1875,20 +1751,17 @@ public class SampleAppActivity extends FragmentActivity implements
 
     @Override
     public void onPulseEffectChanged(PulseEffect effect) {
-        // TODO Auto-generated method stub
-
+        // TODO-IMPL
     }
 
     @Override
     public void onPulseEffectError(LightingItemErrorEvent error) {
-        // TODO Auto-generated method stub
-
+        // TODO-IMPL
     }
 
     @Override
     public void onPulseEffectRemoved(PulseEffect effect) {
-        // TODO Auto-generated method stub
-
+        // TODO-IMPL
     }
 
     @Override
@@ -1898,19 +1771,43 @@ public class SampleAppActivity extends FragmentActivity implements
 
     @Override
     public void onSceneElementChanged(SceneElement element) {
-        // TODO Auto-generated method stub
+        Log.d(SampleAppActivity.TAG, "onSceneElementChanged() " + element.getName());
 
+        refreshSceneElement(element);
     }
 
     @Override
     public void onSceneElementError(LightingItemErrorEvent error) {
-        // TODO Auto-generated method stub
-
+        // TODO-IMPL
     }
 
     @Override
     public void onSceneElementRemoved(SceneElement element) {
-        // TODO Auto-generated method stub
-
+        // TODO-IMPL
     }
+
+    private void refreshSceneElement(SceneElement sceneElement) {
+        ScenesPageFragment scenesPageFragment = (ScenesPageFragment)getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
+
+        if (scenesPageFragment != null) {
+            ScenesTableFragment sceneTableFragment = (ScenesTableFragment)scenesPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
+
+            if (sceneTableFragment != null && sceneElement != null) {
+                sceneTableFragment.addSceneElement(this, sceneElement);
+
+                if (isSwipeable()) {
+                    resetActionBar();
+                }
+            }
+
+            if (scenesPageFragment.isElementMode()) {
+                SceneElementV2InfoFragment sceneElementInfoFragment = (SceneElementV2InfoFragment)scenesPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
+
+                if (sceneElementInfoFragment != null) {
+                    sceneElementInfoFragment.updateInfoFields();
+                }
+            }
+        }
+    }
+
 }

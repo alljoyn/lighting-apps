@@ -1,5 +1,5 @@
 /*
- * Copyright AllSeen Alliance. All rights reserved.
+ * Copyright (c) AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -15,11 +15,8 @@
  */
 package org.allseen.lsf.sdk;
 
-import org.allseen.lsf.TrackingID;
+import org.allseen.lsf.sdk.listener.SceneElementCollectionListener;
 
-public interface SceneElementListener extends LightingListener {
-    public void onSceneElementInitialized(TrackingID trackingId, SceneElement element);
-    public void onSceneElementChanged(SceneElement element);
-    public void onSceneElementRemoved(SceneElement element);
-    public void onSceneElementError(LightingItemErrorEvent error);
+public interface SceneElementListener extends SceneElementCollectionListener<SceneElement, LightingItemErrorEvent> {
+
 }

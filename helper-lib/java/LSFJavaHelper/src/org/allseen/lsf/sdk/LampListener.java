@@ -15,14 +15,17 @@
  */
 package org.allseen.lsf.sdk;
 
+import org.allseen.lsf.sdk.listener.LampCollectionListener;
 
 /**
- * <b>WARNING: This class is not intended to be used by clients, and its interface may change
- * in subsequent releases of the SDK</b>.
+ * The listener interface for receiving information about lamps in the lighting
+ * system.
  */
-public interface LampListener extends LightingListener {
+public interface LampListener extends LampCollectionListener<Lamp, LightingItemErrorEvent> {
+    /**
+     * @inheritDoc
+     */
+    @Override
     public void onLampInitialized(Lamp lamp);
-    public void onLampChanged(Lamp lamp);
-    public void onLampRemoved(Lamp lamp);
-    public void onLampError(LightingItemErrorEvent error);
+
 }

@@ -28,7 +28,7 @@ extern "C" {
 /*
  * Class:     org_allseen_lsf_PulseEffectManager
  * Method:    getAllPulseEffectIDs
- * Signature: ()Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: ()Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_getAllPulseEffectIDs
   (JNIEnv *, jobject);
@@ -36,7 +36,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_getAllPulseEff
 /*
  * Class:     org_allseen_lsf_PulseEffectManager
  * Method:    getPulseEffect
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_getPulseEffect
   (JNIEnv *, jobject, jstring);
@@ -44,7 +44,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_getPulseEffect
 /*
  * Class:     org_allseen_lsf_PulseEffectManager
  * Method:    applyPulseEffectOnLamps
- * Signature: (Ljava/lang/String;[Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;[Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_applyPulseEffectOnLamps
   (JNIEnv *, jobject, jstring, jobjectArray);
@@ -52,7 +52,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_applyPulseEffe
 /*
  * Class:     org_allseen_lsf_PulseEffectManager
  * Method:    applyPulseEffectOnLampGroups
- * Signature: (Ljava/lang/String;[Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;[Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_applyPulseEffectOnLampGroups
   (JNIEnv *, jobject, jstring, jobjectArray);
@@ -60,7 +60,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_applyPulseEffe
 /*
  * Class:     org_allseen_lsf_PulseEffectManager
  * Method:    getPulseEffectName
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_getPulseEffectName
   (JNIEnv *, jobject, jstring, jstring);
@@ -68,7 +68,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_getPulseEffect
 /*
  * Class:     org_allseen_lsf_PulseEffectManager
  * Method:    setPulseEffectName
- * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_setPulseEffectName
   (JNIEnv *, jobject, jstring, jstring, jstring);
@@ -76,7 +76,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_setPulseEffect
 /*
  * Class:     org_allseen_lsf_PulseEffectManager
  * Method:    createPulseEffect
- * Signature: (Lorg/allseen/lsf/TrackingID;Lorg/allseen/lsf/PulseEffect;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Lorg/allseen/lsf/sdk/TrackingID;Lorg/allseen/lsf/PulseEffect;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_createPulseEffect
   (JNIEnv *, jobject, jobject, jobject, jstring, jstring);
@@ -84,7 +84,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_createPulseEff
 /*
  * Class:     org_allseen_lsf_PulseEffectManager
  * Method:    updatePulseEffect
- * Signature: (Ljava/lang/String;Lorg/allseen/lsf/PulseEffect;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Lorg/allseen/lsf/PulseEffect;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_updatePulseEffect
   (JNIEnv *, jobject, jstring, jobject);
@@ -92,7 +92,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_updatePulseEff
 /*
  * Class:     org_allseen_lsf_PulseEffectManager
  * Method:    deletePulseEffect
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_deletePulseEffect
   (JNIEnv *, jobject, jstring);
@@ -100,7 +100,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_deletePulseEff
 /*
  * Class:     org_allseen_lsf_PulseEffectManager
  * Method:    getPulseEffectVersion
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_getPulseEffectVersion
   (JNIEnv *, jobject, jstring);
@@ -108,7 +108,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_getPulseEffect
 /*
  * Class:     org_allseen_lsf_PulseEffectManager
  * Method:    getPulseEffectDataSet
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_getPulseEffectDataSet
   (JNIEnv *, jobject, jstring, jstring);

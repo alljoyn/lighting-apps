@@ -15,26 +15,26 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.LampDetails;
-import org.allseen.lsf.LampState;
-import org.allseen.lsf.sdk.model.ColorStateConverter;
-import org.allseen.lsf.sdk.model.LampCapabilities;
+import org.allseen.lsf.sdk.LampCapabilities;
+import org.allseen.lsf.sdk.LampDetails;
+import org.allseen.lsf.sdk.LightingDirector;
+import org.allseen.lsf.sdk.MyLampState;
 
 import android.graphics.Color;
 
 public class ViewColor {
 
-    public static int calculate(LampState state, LampCapabilities capability, LampDetails details) {
-        int viewColorTempDefault = details != null ? details.getMinTemperature() : ColorStateConverter.VIEW_COLORTEMP_MIN;
+    public static int calculate(MyLampState state, LampCapabilities capability, LampDetails details) {
+        int viewColorTempDefault = details != null ? details.getMinTemperature() : LightingDirector.COLORTEMP_MIN;
 
-        if (viewColorTempDefault < ColorStateConverter.VIEW_COLORTEMP_MIN || viewColorTempDefault > ColorStateConverter.VIEW_COLORTEMP_MAX) {
-            viewColorTempDefault = ColorStateConverter.VIEW_COLORTEMP_MIN;
+        if (viewColorTempDefault < LightingDirector.COLORTEMP_MIN || viewColorTempDefault > LightingDirector.COLORTEMP_MAX) {
+            viewColorTempDefault = LightingDirector.COLORTEMP_MIN;
         }
 
-        return calculate(state, capability, ColorStateConverter.convertColorTempViewToModel(viewColorTempDefault));
+        return calculate(state, capability, viewColorTempDefault);
     }
 
-    public static int calculate(LampState state, LampCapabilities capability, long modelColorTempDefault) {
+    public static int calculate(MyLampState state, LampCapabilities capability, int viewColorTempDefault) {
         int viewHue;
         int viewSaturation;
         int viewBrightness;
@@ -42,34 +42,34 @@ public class ViewColor {
 
         if (capability == null || capability.color > LampCapabilities.NONE) {
             // Type 4 (full color)
-            viewHue = ColorStateConverter.convertHueModelToView(state.getHue());
-            viewSaturation = ColorStateConverter.convertSaturationModelToView(state.getSaturation());
-            viewBrightness = ColorStateConverter.convertBrightnessModelToView(state.getBrightness());
-            viewColorTemp = ColorStateConverter.convertColorTempModelToView(state.getColorTemp());
+            viewHue = state.getColor().getHue();
+            viewSaturation = state.getColor().getSaturation();
+            viewBrightness = state.getColor().getBrightness();
+            viewColorTemp = state.getColor().getColorTemperature();
         } else if (capability.temp > LampCapabilities.NONE) {
             // Type 3 (on/off, dim, color temp)
-            viewHue = ColorStateConverter.VIEW_HUE_MIN;
-            viewSaturation = ColorStateConverter.VIEW_SATURATION_MIN;
-            viewBrightness = ColorStateConverter.convertBrightnessModelToView(state.getBrightness());
-            viewColorTemp = ColorStateConverter.convertColorTempModelToView(state.getColorTemp());
+            viewHue = LightingDirector.HUE_MIN;
+            viewSaturation = LightingDirector.SATURATION_MIN;
+            viewBrightness = state.getColor().getBrightness();
+            viewColorTemp = state.getColor().getColorTemperature();
         } else if (capability.dimmable > LampCapabilities.NONE) {
             // Type 2 (on/off, dim)
-            viewHue = ColorStateConverter.VIEW_HUE_MIN;
-            viewSaturation = ColorStateConverter.VIEW_SATURATION_MIN;
-            viewBrightness = ColorStateConverter.convertBrightnessModelToView(state.getBrightness());
-            viewColorTemp = ColorStateConverter.convertColorTempModelToView(modelColorTempDefault);
+            viewHue = LightingDirector.HUE_MIN;
+            viewSaturation = LightingDirector.SATURATION_MIN;
+            viewBrightness = state.getColor().getBrightness();
+            viewColorTemp = viewColorTempDefault;
         } else {
             // Type 1 (on/off)
-            viewHue = ColorStateConverter.VIEW_HUE_MIN;
-            viewSaturation = ColorStateConverter.VIEW_SATURATION_MIN;
-            viewBrightness = ColorStateConverter.VIEW_BRIGHTNESS_MAX;
-            viewColorTemp = ColorStateConverter.convertColorTempModelToView(modelColorTempDefault);
+            viewHue = LightingDirector.HUE_MIN;
+            viewSaturation = LightingDirector.SATURATION_MIN;
+            viewBrightness = LightingDirector.BRIGHTNESS_MAX;
+            viewColorTemp = viewColorTempDefault;
         }
 
         int color;
         float[] hsv = { viewHue, (float) (viewSaturation / 100.0), (float) (viewBrightness / 100.0) };
 
-        if ((viewColorTemp >= ColorStateConverter.VIEW_COLORTEMP_MIN) && (viewColorTemp <= ColorStateConverter.VIEW_COLORTEMP_MAX)) {
+        if ((viewColorTemp >= LightingDirector.COLORTEMP_MIN) && (viewColorTemp <= LightingDirector.COLORTEMP_MAX)) {
             color = calculate(viewColorTemp, hsv);
         } else {
             color = Color.HSVToColor(hsv);
@@ -84,10 +84,10 @@ public class ViewColor {
         double green = 0f;
         double blue = 0f;
 
-        if (intTmpKelvin < ColorStateConverter.VIEW_COLORTEMP_MIN) {
-            intTmpKelvin = ColorStateConverter.VIEW_COLORTEMP_MIN;
-        } else if (intTmpKelvin > ColorStateConverter.VIEW_COLORTEMP_MAX) {
-            intTmpKelvin = ColorStateConverter.VIEW_COLORTEMP_MAX;
+        if (intTmpKelvin < LightingDirector.COLORTEMP_MIN) {
+            intTmpKelvin = LightingDirector.COLORTEMP_MIN;
+        } else if (intTmpKelvin > LightingDirector.COLORTEMP_MAX) {
+            intTmpKelvin = LightingDirector.COLORTEMP_MAX;
         }
 
         double tmpKelvin = intTmpKelvin / 100f;

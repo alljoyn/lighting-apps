@@ -14,11 +14,16 @@
  */
 package org.allseen.lsf.sdk;
 
-import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.sdk.model.LightingItemDataModel;
 import org.allseen.lsf.sdk.model.SceneDataModel;
 
 public class SceneV1 extends Scene {
+    public static void setDefaultName(String defaultName) {
+        if (defaultName != null) {
+            SceneDataModel.defaultName = defaultName;
+        }
+    }
+
     protected SceneDataModel sceneModel;
 
     /**
@@ -30,14 +35,42 @@ public class SceneV1 extends Scene {
      *
      * @param sceneID The ID of the scene
      */
-    public SceneV1(String sceneID) {
+    protected SceneV1(String sceneID) {
         this(new SceneDataModel(sceneID));
     }
 
-    public SceneV1(SceneDataModel sceneModel) {
+    protected SceneV1(SceneV1 scene) {
+        this(new SceneDataModel(scene.getSceneDataModel()));
+    }
+
+    protected SceneV1(SceneDataModel sceneModel) {
         super();
 
         this.sceneModel = sceneModel;
+    }
+
+    @Override
+    public boolean hasComponent(LightingItem item) {
+        String errorContext = "SceneV1.hasComponent() error";
+        return postInvalidArgIfNull(errorContext, item) ? hasPreset(item.getId()) || hasGroup(item.getId()) : false;
+    }
+
+    public boolean hasPreset(Preset preset) {
+        String errorContext = "SceneV1.hasPreset() error";
+        return postInvalidArgIfNull(errorContext, preset) ? hasPreset(preset.getId()) : false;
+    }
+
+    public boolean hasGroup(Group group) {
+        String errorContext = "SceneV1.hasGroup() error";
+        return postInvalidArgIfNull(errorContext, group) ? hasGroup(group.getId()) : false;
+    }
+
+    protected boolean hasPreset(String presetID) {
+        return sceneModel.containsPreset(presetID);
+    }
+
+    protected boolean hasGroup(String groupID) {
+        return sceneModel.containsGroup(groupID);
     }
 
     @Override
@@ -49,7 +82,7 @@ public class SceneV1 extends Scene {
      * <b>WARNING: This method is not intended to be used by clients, and may change or be
      * removed in subsequent releases of the SDK.</b>
      */
-    public SceneDataModel getSceneDataModel() {
+    protected SceneDataModel getSceneDataModel() {
         return sceneModel;
     }
 

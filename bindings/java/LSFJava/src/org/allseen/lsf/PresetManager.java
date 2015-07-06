@@ -15,6 +15,9 @@
  */
 package org.allseen.lsf;
 
+import org.allseen.lsf.sdk.ControllerClientStatus;
+import org.allseen.lsf.sdk.TrackingID;
+
 public class PresetManager extends BaseNativeClassWrapper {
     public static final int MAX_PRESETS = 100;
 

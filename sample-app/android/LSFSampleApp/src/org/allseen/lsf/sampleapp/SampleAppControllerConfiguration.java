@@ -17,7 +17,6 @@ package org.allseen.lsf.sampleapp;
 
 import java.lang.reflect.Method;
 
-import org.allseen.lsf.AboutData;
 import org.allseen.lsf.sdk.LightingControllerConfigurationBase;
 
 import android.content.Context;
@@ -39,13 +38,6 @@ public class SampleAppControllerConfiguration extends LightingControllerConfigur
         super(keystorePath);
 
         appContext = context;
-    }
-
-    @Override
-    public void populateDefaultProperties(AboutData aboutData) {
-        super.populateDefaultProperties(aboutData);
-
-        // Overriding any about data values could be done here
     }
 
     @Override

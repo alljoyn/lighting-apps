@@ -16,6 +16,8 @@
 
 package org.allseen.lsf;
 
+import org.allseen.lsf.sdk.ErrorCode;
+
 public class ControllerClientCallback extends DefaultNativeClassWrapper {
     private static final NativeLibraryLoader LIBS = NativeLibraryLoader.LIBS;
 

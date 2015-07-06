@@ -1,5 +1,5 @@
 /*
- * Copyright AllSeen Alliance. All rights reserved.
+ * Copyright (c) AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -15,11 +15,8 @@
  */
 package org.allseen.lsf.sdk;
 
-import org.allseen.lsf.TrackingID;
+import org.allseen.lsf.sdk.listener.TransitionEffectCollectionListener;
 
-public interface TransitionEffectListener extends LightingListener {
-    public void onTransitionEffectInitialized(TrackingID trackingId, TransitionEffect effect);
-    public void onTransitionEffectChanged(TransitionEffect effect);
-    public void onTransitionEffectRemoved(TransitionEffect effect);
-    public void onTransitionEffectError(LightingItemErrorEvent error);
+public interface TransitionEffectListener extends TransitionEffectCollectionListener<TransitionEffect, LightingItemErrorEvent> {
+
 }

@@ -18,10 +18,10 @@ package org.allseen.lsf.sdk.callback;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.SceneManagerCallback;
 import org.allseen.lsf.SceneWithSceneElements;
-import org.allseen.lsf.TrackingID;
+import org.allseen.lsf.sdk.ResponseCode;
+import org.allseen.lsf.sdk.TrackingID;
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 import org.allseen.lsf.sdk.manager.LightingSystemManager;
 import org.allseen.lsf.sdk.model.SceneDataModelV2;
@@ -30,11 +30,11 @@ import org.allseen.lsf.sdk.model.SceneDataModelV2;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class HelperSceneManagerCallbackV2 extends SceneManagerCallback {
-    protected LightingSystemManager manager;
+public class HelperSceneManagerCallbackV2<SCENEV2> extends SceneManagerCallback {
+    protected LightingSystemManager<?, ?, ?, ?, ?, ?, ?, SCENEV2, ?, ?, ?> manager;
     protected Map<String, TrackingID> creationTrackingIDs;
 
-    public HelperSceneManagerCallbackV2(LightingSystemManager manager) {
+    public HelperSceneManagerCallbackV2(LightingSystemManager<?, ?, ?, ?, ?, ?, ?, SCENEV2, ?, ?, ?> manager) {
         this.manager = manager;
         this.creationTrackingIDs = new HashMap<String, TrackingID>();
     }
@@ -42,7 +42,7 @@ public class HelperSceneManagerCallbackV2 extends SceneManagerCallback {
     @Override
     public void getAllSceneIDsReplyCB(ResponseCode responseCode, String[] sceneIDs) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            manager.getSceneCollectionManager().sendErrorEvent("getAllSceneIDsReplyCB", responseCode, null);
+            manager.getSceneCollectionManagerV2().sendErrorEvent("getAllSceneIDsReplyCB", responseCode, null);
         }
 
         for (final String sceneID : sceneIDs) {
@@ -53,7 +53,7 @@ public class HelperSceneManagerCallbackV2 extends SceneManagerCallback {
     @Override
     public void getSceneNameReplyCB(ResponseCode responseCode, String sceneID, String language, String sceneName) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            manager.getSceneCollectionManager().sendErrorEvent("getSceneNameReplyCB", responseCode, sceneID);
+            manager.getSceneCollectionManagerV2().sendErrorEvent("getSceneNameReplyCB", responseCode, sceneID);
         }
 
         postUpdateSceneName(sceneID, sceneName);
@@ -62,7 +62,7 @@ public class HelperSceneManagerCallbackV2 extends SceneManagerCallback {
     @Override
     public void setSceneNameReplyCB(ResponseCode responseCode, String sceneID, String language) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            manager.getSceneCollectionManager().sendErrorEvent("setSceneNameReplyCB", responseCode, sceneID);
+            manager.getSceneCollectionManagerV2().sendErrorEvent("setSceneNameReplyCB", responseCode, sceneID);
         }
 
         AllJoynManager.sceneManager.getSceneName(sceneID, LightingSystemManager.LANGUAGE);
@@ -76,7 +76,7 @@ public class HelperSceneManagerCallbackV2 extends SceneManagerCallback {
                 boolean containsNewIDs = false;
 
                 for (final String sceneID : sceneIDs) {
-                    if (manager.getSceneCollectionManager().hasID(sceneID)) {
+                    if (manager.getSceneCollectionManagerV2().hasID(sceneID)) {
                         AllJoynManager.sceneManager.getSceneName(sceneID, LightingSystemManager.LANGUAGE);
                     } else {
                         containsNewIDs = true;
@@ -93,7 +93,7 @@ public class HelperSceneManagerCallbackV2 extends SceneManagerCallback {
     @Override
     public void createSceneWithSceneElementsReplyCB(ResponseCode responseCode, String sceneID, long trackingID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            manager.getSceneCollectionManager().sendErrorEvent("createSceneReplyCB", responseCode, sceneID, new TrackingID(trackingID));
+            manager.getSceneCollectionManagerV2().sendErrorEvent("createSceneReplyCB", responseCode, sceneID, new TrackingID(trackingID));
         } else {
             creationTrackingIDs.put(sceneID, new TrackingID(trackingID));
         }
@@ -107,7 +107,7 @@ public class HelperSceneManagerCallbackV2 extends SceneManagerCallback {
     @Override
     public void updateSceneWithSceneElementsReplyCB(ResponseCode responseCode, String sceneID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            manager.getSceneCollectionManager().sendErrorEvent("updateSceneReplyCB", responseCode, sceneID);
+            manager.getSceneCollectionManagerV2().sendErrorEvent("updateSceneReplyCB", responseCode, sceneID);
         }
     }
 
@@ -121,7 +121,7 @@ public class HelperSceneManagerCallbackV2 extends SceneManagerCallback {
     @Override
     public void deleteSceneReplyCB(ResponseCode responseCode, String sceneID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            manager.getSceneCollectionManager().sendErrorEvent("deleteSceneReplyCB", responseCode, sceneID);
+            manager.getSceneCollectionManagerV2().sendErrorEvent("deleteSceneReplyCB", responseCode, sceneID);
         }
     }
 
@@ -133,7 +133,7 @@ public class HelperSceneManagerCallbackV2 extends SceneManagerCallback {
     @Override
     public void getSceneWithSceneElementsReplyCB(ResponseCode responseCode, String sceneID, SceneWithSceneElements scene) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            manager.getSceneCollectionManager().sendErrorEvent("getSceneReplyCB", responseCode, sceneID);
+            manager.getSceneCollectionManagerV2().sendErrorEvent("getSceneReplyCB", responseCode, sceneID);
         }
 
         postUpdateScene(sceneID, scene);
@@ -142,7 +142,7 @@ public class HelperSceneManagerCallbackV2 extends SceneManagerCallback {
     @Override
     public void applySceneReplyCB(ResponseCode responseCode, String sceneID) {
         if (!responseCode.equals(ResponseCode.OK)) {
-            manager.getSceneCollectionManager().sendErrorEvent("applySceneReplyCB", responseCode, sceneID);
+            manager.getSceneCollectionManagerV2().sendErrorEvent("applySceneReplyCB", responseCode, sceneID);
         }
     }
 
@@ -155,7 +155,7 @@ public class HelperSceneManagerCallbackV2 extends SceneManagerCallback {
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
-                if (!manager.getSceneCollectionManager().hasID(sceneID)) {
+                if (!manager.getSceneCollectionManagerV2().hasID(sceneID)) {
                     postUpdateSceneID(sceneID);
                     AllJoynManager.sceneManager.getSceneName(sceneID, LightingSystemManager.LANGUAGE);
                     AllJoynManager.sceneManager.getSceneWithSceneElements(sceneID);
@@ -168,8 +168,8 @@ public class HelperSceneManagerCallbackV2 extends SceneManagerCallback {
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
-                if (!manager.getSceneCollectionManager().hasID(sceneID)) {
-                    manager.getSceneCollectionManager().addScene(sceneID);
+                if (!manager.getSceneCollectionManagerV2().hasID(sceneID)) {
+                    manager.getSceneCollectionManagerV2().addScene(sceneID);
                 }
             }
         });
@@ -181,7 +181,7 @@ public class HelperSceneManagerCallbackV2 extends SceneManagerCallback {
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
-                SceneDataModelV2 sceneModel = manager.getSceneCollectionManager().getModel(sceneID);
+                SceneDataModelV2 sceneModel = manager.getSceneCollectionManagerV2().getModel(sceneID);
 
                 if (sceneModel != null) {
                     boolean wasInitialized = sceneModel.isInitialized();
@@ -200,7 +200,7 @@ public class HelperSceneManagerCallbackV2 extends SceneManagerCallback {
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
-                SceneDataModelV2 sceneModel = manager.getSceneCollectionManager().getModel(sceneID);
+                SceneDataModelV2 sceneModel = manager.getSceneCollectionManagerV2().getModel(sceneID);
 
                 if (sceneModel != null) {
                     boolean wasInitialized = sceneModel.isInitialized();
@@ -220,7 +220,7 @@ public class HelperSceneManagerCallbackV2 extends SceneManagerCallback {
             @Override
             public void run() {
                 for (String sceneID : sceneIDs) {
-                    manager.getSceneCollectionManager().removeScene(sceneID);
+                    manager.getSceneCollectionManagerV2().removeScene(sceneID);
                 }
             }
         });
@@ -230,7 +230,7 @@ public class HelperSceneManagerCallbackV2 extends SceneManagerCallback {
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
-                manager.getSceneCollectionManager().sendChangedEvent(sceneID);
+                manager.getSceneCollectionManagerV2().sendChangedEvent(sceneID);
             }
         });
     }
@@ -239,7 +239,7 @@ public class HelperSceneManagerCallbackV2 extends SceneManagerCallback {
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
-                manager.getSceneCollectionManager().sendInitializedEvent(sceneID, creationTrackingIDs.remove(sceneID));
+                manager.getSceneCollectionManagerV2().sendInitializedEvent(sceneID, creationTrackingIDs.remove(sceneID));
             }
         });
     }

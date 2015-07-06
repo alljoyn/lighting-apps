@@ -15,8 +15,8 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.sdk.model.ControllerDataModel;
-
+import org.allseen.lsf.sdk.Controller;
+import org.allseen.lsf.sdk.LightingDirector;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.util.Log;
@@ -63,14 +63,9 @@ public class SettingsFragment extends PageFrameChildFragment implements OnClickL
 
     public void onUpdateView() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        ControllerDataModel leaderControllerModel = activity.systemManager.getControllerManager().getLeadControllerModel();
-        String leaderName = ControllerDataModel.defaultName;
+        Controller leader = LightingDirector.get().getLeadController();
 
-        if (leaderControllerModel != null && leaderControllerModel.getName() != null && !leaderControllerModel.getName().isEmpty()) {
-            leaderName = leaderControllerModel.getName();
-        }
-
-        ((TextView)view.findViewById(R.id.settingsTextController)).setText(leaderName);
+        ((TextView)view.findViewById(R.id.settingsTextController)).setText(leader.getName());
 
         CheckBox checkBox = (CheckBox)view.findViewById(R.id.settingsStartController);
         checkBox.setChecked(activity.isControllerServiceEnabled());

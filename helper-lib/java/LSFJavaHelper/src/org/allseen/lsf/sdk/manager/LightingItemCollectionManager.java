@@ -22,21 +22,24 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.allseen.lsf.ResponseCode;
-import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.sdk.LightingItemErrorEvent;
+import org.allseen.lsf.sdk.ResponseCode;
+import org.allseen.lsf.sdk.TrackingID;
+import org.allseen.lsf.sdk.factory.LightingItemFactory;
 import org.allseen.lsf.sdk.model.LightingItemFilter;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public abstract class LightingItemCollectionManager<ADAPTER, LISTENER, MODEL> extends LightingItemListenerManager<LISTENER> {
+public abstract class LightingItemCollectionManager<ADAPTER, LISTENER, MODEL, ERROR> extends LightingItemListenerManager<LISTENER> {
 
+    protected final LightingItemFactory<ERROR> factory;
     protected final Map<String, ADAPTER> itemAdapters = new HashMap<String, ADAPTER>();
 
-    public LightingItemCollectionManager(LightingSystemManager director) {
-        super(director);
+    public LightingItemCollectionManager(LightingSystemManager<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> manager, LightingItemFactory<ERROR> factory) {
+        super(manager);
+
+        this.factory = factory;
     }
 
     public boolean hasID(String itemID) {
@@ -92,12 +95,18 @@ public abstract class LightingItemCollectionManager<ADAPTER, LISTENER, MODEL> ex
     }
 
     protected Collection<ADAPTER> getAdapters(LightingItemFilter<ADAPTER> filter) {
-        Collection<ADAPTER> filteredCollection = new ArrayList<ADAPTER>();
+        Collection<ADAPTER> filteredCollection;
 
-        for (ADAPTER adapter : itemAdapters.values()) {
-            if (filter.passes(adapter)) {
-                filteredCollection.add(adapter);
+        if (filter != null) {
+            filteredCollection = new ArrayList<ADAPTER>();
+
+            for (ADAPTER adapter : itemAdapters.values()) {
+                if (filter.passes(adapter)) {
+                    filteredCollection.add(adapter);
+                }
             }
+        } else {
+            filteredCollection = getAdapters();
         }
 
         return filteredCollection;
@@ -145,14 +154,14 @@ public abstract class LightingItemCollectionManager<ADAPTER, LISTENER, MODEL> ex
     }
 
     public void sendErrorEvent(String name, ResponseCode responseCode, String itemID) {
-        sendErrorEvent(new LightingItemErrorEvent(name, responseCode, itemID, null));
+        sendErrorEvent(name, responseCode, itemID, null);
     }
 
     public void sendErrorEvent(String name, ResponseCode responseCode, String itemID, TrackingID trackingID) {
-        sendErrorEvent(new LightingItemErrorEvent(name, responseCode, itemID, trackingID));
+        sendErrorEvent(factory.createError(name, responseCode, itemID, trackingID, null));
     }
 
-    public void sendErrorEvent(LightingItemErrorEvent errorEvent) {
+    public void sendErrorEvent(ERROR errorEvent) {
         for (LISTENER listener : itemListeners) {
             sendErrorEvent(listener, errorEvent);
         }
@@ -161,7 +170,8 @@ public abstract class LightingItemCollectionManager<ADAPTER, LISTENER, MODEL> ex
     protected abstract void sendInitializedEvent(LISTENER listener, ADAPTER item, TrackingID trackingID);
     protected abstract void sendChangedEvent(LISTENER listener, ADAPTER item);
     protected abstract void sendRemovedEvent(LISTENER listener, ADAPTER item);
-    protected abstract void sendErrorEvent(LISTENER listener, LightingItemErrorEvent errorEvent);
+    protected abstract void sendErrorEvent(LISTENER listener, ERROR error);
 
     public abstract MODEL getModel(String itemID);
+    public abstract MODEL getModel(ADAPTER item);
 }

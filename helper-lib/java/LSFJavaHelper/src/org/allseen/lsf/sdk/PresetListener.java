@@ -15,15 +15,8 @@
  */
 package org.allseen.lsf.sdk;
 
-import org.allseen.lsf.TrackingID;
+import org.allseen.lsf.sdk.listener.PresetCollectionListener;
 
-/**
- * <b>WARNING: This class is not intended to be used by clients, and its interface may change
- * in subsequent releases of the SDK</b>.
- */
-public interface PresetListener extends LightingListener {
-    public void onPresetInitialized(TrackingID trackingId, Preset preset);
-    public void onPresetChanged(Preset preset);
-    public void onPresetRemoved(Preset preset);
-    public void onPresetError(LightingItemErrorEvent error);
+public interface PresetListener extends PresetCollectionListener<Preset, LightingItemErrorEvent> {
+
 }

@@ -28,7 +28,7 @@ extern "C" {
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    getAllLampGroupIDs
- * Signature: ()Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: ()Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_getAllLampGroupIDs
   (JNIEnv *, jobject);
@@ -36,7 +36,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_getAllLampGroupI
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    getLampGroupName
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_getLampGroupName
   (JNIEnv *, jobject, jstring, jstring);
@@ -44,7 +44,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_getLampGroupName
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    setLampGroupName
- * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_setLampGroupName
   (JNIEnv *, jobject, jstring, jstring, jstring);
@@ -52,7 +52,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_setLampGroupName
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    createLampGroup
- * Signature: (Lorg/allseen/lsf/LampGroup;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Lorg/allseen/lsf/LampGroup;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_createLampGroup
   (JNIEnv *, jobject, jobject, jstring, jstring);
@@ -60,7 +60,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_createLampGroup
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    updateLampGroup
- * Signature: (Ljava/lang/String;Lorg/allseen/lsf/LampGroup;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Lorg/allseen/lsf/LampGroup;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_updateLampGroup
   (JNIEnv *, jobject, jstring, jobject);
@@ -68,7 +68,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_updateLampGroup
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    getLampGroup
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_getLampGroup
   (JNIEnv *, jobject, jstring);
@@ -76,7 +76,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_getLampGroup
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    deleteLampGroup
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_deleteLampGroup
   (JNIEnv *, jobject, jstring);
@@ -84,7 +84,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_deleteLampGroup
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    transitionLampGroupState
- * Signature: (Ljava/lang/String;Lorg/allseen/lsf/LampState;J)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Lorg/allseen/lsf/LampState;J)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_transitionLampGroupState
   (JNIEnv *, jobject, jstring, jobject, jlong);
@@ -92,7 +92,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_transitionLampGr
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    pulseLampGroupWithState
- * Signature: (Ljava/lang/String;Lorg/allseen/lsf/LampState;JJJLorg/allseen/lsf/LampState;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Lorg/allseen/lsf/LampState;JJJLorg/allseen/lsf/LampState;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_pulseLampGroupWithState
   (JNIEnv *, jobject, jstring, jobject, jlong, jlong, jlong, jobject);
@@ -100,7 +100,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_pulseLampGroupWi
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    pulseLampGroupWithPreset
- * Signature: (Ljava/lang/String;Ljava/lang/String;JJJLjava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;JJJLjava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_pulseLampGroupWithPreset
   (JNIEnv *, jobject, jstring, jstring, jlong, jlong, jlong, jstring);
@@ -108,7 +108,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_pulseLampGroupWi
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    transitionLampGroupStateOnOffField
- * Signature: (Ljava/lang/String;Z)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Z)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_transitionLampGroupStateOnOffField
   (JNIEnv *, jobject, jstring, jboolean);
@@ -116,7 +116,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_transitionLampGr
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    transitionLampGroupStateHueField
- * Signature: (Ljava/lang/String;JJ)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;JJ)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_transitionLampGroupStateHueField
   (JNIEnv *, jobject, jstring, jlong, jlong);
@@ -124,7 +124,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_transitionLampGr
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    transitionLampGroupStateSaturationField
- * Signature: (Ljava/lang/String;JJ)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;JJ)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_transitionLampGroupStateSaturationField
   (JNIEnv *, jobject, jstring, jlong, jlong);
@@ -132,7 +132,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_transitionLampGr
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    transitionLampGroupStateBrightnessField
- * Signature: (Ljava/lang/String;JJ)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;JJ)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_transitionLampGroupStateBrightnessField
   (JNIEnv *, jobject, jstring, jlong, jlong);
@@ -140,7 +140,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_transitionLampGr
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    transitionLampGroupStateColorTempField
- * Signature: (Ljava/lang/String;JJ)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;JJ)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_transitionLampGroupStateColorTempField
   (JNIEnv *, jobject, jstring, jlong, jlong);
@@ -148,7 +148,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_transitionLampGr
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    transitionLampGroupStateToPreset
- * Signature: (Ljava/lang/String;Ljava/lang/String;J)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;J)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_transitionLampGroupStateToPreset
   (JNIEnv *, jobject, jstring, jstring, jlong);
@@ -156,7 +156,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_transitionLampGr
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    resetLampGroupState
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_resetLampGroupState
   (JNIEnv *, jobject, jstring);
@@ -164,7 +164,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_resetLampGroupSt
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    resetLampGroupStateOnOffField
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_resetLampGroupStateOnOffField
   (JNIEnv *, jobject, jstring);
@@ -172,7 +172,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_resetLampGroupSt
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    resetLampGroupStateHueField
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_resetLampGroupStateHueField
   (JNIEnv *, jobject, jstring);
@@ -180,7 +180,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_resetLampGroupSt
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    resetLampGroupStateSaturationField
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_resetLampGroupStateSaturationField
   (JNIEnv *, jobject, jstring);
@@ -188,7 +188,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_resetLampGroupSt
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    resetLampGroupStateBrightnessField
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_resetLampGroupStateBrightnessField
   (JNIEnv *, jobject, jstring);
@@ -196,7 +196,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_resetLampGroupSt
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    resetLampGroupStateColorTempField
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_resetLampGroupStateColorTempField
   (JNIEnv *, jobject, jstring);
@@ -204,7 +204,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_resetLampGroupSt
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    getLampGroupVersion
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_getLampGroupVersion
   (JNIEnv *, jobject, jstring);
@@ -212,7 +212,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_getLampGroupVers
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    createLampGroupWithTracking
- * Signature: (Lorg/allseen/lsf/TrackingID;Lorg/allseen/lsf/LampGroup;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Lorg/allseen/lsf/sdk/TrackingID;Lorg/allseen/lsf/LampGroup;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_createLampGroupWithTracking
   (JNIEnv *, jobject, jobject, jobject, jstring, jstring);
@@ -220,7 +220,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_createLampGroupW
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    getLampGroupDataSet
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_getLampGroupDataSet
   (JNIEnv *, jobject, jstring, jstring);
@@ -228,7 +228,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_getLampGroupData
 /*
  * Class:     org_allseen_lsf_LampGroupManager
  * Method:    setLampGroupEffect
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_setLampGroupEffect
   (JNIEnv *, jobject, jstring, jstring);

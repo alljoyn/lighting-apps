@@ -17,7 +17,8 @@ package org.allseen.lsf.sampleapp;
 
 import java.util.List;
 
-import org.allseen.lsf.sdk.manager.AllJoynManager;
+import org.allseen.lsf.sdk.LightingDirector;
+import org.allseen.lsf.sdk.Scene;
 
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,12 +41,12 @@ public class MasterSceneSelectMembersFragment extends SelectMembersFragment {
 
     @Override
     protected String[] getPendingScenes() {
-        return ((SampleAppActivity)getActivity()).pendingMasterSceneModel.masterScene.getScenes();
+        return MasterSceneInfoFragment.pendingMasterScene.sceneIDs;
     }
 
     @Override
     protected String getPendingItemID() {
-        return ((SampleAppActivity)getActivity()).pendingMasterSceneModel.id;
+        return MasterSceneInfoFragment.pendingMasterScene.id;
     }
 
     @Override
@@ -56,13 +57,14 @@ public class MasterSceneSelectMembersFragment extends SelectMembersFragment {
     }
 
     @Override
-    protected void processSelection(SampleAppActivity activity, List<String> lampIDs, List<String> groupIDs, List<String> sceneIDs) {
-        activity.pendingMasterSceneModel.masterScene.setScenes(sceneIDs.toArray(new String[sceneIDs.size()]));
+    protected void processSelection(SampleAppActivity activity, List<String> lampIDs, List<String> groupIDs, List<String> presetIDs, List<String> transitionEffectIDs, List<String> pulseEffectIDs, List<String> sceneElementIDs, List<String> sceneIDs) {
+        LightingDirector director = LightingDirector.get();
+        Scene[] scenes = director.getScenes(sceneIDs);
 
-        if (activity.pendingMasterSceneModel.hasDefaultID()) {
-            AllJoynManager.masterSceneManager.createMasterScene(activity.pendingMasterSceneModel.masterScene, activity.pendingMasterSceneModel.getName(), SampleAppActivity.LANGUAGE);
+        if (MasterSceneInfoFragment.pendingMasterScene.id != null) {
+            director.getMasterScene(MasterSceneInfoFragment.pendingMasterScene.id).modify(scenes);
         } else {
-            AllJoynManager.masterSceneManager.updateMasterScene(activity.pendingMasterSceneModel.id, activity.pendingMasterSceneModel.masterScene);
+            director.createMasterScene(scenes, MasterSceneInfoFragment.pendingMasterScene.name, null);
         }
     }
 

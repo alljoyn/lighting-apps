@@ -24,12 +24,12 @@ import java.util.List;
  */
 public abstract class LightingItemListenerManager<LISTENER> {
     protected final List<LISTENER> itemListeners = new ArrayList<LISTENER>();
-    protected final LightingSystemManager director;
+    protected final LightingSystemManager<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> manager;
 
-    public LightingItemListenerManager(LightingSystemManager director) {
+    public LightingItemListenerManager(LightingSystemManager<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> manager) {
         super();
 
-        this.director = director;
+        this.manager = manager;
     }
 
     public void addListener(LISTENER listener) {

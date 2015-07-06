@@ -15,8 +15,8 @@
  */
 package org.allseen.lsf.sdk.model;
 
-import org.allseen.lsf.LampDetails;
-import org.allseen.lsf.LampParameters;
+import org.allseen.lsf.sdk.LampDetails;
+import org.allseen.lsf.sdk.LampParameters;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change

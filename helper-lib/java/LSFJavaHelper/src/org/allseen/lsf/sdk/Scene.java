@@ -14,32 +14,46 @@
  */
 package org.allseen.lsf.sdk;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 
 /**
  * A Scene object represents a set of lamps and associated states in a lighting system, and can be
  * used to apply the states to the lamps.
  */
-public abstract class Scene extends LightingItem {
+public abstract class Scene extends SceneItem {
+    @Override
+    public void apply() {
+        String errorContext = "Scene.apply() error";
 
-     public void apply() {
-         String errorContext = "Scene.apply() error";
+        postErrorIfFailure(errorContext,
+            AllJoynManager.sceneManager.applyScene(this.getId()));
+    }
 
-         postErrorIfFailure(errorContext,
-                 AllJoynManager.sceneManager.applyScene(this.getId()));
-     }
+    @Override
+    public void rename(String sceneName) {
+        String errorContext = "Scene.rename() error";
 
-     @Override
-     public void rename(String sceneName) {
-         String errorContext = "Scene.rename() error";
+        if (postInvalidArgIfNull(errorContext, sceneName)) {
+            postErrorIfFailure(errorContext,
+                AllJoynManager.sceneManager.setSceneName(this.getId(), sceneName, LightingDirector.get().getDefaultLanguage()));
+        }
+    }
 
-         if (postInvalidArgIfNull(errorContext, sceneName)) {
-             postErrorIfFailure(errorContext,
-                     AllJoynManager.sceneManager.setSceneName(this.getId(), sceneName, LightingDirector.get().getDefaultLanguage()));
-         }
-     }
+    @Override
+    public void delete() {
+        AllJoynManager.sceneManager.deleteScene(this.getId());
+    }
 
-     public void delete() {
-         AllJoynManager.sceneManager.deleteScene(this.getId());
-     }
+    @Override
+    protected Collection<LightingItem> getDependentCollection() {
+        LightingDirector director = LightingDirector.get();
+        Collection<LightingItem> dependents = new ArrayList<LightingItem>();
+
+        dependents.addAll(director.getMasterSceneCollectionManager().getMasterScenesCollection(new LightingItemHasComponentFilter<MasterScene>(Scene.this)));
+
+        return dependents;
+    }
 }

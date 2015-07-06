@@ -15,6 +15,7 @@
 package org.allseen.lsf.sdk;
 
 
+
 /**
  * Abstract base class for Lighting items that support color.
  * <p>
@@ -41,6 +42,10 @@ public abstract class MutableColorItem extends ColorItem implements LampState {
                 setColorHsvt(hsvt[0], hsvt[1], hsvt[2], hsvt[3]);
             }
         }
+    }
+
+    public void togglePower() {
+        setPowerOn(isOff());
     }
 
     public void setPower(Power power) {

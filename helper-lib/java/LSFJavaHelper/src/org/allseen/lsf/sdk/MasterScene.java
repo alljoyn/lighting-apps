@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 import org.allseen.lsf.sdk.model.LightingItemDataModel;
 import org.allseen.lsf.sdk.model.LightingItemUtil;
@@ -30,16 +29,22 @@ import org.allseen.lsf.sdk.model.MasterSceneDataModel;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public final class MasterScene extends LightingItem {
+public class MasterScene extends SceneItem {
+    public static void setDefaultName(String defaultName) {
+        if (defaultName != null) {
+            MasterSceneDataModel.defaultName = defaultName;
+        }
+    }
 
     protected MasterSceneDataModel masterModel;
 
-    public MasterScene(String masterSceneID) {
+    protected MasterScene(String masterSceneID) {
         super();
 
         masterModel = new MasterSceneDataModel(masterSceneID);
     }
 
+    @Override
     public void apply() {
         String errorContext = "MasterScene.apply() error";
 
@@ -89,6 +94,7 @@ public final class MasterScene extends LightingItem {
         }
     }
 
+    @Override
     public void delete() {
         String errorContext = "MasterScene.delete() error";
 
@@ -106,12 +112,36 @@ public final class MasterScene extends LightingItem {
         }
     }
 
+    public String[] getSceneIDs() {
+        return masterModel.getMasterScene().getScenes();
+    }
+
+    public Scene[] getScenes() {
+        //TODO-CHK Do we need to insert null "placeholders"?
+        return LightingDirector.get().getScenes(Arrays.asList(getSceneIDs()));
+    }
+
+    @Override
+    public boolean hasComponent(LightingItem item) {
+        String errorContext = "MasterScene.hasComponent() error";
+        return postInvalidArgIfNull(errorContext, item) ? hasScene(item.getId()) : false;
+    }
+
+    public boolean hasScene(Scene scene) {
+        String errorContext = "MasterScene.hasScene() error";
+        return postInvalidArgIfNull(errorContext, scene) ? hasScene(scene.getId()) : false;
+    }
+
+    protected boolean hasScene(String sceneID) {
+        return masterModel.containsBasicScene(sceneID);
+    }
+
     @Override
     protected LightingItemDataModel getItemDataModel() {
         return getMasterSceneDataModel();
     }
 
-    public MasterSceneDataModel getMasterSceneDataModel() {
+    protected MasterSceneDataModel getMasterSceneDataModel() {
         return masterModel;
     }
 

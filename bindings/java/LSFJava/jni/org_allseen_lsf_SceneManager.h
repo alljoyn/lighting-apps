@@ -28,7 +28,7 @@ extern "C" {
 /*
  * Class:     org_allseen_lsf_SceneManager
  * Method:    getAllSceneIDs
- * Signature: ()Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: ()Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_getAllSceneIDs
   (JNIEnv *, jobject);
@@ -36,7 +36,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_getAllSceneIDs
 /*
  * Class:     org_allseen_lsf_SceneManager
  * Method:    getSceneName
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_getSceneName
   (JNIEnv *, jobject, jstring, jstring);
@@ -44,7 +44,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_getSceneName
 /*
  * Class:     org_allseen_lsf_SceneManager
  * Method:    setSceneName
- * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_setSceneName
   (JNIEnv *, jobject, jstring, jstring, jstring);
@@ -52,7 +52,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_setSceneName
 /*
  * Class:     org_allseen_lsf_SceneManager
  * Method:    createScene
- * Signature: (Lorg/allseen/lsf/Scene;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Lorg/allseen/lsf/Scene;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_createScene
   (JNIEnv *, jobject, jobject, jstring, jstring);
@@ -60,7 +60,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_createScene
 /*
  * Class:     org_allseen_lsf_SceneManager
  * Method:    updateScene
- * Signature: (Ljava/lang/String;Lorg/allseen/lsf/Scene;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Lorg/allseen/lsf/Scene;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_updateScene
   (JNIEnv *, jobject, jstring, jobject);
@@ -68,7 +68,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_updateScene
 /*
  * Class:     org_allseen_lsf_SceneManager
  * Method:    deleteScene
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_deleteScene
   (JNIEnv *, jobject, jstring);
@@ -76,7 +76,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_deleteScene
 /*
  * Class:     org_allseen_lsf_SceneManager
  * Method:    getScene
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_getScene
   (JNIEnv *, jobject, jstring);
@@ -84,7 +84,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_getScene
 /*
  * Class:     org_allseen_lsf_SceneManager
  * Method:    applyScene
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_applyScene
   (JNIEnv *, jobject, jstring);
@@ -92,7 +92,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_applyScene
 /*
  * Class:     org_allseen_lsf_SceneManager
  * Method:    createSceneWithTracking
- * Signature: (Lorg/allseen/lsf/TrackingID;Lorg/allseen/lsf/Scene;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Lorg/allseen/lsf/sdk/TrackingID;Lorg/allseen/lsf/Scene;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_createSceneWithTracking
   (JNIEnv *, jobject, jobject, jobject, jstring, jstring);
@@ -100,7 +100,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_createSceneWithTrack
 /*
  * Class:     org_allseen_lsf_SceneManager
  * Method:    createSceneWithSceneElements
- * Signature: (Lorg/allseen/lsf/TrackingID;Lorg/allseen/lsf/SceneWithSceneElements;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Lorg/allseen/lsf/sdk/TrackingID;Lorg/allseen/lsf/SceneWithSceneElements;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_createSceneWithSceneElements
   (JNIEnv *, jobject, jobject, jobject, jstring, jstring);
@@ -108,7 +108,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_createSceneWithScene
 /*
  * Class:     org_allseen_lsf_SceneManager
  * Method:    updateSceneWithSceneElements
- * Signature: (Ljava/lang/String;Lorg/allseen/lsf/SceneWithSceneElements;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Lorg/allseen/lsf/SceneWithSceneElements;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_updateSceneWithSceneElements
   (JNIEnv *, jobject, jstring, jobject);
@@ -116,7 +116,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_updateSceneWithScene
 /*
  * Class:     org_allseen_lsf_SceneManager
  * Method:    getSceneWithSceneElements
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_getSceneWithSceneElements
   (JNIEnv *, jobject, jstring);
@@ -124,7 +124,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_getSceneWithSceneEle
 /*
  * Class:     org_allseen_lsf_SceneManager
  * Method:    getSceneVersion
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_getSceneVersion
   (JNIEnv *, jobject, jstring);
@@ -132,7 +132,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_getSceneVersion
 /*
  * Class:     org_allseen_lsf_SceneManager
  * Method:    getSceneDataSet
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_getSceneDataSet
   (JNIEnv *, jobject, jstring, jstring);
@@ -140,7 +140,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_getSceneDataSet
 /*
  * Class:     org_allseen_lsf_SceneManager
  * Method:    getSceneWithSceneElementsDataSet
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_getSceneWithSceneElementsDataSet
   (JNIEnv *, jobject, jstring, jstring);

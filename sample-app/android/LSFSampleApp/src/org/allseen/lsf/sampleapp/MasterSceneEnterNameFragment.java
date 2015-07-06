@@ -15,11 +15,7 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import java.util.Iterator;
-
-import org.allseen.lsf.sdk.MasterScene;
-import org.allseen.lsf.sdk.model.MasterSceneDataModel;
-
+import org.allseen.lsf.sdk.LightingDirector;
 import android.util.Log;
 
 public class MasterSceneEnterNameFragment extends EnterNameFragment {
@@ -35,13 +31,9 @@ public class MasterSceneEnterNameFragment extends EnterNameFragment {
 
     @Override
     protected void setName(String name) {
-        MasterSceneDataModel masterSceneModel = new MasterSceneDataModel();
-        masterSceneModel.setName(name);
+        MasterSceneInfoFragment.pendingMasterScene.name = name;
 
-        SampleAppActivity activity = (SampleAppActivity)getActivity();
-        activity.pendingMasterSceneModel = masterSceneModel;
-
-        Log.d(SampleAppActivity.TAG, "Pending master scene name: " + activity.pendingMasterSceneModel.getName());
+        Log.d(SampleAppActivity.TAG, "Pending master scene name: " + name);
     }
 
     @Override
@@ -50,15 +42,7 @@ public class MasterSceneEnterNameFragment extends EnterNameFragment {
     }
 
     @Override
-    protected boolean duplicateName(String name) {
-        Iterator<MasterScene> i = ((SampleAppActivity)getActivity()).systemManager.getMasterSceneCollectionManager().getMasterSceneIterator();
-
-        while (i.hasNext()) {
-            if (i.next().getMasterSceneDataModel().getName().equals(name)) {
-                return true;
-            }
-        }
-
-        return false;
+    protected boolean duplicateName(String masterSceneName) {
+        return Util.isDuplicateName(LightingDirector.get().getMasterScenes(), masterSceneName);
     }
 }

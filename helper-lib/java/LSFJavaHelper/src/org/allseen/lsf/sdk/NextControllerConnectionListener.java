@@ -1,5 +1,5 @@
 /*
- * Copyright AllSeen Alliance. All rights reserved.
+ * Copyright (c) AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -15,6 +15,6 @@
  */
 package org.allseen.lsf.sdk;
 
-public interface NextControllerConnectionListener {
-    public void onControllerConnected();
+public interface NextControllerConnectionListener extends org.allseen.lsf.sdk.listener.NextControllerConnectionListener {
+
 }

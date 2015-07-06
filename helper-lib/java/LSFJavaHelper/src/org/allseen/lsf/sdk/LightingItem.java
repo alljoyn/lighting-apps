@@ -14,9 +14,11 @@
  */
 package org.allseen.lsf.sdk;
 
-import org.allseen.lsf.ControllerClientStatus;
-import org.allseen.lsf.ResponseCode;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.allseen.lsf.sdk.model.LightingItemDataModel;
+import org.allseen.lsf.sdk.model.LightingItemSortableTag;
 
 /**
  * Abstract base class for items in a Lighting system.
@@ -33,6 +35,10 @@ public abstract class LightingItem implements LightingItemInterface {
     @Override
     public String getId() {
         return getItemDataModel().id;
+    }
+
+    public LightingItemSortableTag getTag() {
+        return getItemDataModel().tag;
     }
 
     public boolean isInitialized() {
@@ -55,10 +61,36 @@ public abstract class LightingItem implements LightingItemInterface {
         return equivalent;
     }
 
+    @Override
+    public LightingItem[] getDependents() {
+        Collection<LightingItem> dependents = getDependentCollection();
+        return dependents.toArray(new LightingItem[dependents.size()]);
+    }
+
+    @Override
+    public LightingItem[] getComponents() {
+        Collection<LightingItem> components = getComponentCollection();
+        return components.toArray(new LightingItem[components.size()]);
+    }
+
+    public boolean hasComponent(LightingItem item) {
+        // Default implementation -- subclasses may override for efficiency
+        return getComponentCollection().contains(item);
+    }
+
+    protected Collection<LightingItem> getDependentCollection() {
+        // Default implementation is an empty list -- subclasses must override if they can be a component of another item
+        return new ArrayList<LightingItem>();
+    }
+
+    protected Collection<LightingItem> getComponentCollection() {
+        // Default implementation is an empty list -- subclasses must override if they have other items as components
+        return new ArrayList<LightingItem>();
+    }
 
     protected boolean postInvalidArgIfNull(String name, Object obj) {
         if (obj == null) {
-            postError(name, ResponseCode.ERR_INVALID_ARGS);
+            postError(new Throwable().getStackTrace()[1].getMethodName(), ResponseCode.ERR_INVALID_ARGS);
             return false;
         }
 
@@ -67,11 +99,15 @@ public abstract class LightingItem implements LightingItemInterface {
 
     protected boolean postErrorIfFailure(String name, ControllerClientStatus status) {
         if (status != ControllerClientStatus.OK) {
-            postError(name, ResponseCode.ERR_FAILURE);
+            postError(new Throwable().getStackTrace()[1].getMethodName(), ResponseCode.ERR_FAILURE);
             return false;
         }
 
         return true;
+    }
+
+    protected void postError(ResponseCode status) {
+        postError(new Throwable().getStackTrace()[1].getMethodName(), status);
     }
 
     public abstract void rename(String name);

@@ -15,15 +15,8 @@
  */
 package org.allseen.lsf.sdk;
 
-import org.allseen.lsf.TrackingID;
+import org.allseen.lsf.sdk.listener.GroupCollectionListener;
 
-/**
- * <b>WARNING: This class is not intended to be used by clients, and its interface may change
- * in subsequent releases of the SDK</b>.
- */
-public interface GroupListener extends LightingListener {
-    public void onGroupInitialized(TrackingID trackingId, Group group);
-    public void onGroupChanged(Group group);
-    public void onGroupRemoved(Group group);
-    public void onGroupError(LightingItemErrorEvent error);
+public interface GroupListener extends GroupCollectionListener<Group, LightingItemErrorEvent> {
+
 }

@@ -16,7 +16,7 @@
 package org.allseen.lsf.sdk.callback;
 
 import org.allseen.lsf.ControllerServiceManagerCallback;
-import org.allseen.lsf.ResponseCode;
+import org.allseen.lsf.sdk.ResponseCode;
 import org.allseen.lsf.sdk.manager.LightingSystemManager;
 
 /**
@@ -24,9 +24,9 @@ import org.allseen.lsf.sdk.manager.LightingSystemManager;
  * in subsequent releases of the SDK</b>.
  */
 public class HelperControllerServiceManagerCallback extends ControllerServiceManagerCallback {
-    private final LightingSystemManager manager;
+    private final LightingSystemManager<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> manager;
 
-    public HelperControllerServiceManagerCallback(LightingSystemManager manager) {
+    public HelperControllerServiceManagerCallback(LightingSystemManager<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> manager) {
         super();
 
         this.manager = manager;
@@ -37,7 +37,7 @@ public class HelperControllerServiceManagerCallback extends ControllerServiceMan
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
-                manager.getControllerManager().getLeadControllerModel().version = version;
+                manager.getControllerManager().getLeaderModel().version = version;
                 postSendControllerChanged();
             }
         });

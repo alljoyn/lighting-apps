@@ -15,6 +15,8 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import org.allseen.lsf.sdk.LightingItem;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,29 +26,13 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 public abstract class DetailedItemTableFragment extends ScrollableTableFragment implements View.OnClickListener {
-    protected void insertDetailedItemRow(Context context, String itemID, String sortableName, String displayName, String details) {
-        insertDetailedItemRow(
-            context,
-            (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-            itemID,
-            sortableName,
-            displayName,
-            details,
-            false);
+    public void addItem(LightingItem item, String details, int iconID) {
+        if (item != null) {
+            insertDetailedItemRow(getActivity(), item.getId(), item.getTag(), item.getName(), details, iconID);
+        }
     }
 
-    protected void insertDetailedItemRow(LayoutInflater inflater, View root, String itemID, String sortableName, String displayName, String details) {
-        insertDetailedItemRow(
-            root.getContext(),
-            inflater,
-            itemID,
-            sortableName,
-            displayName,
-            details,
-            false);
-    }
-
-    protected <T> void insertDetailedItemRow(Context context, String itemID, Comparable<T> tag, String name, String details, boolean isMasterScene) {
+    protected <T> void insertDetailedItemRow(Context context, String itemID, Comparable<T> tag, String name, String details, int iconID) {
         insertDetailedItemRow(
             context,
             (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE),
@@ -54,21 +40,11 @@ public abstract class DetailedItemTableFragment extends ScrollableTableFragment 
             tag,
             name,
             details,
-            isMasterScene);
+            iconID);
     }
 
-    protected <T> void insertDetailedItemRow(Context context, LayoutInflater inflater, String itemID, Comparable<T> tag, String name, String details) {
-        insertDetailedItemRow(context,
-            inflater,
-            itemID,
-            tag,
-            name,
-            details,
-            false);
-    }
-
-    protected <T> void insertDetailedItemRow(Context context, LayoutInflater inflater, String itemID, Comparable<T> tag, String name, String details, boolean isMasterScene) {
-        Log.d(SampleAppActivity.TAG, "insertDetailedItemRow(): " + itemID + ", " + ", " + name);
+    protected <T> void insertDetailedItemRow(Context context, LayoutInflater inflater, String itemID, Comparable<T> tag, String name, String details, int iconID) {
+        Log.d(SampleAppActivity.TAG, "insertDetailedItemRow(): " + itemID + ", " + ", " + name + ", " + iconID);
 
         TableRow tableRow = (TableRow)table.findViewWithTag(itemID);
 
@@ -77,8 +53,7 @@ public abstract class DetailedItemTableFragment extends ScrollableTableFragment 
 
             inflater.inflate(R.layout.view_detailed_item_row, tableRow);
 
-            ImageButton icon = (ImageButton)tableRow.findViewById(R.id.detailedItemButtonIcon);
-            icon.setBackgroundResource(isMasterScene ? R.drawable.master_scene_set_icon : R.drawable.scene_set_icon);
+            setImageButtonBackgroundResource(tableRow, R.id.detailedItemButtonIcon, iconID);
 
             TextView textHeader = (TextView)tableRow.findViewById(R.id.detailedItemRowTextHeader);
             textHeader.setText(name);
@@ -99,6 +74,7 @@ public abstract class DetailedItemTableFragment extends ScrollableTableFragment 
 
             TableSorter.insertSortedTableRow(table, tableRow, tag);
         } else {
+            Log.d(SampleAppActivity.TAG, "setText(): " + itemID + ", " + ", " + name + ", " + iconID);
             ((TextView)tableRow.findViewById(R.id.detailedItemRowTextHeader)).setText(name);
             ((TextView)tableRow.findViewById(R.id.detailedItemRowTextDetails)).setText(details);
 
@@ -123,15 +99,15 @@ public abstract class DetailedItemTableFragment extends ScrollableTableFragment 
         }
     }
 
-    protected void onClickRowText(String itemID) {
+    protected void onClickRowText(String sceneItemID) {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
 
-        if (activity.systemManager.getSceneCollectionManagerV1().hasID(itemID)) {
-            activity.applyBasicScene(itemID);
-        } else {
-            activity.applyMasterScene(itemID);
+        if (!activity.applySceneElement(sceneItemID)) {
+            if (!activity.applyBasicScene(sceneItemID)) {
+                if (!activity.applyMasterScene(sceneItemID)) {
+                    Log.e(SampleAppActivity.TAG, "Apply failed: Invalid ID " + sceneItemID);
+                }
+            }
         }
     }
-
-    public abstract void addElement(String id);
 }

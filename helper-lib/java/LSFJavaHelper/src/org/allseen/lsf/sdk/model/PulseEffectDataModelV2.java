@@ -70,6 +70,8 @@ public class PulseEffectDataModelV2 extends ColorItemDataModel {
     public PulseEffectDataModelV2(PulseEffectDataModelV2 other) {
         super(other);
 
+        setCapability(LampCapabilities.allCapabilities);
+
         LampState otherEndState = other.getEndState();
         if (otherEndState != null) {
             endState = new LampState(otherEndState);
@@ -152,6 +154,10 @@ public class PulseEffectDataModelV2 extends ColorItemDataModel {
 
     public void setStartWithCurrent(boolean startWithCurrent) {
         this.startWithCurrent = startWithCurrent;
+    }
+
+    public boolean containsPreset(String presetID) {
+        return presetID.equals(startPresetID) || presetID.equals(endPresetID);
     }
 
     @Override

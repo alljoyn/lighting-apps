@@ -16,6 +16,8 @@
 
 package org.allseen.lsf;
 
+import org.allseen.lsf.sdk.ControllerClientStatus;
+
 public class LampManager extends BaseNativeClassWrapper {
     public LampManager(ControllerClient controller, LampManagerCallback callback) {
         createNativeObject(controller, callback);

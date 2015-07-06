@@ -41,6 +41,8 @@ public class TransitionEffectDataModelV2 extends ColorItemDataModel {
     public TransitionEffectDataModelV2(String transitionEffectID, String transitionEffectName) {
         super(transitionEffectID, TAG_PREFIX_TRANSITION, transitionEffectName != null ? transitionEffectName : defaultName);
 
+        setCapability(LampCapabilities.allCapabilities);
+
         duration = defaultDuration;
         presetID = null;
 
@@ -64,6 +66,10 @@ public class TransitionEffectDataModelV2 extends ColorItemDataModel {
     public void setDuration(long transitionEffectDuration) {
         duration = transitionEffectDuration;
         durationInitialized = true;
+    }
+
+    public boolean containsPreset(String presetID) {
+        return presetID.equals(this.presetID);
     }
 
     @Override

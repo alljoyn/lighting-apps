@@ -34,5 +34,7 @@ public class PresetDataModel extends ColorItemDataModel {
 
     public PresetDataModel(String presetID, String presetName) {
         super(presetID, TAG_PREFIX_PRESET, presetName != null ? presetName : defaultName);
+
+        setCapability(LampCapabilities.allCapabilities);
     }
 }

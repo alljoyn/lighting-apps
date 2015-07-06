@@ -26,7 +26,7 @@ extern "C" {
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    getAllLampIDs
- * Signature: ()Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: ()Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getAllLampIDs
   (JNIEnv *, jobject);
@@ -34,7 +34,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getAllLampIDs
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    getLampManufacturer
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampManufacturer
   (JNIEnv *, jobject, jstring, jstring);
@@ -42,7 +42,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampManufacturer
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    getLampName
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampName
   (JNIEnv *, jobject, jstring, jstring);
@@ -50,7 +50,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampName
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    setLampName
- * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_setLampName
   (JNIEnv *, jobject, jstring, jstring, jstring);
@@ -58,7 +58,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_setLampName
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    getLampDetails
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampDetails
   (JNIEnv *, jobject, jstring);
@@ -66,7 +66,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampDetails
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    getLampParameters
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampParameters
   (JNIEnv *, jobject, jstring);
@@ -74,7 +74,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampParameters
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    getLampParametersEnergyUsageMilliwattsField
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampParametersEnergyUsageMilliwattsField
   (JNIEnv *, jobject, jstring);
@@ -82,7 +82,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampParametersEner
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    getLampParametersLumensField
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampParametersLumensField
   (JNIEnv *, jobject, jstring);
@@ -90,7 +90,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampParametersLume
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    getLampState
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampState
   (JNIEnv *, jobject, jstring);
@@ -98,7 +98,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampState
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    getLampStateOnOffField
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampStateOnOffField
   (JNIEnv *, jobject, jstring);
@@ -106,7 +106,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampStateOnOffFiel
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    getLampStateHueField
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampStateHueField
   (JNIEnv *, jobject, jstring);
@@ -114,7 +114,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampStateHueField
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    getLampStateSaturationField
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampStateSaturationField
   (JNIEnv *, jobject, jstring);
@@ -122,7 +122,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampStateSaturatio
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    getLampStateBrightnessField
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampStateBrightnessField
   (JNIEnv *, jobject, jstring);
@@ -130,7 +130,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampStateBrightnes
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    getLampStateColorTempField
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampStateColorTempField
   (JNIEnv *, jobject, jstring);
@@ -138,7 +138,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampStateColorTemp
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    resetLampState
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_resetLampState
   (JNIEnv *, jobject, jstring);
@@ -146,7 +146,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_resetLampState
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    resetLampStateOnOffField
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_resetLampStateOnOffField
   (JNIEnv *, jobject, jstring);
@@ -154,7 +154,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_resetLampStateOnOffFi
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    resetLampStateHueField
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_resetLampStateHueField
   (JNIEnv *, jobject, jstring);
@@ -162,7 +162,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_resetLampStateHueFiel
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    resetLampStateSaturationField
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_resetLampStateSaturationField
   (JNIEnv *, jobject, jstring);
@@ -170,7 +170,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_resetLampStateSaturat
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    resetLampStateBrightnessField
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_resetLampStateBrightnessField
   (JNIEnv *, jobject, jstring);
@@ -178,7 +178,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_resetLampStateBrightn
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    resetLampStateColorTempField
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_resetLampStateColorTempField
   (JNIEnv *, jobject, jstring);
@@ -186,7 +186,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_resetLampStateColorTe
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    transitionLampState
- * Signature: (Ljava/lang/String;Lorg/allseen/lsf/LampState;J)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Lorg/allseen/lsf/LampState;J)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_transitionLampState
   (JNIEnv *, jobject, jstring, jobject, jlong);
@@ -194,7 +194,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_transitionLampState
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    pulseLampWithState
- * Signature: (Ljava/lang/String;Lorg/allseen/lsf/LampState;JJJLorg/allseen/lsf/LampState;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Lorg/allseen/lsf/LampState;JJJLorg/allseen/lsf/LampState;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_pulseLampWithState
   (JNIEnv *, jobject, jstring, jobject, jlong, jlong, jlong, jobject);
@@ -202,7 +202,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_pulseLampWithState
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    pulseLampWithPreset
- * Signature: (Ljava/lang/String;Ljava/lang/String;JJJLjava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;JJJLjava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_pulseLampWithPreset
   (JNIEnv *, jobject, jstring, jstring, jlong, jlong, jlong, jstring);
@@ -210,7 +210,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_pulseLampWithPreset
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    transitionLampStateOnOffField
- * Signature: (Ljava/lang/String;Z)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Z)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_transitionLampStateOnOffField
   (JNIEnv *, jobject, jstring, jboolean);
@@ -218,7 +218,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_transitionLampStateOn
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    transitionLampStateHueField
- * Signature: (Ljava/lang/String;JJ)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;JJ)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_transitionLampStateHueField
   (JNIEnv *, jobject, jstring, jlong, jlong);
@@ -226,7 +226,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_transitionLampStateHu
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    transitionLampStateSaturationField
- * Signature: (Ljava/lang/String;JJ)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;JJ)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_transitionLampStateSaturationField
   (JNIEnv *, jobject, jstring, jlong, jlong);
@@ -234,7 +234,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_transitionLampStateSa
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    transitionLampStateBrightnessField
- * Signature: (Ljava/lang/String;JJ)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;JJ)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_transitionLampStateBrightnessField
   (JNIEnv *, jobject, jstring, jlong, jlong);
@@ -242,7 +242,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_transitionLampStateBr
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    transitionLampStateColorTempField
- * Signature: (Ljava/lang/String;JJ)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;JJ)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_transitionLampStateColorTempField
   (JNIEnv *, jobject, jstring, jlong, jlong);
@@ -250,7 +250,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_transitionLampStateCo
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    transitionLampStateToPreset
- * Signature: (Ljava/lang/String;Ljava/lang/String;J)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;J)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_transitionLampStateToPreset
   (JNIEnv *, jobject, jstring, jstring, jlong);
@@ -258,7 +258,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_transitionLampStateTo
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    getLampFaults
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampFaults
   (JNIEnv *, jobject, jstring);
@@ -266,7 +266,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampFaults
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    getLampServiceVersion
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampServiceVersion
   (JNIEnv *, jobject, jstring);
@@ -274,7 +274,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampServiceVersion
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    clearLampFault
- * Signature: (Ljava/lang/String;J)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;J)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_clearLampFault
   (JNIEnv *, jobject, jstring, jlong);
@@ -282,7 +282,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_clearLampFault
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    getLampSupportedLanguages
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampSupportedLanguages
   (JNIEnv *, jobject, jstring);
@@ -290,7 +290,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampSupportedLangu
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    getLampDataSet
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampDataSet
   (JNIEnv *, jobject, jstring, jstring);
@@ -298,7 +298,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampDataSet
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    getLampVersion
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampVersion
   (JNIEnv *, jobject, jstring);
@@ -306,7 +306,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampVersion
 /*
  * Class:     org_allseen_lsf_LampManager
  * Method:    setLampEffect
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_setLampEffect
   (JNIEnv *, jobject, jstring, jstring);

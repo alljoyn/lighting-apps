@@ -15,11 +15,11 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import java.util.Iterator;
-
-import org.allseen.lsf.sdk.manager.AllJoynManager;
-import org.allseen.lsf.sdk.model.MasterSceneDataModel;
-import org.allseen.lsf.sdk.model.SceneDataModel;
+import org.allseen.lsf.sampleapp.scenesv1.BasicSceneUtil;
+import org.allseen.lsf.sdk.LightingDirector;
+import org.allseen.lsf.sdk.MasterScene;
+import org.allseen.lsf.sdk.Scene;
+import org.allseen.lsf.sdk.SceneElement;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -44,16 +44,16 @@ public class ScenesTableFragment extends DetailedItemTableFragment {
         View root = super.onCreateView(inflater, container, savedInstanceState);
         SampleAppActivity activity = (SampleAppActivity) getActivity();
 
-        Iterator<String> masterSceneIterator = activity.systemManager.getMasterSceneCollectionManager().getIDIterator();
-
-        while (masterSceneIterator.hasNext()) {
-            addElement(masterSceneIterator.next());
+        for (MasterScene masterScene : LightingDirector.get().getMasterScenes()) {
+            addMasterScene(activity, masterScene);
         }
 
-        Iterator<String> sceneIterator = activity.systemManager.getSceneCollectionManagerV1().getIDIterator();
+        for (Scene basicScene : LightingDirector.get().getScenes()) {
+            addBasicScene(activity, basicScene);
+        }
 
-        while (sceneIterator.hasNext()) {
-            addElement(sceneIterator.next());
+        for (SceneElement sceneElement : LightingDirector.get().getSceneElements()) {
+            addSceneElement(activity, sceneElement);
         }
 
         return root;
@@ -65,28 +65,29 @@ public class ScenesTableFragment extends DetailedItemTableFragment {
         updateLoading();
     }
 
-    @Override
-    public void addElement(String id) {
-        SampleAppActivity activity = (SampleAppActivity) getActivity();
-        SceneDataModel basicSceneModel = activity.systemManager.getSceneCollectionManagerV1().getModel(id);
-        MasterSceneDataModel masterSceneModel = activity.systemManager.getMasterSceneCollectionManager().getModel(id);
+    public void addMasterScene(SampleAppActivity activity, MasterScene masterScene) {
+        addItem(masterScene, Util.createSceneNamesString(activity, masterScene), R.drawable.master_scene_set_icon);
+        updateLoading();
+    }
 
-        if (basicSceneModel != null) {
-            String details = Util.createMemberNamesString(activity, basicSceneModel, ", ");
-            insertDetailedItemRow(getActivity(), basicSceneModel.id, basicSceneModel.tag, basicSceneModel.getName(), details, false);
-            updateLoading();
-        } else if (masterSceneModel != null) {
-            String details = Util.createSceneNamesString(activity, masterSceneModel.masterScene);
-            insertDetailedItemRow(getActivity(), masterSceneModel.id, masterSceneModel.tag, masterSceneModel.getName(), details, true);
-            updateLoading();
-        }
+    public void addBasicScene(SampleAppActivity activity, Scene basicScene) {
+        addItem(basicScene, BasicSceneUtil.createMemberNamesString(activity, basicScene, ", "), R.drawable.scene_set_icon);
+        updateLoading();
+    }
+
+    public void addSceneElement(SampleAppActivity activity, SceneElement sceneElement) {
+        addItem(sceneElement, Util.createMemberNamesString(activity, sceneElement, ", ", R.string.scene_element_members_none), R.drawable.scene_element_set_icon);
+        updateLoading();
     }
 
     @Override
     public void updateLoading() {
         super.updateLoading();
 
-        if (AllJoynManager.controllerConnected && ((SampleAppActivity) getActivity()).systemManager.getSceneCollectionManagerV1().size() == 0) {
+        LightingDirector director = LightingDirector.get();
+        int sceneItemCount = director.getSceneCount() + director.getSceneElementCount();
+
+        if (((SampleAppActivity) getActivity()).isControllerConnected() && sceneItemCount == 0) {
             // connected but no scenes found; display create scenes screen, hide the scroll table
             layout.findViewById(R.id.scrollLoadingView).setVisibility(View.VISIBLE);
             layout.findViewById(R.id.scrollScrollView).setVisibility(View.GONE);

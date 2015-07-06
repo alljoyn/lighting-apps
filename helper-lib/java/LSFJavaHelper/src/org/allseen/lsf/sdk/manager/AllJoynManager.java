@@ -18,7 +18,6 @@ package org.allseen.lsf.sdk.manager;
 import org.alljoyn.bus.BusAttachment;
 import org.allseen.lsf.ControllerClient;
 import org.allseen.lsf.ControllerClientCallback;
-import org.allseen.lsf.ControllerClientStatus;
 import org.allseen.lsf.ControllerServiceManager;
 import org.allseen.lsf.ControllerServiceManagerCallback;
 import org.allseen.lsf.LampGroupManager;
@@ -36,15 +35,16 @@ import org.allseen.lsf.SceneManager;
 import org.allseen.lsf.SceneManagerCallback;
 import org.allseen.lsf.TransitionEffectManager;
 import org.allseen.lsf.TransitionEffectManagerCallback;
-import org.allseen.lsf.sdk.AllJoynListener;
+import org.allseen.lsf.sdk.ControllerClientStatus;
 import org.allseen.lsf.sdk.callback.HelperGroupManagerCallback;
+import org.allseen.lsf.sdk.listener.AllJoynListener;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
 public class AllJoynManager {
-    private static final String TAG = "TagAlljoynManager";
+    //private static final String TAG = "TagAlljoynManager";
 
     public static BusAttachment bus;
     public static ControllerClient controllerClient;
@@ -68,7 +68,7 @@ public class AllJoynManager {
         final ControllerClientCallback controllerClientCallback,
         final ControllerServiceManagerCallback controllerServiceManagerCallback,
         final LampManagerCallback lampManagerCallback,
-        final HelperGroupManagerCallback groupManagerCallback,
+        final HelperGroupManagerCallback<?> groupManagerCallback,
         final PresetManagerCallback presetManagerCallback,
         final TransitionEffectManagerCallback transitionEffectManagerCallback,
         final PulseEffectManagerCallback pulseEffectManagerCallback,
@@ -99,7 +99,7 @@ public class AllJoynManager {
         final ControllerClientCallback controllerClientCallback,
         final ControllerServiceManagerCallback controllerServiceManagerCallback,
         final LampManagerCallback lampManagerCallback,
-        final HelperGroupManagerCallback groupManagerCallback,
+        final HelperGroupManagerCallback<?> groupManagerCallback,
         final PresetManagerCallback presetManagerCallback,
         final TransitionEffectManagerCallback transitionEffectManagerCallback,
         final PulseEffectManagerCallback pulseEffectManagerCallback,

@@ -16,7 +16,7 @@
 package org.allseen.lsf.sdk.callback;
 
 import org.allseen.lsf.ControllerClientCallback;
-import org.allseen.lsf.ErrorCode;
+import org.allseen.lsf.sdk.ErrorCode;
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 import org.allseen.lsf.sdk.manager.LightingSystemManager;
 import org.allseen.lsf.sdk.model.ControllerDataModel;
@@ -25,10 +25,10 @@ import org.allseen.lsf.sdk.model.ControllerDataModel;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class HelperControllerClientCallback extends ControllerClientCallback {
-    protected LightingSystemManager manager;
+public class HelperControllerClientCallback<CONTROLLER> extends ControllerClientCallback {
+    protected LightingSystemManager<?, ?, ?, ?, ?, ?, ?, ?, ?, CONTROLLER, ?> manager;
 
-    public HelperControllerClientCallback(LightingSystemManager manager) {
+    public HelperControllerClientCallback(LightingSystemManager<?, ?, ?, ?, ?, ?, ?, ?, ?, CONTROLLER, ?> manager) {
         super();
 
         this.manager = manager;
@@ -73,13 +73,13 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
         manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
-                ControllerDataModel leadModel = manager.getControllerManager().getLeadControllerModel();
+                ControllerDataModel leaderModel = manager.getControllerManager().getLeaderModel();
 
-                if (!leadModel.id.equals(controllerID) || !leadModel.connected) {
-                    leadModel.id = controllerID;
-                    leadModel.setName(controllerName);
-                    leadModel.connected = true;
-                    leadModel.updateTime();
+                if (!leaderModel.equalsID(controllerID) || !leaderModel.connected) {
+                    leaderModel.id = controllerID;
+                    leaderModel.setName(controllerName);
+                    leaderModel.connected = true;
+                    leaderModel.updateTime();
 
                     postSendControllerChanged();
                 }
@@ -91,11 +91,13 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
         manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
-                ControllerDataModel leadModel = manager.getControllerManager().getLeadControllerModel();
+                ControllerDataModel leaderModel = manager.getControllerManager().getLeaderModel();
 
-                if (leadModel.id.equals(controllerID) && leadModel.connected) {
-                    leadModel.connected = false;
-                    leadModel.updateTime();
+                //TODO-CHK Logic here changed - is it right?
+                if (leaderModel.equalsID(controllerID) && leaderModel.connected) {
+                    leaderModel.setName(controllerName);
+                    leaderModel.connected = false;
+                    leaderModel.updateTime();
 
                     postSendControllerChanged();
                 }
@@ -107,11 +109,12 @@ public class HelperControllerClientCallback extends ControllerClientCallback {
         manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
-                ControllerDataModel leadModel = manager.getControllerManager().getLeadControllerModel();
+                ControllerDataModel leaderModel = manager.getControllerManager().getLeaderModel();
 
-                if (leadModel.id.equals(controllerID)) {
-                    leadModel.setName(controllerName);
-                    leadModel.updateTime();
+                //TODO-CHK Logic here changed - is it right?
+                if (leaderModel.equalsID(controllerID)) {
+                    leaderModel.setName(controllerName);
+                    leaderModel.updateTime();
 
                     postSendControllerChanged();
                 }

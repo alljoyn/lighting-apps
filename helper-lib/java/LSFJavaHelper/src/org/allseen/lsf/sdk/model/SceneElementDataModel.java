@@ -24,6 +24,8 @@ import org.allseen.lsf.LampGroup;
 public class SceneElementDataModel extends ColorItemDataModel {
     public static final char TAG_PREFIX_SCENE_ELEMENT = 's';
 
+    public static String defaultName = "<Loading scene element info ...>";
+
     protected static int nextID = 1;
 
     public final EffectType type;
@@ -66,7 +68,7 @@ public class SceneElementDataModel extends ColorItemDataModel {
     }
 
     public boolean containsPreset(String presetID) {
-        //TODO-FIX
+        //TODO-FIX need to do check
         return false;
     }
 }

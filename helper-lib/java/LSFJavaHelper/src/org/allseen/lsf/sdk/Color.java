@@ -19,6 +19,8 @@ import org.allseen.lsf.sdk.model.ColorStateConverter;
 
 public class Color {
 
+    public static final Color DEFAULT = new Color(LightingDirector.HUE_MIN, LightingDirector.SATURATION_MIN, LightingDirector.BRIGHTNESS_MIN, LightingDirector.COLORTEMP_MIN);
+
     public static final Color RED = new Color(0, 100, 100, 3500);
     public static final Color GREEN = new Color(120, 100, 50, 3500);
     public static final Color BLUE = new Color(240, 100, 100, 3500);
@@ -100,7 +102,4 @@ public class Color {
 
         return false;
     }
-
-
-
 }

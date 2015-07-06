@@ -15,13 +15,9 @@
  */
 package org.allseen.lsf.sdk;
 
-import org.allseen.lsf.sdk.model.ControllerDataModel;
+import org.allseen.lsf.sdk.listener.ControllerCollectionListener;
+import org.allseen.lsf.sdk.listener.LightingListener;
 
-/**
- * <b>WARNING: This class is not intended to be used by clients, and its interface may change
- * in subsequent releases of the SDK</b>.
- */
-public interface ControllerListener extends LightingListener {
-    public void onLeaderModelChange(ControllerDataModel leadModel);
-    public void onControllerErrors(ControllerErrorEvent errorEvent);
+public interface ControllerListener extends ControllerCollectionListener<Controller, LightingItemErrorEvent>, LightingListener {
+
 }

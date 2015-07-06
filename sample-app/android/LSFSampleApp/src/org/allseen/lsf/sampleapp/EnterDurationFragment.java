@@ -20,12 +20,17 @@ import java.util.Locale;
 import android.text.InputType;
 
 public class EnterDurationFragment extends EnterNumberFragment {
+    // Fragment mode: true = transition effect, false = pulse effect
+    public static boolean transition;
+    public static long duration;
+
+    protected boolean isTransitionEffectMode() {
+        return EnterDurationFragment.transition;
+    }
 
     @Override
     protected int getTitleID() {
-        SampleAppActivity activity = (SampleAppActivity)getActivity();
-
-        return activity.pendingTransitionEffectModel != null ? R.string.title_effect_transition_duration : R.string.title_effect_pulse_duration;
+        return isTransitionEffectMode() ? R.string.title_effect_transition_duration : R.string.title_effect_pulse_duration;
     }
 
     @Override
@@ -40,24 +45,15 @@ public class EnterDurationFragment extends EnterNumberFragment {
 
     @Override
     protected String getNumberString() {
-        SampleAppActivity activity = (SampleAppActivity)getActivity();
-        long duration = activity.pendingTransitionEffectModel != null ? activity.pendingTransitionEffectModel.duration : activity.pendingPulseEffectModel.duration;
-
-        return String.format(Locale.ENGLISH, getString(R.string.effect_info_duration_format), duration / 1000.0);
+        return String.format(Locale.ENGLISH, getString(R.string.effect_info_duration_format), EnterDurationFragment.duration / 1000.0);
     }
 
     @Override
     protected boolean setNumberValue(long numberValue) {
-        SampleAppActivity activity = (SampleAppActivity)getActivity();
-
-        if (activity.pendingTransitionEffectModel != null) {
-            activity.pendingTransitionEffectModel.duration = numberValue;
-        } else {
-            activity.pendingPulseEffectModel.duration = numberValue;
-        }
+        EnterDurationFragment.duration = numberValue;
 
         // Go back to the effect info display
-        activity.onBackPressed();
+        ((SampleAppActivity)getActivity()).onBackPressed();
 
         return true;
     }

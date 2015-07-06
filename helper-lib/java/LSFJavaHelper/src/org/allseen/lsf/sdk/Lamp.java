@@ -14,8 +14,9 @@
  */
 package org.allseen.lsf.sdk;
 
+import java.util.Collection;
+
 import org.allseen.lsf.LampState;
-import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 import org.allseen.lsf.sdk.model.ColorItemDataModel;
 import org.allseen.lsf.sdk.model.ColorStateConverter;
@@ -25,7 +26,12 @@ import org.allseen.lsf.sdk.model.LampDataModel;
  * A Lamp object represents a lamp in a lighting system, and can be used to send commands
  * to it.
  */
-public final class Lamp extends GroupMember {
+public class Lamp extends GroupMember {
+    public static void setDefaultName(String defaultName) {
+        if (defaultName != null) {
+            LampDataModel.defaultName = defaultName;
+        }
+    }
 
     protected LampDataModel lampModel;
 
@@ -38,7 +44,7 @@ public final class Lamp extends GroupMember {
      *
      * @param lampID The ID of the lamp
      */
-    public Lamp(String lampID) {
+    protected Lamp(String lampID) {
         this(lampID, null);
     }
 
@@ -52,7 +58,7 @@ public final class Lamp extends GroupMember {
      * @param lampID The ID of the lamp
      * @param lampName The name of the lamp
      */
-    public Lamp(String lampID, String lampName) {
+    protected Lamp(String lampID, String lampName) {
         super();
 
         lampModel = new LampDataModel(lampID, lampName);
@@ -104,13 +110,11 @@ public final class Lamp extends GroupMember {
      * @param hueDegrees The hue component of the desired color, in degrees (0-360)
      * @param saturationPercent The saturation component of the desired color, in percent (0-100)
      * @param brightnessPercent The brightness component of the desired color, in percent (0-100)
-     * @param colorTempDegrees The color temperature component of the desired color, in degrees Kelvin (2700-9000)
+     * @param colorTempDegrees The color temperature component of the desired color, in degrees Kelvin (1000-20000)
      */
     @Override
     public void setColorHsvt(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees) {
         LampState lampState = new LampState();
-
-        lampState.setOnOff(true);
 
         ColorStateConverter.convertViewToModel(hueDegrees, saturationPercent, brightnessPercent, colorTempDegrees, lampState);
 
@@ -130,6 +134,35 @@ public final class Lamp extends GroupMember {
         }
     }
 
+    public LampAbout getAbout() {
+        return new LampAbout(lampModel.getAbout());
+    }
+
+    public LampDetails getDetails() {
+        LampDetails lampDetails = lampModel.getDetails();
+
+        return lampDetails != null ? lampDetails : EmptyLampDetails.instance;
+    }
+
+    public LampParameters getParameters() {
+        LampParameters lampParams = lampModel.getParameters();
+
+        return lampParams != null ? lampParams : EmptyLampParameters.instance;
+    }
+
+    public int getColorTempMin() {
+        return getDetails().getMinTemperature();
+    }
+
+    public int getColorTempMax() {
+        return getDetails().getMaxTemperature();
+    }
+
+    @Override
+    protected void addTo(Collection<String> lampIDs, Collection<String> groupIDs) {
+        lampIDs.add(getId());
+    }
+
     @Override
     protected ColorItemDataModel getColorDataModel() {
         return getLampDataModel();
@@ -139,7 +172,7 @@ public final class Lamp extends GroupMember {
      * <b>WARNING: This method is not intended to be used by clients, and may change or be
      * removed in subsequent releases of the SDK.</b>
      */
-    public LampDataModel getLampDataModel() {
+    protected LampDataModel getLampDataModel() {
         return lampModel;
     }
 

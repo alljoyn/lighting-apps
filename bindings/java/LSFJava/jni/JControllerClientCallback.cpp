@@ -74,7 +74,7 @@ void JControllerClientCallback::ConnectToControllerServiceFailedCB(const LSFStri
 
 void JControllerClientCallback::ControllerClientErrorCB(const ErrorCodeList& errorCodeList)
 {
-    //TODO-FIX XJavaDelegator::Call_Void_EnumList(jdelegate, __func__, JEnumArray::NewEnumArray(*JEnum::jErrorCodeEnum, errorCodeList), "org/allseen/lsf/ErrorCode");
+    XJavaDelegator::Call_Void_EnumList(jdelegate, __func__, JEnumArray::NewEnumArray(*JEnum::jErrorCodeEnum, errorCodeList), "org/allseen/lsf/sdk/ErrorCode");
 }
 
 } /* namespace lsf */

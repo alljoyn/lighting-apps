@@ -64,19 +64,17 @@ public class ColorItemDataModel extends LightingItemDataModel {
         return that != null ? stateEquals(that.state) : false;
     }
 
-    public boolean stateEquals(LampState thatState) {
-        boolean result = false;
+    public boolean stateEquals(LampState that) {
+        return that != null ? stateEquals(that.getOnOff(), that.getHue(), that.getSaturation(), that.getBrightness(), that.getColorTemp()) : false;
+    }
 
-        if (thatState != null) {
-            result =
-                this.state.getHue() == thatState.getHue() &&
-                this.state.getSaturation() == thatState.getSaturation() &&
-                this.state.getBrightness() == thatState.getBrightness() &&
-                this.state.getColorTemp() == thatState.getColorTemp() &&
-                this.state.getOnOff() == thatState.getOnOff();
-        }
-
-        return result;
+    public boolean stateEquals(boolean onOff, long hue, long saturation, long brightness, long colorTemp) {
+        return
+            this.state.getHue()         == hue          &&
+            this.state.getSaturation()  == saturation   &&
+            this.state.getBrightness()  == brightness   &&
+            this.state.getColorTemp()   == colorTemp    &&
+            this.state.getOnOff()       == onOff;
     }
 
     public void setCapability(LampCapabilities capability) {

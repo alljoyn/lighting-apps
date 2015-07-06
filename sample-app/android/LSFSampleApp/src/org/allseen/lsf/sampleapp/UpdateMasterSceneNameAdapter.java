@@ -15,21 +15,13 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import java.util.Iterator;
-
+import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.MasterScene;
-import org.allseen.lsf.sdk.manager.AllJoynManager;
-import org.allseen.lsf.sdk.model.MasterSceneDataModel;
 
 public class UpdateMasterSceneNameAdapter extends UpdateItemNameAdapter {
 
-    public UpdateMasterSceneNameAdapter(MasterSceneDataModel masterSceneModel, SampleAppActivity activity) {
-        super(masterSceneModel, activity);
-    }
-
-    @Override
-    protected void doUpdateName() {
-        AllJoynManager.masterSceneManager.setMasterSceneName(itemModel.id, itemModel.getName(), SampleAppActivity.LANGUAGE);
+    public UpdateMasterSceneNameAdapter(MasterScene masterScene, SampleAppActivity activity) {
+        super(masterScene, activity);
     }
 
     @Override
@@ -38,14 +30,8 @@ public class UpdateMasterSceneNameAdapter extends UpdateItemNameAdapter {
     }
 
     @Override
-    protected boolean duplicateName(String name) {
-        Iterator<MasterScene> i = activity.systemManager.getMasterSceneCollectionManager().getMasterSceneIterator();
-
-        while (i.hasNext()) {
-            if (i.next().getMasterSceneDataModel().getName().equals(name) && !name.equals(itemModel.getName())) {
-                return true;
-            }
-        }
+    protected boolean duplicateName(String masterSceneName) {
+        Util.isDuplicateName(LightingDirector.get().getMasterScenes(), masterSceneName);
 
         return false;
     }

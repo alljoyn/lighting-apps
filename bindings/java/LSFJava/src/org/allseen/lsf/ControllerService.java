@@ -15,6 +15,11 @@
  */
 package org.allseen.lsf;
 
+import org.allseen.lsf.sdk.RankAvailability;
+import org.allseen.lsf.sdk.RankMobility;
+import org.allseen.lsf.sdk.RankNodeType;
+import org.allseen.lsf.sdk.RankPower;
+
 public abstract class ControllerService extends DefaultNativeClassWrapper {
     private static final NativeLibraryLoader LIBS = NativeLibraryLoader.LIBS;
 

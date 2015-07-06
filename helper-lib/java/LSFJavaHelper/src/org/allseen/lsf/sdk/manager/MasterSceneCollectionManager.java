@@ -18,10 +18,9 @@ package org.allseen.lsf.sdk.manager;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.sdk.LightingItemErrorEvent;
-import org.allseen.lsf.sdk.MasterScene;
-import org.allseen.lsf.sdk.MasterSceneListener;
+import org.allseen.lsf.sdk.TrackingID;
+import org.allseen.lsf.sdk.factory.MasterSceneFactory;
+import org.allseen.lsf.sdk.listener.MasterSceneCollectionListener;
 import org.allseen.lsf.sdk.model.LightingItemFilter;
 import org.allseen.lsf.sdk.model.MasterSceneDataModel;
 
@@ -29,69 +28,80 @@ import org.allseen.lsf.sdk.model.MasterSceneDataModel;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class MasterSceneCollectionManager extends LightingItemCollectionManager<MasterScene, MasterSceneListener, MasterSceneDataModel> {
+public class MasterSceneCollectionManager<MASTERSCENE, ERROR> extends LightingItemCollectionManager<MASTERSCENE, MasterSceneCollectionListener<? super MASTERSCENE, ? super ERROR>, MasterSceneDataModel, ERROR> {
 
-    public MasterSceneCollectionManager(LightingSystemManager director) {
-        super(director);
+    protected final MasterSceneFactory<MASTERSCENE, ERROR> factory;
+
+    public MasterSceneCollectionManager(LightingSystemManager<?, ?, ?, ?, ?, ?, ?, ?, MASTERSCENE, ?, ?> manager, MasterSceneFactory<MASTERSCENE, ERROR> factory) {
+        super(manager, factory);
+
+        this.factory = factory;
     }
 
-    public MasterScene addMasterScene(String masterSceneID) {
-        return addMasterScene(masterSceneID, new MasterScene(masterSceneID));
+    public MASTERSCENE addMasterScene(String masterSceneID) {
+        return addMasterScene(masterSceneID, factory.createMasterScene(masterSceneID));
     }
 
-    public MasterScene addMasterScene(String masterSceneID, MasterScene scene) {
+    public MASTERSCENE addMasterScene(String masterSceneID, MASTERSCENE scene) {
         return itemAdapters.put(masterSceneID, scene);
     }
 
-    public MasterScene getMasterScene(String masterSceneID) {
+    public MASTERSCENE getMasterScene(String masterSceneID) {
         return getAdapter(masterSceneID);
     }
 
-    public MasterScene[] getMasterScenes() {
-        return getAdapters().toArray(new MasterScene[size()]);
+    public MASTERSCENE[] getMasterScenes() {
+        return getAdapters().toArray(factory.createMasterScenes(size()));
     }
 
-    public MasterScene[] getMasterScenes(LightingItemFilter<MasterScene> filter) {
-        Collection<MasterScene> filteredMasterScenes = getAdapters(filter);
-        return filteredMasterScenes.toArray(new MasterScene[filteredMasterScenes.size()]);
+    public MASTERSCENE[] getMasterScenes(LightingItemFilter<MASTERSCENE> filter) {
+        Collection<MASTERSCENE> filteredMasterScenes = getMasterScenesCollection(filter);
+        return filteredMasterScenes.toArray(factory.createMasterScenes(filteredMasterScenes.size()));
     }
 
-    public Iterator<MasterScene> getMasterSceneIterator() {
+    public Collection<MASTERSCENE> getMasterScenesCollection(LightingItemFilter<MASTERSCENE> filter) {
+        return getAdapters(filter);
+    }
+
+    public Iterator<MASTERSCENE> getMasterSceneIterator() {
         return getAdapters().iterator();
     }
 
-    public Collection<MasterScene> removeMasterScenes() {
+    public Collection<MASTERSCENE> removeMasterScenes() {
         return removeAllAdapters();
     }
 
-    public MasterScene removeMasterScene(String masterSceneID) {
+    public MASTERSCENE removeMasterScene(String masterSceneID) {
         return removeAdapter(masterSceneID);
     }
 
     @Override
-    protected void sendInitializedEvent(MasterSceneListener listener, MasterScene masterScene, TrackingID trackingID) {
+    protected void sendInitializedEvent(MasterSceneCollectionListener<? super MASTERSCENE, ? super ERROR> listener, MASTERSCENE masterScene, TrackingID trackingID) {
         listener.onMasterSceneInitialized(trackingID, masterScene);
     }
 
     @Override
-    protected void sendChangedEvent(MasterSceneListener listener, MasterScene masterScene) {
+    protected void sendChangedEvent(MasterSceneCollectionListener<? super MASTERSCENE, ? super ERROR> listener, MASTERSCENE masterScene) {
         listener.onMasterSceneChanged(masterScene);
     }
 
     @Override
-    protected void sendRemovedEvent(MasterSceneListener listener, MasterScene masterScene) {
+    protected void sendRemovedEvent(MasterSceneCollectionListener<? super MASTERSCENE, ? super ERROR> listener, MASTERSCENE masterScene) {
         listener.onMasterSceneRemoved(masterScene);
     }
 
     @Override
-    protected void sendErrorEvent(MasterSceneListener listener, LightingItemErrorEvent errorEvent) {
-        listener.onMasterSceneError(errorEvent);
+    protected void sendErrorEvent(MasterSceneCollectionListener<? super MASTERSCENE, ? super ERROR> listener, ERROR error) {
+        listener.onMasterSceneError(error);
     }
 
     @Override
     public MasterSceneDataModel getModel(String masterSceneID) {
-        MasterScene scene = getAdapter(masterSceneID);
+        return getModel(getAdapter(masterSceneID));
+    }
 
-        return scene != null ? scene.getMasterSceneDataModel() : null;
+    @Override
+    public MasterSceneDataModel getModel(MASTERSCENE masterScene) {
+        return masterScene != null ? factory.findMasterSceneDataModel(masterScene) : null;
     }
 }

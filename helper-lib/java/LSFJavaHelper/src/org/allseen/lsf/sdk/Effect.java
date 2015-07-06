@@ -15,6 +15,15 @@
  */
 package org.allseen.lsf.sdk;
 
-public interface Effect extends LightingItemInterface {
+import org.allseen.lsf.PresetPulseEffect;
+import org.allseen.lsf.sdk.model.EffectType;
+
+public interface Effect extends LightingItemInterface, DeletableItem {
+    public static final String EFFECT_TYPE_PRESET = EffectType.None.toString();
+    public static final String EFFECT_TYPE_TRANSITION = EffectType.Transition.toString();
+    public static final String EFFECT_TYPE_PULSE = EffectType.Pulse.toString();
+
+    public static final String PRESET_ID_USE_CURRENT_STATE = PresetPulseEffect.PRESET_ID_CURRENT_STATE;
+
     public void applyTo(GroupMember member);
 }

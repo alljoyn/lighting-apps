@@ -15,21 +15,13 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import java.util.Iterator;
-
 import org.allseen.lsf.sdk.Group;
-import org.allseen.lsf.sdk.manager.AllJoynManager;
-import org.allseen.lsf.sdk.model.GroupDataModel;
+import org.allseen.lsf.sdk.LightingDirector;
 
 public class UpdateGroupNameAdapter extends UpdateItemNameAdapter {
 
-    public UpdateGroupNameAdapter(GroupDataModel groupModel, SampleAppActivity activity) {
-        super(groupModel, activity);
-    }
-
-    @Override
-    protected void doUpdateName() {
-        AllJoynManager.groupManager.setLampGroupName(itemModel.id, itemModel.getName(), SampleAppActivity.LANGUAGE);
+    public UpdateGroupNameAdapter(Group group, SampleAppActivity activity) {
+        super(group, activity);
     }
 
     @Override
@@ -38,14 +30,9 @@ public class UpdateGroupNameAdapter extends UpdateItemNameAdapter {
     }
 
     @Override
-    protected boolean duplicateName(String name) {
-        Iterator<Group> i = activity.systemManager.getGroupCollectionManager().getGroupIterator();
+    protected boolean duplicateName(String groupName) {
+        Util.isDuplicateName(LightingDirector.get().getGroups(), groupName);
 
-        while(i.hasNext()) {
-            if (i.next().getName().equals(name) && !name.equals(itemModel.getName())) {
-                return true;
-            }
-        }
         return false;
     }
 }

@@ -18,21 +18,25 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 import org.allseen.lsf.sdk.model.LightingItemDataModel;
 import org.allseen.lsf.sdk.model.LightingItemUtil;
 import org.allseen.lsf.sdk.model.SceneDataModelV2;
 
-public final class SceneV2 extends Scene {
+public class SceneV2 extends Scene {
+    public static void setDefaultName(String defaultName) {
+        if (defaultName != null) {
+            SceneDataModelV2.defaultName = defaultName;
+        }
+    }
 
     protected SceneDataModelV2 sceneModel;
 
-    public SceneV2(String sceneID) {
+    protected SceneV2(String sceneID) {
         this(new SceneDataModelV2(sceneID));
     }
 
-    public SceneV2(SceneDataModelV2 sceneModel) {
+    protected SceneV2(SceneDataModelV2 sceneModel) {
         super();
 
         this.sceneModel = sceneModel;
@@ -86,11 +90,34 @@ public final class SceneV2 extends Scene {
         return getSceneDataModel();
     }
 
+    public String[] getSceneElementIDs() {
+        return sceneModel.getSceneWithSceneElements().getSceneElements();
+    }
+
+    public SceneElement[] getSceneElements() {
+        return LightingDirector.get().getSceneElements(Arrays.asList(getSceneElementIDs()));
+    }
+
+    @Override
+    public boolean hasComponent(LightingItem item) {
+        String errorContext = "SceneV2.hasComponent() error";
+        return postInvalidArgIfNull(errorContext, item) ? hasSceneElement(item.getId()) : false;
+    }
+
+    public boolean hasSceneElement(SceneElement sceneElement) {
+        String errorContext = "SceneV2.hasSceneElement() error";
+        return postInvalidArgIfNull(errorContext, sceneElement) ? hasSceneElement(sceneElement.getId()) : false;
+    }
+
+    protected boolean hasSceneElement(String sceneElementID) {
+        return sceneModel.containsSceneElement(sceneElementID);
+    }
+
     /**
      * <b>WARNING: This method is not intended to be used by clients, and may change or be
      * removed in subsequent releases of the SDK.</b>
      */
-    public SceneDataModelV2 getSceneDataModel() {
+    protected SceneDataModelV2 getSceneDataModel() {
         return sceneModel;
     }
 

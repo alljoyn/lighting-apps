@@ -28,7 +28,7 @@ extern "C" {
 /*
  * Class:     org_allseen_lsf_TransitionEffectManager
  * Method:    getAllTransitionEffectIDs
- * Signature: ()Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: ()Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_getAllTransitionEffectIDs
   (JNIEnv *, jobject);
@@ -36,7 +36,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_getAllTra
 /*
  * Class:     org_allseen_lsf_TransitionEffectManager
  * Method:    getTransitionEffect
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_getTransitionEffect
   (JNIEnv *, jobject, jstring);
@@ -44,7 +44,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_getTransi
 /*
  * Class:     org_allseen_lsf_TransitionEffectManager
  * Method:    applyTransitionEffectOnLamps
- * Signature: (Ljava/lang/String;[Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;[Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_applyTransitionEffectOnLamps
   (JNIEnv *, jobject, jstring, jobjectArray);
@@ -52,7 +52,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_applyTran
 /*
  * Class:     org_allseen_lsf_TransitionEffectManager
  * Method:    applyTransitionEffectOnLampGroups
- * Signature: (Ljava/lang/String;[Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;[Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_applyTransitionEffectOnLampGroups
   (JNIEnv *, jobject, jstring, jobjectArray);
@@ -60,7 +60,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_applyTran
 /*
  * Class:     org_allseen_lsf_TransitionEffectManager
  * Method:    getTransitionEffectName
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_getTransitionEffectName
   (JNIEnv *, jobject, jstring, jstring);
@@ -68,7 +68,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_getTransi
 /*
  * Class:     org_allseen_lsf_TransitionEffectManager
  * Method:    setTransitionEffectName
- * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_setTransitionEffectName
   (JNIEnv *, jobject, jstring, jstring, jstring);
@@ -76,7 +76,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_setTransi
 /*
  * Class:     org_allseen_lsf_TransitionEffectManager
  * Method:    createTransitionEffect
- * Signature: (Lorg/allseen/lsf/TrackingID;Lorg/allseen/lsf/TransitionEffect;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Lorg/allseen/lsf/sdk/TrackingID;Lorg/allseen/lsf/TransitionEffect;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_createTransitionEffect
   (JNIEnv *, jobject, jobject, jobject, jstring, jstring);
@@ -84,7 +84,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_createTra
 /*
  * Class:     org_allseen_lsf_TransitionEffectManager
  * Method:    updateTransitionEffect
- * Signature: (Ljava/lang/String;Lorg/allseen/lsf/TransitionEffect;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Lorg/allseen/lsf/TransitionEffect;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_updateTransitionEffect
   (JNIEnv *, jobject, jstring, jobject);
@@ -92,7 +92,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_updateTra
 /*
  * Class:     org_allseen_lsf_TransitionEffectManager
  * Method:    deleteTransitionEffect
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_deleteTransitionEffect
   (JNIEnv *, jobject, jstring);
@@ -100,7 +100,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_deleteTra
 /*
  * Class:     org_allseen_lsf_TransitionEffectManager
  * Method:    getTransitionEffectVersion
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_getTransitionEffectVersion
   (JNIEnv *, jobject, jstring);
@@ -108,7 +108,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_getTransi
 /*
  * Class:     org_allseen_lsf_TransitionEffectManager
  * Method:    getTransitionEffectDataSet
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_getTransitionEffectDataSet
   (JNIEnv *, jobject, jstring, jstring);

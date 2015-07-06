@@ -15,9 +15,11 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.LampState;
-import org.allseen.lsf.sdk.model.ColorItemDataModel;
-import org.allseen.lsf.sdk.model.LampCapabilities;
+import org.allseen.lsf.sdk.Color;
+import org.allseen.lsf.sdk.ColorItem;
+import org.allseen.lsf.sdk.LampCapabilities;
+import org.allseen.lsf.sdk.LampStateUniformity;
+import org.allseen.lsf.sdk.MyLampState;
 
 import android.graphics.PorterDuff.Mode;
 import android.os.Bundle;
@@ -100,42 +102,48 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         }
     }
 
-    public void updateInfoFields(ColorItemDataModel itemModel) {
-        if (itemModel.id.equals(key)) {
-            if (itemModel.uniformity.power) {
-                setImageButtonBackgroundResource(statusView, R.id.statusButtonPower, itemModel.state.getOnOff() ? R.drawable.power_button_on : R.drawable.power_button_off);
-            } else {
-                setImageButtonBackgroundResource(statusView, R.id.statusButtonPower, R.drawable.power_button_mix);
-            }
-
-            setTextViewValue(statusView, R.id.statusTextName, itemModel.getName(), 0);
-
-            stateAdapter.setBrightness(itemModel.state.getBrightness(), itemModel.uniformity.brightness);
-            stateAdapter.setHue(itemModel.state.getHue(), itemModel.uniformity.hue);
-            stateAdapter.setSaturation(itemModel.state.getSaturation(), itemModel.uniformity.saturation);
-            stateAdapter.setColorTemp(itemModel.state.getColorTemp(), itemModel.uniformity.colorTemp);
-
-            // presets button
-            updatePresetFields(itemModel);
-
-            setColorIndicator(stateAdapter.stateView, itemModel.state, itemModel.getCapability(), getColorTempDefault());
+    public void updateInfoFields(ColorItem colorItem) {
+        if (colorItem.getId().equals(key)) {
+            updateInfoFields(colorItem.getName(), colorItem.getState(), colorItem.getCapability(), colorItem.getUniformity());
         }
     }
 
+    protected void updateInfoFields(String name, MyLampState state, LampCapabilities capability, LampStateUniformity uniformity) {
+        Color color = state.getColor();
+
+        if (uniformity.power) {
+            setImageButtonBackgroundResource(statusView, R.id.statusButtonPower, state.isOn() ? R.drawable.power_button_on : R.drawable.power_button_off);
+        } else {
+            setImageButtonBackgroundResource(statusView, R.id.statusButtonPower, R.drawable.power_button_mix);
+        }
+
+        setTextViewValue(statusView, R.id.statusTextName, name, 0);
+
+        stateAdapter.setBrightness(color.getBrightness(), uniformity.brightness);
+        stateAdapter.setHue(color.getHue(), uniformity.hue);
+        stateAdapter.setSaturation(color.getSaturation(), uniformity.saturation);
+        stateAdapter.setColorTemp(color.getColorTemperature(), uniformity.colorTemp);
+
+        // presets button
+        updatePresetFields(state);
+
+        setColorIndicator(stateAdapter.stateView, state, capability, getColorTempDefault());
+    }
+
     public void updatePresetFields() {
-        updatePresetFields(getColorItemDataModel(key));
+        updatePresetFields(getItemLampState(key));
     }
 
-    public void updatePresetFields(ColorItemDataModel itemModel) {
-        updatePresetFields(itemModel != null ? itemModel.state : null, stateAdapter);
+    public void updatePresetFields(MyLampState itemState) {
+        updatePresetFields(itemState, stateAdapter);
     }
 
-    public void updatePresetFields(LampState itemState, LampStateViewAdapter itemAdapter) {
+    public void updatePresetFields(MyLampState itemState, LampStateViewAdapter itemAdapter) {
         itemAdapter.setPreset(Util.createPresetNamesString((SampleAppActivity)getActivity(), itemState));
     }
 
-    public void setColorIndicator(View parentStateView, LampState lampState, LampCapabilities capability, long modelColorTempDefault) {
-        int color = lampState != null ? ViewColor.calculate(lampState, capability, modelColorTempDefault) : defaultIndicatorColor;
+    public void setColorIndicator(View parentStateView, MyLampState lampState, LampCapabilities capability, int viewColorTempDefault) {
+        int color = lampState != null ? ViewColor.calculate(lampState, capability, viewColorTempDefault) : defaultIndicatorColor;
 
         parentStateView.findViewById(R.id.stateRowColorIndicator).getBackground().setColorFilter(color, Mode.MULTIPLY);
     }
@@ -143,7 +151,7 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
     protected abstract int getLayoutID();
     protected abstract int getColorTempMin();
     protected abstract int getColorTempSpan();
-    protected abstract long getColorTempDefault();
+    protected abstract int getColorTempDefault();
     protected abstract void onHeaderClick();
-    protected abstract ColorItemDataModel getColorItemDataModel(String itemID);
+    protected abstract MyLampState getItemLampState(String itemID);
 }

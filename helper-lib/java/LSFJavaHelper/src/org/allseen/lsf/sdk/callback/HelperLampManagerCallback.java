@@ -19,13 +19,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.alljoyn.bus.Variant;
-import org.allseen.lsf.LampDetails;
 import org.allseen.lsf.LampManagerCallback;
-import org.allseen.lsf.LampParameters;
 import org.allseen.lsf.LampState;
-import org.allseen.lsf.ResponseCode;
-import org.allseen.lsf.sdk.Lamp;
+import org.allseen.lsf.sdk.LampDetails;
+import org.allseen.lsf.sdk.LampParameters;
+import org.allseen.lsf.sdk.ResponseCode;
 import org.allseen.lsf.sdk.manager.AllJoynManager;
+import org.allseen.lsf.sdk.manager.LampCollectionManager;
 import org.allseen.lsf.sdk.manager.LightingSystemManager;
 import org.allseen.lsf.sdk.model.LampAbout;
 import org.allseen.lsf.sdk.model.LampDataModel;
@@ -34,21 +34,18 @@ import org.allseen.lsf.sdk.model.LampDataModel;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class HelperLampManagerCallback extends LampManagerCallback {
+public class HelperLampManagerCallback<LAMP> extends LampManagerCallback {
     private static final int RETRY_DELAY = 1000;
+    private static final int ABOUT_DELAY = 1000;
 
-    protected LightingSystemManager manager;
+    protected LightingSystemManager<LAMP, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> manager;
     protected Map<String, LampAbout> savedLampAbouts;
 
-    public HelperLampManagerCallback(LightingSystemManager manager) {
+    public HelperLampManagerCallback(LightingSystemManager<LAMP, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> manager) {
         super();
 
         this.manager = manager;
         this.savedLampAbouts = new HashMap<String, LampAbout>();
-    }
-
-    public void clear() {
-        savedLampAbouts.clear();
     }
 
     @Override
@@ -238,9 +235,15 @@ public class HelperLampManagerCallback extends LampManagerCallback {
                 LampDataModel lampModel = manager.getLampCollectionManager().getModel(lampID);
 
                 if (lampModel != null) {
-                    lampModel.getAbout().setAnnouncedData(peer, port, announcedData);
+                    //Log.d("AboutManager", "updating lamp model: " + lampID);
+                    LampAbout lampAbout = lampModel.getAbout();
+
+                    lampAbout.setAnnouncedData(peer, port, announcedData);
+
                     postGetLampName(lampID, 0);
+                    postGetLampQueriedAboutData(lampID, lampAbout);
                 } else {
+                    //Log.d("AboutManager", "caching about data: " + lampID);
                     LampAbout lampAbout = new LampAbout();
                     lampAbout.setAnnouncedData(peer, port, announcedData);
 
@@ -270,13 +273,13 @@ public class HelperLampManagerCallback extends LampManagerCallback {
         manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Lamp lamp = manager.getLampCollectionManager().getLamp(lampID);
+                LampCollectionManager<LAMP, ?> lampManager = manager.getLampCollectionManager();
 
-                if (lamp == null) {
-                    lamp = manager.getLampCollectionManager().addLamp(lampID);
+                if (!lampManager.hasID(lampID)) {
+                    lampManager.addLamp(lampID);
                 }
 
-                LampDataModel lampModel = lamp.getLampDataModel();
+                LampDataModel lampModel = lampManager.getModel(lampID);
 
                 if (LampDataModel.defaultName.equals(lampModel.getName())) {
                     postGetLampName(lampID, 0);
@@ -286,9 +289,12 @@ public class HelperLampManagerCallback extends LampManagerCallback {
                 }
 
                 LampAbout savedLampAbout = savedLampAbouts.remove(lampID);
+                //Log.d("AboutManager", "retrieving cached about data: " + lampID);
 
                 if (savedLampAbout != null) {
+                    //Log.d("AboutManager", "updating about data: " + lampID);
                     lampModel.setAbout(savedLampAbout);
+                    postGetLampQueriedAboutData(lampID, savedLampAbout);
                 }
 
                 // update the timestamp
@@ -552,6 +558,16 @@ public class HelperLampManagerCallback extends LampManagerCallback {
                 }
             }
         }, delay);
+    }
+
+    protected void postGetLampQueriedAboutData(final String lampID, final LampAbout lampAbout) {
+        manager.getQueue().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Log.d("AboutManager", "querying about data: " + lampID);
+                AllJoynManager.aboutManager.getLampQueriedAboutData(lampID, lampAbout.aboutPeer, lampAbout.aboutPort);
+            }
+        }, ABOUT_DELAY);
     }
 
     protected void postSendLampChanged(final String lampID) {

@@ -16,10 +16,10 @@
 package org.allseen.lsf.sdk.model;
 
 import org.allseen.lsf.AboutData;
-import org.allseen.lsf.RankAvailability;
-import org.allseen.lsf.RankMobility;
-import org.allseen.lsf.RankNodeType;
-import org.allseen.lsf.RankPower;
+import org.allseen.lsf.sdk.RankAvailability;
+import org.allseen.lsf.sdk.RankMobility;
+import org.allseen.lsf.sdk.RankNodeType;
+import org.allseen.lsf.sdk.RankPower;
 
 /**
  * Interface used to define any application and device specific values used by

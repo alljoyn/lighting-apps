@@ -20,31 +20,18 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.allseen.lsf.LampGroup;
-import org.allseen.lsf.sdk.model.GroupDataModel;
-import org.allseen.lsf.sdk.model.LampDataModel;
+import org.allseen.lsf.sdk.LightingItemInterface;
 
 public class MemberNamesString {
-    // Creates a details string, containing a list of all lamps and subgroups in a lamp group
-    public static String format(SampleAppActivity activity, LampGroup members, MemberNamesOptions options, int maxCount, int noMembersID) {
-        return format(activity, members, options, maxCount, noMembersID > 0 ? activity.getString(noMembersID) : "");
-    }
 
-    public static String format(SampleAppActivity activity, LampGroup members, MemberNamesOptions options, int maxCount, String noMembers) {
-        List<String> groupNames = new ArrayList<String>();
-        List<String> lampNames = new ArrayList<String>();
+    public static String format(SampleAppActivity activity, LightingItemInterface[] items, MemberNamesOptions options, int maxCount, String noMembers) {
+        List<String> itemNames = new ArrayList<String>();
 
-        for (String groupID : members.getLampGroups()) {
-            GroupDataModel groupModel = activity.systemManager.getGroupCollectionManager().getModel(groupID);
-            groupNames.add(groupModel != null ? groupModel.getName() : String.format(activity.getString(R.string.member_group_not_found), groupID));
+        for (LightingItemInterface item : items) {
+            itemNames.add(item.getName());
         }
 
-        for (String lampID : members.getLamps()) {
-            LampDataModel lampModel = activity.systemManager.getLampCollectionManager().getModel(lampID);
-            lampNames.add(lampModel != null ? lampModel.getName() : String.format(activity.getString(R.string.member_lamp_not_found), lampID));
-        }
-
-        return format(activity, groupNames, lampNames, options, maxCount, noMembers);
+        return format(activity, itemNames, options, maxCount, noMembers);
     }
 
     public static String format(SampleAppActivity activity, List<String> names, MemberNamesOptions options, int maxCount, String noMembers) {

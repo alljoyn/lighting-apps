@@ -57,11 +57,16 @@ public class PageFrameChildFragment extends Fragment {
         inputManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    // Note that this sets the background image. The foreground image
+    // may also have been set, either in XML or in code, which could
+    // make this call appear to have no effect.
     protected void setImageButtonBackgroundResource(View parent, int viewID, int imageID) {
         ImageButton imageButton = (ImageButton)parent.findViewById(viewID);
 
         if (imageButton != null) {
             imageButton.setBackgroundResource(imageID);
+        } else {
+            Log.e(SampleAppActivity.TAG, "Missing image button: " + viewID);
         }
     }
 

@@ -15,8 +15,7 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.sdk.model.LightingItemDataModel;
-
+import org.allseen.lsf.sdk.LightingItem;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -24,17 +23,17 @@ import android.util.Log;
 import android.widget.EditText;
 
 public abstract class UpdateItemNameAdapter implements ItemNameAdapter {
-    protected LightingItemDataModel itemModel;
+    protected LightingItem item;
     protected SampleAppActivity activity;
 
-    public UpdateItemNameAdapter(LightingItemDataModel itemModel, SampleAppActivity activity) {
-        this.itemModel = itemModel;
+    public UpdateItemNameAdapter(LightingItem item, SampleAppActivity activity) {
+        this.item = item;
         this.activity = activity;
     }
 
     @Override
     public String getCurrentName() {
-        return itemModel != null ? itemModel.getName() : "";
+        return item != null ? item.getName() : "";
     }
 
     @Override
@@ -42,7 +41,7 @@ public abstract class UpdateItemNameAdapter implements ItemNameAdapter {
         EditText nameText = (EditText)(((AlertDialog)dialog).findViewById(R.id.itemNameText));
         final String itemName = nameText.getText().toString();
 
-        Log.d(SampleAppActivity.TAG, "Item ID: " + itemModel.id + " New name: " + itemName);
+        Log.d(SampleAppActivity.TAG, "Item ID: " + item.getId() + " New name: " + itemName);
 
         if (itemName != null && !itemName.isEmpty()) {
 
@@ -56,8 +55,7 @@ public abstract class UpdateItemNameAdapter implements ItemNameAdapter {
                 builder.setPositiveButton(R.string.dialog_ok, new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        itemModel.setName(itemName);
-                        doUpdateName();
+                        doUpdateName(itemName);
                     }
                 });
                 builder.setNegativeButton(R.string.dialog_cancel, new OnClickListener() {
@@ -71,19 +69,15 @@ public abstract class UpdateItemNameAdapter implements ItemNameAdapter {
 
             } else {
                 // we can go ahead and use this name
-
-                itemModel.setName(itemName);
-                doUpdateName();
+                doUpdateName(itemName);
             }
-
-
-
-
-
         }
     }
 
-    protected abstract void doUpdateName();
+    protected void doUpdateName(String itemName) {
+        item.rename(itemName);
+    }
+
     protected abstract String getDuplicateNameMessage();
     protected abstract boolean duplicateName(String itemName);
 }

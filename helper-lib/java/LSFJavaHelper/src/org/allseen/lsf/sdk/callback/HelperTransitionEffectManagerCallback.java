@@ -18,10 +18,10 @@ package org.allseen.lsf.sdk.callback;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.allseen.lsf.ResponseCode;
-import org.allseen.lsf.TrackingID;
 import org.allseen.lsf.TransitionEffectV2;
 import org.allseen.lsf.TransitionEffectManagerCallback;
+import org.allseen.lsf.sdk.ResponseCode;
+import org.allseen.lsf.sdk.TrackingID;
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 import org.allseen.lsf.sdk.manager.LightingSystemManager;
 import org.allseen.lsf.sdk.model.TransitionEffectDataModelV2;
@@ -30,11 +30,11 @@ import org.allseen.lsf.sdk.model.TransitionEffectDataModelV2;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class HelperTransitionEffectManagerCallback extends TransitionEffectManagerCallback {
-    protected LightingSystemManager manager;
+public class HelperTransitionEffectManagerCallback<TRANSITIONEFFECT> extends TransitionEffectManagerCallback {
+    protected LightingSystemManager<?, ?, ?, TRANSITIONEFFECT, ?, ?, ?, ?, ?, ?, ?> manager;
     protected Map<String, TrackingID> creationTrackingIDs;
 
-    public HelperTransitionEffectManagerCallback(LightingSystemManager manager) {
+    public HelperTransitionEffectManagerCallback(LightingSystemManager<?, ?, ?, TRANSITIONEFFECT, ?, ?, ?, ?, ?, ?, ?> manager) {
         super();
 
         this.manager = manager;

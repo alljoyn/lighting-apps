@@ -16,6 +16,9 @@
 
 package org.allseen.lsf;
 
+import org.allseen.lsf.sdk.ControllerClientStatus;
+import org.allseen.lsf.sdk.TrackingID;
+
 public class PulseEffectManager extends BaseNativeClassWrapper {
     public static final int MAX_PULSE_EFFECTS = 100;
 

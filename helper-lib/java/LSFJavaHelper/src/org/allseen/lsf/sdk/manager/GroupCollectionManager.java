@@ -18,10 +18,9 @@ package org.allseen.lsf.sdk.manager;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.sdk.Group;
-import org.allseen.lsf.sdk.GroupListener;
-import org.allseen.lsf.sdk.LightingItemErrorEvent;
+import org.allseen.lsf.sdk.TrackingID;
+import org.allseen.lsf.sdk.factory.GroupFactory;
+import org.allseen.lsf.sdk.listener.GroupCollectionListener;
 import org.allseen.lsf.sdk.model.GroupDataModel;
 import org.allseen.lsf.sdk.model.GroupsFlattener;
 import org.allseen.lsf.sdk.model.LightingItemFilter;
@@ -30,36 +29,44 @@ import org.allseen.lsf.sdk.model.LightingItemFilter;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class GroupCollectionManager extends LightingItemCollectionManager<Group, GroupListener, GroupDataModel> {
+public class GroupCollectionManager<GROUP, ERROR> extends LightingItemCollectionManager<GROUP, GroupCollectionListener<? super GROUP, ? super ERROR>, GroupDataModel, ERROR> {
 
-    protected GroupsFlattener groupsFlattener = new GroupsFlattener();
+    protected final GroupFactory<GROUP, ERROR> factory;
+    protected final GroupsFlattener<GROUP> groupsFlattener;
 
-    public GroupCollectionManager(LightingSystemManager director) {
-        super(director);
+    public GroupCollectionManager(LightingSystemManager<?, GROUP, ?, ?, ?, ?, ?, ?, ?, ?, ?> manager, GroupFactory<GROUP, ERROR> factory) {
+        super(manager, factory);
+
+        this.factory = factory;
+        this.groupsFlattener = new GroupsFlattener<GROUP>(factory);
     }
 
-    public Group addGroup(String groupID) {
-        return addGroup(groupID, new Group(groupID));
+    public GROUP addGroup(String groupID) {
+        return addGroup(groupID, factory.createGroup(groupID));
     }
 
-    public Group addGroup(String groupID, Group group) {
+    public GROUP addGroup(String groupID, GROUP group) {
         return itemAdapters.put(groupID, group);
     }
 
-    public Group getGroup(String groupID) {
+    public GROUP getGroup(String groupID) {
         return getAdapter(groupID);
     }
 
-    public Group[] getGroups() {
-        return getAdapters().toArray(new Group[size()]);
+    public GROUP[] getGroups() {
+        return getAdapters().toArray(factory.createGroups(size()));
     }
 
-    public Group[] getGroups(LightingItemFilter<Group> filter) {
-        Collection<Group> filteredGroups = getAdapters(filter);
-        return filteredGroups.toArray(new Group[filteredGroups.size()]);
+    public GROUP[] getGroups(LightingItemFilter<GROUP> filter) {
+        Collection<GROUP> filteredGroups = getGroupCollection(filter);
+        return filteredGroups.toArray(factory.createGroups(filteredGroups.size()));
     }
 
-    public Iterator<Group> getGroupIterator() {
+    public Collection<GROUP> getGroupCollection(LightingItemFilter<GROUP> filter) {
+        return getAdapters(filter);
+    }
+
+    public Iterator<GROUP> getGroupIterator() {
         return getAdapters().iterator();
     }
 
@@ -67,43 +74,45 @@ public class GroupCollectionManager extends LightingItemCollectionManager<Group,
         groupsFlattener.flattenGroups(itemAdapters);
     }
 
-    public void flattenGroup(Group group) {
+    public void flattenGroup(GROUP group) {
         groupsFlattener.flattenGroup(itemAdapters, group);
     }
 
-    public Collection<Group> removeGroups() {
+    public Collection<GROUP> removeGroups() {
         return removeAllAdapters();
     }
 
-    public Group removeGroup(String groupID) {
+    public GROUP removeGroup(String groupID) {
         return removeAdapter(groupID);
     }
 
     @Override
-    protected void sendInitializedEvent(GroupListener listener, Group group, TrackingID trackingID) {
+    protected void sendInitializedEvent(GroupCollectionListener<? super GROUP, ? super ERROR> listener, GROUP group, TrackingID trackingID) {
         listener.onGroupInitialized(trackingID, group);
     }
 
     @Override
-    protected void sendChangedEvent(GroupListener listener, Group group) {
+    protected void sendChangedEvent(GroupCollectionListener<? super GROUP, ? super ERROR> listener, GROUP group) {
         listener.onGroupChanged(group);
     }
 
     @Override
-    protected void sendRemovedEvent(GroupListener listener, Group group) {
+    protected void sendRemovedEvent(GroupCollectionListener<? super GROUP, ? super ERROR> listener, GROUP group) {
         listener.onGroupRemoved(group);
     }
 
     @Override
-    protected void sendErrorEvent(GroupListener listener, LightingItemErrorEvent errorEvent) {
-        listener.onGroupError(errorEvent);
+    protected void sendErrorEvent(GroupCollectionListener<? super GROUP, ? super ERROR> listener, ERROR error) {
+        listener.onGroupError(error);
     }
 
     @Override
     public GroupDataModel getModel(String groupID) {
-        Group group = getAdapter(groupID);
-
-        return group != null ? group.getGroupDataModel() : null;
+        return getModel(getAdapter(groupID));
     }
 
+    @Override
+    public GroupDataModel getModel(GROUP group) {
+        return group != null ? factory.findGroupDataModel(group) : null;
+    }
 }

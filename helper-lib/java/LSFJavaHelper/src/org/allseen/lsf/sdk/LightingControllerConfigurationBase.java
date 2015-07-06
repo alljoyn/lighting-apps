@@ -19,10 +19,6 @@ import java.util.Random;
 
 import org.alljoyn.bus.AboutKeys;
 import org.allseen.lsf.AboutData;
-import org.allseen.lsf.RankAvailability;
-import org.allseen.lsf.RankMobility;
-import org.allseen.lsf.RankNodeType;
-import org.allseen.lsf.RankPower;
 import org.allseen.lsf.sdk.model.LightingControllerConfiguration;
 
 public class LightingControllerConfigurationBase implements LightingControllerConfiguration {

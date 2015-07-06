@@ -15,8 +15,7 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.sdk.model.ColorStateConverter;
-import org.allseen.lsf.sdk.model.LampCapabilities;
+import org.allseen.lsf.sdk.LampCapabilities;
 
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -142,10 +141,8 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
         presetsButton.setText(presetName);
     }
 
-    public void setBrightness(long modelBrightness, boolean uniformBrightness) {
+    public void setBrightness(int viewBrightness, boolean uniformBrightness) {
         if (capability.dimmable >= LampCapabilities.SOME) {
-            int viewBrightness = ColorStateConverter.convertBrightnessModelToView(modelBrightness);
-
             brightnessSeekBar.setProgress(viewBrightness);
             brightnessSeekBar.setThumb(parentFragment.getResources().getDrawable(uniformBrightness ? R.drawable.slider_thumb_normal : R.drawable.slider_thumb_midstate));
 
@@ -153,10 +150,8 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
         }
     }
 
-    public void setHue(long modelHue, boolean uniformHue) {
+    public void setHue(int viewHue, boolean uniformHue) {
         if (capability.color >= LampCapabilities.SOME) {
-            int viewHue = ColorStateConverter.convertHueModelToView(modelHue);
-
             hueSeekBar.setProgress(viewHue);
             hueSeekBar.setThumb(parentFragment.getResources().getDrawable(uniformHue ? R.drawable.slider_thumb_normal : R.drawable.slider_thumb_midstate));
 
@@ -164,10 +159,8 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
         }
     }
 
-    public void setSaturation(long modelSaturation, boolean uniformSaturation) {
+    public void setSaturation(int viewSaturation, boolean uniformSaturation) {
         if (capability.color >= LampCapabilities.SOME) {
-            int viewSaturation = ColorStateConverter.convertSaturationModelToView(modelSaturation);
-
             saturationSeekBar.setProgress(viewSaturation);
             saturationSeekBar.setThumb(parentFragment.getResources().getDrawable(uniformSaturation ? R.drawable.slider_thumb_normal : R.drawable.slider_thumb_midstate));
 
@@ -177,10 +170,8 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
         }
     }
 
-    public void setColorTemp(long modelColorTemp, boolean uniformColorTemp) {
+    public void setColorTemp(int viewColorTemp, boolean uniformColorTemp) {
         if (capability.temp >= LampCapabilities.SOME) {
-            int viewColorTemp = ColorStateConverter.convertColorTempModelToView(modelColorTemp);
-
             tempSeekBar.setProgress(viewColorTemp - viewColorTempMin);
             tempSeekBar.setThumb(parentFragment.getResources().getDrawable(uniformColorTemp ? R.drawable.slider_thumb_normal : R.drawable.slider_thumb_midstate));
 

@@ -28,7 +28,7 @@ extern "C" {
 /*
  * Class:     org_allseen_lsf_PresetManager
  * Method:    getAllPresetIDs
- * Signature: ()Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: ()Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_getAllPresetIDs
   (JNIEnv *, jobject);
@@ -36,7 +36,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_getAllPresetIDs
 /*
  * Class:     org_allseen_lsf_PresetManager
  * Method:    getPreset
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_getPreset
   (JNIEnv *, jobject, jstring);
@@ -44,7 +44,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_getPreset
 /*
  * Class:     org_allseen_lsf_PresetManager
  * Method:    getPresetName
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_getPresetName
   (JNIEnv *, jobject, jstring, jstring);
@@ -52,7 +52,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_getPresetName
 /*
  * Class:     org_allseen_lsf_PresetManager
  * Method:    setPresetName
- * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_setPresetName
   (JNIEnv *, jobject, jstring, jstring, jstring);
@@ -60,7 +60,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_setPresetName
 /*
  * Class:     org_allseen_lsf_PresetManager
  * Method:    createPreset
- * Signature: (Lorg/allseen/lsf/LampState;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Lorg/allseen/lsf/LampState;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_createPreset
   (JNIEnv *, jobject, jobject, jstring, jstring);
@@ -68,7 +68,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_createPreset
 /*
  * Class:     org_allseen_lsf_PresetManager
  * Method:    updatePreset
- * Signature: (Ljava/lang/String;Lorg/allseen/lsf/LampState;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Lorg/allseen/lsf/LampState;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_updatePreset
   (JNIEnv *, jobject, jstring, jobject);
@@ -76,7 +76,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_updatePreset
 /*
  * Class:     org_allseen_lsf_PresetManager
  * Method:    deletePreset
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_deletePreset
   (JNIEnv *, jobject, jstring);
@@ -84,7 +84,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_deletePreset
 /*
  * Class:     org_allseen_lsf_PresetManager
  * Method:    getDefaultLampState
- * Signature: ()Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: ()Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_getDefaultLampState
   (JNIEnv *, jobject);
@@ -92,7 +92,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_getDefaultLampState
 /*
  * Class:     org_allseen_lsf_PresetManager
  * Method:    setDefaultLampState
- * Signature: (Lorg/allseen/lsf/LampState;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Lorg/allseen/lsf/LampState;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_setDefaultLampState
   (JNIEnv *, jobject, jobject);
@@ -100,7 +100,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_setDefaultLampState
 /*
  * Class:     org_allseen_lsf_PresetManager
  * Method:    getPresetVersion
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_getPresetVersion
   (JNIEnv *, jobject, jstring);
@@ -108,7 +108,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_getPresetVersion
 /*
  * Class:     org_allseen_lsf_PresetManager
  * Method:    createPresetWithTracking
- * Signature: (Lorg/allseen/lsf/TrackingID;Lorg/allseen/lsf/LampState;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Lorg/allseen/lsf/sdk/TrackingID;Lorg/allseen/lsf/LampState;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_createPresetWithTracking
   (JNIEnv *, jobject, jobject, jobject, jstring, jstring);
@@ -116,7 +116,7 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_createPresetWithTra
 /*
  * Class:     org_allseen_lsf_PresetManager
  * Method:    getPresetDataSet
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/ControllerClientStatus;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_getPresetDataSet
   (JNIEnv *, jobject, jstring, jstring);

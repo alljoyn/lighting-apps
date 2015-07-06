@@ -16,7 +16,6 @@
 package org.allseen.lsf.sdk.model;
 
 public class LampStateUniformity {
-
     public boolean power;
     public boolean hue;
     public boolean saturation;

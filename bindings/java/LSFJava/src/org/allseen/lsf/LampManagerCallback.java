@@ -16,6 +16,10 @@
 
 package org.allseen.lsf;
 
+import org.allseen.lsf.sdk.LampDetails;
+import org.allseen.lsf.sdk.LampParameters;
+import org.allseen.lsf.sdk.ResponseCode;
+
 public class LampManagerCallback extends DefaultNativeClassWrapper {
     private static final NativeLibraryLoader LIBS = NativeLibraryLoader.LIBS;
 

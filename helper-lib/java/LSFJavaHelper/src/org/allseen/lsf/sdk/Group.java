@@ -14,12 +14,13 @@
  */
 package org.allseen.lsf.sdk;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.allseen.lsf.LampState;
-import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 import org.allseen.lsf.sdk.model.AllLampsDataModel;
 import org.allseen.lsf.sdk.model.ColorItemDataModel;
@@ -33,7 +34,12 @@ import org.allseen.lsf.sdk.model.LightingItemUtil;
  *
  * Groups can contain lamps and other groups.
  */
-public class Group extends GroupMember {
+public class Group extends GroupMember implements DeletableItem {
+    public static void setDefaultName(String defaultName) {
+        if (defaultName != null) {
+            GroupDataModel.defaultName = defaultName;
+        }
+    }
 
     protected GroupDataModel groupModel;
 
@@ -46,7 +52,7 @@ public class Group extends GroupMember {
      *
      * @param groupID The ID of the group
      */
-    public Group(String groupID) {
+    protected Group(String groupID) {
         this(groupID, null);
     }
 
@@ -60,7 +66,7 @@ public class Group extends GroupMember {
      * @param groupID The ID of the group
      * @param groupName The name of the group
      */
-    public Group(String groupID, String groupName) {
+    protected Group(String groupID, String groupName) {
         super();
 
         groupModel = AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupID) ? AllLampsDataModel.instance : new GroupDataModel(groupID, groupName);
@@ -85,13 +91,11 @@ public class Group extends GroupMember {
      * @param hueDegrees The hue component of the desired color, in degrees (0-360)
      * @param saturationPercent The saturation component of the desired color, in percent (0-100)
      * @param brightnessPercent The brightness component of the desired color, in percent (0-100)
-     * @param colorTempDegrees The color temperature component of the desired color, in degrees Kelvin (2700-9000)
+     * @param colorTempDegrees The color temperature component of the desired color, in degrees Kelvin (1000-20000)
      */
     @Override
     public void setColorHsvt(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees) {
         LampState lampState = new LampState();
-
-        lampState.setOnOff(true);
 
         ColorStateConverter.convertViewToModel(hueDegrees, saturationPercent, brightnessPercent, colorTempDegrees, lampState);
 
@@ -109,9 +113,9 @@ public class Group extends GroupMember {
             Set<String> groups = new HashSet<String>(Arrays.asList(groupModel.members.getLampGroups()));
 
             if (member instanceof Lamp) {
-                lamps.add(member.getColorDataModel().id);
+                lamps.add(member.getId());
             } else if (member instanceof Group) {
-                groups.add(member.getColorDataModel().id);
+                groups.add(member.getId());
             }
 
             postErrorIfFailure(errorContext,
@@ -128,7 +132,7 @@ public class Group extends GroupMember {
             Set<String> groups = new HashSet<String>(Arrays.asList(groupModel.members.getLampGroups()));
 
 
-            boolean didRemove = lamps.remove(member.getColorDataModel().id) || groups.remove(member.getColorDataModel().id);
+            boolean didRemove = lamps.remove(member.getId()) || groups.remove(member.getId());
 
             if (didRemove) {
                 postErrorIfFailure(errorContext,
@@ -143,15 +147,16 @@ public class Group extends GroupMember {
 
         if (postInvalidArgIfNull(errorContext, members)) {
             postErrorIfFailure(errorContext,
-                    AllJoynManager.groupManager.updateLampGroup(groupModel.id, LightingItemUtil.createLampGroup(members)));
+                AllJoynManager.groupManager.updateLampGroup(groupModel.id, GroupMember.createLampGroup(members)));
         }
     }
 
+    @Override
     public void delete() {
         String errorContext = "Group.delete() error";
 
         postErrorIfFailure(errorContext,
-                AllJoynManager.groupManager.deleteLampGroup(groupModel.id));
+            AllJoynManager.groupManager.deleteLampGroup(groupModel.id));
     }
 
     @Override
@@ -160,7 +165,7 @@ public class Group extends GroupMember {
 
         if (postInvalidArgIfNull(errorContext, preset)) {
             postErrorIfFailure(errorContext,
-                    AllJoynManager.groupManager.transitionLampGroupStateToPreset(groupModel.id, preset.getPresetDataModel().id, 0));
+                AllJoynManager.groupManager.transitionLampGroupStateToPreset(groupModel.id, preset.getPresetDataModel().id, 0));
         }
     }
 
@@ -192,6 +197,85 @@ public class Group extends GroupMember {
     }
 
     @Override
+    public boolean hasComponent(LightingItem item) {
+        String errorContext = "Group.hasComponent() error";
+        return postInvalidArgIfNull(errorContext, item) ? hasLampID(item.getId()) || hasGroupID(item.getId()) : false;
+    }
+
+    public boolean hasLamp(Lamp lamp) {
+        String errorContext = "Group.hasLamp() error";
+        return postInvalidArgIfNull(errorContext, lamp) ? hasLampID(lamp.getId()) : false;
+    }
+
+    public boolean hasGroup(Group group) {
+        String errorContext = "Group.hasGroup() error";
+        return postInvalidArgIfNull(errorContext, group) ? hasGroupID(group.getId()) : false;
+    }
+
+    public boolean hasLampID(String lampID) {
+        return groupModel.containsLamp(lampID);
+    }
+
+    public boolean hasGroupID(String groupID) {
+        return groupModel.containsGroup(groupID);
+    }
+
+    public Lamp[] getLamps() {
+        return LightingDirector.get().getLamps(getLampIDs());
+    }
+
+    public Group[] getGroups() {
+        return LightingDirector.get().getGroups(getGroupIDs());
+    }
+
+    public Collection<String> getLampIDs() {
+        return groupModel.getLamps();
+    }
+
+    public Collection<String> getGroupIDs() {
+        return groupModel.getGroups();
+    }
+
+    @Override
+    protected void addTo(Collection<String> lampIDs, Collection<String> groupIDs) {
+        groupIDs.add(getId());
+    }
+
+    @Override
+    protected Collection<LightingItem> getDependentCollection() {
+        LightingDirector director = LightingDirector.get();
+        Collection<LightingItem> dependents = new ArrayList<LightingItem>();
+
+        dependents.addAll(director.getGroupCollectionManager().getGroupCollection(new LightingItemHasComponentFilter<Group>(Group.this)));
+        dependents.addAll(director.getSceneCollectionManager().getScenesCollection(new LightingItemHasComponentFilter<SceneV1>(Group.this)));
+        dependents.addAll(director.getSceneElementCollectionManager().getSceneElementsCollection(new LightingItemHasComponentFilter<SceneElement>(Group.this)));
+
+        return dependents;
+    }
+
+    @Override
+    protected Collection<LightingItem> getComponentCollection() {
+        Collection<LightingItem> components = new ArrayList<LightingItem>();
+
+        components.addAll(Arrays.asList(getLamps()));
+        components.addAll(Arrays.asList(getGroups()));
+
+        return components;
+    }
+
+    public int getColorTempMin() {
+        return getGroupDataModel().viewColorTempMin;
+    }
+
+    public int getColorTempMax() {
+        return getGroupDataModel().viewColorTempMax;
+    }
+
+    public boolean isAllLampsGroup() {
+        return AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupModel.id);
+    }
+
+    @Override
     protected ColorItemDataModel getColorDataModel() {
         return getGroupDataModel();
     }
@@ -200,7 +284,7 @@ public class Group extends GroupMember {
      * <b>WARNING: This method is not intended to be used by clients, and may change or be
      * removed in subsequent releases of the SDK.</b>
      */
-    public GroupDataModel getGroupDataModel() {
+    protected GroupDataModel getGroupDataModel() {
         return groupModel;
     }
 

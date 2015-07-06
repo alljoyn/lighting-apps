@@ -14,9 +14,11 @@
  */
 package org.allseen.lsf.sdk;
 
-import org.allseen.lsf.ResponseCode;
+import java.util.ArrayList;
+import java.util.Collection;
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 import org.allseen.lsf.sdk.model.ColorItemDataModel;
+import org.allseen.lsf.sdk.model.ColorStateConverter;
 import org.allseen.lsf.sdk.model.LightingItemUtil;
 import org.allseen.lsf.sdk.model.PresetDataModel;
 
@@ -27,13 +29,19 @@ import org.allseen.lsf.sdk.model.PresetDataModel;
  * interface may change in subsequent releases of the SDK</b>.
  */
 public class Preset extends MutableColorItem implements Effect {
+    public static void setDefaultName(String defaultName) {
+        if (defaultName != null) {
+            PresetDataModel.defaultName = defaultName;
+        }
+    }
+
     protected PresetDataModel presetModel;
 
-    public Preset(String presetID) {
+    protected Preset(String presetID) {
         this(presetID, null);
     }
 
-    public Preset(String presetID, String presetName) {
+    protected Preset(String presetID, String presetName) {
         super();
 
         presetModel = new PresetDataModel(presetID, presetName);
@@ -69,15 +77,12 @@ public class Preset extends MutableColorItem implements Effect {
         }
     }
 
+    @Override
     public void delete() {
         String errorContext = "Preset.delete() error";
 
         postErrorIfFailure(errorContext,
                 AllJoynManager.presetManager.deletePreset(presetModel.id));
-    }
-
-    public PresetDataModel getPresetDataModel() {
-        return presetModel;
     }
 
     @Override
@@ -88,6 +93,39 @@ public class Preset extends MutableColorItem implements Effect {
     @Override
     public void setColorHsvt(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees) {
         modify(getPower(), new Color(hueDegrees, saturationPercent, brightnessPercent, colorTempDegrees));
+    }
+
+    public boolean stateEquals(Preset that) {
+        return getColorDataModel().stateEquals(that.getColorDataModel());
+    }
+
+    public boolean stateEquals(MyLampState state) {
+        return stateEquals(state.getPower(), state.getColor());
+    }
+
+    public boolean stateEquals(Power power, Color color) {
+        return getColorDataModel().stateEquals(
+            power == Power.ON,
+            ColorStateConverter.convertHueViewToModel(color.getHue()),
+            ColorStateConverter.convertSaturationViewToModel(color.getSaturation()),
+            ColorStateConverter.convertBrightnessViewToModel(color.getBrightness()),
+            ColorStateConverter.convertColorTempViewToModel(color.getHue()));
+    }
+
+    @Override
+    protected Collection<LightingItem> getDependentCollection() {
+        LightingDirector director = LightingDirector.get();
+        Collection<LightingItem> dependents = new ArrayList<LightingItem>();
+
+        dependents.addAll(director.getSceneCollectionManager().getScenesCollection(new LightingItemHasComponentFilter<SceneV1>(Preset.this)));
+        dependents.addAll(director.getTransitionEffectCollectionManager().getTransitionEffectsCollection(new LightingItemHasComponentFilter<TransitionEffect>(Preset.this)));
+        dependents.addAll(director.getPulseEffectCollectionManager().getPulseEffectsCollection(new LightingItemHasComponentFilter<PulseEffect>(Preset.this)));
+
+        return dependents;
+    }
+
+    protected PresetDataModel getPresetDataModel() {
+        return presetModel;
     }
 
     @Override

@@ -15,34 +15,42 @@
  */
 package org.allseen.lsf.sdk;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.allseen.lsf.ResponseCode;
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 import org.allseen.lsf.sdk.model.LightingItemDataModel;
 import org.allseen.lsf.sdk.model.LightingItemUtil;
+import org.allseen.lsf.sdk.model.SceneElementDataModel;
 import org.allseen.lsf.sdk.model.SceneElementDataModelV2;
 
-public class SceneElement extends LightingItem {
+public class SceneElement extends SceneItem {
+    public static void setDefaultName(String defaultName) {
+        if (defaultName != null) {
+            SceneElementDataModel.defaultName = defaultName;
+        }
+    }
 
-    private SceneElementDataModelV2 sceneElementModel;
+    protected SceneElementDataModelV2 sceneElementModel;
 
-    public SceneElement(String sceneElementId) {
+    protected SceneElement(String sceneElementId) {
         this(sceneElementId, null);
     }
 
-    public SceneElement(String sceneElementId, String sceneElementName) {
+    protected SceneElement(String sceneElementId, String sceneElementName) {
         super();
 
         sceneElementModel = new SceneElementDataModelV2(sceneElementId, sceneElementName);
     }
 
+    @Override
     public void apply() {
         String errorContext = "SceneElement.apply() error";
 
         postErrorIfFailure(errorContext,
-                AllJoynManager.sceneElementManager.applySceneElement(sceneElementModel.id));
+            AllJoynManager.sceneElementManager.applySceneElement(sceneElementModel.id));
     }
 
     public void modify(Effect effect, GroupMember[] members) {
@@ -50,7 +58,7 @@ public class SceneElement extends LightingItem {
 
         if (postInvalidArgIfNull(errorContext, effect) && postInvalidArgIfNull(errorContext, members)) {
             postErrorIfFailure(errorContext,
-                    AllJoynManager.sceneElementManager.updateSceneElement(sceneElementModel.id, LightingItemUtil.createSceneElement(effect.getId(), members)));
+                AllJoynManager.sceneElementManager.updateSceneElement(sceneElementModel.id, LightingItemUtil.createSceneElement(effect.getId(), GroupMember.createLampGroup(members))));
         }
     }
 
@@ -101,6 +109,7 @@ public class SceneElement extends LightingItem {
         }
     }
 
+    @Override
     public void delete() {
         String errorContext = "SceneElement.delete() error";
 
@@ -108,7 +117,74 @@ public class SceneElement extends LightingItem {
                 AllJoynManager.sceneElementManager.deleteSceneElement(sceneElementModel.id));
     }
 
-    public SceneElementDataModelV2 getSceneElementDataModel() {
+    public Effect getEffect() {
+        return LightingDirector.get().getEffect(sceneElementModel.getEffectId());
+    }
+
+    public Lamp[] getLamps() {
+        return LightingDirector.get().getLamps(sceneElementModel.getLamps());
+    }
+
+    public Group[] getGroups() {
+        return LightingDirector.get().getGroups(sceneElementModel.getGroups());
+    }
+
+    public String getEffectID() {
+        return sceneElementModel.getEffectId();
+    }
+
+    public Collection<String> getLampIDs() {
+        return sceneElementModel.getLamps();
+    }
+
+    public Collection<String> getGroupIDs() {
+        return sceneElementModel.getGroups();
+    }
+
+    @Override
+    public boolean hasComponent(LightingItem item) {
+        String errorContext = "SceneElement.hasComponent() error";
+        return postInvalidArgIfNull(errorContext, item) ? hasEffect(item.getId()) || hasLamp(item.getId()) || hasGroup(item.getId()) : false;
+    }
+
+    public boolean hasEffect(Effect effect) {
+        String errorContext = "SceneElement.hasEffect() error";
+        return postInvalidArgIfNull(errorContext, effect) ? hasEffect(effect.getId()) : false;
+    }
+
+    public boolean hasLamp(Lamp lamp) {
+        String errorContext = "Group.hasLamp() error";
+        return postInvalidArgIfNull(errorContext, lamp) ? hasLamp(lamp.getId()) : false;
+    }
+
+    public boolean hasGroup(Group group) {
+        String errorContext = "SceneElement.hasGroup() error";
+        return postInvalidArgIfNull(errorContext, group) ? hasGroup(group.getId()) : false;
+    }
+
+    protected boolean hasEffect(String effectID) {
+        return sceneElementModel.containsEffect(effectID);
+    }
+
+    protected boolean hasLamp(String lampID) {
+        return sceneElementModel.containsLamp(lampID);
+    }
+
+    protected boolean hasGroup(String groupID) {
+        return sceneElementModel.containsGroup(groupID);
+    }
+
+    @Override
+    protected Collection<LightingItem> getDependentCollection() {
+        LightingDirector director = LightingDirector.get();
+        Collection<LightingItem> dependents = new ArrayList<LightingItem>();
+
+        dependents.addAll(director.getSceneCollectionManagerV2().getScenesCollection(new LightingItemHasComponentFilter<SceneV2>(SceneElement.this)));
+
+        return dependents;
+    }
+
+    protected SceneElementDataModelV2 getSceneElementDataModel() {
         return sceneElementModel;
     }
 

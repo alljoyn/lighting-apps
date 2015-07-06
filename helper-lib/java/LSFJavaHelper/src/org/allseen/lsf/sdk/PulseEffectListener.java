@@ -1,5 +1,5 @@
 /*
- * Copyright AllSeen Alliance. All rights reserved.
+ * Copyright (c) AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -15,11 +15,8 @@
  */
 package org.allseen.lsf.sdk;
 
-import org.allseen.lsf.TrackingID;
+import org.allseen.lsf.sdk.listener.PulseEffectCollectionListener;
 
-public interface PulseEffectListener extends LightingListener {
-    public void onPulseEffectInitialized(TrackingID trackingId, PulseEffect effect);
-    public void onPulseEffectChanged(PulseEffect effect);
-    public void onPulseEffectRemoved(PulseEffect effect);
-    public void onPulseEffectError(LightingItemErrorEvent error);
+public interface PulseEffectListener extends PulseEffectCollectionListener<PulseEffect, LightingItemErrorEvent> {
+
 }

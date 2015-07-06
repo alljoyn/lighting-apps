@@ -15,6 +15,9 @@
  */
 package org.allseen.lsf;
 
+import org.allseen.lsf.sdk.ControllerClientStatus;
+import org.allseen.lsf.sdk.TrackingID;
+
 public class SceneElementManager extends BaseNativeClassWrapper {
     public static final int MAX_SCENE_ELEMENTS = 100;
 

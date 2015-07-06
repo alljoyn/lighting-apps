@@ -15,8 +15,9 @@
  */
 package org.allseen.lsf.sdk;
 
-import org.allseen.lsf.ResponseCode;
-import org.allseen.lsf.TrackingID;
+import org.allseen.lsf.sdk.ErrorCode;
+import org.allseen.lsf.sdk.ResponseCode;
+import org.allseen.lsf.sdk.TrackingID;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
@@ -27,11 +28,13 @@ public class LightingItemErrorEvent {
     public ResponseCode responseCode;
     public String itemID;
     public TrackingID trackingID;
+    public ErrorCode[] errorCodes;
 
-    public LightingItemErrorEvent(String name, ResponseCode responseCode, String itemID, TrackingID trackingID) {
+    public LightingItemErrorEvent(String name, ResponseCode responseCode, String itemID, TrackingID trackingID, ErrorCode[] errorCodes) {
         this.name = name;
         this.responseCode = responseCode;
         this.itemID = itemID;
         this.trackingID = trackingID;
+        this.errorCodes = errorCodes;
     }
 }

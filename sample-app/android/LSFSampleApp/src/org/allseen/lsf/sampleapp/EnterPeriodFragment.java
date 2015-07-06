@@ -20,6 +20,7 @@ import java.util.Locale;
 import android.text.InputType;
 
 public class EnterPeriodFragment extends EnterNumberFragment {
+    public static long period;
 
     @Override
     protected int getTitleID() {
@@ -38,20 +39,13 @@ public class EnterPeriodFragment extends EnterNumberFragment {
 
     @Override
     protected String getNumberString() {
-        SampleAppActivity activity = (SampleAppActivity)getActivity();
-        long period = activity.pendingPulseEffectModel.period;
-
-        return String.format(Locale.ENGLISH, getString(R.string.effect_info_period_format), period / 1000.0);
+        return String.format(Locale.ENGLISH, getString(R.string.effect_info_period_format), EnterPeriodFragment.period / 1000.0);
     }
 
     @Override
     protected boolean setNumberValue(long numberValue) {
-        SampleAppActivity activity = (SampleAppActivity)getActivity();
-
-        activity.pendingPulseEffectModel.period = numberValue;
-
         // Go back to the effect info display
-        activity.onBackPressed();
+        ((SampleAppActivity)getActivity()).onBackPressed();
 
         return true;
     }

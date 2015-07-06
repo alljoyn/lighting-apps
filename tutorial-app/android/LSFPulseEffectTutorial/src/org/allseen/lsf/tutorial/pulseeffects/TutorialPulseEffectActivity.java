@@ -15,8 +15,7 @@
  */
 package org.allseen.lsf.tutorial.pulseeffects;
 
-import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.sdk.AllCollectionAdapter;
+import org.allseen.lsf.sdk.AllLightingItemListenerBase;
 import org.allseen.lsf.sdk.Color;
 import org.allseen.lsf.sdk.Group;
 import org.allseen.lsf.sdk.Lamp;
@@ -27,6 +26,7 @@ import org.allseen.lsf.sdk.MyLampState;
 import org.allseen.lsf.sdk.NextControllerConnectionListener;
 import org.allseen.lsf.sdk.Power;
 import org.allseen.lsf.sdk.PulseEffect;
+import org.allseen.lsf.sdk.TrackingID;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -48,7 +48,7 @@ public class TutorialPulseEffectActivity extends Activity implements NextControl
      * Global Lighting event listener. Responsible for handling any callbacks that
      * the user is interested in acting on.
      */
-    private class MyLightingListener extends AllCollectionAdapter {
+    private class MyLightingListener extends AllLightingItemListenerBase {
         @Override
         public void onGroupInitialized(TrackingID trackingId, Group group) {
             // STEP 4: Use the group initialization as a trigger to create parameters

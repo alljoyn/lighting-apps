@@ -15,6 +15,8 @@
  */
 package org.allseen.lsf;
 
+import org.allseen.lsf.sdk.ResponseCode;
+
 public class SceneWithSceneElements extends DefaultNativeClassWrapper {
     public SceneWithSceneElements() {
         createNativeObject();

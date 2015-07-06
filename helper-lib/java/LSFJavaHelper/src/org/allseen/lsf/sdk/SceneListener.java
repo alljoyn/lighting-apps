@@ -15,15 +15,8 @@
  */
 package org.allseen.lsf.sdk;
 
-import org.allseen.lsf.TrackingID;
+import org.allseen.lsf.sdk.listener.SceneCollectionListener;
 
-/**
- * <b>WARNING: This class is not intended to be used by clients, and its interface may change
- * in subsequent releases of the SDK</b>.
- */
-public interface SceneListener extends LightingListener {
-    public void onSceneInitialized(TrackingID trackingId, Scene scene);
-    public void onSceneChanged(Scene scene);
-    public void onSceneRemoved(Scene scene);
-    public void onSceneError(LightingItemErrorEvent error);
+public interface SceneListener extends SceneCollectionListener<Scene, LightingItemErrorEvent> {
+
 }

@@ -15,8 +15,8 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.sdk.model.ColorStateConverter;
-
+import org.allseen.lsf.sdk.ColorItem;
+import org.allseen.lsf.sdk.LampCapabilities;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -36,7 +36,30 @@ public abstract class DimmableItemTableFragment
     protected abstract int getInfoButtonImageID();
     protected abstract Fragment getInfoFragment();
 
-    public <T> TableRow insertDimmableItemRow(Context context, String itemID, Comparable<T> tag, boolean powerOn, boolean uniformPower, String name, long modelBrightness, boolean uniformBrightness, int infoBG) {
+    public void addItems(ColorItem[] items) {
+        for (ColorItem item : items) {
+            addItem(item);
+        }
+    }
+
+    public void addItem(ColorItem item) {
+        if (item != null) {
+            insertDimmableItemRow(
+                getActivity(),
+                item.getId(),
+                item.getTag(),
+                item.isOn(),
+                item.getUniformity().power,
+                item.getName(),
+                item.getColor().getBrightness(),
+                item.getUniformity().brightness,
+                0,
+                item.getCapability().dimmable >= LampCapabilities.SOME);
+            updateLoading();
+        }
+    }
+
+    public <T> TableRow insertDimmableItemRow(Context context, String itemID, Comparable<T> tag, boolean powerOn, boolean uniformPower, String name, int viewBrightness, boolean uniformBrightness, int infoBG) {
         return insertDimmableItemRow(
             context,
             (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE),
@@ -45,13 +68,13 @@ public abstract class DimmableItemTableFragment
             powerOn,
             uniformPower,
             name,
-            modelBrightness,
+            viewBrightness,
             uniformBrightness,
             infoBG,
             true);
     }
 
-    public <T> TableRow insertDimmableItemRow(Context context, String itemID, Comparable<T> tag, boolean powerOn, boolean uniformPower, String name, long modelBrightness, boolean uniformBrightness, int infoBG, boolean enabled) {
+    public <T> TableRow insertDimmableItemRow(Context context, String itemID, Comparable<T> tag, boolean powerOn, boolean uniformPower, String name, int viewBrightness, boolean uniformBrightness, int infoBG, boolean enabled) {
         return insertDimmableItemRow(
             context,
             (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE),
@@ -60,13 +83,13 @@ public abstract class DimmableItemTableFragment
             powerOn,
             uniformPower,
             name,
-            modelBrightness,
+            viewBrightness,
             uniformBrightness,
             infoBG,
             enabled);
     }
 
-    public <T> TableRow insertDimmableItemRow(Context context, LayoutInflater inflater, String itemID, Comparable<T> tag, boolean powerOn, boolean uniformPower, String name, long modelBrightness, boolean uniformBrightness, int infoBG, boolean enabled) {
+    public <T> TableRow insertDimmableItemRow(Context context, LayoutInflater inflater, String itemID, Comparable<T> tag, boolean powerOn, boolean uniformPower, String name, int viewBrightness, boolean uniformBrightness, int infoBG, boolean enabled) {
         Log.d(SampleAppActivity.TAG, "insertDimmableItemRow(): " + itemID + ", " + tag + ", " + name);
 
         final boolean isEnabled = enabled;
@@ -86,7 +109,7 @@ public abstract class DimmableItemTableFragment
             ((TextView)tableRow.findViewById(R.id.dimmableItemRowText)).setText(name);
 
             SeekBar seekBar = (SeekBar)tableRow.findViewById(R.id.dimmableItemRowSlider);
-            seekBar.setProgress(ColorStateConverter.convertBrightnessModelToView(modelBrightness));
+            seekBar.setProgress(viewBrightness);
             seekBar.setTag(itemID);
             seekBar.setSaveEnabled(false);
             seekBar.setOnSeekBarChangeListener(this);
@@ -108,7 +131,7 @@ public abstract class DimmableItemTableFragment
             ((TextView)tableRow.findViewById(R.id.dimmableItemRowText)).setText(name);
 
             SeekBar seekBar = (SeekBar)tableRow.findViewById(R.id.dimmableItemRowSlider);
-            seekBar.setProgress(ColorStateConverter.convertBrightnessModelToView(modelBrightness));
+            seekBar.setProgress(viewBrightness);
             seekBar.setThumb(getResources().getDrawable(uniformBrightness ? R.drawable.slider_thumb_normal : R.drawable.slider_thumb_midstate));
             seekBar.setEnabled(isEnabled);
 
@@ -161,6 +184,4 @@ public abstract class DimmableItemTableFragment
             ((SampleAppActivity)getActivity()).setBrightness(type, seekBar.getTag().toString(), seekBar.getProgress());
         }
     }
-
-    public abstract void addElement(String id);
 }

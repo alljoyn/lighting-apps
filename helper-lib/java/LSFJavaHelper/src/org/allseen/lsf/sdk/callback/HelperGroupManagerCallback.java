@@ -21,12 +21,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.allseen.lsf.LampDetails;
 import org.allseen.lsf.LampGroup;
 import org.allseen.lsf.LampGroupManagerCallback;
-import org.allseen.lsf.ResponseCode;
-import org.allseen.lsf.TrackingID;
-import org.allseen.lsf.sdk.Group;
+import org.allseen.lsf.sdk.LampDetails;
+import org.allseen.lsf.sdk.ResponseCode;
+import org.allseen.lsf.sdk.TrackingID;
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 import org.allseen.lsf.sdk.manager.GroupCollectionManager;
 import org.allseen.lsf.sdk.manager.LightingSystemManager;
@@ -41,8 +40,8 @@ import org.allseen.lsf.sdk.model.LampDataModel;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class HelperGroupManagerCallback extends LampGroupManagerCallback {
-    public LightingSystemManager manager;
+public class HelperGroupManagerCallback<GROUP> extends LampGroupManagerCallback {
+    public LightingSystemManager<?, GROUP, ?, ?, ?, ?, ?, ?, ?, ?, ?> manager;
 
     protected final ColorAverager averageHue = new ColorAverager();
     protected final ColorAverager averageSaturation = new ColorAverager();
@@ -53,7 +52,7 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
     protected Set<String> groupIDsWithPendingFlatten = new HashSet<String>();
     protected Map<String, TrackingID> creationTrackingIDs;
 
-    public HelperGroupManagerCallback(LightingSystemManager manager) {
+    public HelperGroupManagerCallback(LightingSystemManager<?, GROUP, ?, ?, ?, ?, ?, ?, ?, ?, ?> manager) {
         super();
 
         this.manager = manager;
@@ -276,8 +275,8 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
-                GroupCollectionManager groupCollectionManager = manager.getGroupCollectionManager();
-                Group group = groupCollectionManager.getGroup(groupID);
+                GroupCollectionManager<GROUP, ?> groupCollectionManager = manager.getGroupCollectionManager();
+                GROUP group = groupCollectionManager.getGroup(groupID);
 
                 if (group != null) {
                     groupCollectionManager.flattenGroup(group);
@@ -290,10 +289,11 @@ public class HelperGroupManagerCallback extends LampGroupManagerCallback {
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
-                Iterator<Group> i = manager.getGroupCollectionManager().getGroupIterator();
+                GroupCollectionManager<GROUP, ?> groupManager = manager.getGroupCollectionManager();
+                Iterator<GROUP> i = groupManager.getGroupIterator();
 
                 while(i.hasNext()) {
-                    GroupDataModel groupModel = i.next().getGroupDataModel();
+                    GroupDataModel groupModel = groupManager.getModel(i.next());
                     Set<String> lampIDs = groupModel.getLamps();
 
                     if (lampIDs != null && lampIDs.contains(lampID)) {

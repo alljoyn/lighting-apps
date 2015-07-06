@@ -15,21 +15,12 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import java.util.Iterator;
-
 import org.allseen.lsf.sdk.Lamp;
-import org.allseen.lsf.sdk.manager.AllJoynManager;
-import org.allseen.lsf.sdk.model.LampDataModel;
+import org.allseen.lsf.sdk.LightingDirector;
 
 public class UpdateLampNameAdapter extends UpdateItemNameAdapter {
-
-    public UpdateLampNameAdapter(LampDataModel lampModel, SampleAppActivity activity) {
-        super(lampModel, activity);
-    }
-
-    @Override
-    protected void doUpdateName() {
-        AllJoynManager.lampManager.setLampName(itemModel.id, itemModel.getName(), SampleAppActivity.LANGUAGE);
+    public UpdateLampNameAdapter(Lamp lamp, SampleAppActivity activity) {
+        super(lamp, activity);
     }
 
     @Override
@@ -38,17 +29,7 @@ public class UpdateLampNameAdapter extends UpdateItemNameAdapter {
     }
 
     @Override
-    protected boolean duplicateName(String name) {
-        Iterator<Lamp> i = activity.systemManager.getLampCollectionManager().getLampIterator();
-
-        while (i.hasNext()) {
-            LampDataModel lampModel = i.next().getLampDataModel();
-
-            if (lampModel.getName().equals(name) && !name.equals(itemModel.getName())) {
-                return true;
-            }
-        }
-
-        return false;
+    protected boolean duplicateName(String lampName) {
+        return Util.isDuplicateName(LightingDirector.get().getLamps(), lampName);
     }
 }

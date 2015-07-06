@@ -15,14 +15,9 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import java.util.Iterator;
-
-import org.allseen.lsf.LampState;
-import org.allseen.lsf.PresetManager;
+import org.allseen.lsf.sdk.LightingDirector;
+import org.allseen.lsf.sdk.MyLampState;
 import org.allseen.lsf.sdk.Preset;
-import org.allseen.lsf.sdk.manager.AllJoynManager;
-import org.allseen.lsf.sdk.model.ColorItemDataModel;
-import org.allseen.lsf.sdk.model.PresetDataModel;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -36,7 +31,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public abstract class DimmableItemPresetsFragment extends SelectableItemTableFragment implements ItemNameAdapter{
+public abstract class DimmableItemPresetsFragment extends SelectableItemTableFragment implements ItemNameAdapter {
 
     protected boolean allowApply = false;
     protected String currentName = null;
@@ -59,18 +54,15 @@ public abstract class DimmableItemPresetsFragment extends SelectableItemTableFra
     }
 
     public void onUpdateView(LayoutInflater inflater, View root) {
-        SampleAppActivity activity = (SampleAppActivity)getActivity();
-        Iterator<Preset> i = activity.systemManager.getPresetCollectionManager().getPresetIterator();
+        Preset[] presets = LightingDirector.get().getPresets();
 
         table.removeAllViews();
 
-        while (i.hasNext()) {
-            PresetDataModel presetModel = i.next().getPresetDataModel();
-
-            updateSelectableItemRow(inflater, root, presetModel.id, presetModel.tag, R.drawable.nav_more_menu_icon, presetModel.getName(), false);
+        for (Preset preset : presets) {
+            updateSelectableItemRow(inflater, root, preset.getId(), preset.getTag(), R.drawable.nav_more_menu_icon, preset.getName(), false);
         }
 
-        view.findViewById(R.id.selectHeader).setVisibility(activity.systemManager.getPresetCollectionManager().size() < PresetManager.MAX_PRESETS ? View.VISIBLE : View.GONE);
+        view.findViewById(R.id.selectHeader).setVisibility(presets.length < LightingDirector.MAX_PRESETS ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -84,8 +76,7 @@ public abstract class DimmableItemPresetsFragment extends SelectableItemTableFra
     public void removeElement(String id) {
         super.removeElement(id);
 
-        SampleAppActivity activity = (SampleAppActivity)getActivity();
-        view.findViewById(R.id.selectHeader).setVisibility(activity.systemManager.getPresetCollectionManager().size() < PresetManager.MAX_PRESETS ? View.VISIBLE : View.GONE);
+        view.findViewById(R.id.selectHeader).setVisibility(LightingDirector.get().getPresetCount() < LightingDirector.MAX_PRESETS ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -95,11 +86,11 @@ public abstract class DimmableItemPresetsFragment extends SelectableItemTableFra
 
     @Override
     protected boolean isItemSelected(String presetID) {
-        return isItemSelected(((SampleAppActivity)getActivity()).systemManager.getPresetCollectionManager().getModel(presetID));
+        return isItemSelected(LightingDirector.get().getPreset(presetID));
     }
 
-    protected boolean isItemSelected(PresetDataModel presetModel) {
-        return presetModel.stateEquals(getDimmableItemDataModel().state);
+    protected boolean isItemSelected(Preset preset) {
+        return preset.stateEquals(getItemLampState());
     }
 
     @Override
@@ -143,7 +134,7 @@ public abstract class DimmableItemPresetsFragment extends SelectableItemTableFra
         SampleAppActivity activity = (SampleAppActivity)getActivity();
 
         // Default new preset name suffix is next available index (number of preset models + 1 for now)
-        return currentName == null ? String.format(activity.getString(R.string.presets_new_name), activity.systemManager.getPresetCollectionManager().size() + 1) : currentName;
+        return currentName == null ? String.format(activity.getString(R.string.presets_new_name), LightingDirector.get().getPresetCount() + 1) : currentName;
     }
 
     @Override
@@ -177,16 +168,7 @@ public abstract class DimmableItemPresetsFragment extends SelectableItemTableFra
     }
 
     private boolean duplicateName(String presetName) {
-        Iterator<Preset> i = ((SampleAppActivity)getActivity()).systemManager.getPresetCollectionManager().getPresetIterator();
-        boolean isDuplicate = false;
-
-        while (i.hasNext()) {
-            if (i.next().getPresetDataModel().getName().equals(presetName)) {
-                isDuplicate = true;
-            }
-        }
-
-        return isDuplicate;
+        return Util.isDuplicateName(LightingDirector.get().getPresets(), presetName);
     }
 
     @Override
@@ -199,16 +181,16 @@ public abstract class DimmableItemPresetsFragment extends SelectableItemTableFra
     }
 
     protected void doSavePreset(String presetName) {
-        ColorItemDataModel itemModel = getDimmableItemDataModel();
+        MyLampState lampState = getItemLampState();
 
-        if ((presetName != null) && (!presetName.isEmpty()) && (itemModel != null)) {
-            doSavePreset(presetName, itemModel.state);
+        if ((lampState != null) && (presetName != null) && (!presetName.isEmpty())) {
+            doSavePreset(presetName, lampState);
         }
     }
 
-    protected void doSavePreset(String presetName, LampState presetState) {
+    protected void doSavePreset(String presetName, MyLampState presetState) {
         if ((presetName != null) && (!presetName.isEmpty()) && (presetState != null)) {
-            AllJoynManager.presetManager.createPreset(presetState, presetName, SampleAppActivity.LANGUAGE);
+            LightingDirector.get().createPreset(presetState.getPower(), presetState.getColor(), presetName, null);
         }
 
         if (getActivity() != null) {
@@ -217,11 +199,15 @@ public abstract class DimmableItemPresetsFragment extends SelectableItemTableFra
     }
 
     protected void doApplyPreset(String presetID) {
-        doApplyPreset(((SampleAppActivity)getActivity()).systemManager.getPresetCollectionManager().getModel(presetID));
+        Preset preset = LightingDirector.get().getPreset(presetID);
+
+        if (preset != null) {
+            doApplyPreset(preset);
+        }
 
         getActivity().onBackPressed();
     }
 
-    protected abstract void doApplyPreset(PresetDataModel presetModel);
-    protected abstract ColorItemDataModel getDimmableItemDataModel();
+    protected abstract void doApplyPreset(Preset preset);
+    protected abstract MyLampState getItemLampState();
 }

@@ -15,6 +15,8 @@
  */
 package org.allseen.lsf;
 
+import org.allseen.lsf.sdk.ResponseCode;
+
 public class PresetManagerCallback extends DefaultNativeClassWrapper {
 
     public PresetManagerCallback() {
