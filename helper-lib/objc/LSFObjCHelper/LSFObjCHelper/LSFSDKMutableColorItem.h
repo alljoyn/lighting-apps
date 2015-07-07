@@ -23,6 +23,7 @@
 -(void)turnOn;
 -(void)turnOff;
 -(void)setPower: (Power)power;
+-(void)togglePower;
 -(void)setColor: (LSFSDKColor *)color;
 -(void)setColorHsvt: (NSArray *)hsvt;
 

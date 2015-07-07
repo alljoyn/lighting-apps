@@ -18,6 +18,8 @@
 #import "LSFSDKAllJoynManager.h"
 #import "LSFSDKLightingItemUtil.h"
 #import "LSFSDKLightingDirector.h"
+#import "LSFSDKLightingItemHasComponentFilter.h"
+#import "LSFConstants.h"
 
 @implementation LSFSDKPreset
 
@@ -48,11 +50,31 @@
     }
 }
 
--(void)deletePreset
+-(void)deleteItem
 {
     NSString *errorContext = @"LSFSDKPreset rename: error";
 
     [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getPresetManager] deletePresetWithID: presetModel.theID]];
+}
+
+-(BOOL)stateEquals: (LSFSDKPreset *)preset
+{
+    return [[self getPresetDataModel] isStateEqualToModelState: [preset getPresetDataModel]];
+}
+
+-(BOOL)stateEqualsMyLampState: (LSFSDKMyLampState *)state
+{
+    return [self stateEqualsPower: state.power andColor: state.color];
+}
+
+-(BOOL)stateEqualsPower: (Power)power andColor: (LSFSDKColor *)color
+{
+    LSFConstants *constants = [LSFConstants getConstants];
+    unsigned int hue = [constants unscaleLampStateValue: color.hue withMax: 100];
+    unsigned int saturation = [constants unscaleLampStateValue: color.saturation withMax: 360];
+    unsigned int brightness = [constants unscaleLampStateValue: color.brightness withMax: 100];
+    unsigned int colorTemp = [constants unscaleColorTemp: color.colorTemp];
+    return [[self getColorDataModel] isStateEqualToPowerOn: (power == ON ? YES : NO) hue: hue saturation: saturation brightness: brightness colorTemp: colorTemp];
 }
 
 /*
@@ -95,6 +117,21 @@
 -(LSFDataModel *)getColorDataModel
 {
     return [self getPresetDataModel];
+}
+
+-(NSArray *)getDependentCollection
+{
+    LSFSDKLightingDirector *director = [LSFSDKLightingDirector getLightingDirector];
+    NSMutableArray *dependents = [[NSMutableArray alloc] init];
+
+    [dependents addObjectsFromArray: [[[director lightingManager] sceneCollectionManagerV1] getScenesCollectionWithFilter: [[LSFSDKLightingItemHasComponentFilter alloc] initWithComponent:self]]];
+
+    [dependents addObjectsFromArray: [[[director lightingManager] transitionEffectCollectionManager] getTransitionEffectCollectionWithFilter: [[LSFSDKLightingItemHasComponentFilter alloc] initWithComponent:self]]];
+
+    [dependents addObjectsFromArray: [[[director lightingManager] pulseEffectCollectionManager] getPulseEffectsCollectionWithFilter: [[LSFSDKLightingItemHasComponentFilter alloc] initWithComponent:self]]];
+
+
+    return [NSArray arrayWithArray: dependents];
 }
 
 -(void)postError:(NSString *)name status:(LSFResponseCode)status

@@ -20,5 +20,7 @@
 
 @property (nonatomic, strong, readonly) NSString *theID;
 @property (nonatomic, strong, readonly) NSString *name;
+@property (nonatomic, strong, readonly) NSArray *dependents;
+@property (nonatomic, strong, readonly) NSArray *components;
 
 @end

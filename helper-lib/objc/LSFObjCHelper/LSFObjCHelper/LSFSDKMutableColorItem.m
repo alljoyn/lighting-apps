@@ -15,6 +15,7 @@
  ******************************************************************************/
 
 #import "LSFSDKMutableColorItem.h"
+#import "model/LSFConstants.h"
 
 @implementation LSFSDKMutableColorItem
 
@@ -31,6 +32,11 @@
 -(void)setPower: (Power)power
 {
     [self setPowerOn: (power == ON)];
+}
+
+-(void)togglePower
+{
+    [self setPowerOn: [self isOff]];
 }
 
 -(void)setColor: (LSFSDKColor *)color

@@ -16,13 +16,19 @@
 
 #import "LSFSDKLamp.h"
 #import "LSFSDKGroup.h"
-#import "LSFGroupModel.h"
-#import "LSFConstants.h"
-#import "LSFSDKAllJoynManager.h"
 #import "LSFSDKLightingItemUtil.h"
 #import "LSFSDKLightingDirector.h"
+#import "manager/LSFSDKAllJoynManager.h"
+#import "model/LSFGroupModel.h"
+#import "model/LSFConstants.h"
+#import "model/LSFSDKLightingItemHasComponentFilter.h"
+#import "model/LSFConstants.h"
 
 @implementation LSFSDKGroup
+
+@synthesize colorTempMin = _colorTempMin;
+@synthesize colorTempMax = _colorTempMax;
+@synthesize isAllLampsGroup = _isAllLampsGroup;
 
 -(id)initWithGroupID: (NSString *)groupID
 {
@@ -46,6 +52,22 @@
     }
 
     return self;
+}
+
+-(int)colorTempMin
+{
+    return [[self getLampGroupDataModel] groupColorTempMin];
+}
+
+-(int)colorTempMax
+{
+    return [[self getLampGroupDataModel] groupColorTempMax];
+}
+
+-(BOOL)isAllLampsGroup
+{
+    LSFConstants *constants = [[LSFConstants alloc] init];
+    return [[constants ALL_LAMPS_GROUP_ID] isEqualToString: [[self getLampGroupDataModel] theID]];
 }
 
 -(void)add: (LSFSDKGroupMember *)member
@@ -106,10 +128,77 @@
     }
 }
 
--(void)deleteGroup
+-(void)deleteItem
 {
     NSString *errorContext = @"LSFSDKGroup deleteGroup: error";
     [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getGroupManager] deleteLampGroupWithID: groupModel.theID]];
+}
+
+-(BOOL)hasLamp: (LSFSDKLamp *)lamp
+{
+    NSString *errorContext = @"LSFSDKGroup hasLamp: error";
+    return ([self postInvalidArgIfNull:(errorContext) object:lamp]) ? [self hasLampWithID: lamp.theID] : NO;
+}
+
+-(BOOL)hasGroup: (LSFSDKGroup *)group
+{
+    NSString *errorContext = @"LSFSDKGroup hasGroup: error";
+    return ([self postInvalidArgIfNull:(errorContext) object:group]) ? [self hasGroupWithID: group.theID] : NO;
+
+}
+
+-(BOOL)hasComponent:(LSFSDKLightingItem *)item
+{
+    NSString *errorContext = @"LSFSDKGroup hasComponent: error";
+    return ([self postInvalidArgIfNull: errorContext object: item]) ? ([self hasLampWithID: item.theID] || [self hasGroupWithID: item.theID]): NO;
+}
+
+-(BOOL)hasLampWithID: (NSString *)lampID
+{
+    return [groupModel containsLamp: lampID];
+}
+
+-(BOOL)hasGroupWithID: (NSString *)groupID
+{
+    return [groupModel containsGroup: groupID];
+}
+
+-(NSArray *)getGroups
+{
+    NSMutableArray *groups = [[NSMutableArray alloc] init];
+    NSSet *groupIDs = [self getGroupIDs];
+    LSFSDKLightingDirector *lightingDirector = [LSFSDKLightingDirector getLightingDirector];
+
+    for (NSString *groupID in groupIDs)
+    {
+        [groups addObject: [lightingDirector getGroupWithID: groupID]];
+    }
+
+    return groups;
+}
+
+-(NSArray *)getLamps
+{
+    NSMutableArray *lamps = [[NSMutableArray alloc] init];
+    NSSet *lampIDs = [self getLampIDs];
+    LSFSDKLightingDirector *lightingDirector = [LSFSDKLightingDirector getLightingDirector];
+
+    for (NSString *lampID in lampIDs)
+    {
+        [lamps addObject: [lightingDirector getLampWithID: lampID]];
+    }
+
+    return lamps;
+}
+
+-(NSSet *)getLampIDs
+{
+    return groupModel.lamps;
+}
+
+-(NSSet *)getGroupIDs
+{
+    return groupModel.groups;
 }
 
 /*
@@ -131,7 +220,7 @@
     unsigned int scaledSaturation = [constants scaleLampStateValue: saturationPercent withMax: 100];
     unsigned int scaledColorTemp = [constants scaleColorTemp: colorTempDegrees];
 
-    LSFLampState *lampState = [[LSFLampState alloc] initWithOnOff: YES brightness: scaledBrightness hue: scaledHue saturation: scaledSaturation colorTemp: scaledColorTemp];
+    LSFLampState *lampState = [[LSFLampState alloc] initWithOnOff: self.getPowerOn brightness: scaledBrightness hue: scaledHue saturation: scaledSaturation colorTemp: scaledColorTemp];
 
     [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getGroupManager] transitionLampGroupID: groupModel.theID toState: lampState]];
 }
@@ -180,6 +269,19 @@
 -(LSFDataModel *)getColorDataModel
 {
     return [self getLampGroupDataModel];
+}
+
+-(NSArray *)getDependentCollection
+{
+    LSFSDKLightingDirector *director = [LSFSDKLightingDirector getLightingDirector];
+
+    NSMutableArray *dependents = [[NSMutableArray alloc] init];
+    [dependents addObjectsFromArray: [[[director lightingManager] groupCollectionManager] getGroupsCollectionWithFilter: [[LSFSDKLightingItemHasComponentFilter alloc] initWithComponent: self]]];
+    [dependents addObjectsFromArray: [[[director lightingManager] sceneCollectionManagerV1] getScenesCollectionWithFilter: [[LSFSDKLightingItemHasComponentFilter alloc] initWithComponent: self]]];
+    [dependents addObjectsFromArray: [[[director lightingManager] sceneElementCollectionManager] getSceneElementsCollectionWithFilter: [[LSFSDKLightingItemHasComponentFilter alloc] initWithComponent: self]]];
+
+    return [NSArray arrayWithArray: dependents];
+
 }
 
 -(void)postError:(NSString *)name status:(LSFResponseCode)status

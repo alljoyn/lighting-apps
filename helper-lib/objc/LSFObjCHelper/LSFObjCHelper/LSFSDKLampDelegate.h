@@ -16,7 +16,7 @@
 
 #import <Foundation/Foundation.h>
 #import "LSFSDKLightingDelegate.h"
-#import "LSFTrackingID.h"
+#import "LSFSDKTrackingID.h"
 
 @class LSFSDKLamp;
 @class LSFSDKLightingItemErrorEvent;

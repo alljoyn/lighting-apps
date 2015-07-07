@@ -15,8 +15,8 @@
  ******************************************************************************/
 
 #import "LSFEffectTableViewController.h"
-#import "LSFSceneDataModel.h"
-#import "LSFPulseEffectDataModel.h"
+#import <model/LSFSceneDataModel.h>
+#import <model/LSFPulseEffectDataModel.h>
 
 @interface LSFPulseEffectTableViewController : LSFEffectTableViewController
 

@@ -16,9 +16,10 @@
 
 #import <Foundation/Foundation.h>
 #import "LSFSDKGroupMember.h"
-#import "LSFGroupModel.h"
 #import "LSFSDKPreset.h"
 #import "LSFSDKEffect.h"
+#import "LSFSDKLamp.h"
+#import "model/LSFGroupModel.h"
 
 /**
  * An LSFSDKGroup object represents a set of lamps in the lighting system, and can be used to send the
@@ -26,10 +27,14 @@
  *
  * Groups can contain lamps and nested groups.
  */
-@interface LSFSDKGroup : LSFSDKGroupMember
+@interface LSFSDKGroup : LSFSDKGroupMember <LSFSDKDeletableItem>
 {
     @protected LSFGroupModel *groupModel;
 }
+
+@property (nonatomic, readonly) int colorTempMin;
+@property (nonatomic, readonly) int colorTempMax;
+@property (nonatomic, readonly) BOOL isAllLampsGroup;
 
 /** @name Creating LSFSDKLamp */
 
@@ -63,7 +68,15 @@
 -(void)add: (LSFSDKGroupMember *)member;
 -(void)remove: (LSFSDKGroupMember *)member;
 -(void)modify: (NSArray *)members;
--(void)deleteGroup;
+-(void)deleteItem;
+-(BOOL)hasLamp: (LSFSDKLamp *)lamp;
+-(BOOL)hasGroup: (LSFSDKGroup *)group;
+-(BOOL)hasLampWithID: (NSString *)lampID;
+-(BOOL)hasGroupWithID: (NSString *)groupID;
+-(NSArray *)getLamps;
+-(NSArray *)getGroups;
+-(NSSet *)getLampIDs;
+-(NSSet *)getGroupIDs;
 
 /*
  * Note: This method is not intended to be used by clients, and may change or be

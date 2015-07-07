@@ -28,6 +28,7 @@
 -(LSFSDKMasterScene *)getMasterSceneWithID: (NSString *)masterSceneID;
 -(NSArray *)getMasterScenes;
 -(NSArray *)getMasterScenesWithFilter: (id<LSFSDKLightingItemFilter>)filter;
+-(NSArray *)getMasterScenesCollectionWithFilter: (id<LSFSDKLightingItemFilter>)filter;
 -(NSArray *)removeAllMasterScenes;
 -(LSFSDKMasterScene *)removeMasterSceneWithID: (NSString *)masterSceneID;
 -(LSFMasterSceneDataModel *)getModelWithID: (NSString *)masterSceneID;

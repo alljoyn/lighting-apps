@@ -16,19 +16,24 @@
 
 #import "LSFTransitionEffectTutorialViewController.h"
 #import "LSFSDKLightingDirector.h"
+#import "LSFSDKLightingController.h"
+#import "LSFSDKLightingControllerConfigurationBase.h"
 #import "LSFSDKTransitionEffectAdapter.h"
 #import "LSFSDKMyLampState.h"
 
-//Private inner class that serves as the TransitionEffect one-shot delegate
-@interface MyTransitionEffectDelegate : LSFSDKTransitionEffectAdapter
+/*
+ * Global delegate that utilizes the Transition Effect initialization callback to
+ * apply the effect to every Lamp.
+ */
+@interface MyLightingDelegate : LSFSDKTransitionEffectAdapter
 
 @end
 
-@implementation MyTransitionEffectDelegate
+@implementation MyLightingDelegate
 
--(void)onTransitionEffectInitializedWithTrackingID: (LSFTrackingID *)trackingID andTransitionEffect: (LSFSDKTransitionEffect *)transitionEffect
+-(void)onTransitionEffectInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andTransitionEffect: (LSFSDKTransitionEffect *)transitionEffect
 {
-    // STEP 3: Apply the transition effect
+    // STEP 4: Apply the transition effect
     for (LSFSDKLamp *lamp in [[LSFSDKLightingDirector getLightingDirector] lamps])
     {
         [transitionEffect applyToGroupMember: lamp];
@@ -47,6 +52,8 @@ static unsigned int CONTROLLER_CONNECTION_DELAY = 5000;
 @interface LSFTransitionEffectTutorialViewController()
 
 @property (nonatomic, strong) LSFSDKLightingDirector *lightingDirector;
+@property (nonatomic, strong) MyLightingDelegate *myLightingDelegate;
+@property (nonatomic, strong) LSFSDKLightingControllerConfigurationBase *config;
 
 @end
 
@@ -54,6 +61,8 @@ static unsigned int CONTROLLER_CONNECTION_DELAY = 5000;
 
 @synthesize versionLabel = _versionLabel;
 @synthesize lightingDirector = _lightingDirector;
+@synthesize myLightingDelegate = _myLightingDelegate;
+@synthesize config = _config;
 
 -(void)viewDidLoad
 {
@@ -64,10 +73,17 @@ static unsigned int CONTROLLER_CONNECTION_DELAY = 5000;
     [appVersion appendString: [NSString stringWithFormat: @".%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]]];
     [self.versionLabel setText: appVersion];
 
-    // Instantiate the director and wait for the connection
-    self.lightingDirector = [LSFSDKLightingDirector getLightingDirector];
+    // STEP 1: Initialize a lighting controller with default configuration
+    self.config = [[LSFSDKLightingControllerConfigurationBase alloc]initWithKeystorePath: @"Documents"];
+    LSFSDKLightingController *lightingController = [LSFSDKLightingController getLightingController];
+    [lightingController initializeWithControllerConfiguration: self.config];
+    [lightingController start];
 
-    // STEP 1: Register a delegate for when the Controller connects and start the LightingDirector
+    // STEP 2: Instantiate the lighting director and wait for the connection, register a global delegate to
+    // handle Lighting events
+    self.myLightingDelegate = [[MyLightingDelegate alloc] init];
+    self.lightingDirector = [LSFSDKLightingDirector getLightingDirector];
+    [self.lightingDirector addDelegate: self.myLightingDelegate];
     [self.lightingDirector postOnNextControllerConnectionWithDelay: CONTROLLER_CONNECTION_DELAY delegate: self];
     [self.lightingDirector start];
 }
@@ -91,10 +107,9 @@ static unsigned int CONTROLLER_CONNECTION_DELAY = 5000;
  */
 -(void)onNextControllerConnection
 {
-    // STEP 2: Create a TransitionEffect and listen for events using a one-shot Listener
-    MyTransitionEffectDelegate *myTransitionEffectDelegate = [[MyTransitionEffectDelegate alloc] init];
+    // STEP 3: Create a TransitionEffect in lighting director
     LSFSDKMyLampState *myLampState = [[LSFSDKMyLampState alloc] initWithPower: ON color: [LSFSDKColor red]];
-    [[LSFSDKLightingDirector getLightingDirector] createTransitionEffectWithLampState: myLampState duration: 5000 name: @"TutorialTransition" delegate: myTransitionEffectDelegate];
+    [[LSFSDKLightingDirector getLightingDirector] createTransitionEffectWithLampState: myLampState duration: 5000 name: @"TutorialTransition" delegate: nil];
 }
 
 @end

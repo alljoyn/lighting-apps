@@ -15,18 +15,18 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFLampDetails.h"
-#import "LSFLampParameters.h"
-#import "LSFSDKAboutData.h"
+#import "LSFSDKLampDetails.h"
+#import "LSFSDKLampParameters.h"
+#import "LSFLampAbout.h"
 #import "LSFDataModel.h"
 
 extern NSString *LAMP_DEFAULT_NAME;
 
 @interface LSFLampModel : LSFDataModel
 
-@property (nonatomic, strong) LSFLampDetails *lampDetails;
-@property (nonatomic, strong) LSFLampParameters *lampParameters;
-@property (nonatomic, strong) LSFSDKAboutData *aboutData;
+@property (nonatomic, strong) LSFSDKLampDetails *lampDetails;
+@property (nonatomic, strong) LSFSDKLampParameters *lampParameters;
+@property (nonatomic, strong) LSFLampAbout *aboutData;
 
 -(id)initWithLampID: (NSString *)lampID;
 -(id)initWithLampID: (NSString *)lampID andLampName: (NSString *)name;

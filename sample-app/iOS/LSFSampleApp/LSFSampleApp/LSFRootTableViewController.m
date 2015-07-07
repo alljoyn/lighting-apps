@@ -15,12 +15,12 @@
  ******************************************************************************/
 
 #import "LSFRootTableViewController.h"
-#import "LSFEnums.h"
 #import "LSFLightsTableViewController.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFRootTableViewController ()
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification;
 -(void)wifiNotificationReceived: (NSNotification *)notification;
 
 @end
@@ -38,7 +38,7 @@
 {
     [super viewWillAppear: animated];
 
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(wifiNotificationReceived:) name: @"WifiNotification" object: nil];
 }
 
@@ -55,29 +55,14 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handlers
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Connected)
-    {
-        NSLog(@"Controller is now connected");
-    }
-    else if (controllerStatus.intValue == Disconnected)
-    {
-        NSLog(@"Controller is now disconnected");
-    }
-
     [self.data removeAllObjects];
     [self.tableView reloadData];
 }
 
-/*
- * WifiNotification Handler
- */
 -(void)wifiNotificationReceived: (NSNotification *)notification
 {
     NSLog(@"LSFRootTableViewController - wifiNotificationReceived() executing");

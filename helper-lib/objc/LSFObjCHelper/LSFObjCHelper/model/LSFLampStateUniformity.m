@@ -29,6 +29,11 @@
     return [self initWithPower: YES brightness: YES hue: YES saturation: YES andColorTemp: YES];
 }
 
+-(id)initWithLampStateUniformity: (LSFLampStateUniformity *)other
+{
+    return [self initWithPower: other.power brightness:other.brightness hue:other.hue saturation:other.saturation andColorTemp:other.colorTemp];
+}
+
 -(id)initWithPower: (BOOL)power brightness: (BOOL)brightness hue: (BOOL)hue saturation: (BOOL)saturation andColorTemp: (BOOL)colorTemp
 {
     self = [super init];

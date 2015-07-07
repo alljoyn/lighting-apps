@@ -15,16 +15,16 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFResponseCodes.h"
-#import "LSFTrackingID.h"
+#import "LSFSDKResponseCodes.h"
+#import "LSFSDKTrackingID.h"
 
 @interface LSFSDKLightingItemErrorEvent : NSObject
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic) lsf::LSFResponseCode responseCode;
 @property (nonatomic, strong) NSString *itemID;
-@property (nonatomic, strong) LSFTrackingID *trackingID;
+@property (nonatomic, strong) LSFSDKTrackingID *trackingID;
 
--(id)initWithName: (NSString *)name responseCode: (lsf::LSFResponseCode)responseCode itemID: (NSString *)itemID andTrackingID: (LSFTrackingID *)trackingID;
+-(id)initWithName: (NSString *)name responseCode: (lsf::LSFResponseCode)responseCode itemID: (NSString *)itemID andTrackingID: (LSFSDKTrackingID *)trackingID;
 
 @end

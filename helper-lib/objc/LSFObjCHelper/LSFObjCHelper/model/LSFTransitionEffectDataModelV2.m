@@ -49,6 +49,11 @@ const unsigned int TRANSITION_EFFECT_DEFAULT_DURATION = 5000;
     return self;
 }
 
+-(BOOL)containsPreset:(NSString *)presetID
+{
+    return [presetID isEqualToString: self.presetID];
+}
+
 -(void)setPresetID: (NSString *)presetID
 {
     _presetID = presetID;

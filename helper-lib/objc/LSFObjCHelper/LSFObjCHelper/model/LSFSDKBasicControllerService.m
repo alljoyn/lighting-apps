@@ -76,7 +76,7 @@
     return [_controllerConfiguration getRankNodeType];
 }
 
--(void)populateDefaultProperties:(LSFAboutData *)aboutData
+-(void)populateDefaultProperties:(LSFSDKAboutData *)aboutData
 {
     return [_controllerConfiguration populateDefaultProperties: aboutData];
 }

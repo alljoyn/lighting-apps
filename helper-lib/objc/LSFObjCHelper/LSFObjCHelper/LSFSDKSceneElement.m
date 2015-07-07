@@ -17,9 +17,10 @@
 #import "LSFSDKSceneElement.h"
 #import "LSFSDKLamp.h"
 #import "LSFSDKGroup.h"
-#import "LSFSDKAllJoynManager.h"
 #import "LSFSDKLightingItemUtil.h"
 #import "LSFSDKLightingDirector.h"
+#import "manager/LSFSDKAllJoynManager.h"
+#import "model/LSFSDKLightingItemHasComponentFilter.h"
 
 @implementation LSFSDKSceneElement
 
@@ -101,7 +102,7 @@
     }
 }
 
--(void)deleteSceneElement
+-(void)deleteItem
 {
     NSString *errorContext = @"LSFSDKSceneElement deleteSceneElement: error";
 
@@ -140,6 +141,96 @@
 -(LSFSceneElementDataModelV2 *)getSceneElementDataModel
 {
     return sceneElementModel;
+}
+
+-(NSArray *)getLamps
+{
+    NSMutableArray *lamps = [[NSMutableArray alloc] init];
+    NSSet *lampIDs = [[self getSceneElementDataModel] lamps];
+    for (NSString *lampID in lampIDs)
+    {
+        [lamps addObject: [[LSFSDKLightingDirector getLightingDirector] getLampWithID: lampID]];
+    }
+
+    return lamps;
+}
+
+-(NSArray *)getGroups
+{
+    NSMutableArray *groups = [[NSMutableArray alloc] init];
+    NSSet *groupIDs = [[self getSceneElementDataModel] groups];
+    for (NSString *groupID in groupIDs)
+    {
+        [groups addObject: [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: groupID]];
+    }
+
+    return groups;
+}
+
+-(id<LSFSDKEffect>)getEffect
+{
+    return [[LSFSDKLightingDirector getLightingDirector] getEffectWithID: [[self getSceneElementDataModel] effectID]];
+}
+
+-(BOOL)hasLampWithID: (NSString *)lampID
+{
+    return [sceneElementModel containsLamp: lampID];
+}
+
+-(BOOL)hasGroupWithID: (NSString *)groupID
+{
+    return [sceneElementModel containsGroup: groupID];
+}
+
+-(BOOL)hasEffectWithID: (NSString *)effectID
+{
+    return [sceneElementModel contaisnEffect: effectID];
+}
+
+-(BOOL)hasLamp: (LSFSDKLamp *)lamp
+{
+    NSString *errorContext = @"LSFSDKSceneElement hasLamp: error";
+    return ([self postInvalidArgIfNull:(errorContext) object:lamp]) ? [self hasLampWithID: lamp.theID] : NO;
+}
+
+-(BOOL)hasGroup: (LSFSDKGroup *)group
+{
+    NSString *errorContext = @"LSFSDKSceneElement hasGroup: error";
+    return ([self postInvalidArgIfNull:(errorContext) object:group]) ? [self hasGroupWithID: group.theID] : NO;
+}
+
+-(BOOL)hasEffect: (id<LSFSDKEffect>)effect
+{
+    NSString *errorContext = @"LSFSDKSceneElement hasEffect: error";
+    return ([self postInvalidArgIfNull:(errorContext) object:effect]) ? [self hasEffectWithID: effect.theID] : NO;
+}
+
+-(BOOL)hasComponent:(LSFSDKLightingItem *)item
+{
+    NSString *errorContext = @"LSFSDKSceneElement hasComponent: error";
+    return ([self postInvalidArgIfNull:errorContext object:item]) ? ([self hasLampWithID: item.theID] || [self hasGroupWithID: item.theID] || [self hasEffectWithID: item.theID]) : NO;
+}
+
+-(NSArray *)getDependentCollection
+{
+    LSFSDKLightingDirector *director = [LSFSDKLightingDirector getLightingDirector];
+
+    NSMutableArray *dependents = [[NSMutableArray alloc] init];
+    [dependents addObjectsFromArray: [[[director lightingManager] sceneCollectionManager] getScenesCollectionWithFilter: [[LSFSDKLightingItemHasComponentFilter alloc] initWithComponent: self]]];
+
+    return [NSArray arrayWithArray: dependents];
+}
+
+-(NSArray *)getComponentCollection
+{
+    NSMutableArray *collection = [[NSMutableArray alloc] init];
+    if ([self getEffect])
+    {
+        [collection addObject: [self getEffect]];
+    }
+    [collection addObjectsFromArray: [self getGroups]];
+    [collection addObjectsFromArray: [self getLamps]];
+    return collection;
 }
 
 @end

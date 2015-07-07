@@ -28,6 +28,16 @@
     return [[[self getColorDataModel] state] onOff];
 }
 
+-(BOOL)isOn
+{
+    return [self getPowerOn];
+}
+
+-(BOOL)isOff
+{
+    return ![self isOn];
+}
+
 -(Power)getPower
 {
     return (([self getPowerOn]) ? ON : OFF);
@@ -36,6 +46,26 @@
 -(LSFSDKColor *)getColor
 {
     return [[LSFSDKColor alloc] initWithHsvt: [self getColorHsvt]];
+}
+
+-(LSFSDKMyLampState *)getState
+{
+    return [[LSFSDKMyLampState alloc] initWithPower: [self getPower] color: [self getColor]];
+}
+
+-(LSFSDKLampStateUniformity *)getUniformity
+{
+    return [[LSFSDKLampStateUniformity alloc] initWithLampStateUniformity: [[self getColorDataModel] uniformity]];
+}
+
+-(LSFSDKCapabilityData *)getCapabilities
+{
+    return [[LSFSDKCapabilityData alloc] initWithCapabilityData: [[self getColorDataModel] capability]];
+}
+
+-(void)setCapabilities: (LSFSDKCapabilityData *)capabilityData
+{
+    [self getColorDataModel].capability = capabilityData;
 }
 
 -(LSFDataModel *)getColorDataModel;

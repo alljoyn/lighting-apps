@@ -129,11 +129,11 @@
 {
     if (rc != LSF_OK)
     {
-        [self.manager.sceneCollectionManagerV1 sendErrorEvent: @"createSceneTrackingReplyCB" statusCode: rc itemID: sceneID withTrackingID: [[LSFTrackingID alloc] initWithValue:trackingID]];
+        [self.manager.sceneCollectionManagerV1 sendErrorEvent: @"createSceneTrackingReplyCB" statusCode: rc itemID: sceneID withTrackingID: [[LSFSDKTrackingID alloc] initWithValue:trackingID]];
     }
     else
     {
-        LSFTrackingID *myTrackingID = [[LSFTrackingID alloc] initWithValue: trackingID];
+        LSFSDKTrackingID *myTrackingID = [[LSFSDKTrackingID alloc] initWithValue: trackingID];
         [self.creationTrackingIDs setValue: myTrackingID forKey: sceneID];
     }
 }
@@ -300,7 +300,7 @@
 -(void)postSendSceneInitialized: (NSString *)sceneID
 {
     dispatch_async(self.manager.dispatchQueue, ^{
-        LSFTrackingID *trackingID = [self.creationTrackingIDs valueForKey: sceneID];
+        LSFSDKTrackingID *trackingID = [self.creationTrackingIDs valueForKey: sceneID];
 
         if (trackingID != nil)
         {

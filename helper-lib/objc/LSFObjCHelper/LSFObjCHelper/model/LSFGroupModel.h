@@ -15,8 +15,8 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFLampState.h"
-#import "LSFLampGroup.h"
+#import <internal/LSFLampState.h>
+#import <internal/LSFLampGroup.h>
 #import "LSFCapabilityData.h"
 #import "LSFDataModel.h"
 
@@ -32,5 +32,7 @@
 
 -(id)initWithGroupID: (NSString *)groupID;
 -(id)initWithGroupID: (NSString *)groupID andGroupName: (NSString *)groupName;
+-(BOOL)containsLamp: (NSString *)lampID;
+-(BOOL)containsGroup: (NSString *)groupID;
 
 @end

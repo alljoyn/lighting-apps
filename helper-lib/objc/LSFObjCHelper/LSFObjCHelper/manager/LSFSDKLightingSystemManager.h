@@ -16,18 +16,20 @@
 
 #import <Foundation/Foundation.h>
 #import "LSFSDKNextControllerConnectionDelegate.h"
-#import "LSFSDKHelperControllerClientCallback.h"
-#import "LSFSDKHelperControllerServiceManagerCallback.h"
-#import "LSFSDKHelperGroupManagerCallback.h"
-#import "LSFSDKHelperLampManagerCallback.h"
-#import "LSFSDKHelperMasterSceneManagerCallback.h"
-#import "LSFSDKHelperPresetManagerCallback.h"
-#import "LSFSDKHelperPulseEffectManagerCallback.h"
-#import "LSFSDKHelperSceneElementManagerCallback.h"
-#import "LSFSDKHelperSceneManagerCallback.h"
-#import "LSFSDKHelperSceneManagerCallbackV1.h"
-#import "LSFSDKHelperSceneManagerCallbackV2.h"
-#import "LSFSDKHelperTransitionEffectManagerCallback.h"
+#import "../LSFSDKAllJoynDelegate.h"
+#import "../LSFSDKControllerDelegate.h"
+#import "../callback/LSFSDKHelperControllerClientCallback.h"
+#import "../callback/LSFSDKHelperControllerServiceManagerCallback.h"
+#import "../callback/LSFSDKHelperGroupManagerCallback.h"
+#import "../callback/LSFSDKHelperLampManagerCallback.h"
+#import "../callback/LSFSDKHelperMasterSceneManagerCallback.h"
+#import "../callback/LSFSDKHelperPresetManagerCallback.h"
+#import "../callback/LSFSDKHelperPulseEffectManagerCallback.h"
+#import "../callback/LSFSDKHelperSceneElementManagerCallback.h"
+#import "../callback/LSFSDKHelperSceneManagerCallback.h"
+#import "../callback/LSFSDKHelperSceneManagerCallbackV1.h"
+#import "../callback/LSFSDKHelperSceneManagerCallbackV2.h"
+#import "../callback/LSFSDKHelperTransitionEffectManagerCallback.h"
 #import "LSFSDKLampCollectionManager.h"
 #import "LSFSDKPresetCollectionManager.h"
 #import "LSFSDKGroupCollectionManager.h"
@@ -38,22 +40,20 @@
 #import "LSFSDKSceneCollectionManagerV2.h"
 #import "LSFSDKMasterSceneCollectionManager.h"
 #import "LSFControllerManager.h"
-#import "LSFLampManager.h"
-#import "LSFLampGroupManager.h"
-#import "LSFPresetManager.h"
-#import "LSFSceneManager.h"
-#import "LSFMasterSceneManager.h"
-#import "LSFTransitionEffectManager.h"
-#import "LSFSceneElementManager.h"
-#import "LSFPulseEffectManager.h"
-#import "LSFSDKAllJoynDelegate.h"
-#import "LSFSDKControllerDelegate.h"
+#import <internal/LSFLampManager.h>
+#import <internal/LSFLampGroupManager.h>
+#import <internal/LSFPresetManager.h>
+#import <internal/LSFSceneManager.h>
+#import <internal/LSFMasterSceneManager.h>
+#import <internal/LSFTransitionEffectManager.h>
+#import <internal/LSFSceneElementManager.h>
+#import <internal/LSFPulseEffectManager.h>
 
 /**
  * @warning *Note:* This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK.
  */
-@interface LSFSDKLightingSystemManager : NSObject <LSFSDKControllerDelegate>
+@interface LSFSDKLightingSystemManager : NSObject <LSFSDKControllerDelegate, LSFSDKLampDelegate>
 
 @property (nonatomic, strong) NSString *defaultLanguage;
 @property (nonatomic, strong) dispatch_queue_t dispatchQueue;

@@ -19,7 +19,7 @@
 
 @implementation LSFSDKAnyCollectionAdapter
 
--(void)onAnyInitializedWithTrackingID: (LSFTrackingID *)trackingID andLightingItem: (id)item
+-(void)onAnyInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andLightingItem: (id)item
 {
     //Intentionally left blank
 }
@@ -59,7 +59,7 @@
     [self onAnyError: error];
 }
 
--(void)onGroupInitializedWithTrackingID: (LSFTrackingID *)trackingID andGroup: (LSFSDKGroup *)group
+-(void)onGroupInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andGroup: (LSFSDKGroup *)group
 {
     [self onAnyInitializedWithTrackingID: trackingID andLightingItem: group];
 }
@@ -79,7 +79,7 @@
     [self onAnyError: error];
 }
 
--(void)onPresetInitializedWithTrackingID: (LSFTrackingID *)trackingID andPreset: (LSFSDKPreset *)preset
+-(void)onPresetInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andPreset: (LSFSDKPreset *)preset
 {
     [self onAnyInitializedWithTrackingID: trackingID andLightingItem: preset];
 }
@@ -99,7 +99,7 @@
     [self onAnyError: error];
 }
 
--(void)onTransitionEffectInitializedWithTrackingID: (LSFTrackingID *)trackingID andTransitionEffect: (LSFSDKTransitionEffect *)transitionEffect;
+-(void)onTransitionEffectInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andTransitionEffect: (LSFSDKTransitionEffect *)transitionEffect;
 {
     [self onAnyInitializedWithTrackingID: trackingID andLightingItem: transitionEffect];
 }
@@ -119,7 +119,7 @@
     [self onAnyError: error];
 }
 
--(void)onPulseEffectInitializedWithTrackingID: (LSFTrackingID *)trackingID andPulseEffect: (LSFSDKPulseEffect *)pulseEffect;
+-(void)onPulseEffectInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andPulseEffect: (LSFSDKPulseEffect *)pulseEffect;
 {
     [self onAnyInitializedWithTrackingID: trackingID andLightingItem: pulseEffect];
 }
@@ -139,7 +139,7 @@
     [self onAnyError: error];
 }
 
--(void)onSceneElementInitializedWithTrackingID: (LSFTrackingID *)trackingID andSceneElement:(LSFSDKSceneElement *)sceneElement
+-(void)onSceneElementInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andSceneElement:(LSFSDKSceneElement *)sceneElement
 {
     [self onAnyInitializedWithTrackingID: trackingID andLightingItem: sceneElement];
 }
@@ -159,7 +159,7 @@
     [self onAnyError: error];
 }
 
--(void)onSceneInitializedWithTrackingID: (LSFTrackingID *)trackingID andScene: (LSFSDKScene *)scene
+-(void)onSceneInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andScene: (LSFSDKScene *)scene
 {
     [self onAnyInitializedWithTrackingID: trackingID andLightingItem: scene];
 }
@@ -179,7 +179,7 @@
     [self onAnyError: error];
 }
 
--(void)onMasterSceneInitializedWithTrackingID: (LSFTrackingID *)trackingID andMasterScene: (LSFSDKMasterScene *)masterScene
+-(void)onMasterSceneInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andMasterScene: (LSFSDKMasterScene *)masterScene
 {
     [self onAnyInitializedWithTrackingID: trackingID andLightingItem: masterScene];
 }

@@ -15,8 +15,8 @@
  ******************************************************************************/
 
 #import "LSFSceneDataModel.h"
-#import "LSFStateTransitionEffect.h"
-#import "LSFStatePulseEffect.h"
+#import <internal/LSFStateTransitionEffect.h>
+#import <internal/LSFStatePulseEffect.h>
 
 @interface LSFSceneDataModel()
 
@@ -256,6 +256,64 @@
 
         [self.pulseEffects addObject: pedm];
     }
+}
+
+-(BOOL)containsPreset: (NSString *)presetID
+{
+    for (LSFNoEffectDataModel *noEffect in [self noEffects])
+    {
+        if ([noEffect containsPreset: presetID])
+        {
+            return YES;
+        }
+    }
+
+    for (LSFTransitionEffectDataModel *transitionEffect in [self transitionEffects])
+    {
+        if ([transitionEffect containsPreset: presetID])
+        {
+            return YES;
+        }
+    }
+
+    for (LSFPulseEffectDataModel *pulseEffect in [self pulseEffects])
+    {
+        if ([pulseEffect containsPreset: presetID])
+        {
+            return YES;
+        }
+    }
+
+    return NO;
+}
+
+-(BOOL)containsGroup: (NSString *)groupID
+{
+    for (LSFNoEffectDataModel *noEffect in [self noEffects])
+    {
+        if ([noEffect containsGroup: groupID])
+        {
+            return YES;
+        }
+    }
+
+    for (LSFTransitionEffectDataModel *transitionEffect in [self transitionEffects])
+    {
+        if ([transitionEffect containsGroup: groupID])
+        {
+            return YES;
+        }
+    }
+
+    for (LSFPulseEffectDataModel *pulseEffect in [self pulseEffects])
+    {
+        if ([pulseEffect containsGroup: groupID])
+        {
+            return YES;
+        }
+    }
+
+    return NO;
 }
 
 -(BOOL)isInitialized

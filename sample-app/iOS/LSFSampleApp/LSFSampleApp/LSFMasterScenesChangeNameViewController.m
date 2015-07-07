@@ -15,23 +15,18 @@
  ******************************************************************************/
 
 #import "LSFMasterScenesChangeNameViewController.h"
-#import "LSFMasterSceneModelContainer.h"
-#import "LSFSDKMasterScene.h"
-#import "LSFDispatchQueue.h"
-#import "LSFAllJoynManager.h"
 #import "LSFUtilityFunctions.h"
-#import "LSFEnums.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFMasterScenesChangeNameViewController ()
 
 @property (nonatomic) BOOL doneButtonPressed;
-@property (nonatomic, strong) LSFMasterSceneDataModel *masterSceneModel;
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
--(void)masterSceneNotificationReceived: (NSNotification *)notification;
--(void)reloadMasterSceneName;
--(void)deleteMasterScenesWithIDs: (NSArray *)sceneIDs andNames: (NSArray *)sceneNames;
--(BOOL)checkForDuplicateName: (NSString *)name;
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification;
+-(void)masterSceneChangedNotificationReceived: (NSNotification *)notification;
+-(void)masterSceneRemovedNotificationReceived: (NSNotification *)notification;
+-(void)reloadMasterSceneName: (NSString *)masterSceneName;
+-(void)alertMasterSceneDeleted: (LSFSDKMasterScene *)masterScene;
 
 @end
 
@@ -40,7 +35,6 @@
 @synthesize masterSceneID = _masterSceneID;
 @synthesize masterSceneNameTextField = _masterSceneNameTextField;
 @synthesize doneButtonPressed = _doneButtonPressed;
-@synthesize masterSceneModel = _masterSceneModel;
 
 -(void)viewDidLoad
 {
@@ -52,15 +46,14 @@
     [super viewWillAppear: animated];
 
     //Set master scenes notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(masterSceneNotificationReceived:) name: @"MasterSceneNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(masterSceneChangedNotificationReceived:) name: @"LSFMasterSceneChangedNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(masterSceneRemovedNotificationReceived:) name: @"LSFMasterSceneRemovedNotification" object: nil];
 
-    LSFMasterSceneModelContainer *container = [LSFMasterSceneModelContainer getMasterSceneModelContainer];
-    NSMutableDictionary *masterScenes = container.masterScenesContainer;
-    self.masterSceneModel = [[masterScenes objectForKey: self.masterSceneID] getMasterSceneDataModel];
+    LSFSDKMasterScene *masterScene = [[LSFSDKLightingDirector getLightingDirector] getMasterSceneWithID: self.masterSceneID];
 
     [self.masterSceneNameTextField becomeFirstResponder];
-    self.masterSceneNameTextField.text = self.masterSceneModel.name;
+    self.masterSceneNameTextField.text = [masterScene name];
     self.doneButtonPressed = NO;
 }
 
@@ -78,68 +71,55 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handlers
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Disconnected)
+//    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    LSFSDKController *leader = [notification.userInfo valueForKey: @"leader"];
+    if (![leader connected])
     {
-        [self.navigationController popToRootViewControllerAnimated: YES];
+        [self dismissViewControllerAnimated: YES completion: nil];
     }
 }
 
-/*
- * MasterSceneNotification Handler
- */
--(void)masterSceneNotificationReceived: (NSNotification *)notification
+-(void)masterSceneChangedNotificationReceived: (NSNotification *)notification
 {
-    NSString *masterSceneID = [notification.userInfo valueForKey: @"masterSceneID"];
-    NSNumber *callbackOp = [notification.userInfo valueForKey: @"operation"];
-    NSArray *masterSceneIDs = [notification.userInfo valueForKey: @"masterSceneIDs"];
-    NSArray *masterSceneNames = [notification.userInfo valueForKey: @"masterSceneNames"];
+    LSFSDKMasterScene *masterScene = [notification.userInfo valueForKey: @"masterScene"];
 
-    if ([self.masterSceneID isEqualToString: masterSceneID] || [masterSceneIDs containsObject: self.masterSceneID])
+    if ([self.masterSceneID isEqualToString: [masterScene name]])
     {
-        switch (callbackOp.intValue)
-        {
-            case SceneNameUpdated:
-                [self reloadMasterSceneName];
-                break;
-            case SceneDeleted:
-                [self deleteMasterScenesWithIDs: masterSceneIDs andNames: masterSceneNames];
-                break;
-            default:
-                break;
-        }
+        [self reloadMasterSceneName: [masterScene name]];
     }
 }
 
--(void)reloadMasterSceneName
+-(void)masterSceneRemovedNotificationReceived: (NSNotification *)notification
 {
-    self.masterSceneModel = [[[[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer] objectForKey: self.masterSceneID] getMasterSceneDataModel];
-    self.masterSceneNameTextField.text = self.masterSceneModel.name;
+    LSFSDKMasterScene *masterScene = [notification.userInfo valueForKey: @"masterScene"];
+
+    if ([self.masterSceneID isEqualToString: [masterScene name]])
+    {
+        [self alertMasterSceneDeleted: masterScene];
+    }
 }
 
--(void)deleteMasterScenesWithIDs: (NSArray *)masterSceneIDs andNames: (NSArray *)masterSceneNames
+-(void)reloadMasterSceneName: (NSString*)masterSceneName;
 {
-    if ([masterSceneIDs containsObject: self.masterSceneID])
-    {
-        int index = [masterSceneIDs indexOfObject: self.masterSceneID];
+    self.masterSceneNameTextField.text = masterSceneName;
+}
 
-        [self.navigationController popToRootViewControllerAnimated: YES];
+-(void)alertMasterSceneDeleted: (LSFSDKMasterScene *)masterScene
+{
+    [self.navigationController popToRootViewControllerAnimated: YES];
 
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Master Scene Not Found"
-                                                            message: [NSString stringWithFormat: @"The master scene \"%@\" no longer exists.", [masterSceneNames objectAtIndex: index]]
-                                                           delegate: nil
-                                                  cancelButtonTitle: @"OK"
-                                                  otherButtonTitles: nil];
-            [alert show];
-        });
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Master Scene Not Found"
+                                                        message: [NSString stringWithFormat: @"The master scene \"%@\" no longer exists.", [masterScene name]]
+                                                       delegate: nil
+                                              cancelButtonTitle: @"OK"
+                                              otherButtonTitles: nil];
+        [alert show];
+    });
 }
 
 /*
@@ -169,20 +149,27 @@
         return NO;
     }
 
-    BOOL nameMatchFound = [self checkForDuplicateName: self.masterSceneNameTextField.text];
+    BOOL nameMatchFound = [[[[LSFSDKLightingDirector getLightingDirector] masterScenes] valueForKeyPath: @"name"] containsObject: self.masterSceneNameTextField.text];
 
     if (!nameMatchFound)
     {
         self.doneButtonPressed = YES;
         [textField resignFirstResponder];
 
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-            LSFMasterSceneManager *masterSceneManager = ([LSFAllJoynManager getAllJoynManager]).lsfMasterSceneManager;
-            [masterSceneManager setMasterSceneNameWithID: self.masterSceneID andMasterSceneName: self.masterSceneNameTextField.text];
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            LSFSDKMasterScene *masterScene = [[LSFSDKLightingDirector getLightingDirector] getMasterSceneWithID: self.masterSceneID];
+            [masterScene rename: self.masterSceneNameTextField.text];
         });
 
         return YES;
     }
+
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Duplicate Name"
+                                                    message: [NSString stringWithFormat: @"Warning: there is already a master scene named \"%@.\" Although it's possible to use the same name for more than one master scene, it's better to give each master scene a unique name.\n\nKeep duplicate master scene name \"%@\"?", self.masterSceneNameTextField.text, self.masterSceneNameTextField.text]
+                                                   delegate: self
+                                          cancelButtonTitle: @"NO"
+                                          otherButtonTitles: @"YES", nil];
+    [alert show];
 
     return NO;
 }
@@ -212,37 +199,11 @@
         self.doneButtonPressed = YES;
         [self.masterSceneNameTextField resignFirstResponder];
 
-        dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-            LSFMasterSceneManager *masterSceneManager = ([LSFAllJoynManager getAllJoynManager]).lsfMasterSceneManager;
-            [masterSceneManager setMasterSceneNameWithID: self.masterSceneID andMasterSceneName: self.masterSceneNameTextField.text];
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            LSFSDKMasterScene *masterScene = [[LSFSDKLightingDirector getLightingDirector] getMasterSceneWithID: self.masterSceneID];
+            [masterScene rename: self.masterSceneNameTextField.text];
         });
     }
-}
-
-/*
- * Private functions
- */
--(BOOL)checkForDuplicateName: (NSString *)name
-{
-    NSDictionary *masterScenes = [[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer];
-
-    for (LSFSDKMasterScene *masterScene in [masterScenes allValues])
-    {
-        LSFMasterSceneDataModel *model = [masterScene getMasterSceneDataModel];
-        if ([name isEqualToString: model.name])
-        {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Duplicate Name"
-                                                            message: [NSString stringWithFormat: @"Warning: there is already a master scene named \"%@.\" Although it's possible to use the same name for more than one master scene, it's better to give each master scene a unique name.\n\nKeep duplicate master scene name \"%@\"?", name, name]
-                                                           delegate: self
-                                                  cancelButtonTitle: @"NO"
-                                                  otherButtonTitles: @"YES", nil];
-            [alert show];
-
-            return YES;
-        }
-    }
-
-    return NO;
 }
 
 @end

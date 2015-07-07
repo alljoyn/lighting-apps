@@ -15,15 +15,28 @@
  ******************************************************************************/
 
 #import "LSFUtilityFunctions.h"
-#import "LampValues.h"
-#import "LSFLampModelContainer.h"
-#import "LSFGroupModelContainer.h"
-#import "LSFLampModel.h"
-#import "LSFGroupModel.h"
-#import "LSFConstants.h"
+#import <LSFSDKLampValues.h>
+#import <SystemConfiguration/CaptiveNetwork.h>
+#import <LSFSDKLightingDirector.h>
 
 @implementation LSFUtilityFunctions
 
++(BOOL)checkNameEmpty: (NSString *)name entity: (NSString *)entity
+{
+    if ([name isEqualToString: @""])
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: [NSString stringWithFormat: @"%@ Error", entity]
+                                                        message: @"You need to provide a name in order to proceed."
+                                                       delegate: self
+                                              cancelButtonTitle: @"OK"
+                                              otherButtonTitles: nil];
+        [alert show];
+
+        return NO;
+    }
+
+    return YES;
+}
 
 +(BOOL)checkNameLength: (NSString *)name entity: (NSString *)entity
 {
@@ -56,52 +69,7 @@
     return YES;
 }
 
-+(NSString *)buildSectionTitleString: (LSFSceneElementDataModel *)sceneElement
-{
-    BOOL firstElementFound = NO;
-    NSMutableString *titleString = [[NSMutableString alloc] initWithString: @""];
-
-    LSFGroupModelContainer *groupContainer = [LSFGroupModelContainer getGroupModelContainer];
-    NSMutableDictionary *groups = groupContainer.groupContainer;
-
-    for (int i = 0; !firstElementFound && i < sceneElement.members.lampGroups.count; i++)
-    {
-        NSString *lampGroupID = [sceneElement.members.lampGroups objectAtIndex: i];
-        LSFGroupModel *model = [groups valueForKey: lampGroupID];
-
-        if (model != nil)
-        {
-            [titleString appendFormat: @"\"%@\"", model.name];
-            firstElementFound = YES;
-        }
-    }
-
-    LSFLampModelContainer *lampsContainer = [LSFLampModelContainer getLampModelContainer];
-    NSMutableDictionary *lamps = lampsContainer.lampContainer;
-
-    for (int i = 0; !firstElementFound && i < sceneElement.members.lamps.count; i++)
-    {
-        NSString *lampID = [sceneElement.members.lamps objectAtIndex: i];
-        LSFLampModel *model = [lamps valueForKey: lampID];
-
-        if (model != nil)
-        {
-            [titleString appendFormat: @"\"%@\"", model.name];
-            firstElementFound = YES;
-        }
-    }
-
-    unsigned int remainingSceneMembers = (sceneElement.members.lamps.count + sceneElement.members.lampGroups.count - 1);
-
-    if (remainingSceneMembers > 0)
-    {
-        [titleString appendFormat: @" (and %u more)", remainingSceneMembers];
-    }
-
-    return [NSString stringWithString: titleString];
-}
-
-+(void)colorIndicatorSetup: (UIImageView*)colorIndicatorImage withDataState: (LSFLampState*) dataState andCapabilityData: (LSFCapabilityData *)capablity
++(void)colorIndicatorSetup: (UIImageView*)colorIndicatorImage withColor: (LSFSDKColor*) color andCapabilityData: (LSFSDKCapabilityData *)capablity
 {
     CAShapeLayer *circleShape = [CAShapeLayer layer];
     [circleShape setPosition:CGPointMake([colorIndicatorImage bounds].size.width/2.0f, [colorIndicatorImage bounds].size.height/2.0f)];
@@ -109,46 +77,47 @@
     [circleShape setPath:[[UIBezierPath bezierPathWithRoundedRect:CGRectMake(0.0f, 0.0f, 10.0f, 10.0f) cornerRadius:10.0f]  CGPath]];
     [circleShape setLineWidth:0.3f];
     [circleShape setStrokeColor:[[UIColor colorWithRed:0.49 green:0.49 blue:0.49 alpha:1] CGColor]]; // #7d7d7d
-    UIColor* fillColor = [self calcFillColor: dataState withCapability: capablity];
+    UIColor* fillColor = [self calcFillColor: color withCapability: capablity];
     [circleShape setFillColor: [fillColor CGColor]];
     [[colorIndicatorImage layer] addSublayer:circleShape];
 }
 
-+(UIColor*)calcFillColor: (LSFLampState*) dataState withCapability: (LSFCapabilityData *)capability
++(UIColor*)calcFillColor: (LSFSDKColor *) color withCapability: (LSFSDKCapabilityData *)capability
 {
+    LSFSDKLightingDirector *director = [LSFSDKLightingDirector getLightingDirector];
     CGFloat brightness, hue, saturation, colorTemp;
 
     if (capability == nil || capability.color > NONE)
     {
         //Type 4 (on/off, dimmable, full color, color temp)
-        brightness = (CGFloat)dataState.brightness;
-        hue = (CGFloat)dataState.hue;
-        saturation = (CGFloat)dataState.saturation;
-        colorTemp = (CGFloat)dataState.colorTemp;
+        brightness = (CGFloat)[color brightness];
+        hue = (CGFloat)[color hue];
+        saturation = (CGFloat)[color saturation];
+        colorTemp = (CGFloat)[color colorTemp];
     }
     else if (capability.temp > NONE)
     {
         //Type 3 (on/off, dimmable, color temp)
-        brightness = (CGFloat)dataState.brightness;
-        hue = ([LSFConstants getConstants]).MIN_HUE;
-        saturation = ([LSFConstants getConstants]).MIN_SATURATION;
-        colorTemp = (CGFloat)dataState.colorTemp;
+        brightness = (CGFloat)[color brightness];
+        hue = [director HUE_MIN];
+        saturation = [director SATURATION_MIN];
+        colorTemp = (CGFloat)[color colorTemp];
     }
     else if (capability.dimmable > NONE)
     {
         //Type 2 (on/off, dimmable)
-        brightness = (CGFloat)dataState.brightness;
-        hue = ([LSFConstants getConstants]).MIN_HUE;
-        saturation = ([LSFConstants getConstants]).MIN_SATURATION;
-        colorTemp = (CGFloat)dataState.colorTemp;
+        brightness = (CGFloat)[color brightness];
+        hue = [director HUE_MIN];
+        saturation = [director SATURATION_MIN];
+        colorTemp = (CGFloat)[color colorTemp];
     }
     else
     {
         //Type 1 (on/off)
-        brightness = ([LSFConstants getConstants]).MAX_BRIGHTNESS;
-        hue = ([LSFConstants getConstants]).MIN_HUE;
-        saturation = ([LSFConstants getConstants]).MIN_SATURATION;
-        colorTemp = (CGFloat)dataState.colorTemp;
+        brightness = [director BRIGHTNESS_MAX];
+        hue = [director HUE_MIN];
+        saturation = [director SATURATION_MIN];
+        colorTemp = (CGFloat)[color colorTemp];
     }
 
     //Create original color using hue, saturation, brightness
@@ -272,6 +241,102 @@
 
     UIColor *colorTempRGB = [UIColor colorWithRed:(r/255.0f) green:(g/255.0f) blue:(b/255.0f) alpha:1];
     return colorTempRGB;
+}
+
++(NSString *)currentWifiSSID
+{
+    NSString *ssid = nil;
+    NSArray *ifs = (__bridge_transfer id)CNCopySupportedInterfaces();
+
+    for (NSString *ifnam in ifs)
+    {
+        NSDictionary *info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
+        if (info[@"SSID"])
+        {
+            ssid = info[@"SSID"];
+            //NSLog(@"SSID = %@", ssid);
+        }
+    }
+
+    return ssid;
+}
+
+// Temporary fix - move definition from model to SDK level
++(NSArray *)getLampDetailsFields
+{
+    return [[NSArray alloc] initWithObjects: @"Lamp Make", @"Lamp Model", @"Device Type", @"Lamp Type", @"Base Type", @"Lamp Beam Angle",
+            @"Dimmable", @"Supports Color", @"Supports Color Temperature", @"Supports Effects", @"Min Voltage", @"Max Voltage", @"Wattage",
+            @"Incandescent Equivalent", @"Max Lumens", @"Min Temperature", @"Max Temperature", @"Color Rendering Index", nil];
+}
+
+// Temporary fix - move definition from model to SDK level
++(NSArray *)getLampAboutFields
+{
+    return [[NSArray alloc] initWithObjects: @"App ID", @"Default Language", @"Device Name", @"Device ID", @"App Name", @"Manufacturer",
+            @"Model Number", @"Supported Languages", @"Description", @"Date of Manufacture", @"Software Version", @"AJ Software Version", @"Hardware Version", @"Support URL", nil];
+}
+
++(NSArray *)getSupportedEffects
+{
+    return [NSArray arrayWithObjects: @"No Effect", @"Transition", @"Pulse", nil];
+}
+
++(NSArray *)getEffectImages
+{
+    return [NSArray arrayWithObjects: @"list_constant_icon.png", @"list_transition_icon.png", @"list_pulse_icon.png", nil];
+}
+
++(NSMutableAttributedString *)getSourceCodeText
+{
+    NSMutableAttributedString *sourceCodeText = [[NSMutableAttributedString alloc] initWithString: @"AllSeen Alliance Working Group"];
+    [sourceCodeText addAttribute: NSLinkAttributeName value: @"https://wiki.allseenalliance.org/tsc/connected_lighting" range: NSMakeRange(0, sourceCodeText.length)];
+    [sourceCodeText addAttribute: NSFontAttributeName value: [UIFont fontWithName: @"Helvetica Neue" size: 18.0f] range: NSMakeRange(0, sourceCodeText.length)];
+
+    return sourceCodeText;
+}
+
++(NSMutableAttributedString *)getTeamText
+{
+    NSMutableAttributedString *teamText = [[NSMutableAttributedString alloc] initWithString: @"AllSeen Alliance Working Group"];
+    [teamText addAttribute: NSLinkAttributeName value: @"https://wiki.allseenalliance.org/tsc/connected_lighting" range: NSMakeRange(0, teamText.length)];
+    [teamText addAttribute: NSFontAttributeName value: [UIFont fontWithName: @"Helvetica Neue" size: 18.0f] range: NSMakeRange(0, teamText.length)];
+
+    return teamText;
+}
+
++(NSMutableAttributedString *)getNoticeText
+{
+    NSMutableAttributedString *noticeText = [[NSMutableAttributedString alloc] initWithString: @"Copyright (c) AllSeen Alliance. All rights reserved.\n\nPermission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE."];
+    [noticeText addAttribute: NSFontAttributeName value: [UIFont fontWithName: @"Helvetica Neue" size: 18.0f] range: NSMakeRange(0, noticeText.length)];
+
+    return noticeText;
+}
+
++(BOOL)preset: (LSFSDKPreset *)preset matchesMyLampState: (LSFSDKMyLampState *)state
+{
+    Power presetPower = [preset getPower];
+    LSFSDKColor *presetColor = [preset getColor];
+
+    Power lampStatePower = [state power];
+    LSFSDKColor *lampStateColor = [state color];
+
+    return
+    presetPower == lampStatePower                       &&
+    presetColor.hue == lampStateColor.hue               &&
+    presetColor.saturation == lampStateColor.saturation &&
+    presetColor.brightness == lampStateColor.brightness &&
+    presetColor.colorTemp == lampStateColor.colorTemp;
+}
+
++(NSArray *)sortLightingItemsByName: (NSArray *)items
+{
+    NSMutableArray *sortedArray = [NSMutableArray arrayWithArray: [items sortedArrayUsingComparator: ^NSComparisonResult(id a, id b) {
+        NSString *first = [(LSFSDKLightingItem *)a name];
+        NSString *second = [(LSFSDKLightingItem *)b name];
+        return [first localizedCaseInsensitiveCompare: second];
+    }]];
+
+    return sortedArray;
 }
 
 @end

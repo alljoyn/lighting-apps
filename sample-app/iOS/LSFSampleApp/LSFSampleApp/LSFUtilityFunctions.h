@@ -15,15 +15,30 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFSceneElementDataModel.h"
-#import "LSFCapabilityData.h"
-#import "LSFLampDetails.h"
+#import <LSFSDKCapabilityData.h>
+#import <LSFSDKLampDetails.h>
+#import <LSFSDKColor.h>
+#import <LSFSDKPreset.h>
+#import <LSFSDKMyLampState.h>
 
 @interface LSFUtilityFunctions : NSObject
 
+extern NSArray *const LAMP_DETAILS_FIELDS;
+extern NSArray *const LAMP_ABOUT_FIELDS;
+
++(BOOL)checkNameEmpty: (NSString *)name entity: (NSString *)entity;
 +(BOOL)checkNameLength: (NSString *)name entity: (NSString *)entity;
 +(BOOL)checkWhiteSpaces: (NSString *)name entity: (NSString *)entity;
-+(NSString *)buildSectionTitleString: (LSFSceneElementDataModel *)sceneElement;
-+(void)colorIndicatorSetup: (UIImageView *)colorIndicatorImage withDataState: (LSFLampState *) dataState andCapabilityData: (LSFCapabilityData *)capablity;
++(void)colorIndicatorSetup: (UIImageView *)colorIndicatorImage withColor: (LSFSDKColor *) color andCapabilityData: (LSFSDKCapabilityData *)capablity;
++(NSString *)currentWifiSSID;
++(NSArray *)getLampDetailsFields;
++(NSArray *)getLampAboutFields;
++(NSArray *)getSupportedEffects;
++(NSArray *)getEffectImages;
++(NSMutableAttributedString *)getSourceCodeText;
++(NSMutableAttributedString *)getTeamText;
++(NSMutableAttributedString *)getNoticeText;
++(BOOL)preset: (LSFSDKPreset *)preset matchesMyLampState: (LSFSDKMyLampState *)state;
++(NSArray *)sortLightingItemsByName: (NSArray *)items;
 
 @end

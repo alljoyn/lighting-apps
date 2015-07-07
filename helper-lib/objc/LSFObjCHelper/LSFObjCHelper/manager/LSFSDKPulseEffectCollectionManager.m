@@ -64,6 +64,11 @@
 
 -(NSArray *)getPulseEffectsWithFilter: (id<LSFSDKLightingItemFilter>)filter
 {
+    return [self getPulseEffectsCollectionWithFilter: filter];
+}
+
+-(NSArray *)getPulseEffectsCollectionWithFilter: (id<LSFSDKLightingItemFilter>)filter
+{
     return [self getAdaptersWithFilter: filter];
 }
 
@@ -86,7 +91,7 @@
 /*
  * Overriden functions from base class
  */
--(void)sendInitializedEvent: (id<LSFSDKLightingDelegate>)delegate item: (id)item trackingID: (LSFTrackingID *)trackingID
+-(void)sendInitializedEvent: (id<LSFSDKLightingDelegate>)delegate item: (id)item trackingID: (LSFSDKTrackingID *)trackingID
 {
     if ([delegate conformsToProtocol: @protocol(LSFSDKPulseEffectDelegate)] && [item isKindOfClass: [LSFSDKPulseEffect class]])
     {

@@ -15,9 +15,9 @@
  ******************************************************************************/
 
 #import "LSFSDKLightingControllerConfiguration.h"
-#import "LSFController.h"
-#import "lsf/controllerservice/OEM_CS_Config.h"
-#import "LSFControllerServiceDelegate.h"
+#import <LSFSDKRankParam.h>
+#import <internal/LSFController.h>
+#import <internal/LSFControllerServiceDelegate.h>
 
 using namespace lsf;
 

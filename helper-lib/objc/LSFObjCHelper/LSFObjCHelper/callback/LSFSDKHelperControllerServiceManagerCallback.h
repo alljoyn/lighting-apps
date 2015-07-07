@@ -14,7 +14,7 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFControllerServiceManagerCallbackDelegate.h"
+#import <internal/LSFControllerServiceManagerCallbackDelegate.h>
 
 @class LSFSDKLightingSystemManager;
 

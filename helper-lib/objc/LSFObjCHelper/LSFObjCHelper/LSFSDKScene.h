@@ -15,14 +15,15 @@
  ******************************************************************************/
 
 #import "LSFSDKLightingItem.h"
+#import "LSFSDKDeletableItem.h"
 
 /**
  * An LSFSDKScene object represents a set of lamps and associated states in the lighting system, and can be
  * used to apply the states to the lamps.
  */
-@interface LSFSDKScene : LSFSDKLightingItem
+@interface LSFSDKScene : LSFSDKLightingItem <LSFSDKDeletableItem>
 
 -(void)apply;
--(void)deleteScene;
+-(void)deleteItem;
 
 @end

@@ -15,23 +15,18 @@
  ******************************************************************************/
 
 #import "LSFLightsChangeNameViewController.h"
-#import "LSFDispatchQueue.h"
-#import "LSFLampManager.h"
-#import "LSFAllJoynManager.h"
-#import "LSFLampModelContainer.h"
-#import "LSFLampModel.h"
 #import "LSFUtilityFunctions.h"
 #import "LSFLightsTableViewController.h"
 #import "LSFLightInfoTableViewController.h"
-#import "LSFEnums.h"
-#import "LSFSDKLamp.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFLightsChangeNameViewController ()
 
-@property (nonatomic, strong) LSFLampModel *lampModel;
 @property (nonatomic) BOOL doneButtonPressed;
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification;
+-(void)lampChangedNotificationReceived: (NSNotification *)notification;
+-(void)lampRemovedNotificationReceived: (NSNotification *)notification;
 -(BOOL)checkForDuplicateName: (NSString *)name;
 
 @end
@@ -40,7 +35,6 @@
 
 @synthesize lampID = _lampID;
 @synthesize lampNameTextField = _lampNameTextField;
-@synthesize lampModel = _lampModel;
 @synthesize doneButtonPressed = _doneButtonPressed;
 
 -(void)viewDidLoad
@@ -53,8 +47,10 @@
     [super viewWillAppear: animated];
 
     //Set notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(lampNotificationReceived:) name: @"LampNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(lampChangedNotificationReceived:) name: @"LSFLampChangedNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(lampRemovedNotificationReceived:) name: @"LSFLampRemovedNotification" object: nil];
+
 
     [self.lampNameTextField becomeFirstResponder];
     self.doneButtonPressed = NO;
@@ -76,50 +72,38 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handlers
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Disconnected)
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    if (![leaderModel connected])
     {
-        [self.navigationController popToRootViewControllerAnimated: YES];
+        [self dismissViewControllerAnimated: YES completion: nil];
     }
 }
 
-/*
- * LampNotification Handler
- */
--(void)lampNotificationReceived: (NSNotification *)notification
+-(void)lampChangedNotificationReceived: (NSNotification *)notification
 {
-    NSString *lampID = [notification.userInfo valueForKey: @"lampID"];
-    NSNumber *callbackOp = [notification.userInfo valueForKey: @"operation"];
-
+    NSString *lampID = [[notification.userInfo valueForKey: @"lamp"] theID];
     if ([self.lampID isEqualToString: lampID])
     {
-        switch (callbackOp.intValue)
-        {
-            case LampDeleted:
-                [self deleteLampWithID: lampID andName: [notification.userInfo valueForKey: @"lampName"]];
-                break;
-            case LampNameUpdated:
-                [self reloadLampName];
-                break;
-            default:
-                NSLog(@"Operation not found - Taking no action");
-                break;
-        }
+        [self reloadLampName];
+    }
+}
+
+-(void)lampRemovedNotificationReceived: (NSNotification *)notification
+{
+    LSFSDKLamp *lamp = [notification.userInfo valueForKey: @"lamp"];
+    if ([self.lampID isEqualToString: [lamp theID]])
+    {
+        [self deleteLampWithID: [lamp theID] andName: [lamp name]];
     }
 }
 
 -(void)reloadLampName
 {
-    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
-    self.lampModel = [[lamps valueForKey: self.lampID] getLampDataModel];
-
-    self.lampNameTextField.text = self.lampModel.name;
+    self.lampNameTextField.text = [[[LSFSDKLightingDirector getLightingDirector] getLampWithID: self.lampID] name];
 }
 
 -(void)deleteLampWithID: (NSString *)lampID andName: (NSString *)lampName
@@ -158,9 +142,8 @@
         self.doneButtonPressed = YES;
         [textField resignFirstResponder];
         
-        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-            LSFLampManager *lampManager = [[LSFAllJoynManager getAllJoynManager] lsfLampManager];
-            [lampManager setLampNameWithID: self.lampID andName: self.lampNameTextField.text];
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            [[[LSFSDKLightingDirector getLightingDirector] getLampWithID:self.lampID] rename: self.lampNameTextField.text];
         });
         
         return YES;
@@ -193,10 +176,9 @@
         
         self.doneButtonPressed = YES;
         [self.lampNameTextField resignFirstResponder];
-        
-        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-            LSFLampManager *lampManager = [[LSFAllJoynManager getAllJoynManager] lsfLampManager];
-            [lampManager setLampNameWithID: self.lampID andName: self.lampNameTextField.text];
+
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            [[[LSFSDKLightingDirector getLightingDirector] getLampWithID:self.lampID] rename: self.lampNameTextField.text];
         });
     }
 }
@@ -206,13 +188,11 @@
  */
 -(BOOL)checkForDuplicateName: (NSString *)name
 {
-    NSDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
-    
-    for (LSFSDKLamp *lamp in [lamps allValues])
+    for (LSFSDKLamp *lamp in [[LSFSDKLightingDirector getLightingDirector] lamps])
     {
-        LSFLampModel *model = [lamp getLampDataModel];
+        NSString *lampName = [lamp name];
 
-        if ([name isEqualToString: model.name])
+        if ([name isEqualToString: lampName])
         {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Duplicate Name"
                                                             message: [NSString stringWithFormat: @"Warning: there is already a lamp named \"%@.\" Although it's possible to use the same name for more than one lamp, it's better to give each lamp a unique name.\n\nKeep duplicate lamp name \"%@\"?", name, name]

@@ -15,20 +15,13 @@
  ******************************************************************************/
 
 #import "LSFGroupsCell.h"
-#import "LSFDispatchQueue.h"
-#import "LSFConstants.h"
-#import "LSFAllJoynManager.h"
-#import "LSFGroupModel.h"
-#import "LSFGroupModelContainer.h"
-#import "LSFSDKGroup.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFGroupsCell()
 
 @property (nonatomic) unsigned int previousBrightness;
 
 -(void)sliderTapped: (UIGestureRecognizer *)gr;
--(void)setTimestampAndDelay;
--(void)postDelayedGroupRefresh: (unsigned int)delay;
 
 @end
 
@@ -63,53 +56,42 @@
 
 -(IBAction)powerImagePressed: (UIButton *)sender
 {
-    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
-    LSFGroupModel *model = [[groups valueForKey: self.groupID] getLampGroupDataModel];
-
-    if (model != nil && model.state.onOff)
+    LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
+    if ([group getPowerOn])
     {
-        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-            LSFLampGroupManager *groupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
-            [groupManager transitionLampGroupID: self.groupID onOffField: NO];
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            [group setPowerOn: NO];
         });
     }
     else
     {
-        LSFConstants *constants = [LSFConstants getConstants];
-        
-        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-            LSFLampGroupManager *groupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
-
-            if (model.state.brightness == 0)
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            LSFSDKColor* color = [group getColor];
+            if ([color brightness] == 0)
             {
-                unsigned int scaledBrightness = [constants scaleLampStateValue: 25 withMax: 100];
-                [groupManager transitionLampGroupID: self.groupID brightnessField: scaledBrightness];
+                color.brightness = 25;
+                [group setColor: color];
             }
 
-            [groupManager transitionLampGroupID: self.groupID onOffField: YES];
+            [group setPowerOn: YES];
         });
     }
 }
 
 -(IBAction)brightnessSliderChanged: (UISlider *)sender
 {
-    LSFConstants *constants = [LSFConstants getConstants];
-        
-    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-        NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
-        LSFGroupModel *model = [[groups valueForKey: self.groupID] getLampGroupDataModel];
+    dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+        LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
+        LSFSDKColor *color = [group getColor];
 
-        LSFLampGroupManager *groupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
-        unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)sender.value withMax: 100];
-        [groupManager transitionLampGroupID: self.groupID brightnessField: scaledBrightness];
+        color.brightness = (uint32_t)sender.value;
+        [group setColor: color];
 
-        if (model.state.brightness == 0)
+        if ([[group getColor] brightness] == 0)
         {
-            [groupManager transitionLampGroupID: self.groupID onOffField: YES];
+            [group setPowerOn: YES];
         }
     });
-
-    [self setTimestampAndDelay];
 }
 
 -(IBAction)brightnessSliderTouchedWhileDisabled: (UIButton *)sender
@@ -142,45 +124,18 @@
     
     unsigned int newBrightness = (uint32_t)value;
     self.brightnessSlider.value = newBrightness;
-    
-    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-        NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
-        LSFGroupModel *model = [[groups valueForKey: self.groupID] getLampGroupDataModel];
-        LSFConstants *constants = [LSFConstants getConstants];
 
-        LSFLampGroupManager *groupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
-        unsigned int scaledBrightness = [constants scaleLampStateValue: newBrightness withMax: 100];
-        [groupManager transitionLampGroupID: self.groupID brightnessField: scaledBrightness];
+    dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+        LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
+        LSFSDKColor *color = [group getColor];
 
-        if (model.state.brightness == 0)
+        color.brightness = newBrightness;
+        [group setColor: color];
+
+        if ([[group getColor] brightness] == 0)
         {
-            [groupManager transitionLampGroupID: self.groupID onOffField: YES];
+            [group setPowerOn: YES];
         }
-    });
-
-    [self setTimestampAndDelay];
-}
-
--(void)setTimestampAndDelay
-{
-    LSFConstants *constants = [LSFConstants getConstants];
-
-    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
-    LSFGroupModel *model = [[groups valueForKey: self.groupID] getLampGroupDataModel];
-
-    model.timestamp = (long long)([[NSDate date] timeIntervalSince1970] * 1000);
-
-    unsigned int proposedDelay = (constants.UI_DELAY + (model.lamps.count * 50));
-    model.delay = proposedDelay > 1000 ? 1000 : proposedDelay;
-
-    [self postDelayedGroupRefresh: model.delay];
-}
-
--(void)postDelayedGroupRefresh: (unsigned int)delay
-{
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(((double)delay / 1000.0) * NSEC_PER_SEC)), [[LSFDispatchQueue getDispatchQueue] queue], ^{
-        LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
-        [ajManager.slgmc refreshAllLampGroupIDs];
     });
 }
 

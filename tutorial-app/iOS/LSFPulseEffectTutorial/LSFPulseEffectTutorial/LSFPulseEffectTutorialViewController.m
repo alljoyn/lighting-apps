@@ -16,16 +16,18 @@
 
 #import "LSFPulseEffectTutorialViewController.h"
 #import "LSFSDKLightingDirector.h"
+#import "LSFSDKLightingController.h"
+#import "LSFSDKLightingControllerConfigurationBase.h"
 #import "LSFSDKAllCollectionAdapter.h"
 #import "LSFSDKMyLampState.h"
 
 /*
- * Global Lighting event listener. Responsible for handling any callbacks that
+ * Global Lighting event delegate. Responsible for handling any callbacks that
  * the user is interested in acting on.
  */
 @interface MyLightingDelegate : LSFSDKAllCollectionAdapter
 
-@property (nonatomic, strong) LSFTrackingID *groupCreationID;
+@property (nonatomic, strong) LSFSDKTrackingID *groupCreationID;
 @property (nonatomic, strong) NSString *tutorialGroupID;
 
 @end
@@ -48,24 +50,25 @@
     return self;
 }
 
--(void)onGroupInitializedWithTrackingID:(LSFTrackingID *)trackingID andGroup:(LSFSDKGroup *)group
+-(void)onGroupInitializedWithTrackingID:(LSFSDKTrackingID *)trackingID andGroup:(LSFSDKGroup *)group
 {
+    // STEP 4: Using the Group initialized callback as a trigger, create a Pulse Effect
     if (trackingID != nil && self.groupCreationID != nil && group != nil && trackingID.value == self.groupCreationID.value)
     {
         // Save the ID of the Group; to be used later
         self.tutorialGroupID = [group theID];
 
-        // STEP 3: Use the Group creation event as a trigger to create the PulseEffect
+        // Pulse Effect parameters
         LSFSDKColor *pulseFromColor = [LSFSDKColor green];
         LSFSDKColor *pulseToColor = [LSFSDKColor blue];
         Power pulsePowerState = ON;
         unsigned int period = 1000;
         unsigned int duration = 500;
         unsigned int numPulses = 10;
-
-        // boilerplate code, alter parameters above to change effect color, length, etc.
         LSFSDKMyLampState *fromState = [[LSFSDKMyLampState alloc] initWithPower: pulsePowerState color: pulseFromColor];
         LSFSDKMyLampState *toState = [[LSFSDKMyLampState alloc] initWithPower: pulsePowerState color: pulseToColor];
+
+        // boilerplate code, alter parameters above to change effect color, length, etc.
         [[LSFSDKLightingDirector getLightingDirector] createPulseEffectWithFromState: fromState toState: toState period: period duration: duration count: numPulses name: @"TutorialPulseEffect" delegate: nil];
     }
 }
@@ -75,9 +78,10 @@
     NSLog(@"onGroupError - Error Name = %@", error.name);
 }
 
--(void)onPulseEffectInitializedWithTrackingID:(LSFTrackingID *)trackingID andPulseEffect:(LSFSDKPulseEffect *)pulseEffect
+-(void)onPulseEffectInitializedWithTrackingID:(LSFSDKTrackingID *)trackingID andPulseEffect:(LSFSDKPulseEffect *)pulseEffect
 {
-    // STEP4: Apply the PulseEffect
+    // STEP 5: Using the Pulse Effect initialized callback as a trigger, apply the Pulse Effect to the
+    // Group created in STEP 4
     if (self.tutorialGroupID != nil)
     {
         [pulseEffect applyToGroupMember: [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.tutorialGroupID]];
@@ -86,7 +90,7 @@
 
 -(void)onPulseEffectError: (LSFSDKLightingItemErrorEvent *)error
 {
-    NSLog(@"onGroupError - Error Name = %@", error.name);
+    NSLog(@"onPulseEffectError - Error Name = %@", error.name);
 }
 
 @end //End private class
@@ -97,6 +101,7 @@ static unsigned int CONTROLLER_CONNECTION_DELAY = 5000;
 
 @property (nonatomic, strong) LSFSDKLightingDirector *lightingDirector;
 @property (nonatomic, strong) MyLightingDelegate *myLightingDelegate;
+@property (nonatomic, strong) LSFSDKLightingControllerConfigurationBase *config;
 
 @end
 
@@ -105,6 +110,7 @@ static unsigned int CONTROLLER_CONNECTION_DELAY = 5000;
 @synthesize versionLabel = _versionLabel;
 @synthesize lightingDirector = _lightingDirector;
 @synthesize myLightingDelegate = _myLightingDelegate;
+@synthesize config = _config;
 
 -(void)viewDidLoad
 {
@@ -115,11 +121,16 @@ static unsigned int CONTROLLER_CONNECTION_DELAY = 5000;
     [appVersion appendString: [NSString stringWithFormat: @".%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]]];
     [self.versionLabel setText: appVersion];
 
-    // Instantiate the director and wait for the connection
-    self.lightingDirector = [LSFSDKLightingDirector getLightingDirector];
+    // STEP 1: Initialize a lighting controller with default configuration
+    self.config = [[LSFSDKLightingControllerConfigurationBase alloc]initWithKeystorePath: @"Documents"];
+    LSFSDKLightingController *lightingController = [LSFSDKLightingController getLightingController];
+    [lightingController initializeWithControllerConfiguration: self.config];
+    [lightingController start];
 
-    // STEP 1: Register a global delegate to handle Lighting events and Controller connection
+    // STEP 2: Instantiate the lighting director and wait for the connection, register a global delegate to
+    // handle Lighting events
     self.myLightingDelegate = [[MyLightingDelegate alloc] init];
+    self.lightingDirector = [LSFSDKLightingDirector getLightingDirector];
     [self.lightingDirector addDelegate: self.myLightingDelegate];
     [self.lightingDirector postOnNextControllerConnectionWithDelay: CONTROLLER_CONNECTION_DELAY delegate: self];
     [self.lightingDirector start];
@@ -144,7 +155,7 @@ static unsigned int CONTROLLER_CONNECTION_DELAY = 5000;
  */
 -(void)onNextControllerConnection
 {
-    // STEP 2: Create a Group consisting of all connected lamps
+    // STEP 3: Create a Group consisting of all connected lamps
     NSArray *lamps = [self.lightingDirector lamps];
     self.myLightingDelegate.groupCreationID = [[LSFSDKLightingDirector getLightingDirector] createGroupWithMembers: lamps groupName: @"TutorialGroup" delegate: nil];
 }

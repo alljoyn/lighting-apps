@@ -15,11 +15,10 @@
  ******************************************************************************/
 
 #import "LSFWifiMonitor.h"
-#import "LSFConstants.h"
-#import "LSFAllJoynManager.h"
-#import "LSFDispatchQueue.h"
-#import "LSFSDKLightingController.h"
-#import "LSFSDKLightingControllerConfigurationBase.h"
+#import "LSFUtilityFunctions.h"
+#import <LSFSDKLightingDirector.h>
+#import <LSFSDKLightingController.h>
+#import <LSFSDKLightingControllerConfigurationBase.h>
 
 #import <arpa/inet.h>
 #import <ifaddrs.h>
@@ -96,9 +95,9 @@ static void NetworkStatusCallback(SCNetworkReachabilityRef target, SCNetworkReac
         }
         else
         {
-            NSLog(@"Wifi Connected at startup. Last Known SSID = %@", [[LSFConstants getConstants] currentWifiSSID]);
+            NSLog(@"Wifi Connected at startup. Last Known SSID = %@", [LSFUtilityFunctions currentWifiSSID]);
             self.isWifiConnected = YES;
-            self.lastKnownSSID = [[LSFConstants getConstants] currentWifiSSID];
+            self.lastKnownSSID = [LSFUtilityFunctions currentWifiSSID];
 
             [self startController];
         }
@@ -159,21 +158,21 @@ static void NetworkStatusCallback(SCNetworkReachabilityRef target, SCNetworkReac
     }
     else
     {
-        NSLog(@"Wifi Connected. Last Known SSID = %@. Current SSID = %@", self.lastKnownSSID, [[LSFConstants getConstants] currentWifiSSID]);
+        NSLog(@"Wifi Connected. Last Known SSID = %@. Current SSID = %@", self.lastKnownSSID, [LSFUtilityFunctions currentWifiSSID]);
 
-        if ([[LSFConstants getConstants] currentWifiSSID] == nil)
+        if ([LSFUtilityFunctions currentWifiSSID] == nil)
         {
             NSLog(@"Current Wi-Fi SSID is nil just calling stop");
             [self stopController];
 
             self.isWifiConnected = NO;
-            self.lastKnownSSID = [[LSFConstants getConstants] currentWifiSSID];
+            self.lastKnownSSID = [LSFUtilityFunctions currentWifiSSID];
 
             [[NSNotificationCenter defaultCenter] postNotificationName: @"WifiNotification" object: self];
         }
         else
         {
-            if (![self.lastKnownSSID isEqualToString: [[LSFConstants getConstants] currentWifiSSID]])
+            if (![self.lastKnownSSID isEqualToString: [LSFUtilityFunctions currentWifiSSID]])
             {
                 NSLog(@"SSID has changed. Resetting Controller.");
 
@@ -185,7 +184,7 @@ static void NetworkStatusCallback(SCNetworkReachabilityRef target, SCNetworkReac
                 [self startController];
 
                 self.isWifiConnected = YES;
-                self.lastKnownSSID = [[LSFConstants getConstants] currentWifiSSID];
+                self.lastKnownSSID = [LSFUtilityFunctions currentWifiSSID];
 
                 [[NSNotificationCenter defaultCenter] postNotificationName: @"WifiNotification" object: self];
             }
@@ -214,48 +213,19 @@ static void NetworkStatusCallback(SCNetworkReachabilityRef target, SCNetworkReac
  */
 -(void)startController
 {
-    LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
+    [[LSFSDKLightingDirector getLightingDirector] startWithApplicationName: @"LightingDirector" dispatchQueue: dispatch_get_main_queue()];
 
-    ControllerClientStatus status = [ajManager.lsfControllerClient start];
-
-    if (status == CONTROLLER_CLIENT_ERR_RETRY)
-    {
-        NSLog(@"Controller Client start return retry. Retrying 5 seconds later");
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), ([LSFDispatchQueue getDispatchQueue]).queue, ^{
-            [self startController];
-        });
-    }
-    else if (status == CONTROLLER_CLIENT_OK)
-    {
-        [ajManager.aboutManager registerAnnouncementHandler];
-        NSLog(@"Controller Client started successfully");
-    }
-
-    //Start controller service by default
-    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
+    dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
         [[LSFSDKLightingController getLightingController] start];
     });
 }
 
 -(void)stopController
 {
-    LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
-    [ajManager.aboutManager unregisterAnnouncementHandler];
+    [[LSFSDKLightingDirector getLightingDirector] stop];
 
-    ControllerClientStatus status = [ajManager.lsfControllerClient stop];
-
-    if (status == CONTROLLER_CLIENT_OK)
-    {
-        NSLog(@"Controller Client stop returned ok");
-    }
-    else
-    {
-        NSLog(@"Controller Client stop returned some type of error");
-    }
-
-    //Stop controller service
-    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-        [[LSFSDKLightingController getLightingController] stop];
+    dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+        [[LSFSDKLightingController getLightingController] start];
     });
 }
 

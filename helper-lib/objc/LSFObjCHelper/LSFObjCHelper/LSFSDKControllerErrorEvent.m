@@ -20,6 +20,21 @@
 
 @synthesize name = _name;
 @synthesize errorCodes = _errorCodes;
+@synthesize responseCode = _responseCode;
+
+-(id)initWithName:(NSString *)name andResponseCode:(lsf::LSFResponseCode)code
+{
+    self = [super init];
+
+    if (self)
+    {
+        self.name = name;
+        self.responseCode = code;
+        self.errorCodes = nil;
+    }
+
+    return self;
+}
 
 -(id)initWithName: (NSString *)name andErrorCodes: (NSArray *)errorCodes
 {

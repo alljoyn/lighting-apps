@@ -15,33 +15,23 @@
  ******************************************************************************/
 
 #import "LSFGroupsChangeNameViewController.h"
-#import "LSFDispatchQueue.h"
-#import "LSFLampGroupManager.h"
-#import "LSFAllJoynManager.h"
-#import "LSFGroupModelContainer.h"
-#import "LSFGroupModel.h"
 #import "LSFUtilityFunctions.h"
-#import "LSFGroupModel.h"
-#import "LSFEnums.h"
-#import "LSFSDKGroup.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFGroupsChangeNameViewController ()
 
 @property (nonatomic) BOOL doneButtonPressed;
-@property (nonatomic, strong) LSFGroupModel *groupModel;
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
--(void)groupNotificationReceived: (NSNotification *)notification;
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification;
+-(void)groupChangedNotificationReceived: (NSNotification *)notification;
+-(void)groupRemovedNotificationReceived: (NSNotification *)notification;
 -(void)reloadGroupName;
--(void)deleteGroupsWithIDs: (NSArray *)groupIDs andNames: (NSArray *)groupNames;
--(BOOL)checkForDuplicateName: (NSString *)name;
 
 @end
 
 @implementation LSFGroupsChangeNameViewController
 
 @synthesize groupID = _groupID;
-@synthesize groupModel = _groupModel;
 @synthesize groupNameTextField = _groupNameTextField;
 @synthesize doneButtonPressed = _doneButtonPressed;
 
@@ -54,15 +44,13 @@
 {
     [super viewWillAppear: animated];
 
-    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
-    self.groupModel = [[groups valueForKey: self.groupID] getLampGroupDataModel];
-
     //Set notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(groupNotificationReceived:) name: @"GroupNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(groupChangedNotificationReceived:) name: @"LSFGroupChangedNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(groupRemovedNotificationReceived:) name: @"LSFGroupRemovedNotification" object: nil];
 
     [self.groupNameTextField becomeFirstResponder];
-    self.groupNameTextField.text = self.groupModel.name;
+    self.groupNameTextField.text = [[[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID] name];
     self.doneButtonPressed = NO;
 }
 
@@ -80,60 +68,49 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handlers
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Disconnected)
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    if (![leaderModel connected])
     {
-        [self.navigationController popToRootViewControllerAnimated: YES];
+        [self dismissViewControllerAnimated: YES completion: nil];
+    }
+}
+
+-(void)groupChangedNotificationReceived:(NSNotification *)notification
+{
+    LSFSDKGroup *group = [notification.userInfo valueForKey: @"group"];
+
+    if ([self.groupID isEqualToString: [group theID]])
+    {
+        [self reloadGroupName];
+    }
+}
+
+-(void)groupRemovedNotificationReceived:(NSNotification *)notification
+{
+    LSFSDKGroup *group = [notification.userInfo valueForKey: @"group"];
+
+    if ([self.groupID isEqualToString: [group theID]])
+    {
+        [self alertGroupDeleted: group];
     }
 }
 
 /*
- * GroupNotification Handler
+ * Private methods
  */
--(void)groupNotificationReceived: (NSNotification *)notification
-{
-    NSString *groupID = [notification.userInfo valueForKey: @"groupID"];
-    NSNumber *callbackOp = [notification.userInfo valueForKey: @"operation"];
-    NSArray *groupIDs = [notification.userInfo valueForKey: @"groupIDs"];
-    NSArray *groupNames = [notification.userInfo valueForKey: @"groupNames"];
-
-    if ([self.groupID isEqualToString: groupID] || [groupIDs containsObject: self.groupID])
-    {
-        switch (callbackOp.intValue)
-        {
-            case GroupNameUpdated:
-                [self reloadGroupName];
-                break;
-            case GroupDeleted:
-                [self deleteGroupsWithIDs: groupIDs andNames: groupNames];
-                break;
-            default:
-                NSLog(@"Operation not found - Taking no action");
-                break;
-        }
-    }
-}
-
 -(void)reloadGroupName
 {
-    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
-    self.groupModel = [[groups valueForKey: self.groupID] getLampGroupDataModel];
-
-    self.groupNameTextField.text = self.groupModel.name;
+    self.groupNameTextField.text = [[[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID] name];
 }
 
--(void)deleteGroupsWithIDs: (NSArray *)groupIDs andNames: (NSArray *)groupNames
+-(void)alertGroupDeleted: (LSFSDKGroup *) group
 {
-    int index = [groupIDs indexOfObject: self.groupID];
-
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Group Not Found"
-                                                    message: [NSString stringWithFormat: @"The group \"%@\" no longer exists.", [groupNames objectAtIndex: index]]
+                                                    message: [NSString stringWithFormat: @"The group \"%@\" no longer exists.", [group name]]
                                                    delegate: nil
                                           cancelButtonTitle: @"OK"
                                           otherButtonTitles: nil];
@@ -157,21 +134,28 @@
         return NO;
     }
 
-    BOOL nameMatchFound = [self checkForDuplicateName: self.groupNameTextField.text];
+    BOOL nameMatchFound = [[[[LSFSDKLightingDirector getLightingDirector] groups] valueForKeyPath: @"name"] containsObject: self.groupNameTextField.text];
     
     if (!nameMatchFound)
     {
         self.doneButtonPressed = YES;
         [textField resignFirstResponder];
-        
-        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-            LSFLampGroupManager *lampGroupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
-            [lampGroupManager setLampGroupNameForID: self.groupID andName: self.groupNameTextField.text];
+
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
+            [group rename: self.groupNameTextField.text];
         });
         
         return YES;
     }
-    
+
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Duplicate Name"
+                                                    message: [NSString stringWithFormat: @"Warning: there is already a group named \"%@.\" Although it's possible to use the same name for more than one group, it's better to give each group a unique name.\n\nKeep duplicate group name \"%@\"?", self.groupNameTextField.text, self.groupNameTextField.text]
+                                                   delegate: self
+                                          cancelButtonTitle: @"NO"
+                                          otherButtonTitles: @"YES", nil];
+    [alert show];
+
     return NO;
 }
 
@@ -200,38 +184,11 @@
         self.doneButtonPressed = YES;
         [self.groupNameTextField resignFirstResponder];
         
-        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-            LSFLampGroupManager *lampGroupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
-            [lampGroupManager setLampGroupNameForID: self.groupID andName: self.groupNameTextField.text];
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
+            [group rename: self.groupNameTextField.text];
         });
     }
-}
-
-/*
- * Private functions
- */
--(BOOL)checkForDuplicateName: (NSString *)name
-{
-    NSDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
-    
-    for (LSFSDKGroup *group in [groups allValues])
-    {
-        LSFGroupModel *model = [group getLampGroupDataModel];
-
-        if ([name isEqualToString: model.name])
-        {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Duplicate Name"
-                                                            message: [NSString stringWithFormat: @"Warning: there is already a group named \"%@.\" Although it's possible to use the same name for more than one group, it's better to give each group a unique name.\n\nKeep duplicate group name \"%@\"?", name, name]
-                                                           delegate: self
-                                                  cancelButtonTitle: @"NO"
-                                                  otherButtonTitles: @"YES", nil];
-            [alert show];
-            
-            return YES;
-        }
-    }
-    
-    return NO;
 }
 
 @end

@@ -37,12 +37,40 @@
     return self;
 }
 
+-(BOOL)hasPreset: (LSFSDKPreset *)preset
+{
+    NSString *errorContext = @"LSFSDKSceneV1 hasPreset: error";
+    return ([self postInvalidArgIfNull: errorContext object: preset]) ? [self hasPresetWithID: preset.theID] : NO;
+}
+
+-(BOOL)hasGroup: (LSFSDKGroup *)group;
+{
+    NSString *errorContext = @"LSFSDKSceneV1 hasGroup: error";
+    return ([self postInvalidArgIfNull: errorContext object: group]) ? [self hasPresetWithID: group.theID] : NO;
+}
+
+-(BOOL)hasPresetWithID: (NSString *)presetID;
+{
+    return [sceneModel containsPreset: presetID];
+}
+
+-(BOOL)hasGroupWithID: (NSString *)groupID
+{
+    return [sceneModel containsGroup: groupID];
+}
+
 /*
  * Override base class functions
  */
 -(LSFModel *)getItemDataModel
 {
     return [self getSceneDataModel];
+}
+
+-(BOOL)hasComponent:(LSFSDKLightingItem *)item
+{
+    NSString *errorContext = @"LSFSDKSceneV1 hasComponent: error";
+    return ([self postInvalidArgIfNull: errorContext object: item]) ? ([self hasPresetWithID: item.theID] || [self hasGroupWithID: item.theID]): NO;
 }
 
 -(void)postError:(NSString *)name status:(LSFResponseCode)status

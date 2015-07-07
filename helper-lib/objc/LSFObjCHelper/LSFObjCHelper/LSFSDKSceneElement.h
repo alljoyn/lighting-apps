@@ -18,9 +18,12 @@
 #import "LSFSDKLightingItem.h"
 #import "LSFSDKEffect.h"
 #import "LSFSDKGroupMember.h"
-#import "LSFSceneElementDataModelV2.h"
+#import "LSFSDKDeletableItem.h"
+#import "LSFSDKLamp.h"
+#import "LSFSDKGroup.h"
+#import "model/LSFSceneElementDataModelV2.h"
 
-@interface LSFSDKSceneElement : LSFSDKLightingItem
+@interface LSFSDKSceneElement : LSFSDKLightingItem<LSFSDKDeletableItem>
 {
     @protected LSFSceneElementDataModelV2 *sceneElementModel;
 }
@@ -31,7 +34,15 @@
 -(void)modifyWithEffect: (id<LSFSDKEffect>)effect groupMembers: (NSArray *)members;
 -(void)addMember: (LSFSDKGroupMember *)member;
 -(void)removeMember: (LSFSDKGroupMember *)member;
--(void)deleteSceneElement;
+-(NSArray *)getLamps;
+-(NSArray *)getGroups;
+-(id<LSFSDKEffect>)getEffect;
+-(BOOL)hasLampWithID: (NSString *)lampID;
+-(BOOL)hasGroupWithID: (NSString *)groupID;
+-(BOOL)hasEffectWithID: (NSString *)effectID;
+-(BOOL)hasLamp: (LSFSDKLamp *)lamp;
+-(BOOL)hasGroup: (LSFSDKGroup *)group;
+-(BOOL)hasEffect: (id<LSFSDKEffect>)effect;
 
 /**
  * <b>WARNING: This method is not intended to be used by clients, and may change or be

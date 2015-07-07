@@ -30,9 +30,36 @@
     return [[self getItemDataModel] name];
 }
 
+-(NSArray *)dependents
+{
+    return [[NSArray alloc] initWithArray: [self getDependentCollection]];
+}
+
+-(NSArray *)components
+{
+    return [[NSArray alloc] initWithArray: [self getComponentCollection]];
+}
+
 -(BOOL)isInitialized
 {
     return [[self getItemDataModel] isInitialized];
+}
+
+-(BOOL)hasComponent: (LSFSDKLightingItem *) item
+{
+    return [[self getComponentCollection] containsObject: item];
+}
+
+-(NSArray *)getDependentCollection
+{
+    // Default implementation is an empty list -- subclass must override if they can be a component of another item
+    return [[NSArray alloc] init];
+}
+
+-(NSArray *)getComponentCollection
+{
+    // Default implementation is an empty list -- sublass must override if they can be a component of another item
+    return [[NSArray alloc] init];
 }
 
 -(BOOL)postInvalidArgIfNull: (NSString *)name object: (id)object

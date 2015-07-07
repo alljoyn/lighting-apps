@@ -15,15 +15,14 @@
  ******************************************************************************/
 
 #import <UIKit/UIKit.h>
-#import "LSFSDKMasterScene.h"
+#import "LSFPendingScene.h"
 
 @interface LSFMasterScenesEnterNameViewController : UIViewController
 
-@property (nonatomic, strong) LSFMasterSceneDataModel *masterSceneModel;
+@property (nonatomic, strong) LSFPendingScene *pendingMasterScene;
 @property (nonatomic, weak) IBOutlet UITextField *nameTextField;
 
 -(IBAction)cancelButtonPressed: (id)sender;
 -(IBAction)nextButtonPressed: (id)sender;
--(BOOL)checkForDuplicateName: (NSString *)name;
 
 @end

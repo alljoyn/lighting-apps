@@ -14,12 +14,18 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFSDKLamp.h"
-#import "LSFConstants.h"
-#import "LSFSDKAllJoynManager.h"
 #import "LSFSDKLightingDirector.h"
+#import "LSFSDKLamp.h"
+#import "model/LSFConstants.h"
+#import "manager/LSFSDKAllJoynManager.h"
 
 @implementation LSFSDKLamp
+
+@synthesize about = _about;
+@synthesize details = _details;
+@synthesize parameters = _parameters;
+@synthesize colorTempMin = _colorTempMin;
+@synthesize colorTempMax = _colorTempMax;
 
 -(id)initWithLampID: (NSString *)lampID
 {
@@ -45,6 +51,31 @@
     return self;
 }
 
+-(LSFSDKLampAbout *)about
+{
+    return [[LSFSDKLampAbout alloc] initWithAboutData: [[self getLampDataModel] aboutData]];
+}
+
+-(LSFSDKLampDetails *)details
+{
+    return [[self getLampDataModel] lampDetails];
+}
+
+-(LSFSDKLampParameters *)parameters
+{
+    return [[self getLampDataModel] lampParameters];
+}
+
+-(int)colorTempMin
+{
+    return [[self details] minTemperature];
+}
+
+-(int)colorTempMax
+{
+    return [[self details] maxTemperature];
+}
+
 /*
  * Override base class functions
  */
@@ -65,7 +96,7 @@
     unsigned int scaledSaturation = [constants scaleLampStateValue: saturationPercent withMax: 100];
     unsigned int scaledColorTemp = [constants scaleColorTemp: colorTempDegrees];
 
-    LSFLampState *lampState = [[LSFLampState alloc] initWithOnOff: YES brightness: scaledBrightness hue: scaledHue saturation: scaledSaturation colorTemp: scaledColorTemp];
+    LSFLampState *lampState = [[LSFLampState alloc] initWithOnOff: self.getPowerOn brightness: scaledBrightness hue: scaledHue saturation: scaledSaturation colorTemp: scaledColorTemp];
 
     [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getLampManager] transitionLampID: lampModel.theID toLampState: lampState]];
 }

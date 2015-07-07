@@ -14,8 +14,8 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFLampManagerCallbackDelegate.h"
-#import "LSFSDKAboutData.h"
+#import <internal/LSFLampManagerCallbackDelegate.h>
+#import "../model/LSFLampAbout.h"
 
 @class LSFSDKLightingSystemManager;
 
@@ -23,6 +23,6 @@
 
 -(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)manager;
 -(void)clear;
--(void)postUpdateLampID: (NSString *)lampID withAboutData: (LSFSDKAboutData *)aboutData andDelay: (unsigned int)delay;
+-(void)postUpdateLampID: (NSString *)lampID withAboutData: (LSFLampAbout *)aboutData andDelay: (unsigned int)delay;
 
 @end

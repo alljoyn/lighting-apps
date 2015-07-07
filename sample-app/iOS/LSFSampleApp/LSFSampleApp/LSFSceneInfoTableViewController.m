@@ -18,22 +18,7 @@
 #import "LSFScenesMembersTableViewController.h"
 #import "LSFScenesModifyMembersTableViewController.h"
 #import "LSFScenesChangeNameViewController.h"
-#import "LSFLampModelContainer.h"
-#import "LSFGroupModelContainer.h"
-#import "LSFSceneModelContainer.h"
-#import "LSFLampModel.h"
-#import "LSFGroupModel.h"
-#import "LSFSceneDataModel.h"
-#import "LSFSceneElementDataModel.h"
-#import "LSFNoEffectDataModel.h"
-#import "LSFTransitionEffectDataModel.h"
-#import "LSFPulseEffectDataModel.h"
-#import "LSFAllJoynManager.h"
-#import "LSFDispatchQueue.h"
-#import "LSFEnums.h"
-#import "LSFSDKScene.h"
-#import "LSFSDKLamp.h"
-#import "LSFSDKGroup.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFSceneInfoTableViewController ()
 
@@ -41,10 +26,10 @@
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) UIBarButtonItem *addButton;
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
--(void)sceneNotificationReceived: (NSNotification *)notification;
--(void)reloadSceneWithID: (NSString *)sceneID;
--(void)deleteScenesWithIDs: (NSArray *)sceneIDs andNames: (NSArray *)sceneNames;
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification;
+-(void)sceneChangedNotificationReceived:(NSNotification *)notification;
+-(void)sceneRemovedNotificationReceived:(NSNotification *)notification;
+-(void)alertSceneDeleted: (LSFSDKScene *)scene;
 -(NSString *)buildMemberString: (LSFSceneElementDataModel *)sceneElement;
 -(void)plusButtonPressed;
 
@@ -76,18 +61,21 @@
 {
     [super viewWillAppear: animated];
 
-    LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
-
-    if (!ajManager.isConnectedToController)
+    if (![[[LSFSDKLightingDirector getLightingDirector] leadController] connected])
     {
         [self.navigationController popToRootViewControllerAnimated: YES];
     }
 
     //Set notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneNotificationReceived:) name: @"SceneNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneChangedNotificationReceived:) name: @"LSFSceneChangedNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneRemovedNotificationReceived:) name: @"LSFSceneRemovedNotification" object: nil];
 
-    [self reloadSceneWithID: self.sceneID];
+    LSFSDKScene *scene = [[LSFSDKLightingDirector getLightingDirector] getSceneWithID: self.sceneID];
+    if ([scene isKindOfClass: [LSFSDKSceneV1 class]])
+    {
+        [self reloadScene: (LSFSDKSceneV1 *)scene];
+    }
 }
 
 -(void)viewWillDisappear: (BOOL)animated
@@ -104,87 +92,71 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handlers
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    if (![leaderModel connected])
+    {
+        [self dismissViewControllerAnimated: YES completion: nil];
+    }
+}
 
-    if (controllerStatus.intValue == Disconnected)
+-(void)sceneChangedNotificationReceived:(NSNotification *)notification
+{
+    LSFSDKScene *scene = [notification.userInfo valueForKey: @"scene"];
+
+    if ([scene isKindOfClass: [LSFSDKSceneV1 class]] && [self.sceneID isEqualToString: scene.theID])
+    {
+        LSFSDKSceneV1 *sceneV1 = (LSFSDKSceneV1 *)scene;
+        [self reloadScene: sceneV1];
+    }
+}
+
+-(void)sceneRemovedNotificationReceived:(NSNotification *)notification
+{
+    LSFSDKScene *scene = [notification.userInfo valueForKey: @"scene"];
+
+    if ([self.sceneID isEqualToString: scene.theID])
+    {
+        [self alertSceneDeleted: scene];
+    }
+}
+
+-(void)reloadScene: (LSFSDKSceneV1 *)scene
+{
+    [self.dataArray removeAllObjects];
+
+    self.sceneModel = [scene getSceneDataModel];
+
+    if (self.sceneModel != nil)
+    {
+        [self.dataArray addObjectsFromArray: self.sceneModel.noEffects];
+        [self.dataArray addObjectsFromArray: self.sceneModel.transitionEffects];
+        [self.dataArray addObjectsFromArray: self.sceneModel.pulseEffects];
+    }
+    else
     {
         [self.navigationController popToRootViewControllerAnimated: YES];
     }
+
+    [self.tableView reloadData];
 }
 
-/*
- * SceneNotification Handler
- */
--(void)sceneNotificationReceived: (NSNotification *)notification
+-(void)alertSceneDeleted:(LSFSDKScene *)scene
 {
-    NSString *sceneID = [notification.userInfo valueForKey: @"sceneID"];
-    NSNumber *callbackOp = [notification.userInfo valueForKey: @"operation"];
-    NSArray *sceneIDs = [notification.userInfo valueForKey: @"sceneIDs"];
-    NSArray *sceneNames = [notification.userInfo valueForKey: @"sceneNames"];
+    [self.navigationController popToRootViewControllerAnimated: YES];
 
-    if ([self.sceneID isEqualToString: sceneID] || [sceneIDs containsObject: self.sceneID])
-    {
-        switch (callbackOp.intValue)
-        {
-            case SceneNameUpdated:
-            case SceneUpdated:
-                [self reloadSceneWithID: sceneID];
-                break;
-            case SceneDeleted:
-                [self deleteScenesWithIDs: sceneIDs andNames: sceneNames];
-                break;
-            default:
-                break;
-        }
-    }
-}
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Scene Not Found"
+                                                        message: [NSString stringWithFormat: @"The scene \"%@\" no longer exists.", [scene name]]
+                                                       delegate: nil
+                                              cancelButtonTitle: @"OK"
+                                              otherButtonTitles: nil];
+        [alert show];
+    });
 
--(void)reloadSceneWithID: (NSString *)sceneID
-{
-    if ([self.sceneID isEqualToString: sceneID])
-    {
-        [self.dataArray removeAllObjects];
-
-        NSMutableDictionary *sceneDictionary = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
-        self.sceneModel = [[sceneDictionary valueForKey: self.sceneID] getSceneDataModel];
-
-        if (self.sceneModel != nil)
-        {
-            [self.dataArray addObjectsFromArray: self.sceneModel.noEffects];
-            [self.dataArray addObjectsFromArray: self.sceneModel.transitionEffects];
-            [self.dataArray addObjectsFromArray: self.sceneModel.pulseEffects];
-        }
-        else
-        {
-            [self.navigationController popToRootViewControllerAnimated: YES];
-        }
-        
-        [self.tableView reloadData];
-    }
-}
-
--(void)deleteScenesWithIDs: (NSArray *)sceneIDs andNames: (NSArray *)sceneNames
-{
-    if ([sceneIDs containsObject: self.sceneID])
-    {
-        int index = [sceneIDs indexOfObject: self.sceneID];
-
-        [self.navigationController popToRootViewControllerAnimated: YES];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Scene Not Found"
-                                                            message: [NSString stringWithFormat: @"The scene \"%@\" no longer exists.", [sceneNames objectAtIndex: index]]
-                                                           delegate: nil
-                                                  cancelButtonTitle: @"OK"
-                                                  otherButtonTitles: nil];
-            [alert show];
-        });
-    }
 }
 
 /*
@@ -277,9 +249,8 @@
         {
             //NSLog(@"Removing scene element for SceneDataModel was succesful");
 
-            dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-                LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
-                [ajManager.lsfSceneManager updateSceneWithID: self.sceneModel.theID withScene: [self.sceneModel toScene]];
+            dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+                [[[[LSFSDKLightingDirector getLightingDirector] lightingManager] sceneManager] updateSceneWithID: self.sceneModel.theID withScene: [self.sceneModel toScene]];
             });
 
             // Delete the row from the data source
@@ -346,39 +317,35 @@
     BOOL firstNameAdded = NO;
     NSMutableString *memberString = [[NSMutableString alloc] init];
 
-    NSMutableDictionary *lampsDictionary = [[LSFLampModelContainer getLampModelContainer] lampContainer];
-
     for (int i = 0; !firstNameAdded && i < sceneElement.members.lamps.count; i++)
     {
         NSString *lampID = [sceneElement.members.lamps objectAtIndex: i];
-        LSFLampModel *lampModel = [[lampsDictionary valueForKey: lampID] getLampDataModel];
+        LSFSDKLamp *lamp = [[LSFSDKLightingDirector getLightingDirector] getLampWithID: lampID];
 
-        if (lampModel != nil)
+        if (lamp != nil)
         {
-            [memberString appendString: lampModel.name];
+            [memberString appendString: lamp.name];
             firstNameAdded = YES;
         }
     }
-
-    NSMutableDictionary *groupsDictionary = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
 
     for (int i = 0; !firstNameAdded && i < sceneElement.members.lampGroups.count; i++)
     {
         NSString *groupID = [sceneElement.members.lampGroups objectAtIndex: i];
-        LSFGroupModel *groupModel = [[groupsDictionary valueForKey: groupID] getLampGroupDataModel];
+        LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: groupID];
 
-        if (groupModel != nil)
+        if (group != nil)
         {
-            [memberString appendString: groupModel.name];
+            [memberString appendString: group.name];
             firstNameAdded = YES;
         }
     }
 
-    int count = sceneElement.members.lamps.count + sceneElement.members.lampGroups.count - 1;
+    unsigned long count = sceneElement.members.lamps.count + sceneElement.members.lampGroups.count - 1;
 
     if (count > 0)
     {
-        [memberString appendString: [NSString stringWithFormat: @" (%i more)", count]];
+        [memberString appendString: [NSString stringWithFormat: @" (%lu more)", count]];
     }
 
     return memberString;

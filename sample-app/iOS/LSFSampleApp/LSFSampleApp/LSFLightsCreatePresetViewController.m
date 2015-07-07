@@ -15,22 +15,16 @@
  ******************************************************************************/
 
 #import "LSFLightsCreatePresetViewController.h"
-#import "LSFPresetModelContainer.h"
-#import "LSFPresetModel.h"
-#import "LSFDispatchQueue.h"
-#import "LSFAllJoynManager.h"
-#import "LSFConstants.h"
 #import "LSFUtilityFunctions.h"
 #import "LSFLightInfoTableViewController.h"
-#import "LSFEnums.h"
-#import "LSFSDKPreset.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFLightsCreatePresetViewController ()
 
 @property (nonatomic) BOOL doneButtonPressed;
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
--(void)lampNotificationReceived: (NSNotification *)notification;
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification;
+-(void)lampRemovedNotificationReceived: (NSNotification *)notification;
 -(void)deleteLampWithID: (NSString *)lampID andName: (NSString *)lampName;
 
 @end
@@ -38,7 +32,6 @@
 @implementation LSFLightsCreatePresetViewController
 
 @synthesize lampID = _lampID;
-@synthesize lampState = _lampState;
 @synthesize presetNameTextField = _presetNameTextField;
 @synthesize doneButtonPressed = _doneButtonPressed;
 
@@ -49,16 +42,18 @@
 
 -(void)viewWillAppear: (BOOL)animated
 {
-    LSFPresetModelContainer *container = [LSFPresetModelContainer getPresetModelContainer];
-    int numPresets = [container.presetContainer count];
+    [super viewWillAppear: animated];
+
+    int numPresets = (int) [[[LSFSDKLightingDirector getLightingDirector] presets] count];
 
     [self.presetNameTextField becomeFirstResponder];
     self.presetNameTextField.text = [NSString stringWithFormat: @"Preset %i", ++numPresets];
     self.doneButtonPressed = NO;
 
     //Set lamps notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(lampNotificationReceived:) name: @"LampNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(lampRemovedNotificationReceived:) name: @"LSFLampRemovedNotification" object: nil];
+
 }
 
 -(void)viewWillDisappear: (BOOL)animated
@@ -75,38 +70,24 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handlers
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Disconnected)
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    if (![leaderModel connected])
     {
-        [self.navigationController popToRootViewControllerAnimated: YES];
+        [self dismissViewControllerAnimated: YES completion: nil];
     }
 }
 
-/*
- * LampNotification Handler
- */
--(void)lampNotificationReceived: (NSNotification *)notification
+-(void)lampRemovedNotificationReceived: (NSNotification *)notification
 {
-    NSString *lampID = [notification.userInfo valueForKey: @"lampID"];
-    NSNumber *callbackOp = [notification.userInfo valueForKey: @"operation"];
+    LSFSDKLamp *lamp = [notification.userInfo valueForKey: @"lamp"];
 
-    if ([self.lampID isEqualToString: lampID])
+    if ([self.lampID isEqualToString: [lamp theID]])
     {
-        switch (callbackOp.intValue)
-        {
-            case LampDeleted:
-                [self deleteLampWithID: lampID andName: [notification.userInfo valueForKey: @"lampName"]];
-                break;
-            default:
-                NSLog(@"Operation not found - Taking no action");
-                break;
-        }
+        [self deleteLampWithID: [lamp theID] andName: [lamp name]];
     }
 }
 
@@ -142,26 +123,17 @@
     {
         return NO;
     }
-    
-    BOOL nameMatchFound = [self checkForDuplicateName: self.presetNameTextField.text];
+
+    BOOL nameMatchFound = [[[[LSFSDKLightingDirector getLightingDirector] presets] valueForKeyPath: @"name"] containsObject: self.presetNameTextField.text];
     
     if (!nameMatchFound)
     {
         self.doneButtonPressed = YES;
         [textField resignFirstResponder];
-        
-        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-            LSFConstants *constants = [LSFConstants getConstants];
-            
-            unsigned int scaledBrightness = [constants scaleLampStateValue: self.lampState.brightness withMax: 100];
-            unsigned int scaledHue = [constants scaleLampStateValue: self.lampState.hue withMax: 360];
-            unsigned int scaledSaturation = [constants scaleLampStateValue: self.lampState.saturation withMax: 100];
-            unsigned int scaledColorTemp = [constants scaleColorTemp: self.lampState.colorTemp];
-            
-            LSFLampState *scaledState = [[LSFLampState alloc] initWithOnOff: self.lampState.onOff brightness: scaledBrightness hue: scaledHue saturation: scaledSaturation colorTemp: scaledColorTemp];
-            
-            LSFPresetManager *presetManager = [[LSFAllJoynManager getAllJoynManager] lsfPresetManager];
-            [presetManager createPresetWithState: scaledState andPresetName: self.presetNameTextField.text];
+
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            LSFSDKLamp *lamp = [[LSFSDKLightingDirector getLightingDirector] getLampWithID: self.lampID];
+            [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: [lamp getPower] color: [lamp getColor] presetName: self.presetNameTextField.text delegate:nil];
         });
         
         return YES;
@@ -209,40 +181,12 @@
         
         self.doneButtonPressed = YES;
         [self.presetNameTextField resignFirstResponder];
-        
-        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-            LSFConstants *constants = [LSFConstants getConstants];
 
-            unsigned int scaledBrightness = [constants scaleLampStateValue: self.lampState.brightness withMax: 100];
-            unsigned int scaledHue = [constants scaleLampStateValue: self.lampState.hue withMax: 360];
-            unsigned int scaledSaturation = [constants scaleLampStateValue: self.lampState.saturation withMax: 100];
-            unsigned int scaledColorTemp = [constants scaleColorTemp: self.lampState.colorTemp];
-
-            LSFLampState *scaledState = [[LSFLampState alloc] initWithOnOff: self.lampState.onOff brightness: scaledBrightness hue: scaledHue saturation: scaledSaturation colorTemp: scaledColorTemp];
-
-            LSFPresetManager *presetManager = [[LSFAllJoynManager getAllJoynManager] lsfPresetManager];
-            [presetManager createPresetWithState: scaledState andPresetName: self.presetNameTextField.text];
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            LSFSDKLamp *lamp = [[LSFSDKLightingDirector getLightingDirector] getLampWithID: self.lampID];
+            [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: [lamp getPower] color: [lamp getColor] presetName: self.presetNameTextField.text delegate:nil];
         });
     }
-}
-
-/*
- * Private functions
- */
--(BOOL)checkForDuplicateName: (NSString *)name
-{
-    NSDictionary *presets = [[LSFPresetModelContainer getPresetModelContainer] presetContainer];
-    
-    for (LSFSDKPreset *preset in [presets allValues])
-    {
-        LSFPresetModel *model = [preset getPresetDataModel];
-        if ([name isEqualToString: model.name])
-        {
-            return YES;
-        }
-    }
-    
-    return NO;
 }
 
 @end

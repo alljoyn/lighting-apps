@@ -14,13 +14,15 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import <Foundation/Foundation.h>
+#import <LSFSDKResponseCodes.h>
 
 @interface LSFSDKControllerErrorEvent : NSObject
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSArray *errorCodes;
+@property (nonatomic) lsf::LSFResponseCode responseCode;
 
+-(id)initWithName: (NSString *)name andResponseCode: (lsf::LSFResponseCode)code;
 -(id)initWithName: (NSString *)name andErrorCodes: (NSArray *)errorCodes;
 
 @end

@@ -16,14 +16,14 @@
 
 #import <Foundation/Foundation.h>
 #import "LSFSDKLightingDelegate.h"
-#import "LSFTrackingID.h"
+#import "LSFSDKTrackingID.h"
 
 @class LSFSDKGroup;
 @class LSFSDKLightingItemErrorEvent;
 
 @protocol LSFSDKGroupDelegate <LSFSDKLightingDelegate>
 
--(void)onGroupInitializedWithTrackingID: (LSFTrackingID *)trackingID andGroup: (LSFSDKGroup *)group;
+-(void)onGroupInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andGroup: (LSFSDKGroup *)group;
 -(void)onGroupChanged: (LSFSDKGroup *)group;
 -(void)onGroupRemoved: (LSFSDKGroup *)group;
 -(void)onGroupError: (LSFSDKLightingItemErrorEvent *)error;

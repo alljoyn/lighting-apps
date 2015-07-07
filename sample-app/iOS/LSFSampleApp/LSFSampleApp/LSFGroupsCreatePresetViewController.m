@@ -16,21 +16,15 @@
 
 #import "LSFGroupsCreatePresetViewController.h"
 #import "LSFGroupsInfoTableViewController.h"
-#import "LSFPresetModelContainer.h"
-#import "LSFSDKPreset.h"
-#import "LSFDispatchQueue.h"
-#import "LSFAllJoynManager.h"
-#import "LSFConstants.h"
 #import "LSFUtilityFunctions.h"
-#import "LSFEnums.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFGroupsCreatePresetViewController ()
 
 @property (nonatomic) BOOL doneButtonPressed;
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
--(void)groupNotificationReceived: (NSNotification *)notification;
--(void)deleteGroupsWithIDs: (NSArray *)groupIDs andNames: (NSArray *)groupNames;
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification;
+-(void)groupRemovedNotificationReceived: (NSNotification *)notification;
 
 @end
 
@@ -47,16 +41,17 @@
 
 -(void)viewWillAppear: (BOOL)animated
 {
-    LSFPresetModelContainer *container = [LSFPresetModelContainer getPresetModelContainer];
-    int numPresets = [container.presetContainer count];
+    [super viewWillAppear: animated];
+
+    int numPresets = (int) [[[LSFSDKLightingDirector getLightingDirector] presets] count];
 
     [self.presetNameTextField becomeFirstResponder];
     self.presetNameTextField.text = [NSString stringWithFormat: @"Preset %i", ++numPresets];
     self.doneButtonPressed = NO;
 
     //Set notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(groupNotificationReceived:) name: @"GroupNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(groupRemovedNotificationReceived:) name: @"LSFGroupRemovedNotification" object: nil];
 }
 
 -(void)viewWillDisappear: (BOOL)animated
@@ -73,49 +68,31 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handlers
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Disconnected)
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    if (![leaderModel connected])
     {
-        [self.navigationController popToRootViewControllerAnimated: YES];
+        [self dismissViewControllerAnimated: YES completion: nil];
     }
 }
 
-/*
- * GroupNotification Handler
- */
--(void)groupNotificationReceived: (NSNotification *)notification
+-(void)groupRemovedNotificationReceived:(NSNotification *)notification
 {
-    NSString *groupID = [notification.userInfo valueForKey: @"groupID"];
-    NSNumber *callbackOp = [notification.userInfo valueForKey: @"operation"];
-    NSArray *groupIDs = [notification.userInfo valueForKey: @"groupIDs"];
-    NSArray *groupNames = [notification.userInfo valueForKey: @"groupNames"];
+    LSFSDKGroup *group = [notification.userInfo valueForKey: @"group"];
 
-    if ([self.groupID isEqualToString: groupID] || [groupIDs containsObject: self.groupID])
+    if ([self.groupID isEqualToString: [group theID]])
     {
-        switch (callbackOp.intValue)
-        {
-            case GroupDeleted:
-                [self deleteGroupsWithIDs: groupIDs andNames: groupNames];
-                break;
-            default:
-                NSLog(@"Operation not found - Taking no action");
-                break;
-        }
+        [self alertGroupDeleted: group];
     }
 }
 
--(void)deleteGroupsWithIDs: (NSArray *)groupIDs andNames: (NSArray *)groupNames
+-(void)alertGroupDeleted: (LSFSDKGroup *) group
 {
-    int index = [groupIDs indexOfObject: self.groupID];
-
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Group Not Found"
-                                                    message: [NSString stringWithFormat: @"The group \"%@\" no longer exists.", [groupNames objectAtIndex: index]]
+                                                    message: [NSString stringWithFormat: @"The group \"%@\" no longer exists.", [group name]]
                                                    delegate: nil
                                           cancelButtonTitle: @"OK"
                                           otherButtonTitles: nil];
@@ -139,24 +116,16 @@
         return NO;
     }
 
-    BOOL nameMatchFound = [self checkForDuplicateName: self.presetNameTextField.text];
-    
+    BOOL nameMatchFound = [[[[LSFSDKLightingDirector getLightingDirector] presets] valueForKeyPath: @"name"] containsObject: self.presetNameTextField.text];
     if (!nameMatchFound)
     {
         self.doneButtonPressed = YES;
         [textField resignFirstResponder];
-        
-        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-            LSFConstants *constants = [LSFConstants getConstants];
-            unsigned int scaledBrightness = [constants scaleLampStateValue: self.lampState.brightness withMax: 100];
-            unsigned int scaledHue = [constants scaleLampStateValue: self.lampState.hue withMax: 360];
-            unsigned int scaledSaturation = [constants scaleLampStateValue: self.lampState.saturation withMax: 100];
-            unsigned int scaledColorTemp = [constants scaleColorTemp: self.lampState.colorTemp];
-            
-            LSFLampState *scaledState = [[LSFLampState alloc] initWithOnOff: self.lampState.onOff brightness: scaledBrightness hue: scaledHue saturation: scaledSaturation colorTemp: scaledColorTemp];
-            
-            LSFPresetManager *presetManager = [[LSFAllJoynManager getAllJoynManager] lsfPresetManager];
-            [presetManager createPresetWithState: scaledState andPresetName: self.presetNameTextField.text];
+
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            NSString *presetName = self.presetNameTextField.text;
+
+            [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: [self.lampState power] color: [self.lampState color] presetName:presetName delegate:nil];
         });
         
         return YES;
@@ -176,8 +145,6 @@
 {
     if (self.doneButtonPressed)
     {
-        //[self.navigationController popViewControllerAnimated: YES];
-
         for (UIViewController *vc in self.navigationController.viewControllers)
         {
             if ([vc isKindOfClass: [LSFGroupsInfoTableViewController class]])
@@ -204,30 +171,14 @@
         
         self.doneButtonPressed = YES;
         [self.presetNameTextField resignFirstResponder];
-        
-        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-            LSFPresetManager *presetManager = [[LSFAllJoynManager getAllJoynManager] lsfPresetManager];
-            [presetManager createPresetWithState: self.lampState andPresetName: self.presetNameTextField.text];
+
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            NSString *presetName = self.presetNameTextField.text;
+
+            [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: [self.lampState power] color: [self.lampState color] presetName:presetName delegate:nil];
+
         });
     }
-}
-
-/*
- * Private functions
- */
--(BOOL)checkForDuplicateName: (NSString *)name
-{
-    NSDictionary *presets = [[LSFPresetModelContainer getPresetModelContainer] presetContainer];
-    
-    for (LSFSDKPreset *preset in [presets allValues])
-    {
-        if ([name isEqualToString: [[preset getPresetDataModel] name]])
-        {
-            return YES;
-        }
-    }
-    
-    return NO;
 }
 
 @end

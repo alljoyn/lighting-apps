@@ -28,6 +28,7 @@
 -(LSFSDKTransitionEffect *)getTransitionEffectWithID: (NSString *)transitionEffectID;
 -(NSArray *)getTransitionEffects;
 -(NSArray *)getTransitionEffectsWithFilter: (id<LSFSDKLightingItemFilter>)filter;
+-(NSArray *)getTransitionEffectCollectionWithFilter: (id<LSFSDKLightingItemFilter>)filter;
 -(NSArray *)removeAllTransitionEffects;
 -(LSFSDKTransitionEffect *)removeTransitionEffectWithID: (NSString *)transitionEffectID;
 -(LSFTransitionEffectDataModelV2 *)getModelWithID: (NSString *)transitionEffectID;

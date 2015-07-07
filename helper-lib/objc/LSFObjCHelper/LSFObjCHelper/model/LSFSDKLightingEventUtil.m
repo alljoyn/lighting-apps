@@ -54,7 +54,7 @@
     self.lightingDelegate = nil;
 }
 
--(void)onTrackingIDReceived: (LSFTrackingID *)trackingID lightingItem: (LSFSDKLightingItem *)item
+-(void)onTrackingIDReceived: (LSFSDKTrackingID *)trackingID lightingItem: (LSFSDKLightingItem *)item
 {
     if ([self.lightingDelegate conformsToProtocol: @protocol(LSFSDKGroupDelegate)] && [item isKindOfClass: [LSFSDKGroup class]])
     {
@@ -136,10 +136,10 @@
 
 @interface MyAnyCollectionAdapter : LSFSDKAnyCollectionAdapter
 
-@property (nonatomic, strong) LSFTrackingID *myTrackingID;
+@property (nonatomic, strong) LSFSDKTrackingID *myTrackingID;
 @property (nonatomic, strong) id<LSFSDKTrackingIDDelegate> trackingIDDelegate;
 
--(id)initWithTrackingID: (LSFTrackingID *)tid trackingIDDelegate: (id<LSFSDKTrackingIDDelegate>)delegate;
+-(id)initWithTrackingID: (LSFSDKTrackingID *)tid trackingIDDelegate: (id<LSFSDKTrackingIDDelegate>)delegate;
 
 @end
 
@@ -148,7 +148,7 @@
 @synthesize myTrackingID = _myTrackingID;
 @synthesize trackingIDDelegate = _trackingIDDelegate;
 
--(id)initWithTrackingID: (LSFTrackingID *)tid trackingIDDelegate: (id<LSFSDKTrackingIDDelegate>)delegate
+-(id)initWithTrackingID: (LSFSDKTrackingID *)tid trackingIDDelegate: (id<LSFSDKTrackingIDDelegate>)delegate
 {
     self = [super init];
 
@@ -167,7 +167,7 @@
     self.trackingIDDelegate = nil;
 }
 
--(void)onAnyInitializedWithTrackingID: (LSFTrackingID *)trackingID andLightingItem: (id)item
+-(void)onAnyInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andLightingItem: (id)item
 {
     if (trackingID != nil && trackingID.value == self.myTrackingID.value)
     {
@@ -189,7 +189,7 @@
 
 @implementation LSFSDKLightingEventUtil
 
-+(void)listenForTrackingID: (LSFTrackingID *)trackingID lightingDelegate: (id<LSFSDKLightingDelegate>)delegate objectType: (LightingObjectType)lightingObjectType
++(void)listenForTrackingID: (LSFSDKTrackingID *)trackingID lightingDelegate: (id<LSFSDKLightingDelegate>)delegate objectType: (LightingObjectType)lightingObjectType
 {
     MyTrackingIDDelegate *myTrackingIDDelegate = [[MyTrackingIDDelegate alloc] initWithLightingItemDelegate: delegate lightingObjectType: lightingObjectType];
     MyAnyCollectionAdapter *anyCollectionAdapter = [[MyAnyCollectionAdapter alloc] initWithTrackingID: trackingID trackingIDDelegate: myTrackingIDDelegate];

@@ -18,9 +18,9 @@
 #import "LSFConstants.h"
 #import "LSFSDKAllJoynManager.h"
 #import "LSFLampAnnouncementData.h"
-#include "AboutListener.h"
-#include "BusAttachment.h"
-#include "AboutProxy.h"
+#include <alljoyn/AboutListener.h>
+#include <alljoyn/BusAttachment.h>
+#include <alljoyn/AboutProxy.h>
 
 using namespace ajn;
 
@@ -166,7 +166,7 @@ void LSFSDKAboutManagerCpp::GetAboutData(const char* busName, uint16_t port)
         if (status != ER_OK) {
             NSLog(@"Failed 5 attempts to get about data from lamp (%s)", busName);
         } else {
-            LSFSDKAboutData *myAboutData = [[LSFSDKAboutData alloc] init];
+            LSFLampAbout *myAboutData = [[LSFLampAbout alloc] init];
 
             QStatus status;
             char* stringContent;
@@ -344,10 +344,11 @@ void LSFSDKAboutManagerCpp::Announced(const char* busName, uint16_t version, Ses
 
     dispatch_async(dispatch_queue_create("GetAboutData", NULL), ^{
         [LSFSDKAllJoynManager addNewLamp: lampID lampAnnouncementData: lampAnnData];
+//        [LSFSDKAllJoynManager getAboutDataForLampID: lampID];
     });
 }
 
--(void)saveAboutData: (LSFSDKAboutData *)myAboutData
+-(void)saveAboutData: (LSFLampAbout *)myAboutData
 {
     [[LSFSDKAllJoynManager getLampManagerCallback] postUpdateLampID: myAboutData.deviceID withAboutData: myAboutData andDelay: 0];
 }

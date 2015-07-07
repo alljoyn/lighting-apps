@@ -16,6 +16,8 @@
 
 #import "LSFTutorialViewController.h"
 #import "LSFSDKLightingDirector.h"
+#import "LSFSDKLightingController.h"
+#import "LSFSDKLightingControllerConfigurationBase.h"
 #import "LSFSDKLamp.h"
 #import "LSFSDKGroup.h"
 #import "LSFSDKScene.h"
@@ -23,6 +25,7 @@
 @interface LSFTutorialViewController ()
 
 @property (nonatomic, strong) LSFSDKLightingDirector *lightingDirector;
+@property (nonatomic, strong) LSFSDKLightingControllerConfigurationBase *config;
 
 @end
 
@@ -30,6 +33,7 @@
 
 @synthesize versionLabel = _versionLabel;
 @synthesize lightingDirector = _lightingDirector;
+@synthesize config = _config;
 
 -(void)viewDidLoad
 {
@@ -41,7 +45,13 @@
     [appVersion appendString: [NSString stringWithFormat: @" (%@)", ARCH_STR]];
     [self.versionLabel setText: appVersion];
 
-    //Instantiate the director and wait for the connection
+    // STEP 1: Initialize a lighting controller with default configuration
+    self.config = [[LSFSDKLightingControllerConfigurationBase alloc]initWithKeystorePath: @"Documents"];
+    LSFSDKLightingController *lightingController = [LSFSDKLightingController getLightingController];
+    [lightingController initializeWithControllerConfiguration: self.config];
+    [lightingController start];
+
+    // STEP 2: Instantiate the lighting director and wait for the connection
     self.lightingDirector = [LSFSDKLightingDirector getLightingDirector];
     [self.lightingDirector postOnNextControllerConnectionWithDelay: 5000 delegate: self];
     [self.lightingDirector start];

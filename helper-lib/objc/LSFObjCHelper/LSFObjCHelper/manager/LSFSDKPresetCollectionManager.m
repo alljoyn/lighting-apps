@@ -64,6 +64,11 @@
 
 -(NSArray *)getPresetsWithFilter: (id<LSFSDKLightingItemFilter>)filter
 {
+    return [self getPresetsCollectionWithFilter: filter];
+}
+
+-(NSArray *)getPresetsCollectionWithFilter: (id<LSFSDKLightingItemFilter>)filter
+{
     return [self getAdaptersWithFilter: filter];
 }
 
@@ -86,7 +91,7 @@
 /*
  * Overriden functions from base class
  */
--(void)sendInitializedEvent: (id<LSFSDKLightingDelegate>)delegate item: (id)item trackingID: (LSFTrackingID *)trackingID
+-(void)sendInitializedEvent: (id<LSFSDKLightingDelegate>)delegate item: (id)item trackingID: (LSFSDKTrackingID *)trackingID
 {
     if ([delegate conformsToProtocol: @protocol(LSFSDKPresetDelegate)] && [item isKindOfClass: [LSFSDKPreset class]])
     {

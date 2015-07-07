@@ -15,21 +15,22 @@
  ******************************************************************************/
 
 #import "LSFSDKLightingDirector.h"
-#import "LSFSDKLampCollectionManager.h"
-#import "LSFSDKPresetCollectionManager.h"
-#import "LSFSDKGroupCollectionManager.h"
-#import "LSFSDKTransitionEffectCollectionManager.h"
-#import "LSFSDKPulseEffectCollectionManager.h"
-#import "LSFSDKSceneElementCollectionManager.h"
-#import "LSFSDKSceneCollectionManager.h"
-#import "LSFSDKSceneCollectionManagerV2.h"
-#import "LSFSDKMasterSceneCollectionManager.h"
-#import "LSFSDKAllJoynManager.h"
 #import "LSFSDKLightingItemUtil.h"
-#import "LSFSDKLightingItemInitializedFilter.h"
 #import "LSFSDKTrackingIDDelegate.h"
 #import "LSFSDKLightingEventUtil.h"
-#import "Init.h"
+#import "manager/LSFSDKLampCollectionManager.h"
+#import "manager/LSFSDKPresetCollectionManager.h"
+#import "manager/LSFSDKGroupCollectionManager.h"
+#import "manager/LSFSDKTransitionEffectCollectionManager.h"
+#import "manager/LSFSDKPulseEffectCollectionManager.h"
+#import "manager/LSFSDKSceneElementCollectionManager.h"
+#import "manager/LSFSDKSceneCollectionManager.h"
+#import "manager/LSFSDKSceneCollectionManagerV2.h"
+#import "manager/LSFSDKMasterSceneCollectionManager.h"
+#import "manager/LSFSDKAllJoynManager.h"
+#import "model/LSFSDKLightingItemInitializedFilter.h"
+#import "model/LSFConstants.h"
+#import <alljoyn/Init.h>
 
 static NSString *LANGUAGE_DEFAULT = @"en";
 
@@ -50,8 +51,17 @@ static NSString *LANGUAGE_DEFAULT = @"en";
 
 @implementation LSFSDKLightingDirector
 
+@synthesize HUE_MIN = _HUE_MIN;
+@synthesize HUE_MAX = _HUE_MAX;
+@synthesize SATURATION_MIN = _SATURATION_MIN;
+@synthesize SATURATION_MAX = _SATURATION_MAX;
+@synthesize BRIGHTNESS_MIN = _BRIGHTNESS_MIN;
+@synthesize BRIGHTNESS_MAX = _BRIGHTNESS_MAX;
+@synthesize COLORTEMP_MIN = _COLORTEMP_MIN;
+@synthesize COLORTEMP_MAX = _COLORTEMP_MAX;
 @synthesize version = _version;
 @synthesize busAttachment = _busAttachment;
+@synthesize queue = _queue;
 @synthesize lamps = _lamps;
 @synthesize initializedLamps = _initializedLamps;
 @synthesize groups = _groups;
@@ -100,6 +110,46 @@ static NSString *LANGUAGE_DEFAULT = @"en";
     return self;
 }
 
+-(int)HUE_MIN
+{
+    return [[LSFConstants getConstants] MIN_HUE];
+}
+
+-(int)HUE_MAX
+{
+    return [[LSFConstants getConstants] MAX_HUE];
+}
+
+-(int)SATURATION_MIN
+{
+    return [[LSFConstants getConstants] MIN_SATURATION];
+}
+
+-(int)SATURATION_MAX
+{
+    return [[LSFConstants getConstants] MAX_SATURATION];
+}
+
+-(int)BRIGHTNESS_MIN
+{
+    return [[LSFConstants getConstants] MIN_BRIGHTNESS];
+}
+
+-(int)BRIGHTNESS_MAX
+{
+    return [[LSFConstants getConstants] MAX_BRIGHTNESS];
+}
+
+-(int)COLORTEMP_MIN
+{
+    return [[LSFConstants getConstants] MIN_COLOR_TEMP];
+}
+
+-(int)COLORTEMP_MAX
+{
+    return [[LSFConstants getConstants] MAX_COLOR_TEMP];
+}
+
 -(unsigned int)version
 {
     return 2;
@@ -142,6 +192,11 @@ static NSString *LANGUAGE_DEFAULT = @"en";
     return [LSFSDKAllJoynManager getBusAttachment];
 }
 
+-(dispatch_queue_t)queue
+{
+    return [self.lightingManager dispatchQueue];
+}
+
 -(NSArray *)lamps
 {
     return [[self getLampCollectionManager] getLamps];
@@ -150,6 +205,11 @@ static NSString *LANGUAGE_DEFAULT = @"en";
 -(NSArray *)initializedLamps
 {
     return [[self getLampCollectionManager] getLampsWithFilter: [[LSFSDKLightingItemInitializedFilter alloc] init]];
+}
+
+-(NSUInteger)lampCount
+{
+    return [[[self getLampCollectionManager] getLamps] count];
 }
 
 -(LSFSDKLamp *)getLampWithID: (NSString *)lampID
@@ -167,6 +227,11 @@ static NSString *LANGUAGE_DEFAULT = @"en";
     return [[self getGroupCollectionManager] getGroupsWithFilter: [[LSFSDKLightingItemInitializedFilter alloc] init]];
 }
 
+-(NSUInteger)groupCount
+{
+    return [[[self getGroupCollectionManager] getGroups] count];
+}
+
 -(LSFSDKGroup *)getGroupWithID: (NSString *)groupID
 {
     return [[self getGroupCollectionManager] getGroupWithID: groupID];
@@ -180,6 +245,11 @@ static NSString *LANGUAGE_DEFAULT = @"en";
 -(NSArray *)initializedPresets
 {
     return [[self getPresetCollectionManager] getPresetsWithFilter: [[LSFSDKLightingItemInitializedFilter alloc] init]];
+}
+
+-(NSUInteger)presetCount
+{
+    return [[[self getPresetCollectionManager] getPresets] count];
 }
 
 -(LSFSDKPreset *)getPresetWithID: (NSString *)presetID
@@ -197,6 +267,11 @@ static NSString *LANGUAGE_DEFAULT = @"en";
     return [[self getTransitionEffectCollectionManager] getTransitionEffectsWithFilter: [[LSFSDKLightingItemInitializedFilter alloc] init]];
 }
 
+-(NSUInteger)transitionEffectCount
+{
+    return [[[self getTransitionEffectCollectionManager] getTransitionEffects] count];
+}
+
 -(LSFSDKTransitionEffect *)getTransitionEffectWithID: (NSString *)transitionEffectID
 {
     return [[self getTransitionEffectCollectionManager] getTransitionEffectWithID: transitionEffectID];
@@ -212,9 +287,54 @@ static NSString *LANGUAGE_DEFAULT = @"en";
     return [[self getPulseEffectCollectionManager] getPulseEffectsWithFilter: [[LSFSDKLightingItemInitializedFilter alloc] init]];
 }
 
+-(NSUInteger)pulseEffectCount
+{
+    return [[[self getPulseEffectCollectionManager] getPulseEffects] count];
+}
+
 -(LSFSDKPulseEffect *)getPulseEffectWithID: (NSString *)pulseEffectID
 {
     return [[self getPulseEffectCollectionManager] getPulseEffectWithID: pulseEffectID];
+}
+
+-(NSArray *)effects
+{
+    NSMutableArray *allEffects = [[NSMutableArray alloc] init];
+    [allEffects addObjectsFromArray: [self presets]];
+    [allEffects addObjectsFromArray: [self transitionEffects]];
+    [allEffects addObjectsFromArray: [self pulseEffects]];
+
+    return allEffects;
+}
+
+-(NSArray *)initializedEffects
+{
+    NSMutableArray *allInitializedEffects = [[NSMutableArray alloc] init];
+    [allInitializedEffects addObjectsFromArray: [self initializedPresets]];
+    [allInitializedEffects addObjectsFromArray: [self initializedTransitionEffects]];
+    [allInitializedEffects addObjectsFromArray: [self initializedPulseEffects]];
+
+    return allInitializedEffects;
+}
+
+-(NSUInteger)effectCount
+{
+    return [self presetCount] + [self transitionEffectCount] + [self pulseEffectCount];
+}
+
+-(id<LSFSDKEffect>)getEffectWithID:(NSString *)effectID
+{
+    id<LSFSDKEffect> effect = [self getPresetWithID: effectID];
+
+    if (effect == nil) {
+        effect = [self getTransitionEffectWithID: effectID];
+    }
+
+    if (effect == nil) {
+        effect = [self getPulseEffectWithID: effectID];
+    }
+
+    return effect;
 }
 
 -(NSArray *)sceneElements
@@ -227,6 +347,11 @@ static NSString *LANGUAGE_DEFAULT = @"en";
     return [[self getSceneElementCollectionManager] getSceneElementsWithFilter: [[LSFSDKLightingItemInitializedFilter alloc] init]];
 }
 
+-(NSUInteger)sceneElementCount
+{
+    return [[[self getSceneElementCollectionManager] getSceneElements] count];
+}
+
 -(LSFSDKSceneElement *)getSceneElementWithID: (NSString *)sceneElementID
 {
     return [[self getSceneElementCollectionManager] getSceneElementWithID: sceneElementID];
@@ -234,17 +359,49 @@ static NSString *LANGUAGE_DEFAULT = @"en";
 
 -(NSArray *)scenes
 {
-    return [[self getSceneCollectionManagerV2] getScenes];
+    NSMutableArray *scenes = [[NSMutableArray alloc] init];
+    [scenes addObjectsFromArray: [[self getSceneCollectionManagerV2] getScenes]];
+    if (!scenes.count)
+    {
+        [scenes addObjectsFromArray: [[self getSceneCollectionManager] getScenes]];
+    }
+
+    return scenes;
 }
 
 -(NSArray *)initializedScenes
 {
-    return [[self getSceneCollectionManagerV2] getScenesWithFilter: [[LSFSDKLightingItemInitializedFilter alloc] init]];
+    NSMutableArray *initializedScenes = [[NSMutableArray alloc] init];
+    [initializedScenes addObjectsFromArray: [[self getSceneCollectionManagerV2] getScenesWithFilter: [[LSFSDKLightingItemInitializedFilter alloc] init]]];
+    if (!initializedScenes.count)
+    {
+        [initializedScenes addObjectsFromArray: [[self getSceneCollectionManager] getScenesWithFilter: [[LSFSDKLightingItemInitializedFilter alloc] init]]];
+    }
+
+    return initializedScenes;
+}
+
+-(NSUInteger)sceneCount
+{
+    NSUInteger count = [[[self getSceneCollectionManagerV2] getScenes] count];
+    if (!count)
+    {
+        count = [[[self getSceneCollectionManager] getScenes] count];
+    }
+
+    return count;
 }
 
 -(LSFSDKScene *)getSceneWithID: (NSString *)sceneID
 {
-    return [[self getSceneCollectionManagerV2] getSceneWithID: sceneID];
+    LSFSDKScene *scene = [[self getSceneCollectionManagerV2] getSceneWithID: sceneID];
+
+    if (scene == nil)
+    {
+        scene = [[self getSceneCollectionManager] getSceneWithID: sceneID];
+    }
+
+    return scene;
 }
 
 -(NSArray *)masterScenes
@@ -257,14 +414,24 @@ static NSString *LANGUAGE_DEFAULT = @"en";
     return [[self getMasterSceneCollectionManager] getMasterScenesWithFilter: [[LSFSDKLightingItemInitializedFilter alloc] init]];
 }
 
+-(NSUInteger)masterSceneCount
+{
+    return [[[self getMasterSceneCollectionManager] getMasterScenes] count];
+}
+
+-(LSFSDKController *)leadController
+{
+    return [[self getControllerManager] getLeader];
+}
+
 -(LSFSDKMasterScene *)getMasterSceneWithID: (NSString *)masterSceneID
 {
     return [[self getMasterSceneCollectionManager] getMasterSceneWithID: masterSceneID];
 }
 
--(LSFTrackingID *)createGroupWithMembers: (NSArray *)members groupName: (NSString *)groupName delegate: (id<LSFSDKGroupDelegate>)delegate
+-(LSFSDKTrackingID *)createGroupWithMembers: (NSArray *)members groupName: (NSString *)groupName delegate: (id<LSFSDKGroupDelegate>)delegate
 {
-    LSFTrackingID *trackingID = [[LSFTrackingID alloc] init];
+    LSFSDKTrackingID *trackingID = [[LSFSDKTrackingID alloc] init];
     uint32_t tid = 0;
 
     if (delegate)
@@ -278,9 +445,9 @@ static NSString *LANGUAGE_DEFAULT = @"en";
     return trackingID;
 }
 
--(LSFTrackingID *)createPresetWithPower: (Power)power color: (LSFSDKColor *)color presetName: (NSString *)presetName delegate: (id<LSFSDKPresetDelegate>)delegate
+-(LSFSDKTrackingID *)createPresetWithPower: (Power)power color: (LSFSDKColor *)color presetName: (NSString *)presetName delegate: (id<LSFSDKPresetDelegate>)delegate
 {
-    LSFTrackingID *trackingID = [[LSFTrackingID alloc] init];
+    LSFSDKTrackingID *trackingID = [[LSFSDKTrackingID alloc] init];
     uint32_t tid = 0;
 
     if (delegate)
@@ -294,9 +461,9 @@ static NSString *LANGUAGE_DEFAULT = @"en";
     return trackingID;
 }
 
--(LSFTrackingID *)createTransitionEffectWithLampState: (id<LSFSDKLampState>)state duration: (unsigned int)duration name: (NSString *)effectName delegate: (id<LSFSDKTransitionEffectDelegate>)delegate
+-(LSFSDKTrackingID *)createTransitionEffectWithLampState: (id<LSFSDKLampState>)state duration: (unsigned int)duration name: (NSString *)effectName delegate: (id<LSFSDKTransitionEffectDelegate>)delegate
 {
-    LSFTrackingID *trackingID = [[LSFTrackingID alloc] init];
+    LSFSDKTrackingID *trackingID = [[LSFSDKTrackingID alloc] init];
     uint32_t tid = 0;
 
     if (delegate)
@@ -317,9 +484,9 @@ static NSString *LANGUAGE_DEFAULT = @"en";
     return trackingID;
 }
 
--(LSFTrackingID *)createPulseEffectWithFromState: (id<LSFSDKLampState>)fromState toState: (id<LSFSDKLampState>)toState period: (unsigned int)period duration: (unsigned int)duration count: (unsigned int)count name: (NSString *)effectName delegate: (id<LSFSDKPulseEffectDelegate>)delegate
+-(LSFSDKTrackingID *)createPulseEffectWithFromState: (id<LSFSDKLampState>)fromState toState: (id<LSFSDKLampState>)toState period: (unsigned int)period duration: (unsigned int)duration count: (unsigned int)count name: (NSString *)effectName delegate: (id<LSFSDKPulseEffectDelegate>)delegate
 {
-    LSFTrackingID *trackingID = [[LSFTrackingID alloc] init];
+    LSFSDKTrackingID *trackingID = [[LSFSDKTrackingID alloc] init];
     uint32_t tid = 0;
 
     if (delegate)
@@ -340,9 +507,9 @@ static NSString *LANGUAGE_DEFAULT = @"en";
     return trackingID;
 }
 
--(LSFTrackingID *)createSceneElementWithEffect: (id<LSFSDKEffect>)effect groupMembers: (NSArray *)members name: (NSString *)sceneElementName delegate: (id<LSFSDKSceneElementDelegate>)delegate
+-(LSFSDKTrackingID *)createSceneElementWithEffect: (id<LSFSDKEffect>)effect groupMembers: (NSArray *)members name: (NSString *)sceneElementName delegate: (id<LSFSDKSceneElementDelegate>)delegate
 {
-    LSFTrackingID *trackingID = [[LSFTrackingID alloc] init];
+    LSFSDKTrackingID *trackingID = [[LSFSDKTrackingID alloc] init];
     uint32_t tid = 0;
 
     if (delegate)
@@ -356,9 +523,9 @@ static NSString *LANGUAGE_DEFAULT = @"en";
     return trackingID;
 }
 
--(LSFTrackingID *)createSceneWithSceneElements: (NSArray *)sceneElements name: (NSString *)sceneName delegate: (id<LSFSDKSceneDelegate>)delegate
+-(LSFSDKTrackingID *)createSceneWithSceneElements: (NSArray *)sceneElements name: (NSString *)sceneName delegate: (id<LSFSDKSceneDelegate>)delegate
 {
-    LSFTrackingID *trackingID = [[LSFTrackingID alloc] init];
+    LSFSDKTrackingID *trackingID = [[LSFSDKTrackingID alloc] init];
     uint32_t tid = 0;
 
     if (delegate)
@@ -379,9 +546,9 @@ static NSString *LANGUAGE_DEFAULT = @"en";
     return trackingID;
 }
 
--(LSFTrackingID *)createMasterSceneWithScenes: (NSArray *)scenes name: (NSString *)masterSceneName delegate: (id<LSFSDKMasterSceneDelegate>)delegate
+-(LSFSDKTrackingID *)createMasterSceneWithScenes: (NSArray *)scenes name: (NSString *)masterSceneName delegate: (id<LSFSDKMasterSceneDelegate>)delegate
 {
-    LSFTrackingID *trackingID = [[LSFTrackingID alloc] init];
+    LSFSDKTrackingID *trackingID = [[LSFSDKTrackingID alloc] init];
     uint32_t tid = 0;
 
     if (delegate)
@@ -492,6 +659,7 @@ static NSString *LANGUAGE_DEFAULT = @"en";
 
 -(void)addSceneDelegate: (id<LSFSDKSceneDelegate>)delegate
 {
+    [[self getSceneCollectionManager] addSceneDelegate: delegate];
     [[self getSceneCollectionManagerV2] addSceneDelegate: delegate];
 }
 

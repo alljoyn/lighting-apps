@@ -15,8 +15,9 @@
  ******************************************************************************/
 
 #import "LSFSDKControllerAdapter.h"
-#import "LSFLightingSystemManager.h"
-#import "LSFControllerManager.h"
+#import "LSFSDKLightingDirector.h"
+#import "manager/LSFControllerManager.h"
+#import "manager/LSFSDKLightingSystemManager.h"
 
 @implementation LSFSDKControllerAdapter
 
@@ -34,7 +35,7 @@
     return self;
 }
 
--(void)onLeaderModelChange: (LSFControllerModel *)leadModel
+-(void)onLeaderChange: (LSFSDKController *)leader
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (self.delegate)
@@ -44,9 +45,8 @@
     });
 
     //Remove self as delegate
-    LSFLightingSystemManager *director = [LSFLightingSystemManager getLightingSystemManager];
-    LSFControllerManager *controllerManager = [director getControllerManager];
-    [controllerManager removeDelegate: self];
+    LSFSDKLightingSystemManager *manager = [[LSFSDKLightingDirector getLightingDirector] lightingManager];
+    [[manager controllerManager] removeDelegate: self];
 }
 
 -(void)onControllerError: (LSFSDKControllerErrorEvent *)errorEvent

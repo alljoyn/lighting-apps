@@ -64,6 +64,11 @@
 
 -(NSArray *)getSceneElementsWithFilter: (id<LSFSDKLightingItemFilter>)filter
 {
+    return [self getSceneElementsCollectionWithFilter: filter];
+}
+
+-(NSArray *)getSceneElementsCollectionWithFilter: (id<LSFSDKLightingItemFilter>)filter
+{
     return [self getAdaptersWithFilter: filter];
 }
 
@@ -86,7 +91,7 @@
 /*
  * Overriden functions from base class
  */
--(void)sendInitializedEvent: (id<LSFSDKLightingDelegate>)delegate item: (id)item trackingID: (LSFTrackingID *)trackingID
+-(void)sendInitializedEvent: (id<LSFSDKLightingDelegate>)delegate item: (id)item trackingID: (LSFSDKTrackingID *)trackingID
 {
     if ([delegate conformsToProtocol: @protocol(LSFSDKSceneElementDelegate)] && [item isKindOfClass: [LSFSDKSceneElement class]])
     {

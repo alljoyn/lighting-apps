@@ -15,6 +15,7 @@
  ******************************************************************************/
 
 #import "LSFSDKMyLampState.h"
+#import "model/LSFConstants.h"
 
 @implementation LSFSDKMyLampState
 
@@ -22,6 +23,18 @@ static LSFSDKColor *DEFAULT_COLOR = [LSFSDKColor white];
 
 @synthesize power = _power;
 @synthesize color = _color;
+
+-(id)initWithLSFLampState: (LSFLampState *)state
+{
+    LSFConstants *constants = [LSFConstants getConstants];
+    unsigned int hue = [constants unscaleLampStateValue: state.hue withMax: 100];
+    unsigned int saturation = [constants unscaleLampStateValue: state.saturation withMax: 100];
+    unsigned int brightness = [constants unscaleLampStateValue: state.brightness withMax: 100];
+    unsigned int colorTemp = [constants unscaleColorTemp: state.colorTemp];
+
+    return [self initWithPower: (state.onOff ? ON : OFF) hue: hue saturation: saturation brightness: brightness colorTemp: colorTemp];
+
+}
 
 -(id)initWithPower: (Power)power hue: (unsigned int)hue saturation: (unsigned int)sat brightness: (unsigned int)brightness colorTemp: (unsigned int)colorTemp;
 {

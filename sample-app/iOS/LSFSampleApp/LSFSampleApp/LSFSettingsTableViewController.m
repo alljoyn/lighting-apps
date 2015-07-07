@@ -16,14 +16,12 @@
 
 #import "LSFSettingsTableViewController.h"
 #import "LSFSettingsInfoViewController.h"
-#import "LSFControllerModel.h"
-#import "LSFDispatchQueue.h"
-#import "LSFAllJoynManager.h"
-#import "LSFSDKLightingController.h"
+#import <LSFSDKLightingDirector.h>
+#import <LSFSDKLightingController.h>
 
 @interface LSFSettingsTableViewController ()
 
--(void)controllerNameNotificationReceived: (NSNotification *)notification;
+-(void)leaderModelChangedNotificationReceived: (NSNotification *)notification;
 -(void)startBundledController;
 
 @end
@@ -40,9 +38,9 @@
     [super viewWillAppear: animated];
 
     //Set controller notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNameNotificationReceived:) name: @"ControllerNameChanged" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
 
-    [self.controllerNameLabel setText: [[LSFControllerModel getControllerModel] name]];
+    [self.controllerNameLabel setText: [[[LSFSDKLightingDirector getLightingDirector] leadController] name]];
 
     if ([[LSFSDKLightingController getLightingController] isRunning])
     {
@@ -70,9 +68,10 @@
 /*
  * ControllerNotification Handler
  */
--(void)controllerNameNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived: (NSNotification *)notification
 {
-    [self.controllerNameLabel setText: [[LSFControllerModel getControllerModel] name]];
+    LSFSDKController *leader = [notification.userInfo valueForKey: @"leader"];
+    [self.controllerNameLabel setText: [leader name]];
 }
 
 /*

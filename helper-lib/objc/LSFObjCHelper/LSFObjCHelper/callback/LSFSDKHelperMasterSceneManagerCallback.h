@@ -14,7 +14,7 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFMasterSceneManagerCallbackDelegate.h"
+#import <internal/LSFMasterSceneManagerCallbackDelegate.h>
 
 @class LSFSDKLightingSystemManager;
 

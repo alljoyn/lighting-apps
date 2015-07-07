@@ -42,16 +42,16 @@ NSString *LAMP_DEFAULT_NAME = @"<Loading lamp info...>";
 
     if (self)
     {
-        self.lampDetails = [[LSFLampDetails alloc] init];
-        self.lampParameters = [[LSFLampParameters alloc] init];
-        self.aboutData = [[LSFSDKAboutData alloc] init];
+        self.lampDetails = [[LSFSDKLampDetails alloc] init];
+        self.lampParameters = [[LSFSDKLampParameters alloc] init];
+        self.aboutData = [[LSFLampAbout alloc] init];
         self.detailsInitialized = NO;
     }
 
     return self;
 }
 
--(void)setLampDetails: (LSFLampDetails *)lampDetails
+-(void)setLampDetails: (LSFSDKLampDetails *)lampDetails
 {
     _lampDetails = lampDetails;
     self.capability = [[LSFCapabilityData alloc] initWithDimmable: self.lampDetails.dimmable color: self.lampDetails.color andTemp: self.lampDetails.variableColorTemp];

@@ -18,7 +18,7 @@
 #import "LSFNoEffectDataModel.h"
 #import "LSFTransitionEffectDataModel.h"
 #import "LSFPulseEffectDataModel.h"
-#import "LSFScene.h"
+#import <internal/LSFScene.h>
 
 /**
  * @warning *Note:* This class is not intended to be used by clients, and its interface may change
@@ -40,5 +40,7 @@
 -(BOOL)removeElement: (NSString *)elementID;
 -(LSFScene *)toScene;
 -(void)fromScene: (LSFScene *)scene;
+-(BOOL)containsPreset: (NSString *)presetID;
+-(BOOL)containsGroup: (NSString *)groupID;
 
 @end

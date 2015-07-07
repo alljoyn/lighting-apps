@@ -15,31 +15,23 @@
  ******************************************************************************/
 
 #import "LSFScenesChangeNameViewController.h"
-#import "LSFDispatchQueue.h"
-#import "LSFLampGroupManager.h"
-#import "LSFAllJoynManager.h"
-#import "LSFSceneModelContainer.h"
 #import "LSFUtilityFunctions.h"
-#import "LSFEnums.h"
-#import "LSFSDKSceneV1.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFScenesChangeNameViewController ()
 
 @property (nonatomic) BOOL doneButtonPressed;
-@property (nonatomic, strong) LSFSceneDataModel *sceneModel;
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
--(void)sceneNotificationReceived: (NSNotification *)notification;
--(void)reloadSceneName;
--(void)deleteScenesWithIDs: (NSArray *)sceneIDs andNames: (NSArray *)sceneNames;
--(BOOL)checkForDuplicateName: (NSString *)name;
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification;
+-(void)sceneChangedNotificationReceived:(NSNotification *)notification;
+-(void)sceneRemovedNotificationReceived:(NSNotification *)notification;
+-(void)alertSceneDeleted: (LSFSDKScene *)scene;
 
 @end
 
 @implementation LSFScenesChangeNameViewController
 
 @synthesize sceneID = _sceneID;
-@synthesize sceneModel = _sceneModel;
 @synthesize sceneNameTextField = _sceneNameTextField;
 @synthesize doneButtonPressed = _doneButtonPressed;
 
@@ -50,15 +42,14 @@
 
 -(void)viewWillAppear: (BOOL)animated
 {
-    NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
-    self.sceneModel = [[scenes valueForKey: self.sceneID] getSceneDataModel];
+    [super viewWillAppear: animated];
 
     //Set notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneNotificationReceived:) name: @"SceneNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneChangedNotificationReceived:) name: @"LSFSceneChangedNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneRemovedNotificationReceived:) name: @"LSFSceneRemovedNotification" object: nil];
 
     [self.sceneNameTextField becomeFirstResponder];
-    self.sceneNameTextField.text = self.sceneModel.name;
     self.doneButtonPressed = NO;
 }
 
@@ -76,70 +67,47 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handlers
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Disconnected)
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    if (![leaderModel connected])
     {
-        [self.navigationController popToRootViewControllerAnimated: YES];
+        [self dismissViewControllerAnimated: YES completion: nil];
     }
 }
 
-/*
- * SceneNotification Handler
- */
--(void)sceneNotificationReceived: (NSNotification *)notification
+-(void)sceneChangedNotificationReceived:(NSNotification *)notification
 {
-    NSString *sceneID = [notification.userInfo valueForKey: @"sceneID"];
-    NSNumber *callbackOp = [notification.userInfo valueForKey: @"operation"];
-    NSArray *sceneIDs = [notification.userInfo valueForKey: @"sceneIDs"];
-    NSArray *sceneNames = [notification.userInfo valueForKey: @"sceneNames"];
+    LSFSDKScene *scene = [notification.userInfo valueForKey: @"scene"];
 
-    if ([self.sceneID isEqualToString: sceneID] || [sceneIDs containsObject: self.sceneID])
+    if ([self.sceneID isEqualToString: scene.theID])
     {
-        switch (callbackOp.intValue)
-        {
-            case SceneNameUpdated:
-                [self reloadSceneName];
-                break;
-            case SceneDeleted:
-                [self deleteScenesWithIDs: sceneIDs andNames: sceneNames];
-                break;
-            default:
-                break;
-        }
+        self.sceneNameTextField.text = [scene name];
     }
 }
 
--(void)reloadSceneName
+-(void)sceneRemovedNotificationReceived:(NSNotification *)notification
 {
-    NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
-    self.sceneModel = [[scenes valueForKey: self.sceneID] getSceneDataModel];
+    LSFSDKScene *scene = [notification.userInfo valueForKey: @"scene"];
 
-    self.sceneNameTextField.text = self.sceneModel.name;
+    if ([self.sceneID isEqualToString: scene.theID])
+    {
+        [self alertSceneDeleted: scene];
+    }
 }
 
--(void)deleteScenesWithIDs: (NSArray *)sceneIDs andNames: (NSArray *)sceneNames
+-(void)alertSceneDeleted: (LSFSDKScene *)scene
 {
-    if ([sceneIDs containsObject: self.sceneID])
-    {
-        int index = [sceneIDs indexOfObject: self.sceneID];
-
-        [self.navigationController popToRootViewControllerAnimated: YES];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Scene Not Found"
-                                                            message: [NSString stringWithFormat: @"The scene \"%@\" no longer exists.", [sceneNames objectAtIndex: index]]
-                                                           delegate: nil
-                                                  cancelButtonTitle: @"OK"
-                                                  otherButtonTitles: nil];
-            [alert show];
-        });
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Scene Not Found"
+                                                        message: [NSString stringWithFormat: @"The scene \"%@\" no longer exists.", [scene name]]
+                                                       delegate: nil
+                                              cancelButtonTitle: @"OK"
+                                              otherButtonTitles: nil];
+        [alert show];
+    });
 }
 
 /*
@@ -157,20 +125,28 @@
         return NO;
     }
 
-    BOOL nameMatchFound = [self checkForDuplicateName: self.sceneNameTextField.text];
+    BOOL nameMatchFound = [[[[LSFSDKLightingDirector getLightingDirector] scenes] valueForKeyPath: @"name"] containsObject: self.sceneNameTextField.text];
 
     if (!nameMatchFound)
     {
         self.doneButtonPressed = YES;
         [textField resignFirstResponder];
 
-        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-            LSFSceneManager *sceneManager = [[LSFAllJoynManager getAllJoynManager] lsfSceneManager];
-            [sceneManager setSceneNameWithID: self.sceneID andSceneName: self.sceneNameTextField.text];
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            LSFSDKScene *scene = [[LSFSDKLightingDirector getLightingDirector] getSceneWithID: self.sceneID];
+            [scene rename: self.sceneNameTextField.text];
         });
+
 
         return YES;
     }
+
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Duplicate Name"
+                                                  message: [NSString stringWithFormat: @"Warning: there is already a scene named \"%@.\" Although it's possible to use the same name for more than one scene, it's better to give each scene a unique name.\n\nKeep duplicate scene name \"%@\"?", self.sceneNameTextField.text, self.sceneNameTextField.text]
+                                                 delegate: self
+                                        cancelButtonTitle: @"NO"
+                                        otherButtonTitles: @"YES", nil];
+    [alert show];
 
     return NO;
 }
@@ -200,38 +176,11 @@
         self.doneButtonPressed = YES;
         [self.sceneNameTextField resignFirstResponder];
 
-        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-            LSFSceneManager *sceneManager = [[LSFAllJoynManager getAllJoynManager] lsfSceneManager];
-            [sceneManager setSceneNameWithID: self.sceneID andSceneName: self.sceneNameTextField.text];
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            LSFSDKScene *scene = [[LSFSDKLightingDirector getLightingDirector] getSceneWithID: self.sceneID];
+            [scene rename: self.sceneNameTextField.text];
         });
     }
-}
-
-/*
- * Private functions
- */
--(BOOL)checkForDuplicateName: (NSString *)name
-{
-    NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
-
-    for (LSFSDKSceneV1 *scene in [scenes allValues])
-    {
-        LSFSceneDataModel *model = [scene getSceneDataModel];
-
-        if ([name isEqualToString: model.name])
-        {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Duplicate Name"
-                                                            message: [NSString stringWithFormat: @"Warning: there is already a scene named \"%@.\" Although it's possible to use the same name for more than one scene, it's better to give each scene a unique name.\n\nKeep duplicate scene name \"%@\"?", name, name]
-                                                           delegate: self
-                                                  cancelButtonTitle: @"NO"
-                                                  otherButtonTitles: @"YES", nil];
-            [alert show];
-
-            return YES;
-        }
-    }
-
-    return NO;
 }
 
 @end

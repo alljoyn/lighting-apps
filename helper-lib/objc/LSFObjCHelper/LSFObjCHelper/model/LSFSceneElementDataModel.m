@@ -49,4 +49,24 @@ static int nextID = 1;
     return self;
 }
 
+-(BOOL)containsGroup: (NSString *)groupID
+{
+    NSArray *childIDs = [self.members lampGroups];
+
+    for (NSString *childID in childIDs)
+    {
+        if ([childID isEqualToString: groupID])
+        {
+            return YES;
+        }
+    }
+
+    return NO;
+}
+
+-(BOOL) containsPreset:(NSString *)presetID
+{
+    return NO;
+}
+
 @end

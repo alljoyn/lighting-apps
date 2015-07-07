@@ -147,11 +147,11 @@
 {
     if (rc != LSF_OK)
     {
-        [self.manager.transitionEffectCollectionManager sendErrorEvent: @"createTransitionEffectReplyCB" statusCode: rc itemID: transitionEffectID withTrackingID: [[LSFTrackingID alloc] initWithValue:trackingID]];
+        [self.manager.transitionEffectCollectionManager sendErrorEvent: @"createTransitionEffectReplyCB" statusCode: rc itemID: transitionEffectID withTrackingID: [[LSFSDKTrackingID alloc] initWithValue:trackingID]];
     }
     else
     {
-        LSFTrackingID *myTrackingID = [[LSFTrackingID alloc] initWithValue: trackingID];
+        LSFSDKTrackingID *myTrackingID = [[LSFSDKTrackingID alloc] initWithValue: trackingID];
         [self.creationTrackingIDs setValue: myTrackingID forKey: transitionEffectID];
     }
 }
@@ -284,7 +284,7 @@
 -(void)postSendTransitionEffectInitialized: (NSString *)transitionEffectID
 {
     dispatch_async(self.manager.dispatchQueue, ^{
-        LSFTrackingID *trackingID = [self.creationTrackingIDs valueForKey: transitionEffectID];
+        LSFSDKTrackingID *trackingID = [self.creationTrackingIDs valueForKey: transitionEffectID];
 
         if (trackingID != nil)
         {

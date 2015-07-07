@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import "LSFSceneElementDataModel.h"
-#import "LSFLampState.h"
+#import <internal/LSFLampState.h>
 
 /**
  * @warning *Note:* This class is not intended to be used by clients, and its interface may change

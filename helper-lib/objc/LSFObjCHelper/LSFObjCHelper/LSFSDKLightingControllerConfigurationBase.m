@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import "LSFSDKLightingControllerConfigurationBase.h"
-#import "AboutKeys.h"
+#import <alljoyn/AboutKeys.h>
 
 @implementation LSFSDKLightingControllerConfigurationBase
 
@@ -58,7 +58,7 @@
 
 -(OEM_CS_RankParam_Availability)getRankAvailability
 {
-    return SIX_TO_NINE_HOURS;
+    return ZERO_TO_THREE_HOURS;
 }
 
 -(OEM_CS_RankParam_NodeType)getRankNodeType
@@ -66,7 +66,7 @@
     return WIRELESS;
 }
 
--(void)populateDefaultProperties:(LSFAboutData *)aboutData
+-(void)populateDefaultProperties:(LSFSDKAboutData *)aboutData
 {
     [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::DATE_OF_MANUFACTURE] withStringValue: @"10/1/2199"];
     [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::DEFAULT_LANGUAGE] withStringValue: @"en"];

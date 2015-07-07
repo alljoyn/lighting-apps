@@ -52,4 +52,25 @@
     return ([super isInitialized] && stateInitialized);
 }
 
+-(BOOL)isStateEqualToModelState: (LSFDataModel *)other
+{
+    return (other != nil) ? [self isStateEqualToLampState: other.state] : NO;
+}
+
+-(BOOL)isStateEqualToLampState: (LSFLampState *)otherState
+{
+    return otherState != nil ?
+        [self isStateEqualToPowerOn: otherState.onOff hue: otherState.hue saturation: otherState.saturation brightness: otherState.brightness colorTemp: otherState.colorTemp] : NO;
+}
+
+-(BOOL)isStateEqualToPowerOn: (BOOL)onOff hue: (unsigned int)hue saturation:(unsigned int)saturation brightness:(unsigned int)brightness colorTemp:(unsigned int)colorTemp
+{
+    return
+        [self.state hue]        == hue          &&
+        [self.state saturation] == saturation   &&
+        [self.state brightness] == brightness   &&
+        [self.state colorTemp]  == colorTemp    &&
+        [self.state onOff]      == onOff;
+}
+
 @end

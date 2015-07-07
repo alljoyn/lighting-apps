@@ -16,27 +16,20 @@
 
 #import "LSFLightsPresetsTableViewController.h"
 #import "LSFLightsCreatePresetViewController.h"
-#import "LSFLampModelContainer.h"
-#import "LSFPresetModelContainer.h"
-#import "LSFDispatchQueue.h"
-#import "LSFAllJoynManager.h"
-#import "LSFConstants.h"
-#import "LSFEnums.h"
-#import "LSFSDKLamp.h"
-#import "LSFSDKPreset.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFLightsPresetsTableViewController ()
 
-@property (nonatomic, strong) LSFLampModel *lampModel;
 @property (nonatomic, strong) NSArray *presetData;
 @property (nonatomic, strong) NSMutableArray *presetDataSorted;
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
--(void)lampNotificationReceived: (NSNotification *)notification;
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification;
+-(void)lampChangedNotificationReceived: (NSNotification *) notification;
+-(void)lampRemovedNotificationReceived: (NSNotification *) notification;
 -(void)deleteLampWithID: (NSString *)lampID andName: (NSString *)lampName;
 -(void)presetNotificationReceived: (NSNotification *)notification;
+-(BOOL)checkIfLamp: (LSFSDKLamp *) lamp matchesPreset: (LSFSDKPreset *) preset;
 -(void)reloadPresets;
--(BOOL)checkIfLampStateMatchesPreset: (LSFPresetModel *)data;
 -(void)sortPresetData;
 
 @end
@@ -44,7 +37,6 @@
 @implementation LSFLightsPresetsTableViewController
 
 @synthesize lampID = _lampID;
-@synthesize lampModel = _lampModel;
 @synthesize presetData = _presetData;
 
 -(void)viewDidLoad
@@ -58,9 +50,11 @@
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
 
     //Set notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(lampNotificationReceived:) name: @"LampNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(presetNotificationReceived:) name: @"PresetNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(lampChangedNotificationReceived:) name: @"LSFLampChangedNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(lampRemovedNotificationReceived:) name: @"LSFLampRemovedNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(presetNotificationReceived:) name: @"LSFPresetChangedNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(presetNotificationReceived:) name: @"LSFPresetRemovedNotification" object: nil];
     
     [self reloadPresets];
 }
@@ -79,42 +73,40 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handlers
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Disconnected)
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    if (![leaderModel connected])
     {
-        [self.navigationController popToRootViewControllerAnimated: YES];
+        [self dismissViewControllerAnimated: YES completion: nil];
     }
 }
 
-/*
- * LampNotification Handler
- */
--(void)lampNotificationReceived: (NSNotification *)notification
+-(void)lampChangedNotificationReceived: (NSNotification *) notification
 {
-    NSString *lampID = [notification.userInfo valueForKey: @"lampID"];
-    NSNumber *callbackOp = [notification.userInfo valueForKey: @"operation"];
+    NSString *lampID = [[notification.userInfo valueForKey: @"lamp"] theID];
 
     if ([self.lampID isEqualToString: lampID])
     {
-        switch (callbackOp.intValue)
-        {
-            case LampDeleted:
-                [self deleteLampWithID: lampID andName: [notification.userInfo valueForKey: @"lampName"]];
-                break;
-            case LampStateUpdated:
-                [self reloadPresets];
-                break;
-            default:
-                NSLog(@"Operation not found - Taking no action");
-                break;
-        }
+        [self reloadPresets];
     }
+}
+
+-(void)lampRemovedNotificationReceived: (NSNotification *) notification
+{
+    LSFSDKLamp *lamp = [notification.userInfo valueForKey: @"lamp"];
+
+    if ([self.lampID isEqualToString: [lamp theID]])
+    {
+        [self deleteLampWithID: [lamp theID] andName: [lamp name]];
+    }
+}
+
+-(void)presetNotificationReceived: (NSNotification *)notification
+{
+    [self reloadPresets];
 }
 
 -(void)deleteLampWithID: (NSString *)lampID andName: (NSString *)lampName
@@ -134,21 +126,9 @@
     }
 }
 
-/*
- * PresetNotification Handler
- */
--(void)presetNotificationReceived: (NSNotification *)notification
-{
-    [self reloadPresets];
-}
-
 -(void)reloadPresets
 {
-    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
-    self.lampModel = [[lamps valueForKey: self.lampID] getLampDataModel];
-
-    LSFPresetModelContainer *container = [LSFPresetModelContainer getPresetModelContainer];
-    self.presetData = [container.presetContainer allValues];
+    self.presetData = [[LSFSDKLightingDirector getLightingDirector] presets];
     [self sortPresetData];
 
     [self.tableView reloadData];
@@ -168,11 +148,11 @@
     }
     else
     {
-        LSFPresetModel *data = [[self.presetDataSorted objectAtIndex: [indexPath row]] getPresetDataModel];
-        BOOL stateMatchesPreset = [self checkIfLampStateMatchesPreset: data];
+        LSFSDKPreset *preset = [self.presetDataSorted objectAtIndex: [indexPath row]];
+        BOOL stateMatchesPreset = [self checkIfLamp: [[LSFSDKLightingDirector getLightingDirector] getLampWithID: self.lampID]  matchesPreset: preset];
 
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"PresetCell" forIndexPath: indexPath];
-        cell.textLabel.text = data.name;
+        cell.textLabel.text = [preset name];
 
         if (stateMatchesPreset)
         {
@@ -202,11 +182,11 @@
         if (cell.accessoryType == UITableViewCellAccessoryNone)
         {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            LSFPresetModel *data = [[self.presetDataSorted objectAtIndex: [indexPath row]] getPresetDataModel];
 
-            dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-                LSFLampManager *lampManager = [[LSFAllJoynManager getAllJoynManager] lsfLampManager];
-                [lampManager transitionLampID: self.lampID toPresetID: data.theID];
+            dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+                LSFSDKPreset *preset = [self.presetDataSorted objectAtIndex: [indexPath row]];
+                LSFSDKLamp *lamp = [[LSFSDKLightingDirector getLightingDirector] getLampWithID: self.lampID];
+                [lamp applyPreset: preset];
             });
 
             [self.navigationController popViewControllerAnimated: YES];
@@ -261,15 +241,15 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        LSFPresetModel *data = [[self.presetDataSorted objectAtIndex: [indexPath row]] getPresetDataModel];
+        LSFSDKPreset *preset = [self.presetDataSorted objectAtIndex: [indexPath row]];
+
         [self.presetDataSorted removeObjectAtIndex: indexPath.row];
         
         // Delete the row from the data source
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         
-        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-            LSFPresetManager *presetManager = [[LSFAllJoynManager getAllJoynManager] lsfPresetManager];
-            [presetManager deletePresetWithID: data.theID];
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            [preset deleteItem];
         });
     }
 }
@@ -287,23 +267,23 @@
 /*
  * Private functions
  */
--(BOOL)checkIfLampStateMatchesPreset: (LSFPresetModel *)data
+-(BOOL)checkIfLamp: (LSFSDKLamp *) lamp matchesPreset: (LSFSDKPreset *) preset
 {
     BOOL returnValue = NO;
-    
-    LSFConstants *constants = [LSFConstants getConstants];
-    unsigned int scaledBrightness = [constants scaleLampStateValue: self.lampModel.state.brightness withMax: 100];
-    unsigned int scaledHue = [constants scaleLampStateValue: self.lampModel.state.hue withMax: 360];
-    unsigned int scaledSaturation = [constants scaleLampStateValue: self.lampModel.state.saturation withMax: 100];
-    unsigned int scaledColorTemp = [constants scaleColorTemp: self.lampModel.state.colorTemp];
 
-    if ((self.lampModel.state.onOff == data.state.onOff) && (scaledBrightness == data.state.brightness) && (scaledHue == data.state.hue) && (scaledSaturation == data.state.saturation) && (scaledColorTemp == data.state.colorTemp))
+    LSFSDKColor *lampColor = [lamp getColor];
+    LSFSDKColor *presetColor = [preset getColor];
+
+    if ([lamp getPowerOn] == [preset getPowerOn] && [lampColor hue] == [presetColor hue] &&
+        [lampColor saturation] == [presetColor saturation] && [lampColor brightness] == [presetColor brightness] &&
+        [lampColor colorTemp] == [presetColor colorTemp])
     {
         returnValue = YES;
     }
-    
+
     return returnValue;
 }
+
 
 -(void)sortPresetData
 {
@@ -321,7 +301,6 @@
     if ([segue.identifier isEqualToString: @"SavePreset"])
     {
         LSFLightsCreatePresetViewController *lcpvc = [segue destinationViewController];
-        lcpvc.lampState = self.lampModel.state;
         lcpvc.lampID = self.lampID;
     }
 }

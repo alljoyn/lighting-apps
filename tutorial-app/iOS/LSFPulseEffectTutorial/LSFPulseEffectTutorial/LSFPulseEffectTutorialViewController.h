@@ -18,7 +18,7 @@
 #import "LSFSDKNextControllerConnectionDelegate.h"
 
 /*
- * Tutorial illustrating how to create a Group and PulseEffect, then apply the effect
+ * Tutorial illustrating how to create a Group and PulseEffect, then apply the effect to
  * the group. This tutorial assumes that there exists exactly one Lamp and one Controller
  * on the network.
  */

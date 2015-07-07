@@ -17,6 +17,12 @@
 #import "LSFControllerManager.h"
 #import "LSFSDKControllerDelegate.h"
 
+@interface LSFControllerManager()
+
+@property (nonatomic, strong) LSFSDKController *leader;
+
+@end
+
 @implementation LSFControllerManager
 
 -(id)init
@@ -25,15 +31,15 @@
 
     if (self)
     {
-        //Constructor left blank
+        self.leader = [[LSFSDKController alloc] init];
     }
 
     return self;
 }
 
--(LSFControllerModel *)getLeadControllerModel
+-(LSFSDKController *)getLeader
 {
-    return [LSFControllerModel getControllerModel];
+    return self.leader;
 }
 
 -(void)sendLeaderStateChangedEvent
@@ -43,13 +49,18 @@
         if ([delegate conformsToProtocol: @protocol(LSFSDKControllerDelegate)])
         {
             id<LSFSDKControllerDelegate> controllerDelegate = (id<LSFSDKControllerDelegate>)delegate;
-            [controllerDelegate onLeaderModelChange: [LSFControllerModel getControllerModel]];
+            [controllerDelegate onLeaderChange: [self getLeader]];
         }
         else
         {
             NSLog(@"LSFControllerManager - sendLeaderStateChangedEvent() delegate does not conform to \"LSFControllerListener\" protocol.");
         }
     }
+}
+
+-(void)sendErrorEventWithName: (NSString *)name andResonseCode: (LSFResponseCode)responseCode
+{
+    [self sendErrorEvent: [[LSFSDKControllerErrorEvent alloc] initWithName: name andResponseCode: responseCode]];
 }
 
 -(void)sendErrorEventWithName: (NSString *)name andErrorCodes: (NSArray *)errorCodes

@@ -14,6 +14,10 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 #import <UIKit/UIKit.h>
+#import <LSFSDKPreset.h>
+#import <LSFSDKColor.h>
+#import <LSFSDKPower.h>
+#import <model/LSFSceneDataModel.h>
 
 @interface LSFEffectTableViewController : UITableViewController
 
@@ -50,5 +54,7 @@
 -(IBAction)colorTempSliderTouchedWhileDisabled: (UIButton *)sender;
 -(void)updatePresetButtonTitle: (UIButton*)presetButton;
 -(void)updateColorIndicator;
+-(BOOL)checkIfPreset: (LSFSDKPreset *)preset matchesPower: (Power)power andColor: (LSFSDKColor *) color;
+-(NSString *)buildSectionTitleString: (LSFSceneElementDataModel *)sceneElement;
 
 @end

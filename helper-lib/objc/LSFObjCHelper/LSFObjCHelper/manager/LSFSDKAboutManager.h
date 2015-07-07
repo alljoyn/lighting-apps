@@ -15,8 +15,8 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "BusAttachment.h"
-#import "LSFSDKAboutData.h"
+#import <alljoyn/BusAttachment.h>
+#import "../model/LSFLampAbout.h"
 #import "LSFLampAnnouncementDelegate.h"
 
 using namespace ajn;

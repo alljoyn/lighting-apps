@@ -15,14 +15,14 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFLampState.h"
-#import "LSFLampGroup.h"
-#import "LSFTransitionEffectV2.h"
+#import <internal/LSFLampState.h>
+#import <internal/LSFLampGroup.h>
+#import <internal/LSFTransitionEffectV2.h>
+#import <internal/LSFPulseEffectV2.h>
+#import <internal/LSFSceneElement.h>
+#import <internal/LSFMasterScene.h>
+#import <internal/LSFSceneWithSceneElements.h>
 #import "LSFSDKPreset.h"
-#import "LSFPulseEffectV2.h"
-#import "LSFSceneElement.h"
-#import "LSFMasterScene.h"
-#import "LSFSceneWithSceneElements.h"
 
 @interface LSFSDKLightingItemUtil : NSObject
 

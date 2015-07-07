@@ -28,6 +28,7 @@
 -(LSFSDKPreset *)getPresetWithID: (NSString *)presetID;
 -(NSArray *)getPresets;
 -(NSArray *)getPresetsWithFilter: (id<LSFSDKLightingItemFilter>)filter;
+-(NSArray *)getPresetsCollectionWithFilter: (id<LSFSDKLightingItemFilter>)filter;
 -(NSArray *)removeAllPresets;
 -(LSFSDKPreset *)removePresetWithID: (NSString *)presetID;
 -(LSFPresetModel *)getModelWithID: (NSString *)presetID;

@@ -15,43 +15,29 @@
  ******************************************************************************/
 
 #import "LSFGroupsMembersTableViewController.h"
-#import "LSFDispatchQueue.h"
-#import "LSFAllJoynManager.h"
-#import "LSFGroupModelContainer.h"
-#import "LSFLampModelContainer.h"
-#import "LSFLampModel.h"
-#import "LSFGroupModel.h"
-#import "LSFCapabilityData.h"
-#import "LSFEnums.h"
-#import "LSFSDKLamp.h"
-#import "LSFSDKGroup.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFGroupsMembersTableViewController ()
 
-@property (nonatomic, strong) LSFGroupModel *groupModel;
-@property (nonatomic, strong) LSFLampGroup *lampGroup;
+@property (nonatomic, strong) NSArray *members;
 @property (nonatomic, strong) NSMutableArray *lampsGroupsArray;
 @property (nonatomic, strong) NSMutableArray *selectedRows;
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
--(void)groupNotificationReceived: (NSNotification *)notification;
--(void)reloadGroupWithID: (NSString *)groupID;
--(void)deleteGroupsWithIDs: (NSArray *)groupIDs andNames: (NSArray *)groupNames;
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification;
+-(void)groupChangedNotificationReceived: (NSNotification *)notification;
+-(void)groupRemovedNotificationReceived: (NSNotification *)notification;
 -(void)buildTableArray;
 -(void)modifyAllRows: (BOOL)isSelected;
 -(void)processSelectedRows;
 -(void)checkGroupCapability: (LSFCapabilityData *)capability;
 -(void)createLampGroup;
--(BOOL)isParentGroup: (LSFGroupModel *)groupModel;
--(NSArray *)sortLampsGroupsData: (NSArray *)data;
+-(BOOL)isParentGroup: (LSFSDKGroup *)group;
 
 @end
 
 @implementation LSFGroupsMembersTableViewController
 
 @synthesize groupID = _groupID;
-@synthesize groupModel = _groupModel;
-@synthesize lampGroup = _lampGroup;
 @synthesize lampsGroupsArray = _lampsGroupsArray;
 @synthesize selectedRows = _selectedRows;
 
@@ -63,18 +49,15 @@
 -(void)viewWillAppear: (BOOL)animated
 {
     [super viewWillAppear: animated];
-    
+
     //Initialize selected rows array
     self.selectedRows = [[NSMutableArray alloc] init];
-    
+
     //Set notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(groupNotificationReceived:) name: @"GroupNotification" object: nil];
-    
-    //Grab the group model using the passed in group ID
-    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
-    self.groupModel = [[groups valueForKey: self.groupID] getLampGroupDataModel];
-    
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(groupChangedNotificationReceived:) name: @"LSFGroupChangedNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(groupRemovedNotificationReceived:) name: @"LSFGroupRemovedNotification" object: nil];
+
     //Load UI
     [self buildTableArray];
     [self.tableView reloadData];
@@ -94,79 +77,56 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handlers
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Disconnected)
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    if (![leaderModel connected])
     {
-        [self dismissViewControllerAnimated: NO completion: nil];
-    }
-}
-
-/*
- * GroupNotification Handler
- */
--(void)groupNotificationReceived: (NSNotification *)notification
-{
-    NSString *groupID = [notification.userInfo valueForKey: @"groupID"];
-    NSNumber *callbackOp = [notification.userInfo valueForKey: @"operation"];
-    NSArray *groupIDs = [notification.userInfo valueForKey: @"groupIDs"];
-    NSArray *groupNames = [notification.userInfo valueForKey: @"groupNames"];
-
-    if ([self.groupID isEqualToString: groupID] || [groupIDs containsObject: self.groupID])
-    {
-        switch (callbackOp.intValue)
-        {
-            case GroupCreated:
-            case GroupNameUpdated:
-            case GroupStateUpdated:
-                [self reloadGroupWithID: groupID];
-                break;
-            case GroupDeleted:
-                [self deleteGroupsWithIDs: groupIDs andNames: groupNames];
-                break;
-            default:
-                NSLog(@"Operation not found - Taking no action");
-                break;
-        }
-    }
-}
-
--(void)reloadGroupWithID: (NSString *)groupID
-{
-    if ([self.groupID isEqualToString: groupID])
-    {
-        //Grab the group model using the passed in group ID
-        NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
-        self.groupModel = [[groups valueForKey: self.groupID] getLampGroupDataModel];
-
-        //Load UI
-        [self buildTableArray];
-        [self.tableView reloadData];
-    }
-}
-
--(void)deleteGroupsWithIDs: (NSArray *)groupIDs andNames: (NSArray *)groupNames
-{
-    if ([groupIDs containsObject: self.groupID])
-    {
-        int index = [groupIDs indexOfObject: self.groupID];
-
         [self dismissViewControllerAnimated: YES completion: nil];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Group Not Found"
-                                                            message: [NSString stringWithFormat: @"The group \"%@\" no longer exists.", [groupNames objectAtIndex: index]]
-                                                           delegate: nil
-                                                  cancelButtonTitle: @"OK"
-                                                  otherButtonTitles: nil];
-            [alert show];
-        });
     }
+}
+
+-(void)groupChangedNotificationReceived:(NSNotification *)notification
+{
+    LSFSDKGroup *group = [notification.userInfo valueForKey: @"group"];
+
+    if ([self.groupID isEqualToString: [group theID]])
+    {
+        [self reloadGroup: group];
+    }
+}
+
+-(void)groupRemovedNotificationReceived:(NSNotification *)notification
+{
+    LSFSDKGroup *group = [notification.userInfo valueForKey: @"group"];
+
+    if ([self.groupID isEqualToString: [group theID]])
+    {
+        [self showGroupDeleted: group];
+    }
+}
+
+-(void) reloadGroup: (LSFSDKGroup *)group
+{
+    // load UI
+    [self buildTableArray];
+    [self.tableView reloadData];
+}
+
+-(void)showGroupDeleted: (LSFSDKGroup *)group
+{
+    [self dismissViewControllerAnimated: YES completion: nil];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Group Not Found"
+                                                        message: [NSString stringWithFormat: @"The group \"%@\" no longer exists.", [group name]]
+                                                       delegate: nil
+                                              cancelButtonTitle: @"OK"
+                                              otherButtonTitles: nil];
+        [alert show];
+    });
 }
 
 /*
@@ -179,16 +139,16 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    id model = [self.lampsGroupsArray objectAtIndex: [indexPath row]];
+    LSFSDKGroupMember *member = [self.lampsGroupsArray objectAtIndex: [indexPath row]];
+    LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"ModifyLampsGroup" forIndexPath:indexPath];
-    
-    if ([model isKindOfClass: [LSFGroupModel class]])
+
+    if ([member isKindOfClass: [LSFSDKGroup class]])
     {
-        LSFGroupModel *gm = (LSFGroupModel *)model;
-        cell.textLabel.text = gm.name;
+        cell.textLabel.text = [member name];
         cell.imageView.image = [UIImage imageNamed:@"groups_off_icon.png"];
-        
-        if ([self.groupModel.members.lampGroups containsObject: gm.theID])
+
+        if ([group hasGroup: (LSFSDKGroup *)member])
         {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
             [self.selectedRows addObject: indexPath];
@@ -197,14 +157,14 @@
         {
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
+
     }
-    if ([model isKindOfClass: [LSFLampModel class]])
+    if ([member isKindOfClass: [LSFSDKLamp class]])
     {
-        LSFLampModel *lm = (LSFLampModel *)model;
-        cell.textLabel.text = lm.name;
+        cell.textLabel.text = [member name];
         cell.imageView.image = [UIImage imageNamed:@"lamps_off_icon.png"];
-        
-        if ([self.groupModel.members.lamps containsObject: lm.theID])
+
+        if ([group hasLamp: (LSFSDKLamp *)member])
         {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
             [self.selectedRows addObject: indexPath];
@@ -214,14 +174,14 @@
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
     }
-    
+
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    
+
     if (cell.accessoryType == UITableViewCellAccessoryCheckmark)
     {
         cell.accessoryType = UITableViewCellAccessoryNone;
@@ -232,7 +192,7 @@
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         [self.selectedRows addObject: indexPath];
     }
-    
+
     [self.tableView deselectRowAtIndexPath: indexPath animated: YES];
 }
 
@@ -281,47 +241,45 @@
  */
 -(void)buildTableArray
 {
-    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
     NSMutableArray *groupsArray = [[NSMutableArray alloc] init];
 
-    for (LSFSDKGroup *group in [groups allValues])
+    for (LSFSDKGroup *group in [[LSFSDKLightingDirector getLightingDirector] groups])
     {
-        [groupsArray addObject: [group getLampGroupDataModel]];
+        [groupsArray addObject: group];
     }
-    
-    for (LSFGroupModel *groupModel in [groupsArray copy])
+
+    for (LSFSDKGroup *group in [groupsArray copy])
     {
-        if ([groupModel.theID isEqualToString: self.groupModel.theID] || [groupModel.theID isEqualToString: @"!!all_lamps!!"] || [self isParentGroup:groupModel])
+        if ([[group theID] isEqualToString: self.groupID] || [[group theID] isEqualToString: @"!!all_lamps!!"] || [self isParentGroup:group])
         {
-            [groupsArray removeObject: groupModel];
+            [groupsArray removeObject: group];
         }
     }
 
-    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
     NSMutableArray *lampsArray = [[NSMutableArray alloc] init];
 
-    for (LSFSDKLamp *lamp in [lamps allValues])
+    for (LSFSDKLamp *lamp in [[LSFSDKLightingDirector getLightingDirector] lamps])
     {
-        [lampsArray addObject: [lamp getLampDataModel]];
+        [lampsArray addObject: lamp];
     }
-    
-    self.lampsGroupsArray = [NSMutableArray arrayWithArray: [self sortLampsGroupsData: groupsArray]];
-    [self.lampsGroupsArray addObjectsFromArray: [self sortLampsGroupsData: lampsArray]];
+
+    self.lampsGroupsArray = [NSMutableArray arrayWithArray: [self sortGroupMembersByName: groupsArray]];
+    [self.lampsGroupsArray addObjectsFromArray: [self sortGroupMembersByName: lampsArray]];
 }
 
 -(void)modifyAllRows: (BOOL)isSelected
 {
     [self.selectedRows removeAllObjects];
-    
+
     for (int i = 0; i < [self.tableView numberOfSections]; i++)
     {
         for (int j = 0; j < [self.tableView numberOfRowsInSection: i]; j++)
         {
             NSUInteger ints[2] = {i, j};
             NSIndexPath *indexPath = [NSIndexPath indexPathWithIndexes: ints length: 2];
-            
+
             UITableViewCell *cell = [self.tableView cellForRowAtIndexPath: indexPath];
-            
+
             if (isSelected)
             {
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -337,34 +295,22 @@
 
 -(void)processSelectedRows
 {
-    LSFCapabilityData *capabilityData = [[LSFCapabilityData alloc] init];
-    NSMutableArray *groupIDs = [[NSMutableArray alloc] init];
-    NSMutableArray *lampIDs = [[NSMutableArray alloc] init];
-    
+    LSFSDKCapabilityData *capabilityData = [[LSFSDKCapabilityData alloc] init];
+    NSMutableArray *groupMembers = [[NSMutableArray alloc] init];
+
     for (NSIndexPath *indexPath in self.selectedRows)
     {
-        id model = [self.lampsGroupsArray objectAtIndex: indexPath.row];
-        
-        if ([model isKindOfClass: [LSFGroupModel class]])
-        {
-            [groupIDs addObject: ((LSFModel *)model).theID];
-            [capabilityData includeData: ((LSFDataModel *)model).capability];
-        }
-        else if ([model isKindOfClass: [LSFLampModel class]])
-        {
-            [lampIDs addObject: ((LSFModel *)model).theID];
-            [capabilityData includeData: ((LSFDataModel *)model).capability];
-        }
+        LSFSDKGroupMember *groupMember = [self.lampsGroupsArray objectAtIndex: indexPath.row];
+
+        [groupMembers addObject: groupMember];
+        [capabilityData includeData: [groupMember getCapabilities]];
     }
-    
-    self.lampGroup = [[LSFLampGroup alloc] init];
-    self.lampGroup.lamps = lampIDs;
-    self.lampGroup.lampGroups = groupIDs;
-    
+
+    self.members = [[NSArray alloc] initWithArray: groupMembers];
     [self checkGroupCapability: capabilityData];
 }
 
--(void)checkGroupCapability: (LSFCapabilityData *)capability
+-(void)checkGroupCapability: (LSFSDKCapabilityData *)capability
 {
     if ([capability isMixed])
     {
@@ -383,32 +329,32 @@
 
 -(void)createLampGroup
 {
-    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-        LSFLampGroupManager *groupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
-        [groupManager updateLampGroupWithID: self.groupID andLampGroup: self.lampGroup];
+    NSLog(@"Creating lampgroup");
+    dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+        LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
+        [group modify: self.members];
     });
-    
+
     [self dismissViewControllerAnimated: YES completion: nil];
 }
 
--(BOOL)isParentGroup: (LSFGroupModel *)groupModel
+-(BOOL)isParentGroup: (LSFSDKGroup *)group
 {
-    if (!([groupModel.theID isEqualToString: self.groupModel.theID]) && [[groupModel groups] containsObject:self.groupModel.theID])
+    if (!([[group theID] isEqualToString: self.groupID]) && [group hasGroup: [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID]])
     {
-        NSLog(@"%@ is a parent of %@", groupModel.name, self.groupModel.name);
+        NSLog(@"%@ is a parent of %@", [group name], [[[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID] name]);
         return YES;
     }
     return NO;
 }
 
--(NSArray *)sortLampsGroupsData: (NSArray *)data
+-(NSArray*) sortGroupMembersByName: (NSArray *)data
 {
-    NSSortDescriptor *sortDesc = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES comparator:^NSComparisonResult(id obj1, id obj2) {
-        return [(NSString *)obj1 compare:(NSString *)obj2 options:NSCaseInsensitiveSearch];
+    return [data sortedArrayUsingComparator: ^NSComparisonResult(id obj1, id obj2) {
+        LSFSDKGroupMember *member1 = (LSFSDKGroupMember *)obj1;
+        LSFSDKGroupMember *member2 = (LSFSDKGroupMember *)obj1;
+        return [(NSString *)[member1 name] compare: (NSString *)[member2 name] options:NSCaseInsensitiveSearch];
     }];
-
-
-    return [data sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDesc]];
 }
 
 /*
@@ -420,7 +366,7 @@
     {
         [alertView dismissWithClickedButtonIndex: 0 animated: NO];
     }
-    
+
     if (buttonIndex == 1)
     {
         [alertView dismissWithClickedButtonIndex: 1 animated: NO];
