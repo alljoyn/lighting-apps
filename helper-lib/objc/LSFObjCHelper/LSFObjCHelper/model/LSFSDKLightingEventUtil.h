@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import "LSFSDKLightingDelegate.h"
-#import "LSFTrackingID.h"
+#import "LSFSDKTrackingID.h"
 
 typedef enum {
     GROUP,
@@ -30,6 +30,6 @@ typedef enum {
 
 @interface LSFSDKLightingEventUtil : NSObject
 
-+(void)listenForTrackingID: (LSFTrackingID *)trackingID lightingDelegate: (id<LSFSDKLightingDelegate>)delegate objectType: (LightingObjectType)lightingObjectType;
++(void)listenForTrackingID: (LSFSDKTrackingID *)trackingID lightingDelegate: (id<LSFSDKLightingDelegate>)delegate objectType: (LightingObjectType)lightingObjectType;
 
 @end

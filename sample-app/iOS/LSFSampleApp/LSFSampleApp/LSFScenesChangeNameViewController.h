@@ -15,7 +15,6 @@
  ******************************************************************************/
 
 #import <UIKit/UIKit.h>
-#import "LSFSceneDataModel.h"
 
 @interface LSFScenesChangeNameViewController : UIViewController <UITextFieldDelegate, UINavigationBarDelegate, UIAlertViewDelegate>
 

@@ -147,11 +147,11 @@
 {
     if (rc != LSF_OK)
     {
-        [self.manager.pulseEffectCollectionManager sendErrorEvent: @"createPulseEffectReplyCB" statusCode: rc itemID: pulseEffectID withTrackingID: [[LSFTrackingID alloc] initWithValue:trackingID]];
+        [self.manager.pulseEffectCollectionManager sendErrorEvent: @"createPulseEffectReplyCB" statusCode: rc itemID: pulseEffectID withTrackingID: [[LSFSDKTrackingID alloc] initWithValue:trackingID]];
     }
     else
     {
-        LSFTrackingID *myTrackingID = [[LSFTrackingID alloc] initWithValue: trackingID];
+        LSFSDKTrackingID *myTrackingID = [[LSFSDKTrackingID alloc] initWithValue: trackingID];
         [self.creationTrackingIDs setValue: myTrackingID forKey: pulseEffectID];
     }
 }
@@ -290,7 +290,7 @@
 -(void)postSendPulseEffectInitialized: (NSString *)pulseEffectID
 {
     dispatch_async(self.manager.dispatchQueue, ^{
-        LSFTrackingID *trackingID = [self.creationTrackingIDs valueForKey: pulseEffectID];
+        LSFSDKTrackingID *trackingID = [self.creationTrackingIDs valueForKey: pulseEffectID];
 
         if (trackingID != nil)
         {

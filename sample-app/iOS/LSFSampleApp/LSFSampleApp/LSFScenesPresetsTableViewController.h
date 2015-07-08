@@ -15,13 +15,13 @@
  ******************************************************************************/
 
 #import <UIKit/UIKit.h>
-#import "LSFLampState.h"
 #import "LSFEffectTableViewController.h"
+#import <LSFSDKMyLampState.h>
 
 @interface LSFScenesPresetsTableViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) NSString *sceneID;
-@property (nonatomic, strong) LSFLampState *lampState;
+@property (nonatomic, strong) LSFSDKMyLampState *myLampState;
 @property (nonatomic) LSFEffectTableViewController *effectSender;
 @property (nonatomic) BOOL endStateFlag;
 

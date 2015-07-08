@@ -38,7 +38,7 @@
     //Intentionally left blank
 }
 
--(void)onGroupInitializedWithTrackingID: (LSFTrackingID *)trackingID andGroup: (LSFSDKGroup *)group
+-(void)onGroupInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andGroup: (LSFSDKGroup *)group
 {
     //Intentionally left blank
 }
@@ -57,7 +57,7 @@
     //Intentionally left blank
 }
 
--(void)onPresetInitializedWithTrackingID: (LSFTrackingID *)trackingID andPreset: (LSFSDKPreset *)preset
+-(void)onPresetInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andPreset: (LSFSDKPreset *)preset
 {
     //Intentionally left blank
 }
@@ -76,7 +76,7 @@
     //Intentionally left blank
 }
 
--(void)onTransitionEffectInitializedWithTrackingID: (LSFTrackingID *)trackingID andTransitionEffect: (LSFSDKTransitionEffect *)transitionEffect;
+-(void)onTransitionEffectInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andTransitionEffect: (LSFSDKTransitionEffect *)transitionEffect;
 {
     //Intentionally left blank
 }
@@ -96,7 +96,7 @@
     //Intentionally left blank
 }
 
--(void)onPulseEffectInitializedWithTrackingID: (LSFTrackingID *)trackingID andPulseEffect: (LSFSDKPulseEffect *)pulseEffect;
+-(void)onPulseEffectInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andPulseEffect: (LSFSDKPulseEffect *)pulseEffect;
 {
     //Intentionally left blank
 }
@@ -116,7 +116,7 @@
     //Intentionally left blank
 }
 
--(void)onSceneElementInitializedWithTrackingID: (LSFTrackingID *)trackingID andSceneElement: (LSFSDKSceneElement *)sceneElement
+-(void)onSceneElementInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andSceneElement: (LSFSDKSceneElement *)sceneElement
 {
     //Intentionally left blank
 }
@@ -136,7 +136,7 @@
     //Intentionally left blank
 }
 
--(void)onSceneInitializedWithTrackingID: (LSFTrackingID *)trackingID andScene: (LSFSDKScene *)scene
+-(void)onSceneInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andScene: (LSFSDKScene *)scene
 {
     //Intentionally left blank
 }
@@ -156,7 +156,7 @@
     //Intentionally left blank
 }
 
--(void)onMasterSceneInitializedWithTrackingID: (LSFTrackingID *)trackingID andMasterScene: (LSFSDKMasterScene *)masterScene
+-(void)onMasterSceneInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andMasterScene: (LSFSDKMasterScene *)masterScene
 {
     //Intentionally left blank
 }
@@ -176,7 +176,7 @@
     //Intentionally left blank
 }
 
--(void)onLeaderModelChange: (LSFControllerModel *)leadModel
+-(void)onLeaderChange: (LSFSDKController *)leader
 {
     //Intentionally left blank
 }

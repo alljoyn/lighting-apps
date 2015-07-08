@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFLampState.h"
+#import <internal/LSFLampState.h>
 #import "LSFDataModel.h"
 
 /**

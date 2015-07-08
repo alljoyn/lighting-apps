@@ -15,8 +15,8 @@
  ******************************************************************************/
 
 #import "LSFSDKLightingItem.h"
-#import "LSFMasterSceneDataModel.h"
 #import "LSFSDKScene.h"
+#import "model/LSFMasterSceneDataModel.h"
 
 @interface LSFSDKMasterScene : LSFSDKLightingItem
 {
@@ -28,7 +28,10 @@
 -(void)modify: (NSArray *)scenes;
 -(void)add: (LSFSDKScene *)scene;
 -(void)remove: (LSFSDKScene *)scene;
--(void)deleteMasterScene;
+-(void)deleteItem;
+-(NSArray *)getScenes;
+-(BOOL)hasScene: (LSFSDKScene *)scene;
+-(BOOL)hasSceneWithID: (NSString *)sceneID;
 
 /**
  * <b>WARNING: This method is not intended to be used by clients, and may change or be

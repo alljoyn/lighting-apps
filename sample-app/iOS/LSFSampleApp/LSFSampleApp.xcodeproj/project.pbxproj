@@ -115,6 +115,34 @@
 		87FB2790198EBD090004DE02 /* LSFEffectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FB278F198EBD090004DE02 /* LSFEffectTableViewController.m */; };
 		87FB2793198ECAB80004DE02 /* LSFTransitionEffectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FB2792198ECAB80004DE02 /* LSFTransitionEffectTableViewController.m */; };
 		87FE4A4219745A5C00F0A781 /* LSFLightsPresetsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FE4A4119745A5C00F0A781 /* LSFLightsPresetsTableViewController.m */; };
+		F919406C1B49A39C00A383CC /* LSFPulseEffectV2TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F919406B1B49A39C00A383CC /* LSFPulseEffectV2TableViewController.m */; };
+		F91940721B49BA8200A383CC /* LSFPendingSceneElement.m in Sources */ = {isa = PBXBuildFile; fileRef = F91940711B49BA8200A383CC /* LSFPendingSceneElement.m */; };
+		F91940751B49BB5F00A383CC /* LSFEnterSceneElementV2NameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F91940741B49BB5F00A383CC /* LSFEnterSceneElementV2NameViewController.m */; };
+		F91940781B49D21800A383CC /* LSFPendingSceneV2.m in Sources */ = {isa = PBXBuildFile; fileRef = F91940771B49D21800A383CC /* LSFPendingSceneV2.m */; };
+		F919407B1B49D29200A383CC /* LSFEnterSceneV2NameTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F919407A1B49D29200A383CC /* LSFEnterSceneV2NameTableViewController.m */; };
+		F919407E1B4A2E0A00A383CC /* LSFSavePresetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F919407D1B4A2E0A00A383CC /* LSFSavePresetViewController.m */; };
+		F9B6B1DD1B4866700052AC86 /* LSFPresetEffectV2TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B6B1DC1B4866700052AC86 /* LSFPresetEffectV2TableViewController.m */; };
+		F9B6B1EC1B48A1890052AC86 /* LSFPendingItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B6B1EB1B48A1890052AC86 /* LSFPendingItem.m */; };
+		F9B6B1EF1B48A2340052AC86 /* LSFPendingEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B6B1EE1B48A2340052AC86 /* LSFPendingEffect.m */; };
+		F9B6B1F21B48A2DB0052AC86 /* LSFEnterEffectV2NameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B6B1F11B48A2DB0052AC86 /* LSFEnterEffectV2NameViewController.m */; };
+		F9B6B1F51B48D88F0052AC86 /* LSFTransitionEffectV2TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B6B1F41B48D88F0052AC86 /* LSFTransitionEffectV2TableViewController.m */; };
+		F9B6B1F81B48F92E0052AC86 /* LSFSelectPresetTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B6B1F71B48F92E0052AC86 /* LSFSelectPresetTableViewController.m */; };
+		FA101E4D1B43668300B5BD25 /* LSFEffectV2NumericPropertyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA101E4C1B43668300B5BD25 /* LSFEffectV2NumericPropertyViewController.m */; };
+		FA3B55481B388A4E000D3D4E /* LSFEnumConversions.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3B55471B388A4E000D3D4E /* LSFEnumConversions.m */; };
+		FA558BF61B45C02E004359AA /* LSFEffectV2PropertiesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA558BF51B45C02E004359AA /* LSFEffectV2PropertiesTableViewController.m */; };
+		FAAFB5111B42F67F008E6D25 /* LSFItemListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAAFB5101B42F67F008E6D25 /* LSFItemListTableViewController.m */; };
+		FAAFB5141B42FC05008E6D25 /* LSFScenesV2Members.m in Sources */ = {isa = PBXBuildFile; fileRef = FAAFB5131B42FC05008E6D25 /* LSFScenesV2Members.m */; };
+		FAAFB5171B4315AB008E6D25 /* LSFItemMultiSelectionListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAAFB5161B4315AB008E6D25 /* LSFItemMultiSelectionListTableViewController.m */; };
+		FAAFB51F1B433488008E6D25 /* LSFEffectsV2TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAAFB51E1B433488008E6D25 /* LSFEffectsV2TableViewController.m */; };
+		FAAFB5221B43408B008E6D25 /* LSFSceneElementV2MembersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAAFB5211B43408B008E6D25 /* LSFSceneElementV2MembersTableViewController.m */; };
+		FAAFB5251B43517C008E6D25 /* LSFEffectV2TypeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAAFB5241B43517C008E6D25 /* LSFEffectV2TypeTableViewController.m */; };
+		FAC428B21B2601B6009A5218 /* LSFLightingEventListener.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC428B11B2601B6009A5218 /* LSFLightingEventListener.m */; };
+		FAE789501B443E1400BE3ABE /* LSFSceneV2InfoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE7894F1B443E1400BE3ABE /* LSFSceneV2InfoTableViewController.m */; };
+		FAE789531B4461CE00BE3ABE /* LSFSceneElementV2InfoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE789521B4461CE00BE3ABE /* LSFSceneElementV2InfoTableViewController.m */; };
+		FAE7895A1B44A0E800BE3ABE /* scene_element_set_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FAE789581B44A0E800BE3ABE /* scene_element_set_icon.png */; };
+		FAE7895B1B44A0E800BE3ABE /* scene_element_set_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FAE789591B44A0E800BE3ABE /* scene_element_set_icon@2x.png */; };
+		FAF370B51B32504900760968 /* LSFPendingScene.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF370B41B32504900760968 /* LSFPendingScene.m */; };
+		FAF7D11A1B41C92C007CDD00 /* LSFItemNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF7D1191B41C92C007CDD00 /* LSFItemNameViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -297,6 +325,60 @@
 		87FB2792198ECAB80004DE02 /* LSFTransitionEffectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFTransitionEffectTableViewController.m; sourceTree = "<group>"; };
 		87FE4A4019745A5C00F0A781 /* LSFLightsPresetsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFLightsPresetsTableViewController.h; sourceTree = "<group>"; };
 		87FE4A4119745A5C00F0A781 /* LSFLightsPresetsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFLightsPresetsTableViewController.m; sourceTree = "<group>"; };
+		F919406A1B49A39C00A383CC /* LSFPulseEffectV2TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFPulseEffectV2TableViewController.h; sourceTree = "<group>"; };
+		F919406B1B49A39C00A383CC /* LSFPulseEffectV2TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFPulseEffectV2TableViewController.m; sourceTree = "<group>"; };
+		F91940701B49BA8200A383CC /* LSFPendingSceneElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFPendingSceneElement.h; sourceTree = "<group>"; };
+		F91940711B49BA8200A383CC /* LSFPendingSceneElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFPendingSceneElement.m; sourceTree = "<group>"; };
+		F91940731B49BB5F00A383CC /* LSFEnterSceneElementV2NameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFEnterSceneElementV2NameViewController.h; sourceTree = "<group>"; };
+		F91940741B49BB5F00A383CC /* LSFEnterSceneElementV2NameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFEnterSceneElementV2NameViewController.m; sourceTree = "<group>"; };
+		F91940761B49D21800A383CC /* LSFPendingSceneV2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFPendingSceneV2.h; sourceTree = "<group>"; };
+		F91940771B49D21800A383CC /* LSFPendingSceneV2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFPendingSceneV2.m; sourceTree = "<group>"; };
+		F91940791B49D29200A383CC /* LSFEnterSceneV2NameTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFEnterSceneV2NameTableViewController.h; sourceTree = "<group>"; };
+		F919407A1B49D29200A383CC /* LSFEnterSceneV2NameTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFEnterSceneV2NameTableViewController.m; sourceTree = "<group>"; };
+		F919407C1B4A2E0A00A383CC /* LSFSavePresetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSavePresetViewController.h; sourceTree = "<group>"; };
+		F919407D1B4A2E0A00A383CC /* LSFSavePresetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSavePresetViewController.m; sourceTree = "<group>"; };
+		F9B6B1DB1B4866700052AC86 /* LSFPresetEffectV2TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFPresetEffectV2TableViewController.h; sourceTree = "<group>"; };
+		F9B6B1DC1B4866700052AC86 /* LSFPresetEffectV2TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFPresetEffectV2TableViewController.m; sourceTree = "<group>"; };
+		F9B6B1EA1B48A1890052AC86 /* LSFPendingItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFPendingItem.h; sourceTree = "<group>"; };
+		F9B6B1EB1B48A1890052AC86 /* LSFPendingItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFPendingItem.m; sourceTree = "<group>"; };
+		F9B6B1ED1B48A2340052AC86 /* LSFPendingEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFPendingEffect.h; sourceTree = "<group>"; };
+		F9B6B1EE1B48A2340052AC86 /* LSFPendingEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFPendingEffect.m; sourceTree = "<group>"; };
+		F9B6B1F01B48A2DB0052AC86 /* LSFEnterEffectV2NameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFEnterEffectV2NameViewController.h; sourceTree = "<group>"; };
+		F9B6B1F11B48A2DB0052AC86 /* LSFEnterEffectV2NameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFEnterEffectV2NameViewController.m; sourceTree = "<group>"; };
+		F9B6B1F31B48D88F0052AC86 /* LSFTransitionEffectV2TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFTransitionEffectV2TableViewController.h; sourceTree = "<group>"; };
+		F9B6B1F41B48D88F0052AC86 /* LSFTransitionEffectV2TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFTransitionEffectV2TableViewController.m; sourceTree = "<group>"; };
+		F9B6B1F61B48F92E0052AC86 /* LSFSelectPresetTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSelectPresetTableViewController.h; sourceTree = "<group>"; };
+		F9B6B1F71B48F92E0052AC86 /* LSFSelectPresetTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSelectPresetTableViewController.m; sourceTree = "<group>"; };
+		FA101E4B1B43668300B5BD25 /* LSFEffectV2NumericPropertyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFEffectV2NumericPropertyViewController.h; sourceTree = "<group>"; };
+		FA101E4C1B43668300B5BD25 /* LSFEffectV2NumericPropertyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFEffectV2NumericPropertyViewController.m; sourceTree = "<group>"; };
+		FA3B55461B388A4E000D3D4E /* LSFEnumConversions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFEnumConversions.h; sourceTree = "<group>"; };
+		FA3B55471B388A4E000D3D4E /* LSFEnumConversions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFEnumConversions.m; sourceTree = "<group>"; };
+		FA558BF41B45C02E004359AA /* LSFEffectV2PropertiesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFEffectV2PropertiesTableViewController.h; sourceTree = "<group>"; };
+		FA558BF51B45C02E004359AA /* LSFEffectV2PropertiesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFEffectV2PropertiesTableViewController.m; sourceTree = "<group>"; };
+		FAAFB50F1B42F67F008E6D25 /* LSFItemListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFItemListTableViewController.h; sourceTree = "<group>"; };
+		FAAFB5101B42F67F008E6D25 /* LSFItemListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFItemListTableViewController.m; sourceTree = "<group>"; };
+		FAAFB5121B42FC05008E6D25 /* LSFScenesV2Members.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFScenesV2Members.h; sourceTree = "<group>"; };
+		FAAFB5131B42FC05008E6D25 /* LSFScenesV2Members.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFScenesV2Members.m; sourceTree = "<group>"; };
+		FAAFB5151B4315AB008E6D25 /* LSFItemMultiSelectionListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFItemMultiSelectionListTableViewController.h; sourceTree = "<group>"; };
+		FAAFB5161B4315AB008E6D25 /* LSFItemMultiSelectionListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFItemMultiSelectionListTableViewController.m; sourceTree = "<group>"; };
+		FAAFB51D1B433488008E6D25 /* LSFEffectsV2TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFEffectsV2TableViewController.h; sourceTree = "<group>"; };
+		FAAFB51E1B433488008E6D25 /* LSFEffectsV2TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFEffectsV2TableViewController.m; sourceTree = "<group>"; };
+		FAAFB5201B43408B008E6D25 /* LSFSceneElementV2MembersTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSceneElementV2MembersTableViewController.h; sourceTree = "<group>"; };
+		FAAFB5211B43408B008E6D25 /* LSFSceneElementV2MembersTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSceneElementV2MembersTableViewController.m; sourceTree = "<group>"; };
+		FAAFB5231B43517C008E6D25 /* LSFEffectV2TypeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFEffectV2TypeTableViewController.h; sourceTree = "<group>"; };
+		FAAFB5241B43517C008E6D25 /* LSFEffectV2TypeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFEffectV2TypeTableViewController.m; sourceTree = "<group>"; };
+		FAC428B01B2601B6009A5218 /* LSFLightingEventListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFLightingEventListener.h; sourceTree = "<group>"; };
+		FAC428B11B2601B6009A5218 /* LSFLightingEventListener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFLightingEventListener.m; sourceTree = "<group>"; };
+		FAE7894E1B443E1400BE3ABE /* LSFSceneV2InfoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSceneV2InfoTableViewController.h; sourceTree = "<group>"; };
+		FAE7894F1B443E1400BE3ABE /* LSFSceneV2InfoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSceneV2InfoTableViewController.m; sourceTree = "<group>"; };
+		FAE789511B4461CE00BE3ABE /* LSFSceneElementV2InfoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSceneElementV2InfoTableViewController.h; sourceTree = "<group>"; };
+		FAE789521B4461CE00BE3ABE /* LSFSceneElementV2InfoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSceneElementV2InfoTableViewController.m; sourceTree = "<group>"; };
+		FAE789581B44A0E800BE3ABE /* scene_element_set_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = scene_element_set_icon.png; path = images/scene_element_set_icon.png; sourceTree = "<group>"; };
+		FAE789591B44A0E800BE3ABE /* scene_element_set_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "scene_element_set_icon@2x.png"; path = "images/scene_element_set_icon@2x.png"; sourceTree = "<group>"; };
+		FAF370B31B32504900760968 /* LSFPendingScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFPendingScene.h; sourceTree = "<group>"; };
+		FAF370B41B32504900760968 /* LSFPendingScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFPendingScene.m; sourceTree = "<group>"; };
+		FAF7D1181B41C92C007CDD00 /* LSFItemNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFItemNameViewController.h; sourceTree = "<group>"; };
+		FAF7D1191B41C92C007CDD00 /* LSFItemNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFItemNameViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -334,6 +416,12 @@
 		870203331986AA5500A9314C /* GenericViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				FAAFB50F1B42F67F008E6D25 /* LSFItemListTableViewController.h */,
+				FAAFB5101B42F67F008E6D25 /* LSFItemListTableViewController.m */,
+				FAAFB5151B4315AB008E6D25 /* LSFItemMultiSelectionListTableViewController.h */,
+				FAAFB5161B4315AB008E6D25 /* LSFItemMultiSelectionListTableViewController.m */,
+				FAF7D1181B41C92C007CDD00 /* LSFItemNameViewController.h */,
+				FAF7D1191B41C92C007CDD00 /* LSFItemNameViewController.m */,
 				87FB278E198EBD090004DE02 /* LSFEffectTableViewController.h */,
 				87FB278F198EBD090004DE02 /* LSFEffectTableViewController.m */,
 				87D5B98319896A9700EE67FB /* LSFMembersTableViewController.h */,
@@ -353,12 +441,16 @@
 		8771D677195207800027D3A1 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				FA3B55461B388A4E000D3D4E /* LSFEnumConversions.h */,
+				FA3B55471B388A4E000D3D4E /* LSFEnumConversions.m */,
 				87C1598C19DDBB93005D912B /* LSFTabManager.h */,
 				87C1598D19DDBB93005D912B /* LSFTabManager.m */,
 				1923B00019A646A500525A39 /* LSFUtilityFunctions.h */,
 				1923B00119A646A500525A39 /* LSFUtilityFunctions.m */,
 				87EED8BD19D9D9F9003ABF1B /* LSFWifiMonitor.h */,
 				87EED8BE19D9D9F9003ABF1B /* LSFWifiMonitor.m */,
+				FAC428B01B2601B6009A5218 /* LSFLightingEventListener.h */,
+				FAC428B11B2601B6009A5218 /* LSFLightingEventListener.m */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -366,6 +458,8 @@
 		878CC02118FDAED6005C3E46 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				FAE789581B44A0E800BE3ABE /* scene_element_set_icon.png */,
+				FAE789591B44A0E800BE3ABE /* scene_element_set_icon@2x.png */,
 				87ADD5CF1951D52200CD608C /* arrow_details_up_icon.png */,
 				87ADD5D01951D52200CD608C /* arrow_details_up_icon@2x.png */,
 				874CE6DA199E447F0039D570 /* Default_iPad@2x.png */,
@@ -538,12 +632,17 @@
 		87D813F618CA536700903D59 /* LSFSampleApp */ = {
 			isa = PBXGroup;
 			children = (
+				FA6F53C21B4ADF6E00CE1BF3 /* EffectsV2 */,
 				870203331986AA5500A9314C /* GenericViewControllers */,
 				878CC03918FED491005C3E46 /* Groups */,
 				878CC02118FDAED6005C3E46 /* Images */,
 				87FFBC1618FD78C600D80A5E /* Lights */,
 				87BD6287199943E6003C28B1 /* MasterScenes */,
+				F9B6B1E61B48A1510052AC86 /* PendingObjects */,
+				FA6F53C31B4ADFCC00CE1BF3 /* Presets */,
+				FAAFB5191B433260008E6D25 /* SceneElementsV2 */,
 				878CC03A18FED49F005C3E46 /* Scenes */,
+				FAF7D1171B41C8AD007CDD00 /* ScenesV2 */,
 				87FB278A198EA6440004DE02 /* Settings */,
 				8771D677195207800027D3A1 /* Utilities */,
 				87D813FF18CA536700903D59 /* LSFAppDelegate.h */,
@@ -616,6 +715,83 @@
 				878CC03118FECD2C005C3E46 /* LSFLightsTableViewController.m */,
 			);
 			name = Lights;
+			sourceTree = "<group>";
+		};
+		F9B6B1E61B48A1510052AC86 /* PendingObjects */ = {
+			isa = PBXGroup;
+			children = (
+				FAF370B31B32504900760968 /* LSFPendingScene.h */,
+				FAF370B41B32504900760968 /* LSFPendingScene.m */,
+				F9B6B1EA1B48A1890052AC86 /* LSFPendingItem.h */,
+				F9B6B1EB1B48A1890052AC86 /* LSFPendingItem.m */,
+				F9B6B1ED1B48A2340052AC86 /* LSFPendingEffect.h */,
+				F9B6B1EE1B48A2340052AC86 /* LSFPendingEffect.m */,
+				F91940701B49BA8200A383CC /* LSFPendingSceneElement.h */,
+				F91940711B49BA8200A383CC /* LSFPendingSceneElement.m */,
+				F91940761B49D21800A383CC /* LSFPendingSceneV2.h */,
+				F91940771B49D21800A383CC /* LSFPendingSceneV2.m */,
+			);
+			name = PendingObjects;
+			sourceTree = "<group>";
+		};
+		FA6F53C21B4ADF6E00CE1BF3 /* EffectsV2 */ = {
+			isa = PBXGroup;
+			children = (
+				FA101E4B1B43668300B5BD25 /* LSFEffectV2NumericPropertyViewController.h */,
+				FA101E4C1B43668300B5BD25 /* LSFEffectV2NumericPropertyViewController.m */,
+				FA558BF41B45C02E004359AA /* LSFEffectV2PropertiesTableViewController.h */,
+				FA558BF51B45C02E004359AA /* LSFEffectV2PropertiesTableViewController.m */,
+				FAAFB51D1B433488008E6D25 /* LSFEffectsV2TableViewController.h */,
+				FAAFB51E1B433488008E6D25 /* LSFEffectsV2TableViewController.m */,
+				FAAFB5231B43517C008E6D25 /* LSFEffectV2TypeTableViewController.h */,
+				FAAFB5241B43517C008E6D25 /* LSFEffectV2TypeTableViewController.m */,
+				F9B6B1F01B48A2DB0052AC86 /* LSFEnterEffectV2NameViewController.h */,
+				F9B6B1F11B48A2DB0052AC86 /* LSFEnterEffectV2NameViewController.m */,
+				F9B6B1DB1B4866700052AC86 /* LSFPresetEffectV2TableViewController.h */,
+				F9B6B1DC1B4866700052AC86 /* LSFPresetEffectV2TableViewController.m */,
+				F919406A1B49A39C00A383CC /* LSFPulseEffectV2TableViewController.h */,
+				F919406B1B49A39C00A383CC /* LSFPulseEffectV2TableViewController.m */,
+				F9B6B1F31B48D88F0052AC86 /* LSFTransitionEffectV2TableViewController.h */,
+				F9B6B1F41B48D88F0052AC86 /* LSFTransitionEffectV2TableViewController.m */,
+			);
+			name = EffectsV2;
+			sourceTree = "<group>";
+		};
+		FA6F53C31B4ADFCC00CE1BF3 /* Presets */ = {
+			isa = PBXGroup;
+			children = (
+				F919407C1B4A2E0A00A383CC /* LSFSavePresetViewController.h */,
+				F919407D1B4A2E0A00A383CC /* LSFSavePresetViewController.m */,
+				F9B6B1F61B48F92E0052AC86 /* LSFSelectPresetTableViewController.h */,
+				F9B6B1F71B48F92E0052AC86 /* LSFSelectPresetTableViewController.m */,
+			);
+			name = Presets;
+			sourceTree = "<group>";
+		};
+		FAAFB5191B433260008E6D25 /* SceneElementsV2 */ = {
+			isa = PBXGroup;
+			children = (
+				F91940731B49BB5F00A383CC /* LSFEnterSceneElementV2NameViewController.h */,
+				F91940741B49BB5F00A383CC /* LSFEnterSceneElementV2NameViewController.m */,
+				FAE789511B4461CE00BE3ABE /* LSFSceneElementV2InfoTableViewController.h */,
+				FAE789521B4461CE00BE3ABE /* LSFSceneElementV2InfoTableViewController.m */,
+				FAAFB5201B43408B008E6D25 /* LSFSceneElementV2MembersTableViewController.h */,
+				FAAFB5211B43408B008E6D25 /* LSFSceneElementV2MembersTableViewController.m */,
+			);
+			name = SceneElementsV2;
+			sourceTree = "<group>";
+		};
+		FAF7D1171B41C8AD007CDD00 /* ScenesV2 */ = {
+			isa = PBXGroup;
+			children = (
+				FAE7894E1B443E1400BE3ABE /* LSFSceneV2InfoTableViewController.h */,
+				FAE7894F1B443E1400BE3ABE /* LSFSceneV2InfoTableViewController.m */,
+				FAAFB5121B42FC05008E6D25 /* LSFScenesV2Members.h */,
+				FAAFB5131B42FC05008E6D25 /* LSFScenesV2Members.m */,
+				F91940791B49D29200A383CC /* LSFEnterSceneV2NameTableViewController.h */,
+				F919407A1B49D29200A383CC /* LSFEnterSceneV2NameTableViewController.m */,
+			);
+			name = ScenesV2;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -701,6 +877,7 @@
 				87426C0B1989DC0300BFE3CD /* list_constant_icon@2x.png in Resources */,
 				874CE6E2199E447F0039D570 /* Default@2x.png in Resources */,
 				87D2109219EC1C50007D3295 /* power_slider_normal_icon@2x.png in Resources */,
+				FAE7895B1B44A0E800BE3ABE /* scene_element_set_icon@2x.png in Resources */,
 				87219A1219E5A37700E64556 /* groups_nav_normal.png in Resources */,
 				87219A1419E5A37700E64556 /* lamps_nav_normal.png in Resources */,
 				879E897019F7219C009EDF68 /* light_power_btn_on.png in Resources */,
@@ -729,6 +906,7 @@
 				87219A1619E5A37700E64556 /* scene_nav_normal.png in Resources */,
 				87C5693819A6B306004EF373 /* scene_set_icon@2x.png in Resources */,
 				877666771986E68700EC2472 /* scenes_off_icon@2x.png in Resources */,
+				FAE7895A1B44A0E800BE3ABE /* scene_element_set_icon.png in Resources */,
 				8759DD8E195083920047D92D /* MainStoryboard.storyboard in Resources */,
 				879E896F19F7219C009EDF68 /* light_power_btn_off@2x.png in Resources */,
 				879E897219F7219C009EDF68 /* light_power_btn_other.png in Resources */,
@@ -761,8 +939,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA558BF61B45C02E004359AA /* LSFEffectV2PropertiesTableViewController.m in Sources */,
+				FAAFB5171B4315AB008E6D25 /* LSFItemMultiSelectionListTableViewController.m in Sources */,
 				87F20C94198EEC5900B817B2 /* LSFPulseEffectTableViewController.m in Sources */,
 				87D8140118CA536700903D59 /* LSFAppDelegate.m in Sources */,
+				FAAFB5221B43408B008E6D25 /* LSFSceneElementV2MembersTableViewController.m in Sources */,
 				87C1598E19DDBB93005D912B /* LSFTabManager.m in Sources */,
 				8789698D19822A6D00D07084 /* LSFGroupsMembersTableViewController.m in Sources */,
 				87FE4A4219745A5C00F0A781 /* LSFLightsPresetsTableViewController.m in Sources */,
@@ -773,40 +954,63 @@
 				87D813FD18CA536700903D59 /* main.m in Sources */,
 				87074B861991322A001E807D /* LSFSceneCell.m in Sources */,
 				874F4C521981AEFF007EE9E0 /* LSFGroupsAddNameViewController.m in Sources */,
+				F919407E1B4A2E0A00A383CC /* LSFSavePresetViewController.m in Sources */,
 				87F20C90198ED2B000B817B2 /* LSFNoEffectTableViewController.m in Sources */,
 				872AFE2019D9B48E0002350B /* LSFRootTableViewController.m in Sources */,
 				87693CED199C054F00CD3BE6 /* LSFMasterSceneMemberTableViewController.m in Sources */,
+				F9B6B1EC1B48A1890052AC86 /* LSFPendingItem.m in Sources */,
 				874D7806197F33B2005F816D /* LSFGroupsPresetsTableViewController.m in Sources */,
+				FA101E4D1B43668300B5BD25 /* LSFEffectV2NumericPropertyViewController.m in Sources */,
 				87D2A4D91975AB790079B5ED /* LSFLightsCreatePresetViewController.m in Sources */,
 				87693CE9199BE07E00CD3BE6 /* LSFMasterScenesEnterNameViewController.m in Sources */,
 				8745658E1991DE0900AD60EA /* LSFSceneElementEffectPropertiesViewController.m in Sources */,
 				87DCD86D1977293700F05526 /* LSFGroupsCell.m in Sources */,
 				875C596119885247007806EE /* LSFScenesEnterNameViewController.m in Sources */,
 				87426C021989DAEB00BFE3CD /* LSFSceneEffectsTableViewController.m in Sources */,
+				FAE789531B4461CE00BE3ABE /* LSFSceneElementV2InfoTableViewController.m in Sources */,
+				FAAFB5111B42F67F008E6D25 /* LSFItemListTableViewController.m in Sources */,
+				FAC428B21B2601B6009A5218 /* LSFLightingEventListener.m in Sources */,
+				F919406C1B49A39C00A383CC /* LSFPulseEffectV2TableViewController.m in Sources */,
 				874C9F68199D3B8800317B97 /* LSFMasterScenesInfoTableViewController.m in Sources */,
+				FAAFB5251B43517C008E6D25 /* LSFEffectV2TypeTableViewController.m in Sources */,
 				1903F51E198A1B8F00E9B302 /* LSFSettingsViewController.m in Sources */,
 				870FAB7A19A694D00056F70E /* LSFScenesModifyMembersTableViewController.m in Sources */,
+				FAF370B51B32504900760968 /* LSFPendingScene.m in Sources */,
 				8771D68019523A340027D3A1 /* LSFLightsChangeNameViewController.m in Sources */,
+				F9B6B1F81B48F92E0052AC86 /* LSFSelectPresetTableViewController.m in Sources */,
+				F9B6B1F21B48A2DB0052AC86 /* LSFEnterEffectV2NameViewController.m in Sources */,
+				F9B6B1EF1B48A2340052AC86 /* LSFPendingEffect.m in Sources */,
+				FAAFB5141B42FC05008E6D25 /* LSFScenesV2Members.m in Sources */,
 				878CC02918FDAFC5005C3E46 /* LSFLightsCell.m in Sources */,
 				196CA9DB19B5EE5100927ED3 /* LSFScenesCreatePresetViewController.m in Sources */,
 				8797108019E82837005EDF3B /* LSFScenesCreateSceneElementsTableViewController.m in Sources */,
 				1903F51C198A1B8F00E9B302 /* LSFSettingsInfoViewController.m in Sources */,
+				F91940721B49BA8200A383CC /* LSFPendingSceneElement.m in Sources */,
+				FAAFB51F1B433488008E6D25 /* LSFEffectsV2TableViewController.m in Sources */,
 				87D5B989198973AD00EE67FB /* LSFScenesMembersTableViewController.m in Sources */,
 				878CC03318FECD2C005C3E46 /* LSFLightsTableViewController.m in Sources */,
 				8702033D1986C1D700A9314C /* LSFScenesTableViewController.m in Sources */,
 				87D5B98519896A9700EE67FB /* LSFMembersTableViewController.m in Sources */,
 				874C9F6C199D4AC900317B97 /* LSFMasterScenesChangeNameViewController.m in Sources */,
+				F91940781B49D21800A383CC /* LSFPendingSceneV2.m in Sources */,
+				FAE789501B443E1400BE3ABE /* LSFSceneV2InfoTableViewController.m in Sources */,
 				87FB2793198ECAB80004DE02 /* LSFTransitionEffectTableViewController.m in Sources */,
 				874F4C26197FFBB5007EE9E0 /* LSFGroupsCreatePresetViewController.m in Sources */,
 				874F4C551981CE5B007EE9E0 /* LSFGroupsAddLampsTableViewController.m in Sources */,
+				FA3B55481B388A4E000D3D4E /* LSFEnumConversions.m in Sources */,
+				F91940751B49BB5F00A383CC /* LSFEnterSceneElementV2NameViewController.m in Sources */,
+				F919407B1B49D29200A383CC /* LSFEnterSceneV2NameTableViewController.m in Sources */,
 				1923B00219A646A500525A39 /* LSFUtilityFunctions.m in Sources */,
 				874D77FF197EF8CE005F816D /* LSFGroupsChangeNameViewController.m in Sources */,
 				87FB2790198EBD090004DE02 /* LSFEffectTableViewController.m in Sources */,
 				196CA9DE19B5EE9D00927ED3 /* LSFScenesPresetsTableViewController.m in Sources */,
 				87DCD86A19771C4100F05526 /* LSFGroupsTableViewController.m in Sources */,
+				F9B6B1DD1B4866700052AC86 /* LSFPresetEffectV2TableViewController.m in Sources */,
+				FAF7D11A1B41C92C007CDD00 /* LSFItemNameViewController.m in Sources */,
 				87D6DB40197756F600131AC9 /* LSFGroupsInfoTableViewController.m in Sources */,
 				87F2B0DE19951C08001B5E1A /* LSFScenesChangeNameViewController.m in Sources */,
 				1903F51D198A1B8F00E9B302 /* LSFSettingsTableViewController.m in Sources */,
+				F9B6B1F51B48D88F0052AC86 /* LSFTransitionEffectV2TableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -938,12 +1142,12 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/callback\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/manager\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/model\"",
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjC/include/LSFObjC\"",
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/ServiceFramework/include/standard_core_library/lighting_controller_client/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/ServiceFramework/include/standard_core_library/lighting_controller_service/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/ServiceFramework/include/standard_core_library/common/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/ServiceFramework/include/common/inc\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/LSFSampleApp/LSFSampleApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -990,12 +1194,12 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/callback\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/manager\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/model\"",
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjC/include/LSFObjC\"",
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/ServiceFramework/include/standard_core_library/lighting_controller_client/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/ServiceFramework/include/standard_core_library/lighting_controller_service/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/ServiceFramework/include/standard_core_library/common/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/ServiceFramework/include/common/inc\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/LSFSampleApp/LSFSampleApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;

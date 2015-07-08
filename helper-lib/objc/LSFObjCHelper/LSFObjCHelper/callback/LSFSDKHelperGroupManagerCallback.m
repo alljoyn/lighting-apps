@@ -155,12 +155,12 @@
 {
     if (rc != LSF_OK)
     {
-        LSFTrackingID *groupTrackingID = [[LSFTrackingID alloc] initWithValue: trackingID];
+        LSFSDKTrackingID *groupTrackingID = [[LSFSDKTrackingID alloc] initWithValue: trackingID];
         [self.manager.groupCollectionManager sendErrorEvent: @"createLampGroupWithTrackingReplyCB" statusCode: rc itemID: groupID withTrackingID: groupTrackingID];
     }
     else
     {
-        LSFTrackingID *myTrackingID = [[LSFTrackingID alloc] initWithValue: trackingID];
+        LSFSDKTrackingID *myTrackingID = [[LSFSDKTrackingID alloc] initWithValue: trackingID];
         [self.creationTrackingIDs setValue: myTrackingID forKey: groupID];
     }
 }
@@ -444,7 +444,7 @@
 
                 if (lampModel != nil)
                 {
-                    LSFLampDetails *lampDetails = [lampModel lampDetails];
+                    LSFSDKLampDetails *lampDetails = [lampModel lampDetails];
 
                     [capability includeData: lampModel.capability];
 
@@ -542,7 +542,7 @@
 -(void)postSendGroupInitialized: (NSString *)groupID
 {
     dispatch_async(self.manager.dispatchQueue, ^{
-        LSFTrackingID *trackingID = [self.creationTrackingIDs valueForKey: groupID];
+        LSFSDKTrackingID *trackingID = [self.creationTrackingIDs valueForKey: groupID];
 
         if (trackingID != nil)
         {

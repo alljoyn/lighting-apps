@@ -88,10 +88,42 @@
     }
 }
 
--(void)deleteMasterScene
+-(void)deleteItem
 {
     NSString *errorContext = @"LSFSDKMasterScene deleteMasterScene: error";
     [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getMasterSceneManager] deleteMasterSceneWithID: masterSceneDataModel.theID]];
+}
+
+-(NSArray *)getScenes
+{
+    NSMutableArray *scenes = [[NSMutableArray alloc] init];
+
+    for (NSString* sceneID in [[masterSceneDataModel masterScene] sceneIDs])
+    {
+        LSFSDKScene *scene = [[LSFSDKLightingDirector getLightingDirector] getSceneWithID: sceneID];
+
+        if (scene == nil)
+        {
+            // Missing child scene. This could be becase the scenes
+            // have not yet full loaded, so we insert a placeholder
+            scene = [[LSFSDKSceneV1 alloc] initWithSceneID: sceneID];
+        }
+
+        [scenes addObject: scene];
+    }
+
+    return [NSArray arrayWithArray: scenes];
+}
+
+-(BOOL)hasScene: (LSFSDKScene *)scene
+{
+    NSString *errorContext = @"LSFSDKMasterScene hasScene: error";
+    return ([self postInvalidArgIfNull: errorContext object: scene]) ? [self hasSceneWithID: scene.theID] : NO;
+}
+
+-(BOOL)hasSceneWithID: (NSString *)sceneID
+{
+    return [masterSceneDataModel containsSceneID: sceneID];
 }
 
 /*
@@ -110,6 +142,12 @@
 -(LSFModel *)getItemDataModel
 {
     return [self getMasterSceneDataModel];
+}
+
+-(BOOL)hasComponent:(LSFSDKLightingItem *)item
+{
+    NSString *errorContext = @"LSFSDKMasterScene hasComponent: error";
+    return ([self postInvalidArgIfNull: errorContext object: item]) ? [self hasSceneWithID: item.theID] : NO;
 }
 
 -(void)postError:(NSString *)name status:(LSFResponseCode)status

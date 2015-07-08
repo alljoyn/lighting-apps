@@ -18,7 +18,7 @@
 #import "LSFSDKNextControllerConnectionDelegate.h"
 
 /*
- * Tutorial illustrates how to create a TransitionEffect and apply it using a one-shot 
+ * Tutorial illustrating how to create a TransitionEffect and apply it with a global
  * delegate. This tutorial assumes that there exists at least one Lamp and one Controller
  * on the network.
  */

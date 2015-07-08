@@ -32,5 +32,8 @@ extern const NSString *SCENE_ELEMENT_DEFAULT_NAME;
 -(id)init;
 -(id)initWithSceneElementID: (NSString *)sceneElementID;
 -(id)initWithSceneElementID: (NSString *)sceneElementID andSceneElementName: (NSString *)sceneElementName;
+-(BOOL)containsLamp: (NSString *)lampID;
+-(BOOL)containsGroup: (NSString *)groupID;
+-(BOOL)contaisnEffect: (NSString *)effectID;
 
 @end

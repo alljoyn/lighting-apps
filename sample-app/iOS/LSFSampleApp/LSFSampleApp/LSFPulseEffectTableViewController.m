@@ -16,29 +16,22 @@
 
 #import "LSFPulseEffectTableViewController.h"
 #import "LSFSceneElementEffectPropertiesViewController.h"
-#import "LSFPulseEffectDataModel.h"
-#import "LSFConstants.h"
-#import "LSFAllJoynManager.h"
-#import "LSFUtilityFunctions.h"
 #import "LSFScenesPresetsTableViewController.h"
-#import "LSFConstants.h"
-#import "LSFPresetModelContainer.h"
-#import "LSFPresetModel.h"
-#import "LSFEnums.h"
-#import "LSFSDKPreset.h"
+#import "LSFUtilityFunctions.h"
+#import <LSFSDKLightingDirector.h>
+#import <model/LSFConstants.h>
 
 @interface LSFPulseEffectTableViewController ()
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
--(void)sceneNotificationReceived: (NSNotification *)notification;
--(void)deleteScenesWithIDs: (NSArray *)sceneIDs andNames: (NSArray *)sceneNames;
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification;
+-(void)sceneRemovedNotificationReceived:(NSNotification *)notification;
+-(void)alertSceneDeleted: (LSFSDKScene *)scene;
 -(void)presetNotificationReceived: (NSNotification *)notification;
 -(void)endBrightnessSliderTapped: (UIGestureRecognizer *)gr;
 -(void)endHueSliderTapped: (UIGestureRecognizer *)gr;
 -(void)endSaturationSliderTapped: (UIGestureRecognizer *)gr;
 -(void)endColorTempSliderTapped: (UIGestureRecognizer *)gr;
 -(void)showWarning;
--(LSFLampState *)getCurrentScaledLampState;
 
 @end
 
@@ -99,9 +92,10 @@
     [super viewWillAppear: animated];
 
     //Set notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneNotificationReceived:) name: @"SceneNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(presetNotificationReceived:) name: @"PresetNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneRemovedNotificationReceived:) name: @"LSFSceneRemovedNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(presetNotificationReceived:) name: @"LSFPresetChangedNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(presetNotificationReceived:) name: @"LSFPresetRemovedNotification" object: nil];
 
     NSLog(@"LSFPulseEffectTableViewController - viewWillAppear() executing");
     NSLog(@"Power = %@", self.pedm.state.onOff ? @"On" : @"Off");
@@ -117,8 +111,6 @@
     NSLog(@"Capability = [%@, %@, %@]", self.pedm.capability.dimmable ? @"Dimmable" : @"Not Dimmable", self.pedm.capability.color ? @"Color" : @"No Color", self.pedm.capability.temp ? @"Variable Color Temp" : @"No Variable Color Temp");
     NSLog(@"Color Temp Min = %u", self.pedm.colorTempMin);
     NSLog(@"Color Temp Max = %u", self.pedm.colorTempMax);
-
-    LSFConstants *constants = [LSFConstants getConstants];
 
     if (self.pedm != nil)
     {
@@ -153,7 +145,7 @@
         {
             if (self.pedm.capability.dimmable >= SOME)
             {
-                unsigned int brightness = [constants unscaleLampStateValue: self.pedm.state.brightness withMax: 100];
+                unsigned int brightness = self.pedm.state.brightness;
                 self.brightnessSlider.value = brightness;
                 self.brightnessSlider.enabled = YES;
                 self.brightnessLabel.text = [NSString stringWithFormat: @"%u%%", brightness];
@@ -169,7 +161,7 @@
 
             if (self.pedm.capability.color >= SOME)
             {
-                unsigned int hue = [constants unscaleLampStateValue: self.pedm.state.hue withMax: 360];
+                unsigned int hue = self.pedm.state.hue;
                 self.hueSlider.value = hue;
 
                 if (self.pedm.state.saturation == 0)
@@ -185,7 +177,7 @@
                     self.hueSliderButton.enabled = NO;
                 }
 
-                unsigned int saturation = [constants unscaleLampStateValue: self.pedm.state.saturation withMax: 100];
+                unsigned int saturation = self.pedm.state.saturation;
                 self.saturationSlider.value = saturation;
                 self.saturationSlider.enabled = YES;
                 self.saturationLabel.text = [NSString stringWithFormat: @"%u%%", saturation];
@@ -208,16 +200,16 @@
             {
                 if (self.pedm.state.saturation == 100)
                 {
-                    self.colorTempSlider.value = [constants unscaleColorTemp: self.pedm.state.colorTemp];
+                    self.colorTempSlider.value = self.pedm.state.colorTemp;
                     self.colorTempSlider.enabled = NO;
                     self.colorTempLabel.text = @"N/A";
                     self.colorTempSliderButton.enabled = YES;
                 }
                 else
                 {
-                    self.colorTempSlider.value = [constants unscaleColorTemp: self.pedm.state.colorTemp];
+                    self.colorTempSlider.value = self.pedm.state.colorTemp;
                     self.colorTempSlider.enabled = YES;
-                    self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", [constants unscaleColorTemp: self.pedm.state.colorTemp]];
+                    self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", self.pedm.state.colorTemp];
                     self.colorTempSliderButton.enabled = NO;
                 }
 
@@ -226,7 +218,7 @@
             }
             else
             {
-                unsigned int colorTemp = self.pedm.colorTempMin;
+                unsigned int colorTemp = self.pedm.state.colorTemp;
                 self.colorTempSlider.value = colorTemp;
                 self.colorTempSlider.enabled = NO;
                 self.colorTempLabel.text = @"N/A";
@@ -235,13 +227,13 @@
                 //NSLog(@"Color Temp Slider - Min = %i; Max = %i", (int)self.colorTempSlider.minimumValue, (int)self.colorTempSlider.maximumValue);
                 self.colorTempSliderButton.enabled = YES;
             }
-            
+
             [self checkSaturationValueForStartState];
         }
 
         if (self.pedm.capability.dimmable >= SOME)
         {
-            unsigned int endBrightness = [constants unscaleLampStateValue: self.pedm.endState.brightness withMax: 100];
+            unsigned int endBrightness = self.pedm.endState.brightness;
             self.endBrightnessSlider.value = endBrightness;
             self.endBrightnessSlider.enabled = YES;
             self.endBrightnessLabel.text = [NSString stringWithFormat: @"%u%%", endBrightness];
@@ -257,7 +249,7 @@
 
         if (self.pedm.capability.color >= SOME)
         {
-            unsigned int endHue = [constants unscaleLampStateValue: self.pedm.endState.hue withMax: 360];
+            unsigned int endHue = self.pedm.endState.hue;
             self.endHueSlider.value = endHue;
 
             if (self.pedm.endState.saturation == 0)
@@ -273,7 +265,7 @@
                 self.endHueButton.enabled = NO;
             }
 
-            unsigned int endSaturation = [constants unscaleLampStateValue: self.pedm.endState.saturation withMax: 100];
+            unsigned int endSaturation = self.pedm.endState.saturation;
             self.endSaturationSlider.value = endSaturation;
             self.endSaturationSlider.enabled = YES;
             self.endSaturationLabel.text = [NSString stringWithFormat: @"%u%%", endSaturation];
@@ -296,16 +288,16 @@
         {
             if (self.pedm.endState.saturation == 100)
             {
-                self.endColorTempSlider.value = [constants unscaleColorTemp: self.pedm.endState.colorTemp];
+                self.endColorTempSlider.value = self.pedm.endState.colorTemp;
                 self.endColorTempSlider.enabled = NO;
                 self.endColorTempLabel.text = @"N/A";
                 self.endColorTempButton.enabled = YES;
             }
             else
             {
-                self.endColorTempSlider.value = [constants unscaleColorTemp: self.pedm.endState.colorTemp];
+                self.endColorTempSlider.value = self.pedm.endState.colorTemp;
                 self.endColorTempSlider.enabled = YES;
-                self.endColorTempLabel.text = [NSString stringWithFormat: @"%iK", [constants unscaleColorTemp: self.pedm.endState.colorTemp]];
+                self.endColorTempLabel.text = [NSString stringWithFormat: @"%iK", self.pedm.endState.colorTemp];
                 self.endColorTempButton.enabled = NO;
             }
 
@@ -327,22 +319,23 @@
         [self checkSaturationValueForEndState];
     }
 
-    unsigned int brightness = [constants unscaleLampStateValue: self.pedm.state.brightness withMax: 100];
-    unsigned int hue = [constants unscaleLampStateValue: self.pedm.state.hue withMax: 360];
-    unsigned int saturation = [constants unscaleLampStateValue: self.pedm.state.saturation withMax: 100];
-    unsigned int colorTemp = [constants unscaleColorTemp: self.pedm.state.colorTemp];
+    unsigned int brightness = self.pedm.state.brightness;
+    unsigned int hue = self.pedm.state.hue;
+    unsigned int saturation = self.pedm.state.saturation;
+    unsigned int colorTemp = self.pedm.state.colorTemp;
 
-    LSFLampState *lStartState = [[LSFLampState alloc] initWithOnOff: self.pedm.state.onOff brightness: brightness hue: hue saturation: saturation colorTemp:colorTemp];
+    LSFSDKColor *lStartColor = [[LSFSDKColor alloc] initWithHue: hue saturation: saturation brightness: brightness colorTemp: colorTemp];
 
-    [LSFUtilityFunctions colorIndicatorSetup: self.colorIndicatorImage withDataState: lStartState andCapabilityData: self.pedm.capability];
+    [LSFUtilityFunctions colorIndicatorSetup: self.colorIndicatorImage withColor: lStartColor andCapabilityData: [[LSFSDKCapabilityData alloc] initWithCapabilityData: self.pedm.capability]];
 
-    brightness = [constants unscaleLampStateValue: self.pedm.endState.brightness withMax: 100];
-    hue = [constants unscaleLampStateValue: self.pedm.endState.hue withMax: 360];
-    saturation = [constants unscaleLampStateValue: self.pedm.endState.saturation withMax: 100];
-    colorTemp = [constants unscaleColorTemp: self.pedm.endState.colorTemp];
+    brightness = self.pedm.endState.brightness;
+    hue = self.pedm.endState.hue;
+    saturation = self.pedm.endState.saturation;
+    colorTemp = self.pedm.endState.colorTemp;
 
-    LSFLampState *lEndState = [[LSFLampState alloc] initWithOnOff: YES brightness: brightness hue: hue saturation: saturation colorTemp: colorTemp];
-    [LSFUtilityFunctions colorIndicatorSetup: self.endColorIndicatorImage withDataState: lEndState andCapabilityData: self.pedm.capability];
+    LSFSDKColor *lEndColor = [[LSFSDKColor alloc] initWithHue: hue saturation: saturation brightness: brightness colorTemp: colorTemp];
+
+    [LSFUtilityFunctions colorIndicatorSetup: self.endColorIndicatorImage withColor: lEndColor andCapabilityData: [[LSFSDKCapabilityData alloc] initWithCapabilityData: self.pedm.capability]];
 
     [self presetButtonSetup: self.presetButton state: self.pedm.state];
     [self presetButtonSetup: self.endPresetButton state: self.pedm.endState];
@@ -362,67 +355,45 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handlers
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Disconnected)
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    if (![leaderModel connected])
     {
-        [self dismissViewControllerAnimated: NO completion: nil];
+        [self dismissViewControllerAnimated: YES completion: nil];
     }
 }
 
-/*
- * SceneNotification Handler
- */
--(void)sceneNotificationReceived: (NSNotification *)notification
+-(void)sceneRemovedNotificationReceived:(NSNotification *)notification
 {
-    NSNumber *callbackOp = [notification.userInfo valueForKey: @"operation"];
-    NSArray *sceneIDs = [notification.userInfo valueForKey: @"sceneIDs"];
-    NSArray *sceneNames = [notification.userInfo valueForKey: @"sceneNames"];
+    LSFSDKScene *scene = [notification.userInfo valueForKey: @"scene"];
 
-    if ([sceneIDs containsObject: self.sceneModel.theID])
+    if ([self.sceneModel.theID isEqualToString: scene.theID])
     {
-        switch (callbackOp.intValue)
-        {
-            case SceneDeleted:
-                [self deleteScenesWithIDs: sceneIDs andNames: sceneNames];
-                break;
-            default:
-                break;
-        }
+        [self alertSceneDeleted: scene];
     }
 }
 
--(void)deleteScenesWithIDs: (NSArray *)sceneIDs andNames: (NSArray *)sceneNames
+-(void)alertSceneDeleted: (LSFSDKScene *)scene
 {
-    if ([sceneIDs containsObject: self.sceneModel.theID])
-    {
-        int index = [sceneIDs indexOfObject: self.sceneModel.theID];
+    [self dismissViewControllerAnimated: NO completion: nil];
 
-        [self dismissViewControllerAnimated: NO completion: nil];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Scene Not Found"
-                                                            message: [NSString stringWithFormat: @"The scene \"%@\" no longer exists.", [sceneNames objectAtIndex: index]]
-                                                           delegate: nil
-                                                  cancelButtonTitle: @"OK"
-                                                  otherButtonTitles: nil];
-            [alert show];
-        });
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Scene Not Found"
+                                                        message: [NSString stringWithFormat: @"The scene \"%@\" no longer exists.", [scene name]]
+                                                       delegate: nil
+                                              cancelButtonTitle: @"OK"
+                                              otherButtonTitles: nil];
+        [alert show];
+    });
 }
 
-/*
- * PresetNotification Handler
- */
 -(void)presetNotificationReceived: (NSNotification *)notification
 {
     [self updatePresetButtonTitle: self.presetButton];
-    [self presetButtonSetup: self.endPresetButton state: [self getCurrentScaledLampState]];
+    [self presetButtonSetup: self.endPresetButton state: [self getCurrentEndLampState]];
 }
 
 /*
@@ -432,7 +403,7 @@
 {
     if (section == 0)
     {
-        return [NSString stringWithFormat: @"Select the start and end properties that %@ will cycle through", [LSFUtilityFunctions buildSectionTitleString: self.pedm]];
+        return [NSString stringWithFormat: @"Select the start and end properties that %@ will cycle through", [self buildSectionTitleString: self.pedm]];
     }
 
     return @"";
@@ -449,13 +420,13 @@
 
 -(IBAction)endBrightnessSliderTouchUpInside: (UISlider *)sender
 {
-    [self presetButtonSetup: self.endPresetButton state: [self getCurrentScaledLampState]];
+    [self presetButtonSetup: self.endPresetButton state: [self getCurrentEndLampState]];
     [self updateEndColorIndicator];
 }
 
 -(IBAction)endBrightnessSliderTouchUpOutside: (UISlider *)sender
 {
-    [self presetButtonSetup: self.endPresetButton state: [self getCurrentScaledLampState]];
+    [self presetButtonSetup: self.endPresetButton state: [self getCurrentEndLampState]];
     [self updateEndColorIndicator];
 }
 
@@ -467,13 +438,13 @@
 
 -(IBAction)endHueSliderTouchUpInside: (UISlider *)sender
 {
-    [self presetButtonSetup: self.endPresetButton state: [self getCurrentScaledLampState]];
+    [self presetButtonSetup: self.endPresetButton state: [self getCurrentEndLampState]];
     [self updateEndColorIndicator];
 }
 
 -(IBAction)endHueSliderTouchUpOutside: (UISlider *)sender
 {
-    [self presetButtonSetup: self.endPresetButton state: [self getCurrentScaledLampState]];
+    [self presetButtonSetup: self.endPresetButton state: [self getCurrentEndLampState]];
     [self updateEndColorIndicator];
 }
 
@@ -486,14 +457,14 @@
 
 -(IBAction)endSaturationSliderTouchUpInside: (UISlider *)sender
 {
-    [self presetButtonSetup: self.endPresetButton state: [self getCurrentScaledLampState]];
+    [self presetButtonSetup: self.endPresetButton state: [self getCurrentEndLampState]];
     [self updateEndColorIndicator];
     [self checkSaturationValueForEndState];
 }
 
 -(IBAction)endSaturationSliderTouchUpOutside: (UISlider *)sender
 {
-    [self presetButtonSetup: self.endPresetButton state: [self getCurrentScaledLampState]];
+    [self presetButtonSetup: self.endPresetButton state: [self getCurrentEndLampState]];
     [self updateEndColorIndicator];
     [self checkSaturationValueForEndState];
 }
@@ -506,13 +477,13 @@
 
 -(IBAction)endColorTempSliderTouchUpInside: (UISlider *)sender
 {
-    [self presetButtonSetup: self.endPresetButton state: [self getCurrentScaledLampState]];
+    [self presetButtonSetup: self.endPresetButton state: [self getCurrentEndLampState]];
     [self updateEndColorIndicator];
 }
 
 -(IBAction)endColorTempSliderTouchUpOutside: (UISlider *)sender
 {
-    [self presetButtonSetup: self.endPresetButton state: [self getCurrentScaledLampState]];
+    [self presetButtonSetup: self.endPresetButton state: [self getCurrentEndLampState]];
     [self updateEndColorIndicator];
 }
 
@@ -711,15 +682,6 @@
         }
         else
         {
-//            if (scaledBrightness == 0)
-//            {
-//                self.pedm.state.onOff = NO;
-//            }
-//            else
-//            {
-//                self.pedm.state.onOff = YES;
-//            }
-
             self.pedm.state.onOff = YES;
             self.pedm.state.brightness = scaledBrightness;
         }
@@ -746,15 +708,6 @@
     }
     else
     {
-//        if (scaledEndBrightness == 0)
-//        {
-//            self.pedm.state.onOff = NO;
-//        }
-//        else
-//        {
-//            self.pedm.state.onOff = YES;
-//        }
-
         self.pedm.endState.onOff = YES;
         self.pedm.endState.brightness = scaledEndBrightness;
     }
@@ -767,10 +720,9 @@
 
     if (self.shouldUpdateSceneAndDismiss)
     {
-        LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
-        [ajManager.lsfSceneManager updateSceneWithID: self.sceneModel.theID withScene: [self.sceneModel toScene]];
+        [[[[LSFSDKLightingDirector getLightingDirector] lightingManager] sceneManager] updateSceneWithID: self.sceneModel.theID withScene: [self.sceneModel toScene]];
     }
-    
+
     [self dismissViewControllerAnimated: YES completion: nil];
 }
 
@@ -779,8 +731,8 @@
  */
 -(void)updateColorIndicator
 {
-    LSFLampState *lstate = [[LSFLampState alloc] initWithOnOff:YES brightness: self.brightnessSlider.value hue: self.hueSlider.value saturation: self.saturationSlider.value colorTemp: self.colorTempSlider.value];
-    [LSFUtilityFunctions colorIndicatorSetup: self.colorIndicatorImage withDataState: lstate andCapabilityData: self.pedm.capability];
+    LSFSDKColor *lcolor = [[LSFSDKColor alloc] initWithHue: self.hueSlider.value saturation: self.saturationSlider.value brightness: self.brightnessSlider.value colorTemp: self.colorTempSlider.value];
+    [LSFUtilityFunctions colorIndicatorSetup: self.colorIndicatorImage withColor: lcolor andCapabilityData: [[LSFSDKCapabilityData alloc] initWithCapabilityData: self.pedm.capability]];
 }
 
 /*
@@ -788,8 +740,8 @@
  */
 -(void)updateEndColorIndicator
 {
-    LSFLampState *lstate = [[LSFLampState alloc] initWithOnOff: YES brightness: self.endBrightnessSlider.value hue: self.endHueSlider.value saturation: self.endSaturationSlider.value colorTemp: self.endColorTempSlider.value];
-    [LSFUtilityFunctions colorIndicatorSetup: self.endColorIndicatorImage withDataState: lstate andCapabilityData: self.pedm.capability];
+    LSFSDKColor *lcolor = [[LSFSDKColor alloc] initWithHue: self.endHueSlider.value saturation: self.endSaturationSlider.value brightness: self.endBrightnessSlider.value colorTemp: self.endColorTempSlider.value];
+    [LSFUtilityFunctions colorIndicatorSetup: self.endColorIndicatorImage withColor: lcolor andCapabilityData: [[LSFSDKCapabilityData alloc] initWithCapabilityData: self.pedm.capability]];
 }
 
 -(void)endBrightnessSliderTapped: (UIGestureRecognizer *)gr
@@ -906,19 +858,18 @@
 
 -(void)presetButtonSetup:(UIButton *)presetButton state:(LSFLampState*)state
 {
-    LSFPresetModelContainer *container = [LSFPresetModelContainer getPresetModelContainer];
-    NSArray *presets = [container.presetContainer allValues];
+    Power power = state.onOff? ON : OFF;
+    LSFSDKColor *color = [[LSFSDKColor alloc] initWithHue: state.hue saturation: state.saturation brightness: state.brightness colorTemp: state.colorTemp];
 
     NSMutableArray *presetsArray = [[NSMutableArray alloc] init];
     BOOL presetMatched = NO;
-    for (LSFSDKPreset *preset in presets)
+    for (LSFSDKPreset *preset in [[LSFSDKLightingDirector getLightingDirector] presets])
     {
-        LSFPresetModel *data = [preset getPresetDataModel];
-        BOOL matchesPreset = [self checkIfLampState: state matchesPreset: data];
+        BOOL matchesPreset = [self checkIfPreset: preset matchesPower: power andColor: color];
 
         if (matchesPreset)
         {
-            [presetsArray addObject: data.name];
+            [presetsArray addObject: preset.name];
             presetMatched = YES;
         }
     }
@@ -942,28 +893,14 @@
     }
 }
 
--(BOOL)checkIfLampState: (LSFLampState *) state matchesPreset: (LSFPresetModel *)data
+-(LSFLampState *)getCurrentEndLampState
 {
-    BOOL returnValue = NO;
+    unsigned int brightness = (uint32_t)self.endBrightnessSlider.value;
+    unsigned int hue = (uint32_t)self.endHueSlider.value;
+    unsigned int saturation = (uint32_t)self.endSaturationSlider.value;
+    unsigned int colorTemp = (uint32_t)self.endColorTempSlider.value;
 
-    if ((state.brightness == data.state.brightness) && (state.hue == data.state.hue) && (state.saturation == data.state.saturation) && (state.colorTemp == data.state.colorTemp)) // not checking state.onOff
-    {
-        returnValue = YES;
-    }
-
-    return returnValue;
-}
-
--(LSFLampState *)getCurrentScaledLampState
-{
-    LSFConstants *constants = [LSFConstants getConstants];
-
-    unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)self.endBrightnessSlider.value withMax: 100];
-    unsigned int scaledHue = [constants scaleLampStateValue: (uint32_t)self.endHueSlider.value withMax: 360];
-    unsigned int scaledSaturation = [constants scaleLampStateValue: (uint32_t)self.endSaturationSlider.value withMax: 100];
-    unsigned int scaledColorTemp = [constants scaleColorTemp: (uint32_t)self.endColorTempSlider.value];
-
-    return [[LSFLampState alloc] initWithOnOff: (scaledBrightness == 0 ? NO : YES) brightness: scaledBrightness hue: scaledHue saturation: scaledSaturation colorTemp: scaledColorTemp];
+    return [[LSFLampState alloc] initWithOnOff: (brightness == 0 ? NO : YES) brightness: brightness hue: hue saturation: saturation colorTemp: colorTemp];
 }
 
 /*
@@ -971,23 +908,17 @@
  */
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    LSFConstants *constants = [LSFConstants getConstants];
+    unsigned int startBrightness = (uint32_t)self.brightnessSlider.value;
+    unsigned int startHue = (uint32_t)self.hueSlider.value;
+    unsigned int startSaturation = (uint32_t)self.saturationSlider.value;
+    unsigned int startColorTemp = (uint32_t)self.colorTempSlider.value;
 
-    //Get start Lamp State
-    unsigned int startScaledBrightness = [constants scaleLampStateValue: (uint32_t)self.brightnessSlider.value withMax: 100];
-    unsigned int startScaledHue = [constants scaleLampStateValue: (uint32_t)self.hueSlider.value withMax: 360];
-    unsigned int startScaledSaturation = [constants scaleLampStateValue: (uint32_t)self.saturationSlider.value withMax: 100];
-    unsigned int startScaledColorTemp = [constants scaleColorTemp: (uint32_t)self.colorTempSlider.value];
+    unsigned int endBrightness = (uint32_t)self.endBrightnessSlider.value;
+    unsigned int endHue = (uint32_t)self.endHueSlider.value;
+    unsigned int endSaturation = (uint32_t)self.endSaturationSlider.value;
+    unsigned int endColorTemp = (uint32_t)self.endColorTempSlider.value;
 
-    LSFLampState* startScaledLampState = [[LSFLampState alloc] initWithOnOff: (startScaledBrightness == 0 ? NO : YES) brightness:startScaledBrightness hue:startScaledHue saturation:startScaledSaturation colorTemp:startScaledColorTemp];
-
-    //Get end Lamp State
-    unsigned int endScaledBrightness = [constants scaleLampStateValue: (uint32_t)self.endBrightnessSlider.value withMax: 100];
-    unsigned int endScaledHue = [constants scaleLampStateValue: (uint32_t)self.endHueSlider.value withMax: 360];
-    unsigned int endScaledSaturation = [constants scaleLampStateValue: (uint32_t)self.endSaturationSlider.value withMax: 100];
-    unsigned int endScaledColorTemp = [constants scaleColorTemp: (uint32_t)self.endColorTempSlider.value];
-
-    LSFLampState* endScaledLampState = [[LSFLampState alloc] initWithOnOff: (endScaledBrightness == 0 ? NO : YES) brightness:endScaledBrightness hue:endScaledHue saturation:endScaledSaturation colorTemp:endScaledColorTemp];
+    self.pedm.endState = [[LSFLampState alloc] initWithOnOff: (endBrightness? YES : NO) brightness: endBrightness hue: endHue saturation: endSaturation colorTemp: endColorTemp];
 
     if ([segue.destinationViewController isKindOfClass:[LSFSceneElementEffectPropertiesViewController class]])
     {
@@ -1007,8 +938,6 @@
             seepvc.effectProperty = PulseNumPulses;
         }
 
-        seepvc.lampState = startScaledLampState;
-        seepvc.endLampState = endScaledLampState;
         seepvc.effectSender = self;
         seepvc.sceneID = self.sceneModel.theID;
     }
@@ -1018,11 +947,11 @@
 
         if ([segue.identifier isEqualToString: @"ScenePresetsStart"])
         {
-            sptvc.lampState = startScaledLampState;
+            sptvc.myLampState = [[LSFSDKMyLampState alloc] initWithPower: (startBrightness == 0 ? ON : OFF) hue: startHue saturation:startSaturation brightness: startBrightness colorTemp: startColorTemp];
         }
         else if ([segue.identifier isEqualToString: @"ScenePresetsStop"])
         {
-            sptvc.lampState = endScaledLampState;
+            sptvc.myLampState = [[LSFSDKMyLampState alloc] initWithPower: (startBrightness == 0 ? ON : OFF) hue: endHue saturation: endSaturation brightness: endBrightness colorTemp: endColorTemp];
             sptvc.endStateFlag = YES;
         }
 
@@ -1033,8 +962,6 @@
 
 -(void)checkSaturationValueForStartState
 {
-    LSFConstants *constants = [LSFConstants getConstants];
-
     if (self.pedm.capability.color >= SOME && self.pedm.capability.temp >= SOME)
     {
         if (self.saturationSlider.value == 0)
@@ -1047,7 +974,7 @@
         {
             self.hueSlider.enabled = YES;
             self.hueSliderButton.enabled = NO;
-            unsigned int hue = [constants unscaleLampStateValue: self.pedm.state.hue withMax: 360];
+            unsigned int hue = self.pedm.state.hue;
             self.hueLabel.text = [NSString stringWithFormat: @"%i°", hue];
         }
 
@@ -1061,7 +988,7 @@
         {
             self.colorTempSlider.enabled = YES;
             self.colorTempSliderButton.enabled = NO;
-            unsigned int colorTemp = [constants unscaleColorTemp: self.pedm.state.colorTemp];
+            unsigned int colorTemp = self.pedm.state.colorTemp;
             self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", colorTemp];
         }
     }
@@ -1069,8 +996,6 @@
 
 -(void)checkSaturationValueForEndState
 {
-    LSFConstants *constants = [LSFConstants getConstants];
-
     if (self.pedm.capability.color >= SOME && self.pedm.capability.temp >= SOME)
     {
         if (self.endSaturationSlider.value == 0)
@@ -1083,7 +1008,7 @@
         {
             self.endHueSlider.enabled = YES;
             self.endHueButton.enabled = NO;
-            unsigned int endHue = [constants unscaleLampStateValue: self.pedm.endState.hue withMax: 360];
+            unsigned int endHue = self.pedm.endState.hue;
             self.endHueLabel.text = [NSString stringWithFormat: @"%i°", endHue];
         }
 
@@ -1097,7 +1022,7 @@
         {
             self.endColorTempSlider.enabled = YES;
             self.endColorTempButton.enabled = NO;
-            unsigned int endColorTemp = [constants unscaleColorTemp: self.pedm.state.colorTemp];
+            unsigned int endColorTemp = self.pedm.state.colorTemp;
             self.endColorTempLabel.text = [NSString stringWithFormat: @"%iK", endColorTemp];
         }
     }

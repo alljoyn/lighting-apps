@@ -18,7 +18,7 @@
 
 @implementation LSFSDKGroupAdapter
 
--(void)onGroupInitializedWithTrackingID: (LSFTrackingID *)trackingID andGroup: (LSFSDKGroup *)group
+-(void)onGroupInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andGroup: (LSFSDKGroup *)group
 {
     //Intentionally left blank
 }

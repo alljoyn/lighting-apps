@@ -64,6 +64,11 @@
 
 -(NSArray *)getGroupsWithFilter: (id<LSFSDKLightingItemFilter>)filter
 {
+    return [self getGroupsCollectionWithFilter:filter];
+}
+
+-(NSArray *)getGroupsCollectionWithFilter: (id<LSFSDKLightingItemFilter>)filter
+{
     return [self getAdaptersWithFilter: filter];
 }
 
@@ -96,7 +101,7 @@
 /*
  * Overriden functions from base class
  */
--(void)sendInitializedEvent: (id<LSFSDKLightingDelegate>)delegate item: (id)item trackingID: (LSFTrackingID *)trackingID
+-(void)sendInitializedEvent: (id<LSFSDKLightingDelegate>)delegate item: (id)item trackingID: (LSFSDKTrackingID *)trackingID
 {
     if ([delegate conformsToProtocol: @protocol(LSFSDKGroupDelegate)] && [item isKindOfClass: [LSFSDKGroup class]])
     {

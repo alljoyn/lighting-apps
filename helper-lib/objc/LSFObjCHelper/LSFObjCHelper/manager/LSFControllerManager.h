@@ -15,8 +15,9 @@
  ******************************************************************************/
 
 #import "LSFSDKLightingItemListenerManager.h"
-#import "LSFControllerModel.h"
-#import "LSFSDKControllerErrorEvent.h"
+#import "../model/LSFControllerModel.h"
+#import "../LSFSDKControllerErrorEvent.h"
+#import "../LSFSDKController.h"
 
 /**
  * @warning *Note:* This class is not intended to be used by clients, and its interface may change
@@ -25,8 +26,9 @@
 @interface LSFControllerManager : LSFSDKLightingItemListenerManager
 
 -(id)init;
--(LSFControllerModel *)getLeadControllerModel;
+-(LSFSDKController *)getLeader;
 -(void)sendLeaderStateChangedEvent;
+-(void)sendErrorEventWithName: (NSString *)name andResonseCode: (LSFResponseCode)responseCode;
 -(void)sendErrorEventWithName: (NSString *)name andErrorCodes: (NSArray *)errorCodes;
 -(void)sendErrorEvent: (LSFSDKControllerErrorEvent *)errorEvent;
 

@@ -45,6 +45,21 @@ const NSString *SCENE_DEFAULT_NAME = @"<Loading scene info...>";
     return self;
 }
 
+-(BOOL)containsSceneElement: (NSString *)sceneElementID
+{
+    NSArray *childIDs = [self.sceneWithSceneElements sceneElements];
+
+    for (NSString *childID in childIDs)
+    {
+        if ([childID isEqualToString: sceneElementID])
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 -(void)setSceneWithSceneElements: (LSFSceneWithSceneElements *)sceneWithSceneElements
 {
     _sceneWithSceneElements = sceneWithSceneElements;

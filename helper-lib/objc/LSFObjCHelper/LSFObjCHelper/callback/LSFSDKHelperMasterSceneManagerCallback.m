@@ -132,7 +132,7 @@
     }
     else
     {
-        LSFTrackingID *myTrackingID = [[LSFTrackingID alloc] initWithValue: trackingID];
+        LSFSDKTrackingID *myTrackingID = [[LSFSDKTrackingID alloc] initWithValue: trackingID];
         [self.creationTrackingIDs setValue: myTrackingID forKey: masterSceneID];
     }
 }
@@ -282,7 +282,7 @@
 -(void)postSendMasterSceneInitialized: (NSString *)masterSceneID
 {
     dispatch_async(self.manager.dispatchQueue, ^{
-        LSFTrackingID *trackingID = [self.creationTrackingIDs valueForKey: masterSceneID];
+        LSFSDKTrackingID *trackingID = [self.creationTrackingIDs valueForKey: masterSceneID];
 
         if (trackingID != nil)
         {

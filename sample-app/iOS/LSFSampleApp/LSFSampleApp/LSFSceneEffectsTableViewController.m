@@ -18,21 +18,16 @@
 #import "LSFNoEffectTableViewController.h"
 #import "LSFTransitionEffectTableViewController.h"
 #import "LSFPulseEffectTableViewController.h"
-#import "LSFConstants.h"
-#import "LSFLampModelContainer.h"
-#import "LSFGroupModelContainer.h"
-#import "LSFLampModel.h"
-#import "LSFGroupModel.h"
 #import "LSFUtilityFunctions.h"
-#import "LSFEnums.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFSceneEffectsTableViewController ()
 
 @property (nonatomic, strong) NSIndexPath *selectedIndex;
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
--(void)sceneNotificationReceived: (NSNotification *)notification;
--(void)deleteScenesWithIDs: (NSArray *)sceneIDs andNames: (NSArray *)sceneNames;
+-(void)leaderModelChangedNotificationReceived: (NSNotification *)notification;
+-(void)sceneRemovedNotificationReceived: (NSNotification *)notification;
+-(void)alertSceneDeleted: (LSFSDKScene *)scene;
 
 @end
 
@@ -52,8 +47,8 @@
     [super viewWillAppear: animated];
 
     //Set notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneNotificationReceived:) name: @"SceneNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneRemovedNotificationReceived:) name: @"LSFSceneRemovedNotification" object: nil];
 }
 
 -(void)viewWillDisappear: (BOOL)animated
@@ -70,58 +65,39 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handlers
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Disconnected)
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    if (![leaderModel connected])
     {
-        [self dismissViewControllerAnimated: NO completion: nil];
+        [self dismissViewControllerAnimated: YES completion: nil];
     }
 }
 
-/*
- * SceneNotification Handler
- */
--(void)sceneNotificationReceived: (NSNotification *)notification
+-(void)sceneRemovedNotificationReceived:(NSNotification *)notification
 {
-    NSNumber *callbackOp = [notification.userInfo valueForKey: @"operation"];
-    NSArray *sceneIDs = [notification.userInfo valueForKey: @"sceneIDs"];
-    NSArray *sceneNames = [notification.userInfo valueForKey: @"sceneNames"];
+    LSFSDKScene *scene = [notification.userInfo valueForKey: @"scene"];
 
-    if ([sceneIDs containsObject: self.sceneModel.theID])
+    if ([self.sceneModel.theID isEqualToString: scene.theID])
     {
-        switch (callbackOp.intValue)
-        {
-            case SceneDeleted:
-                [self deleteScenesWithIDs: sceneIDs andNames: sceneNames];
-                break;
-            default:
-                break;
-        }
+        [self alertSceneDeleted: scene];
     }
 }
 
--(void)deleteScenesWithIDs: (NSArray *)sceneIDs andNames: (NSArray *)sceneNames
+-(void)alertSceneDeleted: (LSFSDKScene *)scene
 {
-    if ([sceneIDs containsObject: self.sceneModel.theID])
-    {
-        int index = [sceneIDs indexOfObject: self.sceneModel.theID];
+    [self dismissViewControllerAnimated: NO completion: nil];
 
-        [self dismissViewControllerAnimated: NO completion: nil];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Scene Not Found"
-                                                            message: [NSString stringWithFormat: @"The scene \"%@\" no longer exists.", [sceneNames objectAtIndex: index]]
-                                                           delegate: nil
-                                                  cancelButtonTitle: @"OK"
-                                                  otherButtonTitles: nil];
-            [alert show];
-        });
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Scene Not Found"
+                                                        message: [NSString stringWithFormat: @"The scene \"%@\" no longer exists.", [scene name]]
+                                                       delegate: nil
+                                              cancelButtonTitle: @"OK"
+                                              otherButtonTitles: nil];
+        [alert show];
+    });
 }
 
 /*
@@ -135,8 +111,8 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"EffectCells" forIndexPath:indexPath];
-    cell.textLabel.text = [([LSFConstants getConstants]).supportedEffects objectAtIndex: [indexPath row]];
-    cell.imageView.image = [UIImage imageNamed: [([LSFConstants getConstants]).effectImages objectAtIndex: [indexPath row]]];
+    cell.textLabel.text = [[LSFUtilityFunctions getSupportedEffects] objectAtIndex: [indexPath row]];
+    cell.imageView.image = [UIImage imageNamed: [[LSFUtilityFunctions getEffectImages] objectAtIndex: [indexPath row]]];
 
     if (indexPath.row == 0)
     {
@@ -176,7 +152,46 @@
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [NSString stringWithFormat: @"Choose an optional effect for %@", [LSFUtilityFunctions buildSectionTitleString: self.sceneElement]];
+    return [NSString stringWithFormat: @"Choose an optional effect for %@", [self buildSectionTitleString: self.sceneElement]];
+}
+
+-(NSString *)buildSectionTitleString: (LSFSceneElementDataModel *)sceneElement
+{
+    BOOL firstElementFound = NO;
+    NSMutableString *titleString = [[NSMutableString alloc] initWithString: @""];
+
+    for (int i = 0; !firstElementFound && i < sceneElement.members.lampGroups.count; i++)
+    {
+        NSString *lampGroupID = [sceneElement.members.lampGroups objectAtIndex: i];
+        LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: lampGroupID];
+
+        if (group != nil)
+        {
+            [titleString appendFormat: @"\"%@\"", group.name];
+            firstElementFound = YES;
+        }
+    }
+
+    for (int i = 0; !firstElementFound && i < sceneElement.members.lamps.count; i++)
+    {
+        NSString *lampID = [sceneElement.members.lamps objectAtIndex: i];
+        LSFSDKLamp *lamp = [[LSFSDKLightingDirector getLightingDirector] getLampWithID: lampID];
+
+        if (lamp != nil)
+        {
+            [titleString appendFormat: @"\"%@\"", lamp.name];
+            firstElementFound = YES;
+        }
+    }
+
+    unsigned int remainingSceneMembers = (unsigned int)(sceneElement.members.lamps.count + sceneElement.members.lampGroups.count - 1);
+
+    if (remainingSceneMembers > 0)
+    {
+        [titleString appendFormat: @" (and %u more)", remainingSceneMembers];
+    }
+
+    return [NSString stringWithString: titleString];
 }
 
 /*

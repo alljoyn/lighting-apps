@@ -16,11 +16,7 @@
 
 #import "LSFEffectTableViewController.h"
 #import "LSFUtilityFunctions.h"
-#import "LSFLampState.h"
-#import "LSFPresetModelContainer.h"
-#import "LSFPresetModel.h"
-#import "LSFConstants.h"
-#import "LSFSDKPreset.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFEffectTableViewController ()
 
@@ -92,7 +88,8 @@
     [super viewWillAppear: animated];
 
     //Set presets notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(presetNotificationReceived:) name: @"PresetNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(presetNotificationReceived:) name: @"LSFPresetChangedNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(presetNotificationReceived:) name: @"LSFPresetRemovedNotification" object: nil];
 }
 
 -(void)viewWillDisappear: (BOOL)animated
@@ -109,7 +106,7 @@
 }
 
 /*
- * PresetNotification Handler
+ * Notification Handler
  */
 -(void)presetNotificationReceived: (NSNotification *)notification
 {
@@ -337,27 +334,21 @@
 
 -(void)updatePresetButtonTitle: (UIButton*)presetButton
 {
-    LSFConstants *constants = [LSFConstants getConstants];
-    unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)self.brightnessSlider.value withMax: 100];
-    unsigned int scaledHue = [constants scaleLampStateValue: (uint32_t)self.hueSlider.value withMax: 360];
-    unsigned int scaledSaturation = [constants scaleLampStateValue: (uint32_t)self.saturationSlider.value withMax: 100];
-    unsigned int scaledColorTemp = [constants scaleColorTemp: (uint32_t)self.colorTempSlider.value];
-
-    LSFLampState *state = [[LSFLampState alloc] initWithOnOff: (scaledBrightness == 0 ? NO : YES) brightness: scaledBrightness hue: scaledHue saturation: scaledSaturation colorTemp: scaledColorTemp];
-
-    LSFPresetModelContainer *container = [LSFPresetModelContainer getPresetModelContainer];
-    NSArray *presets = [container.presetContainer allValues];
+    unsigned int brightness = (uint32_t)self.brightnessSlider.value;
+    unsigned int hue = (uint32_t)self.hueSlider.value;
+    unsigned int saturation = (uint32_t)self.saturationSlider.value;
+    unsigned int colorTemp = (uint32_t)self.colorTempSlider.value;
+    LSFSDKColor *color = [[LSFSDKColor alloc] initWithHue: hue saturation: saturation brightness: brightness colorTemp: colorTemp];
 
     NSMutableArray *presetsArray = [[NSMutableArray alloc] init];
     BOOL presetMatched = NO;
-    for (LSFSDKPreset *preset in presets)
+    for (LSFSDKPreset *preset in [[LSFSDKLightingDirector getLightingDirector] presets])
     {
-        LSFPresetModel *data = [preset getPresetDataModel];
-        BOOL matchesPreset = [self checkIfLampState: state matchesPreset: data];
+        BOOL matchesPreset = [self checkIfPreset: preset matchesPower: (brightness == 0 ? ON : OFF) andColor: color];
 
         if (matchesPreset)
         {
-            [presetsArray addObject: data.name];
+            [presetsArray addObject: preset.name];
             presetMatched = YES;
         }
     }
@@ -380,16 +371,19 @@
         [self.presetButton setTitle: @"Save New Preset" forState: UIControlStateNormal];
     }
 }
-
--(BOOL)checkIfLampState: (LSFLampState *) state matchesPreset: (LSFPresetModel *)data
+-(BOOL)checkIfPreset: (LSFSDKPreset *)preset matchesPower: (Power)power andColor: (LSFSDKColor *) color
 {
     BOOL returnValue = NO;
 
-    if ((state.brightness == data.state.brightness) && (state.hue == data.state.hue) && (state.saturation == data.state.saturation) && (state.colorTemp == data.state.colorTemp))
+    LSFSDKColor *presetColor = [preset getColor];
+
+    if (power == [preset getPower] && [color hue] == [presetColor hue] &&
+        [color saturation] == [presetColor saturation] && [color brightness] == [presetColor brightness] &&
+        [color colorTemp] == [presetColor colorTemp])
     {
         returnValue = YES;
     }
-    
+
     return returnValue;
 }
 
@@ -420,7 +414,45 @@
         self.colorTempSliderButton.enabled = NO;
         self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", (uint32_t)self.colorTempSlider.value];
     }
+}
 
+-(NSString *)buildSectionTitleString: (LSFSceneElementDataModel *)sceneElement
+{
+    BOOL firstElementFound = NO;
+    NSMutableString *titleString = [[NSMutableString alloc] initWithString: @""];
+
+    for (int i = 0; !firstElementFound && i < sceneElement.members.lampGroups.count; i++)
+    {
+        NSString *lampGroupID = [sceneElement.members.lampGroups objectAtIndex: i];
+        LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: lampGroupID];
+
+        if (group != nil)
+        {
+            [titleString appendFormat: @"\"%@\"", group.name];
+            firstElementFound = YES;
+        }
+    }
+
+    for (int i = 0; !firstElementFound && i < sceneElement.members.lamps.count; i++)
+    {
+        NSString *lampID = [sceneElement.members.lamps objectAtIndex: i];
+        LSFSDKLamp *lamp = [[LSFSDKLightingDirector getLightingDirector] getLampWithID: lampID];
+
+        if (lamp != nil)
+        {
+            [titleString appendFormat: @"\"%@\"", lamp.name];
+            firstElementFound = YES;
+        }
+    }
+
+    unsigned int remainingSceneMembers = (unsigned int)(sceneElement.members.lamps.count + sceneElement.members.lampGroups.count - 1);
+
+    if (remainingSceneMembers > 0)
+    {
+        [titleString appendFormat: @" (and %u more)", remainingSceneMembers];
+    }
+
+    return [NSString stringWithString: titleString];
 }
 
 @end

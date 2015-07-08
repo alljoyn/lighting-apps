@@ -33,6 +33,7 @@
 
 -(id)init;
 -(id)initWithDimmable: (BOOL)isDimmable color: (BOOL)hasColor andTemp: (BOOL)hasTemp;
+-(id)initWithCapabilityData: (LSFCapabilityData *)capabilityData;
 -(void)includeData: (LSFCapabilityData *)data;
 -(BOOL)isMixed;
 -(NSString *)print;

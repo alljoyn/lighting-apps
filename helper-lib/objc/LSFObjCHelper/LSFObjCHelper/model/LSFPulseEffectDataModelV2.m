@@ -64,6 +64,11 @@ const unsigned int PULSE_EFFECT_DEFAULT_COUNT = 10;
     return self;
 }
 
+-(BOOL)containsPreset: (NSString *) presetID;
+{
+    return [presetID isEqualToString: [self startPresetID]] || [presetID isEqualToString: [self endPresetID]];
+}
+
 -(void)setEndState: (LSFLampState *)endState
 {
     _endState = endState;

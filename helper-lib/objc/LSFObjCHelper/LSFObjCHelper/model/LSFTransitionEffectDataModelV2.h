@@ -31,5 +31,6 @@ extern const unsigned int TRANSITION_EFFECT_DEFAULT_DURATION;
 -(id)init;
 -(id)initWithTransitionEffectID: (NSString *)transitionEffectID;
 -(id)initWithTransitionEffectID: (NSString *)transitionEffectID andTransitionEffectName: (NSString *)transitionEffectName;
+-(BOOL)containsPreset: (NSString *)presetID;
 
 @end

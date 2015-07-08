@@ -16,14 +16,7 @@
 
 #import "LSFScenesCreateSceneElementsTableViewController.h"
 #import "LSFScenesMembersTableViewController.h"
-#import "LSFLampModelContainer.h"
-#import "LSFGroupModelContainer.h"
-#import "LSFLampModel.h"
-#import "LSFGroupModel.h"
-#import "LSFAllJoynManager.h"
-#import "LSFEnums.h"
-#import "LSFSDKLamp.h"
-#import "LSFSDKGroup.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFScenesCreateSceneElementsTableViewController ()
 
@@ -31,7 +24,7 @@
 @property (nonatomic, strong) UIBarButtonItem *saveButton;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification;
 -(void)plusButtonPressed;
 -(void)saveButtonPressed;
 -(NSString *)buildMemberString: (LSFSceneElementDataModel *)sceneElement;
@@ -69,7 +62,7 @@
     [super viewWillAppear: animated];
 
     //Set notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
 
     [self.dataArray removeAllObjects];
 
@@ -87,8 +80,7 @@
 {
     [super viewDidAppear: animated];
 
-    LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
-    if (!ajManager.isConnectedToController)
+    if (![[[LSFSDKLightingDirector getLightingDirector] leadController] connected])
     {
         [self dismissViewControllerAnimated: YES completion: nil];
     }
@@ -108,14 +100,12 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handler
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Disconnected)
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    if (![leaderModel connected])
     {
         [self dismissViewControllerAnimated: YES completion: nil];
     }
@@ -196,8 +186,7 @@
 {
     if ((self.sceneModel.noEffects.count + self.sceneModel.transitionEffects.count + self.sceneModel.pulseEffects.count) > 0)
     {
-        LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
-        [ajManager.lsfSceneManager createScene: [self.sceneModel toScene] andSceneName: self.sceneModel.name];
+        [[[[LSFSDKLightingDirector getLightingDirector] lightingManager] sceneManager] createScene: [self.sceneModel toScene] andSceneName: self.sceneModel.name];
 
         [self dismissViewControllerAnimated: YES completion: nil];
     }
@@ -216,39 +205,35 @@
 {
     BOOL firstNameAdded = NO;
     NSMutableString *memberString = [[NSMutableString alloc] init];
-    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
 
     for (int i = 0; !firstNameAdded && i < sceneElement.members.lamps.count; i++)
     {
         NSString *lampID = [sceneElement.members.lamps objectAtIndex: i];
-        LSFLampModel *lampModel = [[lamps valueForKey: lampID] getLampDataModel];;
-
-        if (lampModel != nil)
+        LSFSDKLamp *lamp = [[LSFSDKLightingDirector getLightingDirector] getLampWithID: lampID];
+        if (lamp != nil)
         {
-            [memberString appendString: lampModel.name];
+            [memberString appendString: lamp.name];
             firstNameAdded = YES;
         }
     }
-
-    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
 
     for (int i = 0; !firstNameAdded && i < sceneElement.members.lampGroups.count; i++)
     {
         NSString *groupID = [sceneElement.members.lampGroups objectAtIndex: i];
-        LSFGroupModel *groupModel = [[groups valueForKey: groupID] getLampGroupDataModel];
+        LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: groupID];
 
-        if (groupModel != nil)
+        if (group != nil)
         {
-            [memberString appendString: groupModel.name];
+            [memberString appendString: group.name];
             firstNameAdded = YES;
         }
     }
 
-    int count = sceneElement.members.lamps.count + sceneElement.members.lampGroups.count - 1;
+    unsigned long count = sceneElement.members.lamps.count + sceneElement.members.lampGroups.count - 1;
 
     if (count > 0)
     {
-        [memberString appendString: [NSString stringWithFormat: @" (%i more)", count]];
+        [memberString appendString: [NSString stringWithFormat: @" (%lu more)", count]];
     }
     
     return memberString;

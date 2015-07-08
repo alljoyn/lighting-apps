@@ -16,10 +16,11 @@
 
 #import <Foundation/Foundation.h>
 #import "LSFSDKLightingItemProtocol.h"
+#import "LSFSDKDeletableItem.h"
 
 @class LSFSDKGroupMember;
 
-@protocol LSFSDKEffect <LSFSDKLightingItemProtocol>
+@protocol LSFSDKEffect <LSFSDKLightingItemProtocol, LSFSDKDeletableItem>
 
 -(void)applyToGroupMember: (LSFSDKGroupMember *)member;
 

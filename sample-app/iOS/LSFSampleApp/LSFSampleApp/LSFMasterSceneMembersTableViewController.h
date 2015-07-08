@@ -15,11 +15,11 @@
  ******************************************************************************/
 
 #import "LSFMembersTableViewController.h"
-#import "LSFMasterSceneDataModel.h"
+#import "LSFPendingScene.h"
 
 @interface LSFMasterSceneMembersTableViewController : LSFMembersTableViewController
 
-@property (nonatomic, strong) LSFMasterSceneDataModel *masterSceneModel;
+@property (nonatomic, strong) LSFPendingScene *pendingMasterScene;
 @property (nonatomic) BOOL usesCancel;
 
 -(IBAction)doneButtonPressed: (id)sender;

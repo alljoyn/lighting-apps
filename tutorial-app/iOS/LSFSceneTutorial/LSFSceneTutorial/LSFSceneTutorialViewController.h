@@ -18,9 +18,9 @@
 #import "LSFSDKNextControllerConnectionDelegate.h"
 
 /*
- * Tutorial illustrates how to create a Scene consisting of a PulseEffect and apply it using a
- * one-shot delegate to chain events together. This tutorial assumes that there exists at least
- * one Lamp and one Controller on the network.
+ * Tutorial illustrating how to create a Scene consisting of a PulseEffect and apply it using a
+ * global delegate. This tutorial assumes that there exists at least one Lamp and one Controller
+ * on the network.
  */
 @interface LSFSceneTutorialViewController : UIViewController <LSFSDKNextControllerConnectionDelegate>
 

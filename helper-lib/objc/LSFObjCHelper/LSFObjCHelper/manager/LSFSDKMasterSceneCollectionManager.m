@@ -64,6 +64,11 @@
 
 -(NSArray *)getMasterScenesWithFilter: (id<LSFSDKLightingItemFilter>)filter
 {
+    return [self getMasterScenesCollectionWithFilter:filter];
+}
+
+-(NSArray *)getMasterScenesCollectionWithFilter: (id<LSFSDKLightingItemFilter>)filter;
+{
     return [self getAdaptersWithFilter: filter];
 }
 
@@ -85,7 +90,7 @@
 /*
  * Overriden functions from base class
  */
--(void)sendInitializedEvent: (id<LSFSDKLightingDelegate>)delegate item: (id)item trackingID: (LSFTrackingID *)trackingID
+-(void)sendInitializedEvent: (id<LSFSDKLightingDelegate>)delegate item: (id)item trackingID: (LSFSDKTrackingID *)trackingID
 {
     if ([delegate conformsToProtocol: @protocol(LSFSDKMasterSceneDelegate)] && [item isKindOfClass: [LSFSDKMasterScene class]])
     {

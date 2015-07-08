@@ -14,7 +14,7 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFLampGroupManagerCallbackDelegate.h"
+#import <internal/LSFLampGroupManagerCallbackDelegate.h>
 
 @class LSFSDKLightingSystemManager;
 

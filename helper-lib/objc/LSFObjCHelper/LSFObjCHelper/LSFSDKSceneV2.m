@@ -15,9 +15,10 @@
  ******************************************************************************/
 
 #import "LSFSDKSceneV2.h"
-#import "LSFSDKAllJoynManager.h"
 #import "LSFSDKLightingItemUtil.h"
 #import "LSFSDKLightingDirector.h"
+#import "manager/LSFSDKAllJoynManager.h"
+#import "model/LSFSDKLightingItemHasComponentFilter.h"
 
 @implementation LSFSDKSceneV2
 
@@ -81,12 +82,52 @@
     }
 }
 
+-(BOOL)hasSceneElement:(LSFSDKSceneElement *)sceneElement
+{
+    NSString *errorContext = @"LSFSDKSceneV2 hasSceneElement: error";
+    return ([self postInvalidArgIfNull: errorContext object: sceneElement]) ? [self hasSceneElementWithID: sceneElement.theID] : NO;
+}
+
+-(BOOL)hasSceneElementWithID:(NSString *)sceneElementID
+{
+    return [sceneModel containsSceneElement: sceneElementID];
+}
+
 /*
  * Override base class functions
  */
 -(LSFModel *)getItemDataModel
 {
     return [self getSceneDataModel];
+}
+
+-(BOOL)hasComponent:(LSFSDKLightingItem *)item
+{
+    NSString *errorContext = @"LSFSDKSceneV2 hasComponent: error";
+    return ([self postInvalidArgIfNull: errorContext object: item]) ? [self hasSceneElementWithID: item.theID] : NO;
+}
+
+-(NSArray *)getSceneElementIDs
+{
+    return sceneModel.sceneWithSceneElements.sceneElements;
+}
+
+-(NSArray *)getSceneElements
+{
+    NSMutableArray *collection = [[NSMutableArray alloc] init];
+
+    NSArray *sceneElementIDs = [self getSceneElementIDs];
+    for (NSString *sceneElementID in sceneElementIDs)
+    {
+        [collection addObject: [[LSFSDKLightingDirector getLightingDirector] getSceneElementWithID: sceneElementID]];
+    }
+
+    return collection;
+}
+
+-(NSArray *)getComponentCollection
+{
+    return [self getSceneElements];
 }
 
 -(void)postError:(NSString *)name status:(LSFResponseCode)status

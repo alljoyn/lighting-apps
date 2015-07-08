@@ -18,7 +18,7 @@
 
 @implementation LSFSDKTransitionEffectAdapter
 
--(void)onTransitionEffectInitializedWithTrackingID: (LSFTrackingID *)trackingID andTransitionEffect: (LSFSDKTransitionEffect *)transitionEffect;
+-(void)onTransitionEffectInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andTransitionEffect: (LSFSDKTransitionEffect *)transitionEffect;
 {
     //Intentionally left blank
 }

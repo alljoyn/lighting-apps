@@ -15,9 +15,11 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFLampModel.h"
+#import <LSFSDKLampDetails.h>
 #import "LSFSDKGroupMember.h"
 #import "LSFSDKEffect.h"
+#import "LSFSDKLampAbout.h"
+#import "model/LSFLampModel.h"
 
 @class LSFSDKPreset;
 
@@ -29,6 +31,12 @@
 {
     @protected LSFLampModel *lampModel;
 }
+
+@property (strong, nonatomic, readonly) LSFSDKLampAbout *about;
+@property (strong, nonatomic, readonly) LSFSDKLampDetails *details;
+@property (strong, nonatomic, readonly) LSFSDKLampParameters *parameters;
+@property (nonatomic, readonly) int colorTempMin;
+@property (nonatomic, readonly) int colorTempMax;
 
 /** @name Creating LSFLamp */
 

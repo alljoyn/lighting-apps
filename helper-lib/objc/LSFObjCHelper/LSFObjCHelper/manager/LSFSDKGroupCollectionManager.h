@@ -15,9 +15,9 @@
  ******************************************************************************/
 
 #import "LSFSDKLightingItemCollectionManager.h"
-#import "LSFSDKGroup.h"
-#import "LSFSDKGroupDelegate.h"
-#import "LSFGroupsFlattener.h"
+#import "../LSFSDKGroup.h"
+#import "../LSFSDKGroupDelegate.h"
+#import "../model/LSFGroupsFlattener.h"
 
 @interface LSFSDKGroupCollectionManager : LSFSDKLightingItemCollectionManager
 {
@@ -32,6 +32,7 @@
 -(LSFSDKGroup *)getGroupWithID: (NSString *)groupID;
 -(NSArray *)getGroups;
 -(NSArray *)getGroupsWithFilter: (id<LSFSDKLightingItemFilter>)filter;
+-(NSArray *)getGroupsCollectionWithFilter: (id<LSFSDKLightingItemFilter>)filter;
 -(void)flattenGroups;
 -(void)flattenGroup: (LSFSDKGroup *)group;
 -(NSArray *)removeAllGroups;

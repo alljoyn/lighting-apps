@@ -29,6 +29,7 @@
 -(LSFSDKSceneV1 *)getSceneWithID: (NSString *)sceneID;
 -(NSArray *)getScenes;
 -(NSArray *)getScenesWithFilter: (id<LSFSDKLightingItemFilter>)filter;
+-(NSArray *)getScenesCollectionWithFilter: (id<LSFSDKLightingItemFilter>)filter;
 -(NSArray *)removeAllScenes;
 -(LSFSDKSceneV1 *)removeSceneWithID: (NSString *)sceneID;
 -(LSFSceneDataModel *)getModelWithID: (NSString *)sceneID;

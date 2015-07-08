@@ -14,7 +14,7 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFTransitionEffectManagerCallbackDelegate.h"
+#import <internal/LSFTransitionEffectManagerCallbackDelegate.h>
 
 @class LSFSDKLightingSystemManager;
 

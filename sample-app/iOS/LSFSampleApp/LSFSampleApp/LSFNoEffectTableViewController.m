@@ -15,25 +15,16 @@
  ******************************************************************************/
 
 #import "LSFNoEffectTableViewController.h"
-#import "LSFConstants.h"
-#import "LSFAllJoynManager.h"
-#import "LSFLampModel.h"
-#import "LSFGroupModel.h"
-#import "LSFLampModelContainer.h"
-#import "LSFGroupModelContainer.h"
-#import "LSFUtilityFunctions.h"
 #import "LSFScenesPresetsTableViewController.h"
 #import "LSFUtilityFunctions.h"
-#import "LSFPresetModelContainer.h"
-#import "LSFPresetModel.h"
-#import "LSFEnums.h"
-#import "LSFSDKPreset.h"
+#import <LSFSDKLightingDirector.h>
+#import <model/LSFConstants.h>
 
 @interface LSFNoEffectTableViewController()
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
--(void)sceneNotificationReceived: (NSNotification *)notification;
--(void)deleteScenesWithIDs: (NSArray *)sceneIDs andNames: (NSArray *)sceneNames;
+-(void)leaderModelChangedNotificationReceived: (NSNotification *)notification;
+-(void)sceneRemovedNotificationReceived: (NSNotification *)notification;
+-(void) alertSceneDeleted: (LSFSDKScene *)scene;
 
 @end
 
@@ -53,8 +44,8 @@
     [super viewWillAppear: animated];
 
     //Set notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneNotificationReceived:) name: @"SceneNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneRemovedNotificationReceived:) name: @"LSFSceneRemovedNotification" object: nil];
 
     NSLog(@"LSFNoEffectTableViewController - viewWillAppear() executing");
     NSLog(@"Power = %@", self.nedm.state.onOff ? @"On" : @"Off");
@@ -66,13 +57,11 @@
     NSLog(@"Color Temp Min = %u", self.nedm.colorTempMin);
     NSLog(@"Color Temp Max = %u", self.nedm.colorTempMax);
 
-    LSFConstants *constants = [LSFConstants getConstants];
-
     if (self.nedm != nil)
     {
         if (self.nedm.capability.dimmable >= SOME)
         {
-            unsigned int brightness = [constants unscaleLampStateValue: self.nedm.state.brightness withMax: 100];
+            unsigned int brightness = self.nedm.state.brightness;
             self.brightnessSlider.value = brightness;
             self.brightnessSlider.enabled = YES;
             self.brightnessLabel.text = [NSString stringWithFormat: @"%u%%", brightness];
@@ -88,7 +77,7 @@
 
         if (self.nedm.capability.color >= SOME)
         {
-            unsigned int hue = [constants unscaleLampStateValue: self.nedm.state.hue withMax: 360];
+            unsigned int hue = self.nedm.state.hue;
             self.hueSlider.value = hue;
 
             if (self.nedm.state.saturation == 0)
@@ -104,7 +93,7 @@
                 self.hueSliderButton.enabled = NO;
             }
 
-            unsigned int saturation = [constants unscaleLampStateValue: self.nedm.state.saturation withMax: 100];
+            unsigned int saturation = self.nedm.state.saturation;
             self.saturationSlider.value = saturation;
             self.saturationSlider.enabled = YES;
             self.saturationLabel.text = [NSString stringWithFormat: @"%u%%", saturation];
@@ -127,16 +116,16 @@
         {
             if (self.nedm.state.saturation == 100)
             {
-                self.colorTempSlider.value = [constants unscaleColorTemp: self.nedm.state.colorTemp];
+                self.colorTempSlider.value = self.nedm.state.colorTemp;
                 self.colorTempSlider.enabled = NO;
                 self.colorTempLabel.text = @"N/A";
                 self.colorTempSliderButton.enabled = YES;
             }
             else
             {
-                self.colorTempSlider.value = [constants unscaleColorTemp: self.nedm.state.colorTemp];
+                self.colorTempSlider.value = self.nedm.state.colorTemp;
                 self.colorTempSlider.enabled = YES;
-                self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", [constants unscaleColorTemp: self.nedm.state.colorTemp]];
+                self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", self.nedm.state.colorTemp];
                 self.colorTempSliderButton.enabled = NO;
             }
 
@@ -151,16 +140,15 @@
             self.colorTempLabel.text = @"N/A";
             self.colorTempSlider.minimumValue = self.nedm.colorTempMin;
             self.colorTempSlider.maximumValue = self.nedm.colorTempMax;
-            //NSLog(@"Color Temp Slider - Min = %i; Max = %i", (int)self.colorTempSlider.minimumValue, (int)self.colorTempSlider.maximumValue);
             self.colorTempSliderButton.enabled = YES;
         }
     }
 
-    LSFLampState *lstate = [[LSFLampState alloc] initWithOnOff:YES brightness: self.brightnessSlider.value hue: self.hueSlider.value saturation: self.saturationSlider.value colorTemp: self.colorTempSlider.value];
+    LSFSDKColor *lcolor = [[LSFSDKColor alloc] initWithHue: self.hueSlider.value saturation: self.saturationSlider.value brightness: self.brightnessSlider.value colorTemp: self.colorTempSlider.value];
 
-    [LSFUtilityFunctions colorIndicatorSetup: self.colorIndicatorImage withDataState: lstate andCapabilityData: self.nedm.capability];
+    [LSFUtilityFunctions colorIndicatorSetup: self.colorIndicatorImage withColor: lcolor andCapabilityData: [[LSFSDKCapabilityData alloc] initWithCapabilityData: self.nedm.capability]];
 
-    [self presetButtonSetup: self.nedm.state];
+    [self presetButtonSetup: self.nedm];
 }
 
 -(void)viewWillDisappear: (BOOL)animated
@@ -177,58 +165,39 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handlers
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Disconnected)
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    if (![leaderModel connected])
     {
-        [self dismissViewControllerAnimated: NO completion: nil];
+        [self dismissViewControllerAnimated: YES completion: nil];
     }
 }
 
-/*
- * SceneNotification Handler
- */
--(void)sceneNotificationReceived: (NSNotification *)notification
+-(void)sceneRemovedNotificationReceived:(NSNotification *)notification
 {
-    NSNumber *callbackOp = [notification.userInfo valueForKey: @"operation"];
-    NSArray *sceneIDs = [notification.userInfo valueForKey: @"sceneIDs"];
-    NSArray *sceneNames = [notification.userInfo valueForKey: @"sceneNames"];
+    LSFSDKScene *scene = [notification.userInfo valueForKey: @"scene"];
 
-    if ([sceneIDs containsObject: self.sceneModel.theID])
+    if ([self.sceneModel.theID isEqualToString: scene.theID])
     {
-        switch (callbackOp.intValue)
-        {
-            case SceneDeleted:
-                [self deleteScenesWithIDs: sceneIDs andNames: sceneNames];
-                break;
-            default:
-                break;
-        }
+        [self alertSceneDeleted: scene];
     }
 }
 
--(void)deleteScenesWithIDs: (NSArray *)sceneIDs andNames: (NSArray *)sceneNames
+-(void) alertSceneDeleted: (LSFSDKScene *)scene
 {
-    if ([sceneIDs containsObject: self.sceneModel.theID])
-    {
-        int index = [sceneIDs indexOfObject: self.sceneModel.theID];
+    [self dismissViewControllerAnimated: NO completion: nil];
 
-        [self dismissViewControllerAnimated: NO completion: nil];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Scene Not Found"
-                                                            message: [NSString stringWithFormat: @"The scene \"%@\" no longer exists.", [sceneNames objectAtIndex: index]]
-                                                           delegate: nil
-                                                  cancelButtonTitle: @"OK"
-                                                  otherButtonTitles: nil];
-            [alert show];
-        });
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Scene Not Found"
+                                                        message: [NSString stringWithFormat: @"The scene \"%@\" no longer exists.", [scene name]]
+                                                       delegate: nil
+                                              cancelButtonTitle: @"OK"
+                                              otherButtonTitles: nil];
+        [alert show];
+    });
 }
 
 /*
@@ -238,7 +207,7 @@
 {
     if (section == 0)
     {
-        return [NSString stringWithFormat: @"Set the properties that %@ will change to", [LSFUtilityFunctions buildSectionTitleString: self.nedm]];
+        return [NSString stringWithFormat: @"Set the properties that %@ will change to", [self buildSectionTitleString: self.nedm]];
     }
 
     return @"";
@@ -249,11 +218,11 @@
  */
 -(IBAction)doneButtonPressed: (id)sender
 {
+    // Still need to continue to scale the values for SceneV1 as the SceneManager is used directly
+    // and there does not exist a SDK level create mechanism to handle SceneV1 creation.
     LSFConstants *constants = [LSFConstants getConstants];
 
-    //Get Lamp State
     unsigned int scaledBrightness = 0;
-
     if (self.nedm.capability.dimmable == NONE && self.nedm.capability.color == NONE && self.nedm.capability.temp == NONE)
     {
         scaledBrightness = [constants scaleLampStateValue: 100 withMax: 100];
@@ -272,8 +241,7 @@
 
     if (self.shouldUpdateSceneAndDismiss)
     {
-        LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
-        [ajManager.lsfSceneManager updateSceneWithID: self.sceneModel.theID withScene: [self.sceneModel toScene]];
+        [[[[LSFSDKLightingDirector getLightingDirector] lightingManager] sceneManager] updateSceneWithID: self.sceneModel.theID withScene: [self.sceneModel toScene]];
     }
 
     [self dismissViewControllerAnimated: YES completion: nil];
@@ -281,45 +249,42 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    // Update lamp state
+    unsigned int brightness = (uint32_t)self.brightnessSlider.value;
+    unsigned int hue = (uint32_t)self.hueSlider.value;
+    unsigned int saturation = (uint32_t)self.saturationSlider.value;
+    unsigned int colorTemp = (uint32_t)self.colorTempSlider.value;
+
+    if (brightness == 0)
+    {
+        self.nedm.state.onOff = NO;
+    }
+
+    self.nedm.state = [[LSFLampState alloc] initWithOnOff: self.nedm.state.onOff brightness: brightness hue: hue saturation: saturation colorTemp: colorTemp];
+
     if ([segue.identifier isEqualToString: @"ScenePresets"])
     {
         LSFScenesPresetsTableViewController *sptvc = [segue destinationViewController];
-        LSFConstants *constants = [LSFConstants getConstants];
 
-        //Get Lamp State
-        unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)self.brightnessSlider.value withMax: 100];
-        unsigned int scaledHue = [constants scaleLampStateValue: (uint32_t)self.hueSlider.value withMax: 360];
-        unsigned int scaledSaturation = [constants scaleLampStateValue: (uint32_t)self.saturationSlider.value withMax: 100];
-        unsigned int scaledColorTemp = [constants scaleColorTemp: (uint32_t)self.colorTempSlider.value];
-
-        if (scaledBrightness == 0)
-        {
-            self.nedm.state.onOff = NO;
-        }
-
-        LSFLampState* scaledLampState = [[LSFLampState alloc] initWithOnOff: self.nedm.state.onOff brightness:scaledBrightness hue:scaledHue saturation:scaledSaturation colorTemp:scaledColorTemp];
-
-        sptvc.lampState = scaledLampState;
+        sptvc.myLampState = [[LSFSDKMyLampState alloc] initWithPower: (self.nedm.state.onOff ? ON : OFF) color: [[LSFSDKColor alloc] initWithHue: hue saturation: saturation brightness: brightness colorTemp: colorTemp]];
         sptvc.effectSender = self;
         sptvc.sceneID = self.sceneModel.theID;
     }
 }
 
--(void)presetButtonSetup: (LSFLampState*)state
+-(void)presetButtonSetup: (LSFNoEffectDataModel *)noEffectDataModel
 {
-    LSFPresetModelContainer *container = [LSFPresetModelContainer getPresetModelContainer];
-    NSArray *presets = [container.presetContainer allValues];
+    Power nedmPower = noEffectDataModel.state.onOff ? ON : OFF;
+    LSFSDKColor *nedmColor = [[LSFSDKColor alloc] initWithHue: noEffectDataModel.state.hue saturation:noEffectDataModel.state.saturation brightness:noEffectDataModel.state.brightness colorTemp: noEffectDataModel.state.colorTemp];
 
     NSMutableArray *presetsArray = [[NSMutableArray alloc] init];
     BOOL presetMatched = NO;
-    for (LSFSDKPreset *preset in presets)
+    for (LSFSDKPreset *preset in [[LSFSDKLightingDirector getLightingDirector] presets])
     {
-        LSFPresetModel *data = [preset getPresetDataModel];
-        BOOL matchesPreset = [self checkIfLampState: state matchesPreset: data];
-
+        BOOL matchesPreset = [self checkIfPreset: preset matchesPower: nedmPower andColor: nedmColor];
         if (matchesPreset)
         {
-            [presetsArray addObject: data.name];
+            [presetsArray addObject: preset.name];
             presetMatched = YES;
         }
     }
@@ -343,11 +308,15 @@
     }
 }
 
--(BOOL)checkIfLampState: (LSFLampState *) state matchesPreset: (LSFPresetModel *)data
+-(BOOL)checkIfPreset: (LSFSDKPreset *)preset matchesPower: (Power)power andColor: (LSFSDKColor *) color
 {
     BOOL returnValue = NO;
 
-    if ((state.onOff == data.state.onOff) && (state.brightness == data.state.brightness) && (state.hue == data.state.hue) && (state.saturation == data.state.saturation) && (state.colorTemp == data.state.colorTemp))
+    LSFSDKColor *presetColor = [preset getColor];
+
+    if (power == [preset getPower] && [color hue] == [presetColor hue] &&
+        [color saturation] == [presetColor saturation] && [color brightness] == [presetColor brightness] &&
+        [color colorTemp] == [presetColor colorTemp])
     {
         returnValue = YES;
     }
@@ -360,8 +329,9 @@
  */
 -(void)updateColorIndicator
 {
-    LSFLampState *lstate = [[LSFLampState alloc] initWithOnOff:YES brightness: self.brightnessSlider.value hue: self.hueSlider.value saturation: self.saturationSlider.value colorTemp: self.colorTempSlider.value];
-    [LSFUtilityFunctions colorIndicatorSetup: self.colorIndicatorImage withDataState: lstate andCapabilityData: self.nedm.capability];
+    LSFSDKColor *lcolor = [[LSFSDKColor alloc] initWithHue: self.hueSlider.value saturation: self.saturationSlider.value brightness: self.brightnessSlider.value colorTemp: self.colorTempSlider.value];
+
+    [LSFUtilityFunctions colorIndicatorSetup: self.colorIndicatorImage withColor: lcolor andCapabilityData: [[LSFSDKCapabilityData alloc] initWithCapabilityData: self.nedm.capability]];
 }
 
 -(IBAction)hueSliderTouchedWhileDisabled: (UIButton *)sender

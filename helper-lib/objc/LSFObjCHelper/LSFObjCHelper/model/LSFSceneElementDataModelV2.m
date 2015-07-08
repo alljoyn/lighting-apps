@@ -52,6 +52,21 @@ const NSString *SCENE_ELEMENT_DEFAULT_NAME = @"<Loading scene element info...>";
     return self;
 }
 
+-(BOOL)containsLamp: (NSString *)lampID
+{
+    return [self.lamps containsObject: lampID];
+}
+
+-(BOOL)containsGroup: (NSString *)groupID
+{
+    return [self.groups containsObject: groupID];
+}
+
+-(BOOL)contaisnEffect: (NSString *)effectID
+{
+    return [effectID isEqualToString: self.effectID];
+}
+
 -(void)setLamps: (NSSet *)lamps
 {
     _lamps = lamps;

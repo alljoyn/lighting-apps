@@ -16,16 +16,12 @@
 
 #import "LSFScenesEnterNameViewController.h"
 #import "LSFScenesCreateSceneElementsTableViewController.h"
-#import "LSFSceneModelContainer.h"
-#import "LSFDispatchQueue.h"
-#import "LSFAllJoynManager.h"
 #import "LSFUtilityFunctions.h"
-#import "LSFEnums.h"
-#import "LSFSDKSceneV1.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFScenesEnterNameViewController ()
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification;
 
 @end
 
@@ -46,7 +42,7 @@
     [self.navigationController.toolbar setHidden: YES];
 
     //Set notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
 }
 
 -(void)viewWillDisappear: (BOOL)animated
@@ -64,14 +60,12 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handler
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Disconnected)
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    if (![leaderModel connected])
     {
         [self dismissViewControllerAnimated: YES completion: nil];
     }
@@ -151,26 +145,19 @@
  */
 -(BOOL)checkForDuplicateName: (NSString *)name
 {
-    NSDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
+    BOOL duplicate = [[[[LSFSDKLightingDirector getLightingDirector] scenes] valueForKeyPath: @"name"] containsObject: name];
 
-    for (LSFSDKSceneV1 *scene in [scenes allValues])
+    if (duplicate)
     {
-        LSFSceneDataModel *model = [scene getSceneDataModel];
-
-        if ([name isEqualToString: model.name])
-        {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Duplicate Name"
-                                                            message: [NSString stringWithFormat: @"Warning: there is already a scene named \"%@.\" Although it's possible to use the same name for more than one scene, it's better to give each scene a unique name.\n\nKeep duplicate scene name \"%@\"?", name, name]
-                                                           delegate: self
-                                                  cancelButtonTitle: @"NO"
-                                                  otherButtonTitles: @"YES", nil];
-            [alert show];
-
-            return YES;
-        }
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Duplicate Name"
+                                                        message: [NSString stringWithFormat: @"Warning: there is already a scene named \"%@.\" Although it's possible to use the same name for more than one scene, it's better to give each scene a unique name.\n\nKeep duplicate scene name \"%@\"?", name, name]
+                                                       delegate: self
+                                              cancelButtonTitle: @"NO"
+                                              otherButtonTitles: @"YES", nil];
+        [alert show];
     }
 
-    return NO;
+    return duplicate;
 }
 
 /*

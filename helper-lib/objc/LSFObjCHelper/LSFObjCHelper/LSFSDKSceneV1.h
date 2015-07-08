@@ -15,7 +15,9 @@
  ******************************************************************************/
 
 #import "LSFSDKScene.h"
-#import "LSFSceneDataModel.h"
+#import "LSFSDKPreset.h"
+#import "LSFSDKGroup.h"
+#import "model/LSFSceneDataModel.h"
 
 @interface LSFSDKSceneV1 : LSFSDKScene
 {
@@ -24,6 +26,10 @@
 
 -(id)initWithSceneID: (NSString *)sceneID;
 -(id)initWithSceneDataModel: (LSFSceneDataModel *)model;
+-(BOOL)hasPreset: (LSFSDKPreset *)preset;
+-(BOOL)hasGroup: (LSFSDKGroup *)group;
+-(BOOL)hasPresetWithID: (NSString *)presetID;
+-(BOOL)hasGroupWithID: (NSString *)groupID;
 
 /*
  * Note: This method is not intended to be used by clients, and may change or be

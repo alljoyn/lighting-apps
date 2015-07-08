@@ -16,21 +16,27 @@
 
 #import "LSFSceneTutorialViewController.h"
 #import "LSFSDKLightingDirector.h"
+#import "LSFSDKLightingController.h"
+#import "LSFSDKLightingControllerConfigurationBase.h"
 #import "LSFSDKMyLampState.h"
 #import "LSFSDKAllCollectionAdapter.h"
 
-//Private inner classes that serve as one-shot delegate for the various objects
+/*
+ * Global delegate that uses the initialization callbacks of various objects to sequentially
+ * create the components of a Scene and apply it.
+ */
 @interface MyLightingDelegate : LSFSDKAllCollectionAdapter
 
 @end
 
 @implementation MyLightingDelegate
 
--(void)onPulseEffectInitializedWithTrackingID: (LSFTrackingID *)trackingID andPulseEffect: (LSFSDKPulseEffect *)pulseEffect
+-(void)onPulseEffectInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andPulseEffect: (LSFSDKPulseEffect *)pulseEffect
 {
-    // STEP 3B: Create SceneElement with newly created PulseEffect
+    // STEP 4: Using the Pulse Effect initialized callback as a trigger, create a Scene Element with the new Pulse Effect
+    // and all lamps known to the Lighting Director.
     NSArray *members = [[LSFSDKLightingDirector getLightingDirector] lamps];
-    [[LSFSDKLightingDirector getLightingDirector] createSceneElementWithEffect: pulseEffect groupMembers: members name: @"TutorialSceneElement" delegate: self];
+    [[LSFSDKLightingDirector getLightingDirector] createSceneElementWithEffect: pulseEffect groupMembers: members name: @"TutorialSceneElement" delegate: nil];
 }
 
 -(void)onPulseEffectError: (LSFSDKLightingItemErrorEvent *)error
@@ -38,11 +44,11 @@
     NSLog(@"onPulseEffectError - Error Name = %@", error.name);
 }
 
--(void)onSceneElementInitializedWithTrackingID: (LSFTrackingID *)trackingID andSceneElement: (LSFSDKSceneElement *)sceneElement
+-(void)onSceneElementInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andSceneElement: (LSFSDKSceneElement *)sceneElement
 {
-    // STEP 3C: Create Scene using newly created SceneElement
+    // STEP 5: Using the Scene Element initialized callback as a trigger, create a Scene with the new Scene Element.
     NSArray *sceneElements = [NSArray arrayWithObjects: sceneElement, nil];
-    [[LSFSDKLightingDirector getLightingDirector] createSceneWithSceneElements: sceneElements name: @"TutorialScene" delegate: self];
+    [[LSFSDKLightingDirector getLightingDirector] createSceneWithSceneElements: sceneElements name: @"TutorialScene" delegate: nil];
 }
 
 -(void)onSceneElementError: (LSFSDKLightingItemErrorEvent *)error
@@ -50,9 +56,9 @@
     NSLog(@"onSceneElementError - Error Name = %@", error.name);
 }
 
--(void)onSceneInitializedWithTrackingID: (LSFTrackingID *)trackingID andScene: (LSFSDKScene *)scene
+-(void)onSceneInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andScene: (LSFSDKScene *)scene
 {
-    // STEP 4: Apply The scene
+    // STEP 6: Using the Scene initialized callback as a trigger, apply the Scene.
     [scene apply];
 }
 
@@ -69,6 +75,7 @@ static unsigned int CONTROLLER_CONNECTION_DELAY = 5000;
 
 @property (nonatomic, strong) LSFSDKLightingDirector *lightingDirector;
 @property (nonatomic, strong) MyLightingDelegate *myLightingDelegate;
+@property (nonatomic, strong) LSFSDKLightingControllerConfigurationBase *config;
 
 @end
 
@@ -77,6 +84,7 @@ static unsigned int CONTROLLER_CONNECTION_DELAY = 5000;
 @synthesize versionLabel = _versionLabel;
 @synthesize lightingDirector = _lightingDirector;
 @synthesize myLightingDelegate = _myLightingDelegate;
+@synthesize config = _config;
 
 -(void)viewDidLoad
 {
@@ -87,11 +95,17 @@ static unsigned int CONTROLLER_CONNECTION_DELAY = 5000;
     [appVersion appendString: [NSString stringWithFormat: @".%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]]];
     [self.versionLabel setText: appVersion];
 
-    // Instantiate the director and create the object we will use as the one-shot delegate
-    self.lightingDirector = [LSFSDKLightingDirector getLightingDirector];
-    self.myLightingDelegate = [[MyLightingDelegate alloc] init];
+    // STEP 1: Initialize a lighting controller with default configuration
+    self.config = [[LSFSDKLightingControllerConfigurationBase alloc]initWithKeystorePath: @"Documents"];
+    LSFSDKLightingController *lightingController = [LSFSDKLightingController getLightingController];
+    [lightingController initializeWithControllerConfiguration: self.config];
+    [lightingController start];
 
-    // STEP 1: Register a listener for when the Controller connects and start the LightingDirector
+    // STEP 2: Instantiate the lighting director and wait for the connection, register a global delegate to
+    // handle Lighting events
+    self.myLightingDelegate = [[MyLightingDelegate alloc] init];
+    self.lightingDirector = [LSFSDKLightingDirector getLightingDirector];
+    [self.lightingDirector addDelegate: self.myLightingDelegate];
     [self.lightingDirector postOnNextControllerConnectionWithDelay: CONTROLLER_CONNECTION_DELAY delegate: self];
     [self.lightingDirector start];
 }
@@ -115,21 +129,18 @@ static unsigned int CONTROLLER_CONNECTION_DELAY = 5000;
  */
 -(void)onNextControllerConnection
 {
-    // STEP 2: Define all parameters used in creating a Scene.
+    // STEP 3: Create PulseEffect
     LSFSDKColor *pulseFromColor = [LSFSDKColor green];
     LSFSDKColor *pulseToColor = [LSFSDKColor blue];
     Power pulsePowerState = ON;
     unsigned int period = 1000;
     unsigned int duration = 500;
     unsigned int numPulses = 10;
-
-    // STEP 3: Start Scene creation process, creating all intermediate objects necessary along the way.
-    // boilerplate code, alter parameters in STEP 2 to change effect color, length, etc.
-
-    // STEP 3A: Create PulseEffect
     LSFSDKMyLampState *fromState = [[LSFSDKMyLampState alloc] initWithPower: pulsePowerState color: pulseFromColor];
     LSFSDKMyLampState *toState = [[LSFSDKMyLampState alloc] initWithPower: pulsePowerState color: pulseToColor];
-    [[LSFSDKLightingDirector getLightingDirector] createPulseEffectWithFromState: fromState toState: toState period: period duration: duration count: numPulses name: @"TutorialPulseEffect" delegate: self.myLightingDelegate];
+
+    // boilerplate code, alter parameters above to change effect color, length, etc.
+    [[LSFSDKLightingDirector getLightingDirector] createPulseEffectWithFromState: fromState toState: toState period: period duration: duration count: numPulses name: @"TutorialPulseEffect" delegate: nil];
 }
 
 @end

@@ -15,8 +15,6 @@
  ******************************************************************************/
 
 #import "LSFMembersTableViewController.h"
-#import "LSFLampModel.h"
-#import "LSFGroupModel.h"
 
 @interface LSFMembersTableViewController ()
 
@@ -143,4 +141,5 @@
     NSMutableArray *dataArraySorted = [[NSMutableArray alloc] initWithArray: [self.dataArray sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDesc]]];
     self.dataArray = dataArraySorted;
 }
+
 @end

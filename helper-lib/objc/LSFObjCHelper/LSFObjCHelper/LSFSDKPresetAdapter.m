@@ -18,7 +18,7 @@
 
 @implementation LSFSDKPresetAdapter
 
--(void)onPresetInitializedWithTrackingID: (LSFTrackingID *)trackingID andPreset: (LSFSDKPreset *)preset
+-(void)onPresetInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andPreset: (LSFSDKPreset *)preset
 {
     //Intentionally left blank
 }

@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import "LSFMembersTableViewController.h"
-#import "LSFSceneDataModel.h"
+#import <model/LSFSceneDataModel.h>
 
 @interface LSFScenesMembersTableViewController : LSFMembersTableViewController
 

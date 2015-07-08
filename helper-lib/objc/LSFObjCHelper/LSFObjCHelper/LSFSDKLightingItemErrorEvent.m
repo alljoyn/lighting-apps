@@ -23,7 +23,7 @@
 @synthesize itemID = _itemID;
 @synthesize trackingID = _trackingID;
 
--(id)initWithName: (NSString *)name responseCode: (lsf::LSFResponseCode)responseCode itemID: (NSString *)itemID andTrackingID: (LSFTrackingID *)trackingID
+-(id)initWithName: (NSString *)name responseCode: (lsf::LSFResponseCode)responseCode itemID: (NSString *)itemID andTrackingID: (LSFSDKTrackingID *)trackingID
 {
     self = [super init];
 

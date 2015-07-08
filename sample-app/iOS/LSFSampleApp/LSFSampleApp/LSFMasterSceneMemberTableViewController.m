@@ -15,28 +15,23 @@
  ******************************************************************************/
 
 #import "LSFMasterSceneMembersTableViewController.h"
-#import "LSFSceneModelContainer.h"
-#import "LSFSceneDataModel.h"
-#import "LSFAllJoynManager.h"
-#import "LSFDispatchQueue.h"
-#import "LSFEnums.h"
-#import "LSFSDKSceneV1.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFMasterSceneMembersTableViewController ()
 
 @property (nonatomic, strong) UIBarButtonItem *cancelButton;
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
--(void)masterSceneNotificationReceived: (NSNotification *)notification;
--(void)updateMasterSceneWithID: (NSString *)masterSceneID;
--(void)deleteMasterScenesWithIDs: (NSArray *)masterSceneIDs andNames: (NSArray *)masterSceneNames;
+-(void)leaderModelChangedNotificationReceived: (NSNotification *)notification;
+-(void)masterSceneChangedNotificationReceived: (NSNotification *)notification;
+-(void)masterSceneRemovedNotificationReceived: (NSNotification *)notification;
+-(void)alertMasterSceneDeleted: (LSFSDKMasterScene *)masterScene;
 -(void)sortScenesByName: (NSArray *)scenes;
 
 @end
 
 @implementation LSFMasterSceneMembersTableViewController
 
-@synthesize masterSceneModel = _masterSceneModel;
+@synthesize pendingMasterScene = _pendingMasterScene;
 @synthesize usesCancel = _usesCancel;
 @synthesize cancelButton = _cancelButton;
 
@@ -49,9 +44,10 @@
 {
     [super viewWillAppear: animated];
 
-    //Set master scenes notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(masterSceneNotificationReceived:) name: @"MasterSceneNotification" object: nil];
+    //Set notification handler
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(masterSceneChangedNotificationReceived:) name: @"LSFMasterSceneChangedNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(masterSceneRemovedNotificationReceived:) name: @"LSFMasterSceneRemovedNotification" object: nil];
 
     if (self.usesCancel)
     {
@@ -80,60 +76,45 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handlers
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Disconnected)
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    if (![leaderModel connected])
     {
         [self dismissViewControllerAnimated: YES completion: nil];
     }
 }
 
-/*
- * MasterSceneNotification Handler
- */
--(void)masterSceneNotificationReceived: (NSNotification *)notification
+-(void)masterSceneChangedNotificationReceived: (NSNotification *) notification
 {
-    NSString *masterSceneID = [notification.userInfo valueForKey: @"masterSceneID"];
-    NSNumber *callbackOp = [notification.userInfo valueForKey: @"operation"];
-    NSArray *masterSceneIDs = [notification.userInfo valueForKey: @"masterSceneIDs"];
-    NSArray *masterSceneNames = [notification.userInfo valueForKey: @"masterSceneNames"];
+    LSFSDKMasterScene *masterScene = [notification.userInfo valueForKey: @"masterScene"];
 
-    if ([self.masterSceneModel.theID isEqualToString: masterSceneID] || [masterSceneIDs containsObject: self.masterSceneModel.theID])
+    if ([self.pendingMasterScene.theID isEqualToString: [masterScene theID]])
     {
-        switch (callbackOp.intValue)
-        {
-            case MasterSceneUpdated:
-                [self updateMasterSceneWithID: masterSceneID];
-                break;
-            case MasterSceneDeleted:
-                [self deleteMasterScenesWithIDs: masterSceneIDs andNames: masterSceneNames];
-                break;
-            default:
-                break;
-        }
+        [self buildTableArray];
+        [self.tableView reloadData];
     }
 }
 
--(void)updateMasterSceneWithID: (NSString *)masterSceneID
+-(void)masterSceneRemovedNotificationReceived: (NSNotification *) notification
 {
-    [self buildTableArray];
-    [self.tableView reloadData];
+    LSFSDKMasterScene *masterScene = [notification.userInfo valueForKey: @"masterScene"];
+
+    if ([self.pendingMasterScene.theID isEqualToString: [masterScene theID]])
+    {
+        [self alertMasterSceneDeleted: masterScene];
+    }
 }
 
--(void)deleteMasterScenesWithIDs: (NSArray *)masterSceneIDs andNames: (NSArray *)masterSceneNames
+-(void)alertMasterSceneDeleted: (LSFSDKMasterScene *)masterScene
 {
-    int index = [masterSceneIDs indexOfObject: self.masterSceneModel.theID];
-
     [self dismissViewControllerAnimated: NO completion: nil];
 
     dispatch_async(dispatch_get_main_queue(), ^{
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Master Scene Not Found"
-                                                        message: [NSString stringWithFormat: @"The master scene \"%@\" no longer exists.", [masterSceneNames objectAtIndex: index]]
+                                                        message: [NSString stringWithFormat: @"The master scene \"%@\" no longer exists.", [masterScene name]]
                                                        delegate: nil
                                               cancelButtonTitle: @"OK"
                                               otherButtonTitles: nil];
@@ -146,13 +127,13 @@
  */
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    LSFSceneDataModel *model = [self.dataArray objectAtIndex: [indexPath row]];
+    LSFSDKScene *basicScene = [self.dataArray objectAtIndex: [indexPath row]];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"SceneMembers" forIndexPath:indexPath];
 
-    cell.textLabel.text = model.name;
+    cell.textLabel.text = [basicScene name];
     cell.imageView.image = [UIImage imageNamed:@"scene_set_icon.png"];
 
-    if ([self.masterSceneModel.masterScene.sceneIDs containsObject: model.theID])
+    if ([self.pendingMasterScene.memberIDs containsObject: [basicScene theID]])
     {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         [self.selectedRows addObject: indexPath];
@@ -175,15 +156,8 @@
  */
 -(void)buildTableArray
 {
-    NSMutableDictionary *scenes = [[LSFSceneModelContainer getSceneModelContainer] sceneContainer];
-    NSMutableArray *scenesArray = [[NSMutableArray alloc] init];
-
-    for (LSFSDKSceneV1 *scene in [scenes allValues])
-    {
-        [scenesArray addObject: [scene getSceneDataModel]];
-    }
-
-    [self sortScenesByName: scenesArray];
+    NSArray *scenes = [[LSFSDKLightingDirector getLightingDirector] scenes];
+    [self sortScenesByName: scenes];
 }
 
 -(void)processSelectedRows
@@ -194,24 +168,39 @@
 
     for (NSIndexPath *indexPath in self.selectedRows)
     {
-        LSFSceneDataModel *sceneDataModel = [self.dataArray objectAtIndex: indexPath.row];
-        [sceneIDs addObject: sceneDataModel.theID];
+        LSFSDKScene *basicScene = [self.dataArray objectAtIndex: indexPath.row];
+        [sceneIDs addObject: basicScene.theID];
     }
 
-    self.masterSceneModel.masterScene.sceneIDs = sceneIDs;
+    self.pendingMasterScene.memberIDs = sceneIDs;
 
-    if ([self.masterSceneModel.theID isEqualToString: @""] || (self.masterSceneModel.theID == nil))
+    if (!self.pendingMasterScene.theID.length) // if nil or empty
     {
-        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-            LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
-            [ajManager.lsfMasterSceneManager createMasterScene: self.masterSceneModel.masterScene withName: self.masterSceneModel.name];
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            NSMutableArray *scenes = [[NSMutableArray alloc] init];
+
+            for (NSString* memberID in self.pendingMasterScene.memberIDs)
+            {
+                LSFSDKScene* scene = [[LSFSDKLightingDirector getLightingDirector] getSceneWithID: memberID];
+                [scenes addObject: scene];
+            }
+
+            [[LSFSDKLightingDirector getLightingDirector] createMasterSceneWithScenes: scenes name: self.pendingMasterScene.name delegate: nil];
         });
     }
     else
     {
-        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-            LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
-            [ajManager.lsfMasterSceneManager updateMasterSceneWithID: self.masterSceneModel.theID andMasterScene: self.masterSceneModel.masterScene];
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            NSMutableArray *scenes = [[NSMutableArray alloc] init];
+
+            for (NSString* memberID in self.pendingMasterScene.memberIDs)
+            {
+                LSFSDKScene* scene = [[LSFSDKLightingDirector getLightingDirector] getSceneWithID: memberID];
+                [scenes addObject: scene];
+            }
+
+            LSFSDKMasterScene *masterScene = [[LSFSDKLightingDirector getLightingDirector] getMasterSceneWithID: self.pendingMasterScene.theID];
+            [masterScene modify: scenes];
         });
     }
 
@@ -253,10 +242,10 @@
  */
 -(void)sortScenesByName: (NSArray *)scenes
 {
-    NSMutableArray *sortedArray = [NSMutableArray arrayWithArray: [scenes sortedArrayUsingComparator: ^NSComparisonResult(id a, id b) {
-        NSString *first = [(LSFModel *)a name];
-        NSString *second = [(LSFModel *)b name];
-        return [first localizedCaseInsensitiveCompare: second];
+    NSMutableArray *sortedArray = [NSMutableArray arrayWithArray: [scenes sortedArrayUsingComparator: ^NSComparisonResult(id obj1, id obj2) {
+        LSFSDKScene *scene1 = (LSFSDKScene *)obj1;
+        LSFSDKScene *scene2 = (LSFSDKScene *)obj1;
+        return [(NSString *)[scene1 name] compare: (NSString *)[scene2 name] options:NSCaseInsensitiveSearch];
     }]];
 
     self.dataArray = sortedArray;

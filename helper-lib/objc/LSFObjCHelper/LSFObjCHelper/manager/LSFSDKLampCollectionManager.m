@@ -65,6 +65,11 @@
 
 -(NSArray *)getLampsWithFilter: (id<LSFSDKLightingItemFilter>)filter
 {
+    return [self getLampsCollectionWithFilter: filter];
+}
+
+-(NSArray *)getLampsCollectionWithFilter: (id<LSFSDKLightingItemFilter>)filter
+{
     return [self getAdaptersWithFilter: filter];
 }
 
@@ -88,7 +93,7 @@
 /*
  * Overriden functions from base class
  */
--(void)sendInitializedEvent: (id<LSFSDKLightingDelegate>)delegate item: (id)item trackingID: (LSFTrackingID *)trackingID
+-(void)sendInitializedEvent: (id<LSFSDKLightingDelegate>)delegate item: (id)item trackingID: (LSFSDKTrackingID *)trackingID
 {
     if ([delegate conformsToProtocol: @protocol(LSFSDKLampDelegate)] && [item isKindOfClass: [LSFSDKLamp class]])
     {

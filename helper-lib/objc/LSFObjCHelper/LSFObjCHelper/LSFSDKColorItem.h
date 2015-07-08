@@ -15,9 +15,12 @@
  ******************************************************************************/
 
 #import "LSFSDKLightingItem.h"
-#import "LSFDataModel.h"
 #import "LSFSDKPower.h"
 #import "LSFSDKColor.h"
+#import "LSFSDKMyLampState.h"
+#import "LSFSDKLampStateUniformity.h"
+#import "LSFSDKCapabilityData.h"
+#import "model/LSFDataModel.h"
 
 /**
  * Base class for Lighting items that support color.
@@ -29,8 +32,14 @@
 
 -(NSArray *)getColorHsvt;
 -(BOOL)getPowerOn;
+-(BOOL)isOn;
+-(BOOL)isOff;
 -(Power)getPower;
 -(LSFSDKColor *)getColor;
+-(LSFSDKMyLampState *)getState;
+-(LSFSDKLampStateUniformity *)getUniformity;
+-(LSFSDKCapabilityData *)getCapabilities;
+-(void)setCapabilities: (LSFSDKCapabilityData *)capabilityData;
 -(LSFDataModel *)getColorDataModel;
 
 @end

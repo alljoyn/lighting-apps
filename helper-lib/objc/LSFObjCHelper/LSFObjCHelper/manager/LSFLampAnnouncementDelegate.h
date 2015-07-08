@@ -14,11 +14,11 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-@class LSFSDKAboutData;
+@class LSFLampAbout;
 
 @protocol LSFLampAnnouncementDelegate <NSObject>
 
 -(void)lampAnnouncementReceivedFromLamp: (NSString *)lampID onBus: (NSString *)busName onPort: (uint16_t)port;
--(void)saveAboutData: (LSFSDKAboutData *)myAboutData;
+-(void)saveAboutData: (LSFLampAbout *)myAboutData;
 
 @end

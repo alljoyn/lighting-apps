@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import "LSFSettingsViewController.h"
-#import "LSFAllJoynManager.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFSettingsViewController ()
 
@@ -34,7 +34,7 @@
 
     NSMutableString *appVersion = [NSMutableString stringWithString: [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
     [appVersion appendString: [NSString stringWithFormat: @".%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]]];
-    [appVersion appendString: [NSString stringWithFormat: @" (%@)", AJ_ARCH_STR]];
+    [appVersion appendString: [NSString stringWithFormat: @" (%@)", ARCH_STR]];
     [self.appVersionLabel setText: appVersion];
 }
 

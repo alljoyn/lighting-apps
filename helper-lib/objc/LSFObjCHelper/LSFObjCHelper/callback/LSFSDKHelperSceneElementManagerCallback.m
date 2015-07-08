@@ -121,11 +121,11 @@
     if (rc != LSF_OK)
     {
         NSLog(@"LSFSDKHelperSceneElementManagerCallback - createSceneElement() error %@", [NSString stringWithUTF8String: LSFResponseCodeText(rc)]);
-        [self.manager.sceneElementCollectionManager sendErrorEvent: @"createSceneElementReplyCB" statusCode: rc itemID: sceneElementID withTrackingID: [[LSFTrackingID alloc] initWithValue:trackingID]];
+        [self.manager.sceneElementCollectionManager sendErrorEvent: @"createSceneElementReplyCB" statusCode: rc itemID: sceneElementID withTrackingID: [[LSFSDKTrackingID alloc] initWithValue:trackingID]];
     }
     else
     {
-        LSFTrackingID *myTrackingID = [[LSFTrackingID alloc] initWithValue: trackingID];
+        LSFSDKTrackingID *myTrackingID = [[LSFSDKTrackingID alloc] initWithValue: trackingID];
         [self.creationTrackingIDs setValue: myTrackingID forKey: sceneElementID];
     }
 }
@@ -279,7 +279,7 @@
 -(void)postSendSceneElementInitialized: (NSString *)sceneElementID
 {
     dispatch_async(self.manager.dispatchQueue, ^{
-        LSFTrackingID *trackingID = [self.creationTrackingIDs valueForKey: sceneElementID];
+        LSFSDKTrackingID *trackingID = [self.creationTrackingIDs valueForKey: sceneElementID];
 
         if (trackingID != nil)
         {

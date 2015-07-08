@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import "LSFModel.h"
-#import "LSFSceneWithSceneElements.h"
+#import <internal/LSFSceneWithSceneElements.h>
 
 extern const NSString *SCENE_DEFAULT_NAME;
 
@@ -29,5 +29,6 @@ extern const NSString *SCENE_DEFAULT_NAME;
 -(id)init;
 -(id)initWithSceneID: (NSString *)sceneID;
 -(id)initWithSceneID: (NSString *)sceneID sceneName: (NSString *)sceneName;
+-(BOOL)containsSceneElement: (NSString *)sceneElementID;
 
 @end

@@ -56,6 +56,20 @@
     return self;
 }
 
+-(id)initWithCapabilityData: (LSFCapabilityData *)capabilityData
+{
+    self = [super init];
+
+    if (self)
+    {
+        self.dimmable = capabilityData.dimmable;
+        self.color = capabilityData.color;
+        self.temp = capabilityData.temp;
+    }
+
+    return self;
+}
+
 -(void)includeData: (LSFCapabilityData *)data
 {
     if (data != nil)

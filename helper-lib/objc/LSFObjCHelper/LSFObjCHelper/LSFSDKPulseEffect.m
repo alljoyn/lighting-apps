@@ -17,11 +17,23 @@
 #import "LSFSDKPulseEffect.h"
 #import "LSFSDKLamp.h"
 #import "LSFSDKGroup.h"
-#import "LSFSDKAllJoynManager.h"
 #import "LSFSDKLightingItemUtil.h"
 #import "LSFSDKLightingDirector.h"
+#import "manager/LSFSDKAllJoynManager.h"
+#import "model/LSFSDKLightingItemHasComponentFilter.h"
 
 @implementation LSFSDKPulseEffect
+
+@synthesize isStartWithCurrent = _isStartWithCurrent;
+@synthesize startState = _startState;
+@synthesize endState = _endState;
+@synthesize startPreset = _startPreset;
+@synthesize endPreset = _endPreset;
+@synthesize startPresetID = _startPresetID;
+@synthesize endPresetID = _endPresetID;
+@synthesize period = _period;
+@synthesize duration = _duration;
+@synthesize count = _count;
 
 -(id)initWithPulseEffectID: (NSString *)pulseEffectID
 {
@@ -57,11 +69,22 @@
     }
 }
 
--(void)deletePulseEffect
+-(void)deleteItem
 {
     NSString *errorContext = @"LSFSDKPulseEffect delete: error";
 
     [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getPulseEffectManager] deletePulseEffectWithID: pulseEffectDataModel.theID]];
+}
+
+-(BOOL)hasPreset:(LSFSDKPreset *)preset
+{
+    NSString *errorContext = @"LSFSDKPulseEffect hasPreset: error";
+    return ([self postInvalidArgIfNull: errorContext object: preset]) ? [self hasPresetWithID: preset.theID] : NO;
+}
+
+-(BOOL)hasPresetWithID:(NSString *)presetID
+{
+    return [pulseEffectDataModel containsPreset: presetID];
 }
 
 /*
@@ -95,6 +118,22 @@
     return [self getPulseEffectDataModel];
 }
 
+-(BOOL)hasComponent:(LSFSDKLightingItem *)item
+{
+    NSString *errorContext = @"LSFSDKPulseEffect hasComponent: error";
+    return ([self postInvalidArgIfNull: errorContext object: item]) ? [self hasPresetWithID: item.theID] : NO;
+}
+
+-(NSArray*)getDependentCollection
+{
+    LSFSDKLightingDirector *director = [LSFSDKLightingDirector getLightingDirector];
+
+    NSMutableArray *dependents = [[NSMutableArray alloc] init];
+    [dependents addObjectsFromArray: [[[director lightingManager] sceneElementCollectionManager] getSceneElementsCollectionWithFilter: [[LSFSDKLightingItemHasComponentFilter alloc] initWithComponent: self]]];
+
+    return [NSArray arrayWithArray: dependents];
+}
+
 -(void)postError:(NSString *)name status:(LSFResponseCode)status
 {
     dispatch_async([[[LSFSDKLightingDirector getLightingDirector] lightingManager] dispatchQueue], ^{
@@ -109,6 +148,56 @@
 -(LSFPulseEffectDataModelV2 *)getPulseEffectDataModel
 {
     return pulseEffectDataModel;
+}
+
+-(BOOL)isStartWithCurrent
+{
+    return [pulseEffectDataModel startWithCurrent];
+}
+
+-(LSFSDKMyLampState *)startState
+{
+    return [self getState];
+}
+
+-(LSFSDKMyLampState *)endState
+{
+    return [[LSFSDKMyLampState alloc] initWithLSFLampState: [pulseEffectDataModel endState]];
+}
+
+-(LSFSDKPreset *)startPreset
+{
+    return [[LSFSDKLightingDirector getLightingDirector] getPresetWithID: [self startPresetID]];
+}
+
+-(LSFSDKPreset *)endPreset
+{
+    return [[LSFSDKLightingDirector getLightingDirector] getPresetWithID: [self endPresetID]];
+}
+
+-(NSString *)startPresetID
+{
+    return [pulseEffectDataModel startPresetID];
+}
+
+-(NSString *)endPresetID
+{
+    return [pulseEffectDataModel endPresetID];
+}
+
+-(unsigned int)period
+{
+    return [pulseEffectDataModel period];
+}
+
+-(unsigned int)duration
+{
+    return [pulseEffectDataModel duration];
+}
+
+-(unsigned int)count
+{
+    return [pulseEffectDataModel count];
 }
 
 @end

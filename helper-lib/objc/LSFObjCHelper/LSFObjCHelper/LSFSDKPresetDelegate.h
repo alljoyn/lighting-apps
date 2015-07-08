@@ -16,14 +16,14 @@
 
 #import <Foundation/Foundation.h>
 #import "LSFSDKLightingDelegate.h"
-#import "LSFTrackingID.h"
+#import "LSFSDKTrackingID.h"
 
 @class LSFSDKPreset;
 @class LSFSDKLightingItemErrorEvent;
 
 @protocol LSFSDKPresetDelegate <LSFSDKLightingDelegate>
 
--(void)onPresetInitializedWithTrackingID: (LSFTrackingID *)trackingID andPreset: (LSFSDKPreset *)preset;
+-(void)onPresetInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andPreset: (LSFSDKPreset *)preset;
 -(void)onPresetChanged: (LSFSDKPreset *)preset;
 -(void)onPresetRemoved: (LSFSDKPreset *)preset;
 -(void)onPresetError: (LSFSDKLightingItemErrorEvent *)error;

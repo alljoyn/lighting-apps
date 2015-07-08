@@ -16,34 +16,26 @@
 
 #import "LSFGroupsPresetsTableViewController.h"
 #import "LSFGroupsCreatePresetViewController.h"
-#import "LSFGroupModelContainer.h"
-#import "LSFPresetModelContainer.h"
-#import "LSFDispatchQueue.h"
-#import "LSFAllJoynManager.h"
-#import "LSFConstants.h"
-#import "LSFEnums.h"
-#import "LSFSDKGroup.h"
-#import "LSFSDKPreset.h"
+#import <LSFSDKLightingDirector.h>
+#import <LSFSDKMyLampState.h>
 
 @interface LSFGroupsPresetsTableViewController ()
 
-@property (nonatomic, strong) LSFGroupModel *groupModel;
 @property (nonatomic, strong) NSArray *presetData;
 @property (nonatomic, strong) NSMutableArray *presetDataSorted;
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
--(void)groupNotificationReceived: (NSNotification *)notification;
--(void)deleteGroupsWithIDs: (NSArray *)groupIDs andNames: (NSArray *)groupNames;
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification;
+-(void)groupChangedNotificationReceived: (NSNotification *)notification;
+-(void)groupRemovedNotificationReceived: (NSNotification *)notification;
 -(void)presetNotificationReceived: (NSNotification *)notification;
 -(void)reloadPresets;
--(BOOL)checkIfLampStateMatchesPreset: (LSFPresetModel *)data;
+-(BOOL)checkIfGroup: (LSFSDKGroup *) group matchesPreset: (LSFSDKPreset *) preset;
 
 @end
 
 @implementation LSFGroupsPresetsTableViewController
 
 @synthesize groupID = _groupID;
-@synthesize groupModel = _groupModel;
 @synthesize presetData = _presetData;
 
 -(void)viewDidLoad
@@ -57,9 +49,11 @@
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
 
     //Set notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(groupNotificationReceived:) name: @"GroupNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(presetNotificationReceived:) name: @"PresetNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(groupChangedNotificationReceived:) name: @"LSFGroupChangedNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(groupRemovedNotificationReceived:) name: @"LSFGroupRemovedNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(presetNotificationReceived:) name: @"LSFPresetChangedNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(presetNotificationReceived:) name: @"LSFPresetRemovedNotification" object: nil];
 
     [self reloadPresets];
 }
@@ -78,63 +72,44 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handlers
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Disconnected)
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    if (![leaderModel connected])
     {
+        [self dismissViewControllerAnimated: YES completion: nil];
+    }
+}
+
+-(void)groupChangedNotificationReceived: (NSNotification *)notification
+{
+    LSFSDKGroup *group = [notification.userInfo valueForKey: @"group"];
+
+    if ([self.groupID isEqualToString: [group theID]])
+    {
+        [self reloadPresets];
+    }
+}
+
+-(void)groupRemovedNotificationReceived: (NSNotification *)notification
+{
+    LSFSDKGroup *group = [notification.userInfo valueForKey: @"group"];
+
+    if ([self.groupID isEqualToString: [group theID]])
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Group Not Found"
+                                                        message: [NSString stringWithFormat: @"The group \"%@\" no longer exists.", [group name]]
+                                                       delegate: nil
+                                              cancelButtonTitle: @"OK"
+                                              otherButtonTitles: nil];
+        [alert show];
+
         [self.navigationController popToRootViewControllerAnimated: YES];
     }
 }
 
-/*
- * GroupNotification Handler
- */
--(void)groupNotificationReceived: (NSNotification *)notification
-{
-    NSString *groupID = [notification.userInfo valueForKey: @"groupID"];
-    NSNumber *callbackOp = [notification.userInfo valueForKey: @"operation"];
-    NSArray *groupIDs = [notification.userInfo valueForKey: @"groupIDs"];
-    NSArray *groupNames = [notification.userInfo valueForKey: @"groupNames"];
-
-    if ([self.groupID isEqualToString: groupID] || [groupIDs containsObject: self.groupID])
-    {
-        switch (callbackOp.intValue)
-        {
-            case GroupStateUpdated:
-                [self reloadPresets];
-                break;
-            case GroupDeleted:
-                [self deleteGroupsWithIDs: groupIDs andNames: groupNames];
-                break;
-            default:
-                NSLog(@"Operation not found - Taking no action");
-                break;
-        }
-    }
-}
-
--(void)deleteGroupsWithIDs: (NSArray *)groupIDs andNames: (NSArray *)groupNames
-{
-    int index = [groupIDs indexOfObject: self.groupID];
-
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Group Not Found"
-                                                    message: [NSString stringWithFormat: @"The group \"%@\" no longer exists.", [groupNames objectAtIndex: index]]
-                                                   delegate: nil
-                                          cancelButtonTitle: @"OK"
-                                          otherButtonTitles: nil];
-    [alert show];
-
-    [self.navigationController popToRootViewControllerAnimated: YES];
-}
-
-/*
- * PresetNotification Handler
- */
 -(void)presetNotificationReceived: (NSNotification *)notification
 {
     [self reloadPresets];
@@ -142,10 +117,7 @@
 
 -(void)reloadPresets
 {
-    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
-    self.groupModel = [[groups valueForKey: self.groupID] getLampGroupDataModel];
-
-    self.presetData = [[[LSFPresetModelContainer getPresetModelContainer] presetContainer] allValues];
+    self.presetData = [[LSFSDKLightingDirector getLightingDirector] presets];
     [self sortPresetData];
 
     [self.tableView reloadData];
@@ -165,11 +137,12 @@
     }
     else
     {
-        LSFPresetModel *data = [[self.presetDataSorted objectAtIndex: [indexPath row]] getPresetDataModel];
-        BOOL stateMatchesPreset = [self checkIfLampStateMatchesPreset: data];
+        LSFSDKPreset *preset = [self.presetDataSorted objectAtIndex: [indexPath row]];
+        LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
+        BOOL stateMatchesPreset = [self checkIfGroup: group matchesPreset: preset];
 
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"GroupPresetCell" forIndexPath: indexPath];
-        cell.textLabel.text = data.name;
+        cell.textLabel.text = [preset name];
 
         if (stateMatchesPreset)
         {
@@ -199,11 +172,12 @@
         if (cell.accessoryType == UITableViewCellAccessoryNone)
         {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            LSFPresetModel *data = [[self.presetDataSorted objectAtIndex: [indexPath row]] getPresetDataModel];
 
-            dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-                LSFLampGroupManager *lampGroupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
-                [lampGroupManager transitionLampGroupID: self.groupModel.theID toPreset: data.theID];
+            LSFSDKPreset *preset = [self.presetDataSorted objectAtIndex: [indexPath row]];
+
+            dispatch_async([[[LSFSDKLightingDirector getLightingDirector] lightingManager] dispatchQueue], ^{
+                LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
+                [group applyPreset: preset];
             });
 
             [self.navigationController popViewControllerAnimated: YES];
@@ -262,15 +236,15 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        LSFPresetModel *data = [[self.presetDataSorted objectAtIndex: [indexPath row]] getPresetDataModel];
         [self.presetDataSorted removeObjectAtIndex: indexPath.row];
         
         // Delete the row from the data source
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        
-        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-            LSFPresetManager *presetManager = [[LSFAllJoynManager getAllJoynManager] lsfPresetManager];
-            [presetManager deletePresetWithID: data.theID];
+
+        LSFSDKPreset *preset = [self.presetDataSorted objectAtIndex: [indexPath row]];
+
+        dispatch_async([[[LSFSDKLightingDirector getLightingDirector] lightingManager] dispatchQueue], ^{
+            [preset deleteItem];
         });
     }
 }
@@ -288,30 +262,30 @@
 /*
  * Private functions
  */
--(BOOL)checkIfLampStateMatchesPreset: (LSFPresetModel *)data
+-(BOOL)checkIfGroup: (LSFSDKGroup *) group matchesPreset: (LSFSDKPreset *) preset
 {
     BOOL returnValue = NO;
-    
-    LSFConstants *constants = [LSFConstants getConstants];
-    unsigned int scaledBrightness = [constants scaleLampStateValue: self.groupModel.state.brightness withMax: 100];
-    unsigned int scaledHue = [constants scaleLampStateValue: self.groupModel.state.hue withMax: 360];
-    unsigned int scaledSaturation = [constants scaleLampStateValue: self.groupModel.state.saturation withMax: 100];
-    unsigned int scaledColorTemp = [constants scaleColorTemp: self.groupModel.state.colorTemp];
-    
-    if ((self.groupModel.state.onOff == data.state.onOff) && (scaledBrightness == data.state.brightness) && (scaledHue == data.state.hue) && (scaledSaturation == data.state.saturation) && (scaledColorTemp == data.state.colorTemp))
+
+    LSFSDKColor *groupColor = [group getColor];
+    LSFSDKColor *presetColor = [preset getColor];
+
+    if ([group getPowerOn] == [preset getPowerOn] && [groupColor hue] == [presetColor hue] &&
+        [groupColor saturation] == [presetColor saturation] && [groupColor brightness] == [presetColor brightness] &&
+        [groupColor colorTemp] == [presetColor colorTemp])
     {
         returnValue = YES;
     }
-    
+
     return returnValue;
 }
 
 -(void)sortPresetData
 {
-    NSSortDescriptor *sortDesc = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES comparator:^NSComparisonResult(id obj1, id obj2) {
-        return [(NSString *)obj1 compare:(NSString *)obj2 options:NSCaseInsensitiveSearch];
-    }];
-    self.presetDataSorted = [[NSMutableArray alloc] initWithArray: [self.presetData sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDesc]]];
+    self.presetDataSorted = [[NSMutableArray alloc] initWithArray: [self.presetData sortedArrayUsingComparator: ^NSComparisonResult(id a, id b) {
+        NSString *first = [(LSFSDKPreset *)a name];
+        NSString *second = [(LSFSDKPreset *)b name];
+        return [first localizedCaseInsensitiveCompare: second];
+    }]];
 }
 
 /*
@@ -322,7 +296,10 @@
     if ([segue.identifier isEqualToString: @"SaveGroupPreset"])
     {
         LSFGroupsCreatePresetViewController *gcpvc = [segue destinationViewController];
-        gcpvc.lampState = self.groupModel.state;
+        
+        LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
+        LSFSDKMyLampState *lampState = [[LSFSDKMyLampState alloc] initWithPower:[group getPower] color: [group getColor]];
+        gcpvc.lampState = lampState;
         gcpvc.groupID = self.groupID;
     }
 }

@@ -14,8 +14,8 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "lsf/controllerservice/OEM_CS_Config.h"
-#import "LSFAboutData.h"
+#import <LSFSDKRankParam.h>
+#import <LSFSDKAboutData.h>
 
 using namespace lsf;
 
@@ -32,6 +32,6 @@ using namespace controllerservice;
 -(OEM_CS_RankParam_Power)getRankPower;
 -(OEM_CS_RankParam_Availability)getRankAvailability;
 -(OEM_CS_RankParam_NodeType)getRankNodeType;
--(void)populateDefaultProperties:(LSFAboutData *)aboutData;
+-(void)populateDefaultProperties:(LSFSDKAboutData *)aboutData;
 
 @end

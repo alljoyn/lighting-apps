@@ -15,24 +15,20 @@
  ******************************************************************************/
 
 #import "LSFLightDetailsTableViewController.h"
-#import "LSFConstants.h"
 #import "LSFEnumConversions.h"
-#import "LSFLampModelContainer.h"
-#import "LSFLampModel.h"
-#import "LSFAllJoynManager.h"
-#import "LSFEnums.h"
-#import "LSFSDKLamp.h"
+#import "LSFUtilityFunctions.h"
+#import <LSFSDKLightingDirector.h>
+#import <manager/LSFSDKAllJoynManager.h>
 
 @interface LSFLightDetailsTableViewController ()
 
-@property (nonatomic, strong) LSFLampModel *lampModel;
 @property (nonatomic, strong) NSArray *data;
 @property (nonatomic, strong) NSArray *detailsFields;
 @property (nonatomic, strong) NSArray *aboutFields;
 @property (strong, atomic) UIAlertView *loadingAV;
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
--(void)lampNotificationReceived: (NSNotification *)notification;
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification;
+-(void)lampRemovedNotificationReceived: (NSNotification *) notification;
 -(void)deleteLampWithID: (NSString *)lampID andName: (NSString *)lampName;
 
 @end
@@ -40,7 +36,6 @@
 @implementation LSFLightDetailsTableViewController
 
 @synthesize lampID = _lampID;
-@synthesize lampModel = _lampModel;
 @synthesize data = _data;
 @synthesize detailsFields = _detailsFields;
 @synthesize aboutFields = _aboutFields;
@@ -49,9 +44,8 @@
 {
     [super viewDidLoad];
 
-    LSFConstants *constants = [LSFConstants getConstants];
-    self.detailsFields = constants.lampDetailsFields;
-    self.aboutFields = constants.aboutFields;
+    self.detailsFields = [LSFUtilityFunctions getLampDetailsFields];
+    self.aboutFields = [LSFUtilityFunctions getLampAboutFields];
     self.data = [[NSArray alloc] initWithObjects: self.detailsFields, self.aboutFields, nil];
 }
 
@@ -60,17 +54,15 @@
     [super viewWillAppear: animated];
 
     //Set notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(lampNotificationReceived:) name: @"LampNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(lampRemovedNotificationReceived:) name: @"LSFLampRemovedNotification" object: nil];
 
-    [self showLoadingAlert:@"Fetching lamp details..."];
+//    [self showLoadingAlert:@"Fetching lamp details..."];
 
-    [[LSFAllJoynManager getAllJoynManager] getAboutDataForLampID: self.lampID];
-    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
-    self.lampModel = [[lamps valueForKey: self.lampID] getLampDataModel];
+//    [LSFSDKAllJoynManager getAboutDataForLampID: self.lampID];
     [self.tableView reloadData];
 
-    [self dismissLoadingAlert];
+//    [self dismissLoadingAlert];
 }
 
 -(void)viewWillDisappear: (BOOL)animated
@@ -87,38 +79,24 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handlers
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Disconnected)
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    if (![leaderModel connected])
     {
-        [self.navigationController popToRootViewControllerAnimated: YES];
+        [self dismissViewControllerAnimated: YES completion: nil];
     }
 }
 
-/*
- * LampNotification Handler
- */
--(void)lampNotificationReceived: (NSNotification *)notification
+-(void)lampRemovedNotificationReceived: (NSNotification *) notification
 {
-    NSString *lampID = [notification.userInfo valueForKey: @"lampID"];
-    NSNumber *callbackOp = [notification.userInfo valueForKey: @"operation"];
+    LSFSDKLamp *lamp = [notification.userInfo valueForKey: @"lamp"];
 
-    if ([self.lampID isEqualToString: lampID])
+    if ([self.lampID isEqualToString: [lamp theID]])
     {
-        switch (callbackOp.intValue)
-        {
-            case LampDeleted:
-                [self deleteLampWithID: lampID andName: [notification.userInfo valueForKey: @"lampName"]];
-                break;
-            default:
-                NSLog(@"Operation not found - Taking no action");
-                break;
-        }
+        [self deleteLampWithID: [lamp theID] andName:[lamp name]];
     }
 }
 
@@ -173,6 +151,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    LSFSDKLamp *lamp = [[LSFSDKLightingDirector getLightingDirector] getLampWithID: self.lampID];
+    LSFSDKLampDetails *lampDetails = [lamp details];
+    LSFSDKLampAbout *lampAbout = [lamp about];
+
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"DetailsCell"];
     
     if ([indexPath section] == 0)
@@ -189,58 +171,58 @@
         switch ([indexPath row])
         {
             case 0:
-                cell.detailTextLabel.text = [LSFEnumConversions convertLampMakeToString: self.lampModel.lampDetails.lampMake];
+                cell.detailTextLabel.text = [LSFEnumConversions convertLampMakeToString: lampDetails.lampMake];
                 break;
             case 1:
-                cell.detailTextLabel.text = [LSFEnumConversions convertLampModelToString: self.lampModel.lampDetails.lampModel];
+                cell.detailTextLabel.text = [LSFEnumConversions convertLampModelToString: lampDetails.lampModel];
                 break;
             case 2:
-                cell.detailTextLabel.text = [LSFEnumConversions convertDeviceTypeToString: self.lampModel.lampDetails.deviceType];
+                cell.detailTextLabel.text = [LSFEnumConversions convertDeviceTypeToString: lampDetails.deviceType];
                 break;
             case 3:
-                cell.detailTextLabel.text = [LSFEnumConversions convertLampTypeToString: self.lampModel.lampDetails.lampType];
+                cell.detailTextLabel.text = [LSFEnumConversions convertLampTypeToString: lampDetails.lampType];
                 break;
             case 4:
-                cell.detailTextLabel.text = [LSFEnumConversions convertBaseTypeToString: self.lampModel.lampDetails.baseType];
+                cell.detailTextLabel.text = [LSFEnumConversions convertBaseTypeToString: lampDetails.baseType];
                 break;
             case 5:
-                cell.detailTextLabel.text = [NSString stringWithFormat: @"%u", self.lampModel.lampDetails.lampBeamAngle];
+                cell.detailTextLabel.text = [NSString stringWithFormat: @"%u", lampDetails.lampBeamAngle];
                 break;
             case 6:
-                cell.detailTextLabel.text = self.lampModel.lampDetails.dimmable ? @"YES" : @"NO";
+                cell.detailTextLabel.text = lampDetails.dimmable ? @"YES" : @"NO";
                 break;
             case 7:
-                cell.detailTextLabel.text = self.lampModel.lampDetails.color ? @"YES" : @"NO";
+                cell.detailTextLabel.text = lampDetails.color ? @"YES" : @"NO";
                 break;
             case 8:
-                cell.detailTextLabel.text = self.lampModel.lampDetails.variableColorTemp ? @"YES" : @"NO";
+                cell.detailTextLabel.text = lampDetails.variableColorTemp ? @"YES" : @"NO";
                 break;
             case 9:
-                cell.detailTextLabel.text = self.lampModel.lampDetails.hasEffects ? @"YES" : @"NO";
+                cell.detailTextLabel.text = lampDetails.hasEffects ? @"YES" : @"NO";
                 break;
             case 10:
-                cell.detailTextLabel.text = [NSString stringWithFormat: @"%u", self.lampModel.lampDetails.minVoltage];
+                cell.detailTextLabel.text = [NSString stringWithFormat: @"%u", lampDetails.minVoltage];
                 break;
             case 11:
-                cell.detailTextLabel.text = [NSString stringWithFormat: @"%u", self.lampModel.lampDetails.maxVoltage];
+                cell.detailTextLabel.text = [NSString stringWithFormat: @"%u", lampDetails.maxVoltage];
                 break;
             case 12:
-                cell.detailTextLabel.text = [NSString stringWithFormat: @"%u", self.lampModel.lampDetails.wattage];
+                cell.detailTextLabel.text = [NSString stringWithFormat: @"%u", lampDetails.wattage];
                 break;
             case 13:
-                cell.detailTextLabel.text = [NSString stringWithFormat: @"%u", self.lampModel.lampDetails.incandescentEquivalent];
+                cell.detailTextLabel.text = [NSString stringWithFormat: @"%u", lampDetails.incandescentEquivalent];
                 break;
             case 14:
-                cell.detailTextLabel.text = [NSString stringWithFormat: @"%u", self.lampModel.lampDetails.maxLumens];
+                cell.detailTextLabel.text = [NSString stringWithFormat: @"%u", lampDetails.maxLumens];
                 break;
             case 15:
-                cell.detailTextLabel.text = [NSString stringWithFormat: @"%u", self.lampModel.lampDetails.minTemperature];
+                cell.detailTextLabel.text = [NSString stringWithFormat: @"%u", lampDetails.minTemperature];
                 break;
             case 16:
-                cell.detailTextLabel.text = [NSString stringWithFormat: @"%u", self.lampModel.lampDetails.maxTemperature];
+                cell.detailTextLabel.text = [NSString stringWithFormat: @"%u", lampDetails.maxTemperature];
                 break;
             case 17:
-                cell.detailTextLabel.text = [NSString stringWithFormat: @"%u", self.lampModel.lampDetails.colorRenderingIndex];
+                cell.detailTextLabel.text = [NSString stringWithFormat: @"%u", lampDetails.colorRenderingIndex];
                 break;
         }
     }
@@ -249,46 +231,46 @@
         switch ([indexPath row])
         {
             case 0:
-                cell.detailTextLabel.text = self.lampModel.aboutData.appID;
+                cell.detailTextLabel.text = lampAbout.appID;
                 break;
             case 1:
-                cell.detailTextLabel.text = self.lampModel.aboutData.defaultLanguage;
+                cell.detailTextLabel.text = lampAbout.defaultLanguage;
                 break;
             case 2:
-                cell.detailTextLabel.text = self.lampModel.aboutData.deviceName;
+                cell.detailTextLabel.text = lampAbout.deviceName;
                 break;
             case 3:
-                cell.detailTextLabel.text = self.lampModel.aboutData.deviceID;
+                cell.detailTextLabel.text = lampAbout.deviceID;
                 break;
             case 4:
-                cell.detailTextLabel.text = self.lampModel.aboutData.appName;
+                cell.detailTextLabel.text = lampAbout.appName;
                 break;
             case 5:
-                cell.detailTextLabel.text = self.lampModel.aboutData.manufacturer;
+                cell.detailTextLabel.text = lampAbout.manufacturer;
                 break;
             case 6:
-                cell.detailTextLabel.text = self.lampModel.aboutData.modelNumber;
+                cell.detailTextLabel.text = lampAbout.modelNumber;
                 break;
             case 7:
-                cell.detailTextLabel.text = self.lampModel.aboutData.supportedLanguages;
+                cell.detailTextLabel.text = lampAbout.supportedLanguages;
                 break;
             case 8:
-                cell.detailTextLabel.text = self.lampModel.aboutData.description;
+                cell.detailTextLabel.text = lampAbout.description;
                 break;
             case 9:
-                cell.detailTextLabel.text = self.lampModel.aboutData.dateOfManufacture;
+                cell.detailTextLabel.text = lampAbout.dateOfManufacture;
                 break;
             case 10:
-                cell.detailTextLabel.text = self.lampModel.aboutData.softwareVersion;
+                cell.detailTextLabel.text = lampAbout.softwareVersion;
                 break;
             case 11:
-                cell.detailTextLabel.text = self.lampModel.aboutData.ajSoftwareVersion;
+                cell.detailTextLabel.text = lampAbout.ajSoftwareVersion;
                 break;
             case 12:
-                cell.detailTextLabel.text = self.lampModel.aboutData.hardwareVersion;
+                cell.detailTextLabel.text = lampAbout.hardwareVersion;
                 break;
             case 13:
-                cell.detailTextLabel.text = self.lampModel.aboutData.supportURL;
+                cell.detailTextLabel.text = lampAbout.supportURL;
                 break;
         }
     }

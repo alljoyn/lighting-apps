@@ -15,14 +15,15 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFControllerModel.h"
 #import "LSFSDKLightingDelegate.h"
+#import "LSFSDKController.h"
+#import "model/LSFControllerModel.h"
 
 @class LSFSDKControllerErrorEvent;
 
 @protocol LSFSDKControllerDelegate <LSFSDKLightingDelegate>
 
--(void)onLeaderModelChange: (LSFControllerModel *)leadModel;
+-(void)onLeaderChange: (LSFSDKController *)leader;
 -(void)onControllerError: (LSFSDKControllerErrorEvent *)errorEvent;
 
 @end

@@ -15,8 +15,8 @@
  ******************************************************************************/
 
 #import "LSFEffectTableViewController.h"
-#import "LSFSceneDataModel.h"
-#import "LSFNoEffectDataModel.h"
+#import <model/LSFSceneDataModel.h>
+#import <model/LSFNoEffectDataModel.h>
 
 @interface LSFNoEffectTableViewController : LSFEffectTableViewController
 

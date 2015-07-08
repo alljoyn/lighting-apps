@@ -18,7 +18,8 @@
 
 typedef enum {
     Basic,
-    Master
+    Master,
+    Element
 } SceneType;
 
 @interface LSFSceneCell : UITableViewCell

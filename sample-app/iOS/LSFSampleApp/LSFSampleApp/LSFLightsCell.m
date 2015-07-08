@@ -15,12 +15,7 @@
  ******************************************************************************/
 
 #import "LSFLightsCell.h"
-#import "LSFDispatchQueue.h"
-#import "LSFAllJoynManager.h"
-#import "LSFConstants.h"
-#import "LSFLampModelContainer.h"
-#import "LSFSDKLamp.h"
-#import "LSFLampModel.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFLightsCell()
 
@@ -62,49 +57,41 @@
 
 -(IBAction)powerImagePressed: (UIButton *)sender
 {
-    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
-    LSFLampModel *model = [[lamps valueForKey: self.lampID] getLampDataModel];
+    LSFSDKLamp *lamp = [[LSFSDKLightingDirector getLightingDirector] getLampWithID: self.lampID];
 
-    if (model != nil && model.state.onOff)
+    if (lamp != nil && [lamp getPowerOn])
     {
-        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-            LSFLampManager *lampManager = [[LSFAllJoynManager getAllJoynManager] lsfLampManager];
-            [lampManager transitionLampID: self.lampID onOffField: NO];
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            [lamp setPowerOn: NO];
         });
     }
     else
     {
-        LSFConstants *constants = [LSFConstants getConstants];
-
-        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-            LSFLampManager *lampManager = [[LSFAllJoynManager getAllJoynManager] lsfLampManager];
-
-            if (model.state.brightness == 0 && model.lampDetails.dimmable)
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            if ([[lamp getColor] brightness] == 0 && [[lamp details] dimmable])
             {
-                unsigned int scaledBrightness = [constants scaleLampStateValue: 25 withMax: 100];
-                [lampManager transitionLampID: self.lampID brightnessField: scaledBrightness];
+                LSFSDKColor *color = [lamp getColor];
+                color.brightness = 25;
+                [lamp setColor: color];
             }
 
-            [lampManager transitionLampID: self.lampID onOffField: YES];
+            [lamp setPowerOn: YES];
         });
     }
 }
 
 -(IBAction)brightnessSliderChanged: (UISlider *)sender
 {
-    LSFConstants *constants = [LSFConstants getConstants];
+    LSFSDKLamp *lamp = [[LSFSDKLightingDirector getLightingDirector] getLampWithID:self.lampID];
 
-    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-        NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
-        LSFLampModel *model = [[lamps valueForKey: self.lampID] getLampDataModel];
+    dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+        LSFSDKColor *color = [lamp getColor];
+        color.brightness = (uint32_t)sender.value;
+        [lamp setColor: color];
 
-        LSFLampManager *lampManager = [[LSFAllJoynManager getAllJoynManager] lsfLampManager];
-        unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)sender.value withMax: 100];
-        [lampManager transitionLampID: self.lampID brightnessField: scaledBrightness];
-
-        if (model.state.brightness == 0)
+        if ([[lamp getColor] brightness] == 0)
         {
-            [lampManager transitionLampID: self.lampID onOffField: YES];
+            [lamp setPowerOn: YES];
         }
     });
 }
@@ -137,18 +124,15 @@
     CGFloat delta = percentage * (s.maximumValue - s.minimumValue);
     CGFloat value = round(s.minimumValue + delta);
 
-    dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-        NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
-        LSFLampModel *model = [[lamps valueForKey: self.lampID] getLampDataModel];
-        LSFConstants *constants = [LSFConstants getConstants];
+    dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+        LSFSDKLamp *lamp = [[LSFSDKLightingDirector getLightingDirector] getLampWithID:self.lampID];
+        LSFSDKColor *color = [lamp getColor];
+        color.brightness = (uint32_t)value;
+        [lamp setColor: color];
 
-        LSFLampManager *lampManager = [[LSFAllJoynManager getAllJoynManager] lsfLampManager];
-        unsigned int scaledBrightness = [constants scaleLampStateValue: (uint32_t)value withMax: 100];
-        [lampManager transitionLampID: self.lampID brightnessField: scaledBrightness];
-
-        if (model.state.brightness == 0)
+        if ([[lamp getColor] brightness] == 0)
         {
-            [lampManager transitionLampID: self.lampID onOffField: YES];
+            [lamp setPowerOn: YES];
         }
     });
 }

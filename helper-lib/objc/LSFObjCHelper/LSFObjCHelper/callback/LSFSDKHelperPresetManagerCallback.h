@@ -14,7 +14,7 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFPresetManagerCallbackDelegate.h"
+#import <internal/LSFPresetManagerCallbackDelegate.h>
 
 @class LSFSDKLightingSystemManager;
 

@@ -16,7 +16,6 @@
 
 #import <Foundation/Foundation.h>
 #import "LSFSDKNextControllerConnectionDelegate.h"
-#import "BusAttachment.h"
 #import "LSFSDKLamp.h"
 #import "LSFSDKGroup.h"
 #import "LSFSDKPreset.h"
@@ -35,8 +34,10 @@
 #import "LSFSDKSceneDelegate.h"
 #import "LSFSDKMasterSceneDelegate.h"
 #import "LSFSDKControllerDelegate.h"
-#import "LSFSDKLightingSystemManager.h"
-#import "LSFTrackingID.h"
+#import "LSFSDKTrackingID.h"
+#import "LSFSDKController.h"
+#import "manager/LSFSDKLightingSystemManager.h"
+#import <alljoyn/BusAttachment.h>
 
 #ifdef __aarch64__
 #define ARCH_STR @"64-bit"
@@ -59,6 +60,15 @@
 
 /** @name Class Properties */
 
+@property (nonatomic, readonly) int HUE_MIN;
+@property (nonatomic, readonly) int HUE_MAX;
+@property (nonatomic, readonly) int SATURATION_MIN;
+@property (nonatomic, readonly) int SATURATION_MAX;
+@property (nonatomic, readonly) int BRIGHTNESS_MIN;
+@property (nonatomic, readonly) int BRIGHTNESS_MAX;
+@property (nonatomic, readonly) int COLORTEMP_MIN;
+@property (nonatomic, readonly) int COLORTEMP_MAX;
+
 /**
  * The version number of the interface provided by this class
  *
@@ -74,6 +84,11 @@
  * @return AllJoyn BusAttachment object.
  */
 @property (nonatomic, readonly) ajn::BusAttachment *busAttachment;
+
+/*
+ * TODO
+ */
+@property (nonatomic, readonly) dispatch_queue_t queue;
 
 /**
  * Returns a snapshot of the active Lamps in the Lighting system including lamps that may not have
@@ -97,6 +112,11 @@
  */
 @property (nonatomic, strong, readonly) NSArray *initializedLamps;
 
+/*
+ * TODO
+ */
+@property (nonatomic, readonly) NSUInteger lampCount;
+
 /**
  * Returns a snapshot of the active Group definitions in the Lighting system including groups that may
  * not have received all data from the controller.
@@ -118,6 +138,11 @@
  * @return Array of active Groups.
  */
 @property (nonatomic, strong, readonly) NSArray *initializedGroups;
+
+/*
+ * TODO
+ */
+@property (nonatomic, readonly) NSUInteger groupCount;
 
 /**
  * Returns a snapshot of the active Preset definitions in the Lighting system including presets that may
@@ -141,6 +166,11 @@
  */
 @property (nonatomic, strong, readonly) NSArray *initializedPresets;
 
+/*
+ * TODO
+ */
+@property (nonatomic, readonly) NSUInteger presetCount;
+
 /**
  * Returns a snapshot of the active Transition Effect definitions in the Lighting system including transition effects
  * that may not have received all data from the controller.
@@ -162,6 +192,11 @@
  * @return Array of active Transition Effects.
  */
 @property (nonatomic, strong, readonly) NSArray *initializedTransitionEffects;
+
+/*
+ * TODO
+ */
+@property (nonatomic, readonly) NSUInteger transitionEffectCount;
 
 /**
  * Returns a snapshot of the active Pulse Effect definitions in the Lighting system including pulse effects that may
@@ -185,6 +220,26 @@
  */
 @property (nonatomic, strong, readonly) NSArray *initializedPulseEffects;
 
+/*
+ * TODO
+ */
+@property (nonatomic, readonly) NSUInteger pulseEffectCount;
+
+/*
+ * TODO
+ */
+@property (nonatomic, strong, readonly) NSArray *effects;
+
+/*
+ * TODO
+ */
+@property (nonatomic, strong, readonly) NSArray *initializedEffects;
+
+/*
+ * TODO
+ */
+@property (nonatomic, readonly) NSUInteger effectCount;
+
 /**
  * Returns a snapshot of the active Scene Element definitions in the Lighting system including scene elements that may
  * not have received all data from the controller.
@@ -207,6 +262,11 @@
  */
 @property (nonatomic, strong, readonly) NSArray *initializedSceneElements;
 
+/*
+ * TODO
+ */
+@property (nonatomic, readonly) NSUInteger sceneElementCount;
+
 /**
  * Returns a snapshot of the active Scene definitions in the Lighting system including scenes that may not have received
  * all data from the controller.
@@ -217,6 +277,11 @@
  * @return Array of active Scenes.
  */
 @property (nonatomic, strong, readonly) NSArray *scenes;
+
+/*
+ * TODO
+ */
+@property (nonatomic, readonly) NSUInteger sceneCount;
 
 /**
  * Returns a snapshot of the active Scene definitions in the Lighting system that have received all data from the controller.
@@ -249,6 +314,16 @@
  * @return Array of active Master Scenes.
  */
 @property (nonatomic, strong, readonly) NSArray *initializedMasterScenes;
+
+/*
+ * TODO
+ */
+@property (nonatomic, readonly) NSUInteger masterSceneCount;
+
+/*
+ * TODO
+ */
+@property (nonatomic, strong, readonly) LSFSDKController *leadController;
 
 /**
  * Specifies the default language used in the Lighting System.
@@ -402,6 +477,11 @@
  */
 -(LSFSDKPulseEffect *)getPulseEffectWithID: (NSString *)pulseEffectID;
 
+/*
+ * TODO
+ */
+-(id<LSFSDKEffect>)getEffectWithID: (NSString *)effectID;
+
 /**
  * Returns an instance of the LSFSDKSceneElement with the corresponding scene element ID. If a Scene Element
  * corresponding to the scene element ID is not found, this method will return nil.
@@ -443,7 +523,7 @@
  *
  * @return Instance of LSFTrackingID associate with the creation of the Group.
  */
--(LSFTrackingID *)createGroupWithMembers: (NSArray *)members groupName: (NSString *)groupName delegate: (id<LSFSDKGroupDelegate>)delegate;
+-(LSFSDKTrackingID *)createGroupWithMembers: (NSArray *)members groupName: (NSString *)groupName delegate: (id<LSFSDKGroupDelegate>)delegate;
 
 /**
  * Asynchronously creates a Preset on the Lighting Controller.
@@ -455,7 +535,7 @@
  *
  * @return Instance of LSFTrackingID associate with the creation of the Preset.
  */
--(LSFTrackingID *)createPresetWithPower: (Power)power color: (LSFSDKColor *)color presetName: (NSString *)presetName delegate: (id<LSFSDKPresetDelegate>)delegate;
+-(LSFSDKTrackingID *)createPresetWithPower: (Power)power color: (LSFSDKColor *)color presetName: (NSString *)presetName delegate: (id<LSFSDKPresetDelegate>)delegate;
 
 /**
  * Asynchronously creates a Transtion Effect on the Lighting Controller.
@@ -467,7 +547,7 @@
  *
  * @return Instance of LSFTrackingID associate with the creation of the Transition Effect.
  */
--(LSFTrackingID *)createTransitionEffectWithLampState: (id<LSFSDKLampState>)state duration: (unsigned int)duration name: (NSString *)effectName delegate: (id<LSFSDKTransitionEffectDelegate>)delegate;
+-(LSFSDKTrackingID *)createTransitionEffectWithLampState: (id<LSFSDKLampState>)state duration: (unsigned int)duration name: (NSString *)effectName delegate: (id<LSFSDKTransitionEffectDelegate>)delegate;
 
 /**
  * Asynchronously creates a Pulse Effect on the Lighting Controller.
@@ -482,7 +562,7 @@
  *
  * @return Instance of LSFTrackingID associate with the creation of the Pulse Effect.
  */
--(LSFTrackingID *)createPulseEffectWithFromState: (id<LSFSDKLampState>)fromState toState: (id<LSFSDKLampState>)toState period: (unsigned int)period duration: (unsigned int)duration count: (unsigned int)count name: (NSString *)effectName delegate: (id<LSFSDKPulseEffectDelegate>)delegate;
+-(LSFSDKTrackingID *)createPulseEffectWithFromState: (id<LSFSDKLampState>)fromState toState: (id<LSFSDKLampState>)toState period: (unsigned int)period duration: (unsigned int)duration count: (unsigned int)count name: (NSString *)effectName delegate: (id<LSFSDKPulseEffectDelegate>)delegate;
 
 /**
  * Asynchronously creates a Scene Element on the Lighting Controller.
@@ -494,7 +574,7 @@
  *
  * @return Instance of LSFTrackingID associate with the creation of the Scene Element.
  */
--(LSFTrackingID *)createSceneElementWithEffect: (id<LSFSDKEffect>)effect groupMembers: (NSArray *)members name: (NSString *)sceneElementName delegate: (id<LSFSDKSceneElementDelegate>)delegate;
+-(LSFSDKTrackingID *)createSceneElementWithEffect: (id<LSFSDKEffect>)effect groupMembers: (NSArray *)members name: (NSString *)sceneElementName delegate: (id<LSFSDKSceneElementDelegate>)delegate;
 
 /**
  * Asynchronously creates a Scene on the Lighting Controller.
@@ -505,7 +585,7 @@
  *
  * @return Instance of LSFTrackingID associate with the creation of the Scene
  */
--(LSFTrackingID *)createSceneWithSceneElements: (NSArray *)sceneElements name: (NSString *)sceneName delegate: (id<LSFSDKSceneDelegate>)delegate;
+-(LSFSDKTrackingID *)createSceneWithSceneElements: (NSArray *)sceneElements name: (NSString *)sceneName delegate: (id<LSFSDKSceneDelegate>)delegate;
 
 /**
  * Asynchronously creates a Master Scene on the Lighting Controller.
@@ -516,7 +596,7 @@
  *
  * @return Instance of LSFTrackingID associate with the creation of the Master Scene
  */
--(LSFTrackingID *)createMasterSceneWithScenes: (NSArray *)scenes name: (NSString *)masterSceneName delegate: (id<LSFSDKMasterSceneDelegate>)delegate;
+-(LSFSDKTrackingID *)createMasterSceneWithScenes: (NSArray *)scenes name: (NSString *)masterSceneName delegate: (id<LSFSDKMasterSceneDelegate>)delegate;
 
 /** @name Add and Remove Lighting System delegates */
 

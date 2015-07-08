@@ -15,12 +15,13 @@
  ******************************************************************************/
 
 #import "LSFSDKHelperLampManagerCallback.h"
-#import "LSFResponseCodes.h"
 #import "LSFSDKLightingSystemManager.h"
 #import "LSFSDKAllJoynManager.h"
 #import "LSFConstants.h"
+#import <LSFSDKResponseCodes.h>
 
 static const unsigned int RETRY_DELAY = 1;
+static const unsigned int ABOUT_DELAY = 1;
 
 @interface LSFSDKHelperLampManagerCallback()
 
@@ -31,9 +32,9 @@ static const unsigned int RETRY_DELAY = 1;
 -(void)postRemoveLampID: (NSString *)lampID;
 -(void)postGetLampNameForID: (NSString *)lampID withDelay: (unsigned int)delay;
 -(void)postUpdateLampNameForID: (NSString *)lampID andLampName: (NSString *)lampName;
--(void)postUpdateLampDetailsForID: (NSString *)lampID withDetails: (LSFLampDetails *)lampDetails;
+-(void)postUpdateLampDetailsForID: (NSString *)lampID withDetails: (LSFSDKLampDetails *)lampDetails;
 -(void)postGetLampDetails: (NSString *)lampID withDelay: (unsigned int)delay;
--(void)postUpdateLampParametersForID: (NSString *)lampID withParameters: (LSFLampParameters *)lampParameters;
+-(void)postUpdateLampParametersForID: (NSString *)lampID withParameters: (LSFSDKLampParameters *)lampParameters;
 -(void)postGetLampParameters: (NSString *)lampID withDelay: (unsigned int)delay;
 -(void)postUpdateLampStateForID: (NSString *)lampID withState: (LSFLampState *)lampState;
 -(void)postGetLampState: (NSString *)lampID withDelay: (unsigned int)delay;
@@ -148,7 +149,7 @@ static const unsigned int RETRY_DELAY = 1;
     }
 }
 
--(void)getLampDetailsReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID andLampDetails: (LSFLampDetails *)details
+-(void)getLampDetailsReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID andLampDetails: (LSFSDKLampDetails *)details
 {
     if (rc != LSF_OK)
     {
@@ -161,7 +162,7 @@ static const unsigned int RETRY_DELAY = 1;
     }
 }
 
--(void)getLampParametersReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID andLampParameters: (LSFLampParameters *)params
+-(void)getLampParametersReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID andLampParameters: (LSFSDKLampParameters *)params
 {
     if (rc != LSF_OK)
     {
@@ -403,7 +404,7 @@ static const unsigned int RETRY_DELAY = 1;
     [self postUpdateLampID: lampID withAboutData: nil andDelay: delay];
 }
 
--(void)postUpdateLampID: (NSString *)lampID withAboutData: (LSFSDKAboutData *)aboutData andDelay:(unsigned int)delay
+-(void)postUpdateLampID: (NSString *)lampID withAboutData: (LSFLampAbout *)aboutData andDelay:(unsigned int)delay
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), self.manager.dispatchQueue, ^{
         LSFSDKLamp *lamp = [[self.manager lampCollectionManager] getLampWithID: lampID];
@@ -425,6 +426,12 @@ static const unsigned int RETRY_DELAY = 1;
         if (aboutData != nil)
         {
             lampModel.aboutData = aboutData;
+        }
+        else
+        {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ABOUT_DELAY * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [LSFSDKAllJoynManager getAboutDataForLampID: lampID];
+            });
         }
     });
 
@@ -468,7 +475,7 @@ static const unsigned int RETRY_DELAY = 1;
     });
 }
 
--(void)postUpdateLampDetailsForID: (NSString *)lampID withDetails: (LSFLampDetails *)lampDetails
+-(void)postUpdateLampDetailsForID: (NSString *)lampID withDetails: (LSFSDKLampDetails *)lampDetails
 {
     dispatch_async(self.manager.dispatchQueue, ^{
         LSFLampModel *lampModel = [[self.manager lampCollectionManager] getModelWithID: lampID];
@@ -498,7 +505,7 @@ static const unsigned int RETRY_DELAY = 1;
     });
 }
 
--(void)postUpdateLampParametersForID: (NSString *)lampID withParameters: (LSFLampParameters *)lampParameters
+-(void)postUpdateLampParametersForID: (NSString *)lampID withParameters: (LSFSDKLampParameters *)lampParameters
 {
     dispatch_async(self.manager.dispatchQueue, ^{
         LSFLampModel *lampModel = [[self.manager lampCollectionManager] getModelWithID: lampID];

@@ -14,7 +14,7 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFLampGroup.h"
+#import <internal/LSFLampGroup.h>
 #import "LSFSDKLightingSystemManager.h"
 
 @interface LSFSDKAllLampsLampGroup : LSFLampGroup

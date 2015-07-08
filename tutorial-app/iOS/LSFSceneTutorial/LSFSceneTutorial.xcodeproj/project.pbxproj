@@ -401,12 +401,12 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/callback\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/manager\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/model\"",
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjC/include/LSFObjC\"",
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/ServiceFramework/include/standard_core_library/lighting_controller_client/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/ServiceFramework/include/standard_core_library/lighting_controller_service/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/ServiceFramework/include/standard_core_library/common/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/ServiceFramework/include/common/inc\"",
 				);
 				INFOPLIST_FILE = LSFSceneTutorial/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -449,12 +449,12 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/callback\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/manager\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjCHelper/include/LSFObjCHelper/model\"",
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/LSFObjC/include/LSFObjC\"",
 					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
-					"\"$(LSF_SDK_ROOT)/iOS/Libraries/AllJoyn/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/ServiceFramework/include/standard_core_library/lighting_controller_client/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/ServiceFramework/include/standard_core_library/lighting_controller_service/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/ServiceFramework/include/standard_core_library/common/inc\"",
+					"\"$(LSF_SDK_ROOT)/iOS/Libraries/ServiceFramework/include/common/inc\"",
 				);
 				INFOPLIST_FILE = LSFSceneTutorial/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;

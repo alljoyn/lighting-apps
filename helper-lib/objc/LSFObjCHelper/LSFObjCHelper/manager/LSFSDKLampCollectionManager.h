@@ -32,6 +32,7 @@
 -(LSFSDKLamp *)getLampWithID: (NSString *)lampID;
 -(NSArray *)getLamps;
 -(NSArray *)getLampsWithFilter: (id<LSFSDKLightingItemFilter>)filter;
+-(NSArray *)getLampsCollectionWithFilter: (id<LSFSDKLightingItemFilter>)filter;
 -(NSArray *)removeAllLamps;
 -(LSFSDKLamp *)removeLampWithID: (NSString *)lampID;
 -(LSFLampModel *)getModelWithID: (NSString *)lampID;

@@ -50,6 +50,36 @@
     return self;
 }
 
+-(BOOL)containsLamp:(NSString *)lampID
+{
+    NSArray *childIDs = [[self members] lamps];
+
+    for (NSString* childID : childIDs)
+    {
+        if ([childID isEqualToString: lampID])
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+-(BOOL)containsGroup: (NSString *)groupID
+{
+    NSArray *childIDs = [[self members] lampGroups];
+
+    for (NSString* childID : childIDs)
+    {
+        if ([childID isEqualToString: groupID])
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 -(void)setLamps: (NSSet *)lamps
 {
     _lamps = lamps;

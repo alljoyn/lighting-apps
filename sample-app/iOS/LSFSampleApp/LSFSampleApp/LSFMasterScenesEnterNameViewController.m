@@ -16,21 +16,18 @@
 
 #import "LSFMasterScenesEnterNameViewController.h"
 #import "LSFMasterSceneMembersTableViewController.h"
-#import "LSFDispatchQueue.h"
-#import "LSFAllJoynManager.h"
-#import "LSFMasterSceneModelContainer.h"
 #import "LSFUtilityFunctions.h"
-#import "LSFEnums.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFMasterScenesEnterNameViewController ()
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification;
 
 @end
 
 @implementation LSFMasterScenesEnterNameViewController
 
-@synthesize masterSceneModel = _masterSceneModel;
+@synthesize pendingMasterScene = _pendingMasterScene;
 @synthesize nameTextField = _nameTextField;
 
 -(void)viewDidLoad
@@ -45,7 +42,7 @@
     [self.navigationController.toolbar setHidden: YES];
 
     //Set notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
 }
 
 -(void)viewWillDisappear: (BOOL)animated
@@ -63,14 +60,12 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handlers
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Disconnected)
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    if (![leaderModel connected])
     {
         [self dismissViewControllerAnimated: YES completion: nil];
     }
@@ -124,8 +119,16 @@
 
         return;
     }
-    else if ([self checkForDuplicateName: self.nameTextField.text])
+
+    BOOL nameMatches = [[[[LSFSDKLightingDirector getLightingDirector] masterScenes] valueForKeyPath: @"name"] containsObject: self.nameTextField.text];
+    if (nameMatches)
     {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Duplicate Name"
+                                                        message: [NSString stringWithFormat: @"Warning: there is already a master scene named \"%@.\" Although it's possible to use the same name for more than one master scene, it's better to give each master scene a unique name.\n\nKeep duplicate master scene name \"%@\"?", self.nameTextField.text, self.nameTextField.text]
+                                                       delegate: self
+                                              cancelButtonTitle: @"NO"
+                                              otherButtonTitles: @"YES", nil];
+        [alert show];
         return;
     }
     else if (![LSFUtilityFunctions checkNameLength: self.nameTextField.text entity:@"Master Scene Name"])
@@ -143,43 +146,16 @@
 }
 
 /*
- * Override checkForDuplicateName function
- */
--(BOOL)checkForDuplicateName: (NSString *)name
-{
-    NSDictionary *masterScenes = [[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer];
-
-    for (LSFSDKMasterScene *masterScene in [masterScenes allValues])
-    {
-        LSFMasterSceneDataModel *masterSceneModel = [masterScene getMasterSceneDataModel];
-
-        if ([name isEqualToString: masterSceneModel.name])
-        {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Duplicate Name"
-                                                            message: [NSString stringWithFormat: @"Warning: there is already a master scene named \"%@.\" Although it's possible to use the same name for more than one master scene, it's better to give each master scene a unique name.\n\nKeep duplicate master scene name \"%@\"?", name, name]
-                                                           delegate: self
-                                                  cancelButtonTitle: @"NO"
-                                                  otherButtonTitles: @"YES", nil];
-            [alert show];
-
-            return YES;
-        }
-    }
-
-    return NO;
-}
-
-/*
  * Segue Methods
  */
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    self.masterSceneModel.name = self.nameTextField.text;
+    self.pendingMasterScene.name = self.nameTextField.text;
 
     if ([segue.identifier isEqualToString: @"ChooseMasterSceneMembers"])
     {
         LSFMasterSceneMembersTableViewController *msmtvc = [segue destinationViewController];
-        msmtvc.masterSceneModel = self.masterSceneModel;
+        msmtvc.pendingMasterScene = self.pendingMasterScene;
         msmtvc.usesCancel = NO;
     }
 }

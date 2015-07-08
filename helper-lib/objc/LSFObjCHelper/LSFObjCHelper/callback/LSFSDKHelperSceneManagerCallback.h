@@ -14,7 +14,7 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFSceneManagerCallbackDelegate.h"
+#import <internal/LSFSceneManagerCallbackDelegate.h>
 
 @interface LSFSDKHelperSceneManagerCallback : NSObject <LSFSceneManagerCallbackDelegate>
 

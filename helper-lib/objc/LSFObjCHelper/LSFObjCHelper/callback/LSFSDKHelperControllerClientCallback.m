@@ -106,10 +106,11 @@
 -(void)postUpdateControllerID: (NSString *)controllerID controllerName: (NSString *)controllerName isConnected: (BOOL)connected withDelay: (unsigned int)delay
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), self.manager.dispatchQueue, ^{
-        LSFControllerModel *controllerModel = [self.manager.controllerManager getLeadControllerModel];
+        LSFSDKController *controller = [self.manager.controllerManager getLeader];
 
-        if (connected || [controllerID isEqualToString: controllerModel.theID])
+        if (connected || [controllerID isEqualToString: controller.theID])
         {
+            LSFControllerModel *controllerModel = [controller getControllerDataModel];
             controllerModel.theID = controllerID;
             controllerModel.name = controllerName;
             controllerModel.connected = connected;

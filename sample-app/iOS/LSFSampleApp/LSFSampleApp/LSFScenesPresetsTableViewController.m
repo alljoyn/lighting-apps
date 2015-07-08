@@ -15,26 +15,20 @@
  ******************************************************************************/
 
 #import "LSFScenesPresetsTableViewController.h"
-#import "LSFAllJoynManager.h"
-#import "LSFDispatchQueue.h"
-#import "LSFPresetModelContainer.h"
-#import "LSFPresetModel.h"
 #import "LSFScenesCreatePresetViewController.h"
-#import "LSFConstants.h"
 #import "LSFNoEffectTableViewController.h"
 #import "LSFTransitionEffectTableViewController.h"
 #import "LSFPulseEffectTableViewController.h"
-#import "LSFEnums.h"
-#import "LSFSDKPreset.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFScenesPresetsTableViewController ()
 
 @property (nonatomic, strong) NSArray *presetData;
 @property (nonatomic, strong) NSArray *presetDataSorted;
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
--(void)sceneNotificationReceived: (NSNotification *)notification;
--(void)deleteScenesWithIDs: (NSArray *)sceneIDs andNames: (NSArray *)sceneNames;
+-(void)leaderModelChangedNotificationReceived: (NSNotification *)notification;
+-(void)sceneRemovedNotificationReceived: (NSNotification *)notification;
+-(void)alertSceneDeleted: (LSFSDKScene *)scene;
 -(void)presetNotificationReceived: (NSNotification *)notification;
 
 @end
@@ -42,7 +36,7 @@
 @implementation LSFScenesPresetsTableViewController
 
 @synthesize sceneID = _sceneID;
-@synthesize lampState = _lampState;
+@synthesize myLampState = _myLampState;
 @synthesize effectSender = _effectSender;
 @synthesize endStateFlag = _endStateFlag;
 
@@ -57,9 +51,10 @@
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
 
     //Set notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneNotificationReceived:) name: @"SceneNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(presetNotificationReceived:) name: @"PresetNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(presetNotificationReceived:) name: @"LSFPresetChangedNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(presetNotificationReceived:) name: @"LSFPresetRemovedNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneRemovedNotificationReceived:) name: @"LSFSceneRemovedNotification" object: nil];
 
     [self reloadPresets];
 }
@@ -67,26 +62,6 @@
 -(void)viewWillDisappear: (BOOL)animated
 {
     [super viewWillDisappear: animated];
-
-    if([self.effectSender isKindOfClass:[LSFNoEffectTableViewController class]])
-    {
-        ((LSFNoEffectTableViewController*)self.effectSender).nedm.state = self.lampState;
-    }
-    else if ([self.effectSender isKindOfClass:[LSFTransitionEffectTableViewController class]])
-    {
-        ((LSFTransitionEffectTableViewController*)self.effectSender).tedm.state = self.lampState;
-    }
-    else if ([self.effectSender isKindOfClass:[LSFPulseEffectTableViewController class]])
-    {
-        if (self.endStateFlag)
-        {
-            ((LSFPulseEffectTableViewController*)self.effectSender).pedm.endState = self.lampState;
-        }
-        else
-        {
-            ((LSFPulseEffectTableViewController*)self.effectSender).pedm.state = self.lampState;
-        }
-    }
 
     //Clear notification handler
     [[NSNotificationCenter defaultCenter] removeObserver: self];
@@ -98,74 +73,50 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handlers
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Disconnected)
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    if (![leaderModel connected])
     {
-        [self dismissViewControllerAnimated: NO completion: nil];
+        [self dismissViewControllerAnimated: YES completion: nil];
     }
 }
 
-/*
- * SceneNotification Handler
- */
--(void)sceneNotificationReceived: (NSNotification *)notification
+-(void)sceneRemovedNotificationReceived:(NSNotification *)notification
 {
-    NSNumber *callbackOp = [notification.userInfo valueForKey: @"operation"];
-    NSArray *sceneIDs = [notification.userInfo valueForKey: @"sceneIDs"];
-    NSArray *sceneNames = [notification.userInfo valueForKey: @"sceneNames"];
+    LSFSDKScene *scene = [notification.userInfo valueForKey: @"scene"];
 
-    if ([sceneIDs containsObject: self.sceneID])
+    if ([self.sceneID isEqualToString: scene.theID])
     {
-        switch (callbackOp.intValue)
-        {
-            case SceneDeleted:
-                [self deleteScenesWithIDs: sceneIDs andNames: sceneNames];
-                break;
-            default:
-                break;
-        }
+        [self alertSceneDeleted: scene];
     }
 }
 
--(void)deleteScenesWithIDs: (NSArray *)sceneIDs andNames: (NSArray *)sceneNames
-{
-    if ([sceneIDs containsObject: self.sceneID])
-    {
-        int index = [sceneIDs indexOfObject: self.sceneID];
-
-        [self dismissViewControllerAnimated: NO completion: nil];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Scene Not Found"
-                                                            message: [NSString stringWithFormat: @"The scene \"%@\" no longer exists.", [sceneNames objectAtIndex: index]]
-                                                           delegate: nil
-                                                  cancelButtonTitle: @"OK"
-                                                  otherButtonTitles: nil];
-            [alert show];
-        });
-    }
-}
-
-/*
- * PresetNotification Handler
- */
 -(void)presetNotificationReceived: (NSNotification *)notification
 {
     [self reloadPresets];
 }
 
+-(void)alertSceneDeleted: (LSFSDKScene *)scene
+{
+    [self dismissViewControllerAnimated: NO completion: nil];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Scene Not Found"
+                                                        message: [NSString stringWithFormat: @"The scene \"%@\" no longer exists.", scene.name]
+                                                       delegate: nil
+                                              cancelButtonTitle: @"OK"
+                                              otherButtonTitles: nil];
+        [alert show];
+    });
+}
+
 -(void)reloadPresets
 {
-    LSFPresetModelContainer *container = [LSFPresetModelContainer getPresetModelContainer];
-    self.presetData = [container.presetContainer allValues];
+    self.presetData = [[LSFSDKLightingDirector getLightingDirector] presets];
     [self sortPresetData];
-
     [self.tableView reloadData];
 }
 
@@ -183,11 +134,11 @@
     }
     else
     {
-        LSFPresetModel *data = [[self.presetDataSorted objectAtIndex: [indexPath row]] getPresetDataModel];
-        BOOL stateMatchesPreset = [self checkIfLampStateMatchesPreset: data];
+        LSFSDKPreset *preset = [self.presetDataSorted objectAtIndex: [indexPath row]];
+        BOOL stateMatchesPreset = [self checkIfPreset: preset matchesPower: self.myLampState.power andColor: self.myLampState.color];
 
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"ScenePresetCell" forIndexPath:indexPath];
-        cell.textLabel.text = data.name;
+        cell.textLabel.text = preset.name;
 
         if (stateMatchesPreset)
         {
@@ -217,32 +168,28 @@
         if (cell.accessoryType == UITableViewCellAccessoryNone)
         {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            LSFPresetModel *data = [[self.presetDataSorted objectAtIndex: [indexPath row]] getPresetDataModel];
 
-            self.lampState.onOff = data.state.onOff;
-            self.lampState.brightness = data.state.brightness;
-            self.lampState.hue = data.state.hue;
-            self.lampState.saturation = data.state.saturation;
-            self.lampState.colorTemp = data.state.colorTemp;
-
+            LSFSDKPreset *preset = [self.presetDataSorted objectAtIndex: [indexPath row]];
+            LSFSDKColor *presetColor = [preset getColor];
+            LSFLampState *lampState = [[LSFLampState alloc] initWithOnOff: preset.getPowerOn brightness: presetColor.brightness hue: presetColor.hue saturation: presetColor.saturation colorTemp: presetColor.colorTemp];
 
             if([self.effectSender isKindOfClass:[LSFNoEffectTableViewController class]])
             {
-                ((LSFNoEffectTableViewController*)self.effectSender).nedm.state = self.lampState;
+                ((LSFNoEffectTableViewController*)self.effectSender).nedm.state = lampState;
             }
             else if ([self.effectSender isKindOfClass:[LSFTransitionEffectTableViewController class]])
             {
-                ((LSFTransitionEffectTableViewController*)self.effectSender).tedm.state = self.lampState;
+                ((LSFTransitionEffectTableViewController*)self.effectSender).tedm.state = lampState;
             }
             else if ([self.effectSender isKindOfClass:[LSFPulseEffectTableViewController class]])
             {
                 if (self.endStateFlag)
                 {
-                    ((LSFPulseEffectTableViewController*)self.effectSender).pedm.endState = self.lampState;
+                    ((LSFPulseEffectTableViewController*)self.effectSender).pedm.endState = lampState;
                 }
                 else
                 {
-                    ((LSFPulseEffectTableViewController*)self.effectSender).pedm.state = self.lampState;
+                    ((LSFPulseEffectTableViewController*)self.effectSender).pedm.state = lampState;
                 }
             }
 
@@ -275,8 +222,7 @@
     }
     else
     {
-        LSFPresetModelContainer *container = [LSFPresetModelContainer getPresetModelContainer];
-        return [container.presetContainer count];
+        return [[LSFSDKLightingDirector getLightingDirector] presetCount];
     }
 }
 
@@ -306,17 +252,12 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        LSFPresetModel *data = [[self.presetDataSorted objectAtIndex: [indexPath row]] getPresetDataModel];
-
-        LSFPresetModelContainer *container = [LSFPresetModelContainer getPresetModelContainer];
-        [container.presetContainer removeObjectForKey: data.theID];
-
         // Delete the row from the data source
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 
-        dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-            LSFPresetManager *presetManager = [[LSFAllJoynManager getAllJoynManager] lsfPresetManager];
-            [presetManager deletePresetWithID: data.theID];
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            LSFSDKPreset *preset = [self.presetDataSorted objectAtIndex: [indexPath row]];
+            [preset deleteItem];
         });
     }
 }
@@ -331,14 +272,15 @@
     return UITableViewAutomaticDimension;
 }
 
-/*
- * Private functions
- */
--(BOOL)checkIfLampStateMatchesPreset: (LSFPresetModel *)data
+-(BOOL)checkIfPreset: (LSFSDKPreset *)preset matchesPower: (Power)power andColor: (LSFSDKColor *) color
 {
     BOOL returnValue = NO;
 
-    if (((self.lampState.onOff == data.state.onOff) && (self.lampState.brightness == data.state.brightness) && (self.lampState.hue == data.state.hue) && (self.lampState.saturation == data.state.saturation) && self.lampState.colorTemp == data.state.colorTemp))
+    LSFSDKColor *presetColor = [preset getColor];
+
+    if (power == [preset getPower] && [color hue] == [presetColor hue] &&
+        [color saturation] == [presetColor saturation] && [color brightness] == [presetColor brightness] &&
+        [color colorTemp] == [presetColor colorTemp])
     {
         returnValue = YES;
     }
@@ -362,7 +304,7 @@
     if ([segue.identifier isEqualToString: @"SaveScenePreset"])
     {
         LSFScenesCreatePresetViewController *scpvc = [segue destinationViewController];
-        scpvc.lampState = self.lampState;
+        scpvc.lampState = self.myLampState;
         scpvc.sceneID = self.sceneID;
     }
 }

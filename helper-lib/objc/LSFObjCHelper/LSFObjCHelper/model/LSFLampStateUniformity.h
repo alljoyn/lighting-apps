@@ -29,6 +29,7 @@
 @property (nonatomic) BOOL colorTemp;
 
 -(id)init;
+-(id)initWithLampStateUniformity: (LSFLampStateUniformity *)other;
 -(id)initWithPower: (BOOL)power brightness: (BOOL)brightness hue: (BOOL)hue saturation: (BOOL)saturation andColorTemp: (BOOL)colorTemp;
 
 @end

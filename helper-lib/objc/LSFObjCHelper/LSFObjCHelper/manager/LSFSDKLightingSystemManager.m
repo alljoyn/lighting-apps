@@ -22,7 +22,7 @@
 /*
  * Private Class
  */
-@interface MyControllerAdapter : NSObject  <LSFSDKControllerDelegate>
+@interface MyControllerAdapter : NSObject  <LSFSDKControllerDelegate, LSFSDKLampDelegate>
 
 @property (nonatomic, weak) id<LSFSDKNextControllerConnectionDelegate> delegate;
 @property (nonatomic, strong) LSFSDKLightingSystemManager *manager;
@@ -52,12 +52,12 @@
     return self;
 }
 
--(void)onLeaderModelChange:(LSFControllerModel *)leadModel
+-(void)onLeaderChange:(LSFSDKController *)leader
 {
     NSLog(@"MyControllerAdapter - onLeaderModelChanged() callback executing");
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.delay * NSEC_PER_SEC)), self.manager.dispatchQueue, ^{
-        if ([leadModel connected])
+        if ([leader connected])
         {
             NSLog(@"MyControllerAdapter - Controller is connected, firing next controller connection delegate");
             [self.manager.controllerManager removeDelegate: self];
@@ -67,6 +67,26 @@
 }
 
 -(void)onControllerError:(LSFSDKControllerErrorEvent *)errorEvent
+{
+    //Intentionally left blank
+}
+
+-(void)onLampChanged:(LSFSDKLamp *)lamp
+{
+    //Intentionally left blank
+}
+
+-(void)onLampInitialized: (LSFSDKLamp *)lamp
+{
+    //Intentionally left blank
+}
+
+-(void)onLampRemoved: (LSFSDKLamp *)lamp
+{
+    //Intentionally left blank
+}
+
+-(void)onLampError: (LSFSDKLightingItemErrorEvent *)error
 {
     //Intentionally left blank
 }
@@ -141,6 +161,8 @@
 
         _controllerManager = [[LSFControllerManager alloc] init];
         [_controllerManager addDelegate: self];
+
+        [_lampCollectionManager addDelegate: self];
 
         //TODO - initialize properties
     }
@@ -281,11 +303,12 @@
 /*
  * LSFSDKControllerDelegate implementation
  */
--(void)onLeaderModelChange: (LSFControllerModel *)leadModel
+//-(void)onLeaderModelChange: (LSFControllerModel *)leadModel
+-(void)onLeaderChange:(LSFSDKController *)leader
 {
     NSLog(@"LSFSDKLightingSystemManager - onLeaderModelChange() callback executing");
 
-    if (![leadModel connected])
+    if (![leader connected])
     {
         NSLog(@"Clearing Models");
         [self clearModels];
@@ -293,6 +316,29 @@
 }
 
 -(void)onControllerError: (LSFSDKControllerErrorEvent *)errorEvent
+{
+    //Intentionally left blank
+}
+
+/*
+ * LSFSDKLampDelegate implementation
+ */
+-(void)onLampChanged:(LSFSDKLamp *)lamp
+{
+    [[self groupManagerCB] postUpdateDependentLampGroups: lamp.theID];
+}
+
+-(void)onLampInitialized: (LSFSDKLamp *)lamp
+{
+    //Intentionally left blank
+}
+
+-(void)onLampRemoved: (LSFSDKLamp *)lamp
+{
+    //Intentionally left blank
+}
+
+-(void)onLampError: (LSFSDKLightingItemErrorEvent *)error
 {
     //Intentionally left blank
 }

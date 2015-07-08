@@ -17,21 +17,10 @@
 #import "LSFGroupsTableViewController.h"
 #import "LSFGroupsInfoTableViewController.h"
 #import "LSFGroupsAddNameViewController.h"
-#import "LSFDispatchQueue.h"
-#import "LSFAllJoynManager.h"
 #import "LSFGroupsCell.h"
-#import "LSFGroupModelContainer.h"
-#import "LSFGroupModel.h"
-#import "LSFSceneModelContainer.h"
-#import "LSFSceneDataModel.h"
-#import "LSFNoEffectDataModel.h"
-#import "LSFTransitionEffectDataModel.h"
-#import "LSFPulseEffectDataModel.h"
-#import "LSFConstants.h"
 #import "LSFWifiMonitor.h"
-#import "LSFEnums.h"
-#import "LSFSDKGroup.h"
-#import "LSFSDKSceneV1.h"
+#import "LSFUtilityFunctions.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFGroupsTableViewController ()
 
@@ -39,15 +28,13 @@
 @property (nonatomic, strong) UIBarButtonItem *settingsButton;
 @property (nonatomic, strong) UIBarButtonItem *addButton;
 
--(void)groupNotificationReceived: (NSNotification *)notification;
--(void)addNewGroup: (NSString *)groupID;
--(void)reorderGroup: (NSString *)groupID;
--(void)refreshGroup: (NSString *)groupID;
--(void)removeGroup: (NSArray *)groupIDs;
+-(void)groupChangedNotificationReceived: (NSNotification *)notification;
+-(void)groupRemovedNotificationReceived: (NSNotification *)notification;
+-(void)updateGroup: (LSFSDKGroup *)group;
+-(void)removeGroup: (LSFSDKGroup *)group;
 -(void)plusButtonPressed;
 -(void)settingsButtonPressed;
--(NSUInteger)checkIfGroupModelExists: (LSFGroupModel *)groupModel;
--(NSUInteger)findInsertionIndexInArray: (LSFGroupModel *)groupModel;
+-(NSUInteger)findInsertionIndexInArray: (LSFSDKGroup *)group;
 -(void)sortGroupsByName;
 -(void)refreshRowInTableAtIndex: (NSUInteger)index;
 -(NSArray *)isGroupContainedInGroupsOrScenes: (NSString *)groupID;
@@ -64,18 +51,18 @@
 {
     [super viewDidLoad];
     [self.navigationItem setHidesBackButton:YES];
-    
+
     self.addButton = [[UIBarButtonItem alloc]
                       initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                       target: self
                       action: @selector(plusButtonPressed)];
-    
+
     self.settingsButton = [[UIBarButtonItem alloc]
                            initWithImage: [UIImage imageNamed: @"nav_settings_regular_icon.png"]
                            style:UIBarButtonItemStylePlain
                            target: self
                            action: @selector(settingsButtonPressed)];
-    
+
     NSArray *actionButtonItems = @[self.settingsButton, self.addButton];
     self.navigationItem.rightBarButtonItems = actionButtonItems;
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
@@ -84,17 +71,13 @@
 -(void)viewWillAppear: (BOOL)animated
 {
     [super viewWillAppear: animated];
-    
-    //Set groups notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(groupNotificationReceived:) name: @"GroupNotification" object: nil];
-    
-    //Set the content of the default group data array
-    self.data = [[NSMutableArray alloc] init];
 
-    for (LSFSDKGroup *group in [[[LSFGroupModelContainer getGroupModelContainer] groupContainer] allValues])
-    {
-        [self.data addObject: [group getLampGroupDataModel]];
-    }
+    //Set groups notification handler
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(groupChangedNotificationReceived:) name: @"LSFGroupChangedNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(groupRemovedNotificationReceived:) name: @"LSFGroupRemovedNotification" object: nil];
+
+    //Set the content of the default group data array
+    self.data = [[NSMutableArray alloc] initWithArray: [[LSFSDKLightingDirector getLightingDirector] groups]];
 
     if (self.data.count > 0)
     {
@@ -119,129 +102,64 @@
 }
 
 /*
- * GroupNotification Handler
+ * Notification Handlers
  */
--(void)groupNotificationReceived: (NSNotification *)notification
+-(void)groupChangedNotificationReceived: (NSNotification *)notification
 {
     @synchronized(self.data)
     {
-        NSString *groupID = [notification.userInfo valueForKey: @"groupID"];
-        NSNumber *callbackOp = [notification.userInfo valueForKey: @"operation"];
-        NSArray *groupIDs = [notification.userInfo valueForKey: @"groupIDs"];
-
-        switch (callbackOp.intValue)
-        {
-            case GroupCreated:
-                [self addNewGroup: groupID];
-                break;
-            case GroupNameUpdated:
-                [self reorderGroup: groupID];
-                break;
-            case GroupStateUpdated:
-                [self refreshGroup: groupID];
-                break;
-            case GroupDeleted:
-                [self removeGroup: groupIDs];
-                break;
-            default:
-                NSLog(@"Operation not found - Taking no action");
-                break;
-        }
+        LSFSDKGroup *group = [notification.userInfo valueForKey: @"group"];
+        [self updateGroup: group];
     }
 }
 
--(void)addNewGroup: (NSString *)groupID
+-(void)groupRemovedNotificationReceived: (NSNotification *)notification
 {
-    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
-    LSFGroupModel *model = [[groups valueForKey: groupID] getLampGroupDataModel];
-
-    long long currentTmestamp = (long long)([[NSDate date] timeIntervalSince1970] * 1000);
-
-    if ((model.timestamp + model.delay) <= currentTmestamp)
+    @synchronized(self.data)
     {
-        @synchronized (model)
+        LSFSDKGroup *group = [notification.userInfo valueForKey: @"group"];
+        [self removeGroup: group];
+    }
+}
+
+-(void)updateGroup: (LSFSDKGroup *)group
+{
+    if (![self.data containsObject: group])
+    {
+        // new group
+        [self.data addObject: group];
+        [self sortGroupsByName];
+        [self.tableView reloadData];
+    }
+    else
+    {
+        NSUInteger existingIndex = [self findIndexInModelOfID: [group theID]];
+        NSUInteger insertionIndex = [self findInsertionIndexInArray: group];
+
+        if (existingIndex == insertionIndex)
         {
-            [self.data addObject: model];
+            if (existingIndex != -1)
+            {
+                [self refreshRowInTableAtIndex: existingIndex];
+                [self.tableView reloadData];
+            }
+        }
+        else
+        {
             [self sortGroupsByName];
             [self.tableView reloadData];
         }
     }
 }
 
--(void)refreshGroup: (NSString *)groupID
+-(void) removeGroup:(LSFSDKGroup *)group
 {
-    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
-    LSFGroupModel *model = [[groups valueForKey: groupID] getLampGroupDataModel];
+    int modelArrayIndex = [self findIndexInModelOfID: [group theID]];
 
-    long long currentTmestamp = (long long)([[NSDate date] timeIntervalSince1970] * 1000);
-
-    if ((model.timestamp + model.delay) <= currentTmestamp)
+    if (modelArrayIndex != -1)
     {
-        @synchronized (model)
-        {
-            if (model != nil)
-            {
-                NSUInteger existingIndex = [self findIndexInModelOfID: groupID];
-
-                if (existingIndex != -1)
-                {
-                    [self refreshRowInTableAtIndex: existingIndex];
-                }
-            }
-            else
-            {
-                NSLog(@"LSFGroupsTableViewController - refreshLamp() model is nil");
-            }
-        }
-    }
-}
-
--(void)reorderGroup: (NSString *)groupID
-{
-    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
-    LSFGroupModel *model = [[groups valueForKey: groupID] getLampGroupDataModel];
-
-    long long currentTmestamp = (long long)([[NSDate date] timeIntervalSince1970] * 1000);
-
-    if ((model.timestamp + model.delay) <= currentTmestamp)
-    {
-        @synchronized (model)
-        {
-            if (model != nil)
-            {
-                [self sortGroupsByName];
-                [self.tableView reloadData];
-            }
-            else
-            {
-                NSLog(@"LSFGroupsTableViewController - reorderLamp() model is nil");
-            }
-        }
-    }
-}
-
--(void)removeGroup: (NSArray *)groupIDs
-{
-    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
-
-    for (NSString *groupID in groupIDs)
-    {
-        LSFGroupModel *model = [[groups valueForKey: groupID] getLampGroupDataModel];
-
-        if (model == nil)
-        {
-            int modelArrayIndex = [self findIndexInModelOfID: groupID];
-
-            if (modelArrayIndex != -1)
-            {
-                [self.data removeObjectAtIndex: modelArrayIndex];
-                [self.tableView reloadData];
-            }
-        }
-        else
-        {
-            NSLog(@"LSFGroupsTableViewController - removeLamp() model is not nil");
-        }
+        [self.data removeObjectAtIndex: modelArrayIndex];
+        [self.tableView reloadData];
     }
 }
 
@@ -256,8 +174,6 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     LSFWifiMonitor *wifiMonitor = [LSFWifiMonitor getWifiMonitor];
-    LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
-    LSFConstants *constants = [LSFConstants getConstants];
 
     if (!wifiMonitor.isWifiConnected)
     {
@@ -278,7 +194,8 @@
         self.tableView.backgroundView = customView;
         return 0;
     }
-    else if (!ajManager.isConnectedToController)
+//    else if (![[[[[LSFSDKLightingDirector getLightingDirector] lightingManager] controllerManager] getLeadControllerModel] connected])
+    else if (![[[LSFSDKLightingDirector getLightingDirector] leadController] connected])
     {
         CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
         UIView *customView = [[UIView alloc] initWithFrame: frame];
@@ -289,7 +206,7 @@
         frame.size.width = self.view.bounds.size.width - frame.origin.x;
 
         messageLabel.frame = frame;
-        messageLabel.text = [NSString stringWithFormat: @"No controller service is available on the network %@.\n\nSearching for controller service...", [constants currentWifiSSID]];
+        messageLabel.text = [NSString stringWithFormat: @"No controller service is available on the network %@.\n\nSearching for controller service...", [LSFUtilityFunctions currentWifiSSID]];
         messageLabel.textColor = [UIColor blackColor];
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = NSTextAlignmentLeft;
@@ -307,34 +224,26 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    LSFGroupModel *data = [self.data objectAtIndex: [indexPath row]];
-
-//    NSLog(@"Group Model State - %@", data.name);
-//    NSLog(@"OnOff = %@", data.state.onOff ? @"On" : @"Off");
-//    NSLog(@"Brightness = %u", data.state.brightness);
-//    NSLog(@"Hue = %u", data.state.hue);
-//    NSLog(@"Saturation = %u", data.state.saturation);
-//    NSLog(@"Color Temp = %u", data.state.colorTemp);
+    LSFSDKGroup *group = [self.data objectAtIndex: [indexPath row]];
 
     LSFGroupsCell *cell = [tableView dequeueReusableCellWithIdentifier: @"GroupCell" forIndexPath:indexPath];
-    cell.groupID = data.theID;
-    cell.nameLabel.text = data.name;
-    
-    if (data.capability.dimmable > NONE)
+    cell.groupID = [group theID];
+    cell.nameLabel.text = [group name];
+
+    if ([[group getCapabilities] dimmable] > NONE)
     {
-        if (data.state.onOff && data.state.brightness == 0)
+        if ([group getPowerOn] && [[group getColor] brightness] == 0)
         {
-            dispatch_async(([LSFDispatchQueue getDispatchQueue]).queue, ^{
-                LSFLampGroupManager *groupManager = ([LSFAllJoynManager getAllJoynManager]).lsfLampGroupManager;
-                [groupManager transitionLampGroupID: cell.groupID onOffField: NO];
+            dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+                [group setPowerOn: NO];
             });
         }
-        
+
         cell.brightnessSlider.enabled = YES;
-        cell.brightnessSlider.value = data.state.brightness;
+        cell.brightnessSlider.value = [[group getColor] brightness];
         cell.brightnessSliderButton.enabled = NO;
 
-        if (data.uniformity.brightness)
+        if ([[group getUniformity] brightness])
         {
             [cell.brightnessSlider setThumbImage: [UIImage imageNamed: @"power_slider_normal_icon.png"] forState: UIControlStateNormal];
             [cell.brightnessSlider setThumbImage: [UIImage imageNamed: @"power_slider_pressed_icon.png"] forState: UIControlStateHighlighted];
@@ -352,9 +261,9 @@
         cell.brightnessSliderButton.enabled = YES;
     }
 
-    if (data.state.onOff)
+    if ([group getPowerOn])
     {
-        if (data.uniformity.power)
+        if ([[group getUniformity] power])
         {
             cell.powerImage.image = [UIImage imageNamed: @"light_power_btn_on.png"];
         }
@@ -369,7 +278,7 @@
     }
 
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
+
     return cell;
 }
 
@@ -409,9 +318,9 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        LSFGroupModel *data = [self.data objectAtIndex: [indexPath row]];
+        LSFSDKGroup *group = [self.data objectAtIndex: [indexPath row]];
 
-        NSArray *names = [self isGroupContainedInGroupsOrScenes: data.theID];
+        NSArray *names = [self isGroupContainedInGroupsOrScenes: [group theID]];
         if (names.count > 0)
         {
             NSMutableString *nameString = [[NSMutableString alloc] init];
@@ -429,7 +338,7 @@
             [nameString deleteCharactersInRange: NSMakeRange(nameString.length - 2, 2)];
 
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Can't Delete Group"
-                                                            message: [NSString stringWithFormat: @"The group \"%@\" is being used by the following groups or scenes: %@. It cannot be deleted until it is removed from those items, or those items are deleted.", data.name, nameString]
+                                                            message: [NSString stringWithFormat: @"The group \"%@\" is being used by the following groups or scenes: %@. It cannot be deleted until it is removed from those items, or those items are deleted.", [group name], nameString]
                                                            delegate: nil
                                                   cancelButtonTitle: @"OK"
                                                   otherButtonTitles: nil];
@@ -437,15 +346,14 @@
         }
         else
         {
-            int modelArrayIndex = [self findIndexInModelOfID: data.theID];
+            int modelArrayIndex = [self findIndexInModelOfID: [group theID]];
             [self.data removeObjectAtIndex: modelArrayIndex];
 
             // Delete the row from the data source
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 
-            dispatch_async([[LSFDispatchQueue getDispatchQueue] queue], ^{
-                LSFLampGroupManager *groupManager = [[LSFAllJoynManager getAllJoynManager] lsfLampGroupManager];
-                [groupManager deleteLampGroupWithID: data.theID];
+            dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+                [group deleteItem];
             });
         }
     }
@@ -459,9 +367,9 @@
     if ([segue.identifier isEqualToString: @"GroupInfo"])
     {
         NSIndexPath *indexPath = [self.tableView indexPathForCell: sender];
-        
+
         LSFGroupsInfoTableViewController *gitvc = [segue destinationViewController];
-        gitvc.groupID = [NSString stringWithString: ((LSFGroupModel *)[self.data objectAtIndex: [indexPath row]]).theID];
+        gitvc.groupID = [NSString stringWithString: ((LSFSDKGroup *)[self.data objectAtIndex: [indexPath row]]).theID];
     }
 }
 
@@ -471,9 +379,9 @@
 -(void)plusButtonPressed
 {
     LSFWifiMonitor *wifiMonitor = [LSFWifiMonitor getWifiMonitor];
-    LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
 
-    if (wifiMonitor.isWifiConnected && ajManager.isConnectedToController)
+//    if (wifiMonitor.isWifiConnected && [[[[[LSFSDKLightingDirector getLightingDirector] lightingManager] controllerManager] getLeadControllerModel] connected])
+    if (wifiMonitor.isWifiConnected && [[[LSFSDKLightingDirector getLightingDirector] leadController] connected])
     {
         [self performSegueWithIdentifier: @"AddGroup" sender: nil];
     }
@@ -493,73 +401,40 @@
     [self performSegueWithIdentifier: @"GroupsSettings" sender: self];
 }
 
--(NSUInteger)checkIfGroupModelExists: (LSFGroupModel *)groupModel
+-(NSUInteger)findInsertionIndexInArray: (LSFSDKGroup *)group
 {
-    for (int i = 0; i < self.data.count; i++)
-    {
-        LSFGroupModel *model = (LSFGroupModel *)[self.data objectAtIndex: i];
-
-        if ([groupModel.theID isEqualToString: model.theID])
-        {
-            return i;
-        }
-    }
-
-    return NSNotFound;
-}
-
--(NSUInteger)findInsertionIndexInArray: (LSFGroupModel *)groupModel
-{
-    NSUInteger insertionIndex = 1;
-
-    if (self.data.count <= 1)
-    {
-        NSLog(@"Group Data count is 1 or less so returning 1");
-        insertionIndex = 1;
-    }
-    else
-    {
-        for (int i = 1; i < self.data.count; i++)
-        {
-            LSFGroupModel *model = (LSFGroupModel *)[self.data objectAtIndex: i];
-            NSLog(@"GroupModel Name = %@; Model Name = %@", groupModel.name, model.name);
-
-            if ([model.name localizedCaseInsensitiveCompare: groupModel.name] == NSOrderedAscending || [model.name localizedCaseInsensitiveCompare: groupModel.name] == NSOrderedSame)
-            {
-                NSLog(@"InsertionIndex = %i", i);
-                insertionIndex = i;
-                break;
-            }
-        }
-    }
-
-    return insertionIndex;
+    return [self.data indexOfObject: group inSortedRange: (NSRange){0, [self.data count]} options: (NSBinarySearchingFirstEqual | NSBinarySearchingInsertionIndex) usingComparator:
+            ^NSComparisonResult(id a, id b) {
+                NSString *first = [(LSFSDKGroup *)a name];
+                NSString *second = [(LSFSDKGroup *)b name];
+                return [first localizedCaseInsensitiveCompare: second];
+            }];
 }
 
 -(void)sortGroupsByName
 {
     NSMutableArray *sortedArray = [NSMutableArray arrayWithArray: [self.data sortedArrayUsingComparator: ^NSComparisonResult(id a, id b) {
-        NSString *first = [(LSFGroupModel *)a name];
-        NSString *second = [(LSFGroupModel *)b name];
+        NSString *first = [(LSFSDKGroup *)a name];
+        NSString *second = [(LSFSDKGroup *)b name];
         return [first localizedCaseInsensitiveCompare: second];
     }]];
-    
-    LSFGroupModel *allLampsGroupModel;
-    for (LSFGroupModel *model in sortedArray)
+
+    LSFSDKGroup *allLampsGroup;
+    for (LSFSDKGroup *group in sortedArray)
     {
-        if ([model.name isEqualToString: @"All Lamps"])
+        if ([group.name isEqualToString: @"All Lamps"])
         {
-            allLampsGroupModel = model;
-            [sortedArray removeObject: model];
+            allLampsGroup = group;
+            [sortedArray removeObject: group];
             break;
         }
     }
 
-    if (allLampsGroupModel != nil)
+    if (allLampsGroup != nil)
     {
-        [sortedArray insertObject: allLampsGroupModel atIndex: 0];
+        [sortedArray insertObject: allLampsGroup atIndex: 0];
     }
-    
+
     self.data = [NSMutableArray arrayWithArray: sortedArray];
 }
 
@@ -567,9 +442,9 @@
 {
     for (int i = 0; i < self.data.count; i++)
     {
-        LSFGroupModel *model = [self.data objectAtIndex: i];
+        LSFSDKGroup *group = [self.data objectAtIndex: i];
 
-        if ([theID isEqualToString: model.theID])
+        if ([theID isEqualToString: group.theID])
         {
             return i;
         }
@@ -591,51 +466,12 @@
 -(NSArray *)isGroupContainedInGroupsOrScenes: (NSString *)groupID
 {
     NSMutableArray *names = [[NSMutableArray alloc] init];
-    NSMutableArray *groups = [[NSMutableArray alloc] initWithArray: [[[LSFGroupModelContainer getGroupModelContainer] groupContainer] allValues]];
+    LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: groupID];
+    NSArray *lightingDependents = [group dependents];
 
-    for (LSFSDKGroup *group in groups)
+    for (LSFSDKLightingItem *item in lightingDependents)
     {
-        LSFGroupModel *model = [group getLampGroupDataModel];
-
-        if (![groupID isEqualToString: model.theID])
-        {
-            if ([model.members.lampGroups containsObject: groupID])
-            {
-                NSLog(@"Group %@ contains group ID %@", model.name, groupID);
-                [names addObject: [NSString stringWithString: model.name]];
-            }
-        }
-    }
-
-    NSMutableArray *scenes = [[NSMutableArray alloc] initWithArray: [[[LSFSceneModelContainer getSceneModelContainer] sceneContainer] allValues]];
-
-    for (LSFSDKSceneV1 *scene in scenes)
-    {
-        LSFSceneDataModel *model = [scene getSceneDataModel];
-
-        for (LSFNoEffectDataModel *nedm in model.noEffects)
-        {
-            if ([nedm.members.lampGroups containsObject: groupID])
-            {
-                [names addObject: [NSString stringWithString: model.name]];
-            }
-        }
-
-        for (LSFTransitionEffectDataModel *tedm in model.transitionEffects)
-        {
-            if ([tedm.members.lampGroups containsObject: groupID])
-            {
-                [names addObject: [NSString stringWithString: model.name]];
-            }
-        }
-
-        for (LSFPulseEffectDataModel *pedm in model.pulseEffects)
-        {
-            if ([pedm.members.lampGroups containsObject: groupID])
-            {
-                [names addObject: [NSString stringWithString: model.name]];
-            }
-        }
+        [names addObject: [NSString stringWithString: item.name]];
     }
 
     return names;

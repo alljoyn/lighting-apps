@@ -18,22 +18,16 @@
 #import "LSFNoEffectTableViewController.h"
 #import "LSFTransitionEffectTableViewController.h"
 #import "LSFPulseEffectTableViewController.h"
-#import "LSFGroupModelContainer.h"
-#import "LSFLampModelContainer.h"
-#import "LSFLampModel.h"
-#import "LSFGroupModel.h"
-#import "LSFEnums.h"
-#import "LSFConstants.h"
-#import "LSFSDKLamp.h"
-#import "LSFSDKGroup.h"
+#import <LSFSDKLightingDirector.h>
+#import <model/LSFConstants.h>
 
 @interface LSFScenesModifyMembersTableViewController ()
 
 @property (nonatomic, strong) UIBarButtonItem *cancelButton;
 
--(void)controllerNotificationReceived: (NSNotification *)notification;
--(void)sceneNotificationReceived: (NSNotification *)notification;
--(void)deleteScenesWithIDs: (NSArray *)sceneIDs andNames: (NSArray *)sceneNames;
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification;
+-(void)sceneRemovedNotificationReceived:(NSNotification *)notification;
+-(void)alertSceneDeleted: (LSFSDKScene *)scene;
 -(void)cancelButtonPressed;
 -(void)getColorTempMinMax;
 
@@ -62,8 +56,8 @@
     self.navigationItem.leftBarButtonItem = self.cancelButton;
 
     //Set notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneNotificationReceived:) name: @"SceneNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneRemovedNotificationReceived:) name: @"LSFSceneRemovedNotification" object: nil];
 }
 
 -(void)viewWillDisappear: (BOOL)animated
@@ -80,58 +74,39 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handlers
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Disconnected)
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    if (![leaderModel connected])
     {
-        [self dismissViewControllerAnimated: NO completion: nil];
+        [self dismissViewControllerAnimated: YES completion: nil];
     }
 }
 
-/*
- * SceneNotification Handler
- */
--(void)sceneNotificationReceived: (NSNotification *)notification
+-(void)sceneRemovedNotificationReceived:(NSNotification *)notification
 {
-    NSNumber *callbackOp = [notification.userInfo valueForKey: @"operation"];
-    NSArray *sceneIDs = [notification.userInfo valueForKey: @"sceneIDs"];
-    NSArray *sceneNames = [notification.userInfo valueForKey: @"sceneNames"];
+    LSFSDKScene *scene = [notification.userInfo valueForKey: @"scene"];
 
-    if ([sceneIDs containsObject: self.sceneModel.theID])
+    if ([self.sceneModel.theID isEqualToString: scene.theID])
     {
-        switch (callbackOp.intValue)
-        {
-            case SceneDeleted:
-                [self deleteScenesWithIDs: sceneIDs andNames: sceneNames];
-                break;
-            default:
-                break;
-        }
+        [self alertSceneDeleted: scene];
     }
 }
 
--(void)deleteScenesWithIDs: (NSArray *)sceneIDs andNames: (NSArray *)sceneNames
+-(void)alertSceneDeleted:(LSFSDKScene *)scene
 {
-    if ([sceneIDs containsObject: self.sceneModel.theID])
-    {
-        int index = [sceneIDs indexOfObject: self.sceneModel.theID];
+    [self dismissViewControllerAnimated: NO completion: nil];
 
-        [self dismissViewControllerAnimated: NO completion: nil];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Scene Not Found"
-                                                            message: [NSString stringWithFormat: @"The scene \"%@\" no longer exists.", [sceneNames objectAtIndex: index]]
-                                                           delegate: nil
-                                                  cancelButtonTitle: @"OK"
-                                                  otherButtonTitles: nil];
-            [alert show];
-        });
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Scene Not Found"
+                                                        message: [NSString stringWithFormat: @"The scene \"%@\" no longer exists.", [scene name]]
+                                                       delegate: nil
+                                              cancelButtonTitle: @"OK"
+                                              otherButtonTitles: nil];
+        [alert show];
+    });
 }
 
 /*
@@ -139,17 +114,15 @@
  */
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    id model = [self.dataArray objectAtIndex: [indexPath row]];
+    LSFSDKGroupMember *groupMember = [self.dataArray objectAtIndex: [indexPath row]];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"ModifyMembers" forIndexPath:indexPath];
 
-    if ([model isKindOfClass: [LSFGroupModel class]])
+    if ([groupMember isKindOfClass: [LSFSDKGroup class]])
     {
-        LSFGroupModel *groupModel = (LSFGroupModel *)model;
-
-        cell.textLabel.text = groupModel.name;
+        cell.textLabel.text = groupMember.name;
         cell.imageView.image = [UIImage imageNamed:@"groups_off_icon.png"];
 
-        if ([self.sceneElement.members.lampGroups containsObject: groupModel.theID])
+        if ([self.sceneElement.members.lampGroups containsObject: groupMember.theID])
         {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
             [self.selectedRows addObject: indexPath];
@@ -159,14 +132,12 @@
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
     }
-    if ([model isKindOfClass: [LSFLampModel class]])
+    if ([groupMember isKindOfClass: [LSFSDKLamp class]])
     {
-        LSFLampModel *lampModel = (LSFLampModel *)model;
-
-        cell.textLabel.text = lampModel.name;
+        cell.textLabel.text = groupMember.name;
         cell.imageView.image = [UIImage imageNamed:@"lamps_off_icon.png"];
 
-        if ([self.sceneElement.members.lamps containsObject: lampModel.theID])
+        if ([self.sceneElement.members.lamps containsObject: groupMember.theID])
         {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
             [self.selectedRows addObject: indexPath];
@@ -187,23 +158,23 @@
 {
     //NSLog(@"LSFScenesMembersTableViewController - processSelectedRows() executing");
 
-    LSFCapabilityData *capabilityData = [[LSFCapabilityData alloc] init];
+    LSFSDKCapabilityData *capabilityData = [[LSFSDKCapabilityData alloc] init];
     NSMutableArray *groupIDs = [[NSMutableArray alloc] init];
     NSMutableArray *lampIDs = [[NSMutableArray alloc] init];
 
     for (NSIndexPath *indexPath in self.selectedRows)
     {
-        id model = [self.dataArray objectAtIndex: indexPath.row];
+        LSFSDKGroupMember *groupMember = [self.dataArray objectAtIndex: indexPath.row];
 
-        if ([model isKindOfClass: [LSFGroupModel class]])
+        if ([groupMember isKindOfClass: [LSFSDKGroup class]])
         {
-            [groupIDs addObject: ((LSFModel *)model).theID];
-            [capabilityData includeData: ((LSFDataModel *)model).capability];
+            [groupIDs addObject: groupMember.theID];
+            [capabilityData includeData: groupMember.getCapabilities];
         }
-        else if ([model isKindOfClass: [LSFLampModel class]])
+        else if ([groupMember isKindOfClass: [LSFSDKLamp class]])
         {
-            [lampIDs addObject: ((LSFModel *)model).theID];
-            [capabilityData includeData: ((LSFDataModel *)model).capability];
+            [lampIDs addObject: groupMember.theID];
+            [capabilityData includeData: groupMember.getCapabilities];
         }
     }
 
@@ -264,14 +235,12 @@
     int colorTempGroupMin = -1;
     int colorTempGroupMax = -1;
 
-    NSMutableDictionary *lamps = [[LSFLampModelContainer getLampModelContainer] lampContainer];
-
     for (NSString *lampID in self.sceneElement.members.lamps)
     {
-        LSFLampModel *lampModel = [[lamps valueForKey: lampID] getLampDataModel];
+        LSFSDKLamp *lamp = [[LSFSDKLightingDirector getLightingDirector] getLampWithID: lampID];
 
-        int colorTempLampMin = lampModel.lampDetails.minTemperature;
-        int colorTempLampMax = lampModel.lampDetails.maxTemperature;
+        int colorTempLampMin = lamp.details.minTemperature;
+        int colorTempLampMax = lamp.details.maxTemperature;
 
         if ((colorTempGroupMin == -1) || (colorTempGroupMin > colorTempLampMin))
         {
@@ -284,18 +253,16 @@
         }
     }
 
-    NSMutableDictionary *groups = [[LSFGroupModelContainer getGroupModelContainer] groupContainer];
-
     for (NSString *groupID in self.sceneElement.members.lampGroups)
     {
-        LSFGroupModel *groupModel = [[groups valueForKey: groupID] getLampGroupDataModel];
+        LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: groupID];
 
-        for (NSString *lampID in groupModel.lamps)
+        for (NSString *lampID in [[group getLampGroupDataModel] lamps])
         {
-            LSFLampModel *lampModel = [[lamps valueForKey: lampID] getLampDataModel];
+            LSFSDKLamp *lamp = [[LSFSDKLightingDirector getLightingDirector] getLampWithID: lampID];
 
-            int colorTempLampMin = lampModel.lampDetails.minTemperature;
-            int colorTempLampMax = lampModel.lampDetails.maxTemperature;
+            int colorTempLampMin = lamp.details.minTemperature;
+            int colorTempLampMax = lamp.details.maxTemperature;
 
             if ((colorTempGroupMin == -1) || (colorTempGroupMin > colorTempLampMin))
             {
@@ -309,8 +276,8 @@
         }
     }
 
-    self.sceneElement.colorTempMin = colorTempGroupMin != -1 ? colorTempGroupMin : ([LSFConstants getConstants]).MIN_COLOR_TEMP;
-    self.sceneElement.colorTempMax = colorTempGroupMax != -1 ? colorTempGroupMax : ([LSFConstants getConstants]).MAX_COLOR_TEMP;
+    self.sceneElement.colorTempMin = colorTempGroupMin != -1 ? colorTempGroupMin : [[LSFSDKLightingDirector getLightingDirector] COLORTEMP_MIN];
+    self.sceneElement.colorTempMax = colorTempGroupMax != -1 ? colorTempGroupMax : [[LSFSDKLightingDirector getLightingDirector] COLORTEMP_MAX];
 }
 
 /*
@@ -323,6 +290,8 @@
         LSFNoEffectTableViewController *netvc = [segue destinationViewController];
         netvc.sceneModel = self.sceneModel;
         netvc.nedm = (LSFNoEffectDataModel *)self.sceneElement;
+        // unscale lamp state values as *EffectTableViewControllers are expecting them to not be scaled
+        netvc.nedm.state = [self unscaleLampState: netvc.nedm.state];
         netvc.shouldUpdateSceneAndDismiss = YES;
     }
     else if ([segue.identifier isEqualToString: @"ModifyTransition"])
@@ -330,6 +299,8 @@
         LSFTransitionEffectTableViewController *tetvc = [segue destinationViewController];
         tetvc.sceneModel = self.sceneModel;
         tetvc.tedm = (LSFTransitionEffectDataModel *)self.sceneElement;
+        // unscale lamp state values as *EffectTableViewControllers are expecting them to not be scaled
+        tetvc.tedm.state = [self unscaleLampState: tetvc.tedm.state];
         tetvc.shouldUpdateSceneAndDismiss = YES;
     }
     else if ([segue.identifier isEqualToString: @"ModifyPulse"])
@@ -337,8 +308,24 @@
         LSFPulseEffectTableViewController *petvc = [segue destinationViewController];
         petvc.sceneModel = self.sceneModel;
         petvc.pedm = (LSFPulseEffectDataModel *)self.sceneElement;
+        // unscale lamp state values as *EffectTableViewControllers are expecting them to not be scaled
+        petvc.pedm.state = [self unscaleLampState: petvc.pedm.state];
+        petvc.pedm.endState = [self unscaleLampState: petvc.pedm.endState];
         petvc.shouldUpdateSceneAndDismiss = YES;
     }
+}
+
+-(LSFLampState *)unscaleLampState: (LSFLampState *)state
+{
+    LSFConstants *constants = [LSFConstants getConstants];
+
+    unsigned int brightness = [constants unscaleLampStateValue: state.brightness withMax: 100];
+    unsigned int hue = [constants unscaleLampStateValue: state.hue withMax: 360];
+    unsigned int saturation = [constants unscaleLampStateValue: state.saturation withMax: 100];
+    unsigned int colorTemp = [constants unscaleColorTemp: state.colorTemp];
+
+    LSFLampState *unscaledState = [[LSFLampState alloc] initWithOnOff: state.onOff brightness: brightness hue: hue saturation: saturation colorTemp: colorTemp];
+    return unscaledState;
 }
 
 @end

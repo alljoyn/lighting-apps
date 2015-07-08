@@ -16,8 +16,8 @@
 
 #import "LSFModel.h"
 #import "LSFLampStateUniformity.h"
-#import "LSFLampState.h"
 #import "LSFCapabilityData.h"
+#import <internal/LSFLampState.h>
 
 /**
  * @warning *Note:* This class is not intended to be used by clients, and its interface may change
@@ -33,5 +33,8 @@
 @property (nonatomic, strong) LSFLampStateUniformity *uniformity;
 
 -(id)initWithID: (NSString *)theID andName: (NSString *)name;
+-(BOOL)isStateEqualToModelState: (LSFDataModel *)other;
+-(BOOL)isStateEqualToLampState: (LSFLampState *)otherState;
+-(BOOL)isStateEqualToPowerOn: (BOOL)onOff hue: (unsigned int)hue saturation:(unsigned int)saturation brightness:(unsigned int)brightness colorTemp:(unsigned int)colorTemp;
 
 @end

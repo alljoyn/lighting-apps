@@ -14,7 +14,7 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFSceneElementManagerCallbackDelegate.h"
+#import <internal/LSFSceneElementManagerCallbackDelegate.h>
 
 @class LSFSDKLightingSystemManager;
 

@@ -17,18 +17,33 @@
 #import <Foundation/Foundation.h>
 #import "LSFSDKColorItem.h"
 #import "LSFSDKEffect.h"
-#import "LSFPulseEffectDataModelV2.h"
 #import "LSFSDKLampState.h"
+#import "LSFSDKPreset.h"
+#import "model/LSFPulseEffectDataModelV2.h"
 
 @interface LSFSDKPulseEffect : LSFSDKColorItem <LSFSDKEffect>
 {
     @protected LSFPulseEffectDataModelV2 *pulseEffectDataModel;
 }
 
+@property (nonatomic) BOOL isStartWithCurrent;
+@property (nonatomic, strong) LSFSDKMyLampState * startState;
+@property (nonatomic, strong) LSFSDKMyLampState * endState;
+@property (nonatomic, strong) LSFSDKPreset * startPreset;
+@property (nonatomic, strong) LSFSDKPreset * endPreset;
+@property (nonatomic, strong) NSString * startPresetID;
+@property (nonatomic, strong) NSString * endPresetID;
+@property (nonatomic) unsigned int period;
+@property (nonatomic) unsigned int duration;
+@property (nonatomic) unsigned int count;
+
 -(id)initWithPulseEffectID: (NSString *)pulseEffectID;
 -(id)initWithPulseEffectID: (NSString *)pulseEffectID pulseEffectName: (NSString *)pulseEffectName;
 -(void)modifyFromState: (id<LSFSDKLampState>)fromState toState: (id<LSFSDKLampState>)toState period: (unsigned int)period duration: (unsigned int)duration count: (unsigned int)count;
--(void)deletePulseEffect;
+-(void)deleteItem;
+-(BOOL)hasPreset: (LSFSDKPreset *)preset;
+-(BOOL)hasPresetWithID: (NSString *)presetID;
+
 
 /**
  * <b>WARNING: This method is not intended to be used by clients, and may change or be

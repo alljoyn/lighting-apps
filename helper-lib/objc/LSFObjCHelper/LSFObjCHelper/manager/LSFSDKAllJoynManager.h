@@ -14,29 +14,28 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFSDKHelperControllerClientCallback.h"
-#import "LSFSDKHelperControllerServiceManagerCallback.h"
-#import "LSFSDKHelperGroupManagerCallback.h"
-#import "LSFSDKHelperLampManagerCallback.h"
-#import "LSFSDKHelperPresetManagerCallback.h"
-#import "LSFSDKHelperTransitionEffectManagerCallback.h"
-#import "LSFSDKHelperPulseEffectManagerCallback.h"
-#import "LSFSDKHelperSceneElementManagerCallback.h"
-#import "LSFSDKHelperSceneManagerCallback.h"
-#import "LSFSDKHelperMasterSceneManagerCallback.h"
-#import "BusAttachment.h"
-#import "LSFLampAnnouncementData.h"
-#import "LSFControllerClient.h"
-#import "LSFControllerServiceManager.h"
-#import "LSFLampManager.h"
-#import "LSFPresetManager.h"
-#import "BusAttachment.h"
-#import "LSFLampGroupManager.h"
-#import "LSFSceneElementManager.h"
-#import "LSFSceneManager.h"
-#import "LSFMasterSceneManager.h"
-#import "LSFTransitionEffectManager.h"
-#import "LSFPulseEffectManager.h"
+#import "../callback/LSFSDKHelperControllerClientCallback.h"
+#import "../callback/LSFSDKHelperControllerServiceManagerCallback.h"
+#import "../callback/LSFSDKHelperGroupManagerCallback.h"
+#import "../callback/LSFSDKHelperLampManagerCallback.h"
+#import "../callback/LSFSDKHelperPresetManagerCallback.h"
+#import "../callback/LSFSDKHelperTransitionEffectManagerCallback.h"
+#import "../callback/LSFSDKHelperPulseEffectManagerCallback.h"
+#import "../callback/LSFSDKHelperSceneElementManagerCallback.h"
+#import "../callback/LSFSDKHelperSceneManagerCallback.h"
+#import "../callback/LSFSDKHelperMasterSceneManagerCallback.h"
+#import "../model/LSFLampAnnouncementData.h"
+#import <alljoyn/BusAttachment.h>
+#import <internal/LSFControllerClient.h>
+#import <internal/LSFControllerServiceManager.h>
+#import <internal/LSFLampManager.h>
+#import <internal/LSFPresetManager.h>
+#import <internal/LSFLampGroupManager.h>
+#import <internal/LSFSceneElementManager.h>
+#import <internal/LSFSceneManager.h>
+#import <internal/LSFMasterSceneManager.h>
+#import <internal/LSFTransitionEffectManager.h>
+#import <internal/LSFPulseEffectManager.h>
 
 @interface LSFSDKAllJoynManager : NSObject
 

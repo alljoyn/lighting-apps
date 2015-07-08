@@ -15,10 +15,10 @@
  ******************************************************************************/
 
 #import "LSFSDKMutableColorItem.h"
-#import "LSFPresetModel.h"
 #import "LSFSDKEffect.h"
 #import "LSFSDKPower.h"
 #import "LSFSDKColor.h"
+#import "model/LSFPresetModel.h"
 
 @interface LSFSDKPreset : LSFSDKMutableColorItem <LSFSDKEffect>
 {
@@ -28,7 +28,9 @@
 -(id)initWithPresetID: (NSString *)presetID;
 -(id)initWithPresetID: (NSString *)presetID andName: (NSString *)presetName;
 -(void)modifyWithPower: (Power)power color: (LSFSDKColor *)color;
--(void)deletePreset;
+-(BOOL)stateEquals: (LSFSDKPreset *)preset;
+-(BOOL)stateEqualsMyLampState: (LSFSDKMyLampState *)state;
+-(BOOL)stateEqualsPower: (Power)power andColor: (LSFSDKColor *)color;
 
 /**
  * <b>WARNING: This method is not intended to be used by clients, and may change or be

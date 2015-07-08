@@ -14,7 +14,7 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFLampGroupManager.h"
+#import <internal/LSFLampGroupManager.h>
 #import "LSFSDKHelperGroupManagerCallback.h"
 
 @interface LSFSDKSampleGroupManager : LSFLampGroupManager

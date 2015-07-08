@@ -41,5 +41,6 @@ extern const unsigned int PULSE_EFFECT_DEFAULT_COUNT;
 -(id)init;
 -(id)initWithPulseEffectID: (NSString *)pulseEffectID;
 -(id)initWithPulseEffectID: (NSString *)pulseEffectID andPulseEffectName: (NSString *)pulseEffectName;
+-(BOOL)containsPreset: (NSString *) presetID;
 
 @end

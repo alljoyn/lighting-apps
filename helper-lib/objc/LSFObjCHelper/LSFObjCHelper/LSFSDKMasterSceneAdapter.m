@@ -18,7 +18,7 @@
 
 @implementation LSFSDKMasterSceneAdapter
 
--(void)onMasterSceneInitializedWithTrackingID: (LSFTrackingID *)trackingID andMasterScene: (LSFSDKMasterScene *)masterScene
+-(void)onMasterSceneInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andMasterScene: (LSFSDKMasterScene *)masterScene
 {
     //Intentionally left blank
 }

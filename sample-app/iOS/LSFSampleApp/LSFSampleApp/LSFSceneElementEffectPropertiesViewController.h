@@ -15,9 +15,9 @@
  ******************************************************************************/
 
 #import <UIKit/UIKit.h>
-#import "LSFTransitionEffectDataModel.h"
-#import "LSFPulseEffectDataModel.h"
 #import "LSFEffectTableViewController.h"
+#import <model/LSFTransitionEffectDataModel.h>
+#import <model/LSFPulseEffectDataModel.h>
 
 @interface LSFSceneElementEffectPropertiesViewController : UIViewController
 
@@ -26,8 +26,6 @@
 @property (nonatomic, strong) LSFTransitionEffectDataModel *tedm;
 @property (nonatomic, strong) LSFPulseEffectDataModel *pedm;
 @property (nonatomic, weak) IBOutlet UITextField *durationTextField;
-@property (nonatomic, strong) LSFLampState *lampState;
-@property (nonatomic, strong) LSFLampState *endLampState;
 @property (nonatomic) LSFEffectTableViewController* effectSender;
 
 -(IBAction)doneButtonPressed: (id)sender;

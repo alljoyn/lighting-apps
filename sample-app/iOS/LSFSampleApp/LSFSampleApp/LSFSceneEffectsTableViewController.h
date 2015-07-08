@@ -15,8 +15,8 @@
  ******************************************************************************/
 
 #import <UIKit/UIKit.h>
-#import "LSFSceneDataModel.h"
-#import "LSFSceneElementDataModel.h"
+#import <model/LSFSceneDataModel.h>
+#import <model/LSFSceneElementDataModel.h>
 
 @interface LSFSceneEffectsTableViewController : UITableViewController
 

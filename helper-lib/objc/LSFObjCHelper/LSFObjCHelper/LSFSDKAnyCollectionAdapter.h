@@ -20,7 +20,7 @@
 
 @interface LSFSDKAnyCollectionAdapter : LSFSDKAllCollectionAdapter
 
--(void)onAnyInitializedWithTrackingID: (LSFTrackingID *)trackingID andLightingItem: (id)item;
+-(void)onAnyInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andLightingItem: (id)item;
 -(void)onAnyChanged: (id)item;
 -(void)onAnyRemoved: (id)item;
 -(void)onAnyError: (LSFSDKLightingItemErrorEvent *)error;

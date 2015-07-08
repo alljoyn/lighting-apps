@@ -48,7 +48,7 @@
 -(void)getControllerServiceVersionReply: (unsigned int)version
 {
     dispatch_async(self.manager.dispatchQueue, ^{
-        [[LSFControllerModel getControllerModel] setControllerVersion: version];
+        [[[[self.manager controllerManager] getLeader] getControllerDataModel] setControllerVersion: version];
         [self postSendControllerChanged];
     });
 }

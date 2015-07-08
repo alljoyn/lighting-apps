@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import "LSFModel.h"
-#import "LSFMasterScene.h"
+#import <internal/LSFMasterScene.h>
 
 extern const NSString *MASTER_SCENE_DEFAULT_NAME;
 

@@ -15,9 +15,9 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFModel.h"
 #import "LSFSDKLightingItemProtocol.h"
-#import "ControllerClientDefs.h"
+#import "LSFSDKControllerClientDefs.h"
+#import "model/LSFModel.h"
 
 using namespace lsf;
 
@@ -30,6 +30,9 @@ using namespace lsf;
 @interface LSFSDKLightingItem : NSObject <LSFSDKLightingItemProtocol>
 
 -(BOOL)isInitialized;
+-(BOOL)hasComponent: (LSFSDKLightingItem *) item;
+-(NSArray *)getDependentCollection;
+-(NSArray *)getComponentCollection;
 -(BOOL)postInvalidArgIfNull: (NSString *)name object: (id)object;
 -(BOOL)postErrorIfFailure: (NSString *)name status: (ControllerClientStatus)status;
 -(void)rename: (NSString *)name;

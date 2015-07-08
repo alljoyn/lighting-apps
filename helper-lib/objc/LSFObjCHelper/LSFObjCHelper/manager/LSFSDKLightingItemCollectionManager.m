@@ -42,7 +42,7 @@
 
 -(unsigned int)size
 {
-    return [itemAdapters count];
+    return (unsigned int)[itemAdapters count];
 }
 
 -(id)getAdapterForID: (NSString *)itemID
@@ -84,17 +84,24 @@
 
 -(NSArray *)getAdaptersWithFilter: (id<LSFSDKLightingItemFilter>)filter
 {
-    NSMutableArray *filteredArray = [[NSMutableArray alloc] init];
-
-    for (id item in [itemAdapters allValues])
+    if (filter != nil)
     {
-        if ([filter passes: item])
-        {
-            [filteredArray addObject: item];
-        }
-    }
+        NSMutableArray *filteredArray = [[NSMutableArray alloc] init];
 
-    return [NSArray arrayWithArray: filteredArray];
+        for (id item in [itemAdapters allValues])
+        {
+            if ([filter passes: item])
+            {
+                [filteredArray addObject: item];
+            }
+        }
+
+        return [NSArray arrayWithArray: filteredArray];
+    }
+    else
+    {
+        return [self getAdapters];
+    }
 }
 
 /*
@@ -118,7 +125,7 @@
     [self sendInitializedEvent: itemID withTrackingID: nil];
 }
 
--(void)sendInitializedEvent: (NSString *)itemID withTrackingID: (LSFTrackingID *)trackingID
+-(void)sendInitializedEvent: (NSString *)itemID withTrackingID: (LSFSDKTrackingID *)trackingID
 {
     for (id<LSFSDKLightingDelegate> delegate in delegates)
     {
@@ -152,7 +159,7 @@
     [self sendErrorEvent: [[LSFSDKLightingItemErrorEvent alloc] initWithName: errorName responseCode: responseCode itemID: itemID andTrackingID: nil]];
 }
 
--(void)sendErrorEvent: (NSString *)errorName statusCode: (lsf::LSFResponseCode)responseCode itemID: (NSString *)itemID withTrackingID: (LSFTrackingID *)trackingID
+-(void)sendErrorEvent: (NSString *)errorName statusCode: (lsf::LSFResponseCode)responseCode itemID: (NSString *)itemID withTrackingID: (LSFSDKTrackingID *)trackingID
 {
     [self sendErrorEvent: [[LSFSDKLightingItemErrorEvent alloc] initWithName: errorName responseCode: responseCode itemID: itemID andTrackingID: trackingID]];
 }
@@ -165,7 +172,7 @@
     }
 }
 
--(void)sendInitializedEvent: (id<LSFSDKLightingDelegate>)delegate item: (id)item trackingID: (LSFTrackingID *)trackingID
+-(void)sendInitializedEvent: (id<LSFSDKLightingDelegate>)delegate item: (id)item trackingID: (LSFSDKTrackingID *)trackingID
 {
     @throw [NSException exceptionWithName: NSInternalInconsistencyException reason: [NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)] userInfo: nil];
 }

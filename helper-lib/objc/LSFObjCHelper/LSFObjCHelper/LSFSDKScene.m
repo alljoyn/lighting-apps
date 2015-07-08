@@ -15,7 +15,9 @@
  ******************************************************************************/
 
 #import "LSFSDKScene.h"
-#import "LSFSDKAllJoynManager.h"
+#import "LSFSDKLightingDirector.h"
+#import "LSFSDKLightingItemHasComponentFilter.h"
+#import "manager/LSFSDKAllJoynManager.h"
 
 @implementation LSFSDKScene
 
@@ -26,7 +28,7 @@
     [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getSceneManager] applySceneWithID: [self theID]]];
 }
 
--(void)deleteScene
+-(void)deleteItem
 {
     NSString *errorContext = @"LSFSDKScene delete: error";
 
@@ -44,6 +46,16 @@
     {
         [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getSceneManager] setSceneNameWithID: [self theID] andSceneName: name]];
     }
+}
+
+-(NSArray *) getDependentCollection
+{
+    LSFSDKLightingDirector *director = [LSFSDKLightingDirector getLightingDirector];
+
+    NSMutableArray *dependents = [[NSMutableArray alloc] init];
+    [dependents addObjectsFromArray: [[[director lightingManager] masterSceneCollectionManager] getMasterScenesCollectionWithFilter: [[LSFSDKLightingItemHasComponentFilter alloc] initWithComponent: self]]];
+
+    return [NSArray arrayWithArray: dependents];
 }
 
 @end

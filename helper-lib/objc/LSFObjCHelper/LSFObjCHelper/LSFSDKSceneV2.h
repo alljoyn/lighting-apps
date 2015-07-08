@@ -16,7 +16,7 @@
 
 #import "LSFSDKScene.h"
 #import "LSFSDKSceneElement.h"
-#import "LSFSceneDataModelV2.h"
+#import "model/LSFSceneDataModelV2.h"
 
 @interface LSFSDKSceneV2 : LSFSDKScene
 {
@@ -28,6 +28,10 @@
 -(void)modify: (NSArray *)sceneElements;
 -(void)add: (LSFSDKSceneElement *)sceneElement;
 -(void)remove: (LSFSDKSceneElement *)sceneElement;
+-(BOOL)hasSceneElement: (LSFSDKSceneElement *)sceneElement;
+-(BOOL)hasSceneElementWithID: (NSString *)sceneElementID;
+-(NSArray *)getSceneElementIDs;
+-(NSArray *)getSceneElements;
 
 /*
  * Note: This method is not intended to be used by clients, and may change or be

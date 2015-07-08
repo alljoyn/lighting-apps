@@ -17,27 +17,20 @@
 #import "LSFMasterScenesInfoTableViewController.h"
 #import "LSFMasterSceneMembersTableViewController.h"
 #import "LSFMasterScenesChangeNameViewController.h"
-#import "LSFSDKMasterScene.h"
-#import "LSFMasterSceneModelContainer.h"
-#import "LSFDispatchQueue.h"
-#import "LSFAllJoynManager.h"
-#import "LSFEnums.h"
+#import <LSFSDKLightingDirector.h>
 
 @interface LSFMasterScenesInfoTableViewController ()
 
-@property (nonatomic, strong) LSFMasterSceneDataModel *masterSceneModel;
-
--(void)controllerNotificationReceived: (NSNotification *)notification;
--(void)masterSceneNotificationReceived: (NSNotification *)notification;
--(void)reloadMasterSceneWithID: (NSString *)masterSceneID;
--(void)deleteMasterScenesWithIDs: (NSArray *)masterSceneIDs andNames: (NSArray *)masterSceneNames;
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification;
+-(void)masterSceneChangedNotificationReceived: (NSNotification *)notification;
+-(void)masterSceneRemovedNotificationReceived: (NSNotification *)notification;
+-(void)alertMasterSceneDeleted: (LSFSDKMasterScene *)masterScene;
 
 @end
 
 @implementation LSFMasterScenesInfoTableViewController
 
 @synthesize masterSceneID = _masterSceneID;
-@synthesize masterSceneModel = _masterSceneModel;
 
 -(void)viewDidLoad
 {
@@ -48,18 +41,17 @@
 {
     [super viewWillAppear: animated];
 
-    LSFAllJoynManager *ajManager = [LSFAllJoynManager getAllJoynManager];
-
-    if (!ajManager.isConnectedToController)
+    if (![[[LSFSDKLightingDirector getLightingDirector] leadController] connected])
     {
         [self.navigationController popToRootViewControllerAnimated: NO];
     }
 
     //Set master scenes notification handler
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(controllerNotificationReceived:) name: @"ControllerNotification" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(masterSceneNotificationReceived:) name: @"MasterSceneNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(masterSceneChangedNotificationReceived:) name: @"LSFMasterSceneChangedNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(masterSceneRemovedNotificationReceived:) name: @"LSFMasterSceneRemovedNotification" object: nil];
 
-    [self reloadMasterSceneWithID: self.masterSceneID];
+    [self.tableView reloadData];
 }
 
 -(void)viewWillDisappear: (BOOL)animated
@@ -76,76 +68,49 @@
 }
 
 /*
- * ControllerNotification Handler
+ * Notification Handlers
  */
--(void)controllerNotificationReceived: (NSNotification *)notification
+-(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *controllerStatus = [userInfo valueForKey: @"status"];
-
-    if (controllerStatus.intValue == Disconnected)
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    if (![leaderModel connected])
     {
-        [self.navigationController popToRootViewControllerAnimated: YES];
+        [self dismissViewControllerAnimated: YES completion: nil];
     }
 }
 
-/*
- * MasterSceneNotification Handler
- */
--(void)masterSceneNotificationReceived: (NSNotification *)notification
+-(void)masterSceneChangedNotificationReceived:(NSNotification *)notification
 {
-    NSString *masterSceneID = [notification.userInfo valueForKey: @"masterSceneID"];
-    NSNumber *callbackOp = [notification.userInfo valueForKey: @"operation"];
-    NSArray *masterSceneIDs = [notification.userInfo valueForKey: @"masterSceneIDs"];
-    NSArray *masterSceneNames = [notification.userInfo valueForKey: @"masterSceneNames"];
+    LSFSDKMasterScene *masterScene = [notification.userInfo valueForKey: @"masterScene"];
 
-    if ([self.masterSceneID isEqualToString: masterSceneID] || [masterSceneIDs containsObject: self.masterSceneID])
-    {
-        switch (callbackOp.intValue)
-        {
-            case SceneNameUpdated:
-                [self reloadMasterSceneWithID: masterSceneID];
-                break;
-            case SceneDeleted:
-                [self deleteMasterScenesWithIDs: masterSceneIDs andNames: masterSceneNames];
-                break;
-            default:
-                break;
-        }
-    }
-}
-
--(void)reloadMasterSceneWithID: (NSString *)masterSceneID
-{
-    self.masterSceneModel = [[[[LSFMasterSceneModelContainer getMasterSceneModelContainer] masterScenesContainer] valueForKey: self.masterSceneID] getMasterSceneDataModel];
-
-    if (self.masterSceneModel == nil)
-    {
-        [self.navigationController popToRootViewControllerAnimated: YES];
-    }
-    else
+    if ([self.masterSceneID isEqualToString: [masterScene theID]])
     {
         [self.tableView reloadData];
     }
 }
 
--(void)deleteMasterScenesWithIDs: (NSArray *)masterSceneIDs andNames: (NSArray *)masterSceneNames
+-(void)masterSceneRemovedNotificationReceived:(NSNotification *)notification
 {
-    if ([masterSceneIDs containsObject: self.masterSceneID])
+    LSFSDKMasterScene *masterScene = [notification.userInfo valueForKey: @"masterScene"];
+
+    if ([self.masterSceneID isEqualToString: [masterScene theID]])
     {
-        int index = [masterSceneIDs indexOfObject: self.masterSceneID];
-
-        [self.navigationController popToRootViewControllerAnimated: YES];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Master Scene Not Found"
-                                                            message: [NSString stringWithFormat: @"The master scene \"%@\" no longer exists.", [masterSceneNames objectAtIndex: index]]
-                                                           delegate: nil
-                                                  cancelButtonTitle: @"OK"
-                                                  otherButtonTitles: nil];
-            [alert show];
-        });
+        [self alertMasterSceneDeleted: masterScene];
     }
+}
+
+-(void)alertMasterSceneDeleted: (LSFSDKMasterScene *)masterScene
+{
+    [self.navigationController popToRootViewControllerAnimated: YES];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Master Scene Not Found"
+                                                        message: [NSString stringWithFormat: @"The master scene \"%@\" no longer exists.", [masterScene name]]
+                                                       delegate: nil
+                                              cancelButtonTitle: @"OK"
+                                              otherButtonTitles: nil];
+        [alert show];
+    });
 }
 
 /*
@@ -163,11 +128,12 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    LSFSDKMasterScene *masterScene = [[LSFSDKLightingDirector getLightingDirector] getMasterSceneWithID: self.masterSceneID];
     if (indexPath.section == 0)
     {
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleValue1 reuseIdentifier: nil];
         cell.textLabel.text = @"Master Scene Name";
-        cell.detailTextLabel.text = self.masterSceneModel.name;
+        cell.detailTextLabel.text = [masterScene name];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         return cell;
     }
@@ -201,7 +167,12 @@
     {
         UINavigationController *nc = (UINavigationController *)[segue destinationViewController];
         LSFMasterSceneMembersTableViewController *msmtvc = (LSFMasterSceneMembersTableViewController *)nc.topViewController;
-        msmtvc.masterSceneModel = self.masterSceneModel;
+
+        LSFPendingScene *pendingMasterScene = [[LSFPendingScene alloc] init];
+        pendingMasterScene.theID = self.masterSceneID;
+        pendingMasterScene.memberIDs = [[[[LSFSDKLightingDirector getLightingDirector] getMasterSceneWithID: self.masterSceneID] getScenes] valueForKeyPath: @"theID"];
+        msmtvc.pendingMasterScene = pendingMasterScene;
+
         msmtvc.usesCancel = YES;
     }
     else if ([segue.identifier isEqualToString: @"ChangeMasterSceneName"])

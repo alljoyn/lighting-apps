@@ -15,12 +15,12 @@
  ******************************************************************************/
 
 #import <UIKit/UIKit.h>
-#import "LSFLampState.h"
+#import <LSFSDKMyLampState.h>
 
 @interface LSFScenesCreatePresetViewController : UIViewController <UITextFieldDelegate, UINavigationBarDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSString *sceneID;
-@property (nonatomic, strong) LSFLampState *lampState;
+@property (nonatomic, strong) LSFSDKMyLampState *lampState;
 @property (nonatomic, weak) IBOutlet UITextField *presetNameTextField;
 
 @end

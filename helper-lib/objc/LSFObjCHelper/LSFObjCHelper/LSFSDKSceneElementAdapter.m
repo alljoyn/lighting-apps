@@ -18,7 +18,7 @@
 
 @implementation LSFSDKSceneElementAdapter
 
--(void)onSceneElementInitializedWithTrackingID: (LSFTrackingID *)trackingID andSceneElement: (LSFSDKSceneElement *)sceneElement
+-(void)onSceneElementInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andSceneElement: (LSFSDKSceneElement *)sceneElement
 {
     //Intentionally left blank
 }

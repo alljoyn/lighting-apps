@@ -17,11 +17,16 @@
 #import "LSFSDKTransitionEffect.h"
 #import "LSFSDKLamp.h"
 #import "LSFSDKGroup.h"
-#import "LSFSDKAllJoynManager.h"
 #import "LSFSDKLightingItemUtil.h"
 #import "LSFSDKLightingDirector.h"
+#import "manager/LSFSDKAllJoynManager.h"
+#import "model/LSFSDKLightingItemHasComponentFilter.h"
 
 @implementation LSFSDKTransitionEffect
+
+@synthesize preset = _preset;
+@synthesize presetID = _presetID;
+@synthesize duration = _duration;
 
 -(id)initWithTransitionEffectID: (NSString *)transitionEffectID
 {
@@ -57,11 +62,22 @@
     }
 }
 
--(void)deleteTransitionEffect
+-(void)deleteItem
 {
     NSString *errorContext = @"LSFSDKTransitionEffect deleteTransitionEffect: error";
 
     [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getTransitionEffectManager] deleteTransitionEffectWithID: transitionEffectDataModel.theID]];
+}
+
+-(BOOL)hasPreset: (LSFSDKPreset *)preset
+{
+    NSString *errorContext = @"LSFSDKTransitionEffect hasPreset: error";
+    return ([self postInvalidArgIfNull: errorContext object: preset]) ? [self hasPresetWithID: preset.theID] : NO;
+}
+
+-(BOOL)hasPresetWithID:(NSString *)presetID
+{
+    return [transitionEffectDataModel containsPreset: presetID];
 }
 
 /*
@@ -90,6 +106,22 @@
     }
 }
 
+-(BOOL)hasComponent:(LSFSDKLightingItem *)item
+{
+    NSString *errorContext = @"LSFSDKTransitionEffect hasComponent: error";
+    return ([self postInvalidArgIfNull: errorContext object: item]) ? [self hasPresetWithID: item.theID] : NO;
+}
+
+-(NSArray *)getDependentCollection
+{
+    NSMutableArray *dependents = [[NSMutableArray alloc] init];
+
+    LSFSDKLightingDirector *director = [LSFSDKLightingDirector getLightingDirector];
+    [dependents addObjectsFromArray: [[[director lightingManager] sceneElementCollectionManager] getSceneElementsCollectionWithFilter:[[LSFSDKLightingItemHasComponentFilter alloc] initWithComponent: self]]];
+
+    return [NSArray arrayWithArray: dependents];
+}
+
 -(LSFDataModel *)getColorDataModel
 {
     return [self getTransitionEffectDataModel];
@@ -109,6 +141,21 @@
 -(LSFTransitionEffectDataModelV2 *)getTransitionEffectDataModel
 {
     return transitionEffectDataModel;
+}
+
+-(NSString *)presetID
+{
+    return transitionEffectDataModel.presetID;
+}
+
+-(LSFSDKPreset *)preset
+{
+    return [[LSFSDKLightingDirector getLightingDirector] getPresetWithID: self.presetID];
+}
+
+-(unsigned int)duration
+{
+    return transitionEffectDataModel.duration;
 }
 
 @end

@@ -16,7 +16,7 @@
 
 #import "LSFDataModel.h"
 #import "LSFEffectType.h"
-#import "LSFLampGroup.h"
+#import <internal/LSFLampGroup.h>
 
 /**
  * @warning *Note:* This class is not intended to be used by clients, and its interface may change
@@ -30,5 +30,7 @@
 @property (nonatomic) unsigned int colorTempMax;
 
 -(id)initWithEffectType: (EffectType)type andName: (NSString *)name;
+-(BOOL)containsPreset: (NSString *)presetID;
+-(BOOL)containsGroup: (NSString *)groupID;
 
 @end

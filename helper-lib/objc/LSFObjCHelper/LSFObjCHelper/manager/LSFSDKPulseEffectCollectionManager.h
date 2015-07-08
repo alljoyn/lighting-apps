@@ -28,6 +28,7 @@
 -(LSFSDKPulseEffect *)getPulseEffectWithID: (NSString *)pulseEffectID;
 -(NSArray *)getPulseEffects;
 -(NSArray *)getPulseEffectsWithFilter: (id<LSFSDKLightingItemFilter>)filter;
+-(NSArray *)getPulseEffectsCollectionWithFilter: (id<LSFSDKLightingItemFilter>)filter;
 -(NSArray *)removeAllPulseEffects;
 -(LSFSDKPulseEffect *)removePulseEffectWithID: (NSString *)pulseEffectID;
 -(LSFPulseEffectDataModelV2 *)getModelWithID: (NSString *)pulseEffectID;

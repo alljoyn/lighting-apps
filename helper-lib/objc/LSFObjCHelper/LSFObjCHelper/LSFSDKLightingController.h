@@ -16,7 +16,7 @@
 
 #import "LSFSDKLightingControllerConfiguration.h"
 #import "LSFSDKLightingControllerStatus.h"
-#import "LSFSDKBasicControllerService.h"
+#import "model/LSFSDKBasicControllerService.h"
 
 @interface LSFSDKLightingController : NSObject
 {

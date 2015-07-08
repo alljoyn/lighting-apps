@@ -18,12 +18,14 @@
 #import "LSFSDKLampState.h"
 #import "LSFSDKPower.h"
 #import "LSFSDKColor.h"
+#import <internal/LSFLampState.h>
 
 @interface LSFSDKMyLampState : NSObject <LSFSDKLampState>
 
-@property (nonatomic, readonly) Power power;
-@property (nonatomic, readonly, strong) LSFSDKColor *color;
+@property (nonatomic) Power power;
+@property (nonatomic, strong) LSFSDKColor *color;
 
+-(id)initWithLSFLampState: (LSFLampState *)state;
 -(id)initWithPower: (Power)power hue: (unsigned int)hue saturation: (unsigned int)sat brightness: (unsigned int)brightness colorTemp: (unsigned int)colorTemp;
 -(id)initWithPower: (Power)power color: (LSFSDKColor *)colorState;
 
