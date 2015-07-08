@@ -114,6 +114,7 @@
     <string name="group_info_label_members">Lamps in this group:</string>
     <string name="member_group_not_found">[Group Not Found: %1$s]</string>
     <string name="member_lamp_not_found">[Lamp Not Found: %1$s]</string>
+    <string name="member_effect_not_found">[Effect Not Found: %1$s]</string>
     <string name="member_scene_not_found">[Scene Not Found: %1$s]</string>
     <string name="member_scene_element_not_found">[Scene Element Not Found: %1$s]</string>
     <string name="group_info_members_none">No group members</string>

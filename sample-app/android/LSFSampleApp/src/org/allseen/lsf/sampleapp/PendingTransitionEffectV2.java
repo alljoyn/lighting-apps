@@ -34,7 +34,8 @@ public class PendingTransitionEffectV2 extends PendingLightingItem {
     public PendingTransitionEffectV2(TransitionEffect transitionEffect) {
         init(transitionEffect);
 
-        state = transitionEffect != null ? transitionEffect.getState() : new MyLampState(Power.ON, Color.DEFAULT);
+        // Note the state must have its own instance of a Color object
+        state = transitionEffect != null ? transitionEffect.getState() : new MyLampState(Power.ON, new Color(Color.DEFAULT));
         presetID = transitionEffect != null ? transitionEffect.getPresetID() : "";
 
         EnterDurationFragment.duration = transitionEffect != null ? transitionEffect.getDuration() : 500;

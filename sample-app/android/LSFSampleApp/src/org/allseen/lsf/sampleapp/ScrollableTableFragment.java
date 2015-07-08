@@ -76,6 +76,7 @@ public class ScrollableTableFragment extends PageFrameChildFragment {
         final SampleAppActivity activity = (SampleAppActivity)getActivity();
         final TableRow row = (TableRow) table.findViewWithTag(id);
         if (row != null) {
+            //TODO-CHK: why run on UI thread here? Everything should already be on the UI thread...
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

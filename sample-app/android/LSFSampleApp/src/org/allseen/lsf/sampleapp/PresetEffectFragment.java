@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class PresetEffectFragment extends EffectV2InfoFragment {
@@ -36,9 +37,11 @@ public class PresetEffectFragment extends EffectV2InfoFragment {
         setImageButtonBackgroundResource(statusView, R.id.statusButtonPower, R.drawable.list_constant_icon);
 
         ((TextView)statusView.findViewById(R.id.statusLabelName)).setText(R.string.label_effect_name);
+        ((Button)stateView.findViewById(R.id.stateButton)).setVisibility(View.GONE);
+
+        initLampState();
 
         updateInfoFields(pendingPresetEffect.name, new MyLampState(pendingPresetEffect.state), LampCapabilities.allCapabilities, pendingPresetEffect.uniformity);
-        initLampState();
 
         return view;
     }

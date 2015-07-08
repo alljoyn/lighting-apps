@@ -43,6 +43,10 @@ public abstract class DimmableItemTableFragment
     }
 
     public void addItem(ColorItem item) {
+        addItem(item, 0);
+    }
+
+    public void addItem(ColorItem item, int infoBG) {
         if (item != null) {
             insertDimmableItemRow(
                 getActivity(),
@@ -53,7 +57,7 @@ public abstract class DimmableItemTableFragment
                 item.getName(),
                 item.getColor().getBrightness(),
                 item.getUniformity().brightness,
-                0,
+                infoBG,
                 item.getCapability().dimmable >= LampCapabilities.SOME);
             updateLoading();
         }

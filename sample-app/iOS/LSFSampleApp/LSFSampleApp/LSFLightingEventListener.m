@@ -48,7 +48,7 @@
 
 -(void)onLampError: (LSFSDKLightingItemErrorEvent *)error
 {
-    NSLog(@"%s Error: %@", __FUNCTION__, [error description]);
+    NSLog(@"%s Error: %@", __FUNCTION__, [error name]);
 }
 
 -(void)onGroupInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andGroup: (LSFSDKGroup *)group
@@ -79,7 +79,7 @@
 
 -(void)onGroupError: (LSFSDKLightingItemErrorEvent *)error
 {
-    NSLog(@"%s Error: %@", __FUNCTION__, [error description]);
+    NSLog(@"%s Error: %@", __FUNCTION__, [error name]);
 }
 
 -(void)onPresetInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andPreset: (LSFSDKPreset *)preset
@@ -111,7 +111,7 @@
 
 -(void)onPresetError: (LSFSDKLightingItemErrorEvent *)error
 {
-    NSLog(@"%s Error: %@", __FUNCTION__, [error description]);
+    NSLog(@"%s Error: %@", __FUNCTION__, [error name]);
 }
 
 -(void)onTransitionEffectInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andTransitionEffect: (LSFSDKTransitionEffect *)transitionEffect;
@@ -143,7 +143,7 @@
 
 -(void)onTransitionEffectError: (LSFSDKLightingItemErrorEvent *)error
 {
-    NSLog(@"%s Error: %@", __FUNCTION__, [error description]);
+    NSLog(@"%s Error: %@", __FUNCTION__, [error name]);
 }
 
 -(void)onPulseEffectInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andPulseEffect: (LSFSDKPulseEffect *)pulseEffect;
@@ -175,7 +175,7 @@
 
 -(void)onPulseEffectError: (LSFSDKLightingItemErrorEvent *)error
 {
-    NSLog(@"%s Error: %@", __FUNCTION__, [error description]);
+    NSLog(@"%s Error: %@", __FUNCTION__, [error name]);
 }
 
 -(void)onSceneElementInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andSceneElement: (LSFSDKSceneElement *)sceneElement
@@ -207,7 +207,7 @@
 
 -(void)onSceneElementError: (LSFSDKLightingItemErrorEvent *)error
 {
-    NSLog(@"%s Error: %@", __FUNCTION__, [error description]);
+    NSLog(@"%s Error: %@", __FUNCTION__, [error name]);
 }
 
 -(void)onSceneInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andScene: (LSFSDKScene *)scene
@@ -239,7 +239,7 @@
 
 -(void)onSceneError: (LSFSDKLightingItemErrorEvent *)error
 {
-    NSLog(@"%s Error: %@", __FUNCTION__, [error description]);
+    NSLog(@"%s Error: %@", __FUNCTION__, [error name]);
 }
 
 -(void)onMasterSceneInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andMasterScene: (LSFSDKMasterScene *)masterScene
@@ -271,7 +271,7 @@
 
 -(void)onMasterSceneError: (LSFSDKLightingItemErrorEvent *)error
 {
-    NSLog(@"%s Error: %@", __FUNCTION__, [error description]);
+    NSLog(@"%s Error: %@", __FUNCTION__, [error name]);
 }
 
 //-(void)onLeaderModelChange: (LSFControllerModel *)leadModel

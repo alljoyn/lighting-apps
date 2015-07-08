@@ -41,8 +41,9 @@ public class PendingPulseEffectV2 extends PendingLightingItem {
 
         startWithCurrent = pulseEffect != null ? pulseEffect.isStartWithCurrent() : false;
 
-        startState = pulseEffect != null ? pulseEffect.getStartState() : new MyLampState(Power.ON, Color.DEFAULT);
-        endState = pulseEffect != null ? pulseEffect.getEndState() : new MyLampState(Power.ON, Color.DEFAULT);
+        // Note the lamp states must have their own instance of a Color object
+        startState = pulseEffect != null ? pulseEffect.getStartState() : new MyLampState(Power.ON, new Color(Color.DEFAULT));
+        endState = pulseEffect != null ? pulseEffect.getEndState() : new MyLampState(Power.ON, new Color(Color.DEFAULT));
 
         startPresetID = pulseEffect != null ? pulseEffect.getStartPresetID() : "";
         endPresetID = pulseEffect != null ? pulseEffect.getEndPresetID() : "";

@@ -149,7 +149,11 @@
     NSSet *lampIDs = [[self getSceneElementDataModel] lamps];
     for (NSString *lampID in lampIDs)
     {
-        [lamps addObject: [[LSFSDKLightingDirector getLightingDirector] getLampWithID: lampID]];
+        LSFSDKLamp *lamp = [[LSFSDKLightingDirector getLightingDirector] getLampWithID: lampID];
+        if (lamp != nil)
+        {
+            [lamps addObject: lamp];
+        }
     }
 
     return lamps;
@@ -161,7 +165,11 @@
     NSSet *groupIDs = [[self getSceneElementDataModel] groups];
     for (NSString *groupID in groupIDs)
     {
-        [groups addObject: [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: groupID]];
+        LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: groupID];
+        if (group != nil)
+        {
+            [groups addObject: group];
+        }
     }
 
     return groups;

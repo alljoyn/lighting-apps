@@ -119,7 +119,11 @@
     NSArray *sceneElementIDs = [self getSceneElementIDs];
     for (NSString *sceneElementID in sceneElementIDs)
     {
-        [collection addObject: [[LSFSDKLightingDirector getLightingDirector] getSceneElementWithID: sceneElementID]];
+        LSFSDKSceneElement *sceneElement = [[LSFSDKLightingDirector getLightingDirector] getSceneElementWithID: sceneElementID];
+        if (sceneElement != nil)
+        {
+            [collection addObject: sceneElement];
+        }
     }
 
     return collection;

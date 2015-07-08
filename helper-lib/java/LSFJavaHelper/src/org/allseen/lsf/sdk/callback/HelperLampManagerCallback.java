@@ -561,13 +561,14 @@ public class HelperLampManagerCallback<LAMP> extends LampManagerCallback {
     }
 
     protected void postGetLampQueriedAboutData(final String lampID, final LampAbout lampAbout) {
-        manager.getQueue().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Log.d("AboutManager", "querying about data: " + lampID);
-                AllJoynManager.aboutManager.getLampQueriedAboutData(lampID, lampAbout.aboutPeer, lampAbout.aboutPort);
-            }
-        }, ABOUT_DELAY);
+        // TODO-FIX spread out calls to for AboutData
+        //manager.getQueue().postDelayed(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        //Log.d("AboutManager", "querying about data: " + lampID);
+        //        AllJoynManager.aboutManager.getLampQueriedAboutData(lampID, lampAbout.aboutPeer, lampAbout.aboutPort);
+        //    }
+        //}, ABOUT_DELAY);
     }
 
     protected void postSendLampChanged(final String lampID) {

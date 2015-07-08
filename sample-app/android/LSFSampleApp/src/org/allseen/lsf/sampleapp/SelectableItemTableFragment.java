@@ -81,29 +81,40 @@ public abstract class SelectableItemTableFragment extends ScrollableTableFragmen
     }
 
     protected <T> void updateSelectableItemRow(Context context, LayoutInflater inflater, TableLayout table, String itemID, Comparable<T> tag, int imageID, String name, boolean checked) {
-        TableRow tableRow = new TableRow(context);
+        TableRow tableRow = (TableRow)table.findViewWithTag(itemID);
 
-        inflater.inflate(getTableRowLayout(), tableRow);
+        if (tableRow == null) {
+            tableRow = new TableRow(context);
 
-        tableRow.setTag(itemID);
+            inflater.inflate(getTableRowLayout(), tableRow);
 
-        ImageButton imageButton = (ImageButton)tableRow.findViewById(R.id.selectableItemButtonIcon);
-        imageButton.setTag(itemID);
-        imageButton.setBackgroundResource(imageID);
-        imageButton.setClickable(true);
-        imageButton.setOnClickListener(this);
+            tableRow.setTag(itemID);
 
-        ((TextView)tableRow.findViewById(R.id.selectableItemRowText)).setText(name);
+            ImageButton imageButton = (ImageButton)tableRow.findViewById(R.id.selectableItemButtonIcon);
+            imageButton.setTag(itemID);
+            imageButton.setBackgroundResource(imageID);
+            imageButton.setClickable(true);
+            imageButton.setOnClickListener(this);
 
-        CompoundButton selectButton = getCompoundButton(tableRow);
-        selectButton.setTag(itemID);
-        selectButton.setClickable(true);
-        selectButton.setOnClickListener(this);
-        selectButton.setOnCheckedChangeListener(this);
-        selectButton.setButtonDrawable(getSelectButtonDrawableID());
-        selectButton.setChecked(checked);
+            ((TextView)tableRow.findViewById(R.id.selectableItemRowText)).setText(name);
 
-        TableSorter.insertSortedTableRow(table, tableRow, tag);
+            CompoundButton selectButton = getCompoundButton(tableRow);
+            selectButton.setTag(itemID);
+            selectButton.setClickable(true);
+            selectButton.setOnClickListener(this);
+            selectButton.setOnCheckedChangeListener(this);
+            selectButton.setButtonDrawable(getSelectButtonDrawableID());
+            selectButton.setChecked(checked);
+
+            TableSorter.insertSortedTableRow(table, tableRow, tag);
+        } else {
+            ((TextView)tableRow.findViewById(R.id.selectableItemRowText)).setText(name);
+
+            CompoundButton selectButton = getCompoundButton(tableRow);
+            selectButton.setChecked(checked);
+
+            TableSorter.updateSortedTableRow(table, tableRow, tag);
+        }
     }
 
     protected int getTableRowLayout() {

@@ -95,7 +95,7 @@ public class Group extends GroupMember implements DeletableItem {
      */
     @Override
     public void setColorHsvt(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees) {
-        LampState lampState = new LampState();
+        LampState lampState = new LampState(groupModel.getState());
 
         ColorStateConverter.convertViewToModel(hueDegrees, saturationPercent, brightnessPercent, colorTempDegrees, lampState);
 

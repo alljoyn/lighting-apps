@@ -758,6 +758,8 @@ public class SampleAppActivity extends FragmentActivity implements
         if (scenesPageFragment.isBasicMode()) {
             // Copy the selected scene into the pending state
             BasicScenePlugin.resetPendingData(popupItemID);
+        } else if (scenesPageFragment.isElementMode()) {
+            SceneElementV2InfoFragment.pendingSceneElement = new PendingSceneElementV2(LightingDirector.get().getSceneElement(popupItemID));
         }
 
         showInfoFragment(scenesPageFragment, popupItemID);
@@ -1037,6 +1039,8 @@ public class SampleAppActivity extends FragmentActivity implements
 
                 // TODO-FIX: need to execute the next line only if V2 scenes are not supported by the controller
                 //parent.showInfoChildFragment(null);
+            } else if (parent.isElementMode()) {
+                SceneElementV2InfoFragment.pendingSceneElement = new PendingSceneElementV2();
             }
 
             parent.showEnterNameChildFragment();
@@ -1230,9 +1234,10 @@ public class SampleAppActivity extends FragmentActivity implements
             int groupCount = LightingDirector.get().getGroupCount();
             title = getString(R.string.title_tab_groups, groupCount).toUpperCase(locale);
         } else if (index == 2) {
-            int sceneCount = LightingDirector.get().getSceneCount();
+            int sceneElementCount = LightingDirector.get().getSceneElementCount();
+            int basicSceneCount = LightingDirector.get().getSceneCount();
             int masterSceneCount = LightingDirector.get().getMasterSceneCount();
-            title = getString(R.string.title_tab_scenes, sceneCount + masterSceneCount).toUpperCase(locale);
+            title = getString(R.string.title_tab_scenes, sceneElementCount + basicSceneCount + masterSceneCount).toUpperCase(locale);
         } else {
             title = null;
         }
@@ -1274,7 +1279,8 @@ public class SampleAppActivity extends FragmentActivity implements
                     LampsTableFragment tableFragment = (LampsTableFragment)lampsPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
 
                     if (tableFragment != null) {
-                        tableFragment.addItem(lamp);
+                        // Call addLamp() rather than addItem() to update the color indicator
+                        tableFragment.addLamp(lamp);
                     }
 
                     LampInfoFragment infoFragment = (LampInfoFragment)lampsPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
@@ -1419,6 +1425,8 @@ public class SampleAppActivity extends FragmentActivity implements
         updateInfoFragmentPresetFields(ScenesPageFragment.TAG, ScenesPageFragment.CHILD_TAG_CONSTANT_EFFECT);
         updateInfoFragmentPresetFields(ScenesPageFragment.TAG, ScenesPageFragment.CHILD_TAG_TRANSITION_EFFECT);
         updateInfoFragmentPresetFields(ScenesPageFragment.TAG, ScenesPageFragment.CHILD_TAG_PULSE_EFFECT);
+
+        updateEffect();
     }
 
     @Override
@@ -1430,6 +1438,8 @@ public class SampleAppActivity extends FragmentActivity implements
         removePreset(LampsPageFragment.TAG, presetID);
         removePreset(GroupsPageFragment.TAG, presetID);
         removePreset(ScenesPageFragment.TAG, presetID);
+
+        removeEffect(presetID);
     }
 
     @Override
@@ -1461,6 +1471,31 @@ public class SampleAppActivity extends FragmentActivity implements
         }
     }
 
+    private void updateEffect() {
+        Fragment pageFragment = getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
+
+        if (pageFragment != null) {
+            FragmentManager childManager = pageFragment.getChildFragmentManager();
+            SceneElementV2SelectEffectFragment effectsFragment = (SceneElementV2SelectEffectFragment)childManager.findFragmentByTag(ScenesPageFragment.CHILD_TAG_SELECT_EFFECT);
+
+            if (effectsFragment != null) {
+                effectsFragment.onUpdateView();
+            }
+        }
+    }
+
+    private void removeEffect(String effectID) {
+        Fragment pageFragment = getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
+
+        if (pageFragment != null) {
+            FragmentManager childManager = pageFragment.getChildFragmentManager();
+            SceneElementV2SelectEffectFragment effectsFragment = (SceneElementV2SelectEffectFragment)childManager.findFragmentByTag(ScenesPageFragment.CHILD_TAG_SELECT_EFFECT);
+
+            if (effectsFragment != null) {
+                effectsFragment.removeElement(effectID);
+            }
+        }
+    }
 
     private void updateInfoFragmentPresetFields(String pageFragmentTag, String infoFragmentTag) {
         Fragment pageFragment = getSupportFragmentManager().findFragmentByTag(pageFragmentTag);
@@ -1732,6 +1767,7 @@ public class SampleAppActivity extends FragmentActivity implements
     @Override
     public void onTransitionEffectChanged(TransitionEffect effect) {
         // TODO-IMPL
+        updateEffect();
     }
 
     @Override
@@ -1741,7 +1777,10 @@ public class SampleAppActivity extends FragmentActivity implements
 
     @Override
     public void onTransitionEffectRemoved(TransitionEffect effect) {
+        String effectID = effect.getId();
+
         // TODO-IMPL
+        removeEffect(effectID);
     }
 
     @Override
@@ -1752,6 +1791,7 @@ public class SampleAppActivity extends FragmentActivity implements
     @Override
     public void onPulseEffectChanged(PulseEffect effect) {
         // TODO-IMPL
+        updateEffect();
     }
 
     @Override
@@ -1761,7 +1801,10 @@ public class SampleAppActivity extends FragmentActivity implements
 
     @Override
     public void onPulseEffectRemoved(PulseEffect effect) {
+        String effectID = effect.getId();
+
         // TODO-IMPL
+        removeEffect(effectID);
     }
 
     @Override
@@ -1782,8 +1825,25 @@ public class SampleAppActivity extends FragmentActivity implements
     }
 
     @Override
-    public void onSceneElementRemoved(SceneElement element) {
-        // TODO-IMPL
+    public void onSceneElementRemoved(SceneElement sceneElement) {
+        Log.d(SampleAppActivity.TAG, "onSceneElementRemoved() " + sceneElement.getName());
+
+        Fragment pageFragment = getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
+        FragmentManager childManager = pageFragment != null ? pageFragment.getChildFragmentManager() : null;
+        ScenesTableFragment tableFragment = childManager != null ? (ScenesTableFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE) : null;
+        BasicSceneV2InfoFragment infoFragment = childManager != null ? (BasicSceneV2InfoFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO) : null;
+
+        if (tableFragment != null) {
+            tableFragment.removeElement(sceneElement.getId());
+
+            if (isSwipeable()) {
+                resetActionBar();
+            }
+        }
+
+        if ((infoFragment != null) && (infoFragment.key.equals(sceneElement.getId()))) {
+            createLostConnectionErrorDialog(sceneElement.getName());
+        }
     }
 
     private void refreshSceneElement(SceneElement sceneElement) {

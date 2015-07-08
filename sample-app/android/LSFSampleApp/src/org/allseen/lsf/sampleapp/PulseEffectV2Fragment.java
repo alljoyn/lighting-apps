@@ -56,6 +56,10 @@ public class PulseEffectV2Fragment extends EffectV2InfoFragment implements OnChe
         presetsButton2.setClickable(true);
         presetsButton2.setOnClickListener(this);
 
+        //TODO-FIX Remove the next 2 lines when SceneElementV2PresetsFragment is implemented
+        ((Button)stateView.findViewById(R.id.stateButton)).setVisibility(View.GONE);
+        presetsButton2.setVisibility(View.GONE);
+
         TextView periodName = (TextView)view.findViewById(R.id.infoPeriodRow).findViewById(R.id.nameValueNameText);
         periodName.setTag(R.id.infoPeriodRow);
         periodName.setClickable(true);

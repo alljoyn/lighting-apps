@@ -152,7 +152,11 @@ public class ScenesPageFragment extends PageMainContainerFragment {
 
     @Override
     public PageFrameChildFragment createPresetsChildFragment() {
-        return new BasicSceneElementPresetsFragment();
+        return
+            isMasterMode()  ? null :
+            isBasicMode()   ? new BasicSceneElementPresetsFragment() : //TODO-FIX rename to SceneElementV1PresetsFragment()
+            isElementMode() ? null : //TODO-FIX new SceneElementV2PresetsFragment();
+            null;
     }
 
     @Override

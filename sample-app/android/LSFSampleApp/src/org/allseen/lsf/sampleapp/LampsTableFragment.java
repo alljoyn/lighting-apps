@@ -15,6 +15,7 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import org.allseen.lsf.sdk.Lamp;
 import org.allseen.lsf.sdk.LightingDirector;
 
 import android.os.Bundle;
@@ -45,9 +46,21 @@ public class LampsTableFragment extends DimmableItemTableFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
 
-        addItems(LightingDirector.get().getLamps());
+        // We don't user super.addItems() here because we need to call
+        // ViewColor.calculate() for each lamp.
+        addLamps(LightingDirector.get().getLamps());
 
         return root;
+    }
+
+    public void addLamps(Lamp[] lamps) {
+        for (Lamp lamp : lamps) {
+            addLamp(lamp);
+        }
+    }
+
+    public void addLamp(Lamp lamp) {
+        addItem(lamp, ViewColor.calculate(lamp.getState(), lamp.getCapability(), lamp.getDetails()));
     }
 
     @Override

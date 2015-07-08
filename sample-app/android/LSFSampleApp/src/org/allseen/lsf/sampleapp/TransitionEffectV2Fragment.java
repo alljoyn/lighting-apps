@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class TransitionEffectV2Fragment extends EffectV2InfoFragment {
@@ -36,6 +37,9 @@ public class TransitionEffectV2Fragment extends EffectV2InfoFragment {
 
         setTextViewValue(statusView, R.id.statusLabelName, getString(R.string.label_effect_name), 0);
         setTextViewValue(view.findViewById(R.id.infoDurationRow), R.id.nameValueNameText, getString(R.string.effect_info_transition_duration), 0);
+
+        //TODO-FIX Remove the next line when SceneElementV2PresetsFragment is implemented
+        ((Button)stateView.findViewById(R.id.stateButton)).setVisibility(View.GONE);
 
         TextView effectName = (TextView)statusView.findViewById(R.id.statusTextName);
         effectName.setClickable(true);

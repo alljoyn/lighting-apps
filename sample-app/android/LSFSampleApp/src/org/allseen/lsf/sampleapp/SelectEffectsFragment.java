@@ -30,6 +30,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TableRow;
 
 public abstract class SelectEffectsFragment extends SelectableItemTableFragment {
     protected int labelStringID;
@@ -87,16 +89,16 @@ public abstract class SelectEffectsFragment extends SelectableItemTableFragment 
         View root = super.onCreateView(inflater, container, savedInstanceState);
 
         getPendingSelection();
-        doUpdateView(inflater, root);
+        onUpdateView(inflater, root);
 
         return root;
     }
 
-    public void doUpdateView() {
-        doUpdateView(getActivity().getLayoutInflater(), view);
+    public void onUpdateView() {
+        onUpdateView(getActivity().getLayoutInflater(), view);
     }
 
-    public void doUpdateView(LayoutInflater inflater, View root) {
+    public void onUpdateView(LayoutInflater inflater, View root) {
         LightingDirector director = LightingDirector.get();
         String pendingItemID = getPendingItemID();
 
@@ -105,25 +107,34 @@ public abstract class SelectEffectsFragment extends SelectableItemTableFragment 
         }
 
         if (showPresets()) {
-            addItems(director.getPresets(), pendingItemID, inflater, root);
+            addItems(director.getPresets(), pendingItemID, inflater, root, R.drawable.list_constant_icon);
         }
 
         if (showTransitionEffects()) {
-            addItems(director.getTransitionEffects(), pendingItemID, inflater, root);
+            addItems(director.getTransitionEffects(), pendingItemID, inflater, root, R.drawable.list_transition_icon);
         }
 
         if (showPulseEffects()) {
-            addItems(director.getPulseEffects(), pendingItemID, inflater, root);
+            addItems(director.getPulseEffects(), pendingItemID, inflater, root, R.drawable.list_pulse_icon);
         }
     }
 
     //TODO-REF Common w/SelectMembersFragment
-    protected void addItems(LightingItem[] items, String pendingItemID, LayoutInflater inflater, View root) {
+    protected void addItems(LightingItem[] items, String pendingItemID, LayoutInflater inflater, View root, int imageID) {
         for (LightingItem item : items) {
             String itemID = item.getId();
 
             if (!pendingItemID.equals(itemID)) {
                 updateSelectableItemRow(inflater, root, itemID, item.getTag(), R.drawable.nav_more_menu_icon, item.getName(), isItemSelected(itemID));
+
+                TableRow tableRow = (TableRow)table.findViewWithTag(itemID);
+                if (tableRow != null) {
+                    ImageButton imageButton = (ImageButton)tableRow.findViewById(R.id.selectableItemRowIcon);
+                    imageButton.setBackgroundResource(imageID);
+                    imageButton.setVisibility(View.VISIBLE);
+                } else {
+                    Log.w(SampleAppActivity.TAG, "Missing row: " + itemID);
+                }
             }
         }
     }
@@ -139,7 +150,11 @@ public abstract class SelectEffectsFragment extends SelectableItemTableFragment 
     @Override
     public void onActionDone() {
         if (processSelection()) {
-            parent.clearBackStack();
+            if (isAddMode()) {
+                parent.clearBackStack();
+            } else {
+                parent.popBackStack(PageFrameParentFragment.CHILD_TAG_INFO);
+            }
         }
     }
 

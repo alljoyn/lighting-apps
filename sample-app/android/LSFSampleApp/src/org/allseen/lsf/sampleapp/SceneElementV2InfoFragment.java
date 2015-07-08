@@ -32,7 +32,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class SceneElementV2InfoFragment extends PageFrameChildFragment implements View.OnClickListener {
-    public static PendingSceneElementV2 pendingSceneElement = new PendingSceneElementV2();
+    public static PendingSceneElementV2 pendingSceneElement = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,8 +62,18 @@ public class SceneElementV2InfoFragment extends PageFrameChildFragment implement
 
         // Effect
         View effectView = view.findViewById(R.id.sceneElementInfoEffect);
-        effectView.setClickable(true);
-        effectView.setOnClickListener(this);
+
+        TextView textHeader = (TextView)effectView.findViewById(R.id.detailedItemRowTextHeader);
+        textHeader.setClickable(true);
+        textHeader.setOnClickListener(this);
+
+        TextView textDetails = (TextView)effectView.findViewById(R.id.detailedItemRowTextDetails);
+        textDetails.setClickable(true);
+        textDetails.setOnClickListener(this);
+
+        ImageButton moreButton = (ImageButton)effectView.findViewById(R.id.detailedItemButtonMore);
+        moreButton.setImageResource(R.drawable.group_more_menu_icon);
+        moreButton.setOnClickListener(this);
 
         // Update values
         SampleAppActivity activity = (SampleAppActivity) getActivity();
@@ -85,7 +95,9 @@ public class SceneElementV2InfoFragment extends PageFrameChildFragment implement
 
         if (viewID == R.id.statusLabelName || viewID == R.id.statusTextName) {
             onHeaderClick();
-        } else if (viewID == R.id.sceneInfoRowMembers){
+        } else if (viewID == R.id.detailedItemRowTextHeader || viewID == R.id.detailedItemRowTextDetails) {
+            onEffectClick();
+        } else if (viewID == R.id.sceneElementInfoMembers) {
             onMembersClick();
         }
     }
@@ -97,9 +109,15 @@ public class SceneElementV2InfoFragment extends PageFrameChildFragment implement
         activity.showItemNameDialog(R.string.title_scene_element_rename, new UpdateSceneElementNameAdapter(sceneElement, activity));
     }
 
-    protected void onMembersClick() {
-        pendingSceneElement.init(LightingDirector.get().getSceneElement(key));
+    protected void onEffectClick() {
+        //TODO-FIX we need to actually recompute the pendingSceneElement.hasDetails
+        // value based on the currrent lamps and groups members here
+        pendingSceneElement.hasEffects = true;
 
+        ((ScenesPageFragment)parent).showSelectEffectChildFragment();
+    }
+
+    protected void onMembersClick() {
         ((ScenesPageFragment)parent).showSelectMembersChildFragment();
     }
 
@@ -112,33 +130,29 @@ public class SceneElementV2InfoFragment extends PageFrameChildFragment implement
         setTextViewValue(view.findViewById(R.id.sceneElementInfoStatus), R.id.statusTextName, sceneElement.getName(), 0);
         setTextViewValue(view.findViewById(R.id.sceneElementInfoMembers), R.id.nameValueValueText, Util.createMemberNamesString(activity, sceneElement, ", ", R.string.scene_element_members_none), 0);
 
-        updateEffectFields(activity, view.findViewById(R.id.sceneElementInfoEffect), sceneElement.getEffect());
+        updateEffectFields(activity, view.findViewById(R.id.sceneElementInfoEffect), sceneElement.getEffectID(), sceneElement.getEffect());
     }
 
-    protected void updateEffectFields(SampleAppActivity activity, View effectView, Effect effect) {
+    protected void updateEffectFields(SampleAppActivity activity, View effectView, String effectID, Effect effect) {
         int iconID =
             effect instanceof Preset            ? R.drawable.list_constant_icon :
             effect instanceof TransitionEffect  ? R.drawable.list_transition_icon :
             effect instanceof PulseEffect       ? R.drawable.list_pulse_icon :
             /* unknown effect */                  R.drawable.list_constant_icon;
 
+        String effectName = effect != null ? effect.getName() : String.format(getString(R.string.member_effect_not_found), effectID);
+
         ((ImageButton)effectView.findViewById(R.id.detailedItemButtonIcon)).setImageResource(iconID);
 
         TextView textHeader = (TextView)effectView.findViewById(R.id.detailedItemRowTextHeader);
-        textHeader.setText(effect.getName());
-        textHeader.setTag(effect.getId());
-        textHeader.setClickable(true);
-        textHeader.setOnClickListener(this);
+        textHeader.setText(effectName);
+        textHeader.setTag(effectID);
 
         TextView textDetails = (TextView)effectView.findViewById(R.id.detailedItemRowTextDetails);
         textDetails.setText("");
-        textDetails.setTag(effect.getId());
-        textDetails.setClickable(true);
-        textDetails.setOnClickListener(this);
+        textDetails.setTag(effectID);
 
         ImageButton moreButton = (ImageButton)effectView.findViewById(R.id.detailedItemButtonMore);
-        moreButton.setImageResource(R.drawable.group_more_menu_icon);
-        moreButton.setTag(effect.getId());
-        moreButton.setOnClickListener(this);
+        moreButton.setTag(effectID);
     }
 }

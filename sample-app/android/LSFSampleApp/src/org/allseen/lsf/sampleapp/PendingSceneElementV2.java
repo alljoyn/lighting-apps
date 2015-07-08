@@ -36,14 +36,10 @@ public class PendingSceneElementV2 extends PendingLightingItem {
     public String effectID;
 
     public PendingSceneElementV2() {
-        init();
+        this(null);
     }
 
-    public void init() {
-        init((SceneElement)null);
-    }
-
-    public void init(SceneElement sceneElement) {
+    public PendingSceneElementV2(SceneElement sceneElement) {
         super.init(sceneElement);
 
         groups = sceneElement != null ? sceneElement.getGroupIDs() : new ArrayList<String>();

@@ -15,10 +15,16 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
+import org.allseen.lsf.sdk.Effect;
+import org.allseen.lsf.sdk.GroupMember;
 import org.allseen.lsf.sdk.LampCapabilities;
 import org.allseen.lsf.sdk.ColorAverager;
+import org.allseen.lsf.sdk.LightingDirector;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 
@@ -33,8 +39,9 @@ public class SceneElementV2SelectMembersFragment extends SceneItemSelectMembersF
         super.onCreateOptionsMenu(menu, inflater);
 
         SampleAppActivity activity = (SampleAppActivity)getActivity();
+        boolean isAddMode = isAddMode();
 
-        activity.updateActionBar(isAddMode() ? R.string.title_scene_element_add : R.string.title_scene_element_edit, false, false, true, false, true);
+        activity.updateActionBar(isAddMode ? R.string.title_scene_element_add : R.string.title_scene_element_edit, false, false, isAddMode, !isAddMode, true);
     }
 
     @Override
@@ -124,6 +131,27 @@ public class SceneElementV2SelectMembersFragment extends SceneItemSelectMembersF
             ((ScenesPageFragment)parent).showSelectEffectChildFragment();
         }
     }
+
+    @Override
+    public void onActionDone() {
+        if (processSelection()) {
+            //TODO-REF SceneElementV2SelectEffectFragmment.processSelection()
+            LightingDirector director = LightingDirector.get();
+            Effect effect = director.getEffect(SceneElementV2InfoFragment.pendingSceneElement.effectID);
+
+            ArrayList<GroupMember> memberList = new ArrayList<GroupMember>();
+
+            memberList.addAll(Arrays.asList(director.getLamps(SceneElementV2InfoFragment.pendingSceneElement.lamps)));
+            memberList.addAll(Arrays.asList(director.getGroups(SceneElementV2InfoFragment.pendingSceneElement.groups)));
+
+            GroupMember[] members = memberList.toArray(new GroupMember[memberList.size()]);
+
+            director.getSceneElement(SceneElementV2InfoFragment.pendingSceneElement.id).modify(effect, members);
+
+            parent.popBackStack(PageFrameParentFragment.CHILD_TAG_INFO);
+        }
+    }
+
 //TODO-IMPL
 //    @Override
 //    protected void processSelection(SampleAppActivity activity, List<String> lampIDs, List<String> groupIDs, List<String> sceneIDs) {

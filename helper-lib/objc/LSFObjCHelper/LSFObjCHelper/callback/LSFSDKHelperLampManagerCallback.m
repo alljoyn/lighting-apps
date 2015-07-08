@@ -429,9 +429,10 @@ static const unsigned int ABOUT_DELAY = 1;
         }
         else
         {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ABOUT_DELAY * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [LSFSDKAllJoynManager getAboutDataForLampID: lampID];
-            });
+            // TODO-FIX spread out calls to query for about information
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ABOUT_DELAY * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                [LSFSDKAllJoynManager getAboutDataForLampID: lampID];
+//            });
         }
     });
 
