@@ -29,7 +29,6 @@ import org.allseen.lsf.sdk.TrackingID;
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 import org.allseen.lsf.sdk.manager.GroupCollectionManager;
 import org.allseen.lsf.sdk.manager.LightingSystemManager;
-import org.allseen.lsf.sdk.model.AllLampsDataModel;
 import org.allseen.lsf.sdk.model.ColorAverager;
 import org.allseen.lsf.sdk.model.ColorStateConverter;
 import org.allseen.lsf.sdk.model.GroupDataModel;
@@ -73,7 +72,10 @@ public class HelperGroupManagerCallback<GROUP> extends LampGroupManagerCallback 
             manager.getGroupCollectionManager().sendErrorEvent("getAllLampGroupIDsReplyCB", responseCode);
         }
 
-        postProcessLampGroupID(AllLampsDataModel.ALL_LAMPS_GROUP_ID, true, true);
+// TODO-FIX temporary fix for all lamps group state inconsistency bug.
+// Reintroduce call and remove lamp listener from LightingSystemManager
+// once the underlying issue is resolved.
+//        postProcessLampGroupID(AllLampsDataModel.ALL_LAMPS_GROUP_ID, true, true);
 
         for (final String groupID : groupIDs) {
             postProcessLampGroupID(groupID, true, true);
@@ -193,7 +195,8 @@ public class HelperGroupManagerCallback<GROUP> extends LampGroupManagerCallback 
         }
     }
 
-    protected void postProcessLampGroupID(final String groupID, final boolean needName, final boolean needState) {
+    //TODO-FIX make protected once the all lamps group consistency bug is fixed
+    public void postProcessLampGroupID(final String groupID, final boolean needName, final boolean needState) {
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {

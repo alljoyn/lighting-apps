@@ -164,6 +164,8 @@
 
         [_lampCollectionManager addDelegate: self];
 
+        // For AllLamps groups creation
+        [_lampCollectionManager addLampDelegate: _groupManagerCB];
         //TODO - initialize properties
     }
 

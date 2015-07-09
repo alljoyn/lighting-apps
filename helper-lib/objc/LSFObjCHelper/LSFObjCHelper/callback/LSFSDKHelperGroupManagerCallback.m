@@ -30,6 +30,7 @@
 @property (nonatomic, strong) NSMutableSet *groupIDsWithPendingMembers;
 @property (nonatomic, strong) NSMutableSet *groupIDsWithPendingFlatten;
 @property (nonatomic, strong) NSMutableDictionary *creationTrackingIDs;
+@property (nonatomic) BOOL anyLampsFound;
 
 -(void)postProcessLampGroupID: (NSString *)groupID needName: (BOOL)needName needState: (BOOL)needState;
 -(void)postUpdateLampGroupName: (NSString *)groupID groupName: (NSString *)groupName;
@@ -52,6 +53,7 @@
 @synthesize groupIDsWithPendingMembers = _groupIDsWithPendingMembers;
 @synthesize groupIDsWithPendingFlatten = _groupIDsWithPendingFlatten;
 @synthesize creationTrackingIDs = _creationTrackingIDs;
+@synthesize anyLampsFound = _anyLampsFound;
 
 -(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)manager
 {
@@ -67,6 +69,7 @@
         self.groupIDsWithPendingMembers = [[NSMutableSet alloc] init];
         self.groupIDsWithPendingFlatten = [[NSMutableSet alloc] init];
         self.creationTrackingIDs = [[NSMutableDictionary alloc] init];
+        self.anyLampsFound = NO;
     }
 
     return self;
@@ -99,7 +102,8 @@
         [self.manager.groupCollectionManager sendErrorEvent: @"getAllLampGroupIDsReplyCB" statusCode: rc];
     }
 
-    [self postProcessLampGroupID: ALL_LAMPS_GROUP_ID needName: YES needState: YES];
+    // TODO-FIX reintroduce call and remove lamp delegate
+//  [self postProcessLampGroupID: ALL_LAMPS_GROUP_ID needName: YES needState: YES];
 
     for (NSString *groupID in groupIDs)
     {
@@ -551,6 +555,33 @@
 
         [self.manager.groupCollectionManager sendInitializedEvent: groupID withTrackingID: trackingID];
     });
+}
+
+/*
+ * Lamp Delegate to determine when to create the AllLamps virtual group
+ */
+-(void)onLampInitialized: (LSFSDKLamp *)lamp
+{
+    // intentionally left blank
+}
+
+-(void)onLampChanged: (LSFSDKLamp *)lamp
+{
+    if (!self.anyLampsFound)
+    {
+        self.anyLampsFound = YES;
+        [self postProcessLampGroupID: ALL_LAMPS_GROUP_ID needName: YES needState: YES];
+    }
+}
+
+-(void)onLampRemoved: (LSFSDKLamp *)lamp
+{
+    // intentionally left blank
+}
+
+-(void)onLampError: (LSFSDKLightingItemErrorEvent *)error
+{
+    // intentionally left blank
 }
 
 @end

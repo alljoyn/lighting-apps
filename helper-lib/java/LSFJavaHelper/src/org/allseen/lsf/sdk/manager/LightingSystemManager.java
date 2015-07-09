@@ -43,6 +43,7 @@ import org.allseen.lsf.sdk.listener.AllJoynListener;
 import org.allseen.lsf.sdk.listener.ControllerCollectionListenerBase;
 import org.allseen.lsf.sdk.listener.LampCollectionListenerBase;
 import org.allseen.lsf.sdk.listener.NextControllerConnectionListener;
+import org.allseen.lsf.sdk.model.AllLampsDataModel;
 import org.allseen.lsf.sdk.model.AllLampsLampGroup;
 import org.allseen.lsf.sdk.model.ControllerDataModel;
 
@@ -130,6 +131,19 @@ public class LightingSystemManager
             @Override
             public void onLampChanged(final LAMP lamp) {
                 groupManagerCB.postUpdateDependentLampGroups(factory.findLampDataModel(lamp).id);
+            }
+        });
+
+        //TODO-FIX remove once the all lamps group consistency bug is fixed
+        lampCollectionManager.addListener(new LampCollectionListenerBase<LAMP, ERROR>() {
+            private boolean isAllLampsGroupCreated = false;
+
+            @Override
+            public void onLampChanged(final LAMP lamp) {
+                if (!isAllLampsGroupCreated) {
+                    isAllLampsGroupCreated = true;
+                    groupManagerCB.postProcessLampGroupID(AllLampsDataModel.ALL_LAMPS_GROUP_ID, true, true);
+                }
             }
         });
 

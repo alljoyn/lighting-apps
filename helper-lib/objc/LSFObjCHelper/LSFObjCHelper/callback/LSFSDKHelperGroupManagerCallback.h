@@ -15,10 +15,11 @@
  ******************************************************************************/
 
 #import <internal/LSFLampGroupManagerCallbackDelegate.h>
+#import "../LSFSDKLampDelegate.h"
 
 @class LSFSDKLightingSystemManager;
 
-@interface LSFSDKHelperGroupManagerCallback : NSObject <LSFLampGroupManagerCallbackDelegate>
+@interface LSFSDKHelperGroupManagerCallback : NSObject <LSFLampGroupManagerCallbackDelegate, LSFSDKLampDelegate>
 
 @property (nonatomic, strong) LSFSDKLightingSystemManager *manager;
 
