@@ -136,12 +136,9 @@ public class LightingSystemManager
 
         //TODO-FIX remove once the all lamps group consistency bug is fixed
         lampCollectionManager.addListener(new LampCollectionListenerBase<LAMP, ERROR>() {
-            private boolean isAllLampsGroupCreated = false;
-
             @Override
             public void onLampChanged(final LAMP lamp) {
-                if (!isAllLampsGroupCreated) {
-                    isAllLampsGroupCreated = true;
+                if (!groupCollectionManager.hasID(AllLampsDataModel.ALL_LAMPS_GROUP_ID)) {
                     groupManagerCB.postProcessLampGroupID(AllLampsDataModel.ALL_LAMPS_GROUP_ID, true, true);
                 }
             }

@@ -30,7 +30,6 @@
 @property (nonatomic, strong) NSMutableSet *groupIDsWithPendingMembers;
 @property (nonatomic, strong) NSMutableSet *groupIDsWithPendingFlatten;
 @property (nonatomic, strong) NSMutableDictionary *creationTrackingIDs;
-@property (nonatomic) BOOL anyLampsFound;
 
 -(void)postProcessLampGroupID: (NSString *)groupID needName: (BOOL)needName needState: (BOOL)needState;
 -(void)postUpdateLampGroupName: (NSString *)groupID groupName: (NSString *)groupName;
@@ -53,7 +52,6 @@
 @synthesize groupIDsWithPendingMembers = _groupIDsWithPendingMembers;
 @synthesize groupIDsWithPendingFlatten = _groupIDsWithPendingFlatten;
 @synthesize creationTrackingIDs = _creationTrackingIDs;
-@synthesize anyLampsFound = _anyLampsFound;
 
 -(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)manager
 {
@@ -69,7 +67,6 @@
         self.groupIDsWithPendingMembers = [[NSMutableSet alloc] init];
         self.groupIDsWithPendingFlatten = [[NSMutableSet alloc] init];
         self.creationTrackingIDs = [[NSMutableDictionary alloc] init];
-        self.anyLampsFound = NO;
     }
 
     return self;
@@ -567,9 +564,8 @@
 
 -(void)onLampChanged: (LSFSDKLamp *)lamp
 {
-    if (!self.anyLampsFound)
+    if (![self.manager.groupCollectionManager hasID: ALL_LAMPS_GROUP_ID])
     {
-        self.anyLampsFound = YES;
         [self postProcessLampGroupID: ALL_LAMPS_GROUP_ID needName: YES needState: YES];
     }
 }
