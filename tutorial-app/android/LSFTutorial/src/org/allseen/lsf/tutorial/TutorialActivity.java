@@ -52,6 +52,7 @@ public class TutorialActivity extends FragmentActivity implements NextController
         // STEP 2: Instantiate the director and wait for the connection, register a
         // global listener to handle Lighting events
         lightingDirector = LightingDirector.get();
+        lightingDirector.setNetworkConnectionStatus(true);
         lightingDirector.postOnNextControllerConnection(this, CONTROLLER_CONNECTION_DELAY);
         lightingDirector.start("TutorialApp");
     }

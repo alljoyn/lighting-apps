@@ -23,8 +23,8 @@ import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.MyLampState;
 import org.allseen.lsf.sdk.NextControllerConnectionListener;
 import org.allseen.lsf.sdk.Power;
-import org.allseen.lsf.sdk.TransitionEffect;
 import org.allseen.lsf.sdk.TrackingID;
+import org.allseen.lsf.sdk.TransitionEffect;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -72,6 +72,7 @@ public class TutorialTransitionEffectActivity extends Activity implements NextCo
         // global listener to handle Lighting events
         lightingDirector = LightingDirector.get();
         lightingDirector.addListener(new MyLightingListener());
+        lightingDirector.setNetworkConnectionStatus(true);
         lightingDirector.postOnNextControllerConnection(this, CONTROLLER_CONNECTION_DELAY);
         lightingDirector.start("TutorialApp");
     }

@@ -77,6 +77,7 @@ public class TutorialPresetActivity extends Activity {
         // global listener to handle Lighting events
         lightingDirector = LightingDirector.get();
         lightingDirector.addListener(new MyLightingListener());
+        lightingDirector.setNetworkConnectionStatus(true);
         lightingDirector.start("TutorialApp");
     }
 

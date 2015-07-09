@@ -102,6 +102,7 @@ public class TutorialPulseEffectActivity extends Activity implements NextControl
         // global listener to handle Lighting events
         lightingDirector = LightingDirector.get();
         lightingDirector.addListener(new MyLightingListener());
+        lightingDirector.setNetworkConnectionStatus(true);
         lightingDirector.postOnNextControllerConnection(this, CONTROLLER_CONNECTION_DELAY);
         lightingDirector.start("TutorialApp");
     }

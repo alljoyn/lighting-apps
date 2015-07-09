@@ -79,6 +79,7 @@ public class TutorialSceneUIActivity extends ListActivity {
         // STEP 3: Instantiate the director, add the custom listener, then start.
         LightingDirector lightingDirector = LightingDirector.get();
         lightingDirector.addListener(new MyLightingListener());
+        lightingDirector.setNetworkConnectionStatus(true);
         lightingDirector.start("TutorialApp");
     }
 

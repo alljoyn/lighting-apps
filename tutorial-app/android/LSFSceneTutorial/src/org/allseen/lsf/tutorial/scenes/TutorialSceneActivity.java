@@ -89,6 +89,7 @@ public class TutorialSceneActivity extends Activity implements NextControllerCon
         // global listener to handle Lighting events
         lightingDirector = LightingDirector.get();
         lightingDirector.addListener(new MyLightingListener());
+        lightingDirector.setNetworkConnectionStatus(true);
         lightingDirector.postOnNextControllerConnection(this, CONTROLLER_CONNECTION_DELAY);
         lightingDirector.start("TutorialApp");
     }
