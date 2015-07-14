@@ -17,6 +17,21 @@ package org.allseen.lsf.sdk;
 
 import org.allseen.lsf.sdk.listener.PulseEffectCollectionListener;
 
+/**
+ * The listener interface for receiving information about Pulse Effects in the lighting
+ * system.
+ */
 public interface PulseEffectListener extends PulseEffectCollectionListener<PulseEffect, LightingItemErrorEvent> {
+    //TODO-DOC
+    @Override
+    public void onPulseEffectInitialized(TrackingID trackingId, PulseEffect effect);
 
+    @Override
+    public void onPulseEffectChanged(PulseEffect effect);
+
+    @Override
+    public void onPulseEffectRemoved(PulseEffect effect);
+
+    @Override
+    public void onPulseEffectError(LightingItemErrorEvent error);
 }

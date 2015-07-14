@@ -14,6 +14,10 @@
  */
 package org.allseen.lsf.sdk;
 
+/**
+ * The  interface for sending and receiving information regarding lamp state in the lighting
+ * system.
+ */
 public interface LampState {
     public boolean getPowerOn();
     public void setPowerOn(boolean powerOn);

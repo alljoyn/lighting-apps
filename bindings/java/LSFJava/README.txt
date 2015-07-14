@@ -34,4 +34,14 @@ The following steps will show you how to add the required variables to Eclipse.
     the root folder of the AllJoyn Lighting Service Framework source for Android (e.g.,
     "<path_to_git_clones_folder>/service_framework").
 
+Threading Rules for LSF SDK Usage:
+1) One must not block the Lighting thread (note: all of the listener methods are called on the Lighting thread)
+2) One must perform all interaction with the lighting system (i.e. the LightingDirector) on the lighting thread
 
+Example of Mandatory Calls to Initialize the Lighting Director:
+
+        lightingDirector = LightingDirector.get();
+        lightingDirector.addListener(YOUR_LISTENER);
+        lightingDirector.start("YOUR_APP_NAME");
+
+Once Generated, Full Documentation can be found at [../../../helper-lib/java/LSFJavaHelper/doc/overview-summary.html]

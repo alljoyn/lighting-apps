@@ -15,10 +15,13 @@
  */
 package org.allseen.lsf.sdk;
 
-import org.allseen.lsf.sdk.TrackingID;
 import org.allseen.lsf.sdk.listener.AnyCollectionListenerBase;
 import org.allseen.lsf.sdk.listener.TrackingIDListener;
 
+/**
+ * A lighting Event Utility monitors all events involving a specified
+ * trackingID in the lighting system.
+ */
 public class LightingEventUtil {
 
     public static void listenFor(final TrackingID trackingId, final TrackingIDListener<LightingItem, LightingItemErrorEvent> listener) {

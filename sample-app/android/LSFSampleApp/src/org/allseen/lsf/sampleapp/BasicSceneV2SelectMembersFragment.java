@@ -79,7 +79,7 @@ public class BasicSceneV2SelectMembersFragment extends SelectMembersFragment {
         if (!isAddMode()) {
             ((SceneV2)director.getScene(getPendingItemID())).modify(sceneElements);
         } else {
-            director.createScene(sceneElements, BasicSceneV2InfoFragment.pendingSceneV2.name, null);
+            director.createScene(sceneElements, BasicSceneV2InfoFragment.pendingSceneV2.name);
         }
     }
 

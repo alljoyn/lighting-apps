@@ -15,9 +15,16 @@
  */
 package org.allseen.lsf.sdk;
 
-
+/**
+ * An All Lighting Item Listener Base represents a set of no-op functions for all Lighting Item callbacks.
+ * <p>
+ * To use an All Lighting Item Listener Base, subclass it inside your application, override the
+ * callbacks you need, and then pass an instance of it into your Lighting Director.
+ * See the tutorial applications for example usage or a Listener Base.
+ */
 public class AllLightingItemListenerBase implements AllLightingItemListener {
 
+    //TODO-DOC
     @Override
     public void onLampInitialized(Lamp lamp)                                                    { }
 

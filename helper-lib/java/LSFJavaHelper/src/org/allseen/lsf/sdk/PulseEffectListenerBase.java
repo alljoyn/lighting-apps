@@ -17,6 +17,13 @@ package org.allseen.lsf.sdk;
 
 import org.allseen.lsf.sdk.listener.PulseEffectCollectionListenerBase;
 
+/**
+ * An Pulse Effect Listener Base represents a set of no-op functions for Pulse Effect callbacks.
+ *
+ * To use an Pulse Effect Listener Base, subclass it inside your application, override the
+ * callbacks you need, and then pass an instance of it into your Lighting Director.
+ * See the tutorial applications for example usage of a Listener Base.
+ */
 public class PulseEffectListenerBase extends PulseEffectCollectionListenerBase<PulseEffect, LightingItemErrorEvent> implements PulseEffectListener {
 
 }

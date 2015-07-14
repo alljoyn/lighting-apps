@@ -19,13 +19,32 @@ import java.util.Collection;
 
 import org.allseen.lsf.sdk.model.LightingItemFilter;
 
+/**
+ * A LightingItemIDCollectionFilter is used to filter items with an itemID that matches
+ * one of a specified collection of itemID Strings.
+ *
+ * @param <ITEM> The item type to be filtered.
+ */
 public class LightingItemIDCollectionFilter<ITEM extends LightingItem> implements LightingItemFilter<ITEM> {
     protected Collection<String> itemIDs;
 
+    /**
+     * Constructs a Lighting Item Filter for a specified itemID Strings.
+     *
+     * @param itemIDs The itemIDs to be filtered for in each Item
+     * passed to the filter.
+     */
     public LightingItemIDCollectionFilter(Collection<String> itemIDs) {
         this.itemIDs = itemIDs;
     }
 
+    /**
+     * Returns a boolean true if the item contains one of the specified itemIDs,
+     * false otherwise.
+     *
+     * @return boolean true if the item contains on of the specified itemIDs,
+     * false otherwise.
+     */
     @Override
     public boolean passes(ITEM item) {
         return itemIDs.contains(item.getId());

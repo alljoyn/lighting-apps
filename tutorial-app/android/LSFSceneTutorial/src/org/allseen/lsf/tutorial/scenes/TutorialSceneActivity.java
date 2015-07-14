@@ -52,13 +52,13 @@ public class TutorialSceneActivity extends Activity implements NextControllerCon
         @Override
         public void onPulseEffectInitialized(TrackingID trackingID, PulseEffect effect) {
             // STEP 4: Create SceneElement using onPulseEffectInitialized as a trigger.
-            lightingDirector.createSceneElement(effect, lightingDirector.getLamps(), "TutorialSceneElement", null);
+            lightingDirector.createSceneElement(effect, lightingDirector.getLamps(), "TutorialSceneElement");
         }
 
         @Override
         public void onSceneElementInitialized(TrackingID trackingId, SceneElement element) {
             // STEP 5: Create Scene using onSceneElementInitialized as a trigger.
-            lightingDirector.createScene(new SceneElement[] { element }, "TutorialScene", null);
+            lightingDirector.createScene(new SceneElement[] { element }, "TutorialScene");
         }
 
         @Override
@@ -112,6 +112,6 @@ public class TutorialSceneActivity extends Activity implements NextControllerCon
         final MyLampState lampFrom = new MyLampState(pulsePowerState, pulseFromColor);
         final MyLampState lampTo = new MyLampState(pulsePowerState, pulseToColor);
 
-        lightingDirector.createPulseEffect(lampFrom, lampTo, period, duration, numPulses, "TutorialPulseEffect", null);
+        lightingDirector.createPulseEffect(lampFrom, lampTo, period, duration, numPulses, "TutorialPulseEffect");
     }
 }

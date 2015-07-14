@@ -22,12 +22,26 @@ import java.util.Set;
 import org.allseen.lsf.LampGroup;
 import org.allseen.lsf.sdk.model.LightingItemUtil;
 
+/**
+ * Abstract base class for Mutable Color Items in a group.
+ *
+ */
 public abstract class GroupMember extends MutableColorItem {
 
+    /**
+     * Returns a boolean indicating the GroupMember is not a Lamp object.
+     *
+     * @return boolean false.
+     */
     public boolean isLamp() {
         return false;
     }
 
+    /**
+     * Returns a boolean indicating the GroupMember is not a Group object.
+     *
+     * @return boolean false.
+     */
     public boolean isGroup() {
         return false;
     }
@@ -47,7 +61,7 @@ public abstract class GroupMember extends MutableColorItem {
         }
 
         return LightingItemUtil.createLampGroup(
-            lampIDs.toArray(new String[lampIDs.size()]),
-            groupIDs.toArray(new String[groupIDs.size()]));
+                lampIDs.toArray(new String[lampIDs.size()]),
+                groupIDs.toArray(new String[groupIDs.size()]));
     }
 }

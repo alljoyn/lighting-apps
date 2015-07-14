@@ -15,13 +15,9 @@
  */
 package org.allseen.lsf.sdk;
 
-import org.allseen.lsf.sdk.ErrorCode;
-import org.allseen.lsf.sdk.ResponseCode;
-import org.allseen.lsf.sdk.TrackingID;
 
 /**
- * <b>WARNING: This class is not intended to be used by clients, and its interface may change
- * in subsequent releases of the SDK</b>.
+ * An object representing information pertaining to an error with a Lighting Item.
  */
 public class LightingItemErrorEvent {
     public String name;
@@ -30,6 +26,15 @@ public class LightingItemErrorEvent {
     public TrackingID trackingID;
     public ErrorCode[] errorCodes;
 
+    /**
+     * Constructs a Lighting Item Error Event object.
+     *
+     * @param name The name of the error.
+     * @param responseCode The response code of the error.
+     * @param itemID The item ID of the Lighting Object.
+     * @param trackingID The tracking ID of the Lighting Object.
+     * @param errorCodes An array of ErrorCodes.
+     */
     public LightingItemErrorEvent(String name, ResponseCode responseCode, String itemID, TrackingID trackingID, ErrorCode[] errorCodes) {
         this.name = name;
         this.responseCode = responseCode;

@@ -88,6 +88,6 @@ public class TutorialTransitionEffectActivity extends Activity implements NextCo
         // STEP 3: Create a TransitionEffect in the lightingDirector.
         MyLampState mLS = new MyLampState(Power.ON, Color.RED);
 
-        lightingDirector.createTransitionEffect(mLS, 5000, "TutorialTransition", null);
+        lightingDirector.createTransitionEffect(mLS, 5000, "TutorialTransition");
     }
 }

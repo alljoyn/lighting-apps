@@ -131,7 +131,7 @@ public class TransitionEffectV2Fragment extends EffectV2InfoFragment {
         if (!isAddMode()) {
             director.getTransitionEffect(pendingTransitionEffect.id).modify(preset != null ? preset : pendingTransitionEffect.state, EnterDurationFragment.duration);
         } else {
-            director.createTransitionEffect(preset != null ? preset : pendingTransitionEffect.state, EnterDurationFragment.duration, pendingTransitionEffect.name, null);
+            director.createTransitionEffect(preset != null ? preset : pendingTransitionEffect.state, EnterDurationFragment.duration, pendingTransitionEffect.name);
         }
 
         parent.popBackStack(ScenesPageFragment.CHILD_TAG_SELECT_EFFECT);

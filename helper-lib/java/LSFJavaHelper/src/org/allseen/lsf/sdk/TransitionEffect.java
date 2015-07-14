@@ -23,6 +23,9 @@ import org.allseen.lsf.sdk.model.ColorItemDataModel;
 import org.allseen.lsf.sdk.model.LightingItemUtil;
 import org.allseen.lsf.sdk.model.TransitionEffectDataModelV2;
 
+/**
+ * A Transition Effect object represents a predefined gradual transition between two color states in a lamp.
+ */
 public class TransitionEffect extends ColorItem implements Effect {
     public static void setDefaultName(String defaultName) {
         if (defaultName != null) {
@@ -42,6 +45,11 @@ public class TransitionEffect extends ColorItem implements Effect {
         transitionEffectModel = new TransitionEffectDataModelV2(transitionEffectId, transitionEffectName);
     }
 
+    /**
+     * Applies the Transition Effect to the specified Group Member.
+     *
+     * @param member The Group Member the Transition Effect will be applied to.
+     */
     @Override
     public void applyTo(GroupMember member) {
         String errorContext = "TransitionEffect.applyTo() error";
@@ -51,22 +59,34 @@ public class TransitionEffect extends ColorItem implements Effect {
         }
     }
 
+    /**
+     * Replaces the Transition Effect's LampState and duration values with
+     * those specified as parameters.
+     *
+     * @param state The new LampState.
+     * @param duration The new duration, in milliseconds.
+     */
     public void modify(LampState state, long duration) {
         String errorContext = "TransitionEffect.modify() error";
 
         if (postInvalidArgIfNull(errorContext, state)) {
             if (state instanceof Preset) {
                 postErrorIfFailure(errorContext,
-                    AllJoynManager.transitionEffectManager.updateTransitionEffect(transitionEffectModel.id,
-                        LightingItemUtil.createTransitionEffect(((Preset)state).getPresetDataModel(), duration)));
+                        AllJoynManager.transitionEffectManager.updateTransitionEffect(transitionEffectModel.id,
+                                LightingItemUtil.createTransitionEffect(((Preset)state).getPresetDataModel(), duration)));
             } else {
                 postErrorIfFailure(errorContext,
-                    AllJoynManager.transitionEffectManager.updateTransitionEffect(transitionEffectModel.id,
-                        LightingItemUtil.createTransitionEffect(state.getPowerOn(), state.getColorHsvt(), duration)));
+                        AllJoynManager.transitionEffectManager.updateTransitionEffect(transitionEffectModel.id,
+                                LightingItemUtil.createTransitionEffect(state.getPowerOn(), state.getColorHsvt(), duration)));
             }
         }
     }
 
+    /**
+     * Renames the Transition Effect using the String specified.
+     *
+     * @param effectName The new name for the Transition Effect.
+     */
     @Override
     public void rename(String effectName) {
         String errorContext = "TransitionEffect.rename() error";
@@ -78,6 +98,9 @@ public class TransitionEffect extends ColorItem implements Effect {
         }
     }
 
+    /**
+     * Deletes the Transition Effect.
+     */
     @Override
     public void delete() {
         String errorContext = "TransitionEffect.delete() error";
@@ -86,6 +109,7 @@ public class TransitionEffect extends ColorItem implements Effect {
                 AllJoynManager.transitionEffectManager.deleteTransitionEffect(transitionEffectModel.id));
     }
 
+    //TODO-DOC
     public Preset getPreset() {
         return LightingDirector.get().getPreset(getPresetID());
     }
@@ -98,12 +122,28 @@ public class TransitionEffect extends ColorItem implements Effect {
         return transitionEffectModel.getDuration();
     }
 
+    /**
+     * Returns boolean true if the Transition Effect contains the Lighting Item specified,
+     * false otherwise.
+     *
+     * @param item The Lighting Item to be confirmed a component of the Transition Effect.
+     * @return boolean true if the Transition Effect contains the Lighting Item parameter,
+     * false otherwise.
+     */
     @Override
     public boolean hasComponent(LightingItem item) {
         String errorContext = "TransitionEffect.hasComponent() error";
         return postInvalidArgIfNull(errorContext, item) ? hasPreset(item.getId()) : false;
     }
 
+    /**
+     * Returns boolean true if the Transition Effect contains the Preset specified,
+     * false otherwise.
+     *
+     * @param preset The Preset to be confirmed a component of the Transition Effect.
+     * @return boolean true if the Transition Effect contains the Preset specified,
+     * false otherwise.
+     */
     public boolean hasPreset(Preset preset) {
         String errorContext = "TransitionEffect.hasPreset() error";
         return postInvalidArgIfNull(errorContext, preset) ? hasPreset(preset.getId()) : false;

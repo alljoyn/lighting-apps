@@ -23,6 +23,11 @@ import org.allseen.lsf.sdk.model.LightingItemDataModel;
 import org.allseen.lsf.sdk.model.LightingItemUtil;
 import org.allseen.lsf.sdk.model.SceneDataModelV2;
 
+/**
+ * The second version of the Scene object.
+ * <p>
+ * Compared to a SceneV1, a SceneV2 has extended functionality.
+ */
 public class SceneV2 extends Scene {
     public static void setDefaultName(String defaultName) {
         if (defaultName != null) {
@@ -42,6 +47,11 @@ public class SceneV2 extends Scene {
         this.sceneModel = sceneModel;
     }
 
+    /**
+     * Replaces the Scene Elements in the SceneV1 with the elements specified.
+     *
+     * @param elements The new array of Scene Elements.
+     */
     public void modify(SceneElement[] elements) {
         String errorContext = "SceneV2.modify() error";
 
@@ -57,6 +67,11 @@ public class SceneV2 extends Scene {
         }
     }
 
+    /**
+     * Adds the specified Scene Element to the SceneV2.
+     *
+     * @param element The Scene Element to be added.
+     */
     public void add(SceneElement element) {
         String errorContext = "SceneV2.add() error";
 
@@ -65,12 +80,17 @@ public class SceneV2 extends Scene {
             // only update this SceneElement if it does not already contain the Scene to add
             if (sceneElementIds.add(element.getId())) {
                 postErrorIfFailure(errorContext,
-                    AllJoynManager.sceneManager.updateSceneWithSceneElements(sceneModel.id, LightingItemUtil.createSceneWithSceneElements(
-                            sceneElementIds.toArray(new String[sceneElementIds.size()]))));
+                        AllJoynManager.sceneManager.updateSceneWithSceneElements(sceneModel.id, LightingItemUtil.createSceneWithSceneElements(
+                                sceneElementIds.toArray(new String[sceneElementIds.size()]))));
             }
         }
     }
 
+    /**
+     * Removes the specified Scene Element from the SceneV2.
+     *
+     * @param element The Scene Element to be removed.
+     */
     public void remove(SceneElement element) {
         String errorContext = "SceneV2.remove() error";
 
@@ -79,8 +99,8 @@ public class SceneV2 extends Scene {
             // only update this SceneElement if it contains the scene to remove
             if (sceneElementIds.remove(element.getId())) {
                 postErrorIfFailure(errorContext,
-                    AllJoynManager.sceneManager.updateSceneWithSceneElements(sceneModel.id, LightingItemUtil.createSceneWithSceneElements(
-                            sceneElementIds.toArray(new String[sceneElementIds.size()]))));
+                        AllJoynManager.sceneManager.updateSceneWithSceneElements(sceneModel.id, LightingItemUtil.createSceneWithSceneElements(
+                                sceneElementIds.toArray(new String[sceneElementIds.size()]))));
             }
         }
     }
@@ -90,6 +110,7 @@ public class SceneV2 extends Scene {
         return getSceneDataModel();
     }
 
+    //TODO-DOC
     public String[] getSceneElementIDs() {
         return sceneModel.getSceneWithSceneElements().getSceneElements();
     }
@@ -98,12 +119,29 @@ public class SceneV2 extends Scene {
         return LightingDirector.get().getSceneElements(Arrays.asList(getSceneElementIDs()));
     }
 
+    /**
+     * Returns boolean true if the SceneV2 contains the specified Lighting Item,
+     * false otherwise.
+     *
+     * @param item The Lighting Item to be confirmed a component of the SceneV2.
+     * @return boolean true if the SceneV2 contains the specified Lighting Item,
+     * false otherwise.
+     */
     @Override
     public boolean hasComponent(LightingItem item) {
         String errorContext = "SceneV2.hasComponent() error";
         return postInvalidArgIfNull(errorContext, item) ? hasSceneElement(item.getId()) : false;
     }
 
+    /**
+     * Returns boolean true if the SceneV2 contains the specified Scene Element,
+     * false otherwise.
+     *
+     * @param sceneElement The Scene Element to be confirmed a component of the
+     * SceneV2.
+     * @return boolean true if the SceneV2 contains the specified Scene Element,
+     * false otherwise.
+     */
     public boolean hasSceneElement(SceneElement sceneElement) {
         String errorContext = "SceneV2.hasSceneElement() error";
         return postInvalidArgIfNull(errorContext, sceneElement) ? hasSceneElement(sceneElement.getId()) : false;

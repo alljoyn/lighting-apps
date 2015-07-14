@@ -15,6 +15,9 @@
  */
 package org.allseen.lsf.sdk;
 
+/**
+ * A Lighting Controller's Status can be OK, ERROR, ERROR_ALREADY_RUNNING, or ERROR_INIT.
+ */
 public enum LightingControllerStatus {
     OK,
     ERROR,

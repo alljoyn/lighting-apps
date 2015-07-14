@@ -17,6 +17,9 @@ package org.allseen.lsf.sdk;
 
 import org.allseen.lsf.sdk.listener.ControllerCollectionListenerBase;
 
+/**
+ * An Controller Listener Base represents a set of no-op functions for Controller callbacks.
+ */
 public class ControllerListenerBase extends ControllerCollectionListenerBase<Controller, LightingItemErrorEvent> implements ControllerListener {
 
 }

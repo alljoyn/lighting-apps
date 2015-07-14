@@ -15,7 +15,10 @@
  */
 package org.allseen.lsf.sdk;
 
-
+/**
+ * An Empty Lamp Parameters object represents the a Lamp Parameters object
+ * with all methods returning <code>null</code>.
+ */
 public class EmptyLampParameters extends LampParameters {
     public static final EmptyLampParameters instance = new EmptyLampParameters();
 

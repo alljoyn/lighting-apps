@@ -15,6 +15,10 @@
  */
 package org.allseen.lsf.sdk;
 
+/**
+ * The listener interface for receiving information about all Lighting Items in the lighting
+ * system. An All Lighting Item Listener represents the set of all other Listeners in the SDK.
+ */
 public interface AllLightingItemListener extends
     LampListener,
     GroupListener,

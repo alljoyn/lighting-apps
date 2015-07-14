@@ -17,6 +17,13 @@ package org.allseen.lsf.sdk;
 
 import org.allseen.lsf.sdk.listener.GroupCollectionListenerBase;
 
+/**
+ * An Group Listener Base represents a set of no-op functions for Group callbacks.
+ *
+ * To use an Group Listener Base, subclass it inside your application, override the
+ * callbacks you need, and then pass an instance of it into your Lighting Director.
+ * See the tutorial applications for example Listener Base usage.
+ */
 public class GroupListenerBase extends GroupCollectionListenerBase<Group, LightingItemErrorEvent> implements GroupListener {
 
 }

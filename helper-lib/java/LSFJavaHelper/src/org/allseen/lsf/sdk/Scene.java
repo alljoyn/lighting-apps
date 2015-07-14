@@ -24,24 +24,36 @@ import org.allseen.lsf.sdk.manager.AllJoynManager;
  * used to apply the states to the lamps.
  */
 public abstract class Scene extends SceneItem {
+
+    /**
+     * Applies the Scene on the lighting system.
+     */
     @Override
     public void apply() {
         String errorContext = "Scene.apply() error";
 
         postErrorIfFailure(errorContext,
-            AllJoynManager.sceneManager.applyScene(this.getId()));
+                AllJoynManager.sceneManager.applyScene(this.getId()));
     }
 
+    /**
+     * Renames the Scene using the String parameter provided.
+     *
+     * @param sceneName The new name for the Scene.
+     */
     @Override
     public void rename(String sceneName) {
         String errorContext = "Scene.rename() error";
 
         if (postInvalidArgIfNull(errorContext, sceneName)) {
             postErrorIfFailure(errorContext,
-                AllJoynManager.sceneManager.setSceneName(this.getId(), sceneName, LightingDirector.get().getDefaultLanguage()));
+                    AllJoynManager.sceneManager.setSceneName(this.getId(), sceneName, LightingDirector.get().getDefaultLanguage()));
         }
     }
 
+    /**
+     * Deletes the Scene.
+     */
     @Override
     public void delete() {
         AllJoynManager.sceneManager.deleteScene(this.getId());

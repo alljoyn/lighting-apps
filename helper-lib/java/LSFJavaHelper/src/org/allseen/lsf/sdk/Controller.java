@@ -17,10 +17,14 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.model.ControllerDataModel;
 import org.allseen.lsf.sdk.model.LightingItemDataModel;
 
-// This class represents the client's info on a device providing the Lighting
-// Controller Service (LSF) functionality (currently only the lead controller
-// is exposed). In contrast, the LightingController class is an implementation
-// of the LSF, and is used by devices that want to provide the LSF functionality.
+/**
+ * This class represents the client's info on a device providing the Lighting
+ * Controller Service (LSF) functionality (currently only the lead controller
+ * is exposed).
+ * <p>
+ * In contrast, the LightingController class is an implementation
+ * of the LSF, and is used by devices that want to provide the LSF functionality.
+ */
 public class Controller extends LightingItem {
     public static void setDefaultName(String defaultName) {
         if (defaultName != null) {
@@ -40,16 +44,31 @@ public class Controller extends LightingItem {
         controllerModel = new ControllerDataModel();
     }
 
+    /**
+     * Changes the name of the controller.
+     * <p>
+     * Note: This method is not yet implemented.
+     */
     @Override
     public void rename(String name) {
         // This method is not yet implemented
         postError(ResponseCode.ERR_FAILURE);
     }
 
+    /**
+     * Returns whether or not the Controller is connected.
+     *
+     * @return Whether the controller is connected, as a boolean.
+     */
     public boolean isConnected() {
         return getControllerDataModel().connected;
     }
 
+    /**
+     * Returns the version number of the Controller.
+     *
+     * @return The version number of the Controller.
+     */
     public long getVersion() {
         return getControllerDataModel().version;
     }

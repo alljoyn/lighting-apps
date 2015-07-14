@@ -21,19 +21,45 @@ import org.alljoyn.bus.AboutKeys;
 import org.allseen.lsf.AboutData;
 import org.allseen.lsf.sdk.model.LightingControllerConfiguration;
 
+/**
+ * LightingControllerConfigurationBase automatically sets all the parameters necessary
+ * to initialize a Lighting Controller.
+ * <p>
+ * <b>except</b> for the application's absolute path,
+ * which must be passed as a parameter in the LightingContrllerConfigurationBase's
+ * constructor method.
+ * <p>
+ * An example usage of a LightingControllerConfigurationBase can be found in the
+ * LSFTutorial project.
+ */
 public class LightingControllerConfigurationBase implements LightingControllerConfiguration {
 
     private final String keystorePath;
 
+    /**
+     * Constructs a Lighting Controller Configuration Base with a Key StorePath.
+     *
+     * @param keystorePath The absolute path of you application.
+     */
     public LightingControllerConfigurationBase(String keystorePath) {
         this.keystorePath = keystorePath;
     }
 
+    /**
+     * Returns the Keystore Path of the LightingControllerConfigurationBase
+     *
+     * @return The Keystore Path of the LightingControllerConfigurationBase as a String.
+     */
     @Override
     public String getKeystorePath() {
         return this.keystorePath;
     }
 
+    /**
+     * Populates the default properties of a Lighting Controller Configuration.
+     *
+     * @param aboutData The About Data of your app.
+     */
     @Override
     public void populateDefaultProperties(AboutData aboutData) {
         byte[] randomAppID = new byte[16];
@@ -60,31 +86,61 @@ public class LightingControllerConfigurationBase implements LightingControllerCo
         aboutData.put(AboutKeys.ABOUT_MANUFACTURER, "Firma A (DE-AT)", "de-AT");
     }
 
+    /**
+     * Returns the MAC Address of the Lighting Controller Configuration Base.
+     *
+     * @return The MAC Address of the Lighting Controller Configuration Base.
+     */
     @Override
     public String getMacAddress(String generatedMacAddress) {
         return generatedMacAddress;
     }
 
+    /**
+     * Returns boolean representing the Lighting Controller Configuration is network connected.
+     *
+     * @return boolean true.
+     */
     @Override
     public boolean isNetworkConnected() {
         return true;
     }
 
+    /**
+     * Returns the Rank Power of the Lighting Controller Configuration.
+     *
+     * @return The Rank Power of the Lighting Controller Configuration.
+     */
     @Override
     public RankPower getRankPower() {
         return RankPower.BATTERY_POWERED_CHARGABLE;
     }
 
+    /**
+     * Returns the Rank Mobility of the Lighting Controller Configuration.
+     *
+     * @return The Rank Mobility of the Lighting Controller Configuration.
+     */
     @Override
     public RankMobility getRankMobility() {
         return RankMobility.HIGH_MOBILITY;
     }
 
+    /**
+     * Returns the Rank Availability of the Lighting Controller Configuration.
+     *
+     * @return The Rank Availability of the Lighting Controller Configuration.
+     */
     @Override
     public RankAvailability getRankAvailability() {
         return RankAvailability.SIX_TO_NINE_HOURS;
     }
 
+    /**
+     * Returns the Rank Node Type of the Lighting Controller Configuration.
+     *
+     * @return The Rank Node Type of the Lighting Controller Configuration.
+     */
     @Override
     public RankNodeType getRankNodeType() {
         return RankNodeType.WIRELESS;

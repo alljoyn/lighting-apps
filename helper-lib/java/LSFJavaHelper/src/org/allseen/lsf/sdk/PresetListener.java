@@ -17,6 +17,21 @@ package org.allseen.lsf.sdk;
 
 import org.allseen.lsf.sdk.listener.PresetCollectionListener;
 
+/**
+ * The listener interface for receiving information about Presets in the lighting
+ * system.
+ */
 public interface PresetListener extends PresetCollectionListener<Preset, LightingItemErrorEvent> {
+    @Override
+    //TODO-DOC
+    public void onPresetInitialized(TrackingID trackingId, Preset preset);
 
+    @Override
+    public void onPresetChanged(Preset preset);
+
+    @Override
+    public void onPresetRemoved(Preset preset);
+
+    @Override
+    public void onPresetError(LightingItemErrorEvent error);
 }

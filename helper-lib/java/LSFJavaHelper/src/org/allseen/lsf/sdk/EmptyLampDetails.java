@@ -17,6 +17,10 @@ package org.allseen.lsf.sdk;
 
 import org.allseen.lsf.sdk.model.ColorStateConverter;
 
+/**
+ * An Empty Lamp Details object represents the a LampDetails object
+ * with all methods returning <code>null</code>.
+ */
 public class EmptyLampDetails extends LampDetails {
     public static final EmptyLampDetails instance = new EmptyLampDetails();
 

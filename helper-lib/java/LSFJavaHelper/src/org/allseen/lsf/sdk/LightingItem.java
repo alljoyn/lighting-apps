@@ -22,34 +22,63 @@ import org.allseen.lsf.sdk.model.LightingItemSortableTag;
 
 /**
  * Abstract base class for items in a Lighting system.
- * <p>
- * <b>WARNING: This class is not intended to be used by clients, and its interface may change
- * in subsequent releases of the SDK</b>.
  */
 public abstract class LightingItem implements LightingItemInterface {
+
+    /**
+     * Returns the name of the Lighting Item.
+     *
+     * @return The name of the Lighting Item.
+     */
     @Override
     public String getName() {
         return getItemDataModel().getName();
     }
 
+    /**
+     * Returns the ID of the Lighting Item.
+     *
+     * @return the ID of the Lighting Item.
+     */
     @Override
     public String getId() {
         return getItemDataModel().id;
     }
 
+    /**
+     * Returns the sortable tag of the Lighting Item.
+     *
+     * @return The sortable tag of the Lighting Item.
+     */
     public LightingItemSortableTag getTag() {
         return getItemDataModel().tag;
     }
 
+    /**
+     * Returns a boolean true if the Lighting Item is initialized.
+     *
+     * @return boolean true if the Lighting Item is initialized.
+     */
     public boolean isInitialized() {
         return getItemDataModel().isInitialized();
     }
 
+    /**
+     * Returns the hash code of the Lighting Item.
+     *
+     * @return the hash code of the Lighting Item.
+     */
     @Override
     public int hashCode() {
         return getId().hashCode();
     }
 
+    /**
+     * Returns boolean true if the Lighting Item is equivalent to the other object.
+     *
+     * @param other The other Object.
+     * @return boolean true if the Lighting Item is equivalent to the other object.
+     */
     @Override
     public boolean equals(Object other) {
         boolean equivalent = false;
@@ -61,18 +90,34 @@ public abstract class LightingItem implements LightingItemInterface {
         return equivalent;
     }
 
+    /**
+     * Returns an array of dependent Lighting Items.
+     *
+     * @return Array of dependent Lighting Items.
+     */
     @Override
     public LightingItem[] getDependents() {
         Collection<LightingItem> dependents = getDependentCollection();
         return dependents.toArray(new LightingItem[dependents.size()]);
     }
 
+    /**
+     * Returns an array of component Lighting Items.
+     *
+     * @return Array of component Lighting Items.
+     */
     @Override
     public LightingItem[] getComponents() {
         Collection<LightingItem> components = getComponentCollection();
         return components.toArray(new LightingItem[components.size()]);
     }
 
+    /**
+     * Returns boolean true if the Lighting Item has the method parameter as a component.
+     *
+     * @param item The Lighting Item to be confirmed a component.
+     * @return boolean true if the Lighting Item has the method paramter as a component.
+     */
     public boolean hasComponent(LightingItem item) {
         // Default implementation -- subclasses may override for efficiency
         return getComponentCollection().contains(item);

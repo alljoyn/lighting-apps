@@ -17,6 +17,13 @@ package org.allseen.lsf.sdk;
 
 import org.allseen.lsf.sdk.listener.TransitionEffectCollectionListenerBase;
 
+/**
+ * An Transition Effect Listener Base represents a set of no-op functions for Transition Effect callbacks.
+ * <p>
+ * To use an Transition Effects Listener Base, subclass it inside your application, override the
+ * callbacks you need, and then pass an instance of it into your Lighting Director.
+ * See the tutorial applications for example usage of a Listener Base.
+ */
 public class TransitionEffectListenerBase extends TransitionEffectCollectionListenerBase<TransitionEffect, LightingItemErrorEvent> implements TransitionEffectListener {
 
 }

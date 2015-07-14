@@ -81,7 +81,7 @@ public class GroupSelectMembersFragment extends SelectMembersFragment {
                 group.modify(members.toArray(new GroupMember[members.size()]));
             }
         } else {
-            LightingDirector.get().createGroup(members.toArray(new GroupMember[members.size()]), GroupInfoFragment.pendingGroupName, null);
+            LightingDirector.get().createGroup(members.toArray(new GroupMember[members.size()]), GroupInfoFragment.pendingGroupName);
         }
     }
 

@@ -17,6 +17,21 @@ package org.allseen.lsf.sdk;
 
 import org.allseen.lsf.sdk.listener.MasterSceneCollectionListener;
 
+/**
+ * The listener interface for receiving information about Master Scenes in the lighting
+ * system.
+ */
 public interface MasterSceneListener extends MasterSceneCollectionListener<MasterScene, LightingItemErrorEvent> {
+    //TODO-DOC
+    @Override
+    public void onMasterSceneInitialized(TrackingID trackingId, MasterScene masterScene);
 
+    @Override
+    public void onMasterSceneChanged(MasterScene masterScene);
+
+    @Override
+    public void onMasterSceneRemoved(MasterScene masterScene);
+
+    @Override
+    public void onMasterSceneError(LightingItemErrorEvent error);
 }

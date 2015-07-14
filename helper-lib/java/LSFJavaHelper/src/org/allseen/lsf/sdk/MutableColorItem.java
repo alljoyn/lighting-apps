@@ -18,20 +18,32 @@ package org.allseen.lsf.sdk;
 
 /**
  * Abstract base class for Lighting items that support color.
- * <p>
- * <b>WARNING: This class is not intended to be used by clients, and its interface may change
- * in subsequent releases of the SDK</b>.
  */
 public abstract class MutableColorItem extends ColorItem implements LampState {
 
+    /**
+     * Set Power of the Mutable Color Item to ON.
+     */
     public void turnOn() {
         setPowerOn(true);
     }
 
+    /**
+     * Set Power of the Mutable Color Item to OFF.
+     */
     public void turnOff() {
         setPowerOn(false);
     }
 
+    /**
+     * Set the Color of the Mutable Color Item with the values defined in
+     * the HSVT array.
+     * @param hsvt
+     *              the array of values. hsvt[0] is the hue component in degrees (0-360),
+     *              hsvt[1] is the saturation component in percent (0-100), hsvt[2] is the brightness
+     *              component in percent (0-100), and hsvt[3] is the color temperature in degrees
+     *              Kelvin, (2700 - 9000)
+     */
     public void setColorHsvt(int[] hsvt) {
         String errorContext = "MutableColorItem.setColorHsvt() error";
 
@@ -44,14 +56,27 @@ public abstract class MutableColorItem extends ColorItem implements LampState {
         }
     }
 
+    /**
+     * Switches Power value from ON if OFF and vice versa.
+     */
     public void togglePower() {
         setPowerOn(isOff());
     }
 
+    /**
+     * Sets Power to the same state as the parameter.
+     *
+     * @param power The desired Power state.
+     */
     public void setPower(Power power) {
         setPowerOn(power == Power.ON);
     }
 
+    /**
+     * Sets Color to the same value as the parameter.
+     *
+     * @param color The desired Color value.
+     */
     public void setColor(Color color) {
         String errorContext = "MutableColorItem.setColor() error";
 

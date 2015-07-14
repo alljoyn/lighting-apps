@@ -14,17 +14,38 @@
  */
 package org.allseen.lsf.sdk;
 
+/**
+ * A Lamp Capabilities object represents the parameters supported
+ * by a Lamp in the lighting system.
+ * <p>
+ * Such capabilities include: Dimmable, Color, Color Temperature.
+ */
 public class LampCapabilities extends org.allseen.lsf.sdk.model.LampCapabilities {
     public static final LampCapabilities allCapabilities = new LampCapabilities(true, true, true);
 
+    /**
+     * Default constructor for a LampCapabilities object.
+     */
     public LampCapabilities() {
         super();
     }
 
+    /**
+     * Constructor for a LampCapabilites object.
+     *
+     * @param dimmable Boolean true if your lamp supports dimming.
+     * @param color Boolean true if your lamp supports colors.
+     * @param temp Boolean true if your lamp supports color temperature.
+     */
     public LampCapabilities(boolean dimmable, boolean color, boolean temp) {
         super(dimmable, color, temp);
     }
 
+    /**
+     * Constructor for a LampCapabilities object.
+     *
+     * @param that A LampCapabilities object.
+     */
     public LampCapabilities(org.allseen.lsf.sdk.model.LampCapabilities that) {
         super(that);
     }

@@ -21,12 +21,6 @@ package org.allseen.lsf.sdk.listener;
  * in subsequent releases of the SDK</b>.
  */
 public interface LampCollectionListener<LAMP, ERROR> extends LightingListener {
-    /**
-     * Called when the SDK has retrieved all the information about a lamp
-     * from the controller service/
-     *
-     * @param lamp The lamp that was fully initialized
-     */
     public void onLampInitialized(LAMP lamp);
     public void onLampChanged(LAMP lamp);
     public void onLampRemoved(LAMP lamp);

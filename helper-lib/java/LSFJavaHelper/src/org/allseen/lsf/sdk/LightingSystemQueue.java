@@ -14,5 +14,8 @@
  */
 package org.allseen.lsf.sdk;
 
+/**
+ * The queue interface for the Lighting System.
+ */
 public interface LightingSystemQueue extends org.allseen.lsf.sdk.manager.LightingSystemQueue {
 }

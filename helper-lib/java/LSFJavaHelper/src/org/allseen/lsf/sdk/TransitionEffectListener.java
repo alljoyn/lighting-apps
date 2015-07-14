@@ -17,6 +17,21 @@ package org.allseen.lsf.sdk;
 
 import org.allseen.lsf.sdk.listener.TransitionEffectCollectionListener;
 
+/**
+ * The listener interface for receiving information about Transition Effects in the lighting
+ * system.
+ */
 public interface TransitionEffectListener extends TransitionEffectCollectionListener<TransitionEffect, LightingItemErrorEvent> {
+    //TODO-DOC
+    @Override
+    public void onTransitionEffectInitialized(TrackingID trackingId, TransitionEffect effect);
 
+    @Override
+    public void onTransitionEffectChanged(TransitionEffect effect);
+
+    @Override
+    public void onTransitionEffectRemoved(TransitionEffect effect);
+
+    @Override
+    public void onTransitionEffectError(LightingItemErrorEvent error);
 }

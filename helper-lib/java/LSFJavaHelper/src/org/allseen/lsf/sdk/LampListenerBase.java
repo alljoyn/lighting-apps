@@ -17,6 +17,13 @@ package org.allseen.lsf.sdk;
 
 import org.allseen.lsf.sdk.listener.LampCollectionListenerBase;
 
+/**
+ * An Lamp Listener Base represents a set of no-op functions for Lamp callbacks.
+ *
+ * To use an Lamp Listener Base, subclass it inside your application, override the
+ * callbacks you need, and then pass an instance of it into your Lighting Director.
+ * See the tutorial applications for example usage of a Listener Base.
+ */
 public class LampListenerBase extends LampCollectionListenerBase<Lamp, LightingItemErrorEvent> implements LampListener {
 
 }

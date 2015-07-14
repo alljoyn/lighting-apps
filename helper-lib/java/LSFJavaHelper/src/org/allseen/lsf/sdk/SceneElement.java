@@ -26,7 +26,17 @@ import org.allseen.lsf.sdk.model.LightingItemUtil;
 import org.allseen.lsf.sdk.model.SceneElementDataModel;
 import org.allseen.lsf.sdk.model.SceneElementDataModelV2;
 
+
+/**
+ * A wrapper class for lighting effects that designates them as Elements of a Scene object.
+ * Used to place Lighting Effects into Scenes.
+ */
 public class SceneElement extends SceneItem {
+    /**
+     * Changes the defaultName for Scene Elements.
+     *
+     * @param defaultName The new default name.
+     */
     public static void setDefaultName(String defaultName) {
         if (defaultName != null) {
             SceneElementDataModel.defaultName = defaultName;
@@ -45,23 +55,38 @@ public class SceneElement extends SceneItem {
         sceneElementModel = new SceneElementDataModelV2(sceneElementId, sceneElementName);
     }
 
+    /**
+     * Applies the Scene Element.
+     */
     @Override
     public void apply() {
         String errorContext = "SceneElement.apply() error";
 
         postErrorIfFailure(errorContext,
-            AllJoynManager.sceneElementManager.applySceneElement(sceneElementModel.id));
+                AllJoynManager.sceneElementManager.applySceneElement(sceneElementModel.id));
     }
 
+    /**
+     * Changes the Scene Element's Effect and GroupMembers to those passed
+     * as parameters.
+     *
+     * @param effect The new Effect.
+     * @param members The new GroupMembers.
+     */
     public void modify(Effect effect, GroupMember[] members) {
         String errorContext = "SceneElement.modify() error";
 
         if (postInvalidArgIfNull(errorContext, effect) && postInvalidArgIfNull(errorContext, members)) {
             postErrorIfFailure(errorContext,
-                AllJoynManager.sceneElementManager.updateSceneElement(sceneElementModel.id, LightingItemUtil.createSceneElement(effect.getId(), GroupMember.createLampGroup(members))));
+                    AllJoynManager.sceneElementManager.updateSceneElement(sceneElementModel.id, LightingItemUtil.createSceneElement(effect.getId(), GroupMember.createLampGroup(members))));
         }
     }
 
+    /**
+     * Adds the GroupMember specified to the Scene Element.
+     *
+     * @param member The new Group Member to be added.
+     */
     public void add(GroupMember member) {
         String errorContext = "SceneElement.add() error";
 
@@ -82,6 +107,11 @@ public class SceneElement extends SceneItem {
         }
     }
 
+    /**
+     * Removes the Group Member specified from the Scene Element.
+     *
+     * @param member The Group Member to be removed.
+     */
     public void remove(GroupMember member) {
         String errorContext = "SceneElement.remove() error";
 
@@ -93,12 +123,17 @@ public class SceneElement extends SceneItem {
 
             if (didRemove) {
                 postErrorIfFailure(errorContext,
-                    AllJoynManager.sceneElementManager.updateSceneElement(sceneElementModel.id, LightingItemUtil.createSceneElement(
-                            sceneElementModel.getEffectId(), lamps.toArray(new String[lamps.size()]), groups.toArray(new String[groups.size()]))));
+                        AllJoynManager.sceneElementManager.updateSceneElement(sceneElementModel.id, LightingItemUtil.createSceneElement(
+                                sceneElementModel.getEffectId(), lamps.toArray(new String[lamps.size()]), groups.toArray(new String[groups.size()]))));
             }
         }
     }
 
+    /**
+     * Renames the Scene Element using the passed in String.
+     *
+     * @param sceneElementName The new name for the Scene Element.
+     */
     @Override
     public void rename(String sceneElementName) {
         String errorContext = "SceneElement.rename() error";
@@ -109,6 +144,9 @@ public class SceneElement extends SceneItem {
         }
     }
 
+    /**
+     * Deletes the Scene Element.
+     */
     @Override
     public void delete() {
         String errorContext = "SceneElement.delete() error";
@@ -117,6 +155,7 @@ public class SceneElement extends SceneItem {
                 AllJoynManager.sceneElementManager.deleteSceneElement(sceneElementModel.id));
     }
 
+    //TODO-DOC
     public Effect getEffect() {
         return LightingDirector.get().getEffect(sceneElementModel.getEffectId());
     }
@@ -141,22 +180,50 @@ public class SceneElement extends SceneItem {
         return sceneElementModel.getGroups();
     }
 
+    /**
+     * Returns boolean true if the Scene Element contains the Lighting Item parameter,
+     * false otherwise.
+     *
+     * @param item The Lighting Item to be confirmed a component of the Scene Element.
+     * @return boolean true if the Scene Element contains the Lighting Item parameter,
+     * false otherwise.
+     */
     @Override
     public boolean hasComponent(LightingItem item) {
         String errorContext = "SceneElement.hasComponent() error";
         return postInvalidArgIfNull(errorContext, item) ? hasEffect(item.getId()) || hasLamp(item.getId()) || hasGroup(item.getId()) : false;
     }
 
+    /**
+     * Returns boolean true if the Scene Element contains the Effect parameter,
+     * false otherwise.
+     *
+     * @param effect The Effect to be confirmed a component of the Scene Element.
+     * @return boolean true if the Scene Element contains the Effect parameter,
+     * false otherwise.
+     */
     public boolean hasEffect(Effect effect) {
         String errorContext = "SceneElement.hasEffect() error";
         return postInvalidArgIfNull(errorContext, effect) ? hasEffect(effect.getId()) : false;
     }
 
+    /**
+     * Returns boolean true if the Scene Element contains the Lamp specified, false otherwise.
+     *
+     * @param lamp The Lamp to be confirmed a component of the Scene Element.
+     * @return boolean true if the Scene Element contains the Lamp specified, false otherwise.
+     */
     public boolean hasLamp(Lamp lamp) {
         String errorContext = "Group.hasLamp() error";
         return postInvalidArgIfNull(errorContext, lamp) ? hasLamp(lamp.getId()) : false;
     }
 
+    /**
+     * Returns boolean true if the Scene Element contains the Group specified, false otherwise.
+     *
+     * @param group The Group to be confirmed a component of the Scene Element.
+     * @return boolean true if the Scene Element contains the Group specified, false otherwise.
+     */
     public boolean hasGroup(Group group) {
         String errorContext = "SceneElement.hasGroup() error";
         return postInvalidArgIfNull(errorContext, group) ? hasGroup(group.getId()) : false;

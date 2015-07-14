@@ -14,7 +14,9 @@
  */
 package org.allseen.lsf.sdk;
 
-
+/**
+ * Abstract class for Lighting Items that can be applied in a Scene and also deleted.
+ */
 public abstract class SceneItem extends LightingItem implements DeletableItem {
     public abstract void apply();
 }

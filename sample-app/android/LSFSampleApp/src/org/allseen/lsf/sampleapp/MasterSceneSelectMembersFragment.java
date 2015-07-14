@@ -64,7 +64,7 @@ public class MasterSceneSelectMembersFragment extends SelectMembersFragment {
         if (MasterSceneInfoFragment.pendingMasterScene.id != null) {
             director.getMasterScene(MasterSceneInfoFragment.pendingMasterScene.id).modify(scenes);
         } else {
-            director.createMasterScene(scenes, MasterSceneInfoFragment.pendingMasterScene.name, null);
+            director.createMasterScene(scenes, MasterSceneInfoFragment.pendingMasterScene.name);
         }
     }
 

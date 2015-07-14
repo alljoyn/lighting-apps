@@ -68,7 +68,7 @@ public class TutorialPulseEffectActivity extends Activity implements NextControl
                 MyLampState lampTo = new MyLampState(pulsePowerState, pulseToColor);
 
                 // boilerplate code, alter parameters above to change effect color, length, etc.
-                lightingDirector.createPulseEffect(lampFrom, lampTo, period, duration, numPulses, "TutorialPulseEffect", null);
+                lightingDirector.createPulseEffect(lampFrom, lampTo, period, duration, numPulses, "TutorialPulseEffect");
             }
         }
 
@@ -117,6 +117,6 @@ public class TutorialPulseEffectActivity extends Activity implements NextControl
     public void onControllerConnected() {
         // STEP 3: Create a Group consisting of all the connected Lamps
         Lamp[] lamps = lightingDirector.getLamps();
-        groupCreationId = lightingDirector.createGroup(lamps, "TutorialGroup", null);
+        groupCreationId = lightingDirector.createGroup(lamps, "TutorialGroup");
     }
 }

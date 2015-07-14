@@ -111,7 +111,7 @@ public class SceneElementV2SelectEffectFragment extends SelectEffectsFragment {
         if (!isAddMode()) {
             director.getSceneElement(SceneElementV2InfoFragment.pendingSceneElement.id).modify(effect, members);
         } else {
-            director.createSceneElement(effect, members, SceneElementV2InfoFragment.pendingSceneElement.name, null);
+            director.createSceneElement(effect, members, SceneElementV2InfoFragment.pendingSceneElement.name);
         }
     }
 }

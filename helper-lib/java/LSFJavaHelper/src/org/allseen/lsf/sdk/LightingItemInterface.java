@@ -14,6 +14,9 @@
  */
 package org.allseen.lsf.sdk;
 
+/**
+ * The interface for receiving information from Lighting Items in the lighting system.
+ */
 public interface LightingItemInterface {
     public String getId();
     public String getName();

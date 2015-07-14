@@ -17,7 +17,20 @@ package org.allseen.lsf.sdk;
 
 import org.allseen.lsf.sdk.model.LightingItemFilter;
 
+/**
+ * A LightingItemInitializedFilter is used to filter objects that
+ * have been properly initialized.
+ *
+ * @param <ITEM> the type of item to be filtered.
+ */
 public class LightingItemInitializedFilter<ITEM extends LightingItem> implements LightingItemFilter<ITEM> {
+
+    /**
+     * Returns boolean true if the item specified passes its
+     * own isInitialized() function with a "true" boolean value.
+     *
+     * @return boolean true if the item has been initialized.
+     */
     @Override
     public boolean passes(ITEM item) {
         return item.isInitialized();

@@ -17,6 +17,11 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.model.LightingItemDataModel;
 import org.allseen.lsf.sdk.model.SceneDataModel;
 
+/**
+ * The first version of the Scene object.
+ * <p>
+ * A SceneV1 has less functionality than a SceneV2.
+ */
 public class SceneV1 extends Scene {
     public static void setDefaultName(String defaultName) {
         if (defaultName != null) {
@@ -33,7 +38,7 @@ public class SceneV1 extends Scene {
      * Scenes directly, but should instead get them from the {@link LightingDirector} using the
      * {@link LightingDirector#getScenes()} method.</b>
      *
-     * @param sceneID The ID of the scene
+     * @param sceneID The ID of the Scene.
      */
     protected SceneV1(String sceneID) {
         this(new SceneDataModel(sceneID));
@@ -49,17 +54,39 @@ public class SceneV1 extends Scene {
         this.sceneModel = sceneModel;
     }
 
+    /**
+     * Returns boolean true if the SceneV1 contains the Lighting Item specified,
+     * false otherwise.
+     *
+     * @param item The Lighting Item to be confirmed a component of the SceneV1.
+     * @return boolean true if the SceneV1 contains the Lighting Item parameter,
+     * false otherwise.
+     */
     @Override
     public boolean hasComponent(LightingItem item) {
         String errorContext = "SceneV1.hasComponent() error";
         return postInvalidArgIfNull(errorContext, item) ? hasPreset(item.getId()) || hasGroup(item.getId()) : false;
     }
 
+    /**
+     * Returns boolean true if the SceneV1 contains the Preset specified,
+     * false otherwise.
+     *
+     * @param preset The Preset to be confirmed a component of the SceneV1.
+     * @return boolean true if the SceneV1 contains the Preset specified,
+     * false otherwise.
+     */
     public boolean hasPreset(Preset preset) {
         String errorContext = "SceneV1.hasPreset() error";
         return postInvalidArgIfNull(errorContext, preset) ? hasPreset(preset.getId()) : false;
     }
 
+    /**
+     * Returns boolean true if the SceneV1 contains the Group specified, false otherwise.
+     *
+     * @param group The Group to be confirmed a component of the SceneV1.
+     * @return boolean true if the SceneV1 contains the Group specified, false otherwise.
+     */
     public boolean hasGroup(Group group) {
         String errorContext = "SceneV1.hasGroup() error";
         return postInvalidArgIfNull(errorContext, group) ? hasGroup(group.getId()) : false;

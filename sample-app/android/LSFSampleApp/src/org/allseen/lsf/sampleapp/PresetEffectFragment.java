@@ -97,7 +97,7 @@ public class PresetEffectFragment extends EffectV2InfoFragment {
         if (!isAddMode()) {
             LightingDirector.get().getPreset(pendingPresetEffect.id).modify(pendingPresetEffect.state.getPower(), pendingPresetEffect.state.getColor());
         } else {
-            LightingDirector.get().createPreset(pendingPresetEffect.state.getPower(), pendingPresetEffect.state.getColor(), pendingPresetEffect.name, null);
+            LightingDirector.get().createPreset(pendingPresetEffect.state.getPower(), pendingPresetEffect.state.getColor(), pendingPresetEffect.name);
         }
 
         parent.popBackStack(ScenesPageFragment.CHILD_TAG_SELECT_EFFECT);

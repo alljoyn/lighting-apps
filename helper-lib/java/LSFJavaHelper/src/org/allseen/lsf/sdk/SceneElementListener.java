@@ -17,6 +17,21 @@ package org.allseen.lsf.sdk;
 
 import org.allseen.lsf.sdk.listener.SceneElementCollectionListener;
 
+/**
+ * The listener interface for receiving information about Scene Elements in the lighting
+ * system.
+ */
 public interface SceneElementListener extends SceneElementCollectionListener<SceneElement, LightingItemErrorEvent> {
+    //TODO-DOC
+    @Override
+    public void onSceneElementInitialized(TrackingID trackingId, SceneElement element);
 
+    @Override
+    public void onSceneElementChanged(SceneElement element);
+
+    @Override
+    public void onSceneElementRemoved(SceneElement element);
+
+    @Override
+    public void onSceneElementError(LightingItemErrorEvent error);
 }

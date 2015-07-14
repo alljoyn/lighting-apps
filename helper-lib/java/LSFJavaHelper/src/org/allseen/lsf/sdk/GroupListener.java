@@ -17,6 +17,21 @@ package org.allseen.lsf.sdk;
 
 import org.allseen.lsf.sdk.listener.GroupCollectionListener;
 
+/**
+ * The listener interface for receiving information about Groups in the lighting
+ * system.
+ */
 public interface GroupListener extends GroupCollectionListener<Group, LightingItemErrorEvent> {
+    //TODO-DOC
+    @Override
+    public void onGroupInitialized(TrackingID trackingId, Group group);
 
+    @Override
+    public void onGroupChanged(Group group);
+
+    @Override
+    public void onGroupRemoved(Group group);
+
+    @Override
+    public void onGroupError(LightingItemErrorEvent error);
 }

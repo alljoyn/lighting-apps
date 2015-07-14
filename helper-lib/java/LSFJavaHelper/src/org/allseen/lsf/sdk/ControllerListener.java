@@ -18,6 +18,15 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.listener.ControllerCollectionListener;
 import org.allseen.lsf.sdk.listener.LightingListener;
 
+/**
+ * The listener interface for receiving information about Controllers in the lighting
+ * system.
+ */
 public interface ControllerListener extends ControllerCollectionListener<Controller, LightingItemErrorEvent>, LightingListener {
+    //TODO-DOC
+    @Override
+    public void onLeaderChange(Controller leader);
 
+    @Override
+    public void onControllerErrors(LightingItemErrorEvent error);
 }

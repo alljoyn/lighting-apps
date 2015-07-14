@@ -45,7 +45,7 @@ public class TutorialPresetActivity extends Activity {
         public void onLampInitialized(Lamp lamp) {
             // STEP 3: Use the discovery of a Lamp as a trigger for creating
             // the Preset. We define a preset that changes the color to red.
-            lightingDirector.createPreset(Power.ON, Color.RED, "TutorialPreset", null);
+            lightingDirector.createPreset(Power.ON, Color.RED, "TutorialPreset");
         }
 
         @Override

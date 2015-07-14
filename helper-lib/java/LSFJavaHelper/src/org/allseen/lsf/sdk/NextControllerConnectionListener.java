@@ -15,6 +15,12 @@
  */
 package org.allseen.lsf.sdk;
 
+/**
+ * The listener interface for managing callbacks triggered on the
+ * connection of a lighting Controller.
+ */
 public interface NextControllerConnectionListener extends org.allseen.lsf.sdk.listener.NextControllerConnectionListener {
-
+    //TODO-DOC
+    @Override
+    public void onControllerConnected();
 }

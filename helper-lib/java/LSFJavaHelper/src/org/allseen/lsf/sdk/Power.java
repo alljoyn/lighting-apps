@@ -14,6 +14,9 @@
  */
 package org.allseen.lsf.sdk;
 
+/**
+ * Power can either be ON or OFF.
+ */
 public enum Power {
     ON,
     OFF

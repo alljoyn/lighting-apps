@@ -259,8 +259,7 @@ public class PulseEffectV2Fragment extends EffectV2InfoFragment implements OnChe
                 EnterPeriodFragment.period,
                 EnterDurationFragment.duration,
                 EnterCountFragment.count,
-                pendingPulseEffect.name,
-                null);
+                pendingPulseEffect.name);
         }
 
         parent.popBackStack(ScenesPageFragment.CHILD_TAG_SELECT_EFFECT);

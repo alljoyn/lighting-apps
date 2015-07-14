@@ -124,6 +124,11 @@ public class Lamp extends GroupMember {
                 AllJoynManager.lampManager.transitionLampState(lampModel.id, lampState, 0));
     }
 
+    /**
+     * Renames the Lamp with the specified String.
+     *
+     * @param lampName The new name for the Lamp.
+     */
     @Override
     public void rename(String lampName) {
         String errorContext = "Lamp.rename() error";
@@ -134,26 +139,52 @@ public class Lamp extends GroupMember {
         }
     }
 
+    /**
+     * Returns a LampAbout object specific to the Lamp.
+     *
+     * @return The Lamp's About information.
+     */
     public LampAbout getAbout() {
         return new LampAbout(lampModel.getAbout());
     }
 
+    /**
+     * Returns a LampDetails object specific to the Lamp.
+     *
+     * @return The Lamp's Details.
+     */
     public LampDetails getDetails() {
         LampDetails lampDetails = lampModel.getDetails();
 
         return lampDetails != null ? lampDetails : EmptyLampDetails.instance;
     }
 
+    /**
+     * Returns a LampParameters object specific to the Lamp. If null,
+     * it returns an EmptyLampParameters instance.
+     *
+     * @return The Lamp's Parameters.
+     */
     public LampParameters getParameters() {
         LampParameters lampParams = lampModel.getParameters();
 
         return lampParams != null ? lampParams : EmptyLampParameters.instance;
     }
 
+    /**
+     * Returns the minimum Color Temperature value supported by the Lamp.
+     *
+     * @return The Lamp's minimum Color Temperature Value.
+     */
     public int getColorTempMin() {
         return getDetails().getMinTemperature();
     }
 
+    /**
+     * Returns the maximum Color Temperature value supported by the Lamp.
+     *
+     * @return The Lamp's maximum Color Temperature Value.
+     */
     public int getColorTempMax() {
         return getDetails().getMaxTemperature();
     }

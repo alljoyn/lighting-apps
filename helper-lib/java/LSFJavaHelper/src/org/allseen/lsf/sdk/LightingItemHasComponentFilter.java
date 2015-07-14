@@ -17,13 +17,31 @@ package org.allseen.lsf.sdk;
 
 import org.allseen.lsf.sdk.model.LightingItemFilter;
 
+/**
+ * A LightingItemHasComponentFilter is used to filter items with a specified component.
+ *
+ * @param <ITEM> The item type to be filtered.
+ */
 public class LightingItemHasComponentFilter<ITEM extends LightingItem> implements LightingItemFilter<ITEM> {
     protected LightingItem component;
 
+    /**
+     * Constructs a Lighting Item Filter for a specified component.
+     *
+     * @param component The component to be filtered for each tem
+     * passed to the filter.
+     */
     public LightingItemHasComponentFilter(LightingItem component) {
         this.component = component;
     }
 
+    /**
+     * Returns a boolean true if the item contains the specified component,
+     * false otherwise.
+     *
+     * @return Returns a boolean true if the item contains the specified component,
+     * false otherwise.
+     */
     @Override
     public boolean passes(ITEM item) {
         return item.hasComponent(component);

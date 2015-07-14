@@ -190,7 +190,7 @@ public abstract class DimmableItemPresetsFragment extends SelectableItemTableFra
 
     protected void doSavePreset(String presetName, MyLampState presetState) {
         if ((presetName != null) && (!presetName.isEmpty()) && (presetState != null)) {
-            LightingDirector.get().createPreset(presetState.getPower(), presetState.getColor(), presetName, null);
+            LightingDirector.get().createPreset(presetState.getPower(), presetState.getColor(), presetName);
         }
 
         if (getActivity() != null) {

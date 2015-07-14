@@ -35,6 +35,12 @@ import org.allseen.lsf.sdk.model.LightingItemUtil;
  * Groups can contain lamps and other groups.
  */
 public class Group extends GroupMember implements DeletableItem {
+
+    /**
+     * Sets the default name for Groups, using the string provided.
+     *
+     * @param defaultName The new default name for Groups.
+     */
     public static void setDefaultName(String defaultName) {
         if (defaultName != null) {
             GroupDataModel.defaultName = defaultName;
@@ -105,6 +111,11 @@ public class Group extends GroupMember implements DeletableItem {
                 AllJoynManager.groupManager.transitionLampGroupState(groupModel.id, lampState, 0));
     }
 
+    /**
+     * Adds a member to the Group.
+     *
+     * @param member The GroupMember object to be added to the Group.
+     */
     public void add(GroupMember member) {
         String errorContext = "Group.add() error";
 
@@ -119,11 +130,16 @@ public class Group extends GroupMember implements DeletableItem {
             }
 
             postErrorIfFailure(errorContext,
-                AllJoynManager.groupManager.updateLampGroup(groupModel.id, LightingItemUtil.createLampGroup(
-                        lamps.toArray(new String[lamps.size()]), groups.toArray(new String[groups.size()]))));
+                    AllJoynManager.groupManager.updateLampGroup(groupModel.id, LightingItemUtil.createLampGroup(
+                            lamps.toArray(new String[lamps.size()]), groups.toArray(new String[groups.size()]))));
         }
     }
 
+    /**
+     * Removes a member from the Group.
+     *
+     * @param member the GroupMember object to be removed from the Group.
+     */
     public void remove(GroupMember member) {
         String errorContext = "Group.remove() error";
 
@@ -136,39 +152,59 @@ public class Group extends GroupMember implements DeletableItem {
 
             if (didRemove) {
                 postErrorIfFailure(errorContext,
-                    AllJoynManager.groupManager.updateLampGroup(groupModel.id, LightingItemUtil.createLampGroup(
-                            lamps.toArray(new String[lamps.size()]), groups.toArray(new String[groups.size()]))));
+                        AllJoynManager.groupManager.updateLampGroup(groupModel.id, LightingItemUtil.createLampGroup(
+                                lamps.toArray(new String[lamps.size()]), groups.toArray(new String[groups.size()]))));
             }
         }
     }
 
+    /**
+     * Modifies the Group with the given GroupMember array.
+     *
+     * @param members the array of GroupMembers.
+     */
     public void modify(GroupMember[] members) {
         String errorContext = "Group.modify() error";
 
         if (postInvalidArgIfNull(errorContext, members)) {
             postErrorIfFailure(errorContext,
-                AllJoynManager.groupManager.updateLampGroup(groupModel.id, GroupMember.createLampGroup(members)));
+                    AllJoynManager.groupManager.updateLampGroup(groupModel.id, GroupMember.createLampGroup(members)));
         }
     }
 
+    /**
+     * Deletes the Group from the lighting system.
+     *
+     * @see org.allseen.lsf.sdk.DeletableItem#delete()
+     */
     @Override
     public void delete() {
         String errorContext = "Group.delete() error";
 
         postErrorIfFailure(errorContext,
-            AllJoynManager.groupManager.deleteLampGroup(groupModel.id));
+                AllJoynManager.groupManager.deleteLampGroup(groupModel.id));
     }
 
+    /**
+     * Applies a Preset to every member of the Group.
+     *
+     * @param preset The Preset to be applied.
+     */
     @Override
     public void applyPreset(Preset preset) {
         String errorContext = "Group.applyPreset() error";
 
         if (postInvalidArgIfNull(errorContext, preset)) {
             postErrorIfFailure(errorContext,
-                AllJoynManager.groupManager.transitionLampGroupStateToPreset(groupModel.id, preset.getPresetDataModel().id, 0));
+                    AllJoynManager.groupManager.transitionLampGroupStateToPreset(groupModel.id, preset.getPresetDataModel().id, 0));
         }
     }
 
+    /**
+     * Applies an Effect to every member of the Group.
+     *
+     * @param effect The Effect to be applied.
+     */
     @Override
     public void applyEffect(Effect effect) {
         String errorCotext = "Group.applyEffect() error";
@@ -186,6 +222,11 @@ public class Group extends GroupMember implements DeletableItem {
         }
     }
 
+    /**
+     * Renames the Group.
+     *
+     * @param groupName The new name of the Group.
+     */
     @Override
     public void rename(String groupName) {
         String errorContext = "Group.rename() error";
@@ -196,42 +237,97 @@ public class Group extends GroupMember implements DeletableItem {
         }
     }
 
+    /**
+     * Returns a boolean representing whether or not the Group contains a specified Lighting Item.
+     *
+     * @param item The Lighting Item to be confirmed present in the Group.
+     *
+     * @return boolean representing whether or not the Group contains a specified Lighting Item.
+     */
     @Override
     public boolean hasComponent(LightingItem item) {
         String errorContext = "Group.hasComponent() error";
         return postInvalidArgIfNull(errorContext, item) ? hasLampID(item.getId()) || hasGroupID(item.getId()) : false;
     }
 
+    /**
+     * Returns a boolean representing whether or not the Group contains a specified Lamp.
+     *
+     * @param lamp The Lamp to be confirmed present in the Group.
+     *
+     * @return boolean representing whether or not the Group contains a specified Lamp.
+     */
     public boolean hasLamp(Lamp lamp) {
         String errorContext = "Group.hasLamp() error";
         return postInvalidArgIfNull(errorContext, lamp) ? hasLampID(lamp.getId()) : false;
     }
 
+    /**
+     * Returns a boolean representing whether or not the Group contains a specified Group.
+     *
+     * @param group The Group to be confirmed present.
+     *
+     * @return boolean representing whether or not the Group contains a specified Group.
+     */
     public boolean hasGroup(Group group) {
         String errorContext = "Group.hasGroup() error";
         return postInvalidArgIfNull(errorContext, group) ? hasGroupID(group.getId()) : false;
     }
 
+    /**
+     * Returns a boolean representing whether or not the Group contains a specified Lamp ID.
+     *
+     * @param lampID The Lamp ID to be confirmed present in the Group.
+     *
+     * @return boolean representing whether or not the Group contains a specified Lamp ID.
+     */
     public boolean hasLampID(String lampID) {
         return groupModel.containsLamp(lampID);
     }
 
+    /**
+     * Returns a boolean representing whether or not the Group contains a specified Group ID.
+     *
+     * @param groupID The Group ID to be confirmed present in the Group.
+     *
+     * @return boolean representing whether or not the Group contains a specified Group ID.
+     */
     public boolean hasGroupID(String groupID) {
         return groupModel.containsGroup(groupID);
     }
 
+    /**
+     * Returns all instantiated Lamps in the lighting system.
+     *
+     * @return an array of all the Lamps in the lighting system.
+     */
     public Lamp[] getLamps() {
         return LightingDirector.get().getLamps(getLampIDs());
     }
 
+    /**
+     * Returns all instantiated Groups in the lighting system.
+     *
+     * @return an array of all the Groups in the lighting system.
+     */
     public Group[] getGroups() {
         return LightingDirector.get().getGroups(getGroupIDs());
     }
 
+    /**
+     * Returns a Collection of all Lamp IDs in the Group.
+     *
+     * @return A Collection of Strings of Lamp IDs in the Group.
+     */
     public Collection<String> getLampIDs() {
         return groupModel.getLamps();
     }
 
+    /**
+     * Returns a Collection of all Group IDs in the Group.
+     *
+     * @return A Collection of Strings of Group IDs in the Group.
+     */
     public Collection<String> getGroupIDs() {
         return groupModel.getGroups();
     }
