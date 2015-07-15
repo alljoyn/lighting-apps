@@ -31,7 +31,7 @@
 
     LSFSDKMyLampState *presetState = self.pendingEffect.state;
 
-    [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: presetState.power color: presetState.color presetName: self.pendingEffect.name delegate: nil];
+    [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: presetState.power color: presetState.color presetName: self.pendingEffect.name];
 
     [self dismissViewControllerAnimated: YES completion: nil];
 }

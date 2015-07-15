@@ -109,7 +109,7 @@ static unsigned int CONTROLLER_CONNECTION_DELAY = 5000;
 {
     // STEP 3: Create a TransitionEffect in lighting director
     LSFSDKMyLampState *myLampState = [[LSFSDKMyLampState alloc] initWithPower: ON color: [LSFSDKColor red]];
-    [[LSFSDKLightingDirector getLightingDirector] createTransitionEffectWithLampState: myLampState duration: 5000 name: @"TutorialTransition" delegate: nil];
+    [[LSFSDKLightingDirector getLightingDirector] createTransitionEffectWithLampState: myLampState duration: 5000 name: @"TutorialTransition"];
 }
 
 @end

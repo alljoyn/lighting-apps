@@ -133,7 +133,7 @@
 
         dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
             LSFSDKLamp *lamp = [[LSFSDKLightingDirector getLightingDirector] getLampWithID: self.lampID];
-            [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: [lamp getPower] color: [lamp getColor] presetName: self.presetNameTextField.text delegate:nil];
+            [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: [lamp getPower] color: [lamp getColor] presetName: self.presetNameTextField.text];
         });
         
         return YES;
@@ -184,7 +184,7 @@
 
         dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
             LSFSDKLamp *lamp = [[LSFSDKLightingDirector getLightingDirector] getLampWithID: self.lampID];
-            [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: [lamp getPower] color: [lamp getColor] presetName: self.presetNameTextField.text delegate:nil];
+            [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: [lamp getPower] color: [lamp getColor] presetName: self.presetNameTextField.text];
         });
     }
 }

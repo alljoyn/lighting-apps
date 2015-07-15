@@ -36,7 +36,7 @@
     // STEP 4: Using the Pulse Effect initialized callback as a trigger, create a Scene Element with the new Pulse Effect
     // and all lamps known to the Lighting Director.
     NSArray *members = [[LSFSDKLightingDirector getLightingDirector] lamps];
-    [[LSFSDKLightingDirector getLightingDirector] createSceneElementWithEffect: pulseEffect groupMembers: members name: @"TutorialSceneElement" delegate: nil];
+    [[LSFSDKLightingDirector getLightingDirector] createSceneElementWithEffect: pulseEffect groupMembers: members name: @"TutorialSceneElement"];
 }
 
 -(void)onPulseEffectError: (LSFSDKLightingItemErrorEvent *)error
@@ -48,7 +48,7 @@
 {
     // STEP 5: Using the Scene Element initialized callback as a trigger, create a Scene with the new Scene Element.
     NSArray *sceneElements = [NSArray arrayWithObjects: sceneElement, nil];
-    [[LSFSDKLightingDirector getLightingDirector] createSceneWithSceneElements: sceneElements name: @"TutorialScene" delegate: nil];
+    [[LSFSDKLightingDirector getLightingDirector] createSceneWithSceneElements: sceneElements name: @"TutorialScene"];
 }
 
 -(void)onSceneElementError: (LSFSDKLightingItemErrorEvent *)error
@@ -140,7 +140,7 @@ static unsigned int CONTROLLER_CONNECTION_DELAY = 5000;
     LSFSDKMyLampState *toState = [[LSFSDKMyLampState alloc] initWithPower: pulsePowerState color: pulseToColor];
 
     // boilerplate code, alter parameters above to change effect color, length, etc.
-    [[LSFSDKLightingDirector getLightingDirector] createPulseEffectWithFromState: fromState toState: toState period: period duration: duration count: numPulses name: @"TutorialPulseEffect" delegate: nil];
+    [[LSFSDKLightingDirector getLightingDirector] createPulseEffectWithFromState: fromState toState: toState period: period duration: duration count: numPulses name: @"TutorialPulseEffect"];
 }
 
 @end

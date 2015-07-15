@@ -105,7 +105,7 @@
     self.pendingEffect.endState = state;
 
     //create effect
-    [[LSFSDKLightingDirector getLightingDirector] createPulseEffectWithFromState: self.pendingEffect.state toState: self.pendingEffect.endState period: self.pendingEffect.period duration: self.pendingEffect.duration count: self.pendingEffect.pulses name: self.pendingEffect.name delegate: nil];
+    [[LSFSDKLightingDirector getLightingDirector] createPulseEffectWithFromState: self.pendingEffect.state toState: self.pendingEffect.endState period: self.pendingEffect.period duration: self.pendingEffect.duration count: self.pendingEffect.pulses name: self.pendingEffect.name];
 
     [self dismissViewControllerAnimated: YES completion: nil];
 }

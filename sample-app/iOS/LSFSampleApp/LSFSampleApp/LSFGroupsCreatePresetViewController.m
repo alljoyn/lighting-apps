@@ -125,7 +125,7 @@
         dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
             NSString *presetName = self.presetNameTextField.text;
 
-            [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: [self.lampState power] color: [self.lampState color] presetName:presetName delegate:nil];
+            [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: [self.lampState power] color: [self.lampState color] presetName:presetName];
         });
         
         return YES;
@@ -175,7 +175,7 @@
         dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
             NSString *presetName = self.presetNameTextField.text;
 
-            [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: [self.lampState power] color: [self.lampState color] presetName:presetName delegate:nil];
+            [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: [self.lampState power] color: [self.lampState color] presetName:presetName];
 
         });
     }

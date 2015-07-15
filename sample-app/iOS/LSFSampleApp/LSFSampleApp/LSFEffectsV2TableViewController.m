@@ -174,7 +174,7 @@
 
     if (self.pendingSceneElement.theID == nil)
     {
-        [[LSFSDKLightingDirector getLightingDirector] createSceneElementWithEffect: self.pendingSceneElement.effect groupMembers: self.pendingSceneElement.members name: self.pendingSceneElement.name delegate:nil];
+        [[LSFSDKLightingDirector getLightingDirector] createSceneElementWithEffect: self.pendingSceneElement.effect groupMembers: self.pendingSceneElement.members name: self.pendingSceneElement.name];
     }
     else
     {

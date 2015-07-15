@@ -185,7 +185,7 @@
                 [scenes addObject: scene];
             }
 
-            [[LSFSDKLightingDirector getLightingDirector] createMasterSceneWithScenes: scenes name: self.pendingMasterScene.name delegate: nil];
+            [[LSFSDKLightingDirector getLightingDirector] createMasterSceneWithScenes: scenes name: self.pendingMasterScene.name];
         });
     }
     else

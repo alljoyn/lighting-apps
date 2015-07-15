@@ -59,7 +59,7 @@
     {
         if (self.pendingScene.theID == nil)
         {
-            [[LSFSDKLightingDirector getLightingDirector] createSceneWithSceneElements: self.pendingScene.membersSceneElements name: self.pendingScene.name delegate: nil];
+            [[LSFSDKLightingDirector getLightingDirector] createSceneWithSceneElements: self.pendingScene.membersSceneElements name: self.pendingScene.name];
         }
         else
         {

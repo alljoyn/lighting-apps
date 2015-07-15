@@ -36,7 +36,7 @@
 {
      // STEP 3: Use the discovery of the Lamp as a trigger for creating a Preset. We define a
      // preset that changes the color to red.
-    [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: ON color: [LSFSDKColor red] presetName: @"TutorialPreset" delegate: nil];
+    [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: ON color: [LSFSDKColor red] presetName: @"TutorialPreset"];
 }
 
 -(void)onLampError: (LSFSDKLightingItemErrorEvent *)error

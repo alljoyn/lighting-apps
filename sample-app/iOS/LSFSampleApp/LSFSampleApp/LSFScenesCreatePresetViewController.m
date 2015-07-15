@@ -129,7 +129,7 @@
         [textField resignFirstResponder];
 
         dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
-            [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: self.lampState.power color: self.lampState.color presetName: self.presetNameTextField.text delegate:nil];
+            [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: self.lampState.power color: self.lampState.color presetName: self.presetNameTextField.text];
         });
 
         return YES;
@@ -186,7 +186,7 @@
         [self.presetNameTextField resignFirstResponder];
 
         dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
-            [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: self.lampState.power color: self.lampState.color presetName: self.presetNameTextField.text delegate:nil];
+            [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: self.lampState.power color: self.lampState.color presetName: self.presetNameTextField.text];
         });
     }
 }

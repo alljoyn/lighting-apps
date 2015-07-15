@@ -519,11 +519,10 @@
  *
  * @param members  Array of LSFSDKGroupMember.
  * @param groupName  Name of the group.
- * @param delegate  Specifies the callback that's invoked only for the group being created.
  *
  * @return Instance of LSFTrackingID associate with the creation of the Group.
  */
--(LSFSDKTrackingID *)createGroupWithMembers: (NSArray *)members groupName: (NSString *)groupName delegate: (id<LSFSDKGroupDelegate>)delegate;
+-(LSFSDKTrackingID *)createGroupWithMembers: (NSArray *)members groupName: (NSString *)groupName;
 
 /**
  * Asynchronously creates a Preset on the Lighting Controller.
@@ -531,11 +530,10 @@
  * @param power  Specifies the power of the preset's lamp state.
  * @param color  Specifies the color of the preset's lamp state.
  * @param presetName  Name of the preset.
- * @param delegate  Specifies the callback that's invoked only for the preset being created.
  *
  * @return Instance of LSFTrackingID associate with the creation of the Preset.
  */
--(LSFSDKTrackingID *)createPresetWithPower: (Power)power color: (LSFSDKColor *)color presetName: (NSString *)presetName delegate: (id<LSFSDKPresetDelegate>)delegate;
+-(LSFSDKTrackingID *)createPresetWithPower: (Power)power color: (LSFSDKColor *)color presetName: (NSString *)presetName;
 
 /**
  * Asynchronously creates a Transtion Effect on the Lighting Controller.
@@ -543,11 +541,10 @@
  * @param state  Specifies the lamp state of the transition effect.
  * @param duration  Specifies how long the transition effect will take.
  * @param effectName  Name of the transition effect.
- * @param delegate  Specifies a callback that's invoked only for the transition effect being created.
  *
  * @return Instance of LSFTrackingID associate with the creation of the Transition Effect.
  */
--(LSFSDKTrackingID *)createTransitionEffectWithLampState: (id<LSFSDKLampState>)state duration: (unsigned int)duration name: (NSString *)effectName delegate: (id<LSFSDKTransitionEffectDelegate>)delegate;
+-(LSFSDKTrackingID *)createTransitionEffectWithLampState: (id<LSFSDKLampState>)state duration: (unsigned int)duration name: (NSString *)effectName;
 
 /**
  * Asynchronously creates a Pulse Effect on the Lighting Controller.
@@ -558,11 +555,10 @@
  * @param duration  Specifies the duration of a single pulse (in ms). This must be less than the period.
  * @param count  Specifies the number of pulses.
  * @param effectName  Name of the pulse effect.
- * @param delegate  Specifies a callback that's invoked only for the pulse effect being created.
  *
  * @return Instance of LSFTrackingID associate with the creation of the Pulse Effect.
  */
--(LSFSDKTrackingID *)createPulseEffectWithFromState: (id<LSFSDKLampState>)fromState toState: (id<LSFSDKLampState>)toState period: (unsigned int)period duration: (unsigned int)duration count: (unsigned int)count name: (NSString *)effectName delegate: (id<LSFSDKPulseEffectDelegate>)delegate;
+-(LSFSDKTrackingID *)createPulseEffectWithFromState: (id<LSFSDKLampState>)fromState toState: (id<LSFSDKLampState>)toState period: (unsigned int)period duration: (unsigned int)duration count: (unsigned int)count name: (NSString *)effectName;
 
 /**
  * Asynchronously creates a Scene Element on the Lighting Controller.
@@ -570,33 +566,30 @@
  * @param effect  Specifies the scene element's effect.
  * @param members  Specifies GroupMember's for which the effect will be applied.
  * @param sceneElementName  Name of the scene element.
- * @param delegate  Specifies a callback that's invoked only for the scene element being created.
  *
  * @return Instance of LSFTrackingID associate with the creation of the Scene Element.
  */
--(LSFSDKTrackingID *)createSceneElementWithEffect: (id<LSFSDKEffect>)effect groupMembers: (NSArray *)members name: (NSString *)sceneElementName delegate: (id<LSFSDKSceneElementDelegate>)delegate;
+-(LSFSDKTrackingID *)createSceneElementWithEffect: (id<LSFSDKEffect>)effect groupMembers: (NSArray *)members name: (NSString *)sceneElementName;
 
 /**
  * Asynchronously creates a Scene on the Lighting Controller.
  *
  * @param sceneElements  Specifies the scene elements that belong to the scene.
  * @param sceneName  Name of the scene.
- * @param delegate  Specifies a callback that's invoked only for the scene being created.
  *
  * @return Instance of LSFTrackingID associate with the creation of the Scene
  */
--(LSFSDKTrackingID *)createSceneWithSceneElements: (NSArray *)sceneElements name: (NSString *)sceneName delegate: (id<LSFSDKSceneDelegate>)delegate;
+-(LSFSDKTrackingID *)createSceneWithSceneElements: (NSArray *)sceneElements name: (NSString *)sceneName;
 
 /**
  * Asynchronously creates a Master Scene on the Lighting Controller.
  *
  * @param scenes  Specifies the scenes that belong to the master scene.
  * @param masterSceneName  Name of the master scene.
- * @param delegate  Specifies a callback that's invoked only for the master scene being created.
  *
  * @return Instance of LSFTrackingID associate with the creation of the Master Scene
  */
--(LSFSDKTrackingID *)createMasterSceneWithScenes: (NSArray *)scenes name: (NSString *)masterSceneName delegate: (id<LSFSDKMasterSceneDelegate>)delegate;
+-(LSFSDKTrackingID *)createMasterSceneWithScenes: (NSArray *)scenes name: (NSString *)masterSceneName;
 
 /** @name Add and Remove Lighting System delegates */
 

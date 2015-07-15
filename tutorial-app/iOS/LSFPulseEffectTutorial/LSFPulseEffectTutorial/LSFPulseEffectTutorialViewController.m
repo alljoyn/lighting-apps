@@ -69,7 +69,7 @@
         LSFSDKMyLampState *toState = [[LSFSDKMyLampState alloc] initWithPower: pulsePowerState color: pulseToColor];
 
         // boilerplate code, alter parameters above to change effect color, length, etc.
-        [[LSFSDKLightingDirector getLightingDirector] createPulseEffectWithFromState: fromState toState: toState period: period duration: duration count: numPulses name: @"TutorialPulseEffect" delegate: nil];
+        [[LSFSDKLightingDirector getLightingDirector] createPulseEffectWithFromState: fromState toState: toState period: period duration: duration count: numPulses name: @"TutorialPulseEffect"];
     }
 }
 
@@ -157,7 +157,7 @@ static unsigned int CONTROLLER_CONNECTION_DELAY = 5000;
 {
     // STEP 3: Create a Group consisting of all connected lamps
     NSArray *lamps = [self.lightingDirector lamps];
-    self.myLightingDelegate.groupCreationID = [[LSFSDKLightingDirector getLightingDirector] createGroupWithMembers: lamps groupName: @"TutorialGroup" delegate: nil];
+    self.myLightingDelegate.groupCreationID = [[LSFSDKLightingDirector getLightingDirector] createGroupWithMembers: lamps groupName: @"TutorialGroup"];
 }
 
 @end

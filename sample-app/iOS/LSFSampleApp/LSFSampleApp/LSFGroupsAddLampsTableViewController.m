@@ -252,7 +252,7 @@
 -(void)createLampGroup
 {
     dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
-        [[LSFSDKLightingDirector getLightingDirector] createGroupWithMembers: self.members groupName: self.groupName delegate:nil];
+        [[LSFSDKLightingDirector getLightingDirector] createGroupWithMembers: self.members groupName: self.groupName];
     });
 
     [self dismissViewControllerAnimated: YES completion: nil];

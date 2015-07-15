@@ -40,7 +40,7 @@
 
     [super doneButtonPressed: sender];
 
-    [[LSFSDKLightingDirector getLightingDirector] createTransitionEffectWithLampState:self.pendingEffect.state duration:self.pendingEffect.duration name: self.pendingEffect.name delegate: nil];
+    [[LSFSDKLightingDirector getLightingDirector] createTransitionEffectWithLampState:self.pendingEffect.state duration:self.pendingEffect.duration name: self.pendingEffect.name];
 
     [self dismissViewControllerAnimated: YES completion: nil];
 }
