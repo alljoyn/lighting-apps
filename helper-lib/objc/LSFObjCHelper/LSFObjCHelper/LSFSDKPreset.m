@@ -23,23 +23,6 @@
 
 @implementation LSFSDKPreset
 
--(id)initWithPresetID: (NSString *)presetID
-{
-    return [self initWithPresetID: presetID andName: nil];
-}
-
--(id)initWithPresetID: (NSString *)presetID andName: (NSString *)presetName
-{
-    self = [super init];
-
-    if (self)
-    {
-        presetModel = [[LSFPresetModel alloc] initWithPresetID: presetID andName: presetName];
-    }
-
-    return self;
-}
-
 -(void)modifyWithPower: (Power)power color: (LSFSDKColor *)color
 {
     NSString *errorContext = @"LSFSDKPreset modify: error";

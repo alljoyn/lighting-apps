@@ -15,9 +15,9 @@
  ******************************************************************************/
 
 #import "LSFSDKLightingEventUtil.h"
-#import "LSFSDKAnyCollectionAdapter.h"
+#import "../listener/LSFSDKAnyCollectionDelegateBase.h"
 #import "LSFSDKLightingDirector.h"
-#import "LSFSDKTrackingIDDelegate.h"
+#import "../listener/LSFSDKTrackingIDDelegate.h"
 
 /*
  * Private Classes
@@ -134,7 +134,7 @@
 
 @end
 
-@interface MyAnyCollectionAdapter : LSFSDKAnyCollectionAdapter
+@interface MyAnyCollectionAdapter : LSFSDKAnyCollectionDelegateBase
 
 @property (nonatomic, strong) LSFSDKTrackingID *myTrackingID;
 @property (nonatomic, strong) id<LSFSDKTrackingIDDelegate> trackingIDDelegate;

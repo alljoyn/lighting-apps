@@ -18,14 +18,14 @@
 #import "LSFSDKLightingDirector.h"
 #import "LSFSDKLightingController.h"
 #import "LSFSDKLightingControllerConfigurationBase.h"
-#import "LSFSDKAllCollectionAdapter.h"
+#import "LSFSDKAllLightingItemDelegateBase.h"
 #import "LSFSDKScene.h"
 
 /*
  * Global delegate that updates the table using the Scene Initialized and
  * Scene Removed callbacks.
  */
-@interface MyLightingDelegate : LSFSDKAllCollectionAdapter
+@interface MyLightingDelegate : LSFSDKAllLightingItemDelegateBase
 
 @property (nonatomic, strong) NSMutableArray *localSceneList;
 @property (nonatomic, strong) UITableView *localTableView;

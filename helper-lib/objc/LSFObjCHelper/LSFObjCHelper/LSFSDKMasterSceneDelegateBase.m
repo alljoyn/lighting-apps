@@ -14,26 +14,26 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFSDKGroupAdapter.h"
+#import "LSFSDKMasterSceneDelegateBase.h"
 
-@implementation LSFSDKGroupAdapter
+@implementation LSFSDKMasterSceneDelegateBase
 
--(void)onGroupInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andGroup: (LSFSDKGroup *)group
+-(void)onMasterSceneInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andMasterScene: (LSFSDKMasterScene *)masterScene
 {
     //Intentionally left blank
 }
 
--(void)onGroupChanged: (LSFSDKGroup *)group
+-(void)onMasterSceneChanged: (LSFSDKMasterScene *)masterScene
 {
     //Intentionally left blank
 }
 
--(void)onGroupRemoved: (LSFSDKGroup *)group
+-(void)onMasterSceneRemoved: (LSFSDKMasterScene *)masterScene
 {
     //Intentionally left blank
 }
 
--(void)onGroupError: (LSFSDKLightingItemErrorEvent *)error
+-(void)onMasterSceneError: (LSFSDKLightingItemErrorEvent *)error
 {
     //Intentionally left blank
 }

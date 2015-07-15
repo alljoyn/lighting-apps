@@ -15,8 +15,15 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFSDKSceneElementDelegate.h"
+#import "LSFSDKControllerDelegate.h"
+#import "LSFSDKNextControllerConnectionDelegate.h"
 
-@interface LSFSDKSceneElementAdapter : NSObject <LSFSDKSceneElementDelegate>
+/**
+ * @warning *Note:* This class is not intended to be used by clients, and its interface may change
+ * in subsequent releases of the SDK.
+ */
+@interface LSFSDKControllerDelegateBase : NSObject <LSFSDKControllerDelegate>
+
+@property (nonatomic, weak) id<LSFSDKNextControllerConnectionDelegate> delegate;
 
 @end

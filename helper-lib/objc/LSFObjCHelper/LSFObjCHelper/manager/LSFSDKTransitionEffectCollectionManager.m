@@ -15,6 +15,7 @@
  ******************************************************************************/
 
 #import "LSFSDKTransitionEffectCollectionManager.h"
+#import "../initializer/LSFSDKTransitionEffect+Init.h"
 
 @implementation LSFSDKTransitionEffectCollectionManager
 

@@ -15,16 +15,8 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFSDKLampDelegate.h"
-#import "LSFSDKGroupDelegate.h"
-#import "LSFSDKPresetDelegate.h"
-#import "LSFSDKTransitionEffectDelegate.h"
-#import "LSFSDKPulseEffectDelegate.h"
-#import "LSFSDKSceneElementDelegate.h"
-#import "LSFSDKSceneDelegate.h"
 #import "LSFSDKMasterSceneDelegate.h"
-#import "LSFSDKControllerDelegate.h"
 
-@protocol LSFSDKAllCollectionDelegate <LSFSDKLampDelegate, LSFSDKGroupDelegate, LSFSDKPresetDelegate, LSFSDKTransitionEffectDelegate, LSFSDKPulseEffectDelegate, LSFSDKSceneElementDelegate, LSFSDKSceneDelegate, LSFSDKMasterSceneDelegate, LSFSDKControllerDelegate>
+@interface LSFSDKMasterSceneDelegateBase : NSObject <LSFSDKMasterSceneDelegate>
 
 @end

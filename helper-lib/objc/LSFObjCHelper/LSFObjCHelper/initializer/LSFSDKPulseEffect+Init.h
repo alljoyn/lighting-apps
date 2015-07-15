@@ -14,9 +14,11 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "LSFSDKLampDelegate.h"
+#import "../LSFSDKPulseEffect.h"
 
-@interface LSFSDKLampAdapter : NSObject <LSFSDKLampDelegate>
+@interface LSFSDKPulseEffect (Init)
+
+-(id)initWithPulseEffectID: (NSString *)pulseEffectID;
+-(id)initWithPulseEffectID: (NSString *)pulseEffectID pulseEffectName: (NSString *)pulseEffectName;
 
 @end

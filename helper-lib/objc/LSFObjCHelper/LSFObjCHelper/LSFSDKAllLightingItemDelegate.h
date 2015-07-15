@@ -14,44 +14,17 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFSDKControllerAdapter.h"
-#import "LSFSDKLightingDirector.h"
-#import "manager/LSFControllerManager.h"
-#import "manager/LSFSDKLightingSystemManager.h"
+#import <Foundation/Foundation.h>
+#import "LSFSDKLampDelegate.h"
+#import "LSFSDKGroupDelegate.h"
+#import "LSFSDKPresetDelegate.h"
+#import "LSFSDKTransitionEffectDelegate.h"
+#import "LSFSDKPulseEffectDelegate.h"
+#import "LSFSDKSceneElementDelegate.h"
+#import "LSFSDKSceneDelegate.h"
+#import "LSFSDKMasterSceneDelegate.h"
+#import "LSFSDKControllerDelegate.h"
 
-@implementation LSFSDKControllerAdapter
-
-@synthesize delegate = _delegate;
-
--(id)init
-{
-    self = [super init];
-
-    if (self)
-    {
-        //Intentionally left blank
-    }
-
-    return self;
-}
-
--(void)onLeaderChange: (LSFSDKController *)leader
-{
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (self.delegate)
-        {
-            [self.delegate onNextControllerConnection];
-        }
-    });
-
-    //Remove self as delegate
-    LSFSDKLightingSystemManager *manager = [[LSFSDKLightingDirector getLightingDirector] lightingManager];
-    [[manager controllerManager] removeDelegate: self];
-}
-
--(void)onControllerError: (LSFSDKControllerErrorEvent *)errorEvent
-{
-    //Intentionally left blank
-}
+@protocol LSFSDKAllLightingItemDelegate <LSFSDKLampDelegate, LSFSDKGroupDelegate, LSFSDKPresetDelegate, LSFSDKTransitionEffectDelegate, LSFSDKPulseEffectDelegate, LSFSDKSceneElementDelegate, LSFSDKSceneDelegate, LSFSDKMasterSceneDelegate, LSFSDKControllerDelegate>
 
 @end

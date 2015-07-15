@@ -14,26 +14,26 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFSDKLampAdapter.h"
+#import "LSFSDKGroupDelegateBase.h"
 
-@implementation LSFSDKLampAdapter
+@implementation LSFSDKGroupDelegateBase
 
--(void)onLampInitialized: (LSFSDKLamp *)lamp
+-(void)onGroupInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andGroup: (LSFSDKGroup *)group
 {
     //Intentionally left blank
 }
 
--(void)onLampChanged: (LSFSDKLamp *)lamp
+-(void)onGroupChanged: (LSFSDKGroup *)group
 {
     //Intentionally left blank
 }
 
--(void)onLampRemoved: (LSFSDKLamp *)lamp
+-(void)onGroupRemoved: (LSFSDKGroup *)group
 {
     //Intentionally left blank
 }
 
--(void)onLampError: (LSFSDKLightingItemErrorEvent *)error
+-(void)onGroupError: (LSFSDKLightingItemErrorEvent *)error
 {
     //Intentionally left blank
 }

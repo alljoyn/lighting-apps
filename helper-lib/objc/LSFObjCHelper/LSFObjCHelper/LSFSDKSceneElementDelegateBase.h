@@ -15,8 +15,8 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFSDKGroupDelegate.h"
+#import "LSFSDKSceneElementDelegate.h"
 
-@interface LSFSDKGroupAdapter : NSObject <LSFSDKGroupDelegate>
+@interface LSFSDKSceneElementDelegateBase : NSObject <LSFSDKSceneElementDelegate>
 
 @end

@@ -14,28 +14,9 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFSDKSceneElementAdapter.h"
+#import <Foundation/Foundation.h>
+#import "LSFSDKPulseEffectDelegate.h"
 
-@implementation LSFSDKSceneElementAdapter
-
--(void)onSceneElementInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andSceneElement: (LSFSDKSceneElement *)sceneElement
-{
-    //Intentionally left blank
-}
-
--(void)onSceneElementChanged: (LSFSDKSceneElement *)sceneElement
-{
-    //Intentionally left blank
-}
-
--(void)onSceneElementRemoved: (LSFSDKSceneElement *)sceneElement
-{
-    //Intentionally left blank
-}
-
--(void)onSceneElementError: (LSFSDKLightingItemErrorEvent *)error
-{
-    //Intentionally left blank
-}
+@interface LSFSDKPulseEffectDelegateBase : NSObject <LSFSDKPulseEffectDelegate>
 
 @end

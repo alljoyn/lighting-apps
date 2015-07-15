@@ -14,16 +14,11 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "LSFSDKControllerDelegate.h"
-#import "LSFSDKNextControllerConnectionDelegate.h"
+#import "../LSFSDKPreset.h"
 
-/**
- * @warning *Note:* This class is not intended to be used by clients, and its interface may change
- * in subsequent releases of the SDK.
- */
-@interface LSFSDKControllerAdapter : NSObject <LSFSDKControllerDelegate>
+@interface LSFSDKPreset (Init)
 
-@property (nonatomic, weak) id<LSFSDKNextControllerConnectionDelegate> delegate;
+-(id)initWithPresetID: (NSString *)presetID;
+-(id)initWithPresetID: (NSString *)presetID andName: (NSString *)presetName;
 
 @end

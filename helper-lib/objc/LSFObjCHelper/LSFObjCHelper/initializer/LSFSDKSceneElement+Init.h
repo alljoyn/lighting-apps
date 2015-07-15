@@ -14,28 +14,12 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFSDKPulseEffectAdapter.h"
+#import "LSFSDKSceneElement+Init.h"
+#import "../LSFSDKSceneElement.h"
 
-@implementation LSFSDKPulseEffectAdapter
+@interface LSFSDKSceneElement (Init)
 
--(void)onPulseEffectInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andPulseEffect: (LSFSDKPulseEffect *)pulseEffect;
-{
-    //Intentionally left blank
-}
-
--(void)onPulseEffectChanged: (LSFSDKPulseEffect *)pulseEffect
-{
-    //Intentionally left blank
-}
-
--(void)onPulseEffectRemoved: (LSFSDKPulseEffect *)pulseEffect
-{
-    //Intentionally left blank
-}
-
--(void)onPulseEffectError: (LSFSDKLightingItemErrorEvent *)error
-{
-    //Intentionally left blank
-}
+-(id)initWithSceneElementID: (NSString *)sceneElementID;
+-(id)initWithSceneElementID: (NSString *)sceneElementID sceneElementName: (NSString *)sceneElementName;
 
 @end

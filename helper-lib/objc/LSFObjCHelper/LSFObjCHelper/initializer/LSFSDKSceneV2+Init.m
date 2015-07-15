@@ -14,9 +14,26 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "LSFSDKPresetDelegate.h"
+#import "LSFSDKSceneV2+Init.h"
 
-@interface LSFSDKPresetAdapter : NSObject <LSFSDKPresetDelegate>
+@implementation LSFSDKSceneV2 (Init)
+
+-(id)initWithSceneID: (NSString *)sceneID
+{
+    LSFSceneDataModelV2 *model = [[LSFSceneDataModelV2 alloc] initWithSceneID: sceneID];
+    return [self initWithSceneDataModel: model];
+}
+
+-(id)initWithSceneDataModel: (LSFSceneDataModelV2 *)model
+{
+    self = [super init];
+
+    if (self)
+    {
+        sceneModel = model;
+    }
+
+    return self;
+}
 
 @end

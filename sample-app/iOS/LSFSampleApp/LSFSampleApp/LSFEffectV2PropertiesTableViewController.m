@@ -56,7 +56,7 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    [super viewWillDisappear: animated];
+    [super viewWillAppear: animated];
 
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
 

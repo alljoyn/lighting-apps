@@ -15,6 +15,7 @@
  ******************************************************************************/
 
 #import "LSFSDKGroupCollectionManager.h"
+#import "../initializer/LSFSDKGroup+Init.h"
 
 @implementation LSFSDKGroupCollectionManager
 

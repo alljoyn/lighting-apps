@@ -18,20 +18,9 @@
 #import "LSFSDKAllJoynManager.h"
 #import "LSFSDKLightingItemUtil.h"
 #import "LSFSDKLightingDirector.h"
+#import "initializer/LSFSDKSceneV1+Init.h"
 
 @implementation LSFSDKMasterScene
-
--(id)initWithMasterSceneID: (NSString *)masterSceneID
-{
-    self = [super init];
-
-    if (self)
-    {
-        masterSceneDataModel = [[LSFMasterSceneDataModel alloc] initWithMasterSceneID: masterSceneID];
-    }
-
-    return self;
-}
 
 -(void)apply
 {

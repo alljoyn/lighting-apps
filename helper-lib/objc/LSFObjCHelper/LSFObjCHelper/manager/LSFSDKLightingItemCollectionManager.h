@@ -18,7 +18,7 @@
 #import "LSFSDKLightingItemListenerManager.h"
 #import "LSFSDKTrackingID.h"
 #import "../LSFSDKLightingItemErrorEvent.h"
-#import "../LSFSDKLightingDelegate.h"
+#import "../listener/LSFSDKLightingDelegate.h"
 #import "../model/LSFSDKLightingItemFilter.h"
 #import <LSFSDKResponseCodes.h>
 

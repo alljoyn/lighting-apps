@@ -15,8 +15,8 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import <LSFSDKAllCollectionDelegate.h>
+#import <LSFSDKAllLightingItemDelegate.h>
 
-@interface LSFLightingEventListener : NSObject<LSFSDKAllCollectionDelegate>
+@interface LSFLightingEventListener : NSObject<LSFSDKAllLightingItemDelegate>
 
 @end

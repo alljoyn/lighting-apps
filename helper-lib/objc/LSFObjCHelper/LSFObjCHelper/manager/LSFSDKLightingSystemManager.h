@@ -16,7 +16,7 @@
 
 #import <Foundation/Foundation.h>
 #import "LSFSDKNextControllerConnectionDelegate.h"
-#import "../LSFSDKAllJoynDelegate.h"
+#import "../listener/LSFSDKAllJoynDelegate.h"
 #import "../LSFSDKControllerDelegate.h"
 #import "../callback/LSFSDKHelperControllerClientCallback.h"
 #import "../callback/LSFSDKHelperControllerServiceManagerCallback.h"

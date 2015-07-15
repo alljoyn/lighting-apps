@@ -18,14 +18,14 @@
 #import "LSFSDKLightingDirector.h"
 #import "LSFSDKLightingController.h"
 #import "LSFSDKLightingControllerConfigurationBase.h"
-#import "LSFSDKAllCollectionAdapter.h"
+#import "LSFSDKAllLightingItemDelegateBase.h"
 #import "LSFSDKMyLampState.h"
 
 /*
  * Global Lighting event delegate. Responsible for handling any callbacks that
  * the user is interested in acting on.
  */
-@interface MyLightingDelegate : LSFSDKAllCollectionAdapter
+@interface MyLightingDelegate : LSFSDKAllLightingItemDelegateBase
 
 @property (nonatomic, strong) LSFSDKTrackingID *groupCreationID;
 @property (nonatomic, strong) NSString *tutorialGroupID;

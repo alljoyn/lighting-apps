@@ -14,9 +14,44 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "LSFSDKAllCollectionDelegate.h"
+#import "LSFSDKControllerDelegateBase.h"
+#import "LSFSDKLightingDirector.h"
+#import "manager/LSFControllerManager.h"
+#import "manager/LSFSDKLightingSystemManager.h"
 
-@interface LSFSDKAllCollectionAdapter : NSObject <LSFSDKAllCollectionDelegate>
+@implementation LSFSDKControllerDelegateBase
+
+@synthesize delegate = _delegate;
+
+-(id)init
+{
+    self = [super init];
+
+    if (self)
+    {
+        //Intentionally left blank
+    }
+
+    return self;
+}
+
+-(void)onLeaderChange: (LSFSDKController *)leader
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (self.delegate)
+        {
+            [self.delegate onNextControllerConnection];
+        }
+    });
+
+    //Remove self as delegate
+    LSFSDKLightingSystemManager *manager = [[LSFSDKLightingDirector getLightingDirector] lightingManager];
+    [[manager controllerManager] removeDelegate: self];
+}
+
+-(void)onControllerError: (LSFSDKControllerErrorEvent *)errorEvent
+{
+    //Intentionally left blank
+}
 
 @end

@@ -19,13 +19,13 @@
 #import "LSFSDKLightingController.h"
 #import "LSFSDKLightingControllerConfigurationBase.h"
 #import "LSFSDKMyLampState.h"
-#import "LSFSDKAllCollectionAdapter.h"
+#import "LSFSDKAllLightingItemDelegateBase.h"
 
 /*
  * Global delegate that uses the initialization callbacks of various objects to sequentially
  * create the components of a Scene and apply it.
  */
-@interface MyLightingDelegate : LSFSDKAllCollectionAdapter
+@interface MyLightingDelegate : LSFSDKAllLightingItemDelegateBase
 
 @end
 

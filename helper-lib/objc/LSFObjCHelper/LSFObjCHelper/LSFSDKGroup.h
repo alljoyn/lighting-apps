@@ -36,35 +36,7 @@
 @property (nonatomic, readonly) int colorTempMax;
 @property (nonatomic, readonly) BOOL isAllLampsGroup;
 
-/** @name Creating LSFSDKLamp */
-
-/**
- * Constructs an instance of the LSFSDKGroup class.
- *
- * @param groupID The ID of the Group.
- *
- * @return Instance of LSFSDKGroup.
- *
- * @warning *Note:* This method is intended to be used internally. Client software should not instantiate
- * Groups directly, but should instead get them from the LSFSDKLightingDirector using the [[LSFSDKLightingDirector getLightingDirector] groups]
- * property.
- */
--(id)initWithGroupID: (NSString *)groupID;
-
-/**
- * Constructs an instance of the LSFSDKGroup class.
- *
- * @param groupID The ID of the Group.
- * @param groupName The name of the Group
- *
- * @return Instance of LSFSDKGroup.
- *
- * @warning *Note:* This method is intended to be used internally. Client software should not instantiate
- * Groups directly, but should instead get them from the LSFSDKLightingDirector using the [[LSFSDKLightingDirector getLightingDirector] groups]
- * property.
- */
--(id)initWithGroupID: (NSString *)groupID andName: (NSString *)groupName;
-
+-(instancetype)init NS_UNAVAILABLE;
 -(void)add: (LSFSDKGroupMember *)member;
 -(void)remove: (LSFSDKGroupMember *)member;
 -(void)modify: (NSArray *)members;

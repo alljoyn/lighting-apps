@@ -14,28 +14,25 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFSDKSceneAdapter.h"
+#import "LSFSDKTransitionEffect+Init.h"
 
-@implementation LSFSDKSceneAdapter
+@implementation LSFSDKTransitionEffect (Init)
 
--(void)onSceneInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andScene: (LSFSDKScene *)scene
+-(id)initWithTransitionEffectID: (NSString *)transitionEffectID
 {
-    //Intentionally left blank
+    return [self initWithTransitionEffectID: transitionEffectID transitionEffectName: nil];
 }
 
--(void)onSceneChanged: (LSFSDKScene *)scene
+-(id)initWithTransitionEffectID: (NSString *)transitionEffectID transitionEffectName: (NSString *)transitionEffectName
 {
-    //Intentionally left blank
-}
+    self = [super init];
 
--(void)onSceneRemoved: (LSFSDKScene *)scene
-{
-    //Intentionally left blank
-}
+    if (self)
+    {
+        transitionEffectDataModel = [[LSFTransitionEffectDataModelV2 alloc] initWithTransitionEffectID: transitionEffectID andTransitionEffectName: transitionEffectName];
+    }
 
--(void)onSceneError: (LSFSDKLightingItemErrorEvent *)error
-{
-    //Intentionally left blank
+    return self;
 }
 
 @end

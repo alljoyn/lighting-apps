@@ -23,7 +23,7 @@
     @protected LSFMasterSceneDataModel *masterSceneDataModel;
 }
 
--(id)initWithMasterSceneID: (NSString *)masterSceneID;
+-(instancetype)init NS_UNAVAILABLE;
 -(void)apply;
 -(void)modify: (NSArray *)scenes;
 -(void)add: (LSFSDKScene *)scene;
