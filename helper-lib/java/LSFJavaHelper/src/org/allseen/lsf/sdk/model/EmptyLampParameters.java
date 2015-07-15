@@ -13,26 +13,23 @@
  *    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-package org.allseen.lsf.sdk;
+package org.allseen.lsf.sdk.model;
 
-import org.allseen.lsf.sdk.model.LightingItemFilter;
+import org.allseen.lsf.sdk.LampParameters;
 
 /**
- * A LightingItemInitializedFilter is used to filter objects that
- * have been properly initialized.
- *
- * @param <ITEM> the type of item to be filtered.
+ * An Empty Lamp Parameters object represents the a Lamp Parameters object
+ * with all methods returning <code>null</code>.
  */
-public class LightingItemInitializedFilter<ITEM extends LightingItem> implements LightingItemFilter<ITEM> {
+public class EmptyLampParameters extends LampParameters {
+    public static final EmptyLampParameters instance = new EmptyLampParameters();
 
-    /**
-     * Returns boolean true if the item specified passes its
-     * own isInitialized() function with a "true" boolean value.
-     *
-     * @return boolean true if the item has been initialized.
-     */
+    private EmptyLampParameters() {}
+
+    //TODO-FIX getters should all return null when superclass methods are defined to all return objects
     @Override
-    public boolean passes(ITEM item) {
-        return item.isInitialized();
-    }
+    public int getEnergyUsageMilliwatts()   { return 0; }
+
+    @Override
+    public int getLumens()                  { return 0; }
 }

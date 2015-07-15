@@ -13,9 +13,14 @@
  *    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-package org.allseen.lsf.sdk;
+package org.allseen.lsf.sdk.model;
 
-import org.allseen.lsf.sdk.model.ColorStateConverter;
+import org.allseen.lsf.sdk.BaseType;
+import org.allseen.lsf.sdk.DeviceType;
+import org.allseen.lsf.sdk.LampDetails;
+import org.allseen.lsf.sdk.LampMake;
+import org.allseen.lsf.sdk.LampModel;
+import org.allseen.lsf.sdk.LampType;
 
 /**
  * An Empty Lamp Details object represents the a LampDetails object

@@ -15,7 +15,6 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.sdk.EmptyLampDetails;
 import org.allseen.lsf.sdk.Lamp;
 import org.allseen.lsf.sdk.LampAbout;
 import org.allseen.lsf.sdk.LampDetails;
@@ -49,37 +48,33 @@ public class LampDetailsFragment extends PageFrameChildFragment {
     }
 
     public void updateDetailFields(Lamp lamp) {
-        LampDetails lampDetails = lamp != null ? lamp.getDetails() : EmptyLampDetails.instance;
-        LampMake lampMake = lampDetails.getMake();
-        String lampMakeName = null;
+        LampDetails lampDetails = lamp != null ? lamp.getDetails() : null;
+        LampMake lampMake = lampDetails != null ? lampDetails.getMake() : null;
+        String lampMakeName = lampMake != null ? lampMake.name() : null;
 
-        if (lampMake != null) {
-            lampMakeName = lampMake.name();
-
-            if (lampMakeName.equals("OEM1")) {
-                lampMakeName = "Qualcomm Technologies, Inc.";
-            }
+        if ("OEM1".equals(lampMakeName)) {
+            lampMakeName = "Qualcomm Technologies, Inc.";
         }
 
         setTextViewValue(view, R.id.lampDetailsTextMake, lampMakeName, 0);
-        setTextViewValue(view, R.id.lampDetailsTextModel, lampDetails.getModel(), 0);
-        setTextViewValue(view, R.id.lampDetailsTextDevice, lampDetails.getType(), 0);
-        setTextViewValue(view, R.id.lampDetailsTextLamp, lampDetails.getLampType(), 0);
-        setTextViewValue(view, R.id.lampDetailsTextBase, lampDetails.getLampBaseType(), 0);
-        setTextViewValue(view, R.id.lampDetailsTextBeam, lampDetails.getLampBeamAngle(), 0);
+        setTextViewValue(view, R.id.lampDetailsTextModel, lampDetails != null ? lampDetails.getModel() : null, 0);
+        setTextViewValue(view, R.id.lampDetailsTextDevice, lampDetails != null ? lampDetails.getType() : null, 0);
+        setTextViewValue(view, R.id.lampDetailsTextLamp, lampDetails != null ? lampDetails.getLampType() : null, 0);
+        setTextViewValue(view, R.id.lampDetailsTextBase, lampDetails != null ? lampDetails.getLampBaseType() : null, 0);
+        setTextViewValue(view, R.id.lampDetailsTextBeam, lampDetails != null ? lampDetails.getLampBeamAngle() : 0, 0);
 
-        setTextViewValue(view, R.id.lampDetailsTextDimmable, lampDetails.isDimmable(), 0);
-        setTextViewValue(view, R.id.lampDetailsTextHasColor, lampDetails.hasColor(), 0);
-        setTextViewValue(view, R.id.lampDetailsTextHasTemp, lampDetails.hasVariableColorTemp(), 0);
-        setTextViewValue(view, R.id.lampDetailsTextHasEffects, lampDetails.hasEffects(), 0);
+        setTextViewValue(view, R.id.lampDetailsTextDimmable, lampDetails != null ? lampDetails.isDimmable() : false, 0);
+        setTextViewValue(view, R.id.lampDetailsTextHasColor, lampDetails != null ? lampDetails.hasColor() : false, 0);
+        setTextViewValue(view, R.id.lampDetailsTextHasTemp, lampDetails != null ? lampDetails.hasVariableColorTemp() : false, 0);
+        setTextViewValue(view, R.id.lampDetailsTextHasEffects, lampDetails != null ? lampDetails.hasEffects() : false, 0);
 
-        setTextViewValue(view, R.id.lampDetailsTextVoltageMin, lampDetails.getMinVoltage(), R.string.units_volts);
-        setTextViewValue(view, R.id.lampDetailsTextVoltageMax, lampDetails.getMaxVoltage(), R.string.units_volts);
-        setTextViewValue(view, R.id.lampDetailsTextWattageActual, lampDetails.getWattage(), R.string.units_watts);
-        setTextViewValue(view, R.id.lampDetailsTextWattageEquiv, lampDetails.getIncandescentEquivalent(), R.string.units_watts);
-        setTextViewValue(view, R.id.lampDetailsTextLumens, lampDetails.getMaxLumens(), 0);
-        setTextViewValue(view, R.id.lampDetailsTextTempMin, lampDetails.getMinTemperature(), R.string.units_kelvin);
-        setTextViewValue(view, R.id.lampDetailsTextTempMax, lampDetails.getMaxTemperature(), R.string.units_kelvin);
+        setTextViewValue(view, R.id.lampDetailsTextVoltageMin, lampDetails != null ? lampDetails.getMinVoltage() : 0, R.string.units_volts);
+        setTextViewValue(view, R.id.lampDetailsTextVoltageMax, lampDetails != null ? lampDetails.getMaxVoltage() : 0, R.string.units_volts);
+        setTextViewValue(view, R.id.lampDetailsTextWattageActual, lampDetails != null ? lampDetails.getWattage() : 0, R.string.units_watts);
+        setTextViewValue(view, R.id.lampDetailsTextWattageEquiv, lampDetails != null ? lampDetails.getIncandescentEquivalent() : 0, R.string.units_watts);
+        setTextViewValue(view, R.id.lampDetailsTextLumens, lampDetails != null ? lampDetails.getMaxLumens() : 0, 0);
+        setTextViewValue(view, R.id.lampDetailsTextTempMin, lampDetails != null ? lampDetails.getMinTemperature() : LightingDirector.COLORTEMP_MIN, R.string.units_kelvin);
+        setTextViewValue(view, R.id.lampDetailsTextTempMax, lampDetails != null ? lampDetails.getMaxTemperature() : LightingDirector.COLORTEMP_MAX, R.string.units_kelvin);
 
         if (lamp != null) {
             LampAbout lampAbout = lamp.getAbout();

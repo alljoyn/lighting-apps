@@ -342,9 +342,9 @@ public class Group extends GroupMember implements DeletableItem {
         LightingDirector director = LightingDirector.get();
         Collection<LightingItem> dependents = new ArrayList<LightingItem>();
 
-        dependents.addAll(director.getGroupCollectionManager().getGroupCollection(new LightingItemHasComponentFilter<Group>(Group.this)));
-        dependents.addAll(director.getSceneCollectionManager().getScenesCollection(new LightingItemHasComponentFilter<SceneV1>(Group.this)));
-        dependents.addAll(director.getSceneElementCollectionManager().getSceneElementsCollection(new LightingItemHasComponentFilter<SceneElement>(Group.this)));
+        dependents.addAll(director.getGroupCollectionManager().getGroupCollection(new HasComponentFilter<Group>(Group.this)));
+        dependents.addAll(director.getSceneCollectionManager().getScenesCollection(new HasComponentFilter<SceneV1>(Group.this)));
+        dependents.addAll(director.getSceneElementCollectionManager().getSceneElementsCollection(new HasComponentFilter<SceneElement>(Group.this)));
 
         return dependents;
     }

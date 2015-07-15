@@ -53,7 +53,7 @@ public class EnterDurationFragment extends EnterNumberFragment {
         EnterDurationFragment.duration = numberValue;
 
         // Go back to the effect info display
-        ((SampleAppActivity)getActivity()).onBackPressed();
+        getActivity().onBackPressed();
 
         return true;
     }

@@ -190,7 +190,7 @@ public class PulseEffect extends ColorItem implements Effect {
     protected Collection<LightingItem> getDependentCollection() {
         Collection<LightingItem> dependents = new ArrayList<LightingItem>();
 
-        dependents.addAll(LightingDirector.get().getSceneElementCollectionManager().getSceneElementsCollection(new LightingItemHasComponentFilter<SceneElement>(PulseEffect.this)));
+        dependents.addAll(LightingDirector.get().getSceneElementCollectionManager().getSceneElementsCollection(new HasComponentFilter<SceneElement>(PulseEffect.this)));
 
         return dependents;
     }

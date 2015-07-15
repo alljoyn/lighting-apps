@@ -18,12 +18,25 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.allseen.lsf.sdk.model.LightingItemDataModel;
+import org.allseen.lsf.sdk.model.LightingItemFilter;
 import org.allseen.lsf.sdk.model.LightingItemSortableTag;
 
 /**
  * Abstract base class for items in a Lighting system.
  */
 public abstract class LightingItem implements LightingItemInterface {
+    protected class HasComponentFilter<ITEM extends LightingItem> implements LightingItemFilter<ITEM> {
+        protected LightingItem component;
+
+        public HasComponentFilter(LightingItem component) {
+            this.component = component;
+        }
+
+        @Override
+        public boolean passes(ITEM item) {
+            return item.hasComponent(component);
+        }
+    }
 
     /**
      * Returns the name of the Lighting Item.

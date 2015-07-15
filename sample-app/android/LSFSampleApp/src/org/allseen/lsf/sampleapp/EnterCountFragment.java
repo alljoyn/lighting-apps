@@ -62,7 +62,7 @@ public class EnterCountFragment extends EnterNumberFragment {
         EnterCountFragment.count = numberValue;
 
         // Go back to the effect info display
-        ((SampleAppActivity)getActivity()).onBackPressed();
+        getActivity().onBackPressed();
 
         return true;
     }

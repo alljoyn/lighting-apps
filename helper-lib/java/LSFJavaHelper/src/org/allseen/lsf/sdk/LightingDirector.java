@@ -249,6 +249,26 @@ public class LightingDirector {
         }
     };
 
+    private class ItemIDCollectionFilter<ITEM extends LightingItem> implements LightingItemFilter<ITEM> {
+        protected Collection<String> itemIDs;
+
+        public ItemIDCollectionFilter(Collection<String> itemIDs) {
+            this.itemIDs = itemIDs;
+        }
+
+        @Override
+        public boolean passes(ITEM item) {
+            return itemIDs.contains(item.getId());
+        }
+    }
+
+    private class InitializedFilter<ITEM extends LightingItem> implements LightingItemFilter<ITEM> {
+        @Override
+        public boolean passes(ITEM item) {
+            return item.isInitialized();
+        }
+    }
+
     /**
      * Construct a LightingDirector instance.
      * <p>
@@ -472,7 +492,7 @@ public class LightingDirector {
      * @return An array of Lamps
      */
     public Lamp[] getLamps(Collection<String> lampIDs) {
-        return getLampCollectionManager().getLamps(new LightingItemIDCollectionFilter<Lamp>(lampIDs));
+        return getLampCollectionManager().getLamps(new ItemIDCollectionFilter<Lamp>(lampIDs));
     }
 
     /**
@@ -486,7 +506,7 @@ public class LightingDirector {
      * @return Array of active Lamps
      */
     public Lamp[] getInitializedLamps() {
-        return getLampCollectionManager().getLamps(new LightingItemInitializedFilter<Lamp>());
+        return getLampCollectionManager().getLamps(new InitializedFilter<Lamp>());
     }
 
     /**
@@ -537,7 +557,7 @@ public class LightingDirector {
      * @return An array of Groups
      */
     public Group[] getGroups(Collection<String> groupIDs) {
-        return getGroupCollectionManager().getGroups(new LightingItemIDCollectionFilter<Group>(groupIDs));
+        return getGroupCollectionManager().getGroups(new ItemIDCollectionFilter<Group>(groupIDs));
     }
 
     /**
@@ -551,7 +571,7 @@ public class LightingDirector {
      * @return Array of active Groups
      */
     public Group[] getInitializedGroups() {
-        return getGroupCollectionManager().getGroups(new LightingItemInitializedFilter<Group>());
+        return getGroupCollectionManager().getGroups(new InitializedFilter<Group>());
     }
 
     /**
@@ -602,7 +622,7 @@ public class LightingDirector {
      * @return An array of Presets
      */
     public Preset[] getPresets(Collection<String> presetIDs) {
-        return getPresetCollectionManager().getPresets(new LightingItemIDCollectionFilter<Preset>(presetIDs));
+        return getPresetCollectionManager().getPresets(new ItemIDCollectionFilter<Preset>(presetIDs));
     }
 
     /**
@@ -616,7 +636,7 @@ public class LightingDirector {
      * @return An array of active Presets
      */
     public Preset[] getInitializedPresets() {
-        return getPresetCollectionManager().getPresets(new LightingItemInitializedFilter<Preset>());
+        return getPresetCollectionManager().getPresets(new InitializedFilter<Preset>());
     }
 
     /**
@@ -668,7 +688,7 @@ public class LightingDirector {
      * @return An array of TransitionEffects
      */
     public TransitionEffect[] getTransitionEffects(Collection<String> transitionEffectIDs) {
-        return getTransitionEffectCollectionManager().getTransitionEffects(new LightingItemIDCollectionFilter<TransitionEffect>(transitionEffectIDs));
+        return getTransitionEffectCollectionManager().getTransitionEffects(new ItemIDCollectionFilter<TransitionEffect>(transitionEffectIDs));
     }
 
     /**
@@ -682,7 +702,7 @@ public class LightingDirector {
      * @return An array of active TransitionEffects
      */
     public TransitionEffect[] getInitializedTransitionEffects() {
-        return getTransitionEffectCollectionManager().getTransitionEffects(new LightingItemInitializedFilter<TransitionEffect>());
+        return getTransitionEffectCollectionManager().getTransitionEffects(new InitializedFilter<TransitionEffect>());
     }
 
     /**
@@ -734,7 +754,7 @@ public class LightingDirector {
      * @return An array of PulseEffects
      */
     public PulseEffect[] getPulseEffects(Collection<String> pulseEffectIDs) {
-        return getPulseEffectCollectionManager().getPulseEffects(new LightingItemIDCollectionFilter<PulseEffect>(pulseEffectIDs));
+        return getPulseEffectCollectionManager().getPulseEffects(new ItemIDCollectionFilter<PulseEffect>(pulseEffectIDs));
     }
 
     /**
@@ -748,7 +768,7 @@ public class LightingDirector {
      * @return An array of active PulseEffects
      */
     public PulseEffect[] getInitializedPulseEffects() {
-        return getPulseEffectCollectionManager().getPulseEffects(new LightingItemInitializedFilter<PulseEffect>());
+        return getPulseEffectCollectionManager().getPulseEffects(new InitializedFilter<PulseEffect>());
     }
 
     /**
@@ -800,7 +820,7 @@ public class LightingDirector {
      * @return An array of SceneElements
      */
     public SceneElement[] getSceneElements(Collection<String> sceneElementIDs) {
-        return getSceneElementCollectionManager().getSceneElements(new LightingItemIDCollectionFilter<SceneElement>(sceneElementIDs));
+        return getSceneElementCollectionManager().getSceneElements(new ItemIDCollectionFilter<SceneElement>(sceneElementIDs));
     }
 
     /**
@@ -814,7 +834,7 @@ public class LightingDirector {
      * @return An array of active SceneElements
      */
     public SceneElement[] getInitializedSceneElements() {
-        return getSceneElementCollectionManager().getSceneElements(new LightingItemInitializedFilter<SceneElement>());
+        return getSceneElementCollectionManager().getSceneElements(new InitializedFilter<SceneElement>());
     }
 
     /**
@@ -880,10 +900,10 @@ public class LightingDirector {
      * @return An array of Scenes
      */
     public Scene[] getScenes(Collection<String> sceneIDs) {
-        Scene[] scenes = getSceneCollectionManagerV2().getScenes(new LightingItemIDCollectionFilter<SceneV2>(sceneIDs));
+        Scene[] scenes = getSceneCollectionManagerV2().getScenes(new ItemIDCollectionFilter<SceneV2>(sceneIDs));
 
         if (scenes == null || scenes.length == 0) {
-            scenes = getSceneCollectionManager().getScenes(new LightingItemIDCollectionFilter<SceneV1>(sceneIDs));
+            scenes = getSceneCollectionManager().getScenes(new ItemIDCollectionFilter<SceneV1>(sceneIDs));
         }
 
         return scenes;
@@ -902,10 +922,10 @@ public class LightingDirector {
     public Scene[] getInitializedScenes() {
         Collection<Scene> scenes = new ArrayList<Scene>(getSceneCount());
 
-        scenes.addAll(getSceneCollectionManager().getScenesCollection(new LightingItemInitializedFilter<SceneV1>()));
+        scenes.addAll(getSceneCollectionManager().getScenesCollection(new InitializedFilter<SceneV1>()));
 
         if (scenes.size() == 0) {
-            scenes.addAll(getSceneCollectionManagerV2().getScenesCollection(new LightingItemInitializedFilter<SceneV2>()));
+            scenes.addAll(getSceneCollectionManagerV2().getScenesCollection(new InitializedFilter<SceneV2>()));
         }
 
         return scenes.toArray(new Scene[scenes.size()]);
@@ -962,7 +982,7 @@ public class LightingDirector {
      * @return An array of MasterScenes
      */
     public MasterScene[] getMasterScenes(Collection<String> masterSceneIDs) {
-        return getMasterSceneCollectionManager().getMasterScenes(new LightingItemIDCollectionFilter<MasterScene>(masterSceneIDs));
+        return getMasterSceneCollectionManager().getMasterScenes(new ItemIDCollectionFilter<MasterScene>(masterSceneIDs));
     }
 
     /**
@@ -977,7 +997,7 @@ public class LightingDirector {
      * @return An array of active MasterScenes
      */
     public MasterScene[] getInitializedMasterScenes() {
-        return getMasterSceneCollectionManager().getMasterScenes(new LightingItemInitializedFilter<MasterScene>());
+        return getMasterSceneCollectionManager().getMasterScenes(new InitializedFilter<MasterScene>());
     }
 
     /**
@@ -1002,11 +1022,11 @@ public class LightingDirector {
     }
 
     public Effect[] getEffects(Collection<String> effectIDs) {
-        return getEffects(new LightingItemIDCollectionFilter<Preset>(effectIDs), new LightingItemIDCollectionFilter<TransitionEffect>(effectIDs), new LightingItemIDCollectionFilter<PulseEffect>(effectIDs));
+        return getEffects(new ItemIDCollectionFilter<Preset>(effectIDs), new ItemIDCollectionFilter<TransitionEffect>(effectIDs), new ItemIDCollectionFilter<PulseEffect>(effectIDs));
     }
 
     public Effect[] getInitializedEffects() {
-        return getEffects(new LightingItemInitializedFilter<Preset>(), new LightingItemInitializedFilter<TransitionEffect>(), new LightingItemInitializedFilter<PulseEffect>());
+        return getEffects(new InitializedFilter<Preset>(), new InitializedFilter<TransitionEffect>(), new InitializedFilter<PulseEffect>());
     }
 
     public Effect getEffect(String effectID) {

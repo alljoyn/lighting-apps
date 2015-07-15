@@ -161,7 +161,7 @@ public class TransitionEffect extends ColorItem implements Effect {
     protected Collection<LightingItem> getDependentCollection() {
         Collection<LightingItem> dependents = new ArrayList<LightingItem>();
 
-        dependents.addAll(LightingDirector.get().getSceneElementCollectionManager().getSceneElementsCollection(new LightingItemHasComponentFilter<SceneElement>(TransitionEffect.this)));
+        dependents.addAll(LightingDirector.get().getSceneElementCollectionManager().getSceneElementsCollection(new HasComponentFilter<SceneElement>(TransitionEffect.this)));
 
         return dependents;
     }

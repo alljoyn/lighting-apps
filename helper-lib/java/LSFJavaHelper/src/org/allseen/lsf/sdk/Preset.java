@@ -174,9 +174,9 @@ public class Preset extends MutableColorItem implements Effect {
         LightingDirector director = LightingDirector.get();
         Collection<LightingItem> dependents = new ArrayList<LightingItem>();
 
-        dependents.addAll(director.getSceneCollectionManager().getScenesCollection(new LightingItemHasComponentFilter<SceneV1>(Preset.this)));
-        dependents.addAll(director.getTransitionEffectCollectionManager().getTransitionEffectsCollection(new LightingItemHasComponentFilter<TransitionEffect>(Preset.this)));
-        dependents.addAll(director.getPulseEffectCollectionManager().getPulseEffectsCollection(new LightingItemHasComponentFilter<PulseEffect>(Preset.this)));
+        dependents.addAll(director.getSceneCollectionManager().getScenesCollection(new HasComponentFilter<SceneV1>(Preset.this)));
+        dependents.addAll(director.getTransitionEffectCollectionManager().getTransitionEffectsCollection(new HasComponentFilter<TransitionEffect>(Preset.this)));
+        dependents.addAll(director.getPulseEffectCollectionManager().getPulseEffectsCollection(new HasComponentFilter<PulseEffect>(Preset.this)));
 
         return dependents;
     }

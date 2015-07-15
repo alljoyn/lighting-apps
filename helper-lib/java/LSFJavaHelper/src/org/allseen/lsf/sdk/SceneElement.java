@@ -246,7 +246,7 @@ public class SceneElement extends SceneItem {
         LightingDirector director = LightingDirector.get();
         Collection<LightingItem> dependents = new ArrayList<LightingItem>();
 
-        dependents.addAll(director.getSceneCollectionManagerV2().getScenesCollection(new LightingItemHasComponentFilter<SceneV2>(SceneElement.this)));
+        dependents.addAll(director.getSceneCollectionManagerV2().getScenesCollection(new HasComponentFilter<SceneV2>(SceneElement.this)));
 
         return dependents;
     }

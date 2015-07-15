@@ -19,7 +19,6 @@ import java.util.Random;
 
 import org.alljoyn.bus.AboutKeys;
 import org.allseen.lsf.AboutData;
-import org.allseen.lsf.sdk.model.LightingControllerConfiguration;
 
 /**
  * LightingControllerConfigurationBase automatically sets all the parameters necessary

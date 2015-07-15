@@ -13,7 +13,7 @@
  *    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-package org.allseen.lsf.sdk.model;
+package org.allseen.lsf.sdk;
 
 import org.allseen.lsf.AboutData;
 import org.allseen.lsf.sdk.RankAvailability;

@@ -16,7 +16,6 @@
 package org.allseen.lsf.sdk;
 
 import org.allseen.lsf.sdk.model.BasicControllerService;
-import org.allseen.lsf.sdk.model.LightingControllerConfiguration;
 
 /**
  * The Lighting Controller class serves as middle manager to all devices and

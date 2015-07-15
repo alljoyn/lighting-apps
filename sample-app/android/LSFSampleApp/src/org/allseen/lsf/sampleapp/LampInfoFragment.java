@@ -15,7 +15,6 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.sdk.EmptyLampDetails;
 import org.allseen.lsf.sdk.Lamp;
 import org.allseen.lsf.sdk.LampParameters;
 import org.allseen.lsf.sdk.LightingDirector;
@@ -82,7 +81,7 @@ public class LampInfoFragment extends DimmableItemInfoFragment {
     @Override
     protected int getColorTempMin() {
         Lamp lamp = LightingDirector.get().getLamp(key);
-        int colorTempMin = lamp != null ? lamp.getColorTempMin() : EmptyLampDetails.instance.getMinTemperature();
+        int colorTempMin = lamp != null ? lamp.getColorTempMin() : LightingDirector.COLORTEMP_MIN;
 
         return colorTempMin;
     }
@@ -90,8 +89,8 @@ public class LampInfoFragment extends DimmableItemInfoFragment {
     @Override
     protected int getColorTempSpan() {
         Lamp lamp = LightingDirector.get().getLamp(key);
-        int colorTempMin = lamp != null ? lamp.getColorTempMin() : EmptyLampDetails.instance.getMinTemperature();
-        int colorTempMax = lamp != null ? lamp.getColorTempMax() : EmptyLampDetails.instance.getMaxTemperature();
+        int colorTempMin = lamp != null ? lamp.getColorTempMin() : LightingDirector.COLORTEMP_MIN;
+        int colorTempMax = lamp != null ? lamp.getColorTempMax() : LightingDirector.COLORTEMP_MAX;
 
         return colorTempMax - colorTempMin;
     }

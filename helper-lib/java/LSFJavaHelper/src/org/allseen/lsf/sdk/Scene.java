@@ -64,7 +64,7 @@ public abstract class Scene extends SceneItem {
         LightingDirector director = LightingDirector.get();
         Collection<LightingItem> dependents = new ArrayList<LightingItem>();
 
-        dependents.addAll(director.getMasterSceneCollectionManager().getMasterScenesCollection(new LightingItemHasComponentFilter<MasterScene>(Scene.this)));
+        dependents.addAll(director.getMasterSceneCollectionManager().getMasterScenesCollection(new HasComponentFilter<MasterScene>(Scene.this)));
 
         return dependents;
     }

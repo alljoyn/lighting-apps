@@ -13,15 +13,25 @@
  *    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-package org.allseen.lsf.sdk;
+package org.allseen.lsf.sdk.model;
 
+import org.allseen.lsf.sdk.Controller;
+import org.allseen.lsf.sdk.Group;
+import org.allseen.lsf.sdk.Lamp;
+import org.allseen.lsf.sdk.LightingDirector;
+import org.allseen.lsf.sdk.LightingItem;
+import org.allseen.lsf.sdk.LightingItemErrorEvent;
+import org.allseen.lsf.sdk.MasterScene;
+import org.allseen.lsf.sdk.Preset;
+import org.allseen.lsf.sdk.PulseEffect;
+import org.allseen.lsf.sdk.Scene;
+import org.allseen.lsf.sdk.SceneElement;
+import org.allseen.lsf.sdk.TrackingID;
+import org.allseen.lsf.sdk.TransitionEffect;
 import org.allseen.lsf.sdk.listener.AnyCollectionListenerBase;
 import org.allseen.lsf.sdk.listener.TrackingIDListener;
 
-/**
- * A lighting Event Utility monitors all events involving a specified
- * trackingID in the lighting system.
- */
+// TODO-REN: This class should probably be called ListenerUtil and moved to the listener package
 public class LightingEventUtil {
 
     public static void listenFor(final TrackingID trackingId, final TrackingIDListener<LightingItem, LightingItemErrorEvent> listener) {
