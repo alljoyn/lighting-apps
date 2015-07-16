@@ -236,6 +236,12 @@ jobject JNICALL Java_org_allseen_lsf_LampManager_getLampDataSet(JNIEnv *env, job
 }
 
 JNIEXPORT
+jobject JNICALL Java_org_allseen_lsf_LampManager_getConsolidatedLampDataSet(JNIEnv *env, jobject thiz, jstring jLampID, jstring jLanguage)
+{
+    return XCppDelegator::Call_ControllerClientStatus_String_String<JLampManager>(env, thiz, jLampID, jLanguage, &JLampManager::GetConsolidatedLampDataSet);
+}
+
+JNIEXPORT
 jobject JNICALL Java_org_allseen_lsf_LampManager_getLampVersion(JNIEnv *env, jobject thiz, jstring jLampID)
 {
     // TODO-FIX uncomment once GetLampVersion has implementation in ControllerClient

@@ -66,6 +66,7 @@ public class LampManagerCallback extends DefaultNativeClassWrapper {
     public void getLampSupportedLanguagesReplyCB(ResponseCode responseCode, String lampID, String[] supportedLanguages)                     { }
     public void getLampVersionReplyCB(ResponseCode responseCode, String lampID, long lampVersion)                                           { }
     public void setLampEffectReplyCB(ResponseCode responseCode, String lampID, String effectID)                                             { }
+    public void getConsolidatedLampDataSetReplyCB(ResponseCode responseCode, String lampID, String language, String lampName, LampDetails lampDetails, LampState lampState, LampParameters lampParameters) { }
 
     @Override
     protected native void createNativeObject();

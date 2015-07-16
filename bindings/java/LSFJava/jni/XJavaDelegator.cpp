@@ -372,6 +372,101 @@ void XJavaDelegator::Call_Void_ResponseCode_String_Object(const jweak jdelegate,
 
     Call_Void_Variadic(env, jdelegate, func, sig, jresponseCode, jstrValue, jobjValue);
 }
+
+template <typename CTYPE1, typename XTYPE1, typename CTYPE2, typename XTYPE2, typename CTYPE3, typename XTYPE3>
+void XJavaDelegator::Call_Void_ResponseCode_String_String_String_Object_Object_Object(const jweak jdelegate, char const *func, XClass *xClass1, XClass *xClass2, XClass *xClass3, const LSFResponseCode &responseCode, const LSFString &strValue1, const LSFString &strValue2, const LSFString &strValue3, const CTYPE1 &objValue1, const CTYPE2 &objValue2, const CTYPE3 &objValue3)
+{
+    // Get the JNIEnv for the current native thread
+    JScopedEnv env;
+
+    jobject jresponseCode = JEnum::jResponseCodeEnum->getObject(responseCode);
+    if (env->ExceptionCheck() || !jresponseCode) {
+        QCC_LogError(ER_FAIL, ("getObject() failed"));
+        return;
+    }
+
+    jstring jstrValue1 = env->NewStringUTF(strValue1.c_str());
+    if (env->ExceptionCheck() || !jstrValue1) {
+        QCC_LogError(ER_FAIL, ("NewStringUTF() failed"));
+        return;
+    }
+
+    jstring jstrValue2 = env->NewStringUTF(strValue2.c_str());
+    if (env->ExceptionCheck() || !jstrValue2) {
+        QCC_LogError(ER_FAIL, ("NewStringUTF() failed"));
+        return;
+    }
+
+    jstring jstrValue3 = env->NewStringUTF(strValue3.c_str());
+    if (env->ExceptionCheck() || !jstrValue3) {
+        QCC_LogError(ER_FAIL, ("NewStringUTF() failed"));
+        return;
+    }
+
+    jmethodID jconstructor1 = env->GetMethodID(xClass1->classRef, "<init>", "()V");
+    if (env->ExceptionCheck() || !jconstructor1) {
+        QCC_LogError(ER_FAIL, ("GetMethodID() failed"));
+        return;
+    }
+
+    jobject jobjValue1 = env->NewObject(xClass1->classRef, jconstructor1);
+    if (env->ExceptionCheck() || !jobjValue1) {
+        QCC_LogError(ER_FAIL, ("NewObject() failed"));
+        return;
+    }
+
+    XTYPE1 *xobjValue1 = GetHandle<XTYPE1 *>(jobjValue1);
+    if (env->ExceptionCheck() || !xobjValue1) {
+        QCC_LogError(ER_FAIL, ("GetHandle() failed"));
+        return;
+    }
+
+    jmethodID jconstructor2 = env->GetMethodID(xClass2->classRef, "<init>", "()V");
+    if (env->ExceptionCheck() || !jconstructor2) {
+        QCC_LogError(ER_FAIL, ("GetMethodID() failed"));
+        return;
+    }
+
+    jobject jobjValue2 = env->NewObject(xClass2->classRef, jconstructor2);
+    if (env->ExceptionCheck() || !jobjValue2) {
+        QCC_LogError(ER_FAIL, ("NewObject() failed"));
+        return;
+    }
+
+    XTYPE2 *xobjValue2 = GetHandle<XTYPE2 *>(jobjValue2);
+    if (env->ExceptionCheck() || !xobjValue2) {
+        QCC_LogError(ER_FAIL, ("GetHandle() failed"));
+        return;
+    }
+
+    jmethodID jconstructor3 = env->GetMethodID(xClass3->classRef, "<init>", "()V");
+    if (env->ExceptionCheck() || !jconstructor3) {
+        QCC_LogError(ER_FAIL, ("GetMethodID() failed"));
+        return;
+    }
+
+    jobject jobjValue3 = env->NewObject(xClass3->classRef, jconstructor3);
+    if (env->ExceptionCheck() || !jobjValue3) {
+        QCC_LogError(ER_FAIL, ("NewObject() failed"));
+        return;
+    }
+
+    XTYPE3 *xobjValue3 = GetHandle<XTYPE3 *>(jobjValue3);
+    if (env->ExceptionCheck() || !xobjValue3) {
+        QCC_LogError(ER_FAIL, ("GetHandle() failed"));
+        return;
+    }
+
+    *xobjValue1 = objValue1;
+    *xobjValue2 = objValue2;
+    *xobjValue3 = objValue3;
+
+    char sig[512];
+    snprintf(sig, sizeof(sig), "(Lorg/allseen/lsf/sdk/ResponseCode;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;L%s;L%s;L%s;)V", xClass1->className, xClass2->className, xClass3->className);
+
+    Call_Void_Variadic(env, jdelegate, func, sig, jresponseCode, jstrValue1, jstrValue2, jstrValue3, jobjValue1, jobjValue2, jobjValue3);
+}
+
 #endif //LSF_JNI_XJAVADELEGATOR_H_INCLUDE_TEMPLATE_METHODS
 
 // This .cpp file is #include'd in the .h file because some templated

@@ -255,4 +255,9 @@ void JLampManagerCallback::SetLampEffectReplyCB(const LSFResponseCode& responseC
     XJavaDelegator::Call_Void_ResponseCode_String_String(jdelegate, __func__, responseCode, lampID, effectID);
 }
 
+void JLampManagerCallback::GetConsolidatedLampDataSetReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const LSFString& language, const LSFString& lampName, const LampDetails& lampDetails, const LampState& lampState, const LampParameters& lampParameters)
+{
+    XJavaDelegator::Call_Void_ResponseCode_String_String_String_Object_Object_Object<LampDetails, JLampDetails, LampState, JLampState, LampParameters, JLampParameters>(jdelegate, __func__, XClass::xLampDetails, XClass::xLampState, XClass::xLampParameters, responseCode, lampID, language, lampName, lampDetails, lampState, lampParameters);
+}
+
 } /* namespace lsf */

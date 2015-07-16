@@ -230,6 +230,19 @@ public class HelperLampManagerCallback<LAMP> extends LampManagerCallback {
         }
     }
 
+    @Override
+    public void getConsolidatedLampDataSetReplyCB(ResponseCode responseCode, String lampID, String language, String lampName, LampDetails lampDetails, LampState lampState, LampParameters lampParameters) {
+        if (responseCode.equals(ResponseCode.OK)) {
+            postUpdateLampName(lampID, lampName);
+            postUpdateLampDetails(lampID, lampDetails);
+            postUpdateLampState(lampID, lampState);
+            postUpdateLampParameters(lampID, lampParameters);
+        } else {
+            postGetConsolidatedLampDataSet(lampID, RETRY_DELAY);
+            manager.getLampCollectionManager().sendErrorEvent("getConsolidatedLampDataSetReplyCB", responseCode, lampID);
+        }
+    }
+
     public void postOnLampAnnouncedAboutData(final String lampID, final String peer, final short port, final Map<String, Variant> announcedData, int delay) {
         manager.getQueue().postDelayed(new Runnable() {
             @Override
@@ -284,10 +297,19 @@ public class HelperLampManagerCallback<LAMP> extends LampManagerCallback {
                 LampDataModel lampModel = lampManager.getModel(lampID);
 
                 if (LampDataModel.defaultName.equals(lampModel.getName())) {
-                    postGetLampName(lampID, 0);
-                    postGetLampState(lampID, 0);
-                    postGetLampParameters(lampID, 0);
-                    postGetLampDetails(lampID, 0);
+                    if (AllJoynManager.controllerServiceLeaderVersion < 2) {
+                        // Since 14.12 and earlier controllers did not support the
+                        // consolidated data set, we have to queue up 4 requests and
+                        // process the 4 replies.
+                        postGetLampName(lampID, 0);
+                        postGetLampState(lampID, 0);
+                        postGetLampParameters(lampID, 0);
+                        postGetLampDetails(lampID, 0);
+                    } else {
+                        // For 15.04 controllers and later we can send just 1 request
+                        // and process the 1 reply.
+                        postGetConsolidatedLampDataSet(lampID, 0);
+                    }
                 }
 
                 LampAbout savedLampAbout = savedLampAbouts.remove(lampID);
@@ -557,6 +579,17 @@ public class HelperLampManagerCallback<LAMP> extends LampManagerCallback {
             public void run() {
                 if (AllJoynManager.controllerConnected) {
                     manager.getLampManager().getLampStateColorTempField(lampID);
+                }
+            }
+        }, delay);
+    }
+
+    protected void postGetConsolidatedLampDataSet(final String lampID, int delay) {
+        manager.getQueue().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (AllJoynManager.controllerConnected) {
+                    manager.getLampManager().getConsolidatedLampDataSet(lampID, LightingSystemManager.LANGUAGE);
                 }
             }
         }, delay);

@@ -52,9 +52,9 @@
 {
     ControllerClientStatus status = CONTROLLER_CLIENT_OK;
 
-    if ([groupID isEqualToString: ALL_LAMPS_GROUP_ID])
+    if ([groupID isEqualToString: [LSFSDKAllLampsDataModel getAllLampsGroupID]])
     {
-        [self.callback getLampGroupNameReplyWithCode: LSF_OK groupID: ALL_LAMPS_GROUP_ID language: @"en" andGroupName: ALL_LAMPS_GROUP_NAME];
+        [self.callback getLampGroupNameReplyWithCode: LSF_OK groupID: [LSFSDKAllLampsDataModel getAllLampsGroupID] language: @"en" andGroupName: ALL_LAMPS_GROUP_NAME];
     }
     else
     {
@@ -68,9 +68,9 @@
 {
     ControllerClientStatus status = CONTROLLER_CLIENT_OK;
 
-    if ([groupID isEqualToString: ALL_LAMPS_GROUP_ID])
+    if ([groupID isEqualToString: [LSFSDKAllLampsDataModel getAllLampsGroupID]])
     {
-        [self.callback getLampGroupReplyWithCode: LSF_OK groupID: ALL_LAMPS_GROUP_ID andLampGroup: [LSFSDKAllLampsLampGroup getInstance]];
+        [self.callback getLampGroupReplyWithCode: LSF_OK groupID: [LSFSDKAllLampsDataModel getAllLampsGroupID] andLampGroup: [LSFSDKAllLampsLampGroup getInstance]];
     }
     else
     {
@@ -89,7 +89,7 @@
 {
     ControllerClientStatus status = CONTROLLER_CLIENT_OK;
 
-    if ([groupID isEqualToString: ALL_LAMPS_GROUP_ID])
+    if ([self interceptAllLampsGroupStateChangeRequests] && [groupID isEqualToString: [LSFSDKAllLampsDataModel getAllLampsGroupID]])
     {
         for (NSString *lampID in [self getLampIDs])
         {
@@ -113,7 +113,7 @@
 {
     ControllerClientStatus status = CONTROLLER_CLIENT_OK;
 
-    if ([groupID isEqualToString: ALL_LAMPS_GROUP_ID])
+    if ([self interceptAllLampsGroupStateChangeRequests] && [groupID isEqualToString: [LSFSDKAllLampsDataModel getAllLampsGroupID]])
     {
         for (NSString *lampID in [self getLampIDs])
         {
@@ -137,7 +137,7 @@
 {
     ControllerClientStatus status = CONTROLLER_CLIENT_OK;
 
-    if ([groupID isEqualToString: ALL_LAMPS_GROUP_ID])
+    if ([self interceptAllLampsGroupStateChangeRequests] && [groupID isEqualToString: [LSFSDKAllLampsDataModel getAllLampsGroupID]])
     {
         for (NSString *lampID in [self getLampIDs])
         {
@@ -161,7 +161,7 @@
 {
     ControllerClientStatus status = CONTROLLER_CLIENT_OK;
 
-    if ([groupID isEqualToString: ALL_LAMPS_GROUP_ID])
+    if ([self interceptAllLampsGroupStateChangeRequests] && [groupID isEqualToString: [LSFSDKAllLampsDataModel getAllLampsGroupID]])
     {
         for (NSString *lampID in [self getLampIDs])
         {
@@ -190,7 +190,7 @@
 {
     ControllerClientStatus status = CONTROLLER_CLIENT_OK;
 
-    if ([groupID isEqualToString: ALL_LAMPS_GROUP_ID])
+    if ([self interceptAllLampsGroupStateChangeRequests] && [groupID isEqualToString: [LSFSDKAllLampsDataModel getAllLampsGroupID]])
     {
         for (NSString *lampID in [self getLampIDs])
         {
@@ -219,7 +219,7 @@
 {
     ControllerClientStatus status = CONTROLLER_CLIENT_OK;
 
-    if ([groupID isEqualToString: ALL_LAMPS_GROUP_ID])
+    if ([self interceptAllLampsGroupStateChangeRequests] && [groupID isEqualToString: [LSFSDKAllLampsDataModel getAllLampsGroupID]])
     {
         for (NSString *lampID in [self getLampIDs])
         {
@@ -248,7 +248,7 @@
 {
     ControllerClientStatus status = CONTROLLER_CLIENT_OK;
 
-    if ([groupID isEqualToString: ALL_LAMPS_GROUP_ID])
+    if ([self interceptAllLampsGroupStateChangeRequests] && [groupID isEqualToString: [LSFSDKAllLampsDataModel getAllLampsGroupID]])
     {
         for (NSString *lampID in [self getLampIDs])
         {
@@ -277,7 +277,7 @@
 {
     ControllerClientStatus status = CONTROLLER_CLIENT_OK;
 
-    if ([groupID isEqualToString: ALL_LAMPS_GROUP_ID])
+    if ([self interceptAllLampsGroupStateChangeRequests] && [groupID isEqualToString: [LSFSDKAllLampsDataModel getAllLampsGroupID]])
     {
         for (NSString *lampID in [self getLampIDs])
         {
@@ -306,7 +306,7 @@
 {
     ControllerClientStatus status = CONTROLLER_CLIENT_OK;
 
-    if ([groupID isEqualToString: ALL_LAMPS_GROUP_ID])
+    if ([self interceptAllLampsGroupStateChangeRequests] && [groupID isEqualToString: [LSFSDKAllLampsDataModel getAllLampsGroupID]])
     {
         for (NSString *lampID in [self getLampIDs])
         {
@@ -330,7 +330,7 @@
 {
     ControllerClientStatus status = CONTROLLER_CLIENT_OK;
 
-    if ([groupID isEqualToString: ALL_LAMPS_GROUP_ID])
+    if ([self interceptAllLampsGroupStateChangeRequests] && [groupID isEqualToString: [LSFSDKAllLampsDataModel getAllLampsGroupID]])
     {
         for (NSString *lampID in [self getLampIDs])
         {
@@ -354,7 +354,7 @@
 {
     ControllerClientStatus status = CONTROLLER_CLIENT_OK;
 
-    if ([groupID isEqualToString: ALL_LAMPS_GROUP_ID])
+    if ([self interceptAllLampsGroupStateChangeRequests] && [groupID isEqualToString: [LSFSDKAllLampsDataModel getAllLampsGroupID]])
     {
         for (NSString *lampID in [self getLampIDs])
         {
@@ -378,7 +378,7 @@
 {
     ControllerClientStatus status = CONTROLLER_CLIENT_OK;
 
-    if ([groupID isEqualToString: ALL_LAMPS_GROUP_ID])
+    if ([self interceptAllLampsGroupStateChangeRequests] && [groupID isEqualToString: [LSFSDKAllLampsDataModel getAllLampsGroupID]])
     {
         for (NSString *lampID in [self getLampIDs])
         {
@@ -402,7 +402,7 @@
 {
     ControllerClientStatus status = CONTROLLER_CLIENT_OK;
 
-    if ([groupID isEqualToString: ALL_LAMPS_GROUP_ID])
+    if ([self interceptAllLampsGroupStateChangeRequests] && [groupID isEqualToString: [LSFSDKAllLampsDataModel getAllLampsGroupID]])
     {
         for (NSString *lampID in [self getLampIDs])
         {
@@ -426,7 +426,7 @@
 {
     ControllerClientStatus status = CONTROLLER_CLIENT_OK;
 
-    if ([groupID isEqualToString: ALL_LAMPS_GROUP_ID])
+    if ([self interceptAllLampsGroupStateChangeRequests] && [groupID isEqualToString: [LSFSDKAllLampsDataModel getAllLampsGroupID]])
     {
         for (NSString *lampID in [self getLampIDs])
         {
@@ -450,7 +450,7 @@
 {
     ControllerClientStatus status = CONTROLLER_CLIENT_OK;
 
-    if ([groupID isEqualToString: ALL_LAMPS_GROUP_ID])
+    if ([self interceptAllLampsGroupStateChangeRequests] && [groupID isEqualToString: [LSFSDKAllLampsDataModel getAllLampsGroupID]])
     {
         for (NSString *lampID in [self getLampIDs])
         {
@@ -484,6 +484,11 @@
     }
 
     return lampIDs;
+}
+
+-(BOOL)interceptAllLampsGroupStateChangeRequests
+{
+    return [LSFSDKAllJoynManager getControllerServiceLeaderVersion] < 2;
 }
 
 @end

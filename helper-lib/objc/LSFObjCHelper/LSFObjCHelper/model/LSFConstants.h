@@ -42,7 +42,6 @@
 @property (nonatomic, strong) NSString *aboutInterfaceName;
 @property (nonatomic, strong) NSString *configServiceInterfaceName;
 @property (nonatomic, strong) NSString *defaultLanguage;
-@property (nonatomic, strong) NSString *ALL_LAMPS_GROUP_ID;
 @property (nonatomic, strong) NSArray *supportedEffects;
 @property (nonatomic, strong) NSArray *effectImages;
 @property (nonatomic) unsigned int pollingDelaySeconds;

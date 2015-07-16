@@ -26,8 +26,8 @@ class LSFControllerServiceManagerCallback : public ControllerServiceManagerCallb
   public:
     LSFControllerServiceManagerCallback(id<LSFControllerServiceManagerCallbackDelegate> delegate);
     ~LSFControllerServiceManagerCallback();
-    void GetControllerServiceVersionReplyCB(uint32_t version);
-    void LightingResetControllerServiceReplyCB(LSFResponseCode responseCode);
+    void GetControllerServiceVersionReplyCB(const uint32_t& version);
+    void LightingResetControllerServiceReplyCB(const LSFResponseCode& responseCode);
     void ControllerServiceLightingResetCB(void);
     void ControllerServiceNameChangedCB(const LSFString& controllerServiceDeviceID, const LSFString& controllerServiceName);
     

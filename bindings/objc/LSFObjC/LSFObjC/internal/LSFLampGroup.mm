@@ -95,6 +95,12 @@
     return self.lampGroup->IsDependentLampGroup(gid);
 }
 
++(NSString *)getAllLampsGroupID
+{
+    NSLog(@"AllLampsGroupIdentifier=%@", [NSString stringWithUTF8String: AllLampsGroupIdentifier.c_str()]);
+    return [NSString stringWithUTF8String: AllLampsGroupIdentifier.c_str()];
+}
+
 /*
  * Accessor for the internal C++ API object this objective-c class encapsulates
  */

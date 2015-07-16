@@ -92,6 +92,18 @@ jstring JNICALL Java_org_allseen_lsf_LampGroup_toString(JNIEnv *env, jobject thi
 }
 
 JNIEXPORT
+jstring JNICALL Java_org_allseen_lsf_LampGroup_getAllLampsGroupID(JNIEnv *env, jclass clazz)
+{
+    jstring jstrValue = env->NewStringUTF(AllLampsGroupIdentifier.c_str());
+    if (env->ExceptionCheck() || !jstrValue) {
+        QCC_LogError(ER_FAIL, ("NewStringUTF() failed"));
+        return NULL;
+    }
+
+    return jstrValue;
+}
+
+JNIEXPORT
 void JNICALL Java_org_allseen_lsf_LampGroup_createNativeObject(JNIEnv *env, jobject thiz)
 {
     CreateHandle<JLampGroup>(thiz);

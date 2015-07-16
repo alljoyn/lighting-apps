@@ -45,6 +45,7 @@ import org.allseen.lsf.sdk.listener.AllJoynListener;
  */
 public class AllJoynManager {
     //private static final String TAG = "TagAlljoynManager";
+    public static long controllerServiceLeaderVersion = 0;
 
     public static BusAttachment bus;
     public static ControllerClient controllerClient;

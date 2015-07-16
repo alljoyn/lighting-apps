@@ -344,7 +344,7 @@ void LSFSDKAboutManagerCpp::Announced(const char* busName, uint16_t version, Ses
 
     dispatch_async(dispatch_queue_create("GetAboutData", NULL), ^{
         [LSFSDKAllJoynManager addNewLamp: lampID lampAnnouncementData: lampAnnData];
-//        [LSFSDKAllJoynManager getAboutDataForLampID: lampID];
+        [[LSFSDKAllJoynManager getLampManagerCallback] postGetLampQueriedAboutDataForID: lampID];
     });
 }
 

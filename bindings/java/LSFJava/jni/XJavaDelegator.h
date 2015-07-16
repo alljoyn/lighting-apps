@@ -66,6 +66,10 @@ class XJavaDelegator {
     // Void / 4 Args
     static void Call_Void_ResponseCode_String_String_String(const jweak jdelegate, char const *func, const LSFResponseCode &responseCode, const LSFString &strValue1, const LSFString &strValue2, const LSFString &strValue3);
 
+    // Void / 7 Args
+    template <typename CTYPE1, typename XTYPE1, typename CTYPE2, typename XTYPE2, typename CTYPE3, typename XTYPE3>
+    static void Call_Void_ResponseCode_String_String_String_Object_Object_Object(const jweak jdelegate, char const *func, XClass *xClass1, XClass *xClass2, XClass *xClass3, const LSFResponseCode &responseCode, const LSFString &strValue1, const LSFString &strValue2, const LSFString &strValue3, const CTYPE1 &objValue1, const CTYPE2 &objValue2, const CTYPE3 &objValue3);
+
     // Void / N Args
     static void Call_Void_Variadic(JScopedEnv& env, const jweak jdelegate, char const *func, char const * const sig, ...);
 

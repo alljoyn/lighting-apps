@@ -19,6 +19,8 @@ package org.allseen.lsf;
 import org.allseen.lsf.sdk.ResponseCode;
 
 public class LampGroup extends DefaultNativeClassWrapper implements LampMemberList {
+    public static final String ALL_LAMPS_GROUP_ID = getAllLampsGroupID();
+
     public LampGroup() {
         createNativeObject();
     }
@@ -44,6 +46,8 @@ public class LampGroup extends DefaultNativeClassWrapper implements LampMemberLi
 
     @Override
     public native String toString();
+
+    protected static native String getAllLampsGroupID();
 
     @Override
     protected native void createNativeObject();

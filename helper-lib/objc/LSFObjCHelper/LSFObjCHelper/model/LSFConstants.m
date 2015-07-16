@@ -15,6 +15,7 @@
  ******************************************************************************/
 
 #import "LSFConstants.h"
+#import <internal/LSFLampGroup.h>
 #import <SystemConfiguration/CaptiveNetwork.h>
 
 @implementation LSFConstants
@@ -37,7 +38,6 @@
 @synthesize aboutInterfaceName = _aboutInterfaceName;
 @synthesize configServiceInterfaceName = _configServiceInterfaceName;
 @synthesize defaultLanguage = _defaultLanguage;
-@synthesize ALL_LAMPS_GROUP_ID = _ALL_LAMPS_GROUP_ID;
 @synthesize supportedEffects = _supportedEffects;
 @synthesize effectImages = _effectImages;
 @synthesize pollingDelaySeconds = _pollingDelaySeconds;
@@ -107,8 +107,6 @@
 
         self.defaultLanguage = @"en";
         
-        self.ALL_LAMPS_GROUP_ID = @"!!all_lamps!!";
-
         self.supportedEffects = [NSArray arrayWithObjects: @"No Effect", @"Transition", @"Pulse", nil];
         self.effectImages = [NSArray arrayWithObjects: @"list_constant_icon.png", @"list_transition_icon.png", @"list_pulse_icon.png", nil];
 

@@ -175,7 +175,7 @@
 
     for (LSFSDKGroup *group in groupsArray)
     {
-        if ([[group theID] isEqualToString: @"!!all_lamps!!"])
+        if ([group isAllLampsGroup])
         {
             [groupsArray removeObject: group];
             break;

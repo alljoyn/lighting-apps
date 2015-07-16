@@ -66,14 +66,14 @@ public class HelperControllerClientCallback<CONTROLLER> extends ControllerClient
 
     @Override
     public void controllerClientErrorCB(ErrorCode[] errorCodes) {
-        manager.getControllerManager().sendErrorEvent("controllerClientErrorCB", errorCodes);
+        manager.getControllerCollectionManager().sendErrorEvent("controllerClientErrorCB", errorCodes);
     }
 
     public void postOnControllerConnected(final String controllerID, final String controllerName, int delay) {
         manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
-                ControllerDataModel leaderModel = manager.getControllerManager().getLeaderModel();
+                ControllerDataModel leaderModel = manager.getControllerCollectionManager().getLeaderModel();
 
                 if (!leaderModel.equalsID(controllerID) || !leaderModel.connected) {
                     leaderModel.id = controllerID;
@@ -91,7 +91,7 @@ public class HelperControllerClientCallback<CONTROLLER> extends ControllerClient
         manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
-                ControllerDataModel leaderModel = manager.getControllerManager().getLeaderModel();
+                ControllerDataModel leaderModel = manager.getControllerCollectionManager().getLeaderModel();
 
                 //TODO-CHK Logic here changed - is it right?
                 if (leaderModel.equalsID(controllerID) && leaderModel.connected) {
@@ -109,7 +109,7 @@ public class HelperControllerClientCallback<CONTROLLER> extends ControllerClient
         manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
-                ControllerDataModel leaderModel = manager.getControllerManager().getLeaderModel();
+                ControllerDataModel leaderModel = manager.getControllerCollectionManager().getLeaderModel();
 
                 //TODO-CHK Logic here changed - is it right?
                 if (leaderModel.equalsID(controllerID)) {
@@ -192,7 +192,7 @@ public class HelperControllerClientCallback<CONTROLLER> extends ControllerClient
         manager.getQueue().post(new Runnable() {
             @Override
             public void run() {
-                manager.getControllerManager().sendLeaderStateChangeEvent();
+                manager.getControllerCollectionManager().sendLeaderStateChangeEvent();
             }
         });
     }

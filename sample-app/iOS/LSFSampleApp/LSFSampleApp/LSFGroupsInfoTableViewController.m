@@ -549,9 +549,11 @@
  */
 -(BOOL)shouldPerformSegueWithIdentifier: (NSString *)identifier sender: (id)sender
 {
+    LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
+
     if ([identifier isEqualToString: @"ChangeGroupName"])
     {
-        if ([self.groupID isEqualToString: @"!!all_lamps!!"])
+        if ([group isAllLampsGroup])
         {
             UITableViewCell *cell = (UITableViewCell *)sender;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -567,7 +569,7 @@
     }
     else if ([identifier isEqualToString: @"ChangeGroupMembers"])
     {
-        if ([self.groupID isEqualToString: @"!!all_lamps!!"])
+        if ([group isAllLampsGroup])
         {
             UITableViewCell *cell = (UITableViewCell *)sender;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;

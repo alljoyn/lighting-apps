@@ -15,8 +15,10 @@
  */
 package org.allseen.lsf.sdk.model;
 
+import org.allseen.lsf.LampGroup;
+
 public class AllLampsDataModel extends GroupDataModel {
-    public static final String ALL_LAMPS_GROUP_ID = "!!all_lamps!!";
+    public static final String ALL_LAMPS_GROUP_ID = LampGroup.ALL_LAMPS_GROUP_ID;
     public static final char TAG_PREFIX_ALL_LAMPS = '!';
 
     public static final AllLampsDataModel instance = new AllLampsDataModel();

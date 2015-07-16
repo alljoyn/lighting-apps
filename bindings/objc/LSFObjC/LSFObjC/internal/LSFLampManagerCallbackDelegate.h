@@ -65,5 +65,6 @@ using namespace lsf;
 -(void)transitionLampStateToPresetReplyWithCode: (LSFResponseCode)rc andLampID: (NSString*)lampID;
 -(void)getLampSupportedLanguagesReplyWithCode: (LSFResponseCode)rc lampID: (NSString*)lampID andSupportedLanguages: (NSArray*)supportedLanguages;
 -(void)setLampEffectReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID andEffectID: (NSString *)effectID;
+-(void)getConsolidatedLampDataSetReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID language:(NSString *)language lampName: (NSString *)lampName lampDetails:(LSFSDKLampDetails *)lampDetails lampState: (LSFLampState *)lampState andLampParameters: (LSFSDKLampParameters *)lampParameters;
 
 @end

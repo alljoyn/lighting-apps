@@ -333,6 +333,19 @@
     return self.lampManager->GetLampDataSet(lid, lang);
 }
 
+-(ControllerClientStatus)getConsolidatedLampDataSetForID:(NSString *)lampID
+{
+    std::string lid([lampID UTF8String]);
+    return self.lampManager->GetConsolidatedLampDataSet(lid);
+}
+
+-(ControllerClientStatus)getConsolidatedLampDataSetForID:(NSString *)lampID andLanguage:(NSString *)language
+{
+    std::string lid([lampID UTF8String]);
+    std::string lang([language UTF8String]);
+    return self.lampManager->GetConsolidatedLampDataSet(lid, lang);
+}
+
 -(ControllerClientStatus)setLampEffectForID: (NSString *)lampID withEffectID: (NSString *)effectID
 {
     std::string lid([lampID UTF8String]);

@@ -65,6 +65,7 @@ class LSFLampManagerCallback : public LampManagerCallback {
     void TransitionLampStateToPresetReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID);
     void GetLampSupportedLanguagesReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const LSFStringList& supportedLanguages);
     void SetLampEffectReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const LSFString& effectID);
+    void GetConsolidatedLampDataSetReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const LSFString& language, const LSFString& lampName, const LampDetails& lampDetails, const LampState& lampState, const LampParameters& lampParameters);
 
   private:
     id<LSFLampManagerCallbackDelegate> _lmDelegate;

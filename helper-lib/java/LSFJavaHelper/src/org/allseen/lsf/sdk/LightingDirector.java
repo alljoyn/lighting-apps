@@ -1691,7 +1691,7 @@ public class LightingDirector {
      * removed in subsequent releases of the SDK.</b>
      */
     protected ControllerCollectionManager<Controller, LightingItemErrorEvent> getControllerManager() {
-        return lightingManager.getControllerManager();
+        return lightingManager.getControllerCollectionManager();
     }
 
 

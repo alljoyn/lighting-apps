@@ -26,12 +26,12 @@ LSFControllerServiceManagerCallback::~LSFControllerServiceManagerCallback()
     _csmDelegate = nil;
 }
 
-void LSFControllerServiceManagerCallback::GetControllerServiceVersionReplyCB(uint32_t version)
+void LSFControllerServiceManagerCallback::GetControllerServiceVersionReplyCB(const uint32_t& version)
 {
     [_csmDelegate getControllerServiceVersionReply: version];
 }
 
-void LSFControllerServiceManagerCallback::LightingResetControllerServiceReplyCB(LSFResponseCode responseCode)
+void LSFControllerServiceManagerCallback::LightingResetControllerServiceReplyCB(const LSFResponseCode& responseCode)
 {
     [_csmDelegate lightingResetControllerServiceReplyWithCode: responseCode];
 }

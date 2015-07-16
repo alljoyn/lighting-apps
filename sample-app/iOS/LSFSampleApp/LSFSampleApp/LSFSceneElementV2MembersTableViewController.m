@@ -57,7 +57,17 @@
     [self.data addObjectsFromArray: [LSFUtilityFunctions sortLightingItemsByName: [[LSFSDKLightingDirector getLightingDirector] groups]]];
     [self.data addObjectsFromArray: [LSFUtilityFunctions sortLightingItemsByName: [[LSFSDKLightingDirector getLightingDirector] lamps]]];
 
-    NSUInteger allLampsIndex = [[self.data valueForKeyPath: @"theID"] indexOfObject: @"!!all_lamps!!"];
+    NSUInteger allLampsIndex = -1;
+    for (int i = 0; i < self.data.count; i++)
+    {
+        LSFSDKGroup *group = [self.data objectAtIndex: i];
+
+        if ([group isAllLampsGroup])
+        {
+            allLampsIndex = i;
+        }
+    }
+
     [self.data removeObjectAtIndex: allLampsIndex];
 }
 

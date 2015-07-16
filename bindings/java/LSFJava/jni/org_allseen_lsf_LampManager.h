@@ -297,6 +297,14 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getLampDataSet
 
 /*
  * Class:     org_allseen_lsf_LampManager
+ * Method:    getLampDataSet
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
+ */
+JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampManager_getConsolidatedLampDataSet
+  (JNIEnv *, jobject, jstring, jstring);
+
+/*
+ * Class:     org_allseen_lsf_LampManager
  * Method:    getLampVersion
  * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */

@@ -72,6 +72,8 @@ using namespace lsf;
 -(ControllerClientStatus)getLampSupportedLanguagesForID: (NSString *) lampID;
 -(ControllerClientStatus)getLampDataSetForID: (NSString *)lampID;
 -(ControllerClientStatus)getLampDataSetForID: (NSString *)lampID andLanguage: (NSString *)language;
+-(ControllerClientStatus)getConsolidatedLampDataSetForID: (NSString *)lampID;
+-(ControllerClientStatus)getConsolidatedLampDataSetForID: (NSString *)lampID andLanguage: (NSString *)language;
 -(ControllerClientStatus)setLampEffectForID: (NSString *)lampID withEffectID: (NSString *)effectID;
 
 @end

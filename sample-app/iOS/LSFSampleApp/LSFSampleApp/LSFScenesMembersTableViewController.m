@@ -156,7 +156,7 @@
 
     for (LSFSDKGroup *group in [[LSFSDKLightingDirector getLightingDirector] groups])
     {
-        if (![group.theID isEqualToString: @"!!all_lamps!!"])
+        if (![group isAllLampsGroup])
         {
             [groupsArray addObject: group];
         }

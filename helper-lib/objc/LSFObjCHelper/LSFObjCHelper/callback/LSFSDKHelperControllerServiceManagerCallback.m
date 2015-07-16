@@ -17,6 +17,7 @@
 #import "LSFSDKHelperControllerServiceManagerCallback.h"
 #import "LSFSDKLightingSystemManager.h"
 #import "LSFControllerModel.h"
+#import "LSFSDKAllJoynManager.h"
 
 @interface LSFSDKHelperControllerServiceManagerCallback()
 
@@ -48,6 +49,7 @@
 -(void)getControllerServiceVersionReply: (unsigned int)version
 {
     dispatch_async(self.manager.dispatchQueue, ^{
+        [LSFSDKAllJoynManager setControllerServiceLeaderVersion: version];
         [[[[self.manager controllerManager] getLeader] getControllerDataModel] setControllerVersion: version];
         [self postSendControllerChanged];
     });

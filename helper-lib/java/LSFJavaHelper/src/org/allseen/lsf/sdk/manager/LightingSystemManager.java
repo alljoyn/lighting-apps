@@ -97,7 +97,7 @@ public class LightingSystemManager
     private final SceneCollectionManager<SCENEV1, ERROR> sceneCollectionManagerV1;
     private final SceneCollectionManagerV2<SCENEV2, ERROR> sceneCollectionManager;
     private final MasterSceneCollectionManager<MASTERSCENE, ERROR> masterSceneCollectionManager;
-    private final ControllerCollectionManager<CONTROLLER, ERROR> controllerManager;
+    private final ControllerCollectionManager<CONTROLLER, ERROR> controllerCollectionManager;
 
     public LightingSystemManager(final AllLightingItemsFactory<LAMP, GROUP, PRESET, TRANSITIONEFFECT, PULSEEFFECT, SCENEELEMENT, SCENEV1, SCENEV2, MASTERSCENE, CONTROLLER, ERROR> factory) {
         AllLampsLampGroup.instance.setLightingSystemManager(this);
@@ -126,7 +126,7 @@ public class LightingSystemManager
         sceneCollectionManagerV1 = new SceneCollectionManager<SCENEV1, ERROR>(this, factory);
         sceneCollectionManager = new SceneCollectionManagerV2<SCENEV2, ERROR>(this, factory);
         masterSceneCollectionManager = new MasterSceneCollectionManager<MASTERSCENE, ERROR>(this, factory);
-        controllerManager = new ControllerCollectionManager<CONTROLLER, ERROR>(this, factory);
+        controllerCollectionManager = new ControllerCollectionManager<CONTROLLER, ERROR>(this, factory);
 
         lampCollectionManager.addListener(new LampCollectionListenerBase<LAMP, ERROR>() {
             @Override
@@ -145,7 +145,7 @@ public class LightingSystemManager
             }
         });
 
-        controllerManager.addListener(new ControllerCollectionListenerBase<CONTROLLER, ERROR>() {
+        controllerCollectionManager.addListener(new ControllerCollectionListenerBase<CONTROLLER, ERROR>() {
             @Override
             public void onLeaderChange(CONTROLLER leader) {
                 ControllerDataModel leaderModel = factory.findControllerDataModel(leader);
@@ -283,8 +283,8 @@ public class LightingSystemManager
         return masterSceneCollectionManager;
     }
 
-    public ControllerCollectionManager<CONTROLLER, ERROR> getControllerManager() {
-        return controllerManager;
+    public ControllerCollectionManager<CONTROLLER, ERROR> getControllerCollectionManager() {
+        return controllerCollectionManager;
     }
 
     public LampManager getLampManager() {
@@ -328,7 +328,7 @@ public class LightingSystemManager
     }
 
     public void postOnNextControllerConnection(final Runnable task, final int delay) {
-        final ControllerCollectionManager<CONTROLLER, ERROR> controllerManager = getControllerManager();
+        final ControllerCollectionManager<CONTROLLER, ERROR> controllerManager = getControllerCollectionManager();
 
         controllerManager.addListener(new ControllerCollectionListenerBase<CONTROLLER, ERROR>() {
             @Override

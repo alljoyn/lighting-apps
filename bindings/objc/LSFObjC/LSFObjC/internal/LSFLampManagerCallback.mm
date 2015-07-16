@@ -294,3 +294,40 @@ void LSFLampManagerCallback::SetLampEffectReplyCB(const LSFResponseCode& respons
 {
     [_lmDelegate setLampEffectReplyWithCode: responseCode lampID: [NSString stringWithUTF8String: lampID.c_str()] andEffectID:[NSString stringWithUTF8String: effectID.c_str()]];
 }
+
+void LSFLampManagerCallback::GetConsolidatedLampDataSetReplyCB(const LSFResponseCode &responseCode, const LSFString &lampID, const LSFString &language, const LSFString &lampName, const lsf::LampDetails &lampDetails, const lsf::LampState &lampState, const lsf::LampParameters &lampParameters)
+{
+    LSFSDKLampDetails *details = [[LSFSDKLampDetails alloc] init];
+    details.lampMake = lampDetails.make;
+    details.lampModel = lampDetails.model;
+    details.deviceType = lampDetails.type;
+    details.lampType = lampDetails.lampType;
+    details.baseType = lampDetails.lampBaseType;
+    details.lampBeamAngle = lampDetails.lampBeamAngle;
+    details.dimmable = lampDetails.dimmable;
+    details.color = lampDetails.color;
+    details.variableColorTemp = lampDetails.variableColorTemp;
+    details.hasEffects = lampDetails.hasEffects;
+    details.maxVoltage = lampDetails.maxVoltage;
+    details.minVoltage = lampDetails.minVoltage;
+    details.wattage = lampDetails.wattage;
+    details.incandescentEquivalent = lampDetails.incandescentEquivalent;
+    details.maxLumens = lampDetails.maxLumens;
+    details.minTemperature = lampDetails.minTemperature;
+    details.maxTemperature = lampDetails.maxTemperature;
+    details.colorRenderingIndex = lampDetails.colorRenderingIndex;
+    details.lampID = [NSString stringWithUTF8String: lampID.c_str()];
+
+    LSFLampState *state = [[LSFLampState alloc] init];
+    state.onOff = lampState.onOff;
+    state.brightness = lampState.brightness;
+    state.hue = lampState.hue;
+    state.saturation = lampState.saturation;
+    state.colorTemp = lampState.colorTemp;
+
+    LSFSDKLampParameters *parameters = [[LSFSDKLampParameters alloc] init];
+    parameters.lumens = lampParameters.lumens;
+    parameters.energyUsageMilliwatts = lampParameters.energyUsageMilliwatts;
+
+    [_lmDelegate getConsolidatedLampDataSetReplyWithCode: responseCode lampID: [NSString stringWithUTF8String: lampID.c_str()] language: [NSString stringWithUTF8String: language.c_str()] lampName: [NSString stringWithUTF8String: lampName.c_str()] lampDetails: details lampState: state andLampParameters: parameters];
+}

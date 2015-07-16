@@ -21,10 +21,11 @@
 #import <LSFSDKResponseCodes.h>
 
 static const unsigned int RETRY_DELAY = 1;
-static const unsigned int ABOUT_DELAY = 1;
+static const unsigned int ABOUT_DELAY_IN_MS = 250;
 
 @interface LSFSDKHelperLampManagerCallback()
 
+@property (nonatomic) NSTimeInterval prevLampAboutQueryTime;
 @property (nonatomic, strong) LSFSDKLightingSystemManager *manager;
 @property (nonatomic, strong) NSMutableDictionary *savedLampAbouts;
 
@@ -56,6 +57,7 @@ static const unsigned int ABOUT_DELAY = 1;
 
 @implementation LSFSDKHelperLampManagerCallback
 
+@synthesize prevLampAboutQueryTime = _prevLampAboutQueryTime;
 @synthesize manager = _manager;
 @synthesize savedLampAbouts = _savedLampAbouts;
 
@@ -67,6 +69,7 @@ static const unsigned int ABOUT_DELAY = 1;
     {
         self.manager = manager;
         self.savedLampAbouts = [[NSMutableDictionary alloc] init];
+        self.prevLampAboutQueryTime = 0;
     }
 
     return self;
@@ -396,6 +399,34 @@ static const unsigned int ABOUT_DELAY = 1;
     //TODO - implement later, unused at this time
 }
 
+-(void)getConsolidatedLampDataSetReplyWithCode:(LSFResponseCode)rc lampID:(NSString *)lampID language:(NSString *)language lampName:(NSString *)lampName lampDetails:(LSFSDKLampDetails *)lampDetails lampState:(LSFLampState *)lampState andLampParameters:(LSFSDKLampParameters *)lampParameters
+{
+    if (rc != LSF_OK)
+    {
+        [self postGetConsolidatedLampDataSet: lampID withDelay: RETRY_DELAY];
+        [[self.manager lampCollectionManager] sendErrorEvent: @"getConsolidatedLampDataSetReplyCB" statusCode: rc itemID: lampID];
+    }
+    else
+    {
+        [self postUpdateLampNameForID: lampID andLampName: lampName];
+        [self postUpdateLampDetailsForID: lampID withDetails: lampDetails];
+        [self postUpdateLampStateForID: lampID withState: lampState];
+        [self postUpdateLampParametersForID: lampID withParameters: lampParameters];
+    }
+}
+
+-(void)postGetLampQueriedAboutDataForID: (NSString *)lampID
+{
+    NSTimeInterval currentTimeInMs = [[NSDate date] timeIntervalSince1970] * 1000;
+    self.prevLampAboutQueryTime = MAX(self.prevLampAboutQueryTime, currentTimeInMs) + ABOUT_DELAY_IN_MS;
+    int64_t queryDelay = self.prevLampAboutQueryTime - currentTimeInMs;
+
+    // do not use Lighting thread since fetching Lamp AboutData can take time
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(queryDelay * NSEC_PER_MSEC)), dispatch_get_global_queue(0, 0), ^{
+        [LSFSDKAllJoynManager getAboutDataForLampID: lampID];
+    });
+}
+
 /*
  * Private function implementations
  */
@@ -418,9 +449,19 @@ static const unsigned int ABOUT_DELAY = 1;
 
         if ([lampModel.name isEqualToString: LAMP_DEFAULT_NAME])
         {
-            [self postGetLampNameForID: lampID withDelay: 0];
-            [self postGetLampState: lampID withDelay: 0];
-            [self postGetLampDetails: lampID withDelay: 0];
+            if ([LSFSDKAllJoynManager getControllerServiceLeaderVersion] < 2)
+            {
+                // 14.12 and earlier controllers do no support consolidated
+                // data set. Thus, we must make individual requests.
+                [self postGetLampNameForID: lampID withDelay: 0];
+                [self postGetLampState: lampID withDelay: 0];
+                [self postGetLampParameters: lampID withDelay: 0];
+                [self postGetLampDetails: lampID withDelay: 0];
+            }
+            else
+            {
+                [self postGetConsolidatedLampDataSet: lampID withDelay: 0];
+            }
         }
 
         if (aboutData != nil)
@@ -429,10 +470,7 @@ static const unsigned int ABOUT_DELAY = 1;
         }
         else
         {
-            // TODO-FIX spread out calls to query for about information
-//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ABOUT_DELAY * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                [LSFSDKAllJoynManager getAboutDataForLampID: lampID];
-//            });
+            [self postGetLampQueriedAboutDataForID:lampID];
         }
     });
 
@@ -698,6 +736,16 @@ static const unsigned int ABOUT_DELAY = 1;
         if ([LSFSDKAllJoynManager getControllerConnected])
         {
             [[self.manager lampManager] getLampStateColorTempFieldForID: lampID];
+        }
+    });
+}
+
+-(void)postGetConsolidatedLampDataSet: (NSString *)lampID withDelay: (unsigned int)delay
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if ([LSFSDKAllJoynManager getControllerConnected])
+        {
+            [[self.manager lampManager] getConsolidatedLampDataSetForID: lampID];
         }
     });
 }

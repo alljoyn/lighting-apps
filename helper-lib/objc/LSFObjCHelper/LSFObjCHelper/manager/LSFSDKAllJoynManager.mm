@@ -42,6 +42,7 @@ static LSFPulseEffectManager *pulseEffectManager = nil;
 static LSFSDKAboutManager *aboutManager = nil;
 NSMutableDictionary *lampsAnnouncementData = nil;
 static BOOL controllerConnected = NO;
+static unsigned int controllerServiceLeaderVersion = 0;
 
 @implementation LSFSDKAllJoynManager
 
@@ -55,6 +56,7 @@ static BOOL controllerConnected = NO;
 +(void)initializeWithBusAttachment: (ajn::BusAttachment *)busAttachment controllerClientCallback: (LSFSDKHelperControllerClientCallback *)ccc controllerServiceManagerCallback: (LSFSDKHelperControllerServiceManagerCallback *)csmc lampManagerCallback: (LSFSDKHelperLampManagerCallback *)lmc groupManagerCallback: (LSFSDKHelperGroupManagerCallback *)gmc presetManagerCallback: (LSFSDKHelperPresetManagerCallback *)pmc transitionEffectManagerCallback: (LSFSDKHelperTransitionEffectManagerCallback *)temc pulseEffectManagerCallback: (LSFSDKHelperPulseEffectManagerCallback *)pemc sceneElementManagerCallback: (LSFSDKHelperSceneElementManagerCallback *)semc sceneManagerCallback: (LSFSDKHelperSceneManagerCallback *)smc masterSceneManagerCallback: (LSFSDKHelperMasterSceneManagerCallback *)msmc
 {
     controllerConnected = NO;
+    controllerServiceLeaderVersion = 0;
     bus = busAttachment;
     myCCC = ccc;
     myCSMC = csmc;
@@ -152,7 +154,10 @@ static BOOL controllerConnected = NO;
 +(void)getAboutDataForLampID: (NSString*)lampID
 {
     LSFLampAnnouncementData* lampAnnData = [lampsAnnouncementData  objectForKey: lampID];
-    [aboutManager getAboutDataFromBusName: [lampAnnData busName] onPort: [lampAnnData port]];
+    if (lampAnnData != nil)
+    {
+        [aboutManager getAboutDataFromBusName: [lampAnnData busName] onPort: [lampAnnData port]];
+    }
 }
 
 +(void)setControllerConnected: (BOOL)isConnected
@@ -163,6 +168,16 @@ static BOOL controllerConnected = NO;
 +(BOOL)getControllerConnected
 {
     return controllerConnected;
+}
+
++(void)setControllerServiceLeaderVersion:(unsigned int)version
+{
+    controllerServiceLeaderVersion = version;
+}
+
++(unsigned int)getControllerServiceLeaderVersion
+{
+    return controllerServiceLeaderVersion;
 }
 
 +(LSFControllerClient *)getControllerClient

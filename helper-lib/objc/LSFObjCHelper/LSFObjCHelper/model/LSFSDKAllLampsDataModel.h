@@ -16,11 +16,11 @@
 
 #import "LSFGroupModel.h"
 
-extern NSString *ALL_LAMPS_GROUP_ID;
 extern NSString *ALL_LAMPS_GROUP_NAME;
 
 @interface LSFSDKAllLampsDataModel : LSFGroupModel
 
 +(LSFSDKAllLampsDataModel *)getInstance;
++(NSString *)getAllLampsGroupID;
 
 @end

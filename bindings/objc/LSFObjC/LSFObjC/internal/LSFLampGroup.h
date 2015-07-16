@@ -24,5 +24,6 @@ using namespace lsf;
 
 -(id)init;
 -(LSFResponseCode)isDependentLampGroup: (NSString *)groupID;
++(NSString *)getAllLampsGroupID;
 
 @end

@@ -72,6 +72,14 @@ JNIEXPORT jstring JNICALL Java_org_allseen_lsf_LampGroup_toString
 
 /*
  * Class:     org_allseen_lsf_LampGroup
+ * Method:    getAllLampsGroupID
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_org_allseen_lsf_LampGroup_getAllLampsGroupID
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     org_allseen_lsf_LampGroup
  * Method:    createNativeObject
  * Signature: ()V
  */

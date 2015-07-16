@@ -564,9 +564,9 @@
 
 -(void)onLampChanged: (LSFSDKLamp *)lamp
 {
-    if (![self.manager.groupCollectionManager hasID: ALL_LAMPS_GROUP_ID])
+    if (![self.manager.groupCollectionManager hasID: [LSFSDKAllLampsDataModel getAllLampsGroupID]])
     {
-        [self postProcessLampGroupID: ALL_LAMPS_GROUP_ID needName: YES needState: YES];
+        [self postProcessLampGroupID: [LSFSDKAllLampsDataModel getAllLampsGroupID] needName: YES needState: YES];
     }
 }
 

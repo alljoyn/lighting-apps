@@ -23,6 +23,7 @@
 #import "model/LSFConstants.h"
 #import "model/LSFSDKLightingItemHasComponentFilter.h"
 #import "model/LSFConstants.h"
+#import "model/LSFSDKAllLampsDataModel.h"
 
 @implementation LSFSDKGroup
 
@@ -42,8 +43,7 @@
 
 -(BOOL)isAllLampsGroup
 {
-    LSFConstants *constants = [[LSFConstants alloc] init];
-    return [[constants ALL_LAMPS_GROUP_ID] isEqualToString: [[self getLampGroupDataModel] theID]];
+    return [[LSFSDKAllLampsDataModel getAllLampsGroupID] isEqualToString: [[self getLampGroupDataModel] theID]];
 }
 
 -(void)add: (LSFSDKGroupMember *)member

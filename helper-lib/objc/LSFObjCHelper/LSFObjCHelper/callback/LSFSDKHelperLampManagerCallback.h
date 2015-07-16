@@ -24,5 +24,6 @@
 -(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)manager;
 -(void)clear;
 -(void)postUpdateLampID: (NSString *)lampID withAboutData: (LSFLampAbout *)aboutData andDelay: (unsigned int)delay;
+-(void)postGetLampQueriedAboutDataForID: (NSString *)lampID;
 
 @end

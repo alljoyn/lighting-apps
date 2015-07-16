@@ -1670,6 +1670,8 @@ public class SampleAppActivity extends FragmentActivity implements
 
     @Override
     public void onLeaderChange(Controller leader) {
+        Log.d(SampleAppActivity.TAG, "Leader changed: name " + leader.getName() + ", version " + leader.getVersion());
+
         controllerClientConnected = leader.isConnected();
         postUpdateControllerDisplay();
     }

@@ -16,7 +16,7 @@
 
 #import "LSFSDKAllLampsDataModel.h"
 
-NSString *ALL_LAMPS_GROUP_ID = @"!!all_lamps!!";
+NSString *ALL_LAMPS_GROUP_ID = nil;
 NSString *ALL_LAMPS_GROUP_NAME = @"All Lamps";
 
 @implementation LSFSDKAllLampsDataModel
@@ -33,9 +33,19 @@ NSString *ALL_LAMPS_GROUP_NAME = @"All Lamps";
     return instance;
 }
 
++(NSString *)getAllLampsGroupID
+{
+    if (ALL_LAMPS_GROUP_ID == nil)
+    {
+        ALL_LAMPS_GROUP_ID = [LSFLampGroup getAllLampsGroupID];
+    }
+
+    return ALL_LAMPS_GROUP_ID;
+}
+
 -(id)init
 {
-    self = [super initWithGroupID: ALL_LAMPS_GROUP_ID andGroupName: ALL_LAMPS_GROUP_NAME];
+    self = [super initWithGroupID: [LSFSDKAllLampsDataModel getAllLampsGroupID] andGroupName: ALL_LAMPS_GROUP_NAME];
 
     if (self)
     {

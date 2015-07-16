@@ -250,7 +250,7 @@
 
     for (LSFSDKGroup *group in [groupsArray copy])
     {
-        if ([[group theID] isEqualToString: self.groupID] || [[group theID] isEqualToString: @"!!all_lamps!!"] || [self isParentGroup:group])
+        if ([[group theID] isEqualToString: self.groupID] || [group isAllLampsGroup] || [self isParentGroup:group])
         {
             [groupsArray removeObject: group];
         }

@@ -47,6 +47,8 @@
 +(void)getAboutDataForLampID: (NSString*)lampID;
 +(void)setControllerConnected: (BOOL)isConnected;
 +(BOOL)getControllerConnected;
++(void)setControllerServiceLeaderVersion: (unsigned int)version;
++(unsigned int)getControllerServiceLeaderVersion;
 +(LSFControllerClient *)getControllerClient;
 +(LSFControllerServiceManager *)getControllerServiceManager;
 +(LSFLampManager *)getLampManager;
