@@ -25,8 +25,7 @@
     @protected LSFPresetModel *presetModel;
 }
 
--(id)initWithPresetID: (NSString *)presetID;
--(id)initWithPresetID: (NSString *)presetID andName: (NSString *)presetName;
+-(instancetype)init NS_UNAVAILABLE;
 -(void)modifyWithPower: (Power)power color: (LSFSDKColor *)color;
 -(BOOL)stateEquals: (LSFSDKPreset *)preset;
 -(BOOL)stateEqualsMyLampState: (LSFSDKMyLampState *)state;

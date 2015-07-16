@@ -15,8 +15,8 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFSDKTransitionEffectDelegate.h"
+#import "LSFSDKLampDelegate.h"
 
-@interface LSFSDKTransitionEffectAdapter : NSObject <LSFSDKTransitionEffectDelegate>
+@interface LSFSDKLampDelegateBase : NSObject <LSFSDKLampDelegate>
 
 @end

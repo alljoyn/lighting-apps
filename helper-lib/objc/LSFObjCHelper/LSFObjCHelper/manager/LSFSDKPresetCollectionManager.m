@@ -15,6 +15,7 @@
  ******************************************************************************/
 
 #import "LSFSDKPresetCollectionManager.h"
+#import "../initializer/LSFSDKPreset+Init.h"
 
 @implementation LSFSDKPresetCollectionManager
 

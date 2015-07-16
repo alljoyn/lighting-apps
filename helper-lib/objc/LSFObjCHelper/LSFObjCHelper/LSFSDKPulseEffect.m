@@ -35,23 +35,6 @@
 @synthesize duration = _duration;
 @synthesize count = _count;
 
--(id)initWithPulseEffectID: (NSString *)pulseEffectID
-{
-    return [self initWithPulseEffectID: pulseEffectID pulseEffectName: nil];
-}
-
--(id)initWithPulseEffectID: (NSString *)pulseEffectID pulseEffectName: (NSString *)pulseEffectName
-{
-    self = [super init];
-
-    if (self)
-    {
-        pulseEffectDataModel = [[LSFPulseEffectDataModelV2 alloc] initWithPulseEffectID: pulseEffectID andPulseEffectName: pulseEffectName];
-    }
-
-    return self;
-}
-
 -(void)modifyFromState: (id<LSFSDKLampState>)fromState toState: (id<LSFSDKLampState>)toState period: (unsigned int)period duration: (unsigned int)duration count: (unsigned int)count
 {
     NSString *errorContext = @"LSFSDKPulseEffect modify: error";

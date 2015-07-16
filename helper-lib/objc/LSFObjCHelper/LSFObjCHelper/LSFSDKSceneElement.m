@@ -24,23 +24,6 @@
 
 @implementation LSFSDKSceneElement
 
--(id)initWithSceneElementID: (NSString *)sceneElementID
-{
-    return [self initWithSceneElementID: sceneElementID sceneElementName: nil];
-}
-
--(id)initWithSceneElementID: (NSString *)sceneElementID sceneElementName: (NSString *)sceneElementName
-{
-    self = [super init];
-
-    if (self)
-    {
-        sceneElementModel = [[LSFSceneElementDataModelV2 alloc] initWithSceneElementID: sceneElementID andSceneElementName: sceneElementName];
-    }
-
-    return self;
-}
-
 -(void)apply
 {
     NSString *errorContext = @"LSFSDKSceneElement apply: error";

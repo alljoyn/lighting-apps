@@ -30,8 +30,7 @@
 @property (nonatomic, strong) NSString *presetID;
 @property (nonatomic) unsigned int duration;
 
--(id)initWithTransitionEffectID: (NSString *)transitionEffectID;
--(id)initWithTransitionEffectID: (NSString *)transitionEffectID transitionEffectName: (NSString *)transitionEffectName;
+-(instancetype)init NS_UNAVAILABLE;
 -(void)modify: (id<LSFSDKLampState>)state duration: (unsigned int)duration;
 -(void)deleteItem;
 -(BOOL)hasPreset: (LSFSDKPreset *)preset;

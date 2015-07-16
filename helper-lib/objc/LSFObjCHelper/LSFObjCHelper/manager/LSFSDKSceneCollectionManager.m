@@ -15,6 +15,7 @@
  ******************************************************************************/
 
 #import "LSFSDKSceneCollectionManager.h"
+#import "../initializer/LSFSDKSceneV1+Init.h"
 
 @implementation LSFSDKSceneCollectionManager
 

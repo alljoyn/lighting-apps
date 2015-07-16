@@ -24,8 +24,7 @@
     @protected LSFSceneDataModel *sceneModel;
 }
 
--(id)initWithSceneID: (NSString *)sceneID;
--(id)initWithSceneDataModel: (LSFSceneDataModel *)model;
+-(instancetype)init NS_UNAVAILABLE;
 -(BOOL)hasPreset: (LSFSDKPreset *)preset;
 -(BOOL)hasGroup: (LSFSDKGroup *)group;
 -(BOOL)hasPresetWithID: (NSString *)presetID;

@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFSDKLightingDelegate.h"
+#import "../listener/LSFSDKLightingDelegate.h"
 
 /**
  * @warning *Note:* This class is not intended to be used by clients, and its interface may change

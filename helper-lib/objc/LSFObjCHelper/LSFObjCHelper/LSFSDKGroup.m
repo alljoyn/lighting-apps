@@ -30,30 +30,6 @@
 @synthesize colorTempMax = _colorTempMax;
 @synthesize isAllLampsGroup = _isAllLampsGroup;
 
--(id)initWithGroupID: (NSString *)groupID
-{
-    self = [super init];
-
-    if (self)
-    {
-        groupModel = [[LSFGroupModel alloc] initWithGroupID: groupID];
-    }
-
-    return self;
-}
-
--(id)initWithGroupID:(NSString *)groupID andName: (NSString *)groupName
-{
-    self = [super init];
-
-    if (self)
-    {
-        groupModel = [[LSFGroupModel alloc] initWithGroupID: groupID andGroupName: groupName];
-    }
-
-    return self;
-}
-
 -(int)colorTempMin
 {
     return [[self getLampGroupDataModel] groupColorTempMin];

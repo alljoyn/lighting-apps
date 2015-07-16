@@ -14,9 +14,9 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFSDKAllCollectionAdapter.h"
+#import "LSFSDKAllLightingItemDelegateBase.h"
 
-@implementation LSFSDKAllCollectionAdapter
+@implementation LSFSDKAllLightingItemDelegateBase
 
 -(void)onLampInitialized: (LSFSDKLamp *)lamp
 {

@@ -14,28 +14,9 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFSDKTransitionEffectAdapter.h"
+#import <Foundation/Foundation.h>
+#import "LSFSDKGroupDelegate.h"
 
-@implementation LSFSDKTransitionEffectAdapter
-
--(void)onTransitionEffectInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andTransitionEffect: (LSFSDKTransitionEffect *)transitionEffect;
-{
-    //Intentionally left blank
-}
-
--(void)onTransitionEffectChanged: (LSFSDKTransitionEffect *)transitionEffect
-{
-    //Intentionally left blank
-}
-
--(void)onTransitionEffectRemoved: (LSFSDKTransitionEffect *)transitionEffect
-{
-    //Intentionally left blank
-}
-
--(void)onTransitionEffectError: (LSFSDKLightingItemErrorEvent *)error
-{
-    //Intentionally left blank
-}
+@interface LSFSDKGroupDelegateBase : NSObject <LSFSDKGroupDelegate>
 
 @end

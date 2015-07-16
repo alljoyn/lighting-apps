@@ -15,6 +15,7 @@
  ******************************************************************************/
 
 #import "LSFSDKPulseEffectCollectionManager.h"
+#import "../initializer/LSFSDKPulseEffect+Init.h"
 
 @implementation LSFSDKPulseEffectCollectionManager
 

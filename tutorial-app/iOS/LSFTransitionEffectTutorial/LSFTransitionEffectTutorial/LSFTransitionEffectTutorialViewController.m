@@ -18,14 +18,14 @@
 #import "LSFSDKLightingDirector.h"
 #import "LSFSDKLightingController.h"
 #import "LSFSDKLightingControllerConfigurationBase.h"
-#import "LSFSDKTransitionEffectAdapter.h"
+#import "LSFSDKTransitionEffectDelegateBase.h"
 #import "LSFSDKMyLampState.h"
 
 /*
  * Global delegate that utilizes the Transition Effect initialization callback to
  * apply the effect to every Lamp.
  */
-@interface MyLightingDelegate : LSFSDKTransitionEffectAdapter
+@interface MyLightingDelegate : LSFSDKTransitionEffectDelegateBase
 
 @end
 

@@ -18,13 +18,13 @@
 #import "LSFSDKLightingDirector.h"
 #import "LSFSDKLightingController.h"
 #import "LSFSDKLightingControllerConfigurationBase.h"
-#import "LSFSDKAllCollectionAdapter.h"
+#import "LSFSDKAllLightingItemDelegateBase.h"
 
 /*
  * Global Lighting event listener. Responsible for handling any callbacks that
  * the user is interested in acting on.
  */
-@interface MyLightingDelegate : LSFSDKAllCollectionAdapter
+@interface MyLightingDelegate : LSFSDKAllLightingItemDelegateBase
 
 // Intentionally left blank
 

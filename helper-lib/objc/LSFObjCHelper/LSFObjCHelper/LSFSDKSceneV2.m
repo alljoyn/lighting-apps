@@ -22,24 +22,6 @@
 
 @implementation LSFSDKSceneV2
 
--(id)initWithSceneID: (NSString *)sceneID
-{
-    LSFSceneDataModelV2 *model = [[LSFSceneDataModelV2 alloc] initWithSceneID: sceneID];
-    return [self initWithSceneDataModel: model];
-}
-
--(id)initWithSceneDataModel: (LSFSceneDataModelV2 *)model
-{
-    self = [super init];
-
-    if (self)
-    {
-        sceneModel = model;
-    }
-
-    return self;
-}
-
 -(void)modify: (NSArray *)sceneElements
 {
     NSString *errorContext = @"LSFSDKSceneV2 modify: error";

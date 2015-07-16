@@ -15,6 +15,7 @@
  ******************************************************************************/
 
 #import "LSFSDKLampCollectionManager.h"
+#import "../initializer/LSFSDKLamp+Init.h"
 
 @implementation LSFSDKLampCollectionManager
 

@@ -15,8 +15,8 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFSDKPulseEffectDelegate.h"
+#import "LSFSDKSceneDelegate.h"
 
-@interface LSFSDKPulseEffectAdapter : NSObject <LSFSDKPulseEffectDelegate>
+@interface LSFSDKSceneDelegateBase : NSObject <LSFSDKSceneDelegate>
 
 @end

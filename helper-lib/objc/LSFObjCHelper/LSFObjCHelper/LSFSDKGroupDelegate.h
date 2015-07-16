@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFSDKLightingDelegate.h"
+#import "listener/LSFSDKLightingDelegate.h"
 #import "LSFSDKTrackingID.h"
 
 @class LSFSDKGroup;

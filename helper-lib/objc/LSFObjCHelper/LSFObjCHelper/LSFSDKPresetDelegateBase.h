@@ -14,28 +14,9 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFSDKMasterSceneAdapter.h"
+#import <Foundation/Foundation.h>
+#import "LSFSDKPresetDelegate.h"
 
-@implementation LSFSDKMasterSceneAdapter
-
--(void)onMasterSceneInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andMasterScene: (LSFSDKMasterScene *)masterScene
-{
-    //Intentionally left blank
-}
-
--(void)onMasterSceneChanged: (LSFSDKMasterScene *)masterScene
-{
-    //Intentionally left blank
-}
-
--(void)onMasterSceneRemoved: (LSFSDKMasterScene *)masterScene
-{
-    //Intentionally left blank
-}
-
--(void)onMasterSceneError: (LSFSDKLightingItemErrorEvent *)error
-{
-    //Intentionally left blank
-}
+@interface LSFSDKPresetDelegateBase : NSObject <LSFSDKPresetDelegate>
 
 @end

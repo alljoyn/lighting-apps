@@ -27,30 +27,6 @@
 @synthesize colorTempMin = _colorTempMin;
 @synthesize colorTempMax = _colorTempMax;
 
--(id)initWithLampID: (NSString *)lampID
-{
-    self = [super init];
-
-    if (self)
-    {
-        lampModel = [[LSFLampModel alloc] initWithLampID: lampID];
-    }
-
-    return self;
-}
-
--(id)initWithLampID:(NSString *)lampID andName: (NSString *)lampName
-{
-    self = [super init];
-
-    if (self)
-    {
-        lampModel = [[LSFLampModel alloc] initWithLampID: lampID andLampName: lampName];
-    }
-
-    return self;
-}
-
 -(LSFSDKLampAbout *)about
 {
     return [[LSFSDKLampAbout alloc] initWithAboutData: [[self getLampDataModel] aboutData]];

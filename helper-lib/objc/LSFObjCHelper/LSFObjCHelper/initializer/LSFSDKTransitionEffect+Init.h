@@ -14,9 +14,11 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "LSFSDKMasterSceneDelegate.h"
+#import "../LSFSDKTransitionEffect.h"
 
-@interface LSFSDKMasterSceneAdapter : NSObject <LSFSDKMasterSceneDelegate>
+@interface LSFSDKTransitionEffect (Init)
+
+-(id)initWithTransitionEffectID: (NSString *)transitionEffectID;
+-(id)initWithTransitionEffectID: (NSString *)transitionEffectID transitionEffectName: (NSString *)transitionEffectName;
 
 @end

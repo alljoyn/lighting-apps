@@ -23,8 +23,7 @@
     @protected LSFSceneDataModelV2 *sceneModel;
 }
 
--(id)initWithSceneID: (NSString *)sceneID;
--(id)initWithSceneDataModel: (LSFSceneDataModelV2 *)model;
+-(instancetype)init NS_UNAVAILABLE;
 -(void)modify: (NSArray *)sceneElements;
 -(void)add: (LSFSDKSceneElement *)sceneElement;
 -(void)remove: (LSFSDKSceneElement *)sceneElement;

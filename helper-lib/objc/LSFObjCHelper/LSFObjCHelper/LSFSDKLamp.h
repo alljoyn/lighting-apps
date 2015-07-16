@@ -38,34 +38,7 @@
 @property (nonatomic, readonly) int colorTempMin;
 @property (nonatomic, readonly) int colorTempMax;
 
-/** @name Creating LSFLamp */
-
-/**
- * Constructs an instance of the LSFLamp class.
- *
- * @param lampID The ID of the Lamp.
- *
- * @return Instance of LSFLamp.
- *
- * @warning *Note:* This method is intended to be used internally. Client software should not instantiate
- * Lamps directly, but should instead get them from the LSFLightingDirector using the [LSFLightingDirector getLamps]
- * method.
- */
--(id)initWithLampID: (NSString *)lampID;
-
-/**
- * Constructs an instance of the LSFLamp class.
- *
- * @param lampID  The ID of the Lamp.
- * @param lampName  The name of the Lamp.
- *
- * @return Instance of LSFLamp.
- *
- * @warning *Note:* This method is intended to be used internally. Client software should not instantiate
- * Lamps directly, but should instead get them from the LSFLightingDirector using the [LSFLightingDirector getLamps] 
- * method.
- */
--(id)initWithLampID:(NSString *)lampID andName: (NSString *)lampName;
+-(instancetype)init NS_UNAVAILABLE;
 
 /*
  * Note: This method is not intended to be used by clients, and may change or be

@@ -37,8 +37,7 @@
 @property (nonatomic) unsigned int duration;
 @property (nonatomic) unsigned int count;
 
--(id)initWithPulseEffectID: (NSString *)pulseEffectID;
--(id)initWithPulseEffectID: (NSString *)pulseEffectID pulseEffectName: (NSString *)pulseEffectName;
+-(instancetype)init NS_UNAVAILABLE;
 -(void)modifyFromState: (id<LSFSDKLampState>)fromState toState: (id<LSFSDKLampState>)toState period: (unsigned int)period duration: (unsigned int)duration count: (unsigned int)count;
 -(void)deleteItem;
 -(BOOL)hasPreset: (LSFSDKPreset *)preset;

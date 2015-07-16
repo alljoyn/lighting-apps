@@ -14,28 +14,32 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFSDKPresetAdapter.h"
+#import "LSFSDKLamp+Init.h"
 
-@implementation LSFSDKPresetAdapter
+@implementation LSFSDKLamp (Init)
 
--(void)onPresetInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andPreset: (LSFSDKPreset *)preset
+-(id)initWithLampID: (NSString *)lampID
 {
-    //Intentionally left blank
+    self = [super init];
+
+    if (self)
+    {
+        lampModel = [[LSFLampModel alloc] initWithLampID: lampID];
+    }
+
+    return self;
 }
 
--(void)onPresetChanged: (LSFSDKPreset *)preset
+-(id)initWithLampID:(NSString *)lampID andName: (NSString *)lampName
 {
-    //Intentionally left blank
-}
+    self = [super init];
 
--(void)onPresetRemoved: (LSFSDKPreset *)preset
-{
-    //Intentionally left blank
-}
+    if (self)
+    {
+        lampModel = [[LSFLampModel alloc] initWithLampID: lampID andLampName: lampName];
+    }
 
--(void)onPresetError: (LSFSDKLightingItemErrorEvent *)error
-{
-    //Intentionally left blank
+    return self;
 }
 
 @end

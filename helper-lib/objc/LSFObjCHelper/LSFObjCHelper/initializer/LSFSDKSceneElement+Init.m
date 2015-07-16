@@ -14,16 +14,25 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFSDKAllCollectionAdapter.h"
+#import "LSFSDKSceneElement+Init.h"
 
-@class LSFSDKLightingItemErrorEvent;
+@implementation LSFSDKSceneElement (Init)
 
-@interface LSFSDKAnyCollectionAdapter : LSFSDKAllCollectionAdapter
+-(id)initWithSceneElementID: (NSString *)sceneElementID
+{
+    return [self initWithSceneElementID: sceneElementID sceneElementName: nil];
+}
 
--(void)onAnyInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andLightingItem: (id)item;
--(void)onAnyChanged: (id)item;
--(void)onAnyRemoved: (id)item;
--(void)onAnyError: (LSFSDKLightingItemErrorEvent *)error;
+-(id)initWithSceneElementID: (NSString *)sceneElementID sceneElementName: (NSString *)sceneElementName
+{
+    self = [super init];
 
+    if (self)
+    {
+        sceneElementModel = [[LSFSceneElementDataModelV2 alloc] initWithSceneElementID: sceneElementID andSceneElementName: sceneElementName];
+    }
+
+    return self;
+}
 
 @end

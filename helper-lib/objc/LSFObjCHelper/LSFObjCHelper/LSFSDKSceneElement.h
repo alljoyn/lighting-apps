@@ -28,8 +28,7 @@
     @protected LSFSceneElementDataModelV2 *sceneElementModel;
 }
 
--(id)initWithSceneElementID: (NSString *)sceneElementID;
--(id)initWithSceneElementID: (NSString *)sceneElementID sceneElementName: (NSString *)sceneElementName;
+-(instancetype)init NS_UNAVAILABLE;
 -(void)apply;
 -(void)modifyWithEffect: (id<LSFSDKEffect>)effect groupMembers: (NSArray *)members;
 -(void)addMember: (LSFSDKGroupMember *)member;

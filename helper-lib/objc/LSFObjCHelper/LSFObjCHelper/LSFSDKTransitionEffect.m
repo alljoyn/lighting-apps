@@ -28,23 +28,6 @@
 @synthesize presetID = _presetID;
 @synthesize duration = _duration;
 
--(id)initWithTransitionEffectID: (NSString *)transitionEffectID
-{
-    return [self initWithTransitionEffectID: transitionEffectID transitionEffectName: nil];
-}
-
--(id)initWithTransitionEffectID: (NSString *)transitionEffectID transitionEffectName: (NSString *)transitionEffectName
-{
-    self = [super init];
-
-    if (self)
-    {
-        transitionEffectDataModel = [[LSFTransitionEffectDataModelV2 alloc] initWithTransitionEffectID: transitionEffectID andTransitionEffectName: transitionEffectName];
-    }
-
-    return self;
-}
-
 -(void)modify: (id<LSFSDKLampState>)state duration: (unsigned int)duration
 {
     NSString *errorContext = @"LSFSDKTransitionEffect modify: error";

@@ -19,24 +19,6 @@
 
 @implementation LSFSDKSceneV1
 
--(id)initWithSceneID: (NSString *)sceneID
-{
-    LSFSceneDataModel *model = [[LSFSceneDataModel alloc] initWithSceneID: sceneID];
-    return [self initWithSceneDataModel: model];
-}
-
--(id)initWithSceneDataModel: (LSFSceneDataModel *)model
-{
-    self = [super init];
-
-    if (self)
-    {
-        sceneModel = model;
-    }
-
-    return self;
-}
-
 -(BOOL)hasPreset: (LSFSDKPreset *)preset
 {
     NSString *errorContext = @"LSFSDKSceneV1 hasPreset: error";
