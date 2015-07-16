@@ -25,10 +25,17 @@ import org.allseen.lsf.sdk.model.EmptyLampParameters;
 import org.allseen.lsf.sdk.model.LampDataModel;
 
 /**
- * A Lamp object represents a lamp in a lighting system, and can be used to send commands
- * to it.
+ * This class represents a Lamp in the Lighting system.
+ * <p>
+ * <b>Note: This class is not meant to be instantiated directly. Lamps should be retrieved
+ * from the LightingDirector using the {@link LightingDirector#getLamps()} method.</b>
  */
 public class Lamp extends GroupMember {
+    /**
+     * Specifies the default name of the Lamp.
+     *
+     * @param defaultName Default name of the Lamp
+     */
     public static void setDefaultName(String defaultName) {
         if (defaultName != null) {
             LampDataModel.defaultName = defaultName;
@@ -66,6 +73,11 @@ public class Lamp extends GroupMember {
         lampModel = new LampDataModel(lampID, lampName);
     }
 
+    /**
+     * Applies the provided Preset to the current Lamp.
+     *
+     * @param preset Preset to apply to the current Lamp
+     */
     @Override
     public void applyPreset(Preset preset) {
         String errorContext = "Lamp.applyPreset error";
@@ -76,6 +88,11 @@ public class Lamp extends GroupMember {
         }
     }
 
+    /**
+     * Applies the provided Effect to the current Lamp.
+     *
+     * @param effect Effect to apply to the current Lamp
+     */
     @Override
     public void applyEffect(Effect effect) {
         String errorContext = "Lamp.applyEffect() error";
@@ -94,9 +111,9 @@ public class Lamp extends GroupMember {
     }
 
     /**
-     * Sends a command to turn this Lamp on or off.
+     * Changes the power state of the current Lamp.
      *
-     * @param powerOn Pass in true for on, false for off
+     * @param powerOn True for on, false for off
      */
     @Override
     public void setPowerOn(boolean powerOn) {
@@ -107,12 +124,12 @@ public class Lamp extends GroupMember {
     }
 
     /**
-     * Sends a command to change the color of this Lamp.
+     * Changes the color state of the current Lamp to the provided HSVT color.
      *
-     * @param hueDegrees The hue component of the desired color, in degrees (0-360)
-     * @param saturationPercent The saturation component of the desired color, in percent (0-100)
-     * @param brightnessPercent The brightness component of the desired color, in percent (0-100)
-     * @param colorTempDegrees The color temperature component of the desired color, in degrees Kelvin (1000-20000)
+     * @param hueDegrees The hue component of the desired color (0-360)
+     * @param saturationPercent The saturation component of the desired color (0-100)
+     * @param brightnessPercent The brightness component of the desired color (0-100)
+     * @param colorTempDegrees The color temperature component of the desired color (1000-20000)
      */
     @Override
     public void setColorHsvt(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees) {
@@ -127,9 +144,9 @@ public class Lamp extends GroupMember {
     }
 
     /**
-     * Renames the Lamp with the specified String.
+     * Renames the current Lamp using the provided name.
      *
-     * @param lampName The new name for the Lamp.
+     * @param lampName The new name for the Lamp
      */
     @Override
     public void rename(String lampName) {
@@ -142,18 +159,18 @@ public class Lamp extends GroupMember {
     }
 
     /**
-     * Returns a LampAbout object specific to the Lamp.
+     * Returns the LampAbout object of the current Lamp.
      *
-     * @return The Lamp's About information.
+     * @return Reference to LampAbout object
      */
     public LampAbout getAbout() {
         return new LampAbout(lampModel.getAbout());
     }
 
     /**
-     * Returns a LampDetails object specific to the Lamp.
+     * Returns the LampDetails object of the current Lamp.
      *
-     * @return The Lamp's Details.
+     * @return Reference to LampDetails object
      */
     public LampDetails getDetails() {
         LampDetails lampDetails = lampModel.getDetails();
@@ -162,10 +179,9 @@ public class Lamp extends GroupMember {
     }
 
     /**
-     * Returns a LampParameters object specific to the Lamp. If null,
-     * it returns an EmptyLampParameters instance.
+     * Returns the LampParameters object of the current Lamp.
      *
-     * @return The Lamp's Parameters.
+     * @return Reference to LampParameters object
      */
     public LampParameters getParameters() {
         LampParameters lampParams = lampModel.getParameters();
@@ -174,28 +190,36 @@ public class Lamp extends GroupMember {
     }
 
     /**
-     * Returns the minimum Color Temperature value supported by the Lamp.
+     * Returns the minimum color temperature value supported by the current Lamp.
      *
-     * @return The Lamp's minimum Color Temperature Value.
+     * @return The Lamps minimum color temperature value
      */
     public int getColorTempMin() {
         return getDetails().getMinTemperature();
     }
 
     /**
-     * Returns the maximum Color Temperature value supported by the Lamp.
+     * Returns the maximum color temperature value supported by the current Lamp.
      *
-     * @return The Lamp's maximum Color Temperature Value.
+     * @return The Lamps maximum color temperature value
      */
     public int getColorTempMax() {
         return getDetails().getMaxTemperature();
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected void addTo(Collection<String> lampIDs, Collection<String> groupIDs) {
         lampIDs.add(getId());
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected ColorItemDataModel getColorDataModel() {
         return getLampDataModel();
@@ -209,6 +233,10 @@ public class Lamp extends GroupMember {
         return lampModel;
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected void postError(final String name, final ResponseCode status) {
         LightingDirector.get().getLightingSystemManager().getQueue().post(new Runnable() {

@@ -24,9 +24,17 @@ import org.allseen.lsf.sdk.model.LightingItemUtil;
 import org.allseen.lsf.sdk.model.MasterSceneDataModel;
 
 /**
- * A MasterScene object represents a collection of Scene definitions in a lighting system.
+ * This class represents a MasterScene in the Lighting system.
+ * <p>
+ * <b>Note: This class is not meant to be instantiated directly. MasterScenes should be retrieved
+ * from the LightingDirector using the {@link LightingDirector#getMasterScenes()} method.</b>
  */
 public class MasterScene extends SceneItem {
+    /**
+     * Specifies the default name of the MasterScene.
+     *
+     * @param defaultName Default name of the MasterScene
+     */
     public static void setDefaultName(String defaultName) {
         if (defaultName != null) {
             MasterSceneDataModel.defaultName = defaultName;
@@ -35,6 +43,15 @@ public class MasterScene extends SceneItem {
 
     protected MasterSceneDataModel masterModel;
 
+    /**
+     * Constructs a MasterScene using the specified ID.
+     * <p>
+     * <b>WARNING: This method is intended to be used internally. Client software should not instantiate
+     * MasterScenes directly, but should instead get them from the {@link LightingDirector} using the
+     * {@link LightingDirector#getMasterScenes()} method.</b>
+     *
+     * @param masterSceneID The ID of the master scene
+     */
     protected MasterScene(String masterSceneID) {
         super();
 
@@ -42,7 +59,7 @@ public class MasterScene extends SceneItem {
     }
 
     /**
-     * Applies the Master Scene to the Lighting System.
+     * Applies the current Master Scene in the Lighting System.
      */
     @Override
     public void apply() {
@@ -53,9 +70,9 @@ public class MasterScene extends SceneItem {
     }
 
     /**
-     * Modifies the Master Scene with the array of Scenes passed as a parameter.
+     * Modifies the current MasterScene with the provided array of Scenes.
      *
-     * @param scenes The array of Scenes.
+     * @param scenes The array of new Scenes
      */
     public void modify(Scene[] scenes) {
         String errorContext = "MasterScene.modify() error";
@@ -72,9 +89,9 @@ public class MasterScene extends SceneItem {
     }
 
     /**
-     * Adds a Scene to the Master Scene.
+     * Adds a scene to the current MasterScene.
      *
-     * @param scene The Scene to be added.
+     * @param scene The Scene to be added
      */
     public void add(Scene scene) {
         String errorContext = "MasterScene.add() error";
@@ -91,9 +108,9 @@ public class MasterScene extends SceneItem {
     }
 
     /**
-     * Removes a Scene from the Master Scene.
+     * Removes a Scene from the current MasterScene
      *
-     * @param scene The Scene to be removed.
+     * @param scene The Scene to be removed
      */
     public void remove(Scene scene) {
         String errorContext = "MasterScene.remove() error";
@@ -110,7 +127,7 @@ public class MasterScene extends SceneItem {
     }
 
     /**
-     * Deletes the Master Scene.
+     * Deletes the current MasterScene from the Lighting system.
      */
     @Override
     public void delete() {
@@ -121,9 +138,9 @@ public class MasterScene extends SceneItem {
     }
 
     /**
-     * Renames the Master Scene.
+     * Renames the current MasterScene using the provided name.
      *
-     * @param masterSceneName The new name for the Mster Scene.
+     * @param masterSceneName The new name for the MasterScene
      */
     @Override
     public void rename(String masterSceneName) {
@@ -136,27 +153,30 @@ public class MasterScene extends SceneItem {
     }
 
     /**
-     * Returns all the Scene IDs of the Scenes in the Master Scene in an array.
+     * Returns all the scene IDs associated with the MasterScene.
      *
-     * @return The Scene IDs of the Scenes in the Master Scene in an array.
+     * @return Array of scene IDs of the Scenes in the Master Scene
      */
     public String[] getSceneIDs() {
         return masterModel.getMasterScene().getScenes();
     }
 
-    //TODO-DOC
+    /**
+     * Returns all the Scenes associated with the MasterScene.
+     *
+     * @return Array of Scenes in the Master Scene
+     */
     public Scene[] getScenes() {
         //TODO-CHK Do we need to insert null "placeholders"?
         return LightingDirector.get().getScenes(Arrays.asList(getSceneIDs()));
     }
 
     /**
-     * Returns boolean true if the Master Scene contains the Lighting Item
-     * specified as a component, false otherwise.
+     * Tests to see if the current MasterScene contains the provided Lighting item.
      *
-     * @param item The Lighting Item to be confirmed a component of the Master Scene.
-     * @return  boolean true if the Master Scene contains the Lighting Item
-     * specified as a component, false otherwise.
+     * @param item Lighting item to be confirmed present in the MasterScene
+     *
+     * @return Returns true if the MasterScene contains Lighting item, false otherwise
      */
     @Override
     public boolean hasComponent(LightingItem item) {
@@ -165,29 +185,46 @@ public class MasterScene extends SceneItem {
     }
 
     /**
-     * Returns boolean true if the Master Scene contains the Scene specified, false otherwise.
+     * Tests to see if the current MasterScene contains the provided Scene.
      *
-     * @param scene The Scene to be confirmed a component of the Master Scene.
-     * @return boolean true if the Master Scene contains the Scene specified, false otherwise.
+     * @param scene Scene to be confirmed present in the MasterScene
+     *
+     * @return Returns true if the MasterScene contains Scene, false otherwise
      */
     public boolean hasScene(Scene scene) {
         String errorContext = "MasterScene.hasScene() error";
         return postInvalidArgIfNull(errorContext, scene) ? hasScene(scene.getId()) : false;
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     protected boolean hasScene(String sceneID) {
         return masterModel.containsBasicScene(sceneID);
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected LightingItemDataModel getItemDataModel() {
         return getMasterSceneDataModel();
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     protected MasterSceneDataModel getMasterSceneDataModel() {
         return masterModel;
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected void postError(final String name, final ResponseCode status) {
         LightingDirector.get().getLightingSystemManager().getQueue().post(new Runnable() {

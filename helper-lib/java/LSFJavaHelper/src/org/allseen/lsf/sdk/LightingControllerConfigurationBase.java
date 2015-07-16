@@ -21,33 +21,36 @@ import org.alljoyn.bus.AboutKeys;
 import org.allseen.lsf.AboutData;
 
 /**
- * LightingControllerConfigurationBase automatically sets all the parameters necessary
- * to initialize a Lighting Controller.
+ * Provides a base class for developers to extend or use directly to define the application and device
+ * specific properties for the LightingController. This class can be instantiated and passed directly
+ * to the LightingController without modification. Developers can override only the functions they wish
+ * to change.
  * <p>
- * <b>except</b> for the application's absolute path,
- * which must be passed as a parameter in the LightingContrllerConfigurationBase's
- * constructor method.
+ * <b>Note: All parameters are set using hard coded values EXCEPT the absolute save path which must be
+ * passed in to the constructor.</b>
  * <p>
- * An example usage of a LightingControllerConfigurationBase can be found in the
- * LSFTutorial project.
+ * <b>Note: Once implemented, the subclass must be registered with the LightingController using the
+ * {@link LightingController#init(LightingControllerConfiguration) init} method.</b>
+ * <p>
+ * An example usage of a LightingControllerConfigurationBase can be found in the LSFTutorial project.
  */
 public class LightingControllerConfigurationBase implements LightingControllerConfiguration {
 
     private final String keystorePath;
 
     /**
-     * Constructs a Lighting Controller Configuration Base with a Key StorePath.
+     * Constructs a LightingControllerConfigurationBase using the provided path.
      *
-     * @param keystorePath The absolute path of you application.
+     * @param keystorePath Absolute path used by the LightingController to save files
      */
     public LightingControllerConfigurationBase(String keystorePath) {
         this.keystorePath = keystorePath;
     }
 
     /**
-     * Returns the Keystore Path of the LightingControllerConfigurationBase
+     * Returns the file location to save LighingController specific files.
      *
-     * @return The Keystore Path of the LightingControllerConfigurationBase as a String.
+     * @return Absolute directory path to be used for file storage.
      */
     @Override
     public String getKeystorePath() {
@@ -55,9 +58,10 @@ public class LightingControllerConfigurationBase implements LightingControllerCo
     }
 
     /**
-     * Populates the default properties of a Lighting Controller Configuration.
+     * Populate the AllJoyn AboutData parameter with device specific about data. The about
+     * data will be used by the LighingController.
      *
-     * @param aboutData The About Data of your app.
+     * @param aboutData Reference to AllJoyn AboutData
      */
     @Override
     public void populateDefaultProperties(AboutData aboutData) {
@@ -86,9 +90,15 @@ public class LightingControllerConfigurationBase implements LightingControllerCo
     }
 
     /**
-     * Returns the MAC Address of the Lighting Controller Configuration Base.
+     * Returns the MAC address of the device running the LightingController.
+     * <p>
+     * <b>Note: The MAC address is expected to be a 12-digit hex string (i.e. "XXXXXXXXXXXX").</b>
      *
-     * @return The MAC Address of the Lighting Controller Configuration Base.
+     * @param generatedMacAddress
+     *             Random hex string which can be used as the MAC address on devices where it cannot
+     *             be queried.
+     *
+     * @return The 12-digit HEX string MAC address of the device
      */
     @Override
     public String getMacAddress(String generatedMacAddress) {
@@ -96,9 +106,9 @@ public class LightingControllerConfigurationBase implements LightingControllerCo
     }
 
     /**
-     * Returns boolean representing the Lighting Controller Configuration is network connected.
+     * Determines whether the LightingController is connected to a network.
      *
-     * @return boolean true.
+     * @return Return true if the controller is connected to a network, false otherwise.
      */
     @Override
     public boolean isNetworkConnected() {
@@ -106,9 +116,10 @@ public class LightingControllerConfigurationBase implements LightingControllerCo
     }
 
     /**
-     * Returns the Rank Power of the Lighting Controller Configuration.
+     * Returns the mobility capability of the device running the LightingController. The mobility
+     * capability is used to determine the controllers rank.
      *
-     * @return The Rank Power of the Lighting Controller Configuration.
+     * @return LightingController RankMobility
      */
     @Override
     public RankPower getRankPower() {
@@ -116,9 +127,10 @@ public class LightingControllerConfigurationBase implements LightingControllerCo
     }
 
     /**
-     * Returns the Rank Mobility of the Lighting Controller Configuration.
+     * Returns the power capability of the device running the LightingController. The power
+     * capability is used to determine the controllers rank.
      *
-     * @return The Rank Mobility of the Lighting Controller Configuration.
+     * @return LightingController RankPower
      */
     @Override
     public RankMobility getRankMobility() {
@@ -126,9 +138,10 @@ public class LightingControllerConfigurationBase implements LightingControllerCo
     }
 
     /**
-     * Returns the Rank Availability of the Lighting Controller Configuration.
+     * Returns the availability capability of the device running the LightingController. The availability
+     * capability is used to determine the controllers rank.
      *
-     * @return The Rank Availability of the Lighting Controller Configuration.
+     * @return LightingController RankAvailability
      */
     @Override
     public RankAvailability getRankAvailability() {
@@ -136,13 +149,13 @@ public class LightingControllerConfigurationBase implements LightingControllerCo
     }
 
     /**
-     * Returns the Rank Node Type of the Lighting Controller Configuration.
+     * Returns the type of the device running the LightingController. The node type is used to determine
+     * the controllers rank.
      *
-     * @return The Rank Node Type of the Lighting Controller Configuration.
+     * @return LightingController RankNodeType
      */
     @Override
     public RankNodeType getRankNodeType() {
         return RankNodeType.WIRELESS;
     }
 }
-

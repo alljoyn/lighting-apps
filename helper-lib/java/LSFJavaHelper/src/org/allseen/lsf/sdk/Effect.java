@@ -19,16 +19,34 @@ import org.allseen.lsf.PresetPulseEffect;
 import org.allseen.lsf.sdk.model.EffectType;
 
 /**
- * The listener interface for applying lighting Effects in the lighting
- * system.
+ * Base interface implemented by all Lighting items that are effects.
  */
 public interface Effect extends LightingItemInterface, DeletableItem {
+
+    /**
+     * Constant specifying preset effect type.
+     */
     public static final String EFFECT_TYPE_PRESET = EffectType.None.toString();
+
+    /**
+     * Constant specifying transition effect type.
+     */
     public static final String EFFECT_TYPE_TRANSITION = EffectType.Transition.toString();
+
+    /**
+     * Constant specifying pulse effect type.
+     */
     public static final String EFFECT_TYPE_PULSE = EffectType.Pulse.toString();
 
+    /**
+     * Constant specifying preset to use current state of GroupMember as starting state.
+     */
     public static final String PRESET_ID_USE_CURRENT_STATE = PresetPulseEffect.PRESET_ID_CURRENT_STATE;
 
-    //TODO-DOC
+    /**
+     * Applies the current effect to the provided Lighting item.
+     *
+     * @param member Lighting item to apply the effect
+     */
     public void applyTo(GroupMember member);
 }

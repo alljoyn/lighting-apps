@@ -17,7 +17,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.allseen.lsf.tutorial.sceneUI"
     android:versionCode="1"
-    android:versionName="01_01_0333" >
+    android:versionName="01_01_0341" >
 
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="18" />
 

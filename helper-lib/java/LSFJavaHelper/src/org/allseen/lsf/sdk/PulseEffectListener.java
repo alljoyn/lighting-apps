@@ -18,20 +18,53 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.listener.PulseEffectCollectionListener;
 
 /**
- * The listener interface for receiving information about Pulse Effects in the lighting
- * system.
+ * Provides an interface for developers to implement and receive all PulseEffect related
+ * events in the Lighting system.
+ * <p>
+ * <b>Note: Once implemented, the listener must be registered with the LightingDirector in order
+ * to receive PulseEffect callbacks. See {@link LightingDirector#addPulseEffectListener(PulseEffectListener) addPulseEffectListener}
+ * for more information.</b>
  */
 public interface PulseEffectListener extends PulseEffectCollectionListener<PulseEffect, LightingItemErrorEvent> {
-    //TODO-DOC
+
+    /**
+     * Triggered when all data has been received from the lighting controller for a
+     * particular PulseEffect.
+     * <p>
+     * <b>Note: This callback will fire only once for each PulseEffect when it
+     * is initialized.</b>
+     *
+     * @param trackingId Reference to TrackingID
+     * @param effect Reference to PulseEffect
+     */
     @Override
     public void onPulseEffectInitialized(TrackingID trackingId, PulseEffect effect);
 
+    /**
+     * Triggered every time new data is received from the lighting controller for a
+     * particular PulseEffect.
+     *
+     * @param effect Reference to PulseEffect
+     */
     @Override
     public void onPulseEffectChanged(PulseEffect effect);
 
+    /**
+     * Triggered when a particular PulseEffect has been removed from the Lighting system.
+     * <p>
+     * <b>Note: This callback will fire only once for each PulseEffect when it is removed from
+     * the Lighting system.</b>
+     *
+     * @param effect Reference to PulseEffect
+     */
     @Override
     public void onPulseEffectRemoved(PulseEffect effect);
 
+    /**
+     * Triggered when an error occurs on a PulseEffect operation.
+     *
+     * @param error Reference to LightingItemErrorEvent
+     */
     @Override
     public void onPulseEffectError(LightingItemErrorEvent error);
 }

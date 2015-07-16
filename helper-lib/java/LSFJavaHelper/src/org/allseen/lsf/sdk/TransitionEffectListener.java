@@ -18,20 +18,53 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.listener.TransitionEffectCollectionListener;
 
 /**
- * The listener interface for receiving information about Transition Effects in the lighting
- * system.
+ * Provides an interface for developers to implement and receive all TransitionEffect related
+ * events in the Lighting system.
+ * <p>
+ * <b>Note: Once implemented, the listener must be registered with the LightingDirector in order
+ * to receive TransitionEffect callbacks. See {@link LightingDirector#addTransitionEffectListener(TransitionEffectListener) addTransitionEffectListener}
+ * for more information.</b>
  */
 public interface TransitionEffectListener extends TransitionEffectCollectionListener<TransitionEffect, LightingItemErrorEvent> {
-    //TODO-DOC
+
+    /**
+     * Triggered when all data has been received from the lighting controller for a
+     * particular TransitionEffect.
+     * <p>
+     * <b>Note: This callback will fire only once for each TransitionEffect when it
+     * is initialized.</b>
+     *
+     * @param trackingId Reference to TrackingID
+     * @param effect Reference to TransitionEffect
+     */
     @Override
     public void onTransitionEffectInitialized(TrackingID trackingId, TransitionEffect effect);
 
+    /**
+     * Triggered every time new data is received from the lighting controller for a
+     * particular TransitionEffect.
+     *
+     * @param effect Reference to TransitionEffect
+     */
     @Override
     public void onTransitionEffectChanged(TransitionEffect effect);
 
+    /**
+     * Triggered when a particular TransitionEffect has been removed from the Lighting system.
+     * <p>
+     * <b>Note: This callback will fire only once for each TransitionEffect when it is removed from
+     * the Lighting system.</b>
+     *
+     * @param effect Reference to TransitionEffect
+     */
     @Override
     public void onTransitionEffectRemoved(TransitionEffect effect);
 
+    /**
+     * Triggered when an error occurs on a TransitionEffect operation.
+     *
+     * @param error Reference to LightingItemErrorEvent
+     */
     @Override
     public void onTransitionEffectError(LightingItemErrorEvent error);
 }

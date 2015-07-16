@@ -15,7 +15,35 @@
 package org.allseen.lsf.sdk;
 
 /**
- * The queue interface for the Lighting System.
+ * Provides an interface for developers to implement and provide the Lighting system a Thread
+ * to process all Lighting events
+ * <p>
+ * <b>Note: Once implemented, the queue must be passed to the LightingDirector via the start method.
+ * See {@link LightingDirector#start(String, LightingSystemQueue) start} for more information.</b>
  */
 public interface LightingSystemQueue extends org.allseen.lsf.sdk.manager.LightingSystemQueue {
+
+    /**
+     * Post the provided runnable to the thread associated with the LightingSystemQueue.
+     *
+     * @param r Runnable to post to the queue
+     */
+    @Override
+    public void post(Runnable r);
+
+    /**
+     * Post the provided runnable to the thread associated with the LightingSystemQueue
+     * after the specified delay.
+     *
+     * @param r Runnable to post to the queue
+     * @param delay Specifies the delay to wait before posting the runnable
+     */
+    @Override
+    public void postDelayed(Runnable r, int delay);
+
+    /**
+     * Stops the thread associated the LightingSystemQueue.
+     */
+    @Override
+    public void stop();
 }

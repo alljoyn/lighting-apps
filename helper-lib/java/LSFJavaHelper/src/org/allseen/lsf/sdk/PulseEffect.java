@@ -24,14 +24,16 @@ import org.allseen.lsf.sdk.model.LightingItemUtil;
 import org.allseen.lsf.sdk.model.PulseEffectDataModelV2;
 
 /**
- * A Pulse Effect object represents a predefined two-color oscillating effect in a lamp.
+ * This class represents a PulseEffect in the Lighting system.
+ * <p>
+ * <b>Note: This class is not meant to be instantiated directly. PulseEffects should be retrieved
+ * from the LightingDirector using the {@link LightingDirector#getPulseEffects()} method.</b>
  */
 public class PulseEffect extends ColorItem implements Effect {
-
     /**
-     * Sets the default name for Pulse Effects.
+     * Specifies the default name of the PulseEffect.
      *
-     * @param defaultName The new default name.
+     * @param defaultName Default name of the PulseEffect
      */
     public static void setDefaultName(String defaultName) {
         if (defaultName != null) {
@@ -41,10 +43,29 @@ public class PulseEffect extends ColorItem implements Effect {
 
     protected PulseEffectDataModelV2 pulseEffectModel;
 
+    /**
+     * Constructs a PulseEffect using the specified ID.
+     * <p>
+     * <b>WARNING: This method is intended to be used internally. Client software should not instantiate
+     * PulseEffects directly, but should instead get them from the {@link LightingDirector} using the
+     * {@link LightingDirector#getPulseEffects()} method.</b>
+     *
+     * @param pulseEffectId The ID of the pulse effect
+     */
     protected PulseEffect(String pulseEffectId) {
         this(pulseEffectId, null);
     }
 
+    /**
+     * Constructs a PulseEffect using the specified ID and name.
+     * <p>
+     * <b>WARNING: This method is intended to be used internally. Client software should not instantiate
+     * PulseEffects directly, but should instead get them from the {@link LightingDirector} using the
+     * {@link LightingDirector#getPulseEffects()} method.</b>
+     *
+     * @param pulseEffectId The ID of the pulse effect
+     * @param pulseEffectName The name of the pulse effect
+     */
     protected PulseEffect(String pulseEffectId, String pulseEffectName) {
         super();
 
@@ -52,9 +73,9 @@ public class PulseEffect extends ColorItem implements Effect {
     }
 
     /**
-     * Applies the Pulse Effect to the GroupMember provided.
+     * Applies the current PulseEffect to the specified GroupMember.
      *
-     * @param member The GroupMember the Pulse Effect will be applied to.
+     * @param member The GroupMember the PulseEffect will be applied to.
      */
     @Override
     public void applyTo(GroupMember member) {
@@ -66,14 +87,13 @@ public class PulseEffect extends ColorItem implements Effect {
     }
 
     /**
-     * Replaces the Pulse Effect's fromState, toState, period, duration, and count with
-     * the corresponding method parameters.
+     * Modifies the current PulseEffect using the provided parameters.
      *
-     * @param fromState The new fromState.
-     * @param toState The new toState.
-     * @param period The new period.
-     * @param duration The new duration, in milliseconds.
-     * @param count The new count.
+     * @param fromState The new fromState
+     * @param toState The new toState
+     * @param period The new period
+     * @param duration The new duration, in milliseconds
+     * @param count The new count
      */
     public void modify(LampState fromState, LampState toState, long period, long duration, long count) {
         String errorContext = "PulseEffect.modify() error";
@@ -92,9 +112,9 @@ public class PulseEffect extends ColorItem implements Effect {
     }
 
     /**
-     * Renames the Pulse Effect using the String provided.
+     * Renames the current PulseEffect using the provided name.
      *
-     * @param effectName The new name for the Pulse Effect.
+     * @param effectName The new name for the TransitionEffect
      */
     @Override
     public void rename(String effectName) {
@@ -107,7 +127,7 @@ public class PulseEffect extends ColorItem implements Effect {
     }
 
     /**
-     * Deletes the Pulse Effect.
+     * Deletes the current PulseEffect from the Lighting system.
      */
     @Override
     public void delete() {
@@ -117,53 +137,103 @@ public class PulseEffect extends ColorItem implements Effect {
                 AllJoynManager.pulseEffectManager.deletePulseEffect(pulseEffectModel.id));
     }
 
-    //TODO-DOC
+    /**
+     * Returns a boolean that indicates whether the current PulseEffect using the current
+     * state as its starting state.
+     *
+     * @return Return true if the PulseEffect uses the current state as its starting state, false otherwise
+     */
     public boolean isStartWithCurrent() {
         return pulseEffectModel.isStartWithCurrent();
     }
+
+    /**
+     * Returns the PulseEffect starting lamp state.
+     *
+     * @return Reference to MyLampState object
+     */
     public MyLampState getStartState() {
         return getState();
     }
 
+    /**
+     * Returns the PulseEffect ending lamp state.
+     *
+     * @return Reference to MyLampState object
+     */
     public MyLampState getEndState() {
         return new MyLampState(pulseEffectModel.getEndState());
     }
 
+    /**
+     * Returns the Preset associated with the PulseEffects start state.
+     *
+     * @return Reference to Preset object
+     */
     public Preset getStartPreset() {
         return LightingDirector.get().getPreset(getStartPresetID());
     }
 
+    /**
+     * Returns the Preset associated with the PulseEffects end state.
+     *
+     * @return Reference to Preset object
+     */
     public Preset getEndPreset() {
         return LightingDirector.get().getPreset(getEndPresetID());
     }
 
+    /**
+     * Returns the preset ID associated with the PulseEffects start state.
+     *
+     * @return ID of the Preset
+     */
     public String getStartPresetID() {
         return pulseEffectModel.getStartPresetID();
     }
 
+    /**
+     * Returns the preset ID associated with the PulseEffects end state.
+     *
+     * @return ID of the Preset
+     */
     public String getEndPresetID() {
         return pulseEffectModel.getEndPresetID();
     }
 
+    /**
+     * Returns the period of the PulseEffect.
+     *
+     * @return Period of the PulseEffect, in milliseconds
+     */
     public long getPeriod() {
         return pulseEffectModel.getPeriod();
     }
 
+    /**
+     * Returns the duration of the PulseEffect.
+     *
+     * @return Duration of the PulseEffect, in milliseconds
+     */
     public long getDuration() {
         return pulseEffectModel.getDuration();
     }
 
+    /**
+     * Returns the number of pulsed in the PulseEffect.
+     *
+     * @return Number of pulsed in the PulseEffect
+     */
     public long getCount() {
         return pulseEffectModel.getCount();
     }
 
     /**
-     * Returns boolean true if the Pulse Effect contains the Lighting Item parameter,
-     * false otherwise.
+     * Tests to see if the current PulseEffect contains the provided Lighting item.
      *
-     * @param item The Lighting Item to be confirmed a component of the Pulse Effect.
-     * @return boolean true if the Pulse Effect contains the Lighting Item parameter,
-     * false otherwise.
+     * @param item The Lighting Item to be confirmed a component of the PulseEffect
+     *
+     * @return Returns true if the PulseEffect contains the Lighting item, false otherwise
      */
     @Override
     public boolean hasComponent(LightingItem item) {
@@ -172,20 +242,29 @@ public class PulseEffect extends ColorItem implements Effect {
     }
 
     /**
-     * Returns boolean true if the Pulse Effect contains the Preset parameter, false otherwise.
+     * Tests to see if the current PulseEffect contains the provided Preset.
      *
-     * @param preset The preset to be confirmed a component of the Pulse Effect.
-     * @return boolean true if the Pulse Effect contains the Preset parameter, false otherwise.
+     * @param preset The Preset to be confirmed a component of the PulseEffect
+     *
+     * @return Returns true if the PulseEffect contains the Preset, false otherwise
      */
     public boolean hasPreset(Preset preset) {
         String errorContext = "PulseEffect.hasPreset() error";
         return postInvalidArgIfNull(errorContext, preset) ? hasPreset(preset.getId()) : false;
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     protected boolean hasPreset(String presetID) {
         return pulseEffectModel.containsPreset(presetID);
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected Collection<LightingItem> getDependentCollection() {
         Collection<LightingItem> dependents = new ArrayList<LightingItem>();
@@ -195,15 +274,27 @@ public class PulseEffect extends ColorItem implements Effect {
         return dependents;
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     protected PulseEffectDataModelV2 getPulseEffectDataModel() {
         return pulseEffectModel;
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected ColorItemDataModel getColorDataModel() {
         return getPulseEffectDataModel();
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected void postError(final String name, final ResponseCode status) {
         LightingDirector.get().getLightingSystemManager().getQueue().post(new Runnable() {

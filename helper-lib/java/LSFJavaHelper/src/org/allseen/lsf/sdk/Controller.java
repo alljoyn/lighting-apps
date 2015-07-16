@@ -18,14 +18,15 @@ import org.allseen.lsf.sdk.model.ControllerDataModel;
 import org.allseen.lsf.sdk.model.LightingItemDataModel;
 
 /**
- * This class represents the client's info on a device providing the Lighting
- * Controller Service (LSF) functionality (currently only the lead controller
- * is exposed).
- * <p>
- * In contrast, the LightingController class is an implementation
- * of the LSF, and is used by devices that want to provide the LSF functionality.
+ * This class provides an interface to retrieve information about a given controller
+ * in the Lighting system.
  */
 public class Controller extends LightingItem {
+    /**
+     * Specifies the default name of the Controller.
+     *
+     * @param defaultName Default name of the Controller
+     */
     public static void setDefaultName(String defaultName) {
         if (defaultName != null) {
             ControllerDataModel.defaultName = defaultName;
@@ -45,9 +46,9 @@ public class Controller extends LightingItem {
     }
 
     /**
-     * Changes the name of the controller.
+     * Renames the lead controller in the Lighting system.
      * <p>
-     * Note: This method is not yet implemented.
+     * WARNING: This method is not yet implemented and could change in future releases.
      */
     @Override
     public void rename(String name) {
@@ -56,32 +57,44 @@ public class Controller extends LightingItem {
     }
 
     /**
-     * Returns whether or not the Controller is connected.
+     * Returns a boolean that indicates if it is the lead controller in the Lighting system.
      *
-     * @return Whether the controller is connected, as a boolean.
+     * @return Return true if this is the lead controller, false otherwise
      */
     public boolean isConnected() {
         return getControllerDataModel().connected;
     }
 
     /**
-     * Returns the version number of the Controller.
+     * Returns the version of the controller.
      *
-     * @return The version number of the Controller.
+     * @return Version of the controller.
      */
     public long getVersion() {
         return getControllerDataModel().version;
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     protected ControllerDataModel getControllerDataModel() {
         return controllerModel;
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected LightingItemDataModel getItemDataModel() {
         return getControllerDataModel();
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected void postError(final String name, final ResponseCode status) {
         LightingDirector.get().getLightingSystemManager().getQueue().post(new Runnable() {

@@ -26,17 +26,13 @@ import org.allseen.lsf.sdk.model.LightingItemUtil;
 import org.allseen.lsf.sdk.model.SceneElementDataModel;
 import org.allseen.lsf.sdk.model.SceneElementDataModelV2;
 
-
 /**
- * A wrapper class for lighting effects that designates them as Elements of a Scene object.
- * Used to place Lighting Effects into Scenes.
+ * This class represents a SceneElement in the Lighting system.
+ * <p>
+ * <b>Note: This class is not meant to be instantiated directly. SceneElements should be retrieved
+ * from the LightingDirector using the {@link LightingDirector#getSceneElements()} method.</b>
  */
 public class SceneElement extends SceneItem {
-    /**
-     * Changes the defaultName for Scene Elements.
-     *
-     * @param defaultName The new default name.
-     */
     public static void setDefaultName(String defaultName) {
         if (defaultName != null) {
             SceneElementDataModel.defaultName = defaultName;
@@ -45,10 +41,29 @@ public class SceneElement extends SceneItem {
 
     protected SceneElementDataModelV2 sceneElementModel;
 
+    /**
+     * Constructs a SceneElement using the specified ID.
+     * <p>
+     * <b>WARNING: This method is intended to be used internally. Client software should not instantiate
+     * SceneElements directly, but should instead get them from the {@link LightingDirector} using the
+     * {@link LightingDirector#getSceneElements()} method.</b>
+     *
+     * @param sceneElementId The ID of the scene element
+     */
     protected SceneElement(String sceneElementId) {
         this(sceneElementId, null);
     }
 
+    /**
+     * Constructs a SceneElement using the specified ID and name.
+     * <p>
+     * <b>WARNING: This method is intended to be used internally. Client software should not instantiate
+     * SceneElements directly, but should instead get them from the {@link LightingDirector} using the
+     * {@link LightingDirector#getSceneElements()} method.</b>
+     *
+     * @param sceneElementId The ID of the scene element
+     * @param sceneElementName The name of the scene element
+     */
     protected SceneElement(String sceneElementId, String sceneElementName) {
         super();
 
@@ -56,7 +71,7 @@ public class SceneElement extends SceneItem {
     }
 
     /**
-     * Applies the Scene Element.
+     * Applies the current SceneElement in the Lighting system.
      */
     @Override
     public void apply() {
@@ -67,8 +82,7 @@ public class SceneElement extends SceneItem {
     }
 
     /**
-     * Changes the Scene Element's Effect and GroupMembers to those passed
-     * as parameters.
+     * Modifies the Effect and GroupMembers of the current SceneElement using the provided parameters
      *
      * @param effect The new Effect.
      * @param members The new GroupMembers.
@@ -83,9 +97,9 @@ public class SceneElement extends SceneItem {
     }
 
     /**
-     * Adds the GroupMember specified to the Scene Element.
+     * Adds a member to the current SceneElement.
      *
-     * @param member The new Group Member to be added.
+     * @param member The GroupMember object to be added to the SceneElement
      */
     public void add(GroupMember member) {
         String errorContext = "SceneElement.add() error";
@@ -108,9 +122,9 @@ public class SceneElement extends SceneItem {
     }
 
     /**
-     * Removes the Group Member specified from the Scene Element.
+     * Removes a member from the current SceneElement.
      *
-     * @param member The Group Member to be removed.
+     * @param member The GroupMember object to be removed from the SceneElement
      */
     public void remove(GroupMember member) {
         String errorContext = "SceneElement.remove() error";
@@ -130,9 +144,9 @@ public class SceneElement extends SceneItem {
     }
 
     /**
-     * Renames the Scene Element using the passed in String.
+     * Renames the current SceneElement using the provided name.
      *
-     * @param sceneElementName The new name for the Scene Element.
+     * @param sceneElementName The new name for the SceneElement
      */
     @Override
     public void rename(String sceneElementName) {
@@ -145,7 +159,7 @@ public class SceneElement extends SceneItem {
     }
 
     /**
-     * Deletes the Scene Element.
+     * Deletes the current SceneElement from the Lighting system.
      */
     @Override
     public void delete() {
@@ -155,38 +169,66 @@ public class SceneElement extends SceneItem {
                 AllJoynManager.sceneElementManager.deleteSceneElement(sceneElementModel.id));
     }
 
-    //TODO-DOC
+    /**
+     * Returns the effect associated with the current SceneElement.
+     *
+     * @return Reference to Effect
+     */
     public Effect getEffect() {
         return LightingDirector.get().getEffect(sceneElementModel.getEffectId());
     }
 
+    /**
+     * Returns the Lamps associated with the current SceneElement.
+     *
+     * @return Arrays of Lamps associated with the SceneElement
+     */
     public Lamp[] getLamps() {
         return LightingDirector.get().getLamps(sceneElementModel.getLamps());
     }
 
+    /**
+     * Returns the Groups associated with the current SceneElement.
+     *
+     * @return Arrays of Groups associated with the SceneElement
+     */
     public Group[] getGroups() {
         return LightingDirector.get().getGroups(sceneElementModel.getGroups());
     }
 
+    /**
+     * Returns the ID of the Effect associated with the current SceneElement.
+     *
+     * @return ID of the SceneElement Effect
+     */
     public String getEffectID() {
         return sceneElementModel.getEffectId();
     }
 
+    /**
+     * Returns the lamp IDs associated with the current SceneElement.
+     *
+     * @return Arrays of lamp IDs associated with the SceneElement
+     */
     public Collection<String> getLampIDs() {
         return sceneElementModel.getLamps();
     }
 
+    /**
+     * Returns the group IDs associated with the current SceneElement.
+     *
+     * @return Arrays of group IDs associated with the SceneElement
+     */
     public Collection<String> getGroupIDs() {
         return sceneElementModel.getGroups();
     }
 
     /**
-     * Returns boolean true if the Scene Element contains the Lighting Item parameter,
-     * false otherwise.
+     * Tests to see if the current SceneElement contains the provided Lighting item.
      *
-     * @param item The Lighting Item to be confirmed a component of the Scene Element.
-     * @return boolean true if the Scene Element contains the Lighting Item parameter,
-     * false otherwise.
+     * @param item Lighting item to be confirmed present in the SceneElement
+     *
+     * @return Returns true if the SceneElement contains Lighting item, false otherwise
      */
     @Override
     public boolean hasComponent(LightingItem item) {
@@ -195,12 +237,11 @@ public class SceneElement extends SceneItem {
     }
 
     /**
-     * Returns boolean true if the Scene Element contains the Effect parameter,
-     * false otherwise.
+     * Tests to see if the current SceneElement contains the specified Effect.
      *
-     * @param effect The Effect to be confirmed a component of the Scene Element.
-     * @return boolean true if the Scene Element contains the Effect parameter,
-     * false otherwise.
+     * @param effect The Effect to be confirmed a component of the SceneElement.
+     *
+     * @return Return true if the SceneElement contains Effect, false otherwise.
      */
     public boolean hasEffect(Effect effect) {
         String errorContext = "SceneElement.hasEffect() error";
@@ -208,10 +249,11 @@ public class SceneElement extends SceneItem {
     }
 
     /**
-     * Returns boolean true if the Scene Element contains the Lamp specified, false otherwise.
+     * Tests to see if the current SceneElement contains the specified Lamp.
      *
-     * @param lamp The Lamp to be confirmed a component of the Scene Element.
-     * @return boolean true if the Scene Element contains the Lamp specified, false otherwise.
+     * @param lamp The Lamp to be confirmed a component of the SceneElement.
+     *
+     * @return Return true if the SceneElement contains Lamp, false otherwise.
      */
     public boolean hasLamp(Lamp lamp) {
         String errorContext = "Group.hasLamp() error";
@@ -219,28 +261,45 @@ public class SceneElement extends SceneItem {
     }
 
     /**
-     * Returns boolean true if the Scene Element contains the Group specified, false otherwise.
+     * Tests to see if the current SceneElement contains the specified Group.
      *
-     * @param group The Group to be confirmed a component of the Scene Element.
-     * @return boolean true if the Scene Element contains the Group specified, false otherwise.
+     * @param group The Group to be confirmed a component of the SceneElement.
+     *
+     * @return Return true if the SceneElement contains Group, false otherwise.
      */
     public boolean hasGroup(Group group) {
         String errorContext = "SceneElement.hasGroup() error";
         return postInvalidArgIfNull(errorContext, group) ? hasGroup(group.getId()) : false;
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     protected boolean hasEffect(String effectID) {
         return sceneElementModel.containsEffect(effectID);
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     protected boolean hasLamp(String lampID) {
         return sceneElementModel.containsLamp(lampID);
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     protected boolean hasGroup(String groupID) {
         return sceneElementModel.containsGroup(groupID);
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected Collection<LightingItem> getDependentCollection() {
         LightingDirector director = LightingDirector.get();
@@ -251,15 +310,27 @@ public class SceneElement extends SceneItem {
         return dependents;
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     protected SceneElementDataModelV2 getSceneElementDataModel() {
         return sceneElementModel;
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected LightingItemDataModel getItemDataModel() {
         return getSceneElementDataModel();
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected void postError(final String name, final ResponseCode status) {
         LightingDirector.get().getLightingSystemManager().getQueue().post(new Runnable() {

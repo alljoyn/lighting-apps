@@ -17,8 +17,8 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.model.ColorStateConverter;
 
 /**
- * A MyLampState object represents the state of a lamp in the lighting system
- * in terms of a Power and a Color.
+ * Default implementation of the LampState interface and represents the power and
+ * color state of a Lighting item.
  */
 public class MyLampState implements LampState {
 
@@ -44,12 +44,15 @@ public class MyLampState implements LampState {
 
     /**
      * Constructs a MyLampState object.
+     * <p>
+     * <b>Note: If the provided HSVT values are outside the expected range, they will be normalized to the
+     * expected range</b>
      *
-     * @param lampPower The Power value.
-     * @param hue The hue component of a Color in degrees (0-360)
-     * @param sat The saturation component of a Color in percent (0-100)
-     * @param brightness The brightness component of a Color, in percent (0-100)
-     * @param colorTemp The color temperature component of a Color, in degrees Kelvin (2700-9000)
+     * @param lampPower The Power state.
+     * @param hue The hue component of the Color (0-360)
+     * @param sat The saturation component of a Color (0-100)
+     * @param brightness The brightness component of a Color (0-100)
+     * @param colorTemp The color temperature component of a Color (1000-20000)
      */
     public MyLampState(Power lampPower, int hue, int sat, int brightness, int colorTemp) {
         this(lampPower, new Color(hue, sat, brightness, colorTemp));
@@ -57,9 +60,12 @@ public class MyLampState implements LampState {
 
     /**
      * Contructs a MyLampState object.
+     * <p>
+     * <b>Note: The lamp state power will be on and the color will be white if the constructor
+     * parameters are null.</b>
      *
-     * @param lampPower The Power value. Default is ON.
-     * @param colorState The Color value. Default is WHITE.
+     * @param lampPower The Power state
+     * @param colorState The Color state
      */
     public MyLampState(Power lampPower, Color colorState) {
         power = (lampPower != null)? lampPower : DEFAULT_POWER;
@@ -67,11 +73,9 @@ public class MyLampState implements LampState {
     }
 
     /**
-     * Sets the MyLampState's Power and Color values to those of the parameter.
-     * If either of the parameter's values are <code>null</code>, the corresponding parameter
-     * in the MyLampState will be set to <code>null</code>.
+     * Constructs a MyLampState object using the provided MyLampState object.
      *
-     * @param other The other MyLampState.
+     * @param other The other MyLampState object
      */
     public MyLampState(MyLampState other) {
         this((other == null)? null : other.power,
@@ -79,27 +83,27 @@ public class MyLampState implements LampState {
     }
 
     /**
-     * Returns the Power state of the MyLampState.
+     * Returns the power state.
      *
-     * @return the Power state of the MyLampState.
+     * @return Returns on if the power is on, off otherwise
      */
     public Power getPower() {
         return power;
     }
 
     /**
-     * Returns the Color state of the MyLampState.
+     * Returns the color state.
      *
-     * @return The Color state of the MyLampState.
+     * @return Reference to Color object
      */
     public Color getColor() {
         return color;
     }
 
     /**
-     * Returns boolean true if the Power state of the MyLampState is ON, false otherwise.
+     * Returns the power state.
      *
-     * @return Boolean true if the Power state of the MyLampState is ON, false otherwise.
+     * @return Returns true if the Power state is on, false otherwise
      */
     @Override
     public boolean getPowerOn() {
@@ -107,9 +111,9 @@ public class MyLampState implements LampState {
     }
 
     /**
-     * Sets power to ON if passed boolean true, OFF otherwise.
+     * Sets the power state.
      *
-     * @param powerOn Boolean that sets the Power state.
+     * @param powerOn Boolean that represents the power state
      */
     @Override
     public void setPowerOn(boolean powerOn) {
@@ -117,29 +121,27 @@ public class MyLampState implements LampState {
     }
 
     /**
-     * Returns boolean true if Power is ON, false otherwise.
+     * Returns the power state.
      *
-     * @return boolean true if Power is ON, false otherwise.
+     * @return Returns true if the power state is on, false otherwise
      */
     public boolean isOn() {
         return getPowerOn();
     }
 
     /**
-     * Returns boolean true if Power is OFF, false otherwise.
+     * Returns the power state.
      *
-     * @return boolean true if Power is OFF, false otherwise.
+     * @return Returns true if the power state is off, false otherwise
      */
     public boolean isOff() {
         return !isOn();
     }
 
     /**
-     * Return an int array in which the first four indices correspond to
-     * the Hue, Saturation, Brightness, and Color Temperature values of the
-     * MyLampState's Color, respectively.
+     * Returns the HSVT color state of the Lighting item
      *
-     * @return The hsvt array.
+     * @return Integer array containing the HSVT color of the Lighting item
      */
     @Override
     public int[] getColorHsvt() {
@@ -147,13 +149,12 @@ public class MyLampState implements LampState {
     }
 
     /**
-     * Sets the hue, saturation, brightness, and color temperature of
-     * the MyLampState's Color value.
+     * Sets the color state.
      *
-     * @param hueDegrees The hue component of the desired color, in degrees (0-360)
-     * @param saturationPercent The saturation component of the desired color, in percent (0-100)
-     * @param brightnessPercent The brightness component of the desired color, in percent (0-100)
-     * @param colorTempDegrees The color temperature component of the desired color, in degrees Kelvin (2700-9000)
+     * @param hueDegrees The hue component of the desired color (0-360)
+     * @param saturationPercent The saturation component of the desired color (0-100)
+     * @param brightnessPercent The brightness component of the desired color (0-100)
+     * @param colorTempDegrees The color temperature component of the desired color (1000-20000)
      */
     @Override
     public void setColorHsvt(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees) {
@@ -163,7 +164,7 @@ public class MyLampState implements LampState {
     /**
      * Returns the hash code of the MyLampState object.
      *
-     * @return A hash code of the MyLampState object.
+     * @return Hash code of the MyLampState object.
      */
     @Override
     public int hashCode() {
@@ -175,11 +176,9 @@ public class MyLampState implements LampState {
     }
 
     /**
-     * Returns boolean true if the MyLampState is equivalent to the
-     * parameter object, false otherwise.
+     * Compares the MyLampState object to another object for equivalence.
      *
-     * @return boolean true if the MyLampState is equivalent to the
-     * parameter object, false otherwise.
+     * @return Returns true if the lamp state objects are equivalent, false otherwise
      */
     @Override
     public boolean equals(Object other) {

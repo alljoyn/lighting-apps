@@ -12,37 +12,35 @@
  *    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
+
 package org.allseen.lsf.sdk;
 
-
-
 /**
- * Abstract base class for Lighting items that support color.
+ * Abstract base class for Lighting items that support modification of power and color state.
  */
 public abstract class MutableColorItem extends ColorItem implements LampState {
 
     /**
-     * Set Power of the Mutable Color Item to ON.
+     * Sets the Power of the Lighting item to on.
      */
     public void turnOn() {
         setPowerOn(true);
     }
 
     /**
-     * Set Power of the Mutable Color Item to OFF.
+     * Sets the Power of the Lighting item to off.
      */
     public void turnOff() {
         setPowerOn(false);
     }
 
     /**
-     * Set the Color of the Mutable Color Item with the values defined in
-     * the HSVT array.
-     * @param hsvt
-     *              the array of values. hsvt[0] is the hue component in degrees (0-360),
-     *              hsvt[1] is the saturation component in percent (0-100), hsvt[2] is the brightness
-     *              component in percent (0-100), and hsvt[3] is the color temperature in degrees
-     *              Kelvin, (2700 - 9000)
+     * Sets the color of the Lighting item to the provided HSVT color.
+     * <p>
+     * <b>Note: If the provided HSVT values are outside the expected range, they will be normalized to the
+     * expected range</b>
+     *
+     * @param hsvt Array of HSVT values
      */
     public void setColorHsvt(int[] hsvt) {
         String errorContext = "MutableColorItem.setColorHsvt() error";
@@ -57,25 +55,25 @@ public abstract class MutableColorItem extends ColorItem implements LampState {
     }
 
     /**
-     * Switches Power value from ON if OFF and vice versa.
+     * Toggles the power state of the Lighting item.
      */
     public void togglePower() {
         setPowerOn(isOff());
     }
 
     /**
-     * Sets Power to the same state as the parameter.
+     * Sets the Power state of the Lighting item.
      *
-     * @param power The desired Power state.
+     * @param power The desired Power state
      */
     public void setPower(Power power) {
         setPowerOn(power == Power.ON);
     }
 
     /**
-     * Sets Color to the same value as the parameter.
+     * Sets the color of the Lighting item to the provided HSVT color.
      *
-     * @param color The desired Color value.
+     * @param color The desired Color
      */
     public void setColor(Color color) {
         String errorContext = "MutableColorItem.setColor() error";
@@ -85,8 +83,22 @@ public abstract class MutableColorItem extends ColorItem implements LampState {
         }
     }
 
+    /**
+     * Changes the power state of the current Group.
+     *
+     * @param powerOn True for on, false for off
+     */
     @Override
     public abstract void setPowerOn(boolean powerOn);
+
+    /**
+     * Changes the color state of the current Group to the provided HSVT color.
+     *
+     * @param hueDegrees The hue component of the desired color (0-360)
+     * @param saturationPercent The saturation component of the desired color (0-100)
+     * @param brightnessPercent The brightness component of the desired color (0-100)
+     * @param colorTempDegrees The color temperature component of the desired color (1000-20000)
+     */
     @Override
     public abstract void setColorHsvt(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees);
 }

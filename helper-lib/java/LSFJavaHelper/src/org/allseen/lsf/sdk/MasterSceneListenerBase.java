@@ -18,11 +18,13 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.listener.MasterSceneCollectionListenerBase;
 
 /**
- * An Master Scene Listener Base represents a set of no-op functions for Master Scene callbacks.
+ * Provides a base class for developers to extend and implement to receive all MasterScene related events in the
+ * Lighting system. Any method of the MasterSceneListener interface that is not overridden in the subclass will
+ * be treated as a no-op.
  * <p>
- * To use an Master Scene Listener Base, subclass it inside your application, override the
- * callbacks you need, and then pass an instance of it into your Lighting Director.
- * See the tutorial applications for example usage of a Listener Base.
+ * <b>Note: Once implemented, the listener must be registered with the LightingDirector in order
+ * to receive MasterScene callbacks. See {@link LightingDirector#addMasterSceneListener(MasterSceneListener) addMasterSceneListener}
+ * for more information.</b>
  */
 public class MasterSceneListenerBase extends MasterSceneCollectionListenerBase<MasterScene, LightingItemErrorEvent> implements MasterSceneListener {
 

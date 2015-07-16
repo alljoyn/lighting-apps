@@ -18,20 +18,52 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.listener.MasterSceneCollectionListener;
 
 /**
- * The listener interface for receiving information about Master Scenes in the lighting
- * system.
+ * Provides an interface for developers to implement and receive all MasterScene related events in the
+ * Lighting system.
+ * <p>
+ * <b>Note: Once implemented, the listener must be registered with the LightingDirector in order
+ * to receive MasterScene callbacks. See {@link LightingDirector#addMasterSceneListener(MasterSceneListener) addMasterSceneListener}
+ * for more information.</b>
  */
 public interface MasterSceneListener extends MasterSceneCollectionListener<MasterScene, LightingItemErrorEvent> {
-    //TODO-DOC
+
+    /**
+     * Triggered when all data has been received from the lighting controller for a
+     * particular MasterScene.
+     * <p>
+     * <b>Note: This callback will fire only once for each MasterScene when it is initialized.</b>
+     *
+     * @param trackingId Reference to TrackingID
+     * @param masterScene Reference to MasterScene
+     */
     @Override
     public void onMasterSceneInitialized(TrackingID trackingId, MasterScene masterScene);
 
+    /**
+     * Triggered every time new data is received from the lighting controller for a
+     * particular MasterScene.
+     *
+     * @param masterScene Reference to MasterScene
+     */
     @Override
     public void onMasterSceneChanged(MasterScene masterScene);
 
+    /**
+     * Triggered when a particular MasterScene has been removed from the Lighting system.
+     * <p>
+     * <b>Note: This callback will fire only once for each MasterScene when it is removed from
+     * the Lighting system.</b>
+     *
+     * @param masterScene Reference to MasterScene
+     */
     @Override
     public void onMasterSceneRemoved(MasterScene masterScene);
 
+    /**
+     * Triggered when an error occurs on a MasterScene operation.
+     *
+     * @param error Reference to LightingItemErrorEvent
+     */
     @Override
     public void onMasterSceneError(LightingItemErrorEvent error);
 }

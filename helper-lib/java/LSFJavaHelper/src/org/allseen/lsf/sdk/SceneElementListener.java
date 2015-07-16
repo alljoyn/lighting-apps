@@ -18,20 +18,52 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.listener.SceneElementCollectionListener;
 
 /**
- * The listener interface for receiving information about Scene Elements in the lighting
- * system.
+ * Provides an interface for developers to implement and receive all SceneElement related events in the
+ * Lighting system.
+ * <p>
+ * <b>Note: Once implemented, the listener must be registered with the LightingDirector in order
+ * to receive SceneElement callbacks. See {@link LightingDirector#addSceneElementListener(SceneElementListener) addSceneElementListener}
+ * for more information.</b>
  */
 public interface SceneElementListener extends SceneElementCollectionListener<SceneElement, LightingItemErrorEvent> {
-    //TODO-DOC
+
+    /**
+     * Triggered when all data has been received from the lighting controller for a
+     * particular SceneElement.
+     * <p>
+     * <b>Note: This callback will fire only once for each SceneElement when it is initialized.</b>
+     *
+     * @param trackingId Reference to TrackingID
+     * @param element Reference to SceneElement
+     */
     @Override
     public void onSceneElementInitialized(TrackingID trackingId, SceneElement element);
 
+    /**
+     * Triggered every time new data is received from the lighting controller for a
+     * particular SceneElement.
+     *
+     * @param element Reference to SceneElement
+     */
     @Override
     public void onSceneElementChanged(SceneElement element);
 
+    /**
+     * Triggered when a particular SceneElement has been removed from the Lighting system.
+     * <p>
+     * <b>Note: This callback will fire only once for each SceneElement when it is removed from
+     * the Lighting system.</b>
+     *
+     * @param element Reference to SceneElement
+     */
     @Override
     public void onSceneElementRemoved(SceneElement element);
 
+    /**
+     * Triggered when an error occurs on a SceneElement operation.
+     *
+     * @param error Reference to LightingItemErrorEvent
+     */
     @Override
     public void onSceneElementError(LightingItemErrorEvent error);
 }

@@ -15,14 +15,23 @@
 package org.allseen.lsf.sdk;
 
 /**
- * A LampStateUniformity object represents a set of lamp capabilities that are
- * common to all lamps in the lighting system.
+ * This class specifies the uniformity of lamp state for a given Lighting item. The uniformity is only useful
+ * if you need to determine if a Group of lamps all have the same power and color state.
  */
 public class LampStateUniformity extends org.allseen.lsf.sdk.model.LampStateUniformity {
+
+    /**
+     * Default constructor for a LampStateUniformity object.
+     */
     public LampStateUniformity() {
         super();
     }
 
+    /**
+     * Constructs a LampStateUniformity object using the provided LampStateUniformity object.
+     *
+     * @param that A LampStateUniformity object
+     */
     public LampStateUniformity(org.allseen.lsf.sdk.model.LampStateUniformity that) {
         super(that);
     }

@@ -23,33 +23,52 @@ import org.allseen.lsf.LampGroup;
 import org.allseen.lsf.sdk.model.LightingItemUtil;
 
 /**
- * Abstract base class for Mutable Color Items in a group.
- *
+ * Abstract base class for Lighting items that can be included in a Lighting Group.
  */
 public abstract class GroupMember extends MutableColorItem {
 
     /**
-     * Returns a boolean indicating the GroupMember is not a Lamp object.
+     * Returns a boolean indicating if the GroupMember is a Lamp.
      *
-     * @return boolean false.
+     * @return boolean Returns a default value of false
      */
     public boolean isLamp() {
         return false;
     }
 
     /**
-     * Returns a boolean indicating the GroupMember is not a Group object.
+     * Returns a boolean indicating if the GroupMember is a Group.
      *
-     * @return boolean false.
+     * @return boolean Returns a default value of false
      */
     public boolean isGroup() {
         return false;
     }
 
+    /**
+     * Applies the provided Preset to the current GroupMember.
+     *
+     * @param preset Preset to apply to the current GroupMember
+     */
     public abstract void applyPreset(Preset preset);
+
+    /**
+     * Applies the provided Effect to the current GroupMember.
+     *
+     * @param effect Effect to apply to the current GroupMember
+     */
     public abstract void applyEffect(Effect effect);
+
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     protected abstract void addTo(Collection<String> lampIDs, Collection<String> groupIDs);
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     protected static LampGroup createLampGroup(GroupMember[] groupMembers) {
         Set<String> lampIDs = new HashSet<String>();
         Set<String> groupIDs = new HashSet<String>();

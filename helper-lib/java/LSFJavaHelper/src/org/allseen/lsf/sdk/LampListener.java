@@ -17,27 +17,52 @@ package org.allseen.lsf.sdk;
 
 import org.allseen.lsf.sdk.listener.LampCollectionListener;
 
-//TODO-DOC
 /**
- * The listener interface for receiving information about lamps in the lighting
- * system.
+ * Provides an interface for developers to implement and receive all Lamp related events in the
+ * Lighting system.
+ * <p>
+ * <b>Note: Once implemented, the listener must be registered with the LightingDirector in order
+ * to receive Lamp callbacks. See {@link LightingDirector#addLampListener(LampListener) addLampListener}
+ * for more information.</b>
  */
 public interface LampListener extends LampCollectionListener<Lamp, LightingItemErrorEvent> {
+
     /**
-     * Called when the SDK has retrieved all the information about a lamp
-     * from the controller service/
+     * Triggered when all data has been received from the lighting controller for a
+     * particular Lamp.
+     * <p>
+     * <b>Note: This callback will fire only once for each Lamp when it is initialized.</b>
      *
-     * @param lamp The lamp that was fully initialized
+     * @param lamp Reference to Lamp
      */
     @Override
     public void onLampInitialized(Lamp lamp);
 
+    /**
+     * Triggered every time new data is received from the lighting controller for a
+     * particular Lamp.
+     *
+     * @param lamp Reference to Lamp
+     */
     @Override
     public void onLampChanged(Lamp lamp);
 
+    /**
+     * Triggered when a particular Lamp has been removed from the Lighting system.
+     * <p>
+     * <b>Note: This callback will fire only once for each Lamp when it is removed from
+     * the Lighting system.</b>
+     *
+     * @param lamp Reference to Lamp
+     */
     @Override
     public void onLampRemoved(Lamp lamp);
 
+    /**
+     * Triggered when an error occurs on a Lamp operation.
+     *
+     * @param error Reference to LightingItemErrorEvent
+     */
     @Override
     public void onLampError(LightingItemErrorEvent error);
 }

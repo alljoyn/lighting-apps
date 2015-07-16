@@ -15,12 +15,35 @@
 package org.allseen.lsf.sdk;
 
 /**
- * The interface for receiving information from Lighting Items in the lighting system.
+ * Base interface that is implemented by all Lighting items and provides getters
+ * for the item ID, name, as wells as child and parent Lighting items.
  */
 public interface LightingItemInterface {
+    /**
+     * Returns the ID of the Lighting item.
+     *
+     * @return ID of the Lighting item
+     */
     public String getId();
+
+    /**
+     * Returns the name of the Lighting item.
+     *
+     * @return Name of the Lighting item
+     */
     public String getName();
 
+    /**
+     * Returns the Lighting items parent components.
+     *
+     * @return Array of Lighting item parent components
+     */
     public LightingItem[] getDependents();
+
+    /**
+     * Returns the Lighting items child components.
+     *
+     * @return Array of Lighting item child components
+     */
     public LightingItem[] getComponents();
 }

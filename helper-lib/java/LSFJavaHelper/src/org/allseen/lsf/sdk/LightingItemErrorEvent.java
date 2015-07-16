@@ -17,23 +17,46 @@ package org.allseen.lsf.sdk;
 
 
 /**
- * An object representing information pertaining to an error with a Lighting Item.
+ * This class contains all pertinent information for errors that occur in the Lighting
+ * system. This class provides an interface to retrieve the following data: the name of
+ * the error, the response code returned by the Lighting operation, the ID of the Lighting
+ * item for which the error occured, the tracking ID only if the error occurred during
+ * creation, and an array of error codes if the error occurred in the controller.
  */
 public class LightingItemErrorEvent {
+    /**
+     * The name of the error.
+     */
     public String name;
+
+    /**
+     * The response code of the error.
+     */
     public ResponseCode responseCode;
+
+    /**
+     * The ID of the Lighting item.
+     */
     public String itemID;
+
+    /**
+     * The tracking ID of the Lighting item.
+     */
     public TrackingID trackingID;
+
+    /**
+     * Array of error codes.
+     */
     public ErrorCode[] errorCodes;
 
     /**
-     * Constructs a Lighting Item Error Event object.
+     * Constructs a LightingItemErrorEvent object.
      *
      * @param name The name of the error.
      * @param responseCode The response code of the error.
-     * @param itemID The item ID of the Lighting Object.
+     * @param itemID The ID of the Lighting item.
      * @param trackingID The tracking ID of the Lighting Object.
-     * @param errorCodes An array of ErrorCodes.
+     * @param errorCodes Array of ErrorCodes.
      */
     public LightingItemErrorEvent(String name, ResponseCode responseCode, String itemID, TrackingID trackingID, ErrorCode[] errorCodes) {
         this.name = name;

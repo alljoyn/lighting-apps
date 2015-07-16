@@ -18,20 +18,52 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.listener.PresetCollectionListener;
 
 /**
- * The listener interface for receiving information about Presets in the lighting
- * system.
+ * Provides an interface for developers to implement and receive all Preset related events in the
+ * Lighting system.
+ * <p>
+ * <b>Note: Once implemented, the listener must be registered with the LightingDirector in order
+ * to receive Preset callbacks. See {@link LightingDirector#addPresetListener(PresetListener) addPresetListener}
+ * for more information.</b>
  */
 public interface PresetListener extends PresetCollectionListener<Preset, LightingItemErrorEvent> {
+
+    /**
+     * Triggered when all data has been received from the lighting controller for a
+     * particular Preset.
+     * <p>
+     * <b>Note: This callback will fire only once for each Preset when it is initialized.</b>
+     *
+     * @param trackingId Reference to TrackingID
+     * @param preset Reference to Preset
+     */
     @Override
-    //TODO-DOC
     public void onPresetInitialized(TrackingID trackingId, Preset preset);
 
+    /**
+     * Triggered every time new data is received from the lighting controller for a
+     * particular Preset.
+     *
+     * @param preset Reference to Preset
+     */
     @Override
     public void onPresetChanged(Preset preset);
 
+    /**
+     * Triggered when a particular Preset has been removed from the Lighting system.
+     * <p>
+     * <b>Note: This callback will fire only once for each Preset when it is removed from
+     * the Lighting system.</b>
+     *
+     * @param preset Reference to Preset
+     */
     @Override
     public void onPresetRemoved(Preset preset);
 
+    /**
+     * Triggered when an error occurs on a Preset operation.
+     *
+     * @param error Reference to LightingItemErrorEvent
+     */
     @Override
     public void onPresetError(LightingItemErrorEvent error);
 }

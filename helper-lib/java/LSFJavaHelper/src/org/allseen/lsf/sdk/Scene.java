@@ -20,13 +20,13 @@ import java.util.Collection;
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 
 /**
- * A Scene object represents a set of lamps and associated states in a lighting system, and can be
- * used to apply the states to the lamps.
+ * Abstract base class that represents generic Scene behavior in the Lighting system. Generic scenes
+ * can be applied, renamed, and deleted.
  */
 public abstract class Scene extends SceneItem {
 
     /**
-     * Applies the Scene on the lighting system.
+     * Applies the current Scene in the Lighting system.
      */
     @Override
     public void apply() {
@@ -37,9 +37,9 @@ public abstract class Scene extends SceneItem {
     }
 
     /**
-     * Renames the Scene using the String parameter provided.
+     * Renames the current Scene using the provided name.
      *
-     * @param sceneName The new name for the Scene.
+     * @param sceneName The new name for the Scene
      */
     @Override
     public void rename(String sceneName) {
@@ -52,13 +52,17 @@ public abstract class Scene extends SceneItem {
     }
 
     /**
-     * Deletes the Scene.
+     * Deletes the current Scene in the Lighting system.
      */
     @Override
     public void delete() {
         AllJoynManager.sceneManager.deleteScene(this.getId());
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected Collection<LightingItem> getDependentCollection() {
         LightingDirector director = LightingDirector.get();

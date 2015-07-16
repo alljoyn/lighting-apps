@@ -19,14 +19,28 @@ import org.allseen.lsf.sdk.listener.ControllerCollectionListener;
 import org.allseen.lsf.sdk.listener.LightingListener;
 
 /**
- * The listener interface for receiving information about Controllers in the lighting
- * system.
+ * Provides an interface for developers to implement and receive all Controller related events in the
+ * Lighting system.
+ * <p>
+ * <b>Note: Once implemented, the subclass must be registered with the LightingDirector in order
+ * to receive Controller callbacks. See {@link LightingDirector#addControllerListener(ControllerListener) addControllerListener}
+ * for more information.</b>
  */
 public interface ControllerListener extends ControllerCollectionListener<Controller, LightingItemErrorEvent>, LightingListener {
-    //TODO-DOC
+
+    /**
+     * Triggered when a new Controller becomes the leader in the Lighting system.
+     *
+     * @param leader Reference to new lead Controller
+     */
     @Override
     public void onLeaderChange(Controller leader);
 
+    /**
+     * Triggered when an error occurs on a Controller operation.
+     *
+     * @param error Reference to LightingItemErrorEvent
+     */
     @Override
     public void onControllerErrors(LightingItemErrorEvent error);
 }

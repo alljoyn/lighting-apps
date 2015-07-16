@@ -16,8 +16,13 @@
 package org.allseen.lsf.sdk;
 
 /**
- * The listener interface for receiving information about all Lighting Items in the lighting
- * system. An All Lighting Item Listener represents the set of all other Listeners in the SDK.
+ * Provides an interface for developers to implement and receive all Lighting related events in the
+ * Lighting system. This includes events for lamps, groups, presets, transition/pulse effects, scene
+ * elements, scenes, master scenes, and controller.
+ * <p>
+ * <b>Note: Once implemented, the listener must be registered with the LightingDirector in order
+ * to receive all Lighting callbacks. See {@link LightingDirector#addListener(LightingListener) addListener}
+ * for more information.</b>
  */
 public interface AllLightingItemListener extends
     LampListener,

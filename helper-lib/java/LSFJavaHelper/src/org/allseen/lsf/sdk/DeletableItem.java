@@ -15,8 +15,13 @@
 package org.allseen.lsf.sdk;
 
 /**
- * The listener interface for Deletable Items in the lighting system.
+ * Base interface that is implemented by all Lighting items that support a
+ * delete operation.
  */
 public interface DeletableItem extends LightingItemInterface {
+
+    /**
+     * Delete the current Lighting item.
+     */
     public void delete();
 }

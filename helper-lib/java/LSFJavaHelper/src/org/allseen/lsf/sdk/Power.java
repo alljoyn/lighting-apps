@@ -15,9 +15,16 @@
 package org.allseen.lsf.sdk;
 
 /**
- * Power can either be ON or OFF.
+ * Enum used to convey the power state.
  */
 public enum Power {
+    /**
+     * Power is on.
+     */
     ON,
+
+    /**
+     * Power is off.
+     */
     OFF
 }

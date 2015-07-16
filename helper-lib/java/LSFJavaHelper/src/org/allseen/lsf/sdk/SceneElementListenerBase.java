@@ -18,11 +18,13 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.listener.SceneElementCollectionListenerBase;
 
 /**
- * An Scene Element Listener Base represents a set of no-op functions for Scene Element callbacks.
+ * Provides a base class for developers to extend and implement to receive all SceneElement related events in the
+ * Lighting system. Any method of the SceneElementListener interface that is not overridden in the subclass will
+ * be treated as a no-op.
  * <p>
- * To use an Scene Element Listener Base, subclass it inside your application, override the
- * callbacks you need, and then pass an instance of it into your Lighting Director.
- * See the tutorial applications for example usage of a Listener Base.
+ * <b>Note: Once implemented, the listener must be registered with the LightingDirector in order
+ * to receive SceneElement callbacks. See {@link LightingDirector#addSceneElementListener(SceneElementListener) addSceneElementListener}
+ * for more information.</b>
  */
 public class SceneElementListenerBase extends SceneElementCollectionListenerBase<SceneElement, LightingItemErrorEvent> implements SceneElementListener {
 

@@ -18,20 +18,52 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.listener.SceneCollectionListener;
 
 /**
- * The listener interface for receiving information about Scenes in the lighting
- * system.
+ * Provides an interface for developers to implement and receive all Scene related events in the
+ * Lighting system.
+ * <p>
+ * <b>Note: Once implemented, the listener must be registered with the LightingDirector in order
+ * to receive Scene callbacks. See {@link LightingDirector#addSceneListener(SceneListener) addSceneListener}
+ * for more information.</b>
  */
 public interface SceneListener extends SceneCollectionListener<Scene, LightingItemErrorEvent> {
-    //TODO-DOC
+
+    /**
+     * Triggered when all data has been received from the lighting controller for a
+     * particular Scene.
+     * <p>
+     * <b>Note: This callback will fire only once for each Scene when it is initialized.</b>
+     *
+     * @param trackingId Reference to TrackingID
+     * @param scene Reference to Scene
+     */
     @Override
     public void onSceneInitialized(TrackingID trackingId, Scene scene);
 
+    /**
+     * Triggered every time new data is received from the lighting controller for a
+     * particular Scene.
+     *
+     * @param scene Reference to Scene
+     */
     @Override
     public void onSceneChanged(Scene scene);
 
+    /**
+     * Triggered when a particular Scene has been removed from the Lighting system.
+     * <p>
+     * <b>Note: This callback will fire only once for each Scene when it is removed from
+     * the Lighting system.</b>
+     *
+     * @param scene Reference to Scene
+     */
     @Override
     public void onSceneRemoved(Scene scene);
 
+    /**
+     * Triggered when an error occurs on a Scene operation.
+     *
+     * @param error Reference to LightingItemErrorEvent
+     */
     @Override
     public void onSceneError(LightingItemErrorEvent error);
 }

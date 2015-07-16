@@ -18,12 +18,11 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.model.BasicControllerService;
 
 /**
- * The Lighting Controller class serves as middle manager to all devices and
- * applications working within the lighting system so that they may be recognized
- * and interact with one another.
+ * The LightingController provides access to the bundled controller in the Lighting
+ * SDK. The LightingController serves as the proxy between all active Lighting
+ * components on the network and the LightingDirector.
  * <p>
- * Please see the LSFTutorial Project for an example of how to use the Lighting
- * Controller class.
+ * Please see the LSFTutorial Project for an example of how to use the LightingController class.
  */
 public class LightingController {
 
@@ -33,7 +32,7 @@ public class LightingController {
     private BasicControllerService controllerService;
 
     /*
-     * Construct a LightingController instance with the default queue.
+     * Constructs a LightingController instance.
      *
      * Note that this is private since LightingController is a singleton. See
      * LightingController.get()
@@ -46,29 +45,25 @@ public class LightingController {
     }
 
     /**
-     * Construct a Lighting Controller instance.
+     * Returns a LightingController instance.
      * <p>
-     * Note that the start() method must be called at some point after
-     * construction when you're ready to begin working with the Lighting Controller.
+     * <b>Note: The {@link #start()} method must be called at some point when you're ready
+     * to begin working with the LightingController.</b>
      *
-     * @return The Lighting Controller instance.
+     * @return Reference to LightingController
      */
     public static LightingController get() {
         return LightingController.instance;
     }
 
     /**
-     * Initialize the Lighting Controller with a context configuration.
+     * Initializes the LightingController using the provided controller configuration.
      * <p>
-     * Note that this method call should follow the get() method and
-     * precede the start() method.
-     * <p>
-     * Note that the intended configuration is to pass in a LightingControllerConfigurationBase
-     * with the application's absolute path as a parameter. An example of passing such a
-     * configuration can be found in the LSFTutorial Project.
+     * <b>Note: This method call should follow the {@link #get()} method call and precede the {@link #start()} method call.</b>
      *
-     * @param configuration The desired configuration for your Lighting Controller.
-     * @return "OK" status from the Lighting Controller.
+     * @param configuration The desired configuration for the LightingController
+     *
+     * @return OK if the controller was initialized correctly, ERROR_INIT otherwise
      */
     public LightingControllerStatus init(LightingControllerConfiguration configuration) {
         if (controllerRunning || configuration == null) {
@@ -80,15 +75,15 @@ public class LightingController {
     }
 
     /**
-     * Causes the LightingController to start interacting with devices on the
-     * network.
+     * Causes the LightingController to start interacting with Lighting components on the network.
      * <p>
-     * Note: start() should be called before interacting with the Lighting
-     * Controller. Subsequent calls to start() must each be preceded by a call
-     * to stop().
+     * <b>Note: This method should be called before interacting with the LightingController. Subsequent
+     * calls to this method must each be preceded by a call to stop().</b>
      * <p>
-     * Note: you should make sure a WiFi or other network connection is
-     * available before calling this method.
+     * <b>Note: You should ensure WiFi or some other network connection is available before
+     * calling this method.</b>
+     *
+     * @return OK if LightingController successfully started
      */
     public LightingControllerStatus start() {
 
@@ -111,9 +106,9 @@ public class LightingController {
     }
 
     /**
-     * Causes the Lighting Controller to stop interacting with devices on the network.
+     * Causes the Lighting Controller to stop interacting with Lighting components on the network.
      *
-     * @return "OK" status from the Lighting Controller.
+     * @return OK if the LightingController successfully stopped
      */
     public LightingControllerStatus stop() {
         controllerRunning = false;
@@ -124,7 +119,7 @@ public class LightingController {
     /**
      * Causes the Lighting Controller to reset.
      *
-     * @return "OK" status from the Lighting Controller.
+     * @return OK if the LightingController successfully reset
      */
     public LightingControllerStatus lightingReset() {
         stop();
@@ -135,7 +130,7 @@ public class LightingController {
     /**
      * Causes the Lighting Controller to factory reset.
      *
-     * @return "OK" status from the Lighting Controller.
+     * @return OK if the LightingController successfully factory reset
      */
     public LightingControllerStatus factoryReset() {
         stop();
@@ -146,14 +141,14 @@ public class LightingController {
     /**
      * Returns a boolean representing whether the Controller is running.
      *
-     * @return boolean representing whether the Controller is running.
+     * @return True if the LightingController is running, false otherwise
      */
     public boolean isRunning() {
         return controllerRunning;
     }
 
     /**
-     * Forwards a sendNetworkConnected() method call to the Controller Service.
+     * Notifies the LightingController that a network connection has been established.
      */
     public void sendNetworkConnected() {
         if (controllerRunning) {
@@ -162,7 +157,7 @@ public class LightingController {
     }
 
     /**
-     * Forwards a sendNetworkDisconnected() method call to the Controller Service.
+     * Notifies the LightingController that a network connection has been lost.
      */
     public void sendNetworkDisconnected() {
         if (controllerRunning) {

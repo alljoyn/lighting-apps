@@ -20,106 +20,112 @@ import org.allseen.lsf.sdk.model.ColorStateConverter;
 import org.allseen.lsf.sdk.model.LightingItemDataModel;
 
 /**
- * Abstract base class for Lighting Items that support Color
- * and Power values in the lighting system.
+ * Abstract base class for Lighting Items that support Color in the Lighting system.
  */
 public abstract class ColorItem extends LightingItem {
 
     /**
-     * Returns the color HSVT value in an int array.
+     * Returns the HSVT color state of the Lighting item
      *
-     * @return int array with indexes 0,1,2,3 mapped to hue, saturation,
-     * brightness, and color temperature components, respectively.
+     * @return Integer array containing the HSVT color of the Lighting item
      */
     public int[] getColorHsvt() {
         return ColorStateConverter.convertModelToView(getColorDataModel().getState());
     }
 
     /**
-     * Returns a boolean representing the power state of the Color Item.
+     * Returns the power state of the Lighting item.
      *
-     * @return boolean representing whether or not power is on.
+     * @return Returns true if the Lighting item power state is on, false otherwise
      */
     public boolean getPowerOn() {
         return getColorDataModel().getState().getOnOff();
     }
 
     /**
-     * Returns a boolean representing the power state of the Color Item.
+     * Returns the power state of the Lighting item.
      *
-     * @return boolean representing whether or not power is on.
+     * @return Returns true if the Lighting item power state is on, false otherwise
      */
     public boolean isOn() {
         return getPowerOn();
     }
 
     /**
-     * Returns a boolean representing the power state of the Color Item.
+     * Returns the power state of the Lighting item.
      *
-     * @return boolean representing whether or not power is off.
+     * @return Returns true if the Lighting item power state is off, false otherwise
      */
     public boolean isOff() {
         return !isOn();
     }
 
     /**
-     * Returns the power state of the Color Item.
+     * Returns the power state of the Lighting item.
      *
-     * @return the Power state of the Color Item.
+     * @return Returns ON if the Lighting item power state is on, OFF otherwise
      */
     public Power getPower() {
         return (getPowerOn())? Power.ON : Power.OFF;
     }
 
     /**
-     * Returns a Color object identical to the Color of the Color Item.
+     * Returns the HSVT color state of the Lighting item
      *
-     * @return A Color Object identical to the Color of the Color Item.
+     * @return Reference to Color object
      */
     public Color getColor() {
         return new Color(getColorHsvt());
     }
 
     /**
-     * Returns a MyLampState object identical to that of the Color Item.
+     * Returns the power and color state of the Lighting item
      *
-     * @return a MyLampState object identical to that of the Color Item.
+     * @return Reference to MyLampState object
      */
     public MyLampState getState() {
         return new MyLampState(getPower(), getColor());
     }
 
     /**
-     * Returns a LampStateUniformity object identical to that of the Color Item.
+     * Returns the uniformity information of the Lighting item.
      *
-     * @return a LampStateUniformity object identical to that of the Color Item.
+     * @return Reference to LampStateUniformity object
      */
     public LampStateUniformity getUniformity() {
         return new LampStateUniformity(getColorDataModel().uniformity);
     }
 
     /**
-     * Returns a LampCapabilities object identical to that of the Color Item.
+     * Returns the capabilities of the Lighting item.
      *
-     * @return a LampCapabilities object identical to that of the Color Item.
+     * @return Reference to LampCapabilities object
      */
     public LampCapabilities getCapability() {
         return new LampCapabilities(getColorDataModel().getCapability());
     }
 
     /**
-     * Sets the LampCapabilities of the Color Item.
+     * Sets the capabilities of the Lighting item.
      *
-     * @param capability The LampCapabilities object to be set in the Color Item.
+     * @param capability Reference to LampCapabilities object
      */
     public void setCapability(LampCapabilities capability) {
         getColorDataModel().setCapability(capability);
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected LightingItemDataModel getItemDataModel() {
         return getColorDataModel();
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     protected abstract ColorItemDataModel getColorDataModel();
 }

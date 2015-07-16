@@ -24,9 +24,17 @@ import org.allseen.lsf.sdk.model.LightingItemUtil;
 import org.allseen.lsf.sdk.model.TransitionEffectDataModelV2;
 
 /**
- * A Transition Effect object represents a predefined gradual transition between two color states in a lamp.
+ * This class represents a TransitionEffect in the Lighting system.
+ * <p>
+ * <b>Note: This class is not meant to be instantiated directly. TransitionEffects should be retrieved
+ * from the LightingDirector using the {@link LightingDirector#getTransitionEffects()} method.</b>
  */
 public class TransitionEffect extends ColorItem implements Effect {
+    /**
+     * Specifies the default name of the TransitionEffect.
+     *
+     * @param defaultName Default name of the TransitionEffect
+     */
     public static void setDefaultName(String defaultName) {
         if (defaultName != null) {
             TransitionEffectDataModelV2.defaultName = defaultName;
@@ -35,10 +43,29 @@ public class TransitionEffect extends ColorItem implements Effect {
 
     protected TransitionEffectDataModelV2 transitionEffectModel;
 
+    /**
+     * Constructs a TransitionEffect using the specified ID.
+     * <p>
+     * <b>WARNING: This method is intended to be used internally. Client software should not instantiate
+     * TransitionEffects directly, but should instead get them from the {@link LightingDirector} using the
+     * {@link LightingDirector#getTransitionEffects()} method.</b>
+     *
+     * @param transitionEffectId The ID of the transition effect
+     */
     protected TransitionEffect(String transitionEffectId) {
         this(transitionEffectId, null);
     }
 
+    /**
+     * Constructs a TransitionEffect using the specified ID and name.
+     * <p>
+     * <b>WARNING: This method is intended to be used internally. Client software should not instantiate
+     * TransitionEffects directly, but should instead get them from the {@link LightingDirector} using the
+     * {@link LightingDirector#getTransitionEffects()} method.</b>
+     *
+     * @param transitionEffectId The ID of the transition effect
+     * @param transitionEffectName The name of the transition effect
+     */
     protected TransitionEffect(String transitionEffectId, String transitionEffectName) {
         super();
 
@@ -46,9 +73,9 @@ public class TransitionEffect extends ColorItem implements Effect {
     }
 
     /**
-     * Applies the Transition Effect to the specified Group Member.
+     * Applies the current TransitionEffect to the specified GroupMember.
      *
-     * @param member The Group Member the Transition Effect will be applied to.
+     * @param member The GroupMember the TransitionEffect will be applied to.
      */
     @Override
     public void applyTo(GroupMember member) {
@@ -60,11 +87,10 @@ public class TransitionEffect extends ColorItem implements Effect {
     }
 
     /**
-     * Replaces the Transition Effect's LampState and duration values with
-     * those specified as parameters.
+     * Modifies the current TransitionEffect using the provided lamp state and duration.
      *
-     * @param state The new LampState.
-     * @param duration The new duration, in milliseconds.
+     * @param state The new LampState
+     * @param duration The new duration, in milliseconds
      */
     public void modify(LampState state, long duration) {
         String errorContext = "TransitionEffect.modify() error";
@@ -83,9 +109,9 @@ public class TransitionEffect extends ColorItem implements Effect {
     }
 
     /**
-     * Renames the Transition Effect using the String specified.
+     * Renames the current TransitionEffect using the provided name.
      *
-     * @param effectName The new name for the Transition Effect.
+     * @param effectName The new name for the TransitionEffect
      */
     @Override
     public void rename(String effectName) {
@@ -99,7 +125,7 @@ public class TransitionEffect extends ColorItem implements Effect {
     }
 
     /**
-     * Deletes the Transition Effect.
+     * Deletes the current TransitionEffect from the Lighting system.
      */
     @Override
     public void delete() {
@@ -109,26 +135,45 @@ public class TransitionEffect extends ColorItem implements Effect {
                 AllJoynManager.transitionEffectManager.deleteTransitionEffect(transitionEffectModel.id));
     }
 
-    //TODO-DOC
+    /**
+     * Returns the Preset associated with the current TransitionEffect.
+     * <p>
+     * <b>Note: This method may return null if the TransitionEffect was not created
+     * using an existing Preset.</b>
+     *
+     * @return The Preset associated with the TransitionEffect
+     */
     public Preset getPreset() {
         return LightingDirector.get().getPreset(getPresetID());
     }
 
+    /**
+     * Returns the preset ID associated with the current TransitionEffect.
+     * <p>
+     * <b>Note: This method may return null if the TransitionEffect was not created
+     * using an existing Preset.</b>
+     *
+     * @return The preset ID
+     */
     public String getPresetID() {
         return transitionEffectModel.getPresetID();
     }
 
+    /**
+     * Returns the duration of the current TransitionEffect.
+     *
+     * @return TranstionEffect duration, in milliseconds
+     */
     public long getDuration() {
         return transitionEffectModel.getDuration();
     }
 
     /**
-     * Returns boolean true if the Transition Effect contains the Lighting Item specified,
-     * false otherwise.
+     * Tests to see if the current TransitionEffect contains the provided Lighting item.
      *
-     * @param item The Lighting Item to be confirmed a component of the Transition Effect.
-     * @return boolean true if the Transition Effect contains the Lighting Item parameter,
-     * false otherwise.
+     * @param item The Lighting Item to be confirmed a component of the TransitionEffect
+     *
+     * @return Returns true if the TransitionEffect contains the Lighting item, false otherwise
      */
     @Override
     public boolean hasComponent(LightingItem item) {
@@ -137,26 +182,37 @@ public class TransitionEffect extends ColorItem implements Effect {
     }
 
     /**
-     * Returns boolean true if the Transition Effect contains the Preset specified,
-     * false otherwise.
+     * Tests to see if the current TransitionEffect contains the provided Preset.
      *
-     * @param preset The Preset to be confirmed a component of the Transition Effect.
-     * @return boolean true if the Transition Effect contains the Preset specified,
-     * false otherwise.
+     * @param preset The Preset to be confirmed a component of the TransitionEffect
+     *
+     * @return Returns true if the TransitionEffect contains the Preset, false otherwise
      */
     public boolean hasPreset(Preset preset) {
         String errorContext = "TransitionEffect.hasPreset() error";
         return postInvalidArgIfNull(errorContext, preset) ? hasPreset(preset.getId()) : false;
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     protected boolean hasPreset(String presetID) {
         return transitionEffectModel.containsPreset(presetID);
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     protected TransitionEffectDataModelV2 getTransitionEffectDataModel() {
         return transitionEffectModel;
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected Collection<LightingItem> getDependentCollection() {
         Collection<LightingItem> dependents = new ArrayList<LightingItem>();
@@ -166,11 +222,19 @@ public class TransitionEffect extends ColorItem implements Effect {
         return dependents;
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected ColorItemDataModel getColorDataModel() {
         return getTransitionEffectDataModel();
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected void postError(final String name, final ResponseCode status) {
         LightingDirector.get().getLightingSystemManager().getQueue().post(new Runnable() {

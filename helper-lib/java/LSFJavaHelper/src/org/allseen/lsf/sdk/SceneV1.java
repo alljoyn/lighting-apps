@@ -18,11 +18,18 @@ import org.allseen.lsf.sdk.model.LightingItemDataModel;
 import org.allseen.lsf.sdk.model.SceneDataModel;
 
 /**
- * The first version of the Scene object.
+ * This class represents a SceneV1 in the Lighting system. SceneV1s are only relevant in pre
+ * 15.04 controllers.
  * <p>
- * A SceneV1 has less functionality than a SceneV2.
+ * <b>Note: This class is not meant to be instantiated directly. SceneV1s should be retrieved
+ * from the LightingDirector using the {@link LightingDirector#getScenes()} method.</b>
  */
 public class SceneV1 extends Scene {
+    /**
+     * Specifies the default name of the SceneV1.
+     *
+     * @param defaultName Default name of the SceneV1
+     */
     public static void setDefaultName(String defaultName) {
         if (defaultName != null) {
             SceneDataModel.defaultName = defaultName;
@@ -44,10 +51,28 @@ public class SceneV1 extends Scene {
         this(new SceneDataModel(sceneID));
     }
 
+    /**
+     * Constructs a Scene using the specified scene.
+     * <p>
+     * <b>WARNING: This method is intended to be used internally. Client software should not instantiate
+     * Scenes directly, but should instead get them from the {@link LightingDirector} using the
+     * {@link LightingDirector#getScenes()} method.</b>
+     *
+     * @param scene The Scene to use.
+     */
     protected SceneV1(SceneV1 scene) {
         this(new SceneDataModel(scene.getSceneDataModel()));
     }
 
+    /**
+     * Constructs a Scene using the specified scene model.
+     * <p>
+     * <b>WARNING: This method is intended to be used internally. Client software should not instantiate
+     * Scenes directly, but should instead get them from the {@link LightingDirector} using the
+     * {@link LightingDirector#getScenes()} method.</b>
+     *
+     * @param sceneModel The Scene model to use.
+     */
     protected SceneV1(SceneDataModel sceneModel) {
         super();
 
@@ -55,12 +80,11 @@ public class SceneV1 extends Scene {
     }
 
     /**
-     * Returns boolean true if the SceneV1 contains the Lighting Item specified,
-     * false otherwise.
+     * Tests to see if the current SceneV1 contains the provided Lighting item.
      *
-     * @param item The Lighting Item to be confirmed a component of the SceneV1.
-     * @return boolean true if the SceneV1 contains the Lighting Item parameter,
-     * false otherwise.
+     * @param item Lighting item to be confirmed present in the SceneV1
+     *
+     * @return Returns true if the SceneV1 contains Lighting item, false otherwise
      */
     @Override
     public boolean hasComponent(LightingItem item) {
@@ -69,12 +93,11 @@ public class SceneV1 extends Scene {
     }
 
     /**
-     * Returns boolean true if the SceneV1 contains the Preset specified,
-     * false otherwise.
+     * Tests to see if the current SceneV1 contains the provided Preset.
      *
-     * @param preset The Preset to be confirmed a component of the SceneV1.
-     * @return boolean true if the SceneV1 contains the Preset specified,
-     * false otherwise.
+     * @param preset The Preset to be confirmed a component of the SceneV1
+     *
+     * @return Returns true if the SceneV1 contains the Preset, false otherwise
      */
     public boolean hasPreset(Preset preset) {
         String errorContext = "SceneV1.hasPreset() error";
@@ -82,24 +105,37 @@ public class SceneV1 extends Scene {
     }
 
     /**
-     * Returns boolean true if the SceneV1 contains the Group specified, false otherwise.
+     * Tests to see if the current SceneV1 contains the provided Group.
      *
-     * @param group The Group to be confirmed a component of the SceneV1.
-     * @return boolean true if the SceneV1 contains the Group specified, false otherwise.
+     * @param group The Group to be confirmed a component of the SceneV1
+     *
+     * @return Returns true if the SceneV1 contains the Group, false otherwise
      */
     public boolean hasGroup(Group group) {
         String errorContext = "SceneV1.hasGroup() error";
         return postInvalidArgIfNull(errorContext, group) ? hasGroup(group.getId()) : false;
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     protected boolean hasPreset(String presetID) {
         return sceneModel.containsPreset(presetID);
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     protected boolean hasGroup(String groupID) {
         return sceneModel.containsGroup(groupID);
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected LightingItemDataModel getItemDataModel() {
         return getSceneDataModel();
@@ -113,6 +149,10 @@ public class SceneV1 extends Scene {
         return sceneModel;
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected void postError(final String name, final ResponseCode status) {
         LightingDirector.get().getLightingSystemManager().getQueue().post(new Runnable() {

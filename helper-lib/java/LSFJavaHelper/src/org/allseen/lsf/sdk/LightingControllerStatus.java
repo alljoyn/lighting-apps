@@ -16,11 +16,26 @@
 package org.allseen.lsf.sdk;
 
 /**
- * A Lighting Controller's Status can be OK, ERROR, ERROR_ALREADY_RUNNING, or ERROR_INIT.
+ * Enum used to convey the status of a LightingController operation.
  */
 public enum LightingControllerStatus {
+    /**
+     * LightingController operation was successful.
+     */
     OK,
+
+    /**
+     * An error occurred during the LightingController operation.
+     */
     ERROR,
+
+    /**
+     * LightingController was already started when start was called.
+     */
     ERROR_ALREADY_RUNNING,
+
+    /**
+     * Error occurred while initializing the LightingController.
+     */
     ERROR_INIT
 }

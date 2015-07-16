@@ -29,17 +29,16 @@ import org.allseen.lsf.sdk.model.GroupDataModel;
 import org.allseen.lsf.sdk.model.LightingItemUtil;
 
 /**
- * A Group object represents a set of lamps in a lighting system, and can be used to send the
- * same command to all of them.
- *
- * Groups can contain lamps and other groups.
+ * This class represents a Group in the Lighting system. Groups can contains Lamps and Groups.
+ * <p>
+ * <b>Note: This class is not meant to be instantiated directly. Groups should be retrieved
+ * from the LightingDirector using the {@link LightingDirector#getGroups()} method.</b>
  */
 public class Group extends GroupMember implements DeletableItem {
-
     /**
-     * Sets the default name for Groups, using the string provided.
+     * Specifies the default name of the Group.
      *
-     * @param defaultName The new default name for Groups.
+     * @param defaultName Default name of the Group
      */
     public static void setDefaultName(String defaultName) {
         if (defaultName != null) {
@@ -79,9 +78,9 @@ public class Group extends GroupMember implements DeletableItem {
     }
 
     /**
-     * Sends a command to turn all constituent lamps in the Group on or off.
+     * Changes the power state of the current Group.
      *
-     * @param powerOn Pass in true for on, false for off
+     * @param powerOn True for on, false for off
      */
     @Override
     public void setPowerOn(boolean powerOn) {
@@ -92,12 +91,12 @@ public class Group extends GroupMember implements DeletableItem {
     }
 
     /**
-     * Sends a command to change the color of all constituent lamps in the Group.
+     * Changes the color state of the current Group to the provided HSVT color.
      *
-     * @param hueDegrees The hue component of the desired color, in degrees (0-360)
-     * @param saturationPercent The saturation component of the desired color, in percent (0-100)
-     * @param brightnessPercent The brightness component of the desired color, in percent (0-100)
-     * @param colorTempDegrees The color temperature component of the desired color, in degrees Kelvin (1000-20000)
+     * @param hueDegrees The hue component of the desired color (0-360)
+     * @param saturationPercent The saturation component of the desired color (0-100)
+     * @param brightnessPercent The brightness component of the desired color (0-100)
+     * @param colorTempDegrees The color temperature component of the desired color (1000-20000)
      */
     @Override
     public void setColorHsvt(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees) {
@@ -112,9 +111,9 @@ public class Group extends GroupMember implements DeletableItem {
     }
 
     /**
-     * Adds a member to the Group.
+     * Adds a member to the current Group.
      *
-     * @param member The GroupMember object to be added to the Group.
+     * @param member The GroupMember object to be added to the Group
      */
     public void add(GroupMember member) {
         String errorContext = "Group.add() error";
@@ -136,9 +135,9 @@ public class Group extends GroupMember implements DeletableItem {
     }
 
     /**
-     * Removes a member from the Group.
+     * Removes a member from the current Group.
      *
-     * @param member the GroupMember object to be removed from the Group.
+     * @param member The GroupMember object to be removed from the Group
      */
     public void remove(GroupMember member) {
         String errorContext = "Group.remove() error";
@@ -159,9 +158,9 @@ public class Group extends GroupMember implements DeletableItem {
     }
 
     /**
-     * Modifies the Group with the given GroupMember array.
+     * Replaces the current Group memebers with the provided GroupMember array.
      *
-     * @param members the array of GroupMembers.
+     * @param members The array of GroupMembers
      */
     public void modify(GroupMember[] members) {
         String errorContext = "Group.modify() error";
@@ -173,9 +172,7 @@ public class Group extends GroupMember implements DeletableItem {
     }
 
     /**
-     * Deletes the Group from the lighting system.
-     *
-     * @see org.allseen.lsf.sdk.DeletableItem#delete()
+     * Deletes the current Group from the Lighting system.
      */
     @Override
     public void delete() {
@@ -186,9 +183,9 @@ public class Group extends GroupMember implements DeletableItem {
     }
 
     /**
-     * Applies a Preset to every member of the Group.
+     * Applies the provided Preset to the current Group.
      *
-     * @param preset The Preset to be applied.
+     * @param preset Preset to apply to the current Group
      */
     @Override
     public void applyPreset(Preset preset) {
@@ -201,9 +198,9 @@ public class Group extends GroupMember implements DeletableItem {
     }
 
     /**
-     * Applies an Effect to every member of the Group.
+     * Applies the provided Effect to the current Group.
      *
-     * @param effect The Effect to be applied.
+     * @param effect Effect to apply to the current Group
      */
     @Override
     public void applyEffect(Effect effect) {
@@ -223,9 +220,9 @@ public class Group extends GroupMember implements DeletableItem {
     }
 
     /**
-     * Renames the Group.
+     * Renames the current Group using the provided name.
      *
-     * @param groupName The new name of the Group.
+     * @param groupName The new name for the Group
      */
     @Override
     public void rename(String groupName) {
@@ -238,11 +235,11 @@ public class Group extends GroupMember implements DeletableItem {
     }
 
     /**
-     * Returns a boolean representing whether or not the Group contains a specified Lighting Item.
+     * Tests to see if the current Group contains the specified Lighting item.
      *
-     * @param item The Lighting Item to be confirmed present in the Group.
+     * @param item Lighting item to be confirmed present in the Group
      *
-     * @return boolean representing whether or not the Group contains a specified Lighting Item.
+     * @return Returns true if the Group contains the specified Lighting item, false otherwise
      */
     @Override
     public boolean hasComponent(LightingItem item) {
@@ -251,11 +248,11 @@ public class Group extends GroupMember implements DeletableItem {
     }
 
     /**
-     * Returns a boolean representing whether or not the Group contains a specified Lamp.
+     * Tests to see if the current Group contains the specified Lamp.
      *
-     * @param lamp The Lamp to be confirmed present in the Group.
+     * @param lamp The Lamp to be confirmed present in the Group
      *
-     * @return boolean representing whether or not the Group contains a specified Lamp.
+     * @return Returns true if the Group contains the specified Lamp, false otherwise
      */
     public boolean hasLamp(Lamp lamp) {
         String errorContext = "Group.hasLamp() error";
@@ -263,11 +260,11 @@ public class Group extends GroupMember implements DeletableItem {
     }
 
     /**
-     * Returns a boolean representing whether or not the Group contains a specified Group.
+     * Tests to see if the current Group contains the specified Group.
      *
-     * @param group The Group to be confirmed present.
+     * @param group The Group to be confirmed present in the Group
      *
-     * @return boolean representing whether or not the Group contains a specified Group.
+     * @return Returns true if the Group contains the specified Group, false otherwise
      */
     public boolean hasGroup(Group group) {
         String errorContext = "Group.hasGroup() error";
@@ -275,68 +272,76 @@ public class Group extends GroupMember implements DeletableItem {
     }
 
     /**
-     * Returns a boolean representing whether or not the Group contains a specified Lamp ID.
+     * Tests to see if the current Group contains the specified Lamp ID.
      *
      * @param lampID The Lamp ID to be confirmed present in the Group.
      *
-     * @return boolean representing whether or not the Group contains a specified Lamp ID.
+     * @return Returns true if the Group contains the specified lamp ID, false otherwise
      */
     public boolean hasLampID(String lampID) {
         return groupModel.containsLamp(lampID);
     }
 
     /**
-     * Returns a boolean representing whether or not the Group contains a specified Group ID.
+     * Tests to see if the current Group contains the specified Group ID.
      *
      * @param groupID The Group ID to be confirmed present in the Group.
      *
-     * @return boolean representing whether or not the Group contains a specified Group ID.
+     * @return Returns true if the Group contains the specified group ID, false otherwise
      */
     public boolean hasGroupID(String groupID) {
         return groupModel.containsGroup(groupID);
     }
 
     /**
-     * Returns all instantiated Lamps in the lighting system.
+     * Returns an array of Lamps that are members of the current Group.
      *
-     * @return an array of all the Lamps in the lighting system.
+     * @return Array of all Lamps in the current Group
      */
     public Lamp[] getLamps() {
         return LightingDirector.get().getLamps(getLampIDs());
     }
 
     /**
-     * Returns all instantiated Groups in the lighting system.
+     * Returns an array of Groups that are members of the current Group.
      *
-     * @return an array of all the Groups in the lighting system.
+     * @return Array of all Groups in the current Group
      */
     public Group[] getGroups() {
         return LightingDirector.get().getGroups(getGroupIDs());
     }
 
     /**
-     * Returns a Collection of all Lamp IDs in the Group.
+     * Returns an array of Lamp IDs that are members of the current Group.
      *
-     * @return A Collection of Strings of Lamp IDs in the Group.
+     * @return Array of all Lamp IDs in the current Group
      */
     public Collection<String> getLampIDs() {
         return groupModel.getLamps();
     }
 
     /**
-     * Returns a Collection of all Group IDs in the Group.
+     * Returns an array of Group IDs that are members of the current Group.
      *
-     * @return A Collection of Strings of Group IDs in the Group.
+     * @return Array of all Group IDs in the current Group
      */
     public Collection<String> getGroupIDs() {
         return groupModel.getGroups();
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected void addTo(Collection<String> lampIDs, Collection<String> groupIDs) {
         groupIDs.add(getId());
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected Collection<LightingItem> getDependentCollection() {
         LightingDirector director = LightingDirector.get();
@@ -349,6 +354,10 @@ public class Group extends GroupMember implements DeletableItem {
         return dependents;
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected Collection<LightingItem> getComponentCollection() {
         Collection<LightingItem> components = new ArrayList<LightingItem>();
@@ -359,18 +368,37 @@ public class Group extends GroupMember implements DeletableItem {
         return components;
     }
 
+    /**
+     * Returns the absolute minimum color temperature value supported by the Lamps in the current Group.
+     *
+     * @return The Lamps minimum color temperature value
+     */
     public int getColorTempMin() {
         return getGroupDataModel().viewColorTempMin;
     }
 
+    /**
+     * Returns the absolute maximum color temperature value supported by the Lamps in the current Group.
+     *
+     * @return The Lamps maximum color temperature value
+     */
     public int getColorTempMax() {
         return getGroupDataModel().viewColorTempMax;
     }
 
+    /**
+     * Tests to see if the current Group is the AllLampsGroup.
+     *
+     * @return Returns true if the current Group is the AllLampsGroup, false otherwise
+     */
     public boolean isAllLampsGroup() {
         return AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupModel.id);
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected ColorItemDataModel getColorDataModel() {
         return getGroupDataModel();
@@ -384,6 +412,10 @@ public class Group extends GroupMember implements DeletableItem {
         return groupModel;
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected void postError(final String name, final ResponseCode status) {
         LightingDirector.get().getLightingSystemManager().getQueue().post(new Runnable() {

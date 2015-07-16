@@ -18,20 +18,52 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.listener.GroupCollectionListener;
 
 /**
- * The listener interface for receiving information about Groups in the lighting
- * system.
+ * Provides an interface for developers to implement and receive all Group related events in the
+ * Lighting system.
+ * <p>
+ * <b>Note: Once implemented, the listener must be registered with the LightingDirector in order
+ * to receive Group callbacks. See {@link LightingDirector#addGroupListener(GroupListener) addGroupListener}
+ * for more information.</b>
  */
 public interface GroupListener extends GroupCollectionListener<Group, LightingItemErrorEvent> {
-    //TODO-DOC
+
+    /**
+     * Triggered when all data has been received from the lighting controller for a
+     * particular Group.
+     * <p>
+     * <b>Note: This callback will fire only once for each Group when it is initialized.</b>
+     *
+     * @param trackingId Reference to TrackingID
+     * @param group Reference to Group
+     */
     @Override
     public void onGroupInitialized(TrackingID trackingId, Group group);
 
+    /**
+     * Triggered every time new data is received from the lighting controller for a
+     * particular Group.
+     *
+     * @param group Reference to Group
+     */
     @Override
     public void onGroupChanged(Group group);
 
+    /**
+     * Triggered when a particular Group has been removed from the Lighting system.
+     * <p>
+     * <b>Note: This callback will fire only once for each Group when it is removed from
+     * the Lighting system.</b>
+     *
+     * @param group Reference to Group
+     */
     @Override
     public void onGroupRemoved(Group group);
 
+    /**
+     * Triggered when an error occurs on a Group operation.
+     *
+     * @param error Reference to LightingItemErrorEvent
+     */
     @Override
     public void onGroupError(LightingItemErrorEvent error);
 }

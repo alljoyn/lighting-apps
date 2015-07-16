@@ -18,11 +18,13 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.listener.PresetCollectionListenerBase;
 
 /**
- * An Preset Listener Base represents a set of no-op functions for Preset callbacks.
- *
- * To use an Preset Listener Base, subclass it inside your application, override the
- * callbacks you need, and then pass an instance of it into your Lighting Director.
- * See the tutorial applications for example usage of a Listener Base.
+ * Provides a base class for developers to extend and implement to receive all Preset related events in the
+ * Lighting system. Any method of the PresetListener interface that is not overridden in the subclass will
+ * be treated as a no-op.
+ * <p>
+ * <b>Note: Once implemented, the listener must be registered with the LightingDirector in order
+ * to receive Preset callbacks. See {@link LightingDirector#addPresetListener(PresetListener) addPresetListener}
+ * for more information.</b>
  */
 public class PresetListenerBase extends PresetCollectionListenerBase<Preset, LightingItemErrorEvent> implements PresetListener {
 

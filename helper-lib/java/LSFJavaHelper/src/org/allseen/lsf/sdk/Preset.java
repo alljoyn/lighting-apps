@@ -24,9 +24,17 @@ import org.allseen.lsf.sdk.model.LightingItemUtil;
 import org.allseen.lsf.sdk.model.PresetDataModel;
 
 /**
- * A Preset object represents a predefined color state in a lighting system.
+ * This class represents a Preset in the Lighting system.
+ * <p>
+ * <b>Note: This class is not meant to be instantiated directly. Presets should be retrieved
+ * from the LightingDirector using the {@link LightingDirector#getPresets()} method.</b>
  */
 public class Preset extends MutableColorItem implements Effect {
+    /**
+     * Specifies the default name of the Preset.
+     *
+     * @param defaultName Default name of the Preset
+     */
     public static void setDefaultName(String defaultName) {
         if (defaultName != null) {
             PresetDataModel.defaultName = defaultName;
@@ -35,10 +43,29 @@ public class Preset extends MutableColorItem implements Effect {
 
     protected PresetDataModel presetModel;
 
+    /**
+     * Constructs a Preset using the specified ID.
+     * <p>
+     * <b>WARNING: This method is intended to be used internally. Client software should not instantiate
+     * Presets directly, but should instead get them from the {@link LightingDirector} using the
+     * {@link LightingDirector#getPresets()} method.</b>
+     *
+     * @param presetID The ID of the preset
+     */
     protected Preset(String presetID) {
         this(presetID, null);
     }
 
+    /**
+     * Constructs a Preset using the specified ID and name.
+     * <p>
+     * <b>WARNING: This method is intended to be used internally. Client software should not instantiate
+     * Presets directly, but should instead get them from the {@link LightingDirector} using the
+     * {@link LightingDirector#getPresets()} method.</b>
+     *
+     * @param presetID The ID of the preset
+     * @param presetName The name of the preset
+     */
     protected Preset(String presetID, String presetName) {
         super();
 
@@ -46,7 +73,7 @@ public class Preset extends MutableColorItem implements Effect {
     }
 
     /**
-     * Applies the Preset to a GroupMember.
+     * Applies the current Preset to the provided GroupMember.
      *
      * @param member The GroupMember the Preset will be applied to.
      */
@@ -60,11 +87,10 @@ public class Preset extends MutableColorItem implements Effect {
     }
 
     /**
-     * Changes the Power and Color values of the Preset to the passed
-     * in parameters.
+     * Modifies the current Preset using the provided power and color state.
      *
-     * @param power The desired Power state.
-     * @param color The desired Color state.
+     * @param power New Preset power state.
+     * @param color New Preset color state.
      */
     public void modify(Power power, Color color) {
         String errorContext = "Preset.modify() error";
@@ -78,9 +104,9 @@ public class Preset extends MutableColorItem implements Effect {
     }
 
     /**
-     * Renames the Preset.
+     * Renames the current Preset using the provided name.
      *
-     * @param presetName The new name for the Preset.
+     * @param presetName The new name for the Preset
      */
     @Override
     public void rename(String presetName) {
@@ -93,7 +119,7 @@ public class Preset extends MutableColorItem implements Effect {
     }
 
     /**
-     * Deletes the Preset.
+     * Deletes the current Preset from the Lighting system.
      */
     @Override
     public void delete() {
@@ -104,10 +130,9 @@ public class Preset extends MutableColorItem implements Effect {
     }
 
     /**
-     * Sets the Power value of the Preset to ON if the boolean parameter is
-     * true, OFF otherwise.
+     * Modifies the power state of the current Preset.
      *
-     * @param powerOn The boolean value that determines the Power state of the Preset.
+     * @param powerOn True for on, false for off
      */
     @Override
     public void setPowerOn(boolean powerOn) {
@@ -115,12 +140,12 @@ public class Preset extends MutableColorItem implements Effect {
     }
 
     /**
-     * Sets the Color HSVT values of the Preset to those of the parameters.
+     * Modifies the color state of the current Preset to the provided HSVT color.
      *
-     * @param hueDegrees The hue component of the desired color, in degrees (0-360)
-     * @param saturationPercent The saturation component of the desired color, in percent (0-100)
-     * @param brightnessPercent The brightness component of the desired color, in percent (0-100)
-     * @param colorTempDegrees The color temperature component of the desired color, in degrees Kelvin (2700-9000)
+     * @param hueDegrees The hue component of the desired color (0-360)
+     * @param saturationPercent The saturation component of the desired color (0-100)
+     * @param brightnessPercent The brightness component of the desired color (0-100)
+     * @param colorTempDegrees The color temperature component of the desired color (1000-20000)
      */
     @Override
     public void setColorHsvt(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees) {
@@ -128,37 +153,35 @@ public class Preset extends MutableColorItem implements Effect {
     }
 
     /**
-     * Returns boolean true if the Preset is equivalent to the parameter Preset,
-     * false otherwise.
+     * Tests to see if the current Preset lamp state matches the provided Preset.
      *
      * @param that The Preset for comparison.
-     * @return boolean true if the Preset is equivalent to the parameter Preset,
-     * false otherwise.
+     *
+     * @return Returns true if the lamp states are equal, false otherwise
      */
     public boolean stateEquals(Preset that) {
         return getColorDataModel().stateEquals(that.getColorDataModel());
     }
 
     /**
-     * Returns boolean true if the Preset's Power and Color states are
-     * equivalent to the parameter's Power and Color states, false otherwise.
+     * Tests to see if the current Preset lamp state matches the provided lamp state.
      *
-     * @param that The MyLampState for comparison.
-     * @return boolean true if the Preset is equivalent to the parameter,
-     * false otherwise.
+     * @param state The MyLampState for comparison.
+     *
+     * @return Returns true if the lamp states are equal, false otherwise
      */
     public boolean stateEquals(MyLampState state) {
         return stateEquals(state.getPower(), state.getColor());
     }
 
     /**
-     * Returns boolean true if the Preset's Power and Color states are
-     * equivalent to the corresponding parameters, false otherwise.
+     * Tests to see if the current Preset power and color state matches the provided power and
+     * color state.
      *
-     * @param power The Power for comparison.
-     * @param color The Color for comparison.
-     * @return boolean true if the Preset's Power and Color states are
-     * equivalent to the corresponding parameters, false otherwise.
+     * @param power The Power state to be compared
+     * @param color The Color state to be compared
+     *
+     * @return Returns true if the power and color states are equal, false otherwise
      */
     public boolean stateEquals(Power power, Color color) {
         return getColorDataModel().stateEquals(
@@ -169,6 +192,10 @@ public class Preset extends MutableColorItem implements Effect {
                 ColorStateConverter.convertColorTempViewToModel(color.getHue()));
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected Collection<LightingItem> getDependentCollection() {
         LightingDirector director = LightingDirector.get();
@@ -181,15 +208,27 @@ public class Preset extends MutableColorItem implements Effect {
         return dependents;
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     protected PresetDataModel getPresetDataModel() {
         return presetModel;
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected ColorItemDataModel getColorDataModel() {
         return getPresetDataModel();
     }
 
+    /**
+     * <b>WARNING: This method is not intended to be used by clients, and may change or be
+     * removed in subsequent releases of the SDK.</b>
+     */
     @Override
     protected void postError(final String name, final ResponseCode status) {
         LightingDirector.get().getLightingSystemManager().getQueue().post(new Runnable() {

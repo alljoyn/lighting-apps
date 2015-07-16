@@ -15,13 +15,13 @@
 package org.allseen.lsf.sdk;
 
 /**
- * A Lamp About object represents the About details of a Lamp in the Lighting System.
+ * This class encapsulates the about data of a Lamp in the Lighting System.
  */
 public class LampAbout extends org.allseen.lsf.sdk.model.LampAbout {
     /**
-     * Replaces the DataNotFound String in the LampAbout model.
+     * Specifies the string to use when an about field is indeterminate.
      *
-     * @param dataNotFound The replacement String.
+     * @param dataNotFound String to use for indeterminate fields
      */
     public static void setDataNotFound(String dataNotFound) {
         if (dataNotFound != null) {
@@ -30,10 +30,9 @@ public class LampAbout extends org.allseen.lsf.sdk.model.LampAbout {
     }
 
     /**
-     * Instantiates a Lamp About object identical to the existing Lamp About
-     * object passed as a parameter.
+     * Constructs a LampAbout object using the provided LampAbout object.
      *
-     * @param that The model Lamp About object.
+     * @param that A LampAbout object
      */
     public LampAbout(org.allseen.lsf.sdk.model.LampAbout that) {
         super(that);

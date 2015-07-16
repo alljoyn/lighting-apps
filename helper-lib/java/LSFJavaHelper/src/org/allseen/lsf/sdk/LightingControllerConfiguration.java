@@ -22,79 +22,79 @@ import org.allseen.lsf.sdk.RankNodeType;
 import org.allseen.lsf.sdk.RankPower;
 
 /**
- * Interface used to define any application and device specific values used by
- * the LightingController. The LightingController will query its configuration
- * interface to determine storage location, identifier strings, network
- * connectivity, and controller ranking.
+ * Provides an interface for developers to implement and define the application and device
+ * specific properties for the LightingController. This includes AllJoyn keystore file path,
+ * AllJoyn about properties, device MAC address, and other device specific properties.
+ * <p>
+ * <b>Note: Once implemented, the configuration must be registered with the LightingController
+ * using the {@link LightingController#init(LightingControllerConfiguration) init} method.</b>
  */
 public interface LightingControllerConfiguration {
 
     /**
-     * Get the location to save all AllJoyn and LightingController specific
-     * files.
+     * Returns the file location to save LighingController specific files.
      *
      * @return Absolute directory path to be used for file storage.
      */
     public String getKeystorePath();
 
     /**
-     * Populates the AllJoyn AboutData properties to be used for the LightingController.
+     * Populate the AllJoyn AboutData parameter with device specific about data. The about
+     * data will be used by the LighingController.
      *
-     * @param aboutData
-     *      AllJoyn AboutData object that will be filled with the default values within
-     *      this method.
+     * @param aboutData Reference to AllJoyn AboutData
      */
     public void populateDefaultProperties(AboutData aboutData);
 
     /**
-     * Get the MAC Address of the device running the LightingController. The
-     * MAC Address is expected as a 12-digit HEX string (i.e. "XXXXXXXXXXXX")
+     * Returns the MAC address of the device running the LightingController.
+     * <p>
+     * <b>Note: The MAC address is expected to be a 12-digit hex string (i.e. "XXXXXXXXXXXX").</b>
      *
      * @param generatedMacAddress
-     *      A random 12-digit HEX string which can be substituted as the MAC
-     *      address on devices where it cannot be queried.
+     *             Random hex string which can be used as the MAC address on devices where it cannot
+     *             be queried.
      *
-     * @return the MAC address of the device
+     * @return The 12-digit HEX string MAC address of the device
      */
     public String getMacAddress(String generatedMacAddress);
 
     /**
      * Determines whether the LightingController is connected to a network.
      *
-     * @return true if the controller is connected to a network, otherwise false.
+     * @return Return true if the controller is connected to a network, false otherwise.
      */
     public boolean isNetworkConnected();
 
     /**
-     * Get the Mobility parameter of the LightingController. The mobility is
-     * used when determining the controller's rank.
+     * Returns the mobility capability of the device running the LightingController. The mobility
+     * capability is used to determine the controllers rank.
      *
-     * @return the LightingController mobility
+     * @return LightingController RankMobility
      */
     public RankMobility getRankMobility();
 
     /**
-     * Get the Power parameter of the LightingController. The power is used
-     * when determining the controller's rank.
+     * Returns the power capability of the device running the LightingController. The power
+     * capability is used to determine the controllers rank.
      *
-     * @return the LightingController power
+     * @return LightingController RankPower
      */
     public RankPower getRankPower();
 
     /**
-     * Get the Availability parameter of the LightingController. The
-     * availability is used when determining the controller's rank.
+     * Returns the availability capability of the device running the LightingController. The availability
+     * capability is used to determine the controllers rank.
      *
-     * @return the LightingController availability
+     * @return LightingController RankAvailability
      */
     public RankAvailability getRankAvailability();
 
     /**
-     * Get the NodeType parameter of the LightingController. The NodeType is
-     * used when determining the controller's rank.
+     * Returns the type of the device running the LightingController. The node type is used to determine
+     * the controllers rank.
      *
-     * @return the LightingController node type
+     * @return LightingController RankNodeType
      */
     public RankNodeType getRankNodeType();
 }
-
