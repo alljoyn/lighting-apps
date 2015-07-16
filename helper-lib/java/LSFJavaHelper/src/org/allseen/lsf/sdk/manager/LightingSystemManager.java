@@ -72,6 +72,7 @@ public class LightingSystemManager
     public static final int LAMP_EXPIRATION = 15000;
 
     private LightingSystemQueue queue;
+    private LightingSystemQueue helperQueue;
 
     //TODO-FIX add get...() methods for these
     public final HelperControllerClientCallback<CONTROLLER> controllerClientCB;
@@ -197,11 +198,18 @@ public class LightingSystemManager
     public void start() {
         clearModels();
 
+        helperQueue = new DefaultLightingSystemQueue();
+
         AllJoynManager.start(queue);
     }
 
     public void stop() {
         clearModels();
+
+        if (helperQueue != null) {
+            helperQueue.stop();
+            helperQueue = null;
+        }
 
         AllJoynManager.stop(queue);
     }
@@ -233,6 +241,10 @@ public class LightingSystemManager
 
     public LightingSystemQueue getQueue() {
         return queue;
+    }
+
+    public LightingSystemQueue getHelperQueue() {
+        return helperQueue;
     }
 
     public LampCollectionManager<LAMP, ERROR> getLampCollectionManager() {

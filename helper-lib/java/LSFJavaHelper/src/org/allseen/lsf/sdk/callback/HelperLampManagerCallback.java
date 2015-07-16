@@ -36,8 +36,9 @@ import org.allseen.lsf.sdk.model.LampDataModel;
  */
 public class HelperLampManagerCallback<LAMP> extends LampManagerCallback {
     private static final int RETRY_DELAY = 1000;
-    private static final int ABOUT_DELAY = 1000;
+    private static final int ABOUT_DELAY = 250;
 
+    private long prevLampAboutQueryTime;
     protected LightingSystemManager<LAMP, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> manager;
     protected Map<String, LampAbout> savedLampAbouts;
 
@@ -46,6 +47,7 @@ public class HelperLampManagerCallback<LAMP> extends LampManagerCallback {
 
         this.manager = manager;
         this.savedLampAbouts = new HashMap<String, LampAbout>();
+        this.prevLampAboutQueryTime = 0;
     }
 
     @Override
@@ -561,14 +563,18 @@ public class HelperLampManagerCallback<LAMP> extends LampManagerCallback {
     }
 
     protected void postGetLampQueriedAboutData(final String lampID, final LampAbout lampAbout) {
-        // TODO-FIX spread out calls to for AboutData
-        //manager.getQueue().postDelayed(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        //Log.d("AboutManager", "querying about data: " + lampID);
-        //        AllJoynManager.aboutManager.getLampQueriedAboutData(lampID, lampAbout.aboutPeer, lampAbout.aboutPort);
-        //    }
-        //}, ABOUT_DELAY);
+        long currentTime = System.currentTimeMillis();
+        long targetQueryTime = Math.max(prevLampAboutQueryTime, currentTime) + ABOUT_DELAY;
+        long delay = targetQueryTime - currentTime;
+
+        manager.getHelperQueue().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                AllJoynManager.aboutManager.getLampQueriedAboutData(lampID, lampAbout.aboutPeer, lampAbout.aboutPort);
+            }
+        }, (int)delay);
+
+        prevLampAboutQueryTime = targetQueryTime;
     }
 
     protected void postSendLampChanged(final String lampID) {
