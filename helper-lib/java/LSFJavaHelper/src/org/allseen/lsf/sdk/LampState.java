@@ -15,10 +15,6 @@
 package org.allseen.lsf.sdk;
 
 /**
- * The  interface for sending and receiving information regarding lamp state in the lighting
- * system.
- */
-/**
  * Provides an interface for developers to implement and create their own LampState object.
  */
 public interface LampState {

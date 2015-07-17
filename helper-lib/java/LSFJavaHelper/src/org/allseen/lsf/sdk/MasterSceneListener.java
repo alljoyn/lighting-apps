@@ -18,8 +18,10 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.listener.MasterSceneCollectionListener;
 
 /**
- * Provides an interface for developers to implement and receive all MasterScene related events in the
- * Lighting system.
+ * Provides an interface for developers to implement and receive all master scene related events in the
+ * Lighting system. Developers will be notified when master scenes are added, modified, initialized, and
+ * deleted from the lighting controller. Master scenes are considered initialized when all master scene
+ * data has been received from the lighting controller.
  * <p>
  * <b>Note: Once implemented, the listener must be registered with the LightingDirector in order
  * to receive MasterScene callbacks. See {@link LightingDirector#addMasterSceneListener(MasterSceneListener) addMasterSceneListener}
@@ -31,7 +33,10 @@ public interface MasterSceneListener extends MasterSceneCollectionListener<Maste
      * Triggered when all data has been received from the lighting controller for a
      * particular MasterScene.
      * <p>
-     * <b>Note: This callback will fire only once for each MasterScene when it is initialized.</b>
+     * <b>Note: This callback will fire only once for each MasterScene when all data has been received from
+     * the lighting controller.</b>
+     * <p>
+     * <b>Note: The tracking ID is only valid for master scenes created within your application.</b>
      *
      * @param trackingId Reference to TrackingID
      * @param masterScene Reference to MasterScene
@@ -49,10 +54,10 @@ public interface MasterSceneListener extends MasterSceneCollectionListener<Maste
     public void onMasterSceneChanged(MasterScene masterScene);
 
     /**
-     * Triggered when a particular MasterScene has been removed from the Lighting system.
+     * Triggered when a particular MasterScene has been deleted from the lighting controller.
      * <p>
-     * <b>Note: This callback will fire only once for each MasterScene when it is removed from
-     * the Lighting system.</b>
+     * <b>Note: This callback will fire only once for each MasterScene when it is deleted from
+     * the lighting controller.</b>
      *
      * @param masterScene Reference to MasterScene
      */

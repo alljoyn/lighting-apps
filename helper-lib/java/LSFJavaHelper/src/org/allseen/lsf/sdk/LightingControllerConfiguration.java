@@ -23,7 +23,7 @@ import org.allseen.lsf.sdk.RankPower;
 
 /**
  * Provides an interface for developers to implement and define the application and device
- * specific properties for the LightingController. This includes AllJoyn keystore file path,
+ * specific properties for the lighting controller. This includes AllJoyn keystore file path,
  * AllJoyn about properties, device MAC address, and other device specific properties.
  * <p>
  * <b>Note: Once implemented, the configuration must be registered with the LightingController
@@ -60,9 +60,9 @@ public interface LightingControllerConfiguration {
     public String getMacAddress(String generatedMacAddress);
 
     /**
-     * Determines whether the LightingController is connected to a network.
+     * Determines if their is a network available for LightingController to connect.
      *
-     * @return Return true if the controller is connected to a network, false otherwise.
+     * @return Return true their is a network available for the controller, false otherwise.
      */
     public boolean isNetworkConnected();
 

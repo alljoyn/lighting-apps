@@ -24,10 +24,19 @@ import org.allseen.lsf.sdk.model.LightingItemUtil;
 import org.allseen.lsf.sdk.model.TransitionEffectDataModelV2;
 
 /**
- * This class represents a TransitionEffect in the Lighting system.
+ * This class represents a TransitionEffect definition in the lighting controller. This class
+ * provides an interface to perform TransitionEffect operations. Supported operations include
+ * modifying the transition effect properties, applying the transition effect to a lamp or group,
+ * renaming, and deleting the transition effect. Transition effects gradually changes the color
+ * state of a lamp or group over a given duration. Specifying a duration zero will change the
+ * lamp or group state immediately. Transition effects are considered fully initialized if the
+ * name, color state, and duration have been received. Transition effects are still operational
+ * and can be applied to lamps or groups even in the uninitialized state.
  * <p>
  * <b>Note: This class is not meant to be instantiated directly. TransitionEffects should be retrieved
  * from the LightingDirector using the {@link LightingDirector#getTransitionEffects()} method.</b>
+ * <p>
+ * <b>Note: This class does not support PulseEffect creation. See {@link LightingDirector#createTransitionEffect(LampState, long, String)}.</b>
  */
 public class TransitionEffect extends ColorItem implements Effect {
     /**
@@ -125,7 +134,10 @@ public class TransitionEffect extends ColorItem implements Effect {
     }
 
     /**
-     * Deletes the current TransitionEffect from the Lighting system.
+     * Permanently deletes the current TransitionEffect from the lighting controller.
+     * <p>
+     * <b>Note: You cannot delete a transition effect that is used by a scene element. The dependency
+     * must be deleted first.</b>
      */
     @Override
     public void delete() {

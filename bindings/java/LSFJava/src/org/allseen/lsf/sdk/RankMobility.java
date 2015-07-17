@@ -15,16 +15,33 @@
  */
 package org.allseen.lsf.sdk;
 
+/**
+ * Enum describing how mobile the device that is running the controller service.
+ */
 public enum RankMobility {
-    /** Devices like smartphones will fall in this category */
+    /**
+     * Devices like smartphones will fall in this category
+     */
     HIGH_MOBILITY,
-    /** Examples are tablets & laptops */
+
+    /**
+     * Examples are tablets & laptops
+     */
     INTERMEDIATE_MOBILITY,
-    /** Mostly stationary and proximal devices fall in this category. An example is wireless speaker */
+
+    /**
+     * Mostly stationary and proximal devices fall in this category. An example is wireless speaker
+     */
     LOW_MOBILITY,
-    /** Examples are WiFi Access Point, TV */
+
+    /**
+     * Examples are WiFi Access Point, TV
+     */
     ALWAYS_STATIONARY,
-    /** If OEMs return this value, the Controller Service will use HIGH_MOBILITY as this is not a valid value */
+
+    /**
+     * If OEMs return this value, the Controller Service will use HIGH_MOBILITY as this is not a valid value
+     */
     OEM_CS_RANKPARAM_MOBILITY_LAST_VALUE;
 
     /** Static lookup, used by the native code */
@@ -40,7 +57,7 @@ public enum RankMobility {
     }
 
     /**
-     * Gets the integer value.
+     * Gets the integer value of the enum.
      *
      * @return the integer value
      */

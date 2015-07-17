@@ -16,10 +16,6 @@
 package org.allseen.lsf.sdk;
 
 /**
- * The listener interface for managing callbacks triggered on the
- * connection of a lighting Controller.
- */
-/**
  * Provides an interface for developers to implement and receive a callback when a connection is
  * established with a LightingController.
  * <p>
@@ -30,9 +26,10 @@ package org.allseen.lsf.sdk;
 public interface NextControllerConnectionListener extends org.allseen.lsf.sdk.listener.NextControllerConnectionListener {
 
     /**
-     * Triggered when a connection to a LightingController has been established
+     * Triggered when a connection to a LightingController has been established.
      * <p>
-     * <b>Note: This listener will fire only once when a controller connection is established.</b>
+     * <b>Note: This listener will fire only once when a controller connection is established. This
+     * listener must be reregistered if the controller connection is lost.</b>
      */
     @Override
     public void onControllerConnected();

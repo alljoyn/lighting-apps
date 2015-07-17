@@ -57,46 +57,49 @@ import org.allseen.lsf.sdk.model.SceneElementDataModelV2;
 import org.allseen.lsf.sdk.model.TransitionEffectDataModelV2;
 
 /**
- * LightingDirector is the main entry point to the Lighting SDK and provides access to active
- * components in the Lighting system. LightingDirector also provides an interface to create
- * Lighting system components as well as add/remove callbacks that will be notified when events
- * occur in the Lighting system.
+ * LightingDirector is the main entry point to the Lighting SDK and provides access to the
+ * components in the Lighting system. This includes the lamps connected to the lighting controller
+ * and all group, preset, effect, and scene definitions stored in the lighting controller. The
+ * LightingDirector also provides an interface to create groups, presets, effects, and scenes as
+ * well as add/remove callbacks that will be notified when events occur in the Lighting system.
+ * <p>
+ * <b>Note: The LightingController requires a WiFi or Ethernet network connection.</b>
  * <p>
  * Please see the LSFTutorial project for an example of how to use the LightingDirector class.
  */
 public class LightingDirector {
     /**
-     * Specifies the max number of groups that can be created.
+     * Specifies the max number of groups that can be created in the controller.
      */
     public static final int MAX_GROUPS = LampGroupManager.MAX_LAMP_GROUPS;
 
     /**
-     * Specifies the max number of presets that can be created.
+     * Specifies the max number of presets that can be created in the controller.
      */
     public static final int MAX_PRESETS = PresetManager.MAX_PRESETS;
 
     /**
-     * Specifies the max number of transition effects that can be created.
+     * Specifies the max number of transition effects that can be created in the controller.
      */
     public static final int MAX_TRANSITION_EFFECTS = TransitionEffectManager.MAX_TRANSITION_EFFECTS;
 
     /**
-     * Specifies the max number of pulse effects that can be created.
+     * Specifies the max number of pulse effects that can be created in the controller.
      */
     public static final int MAX_PULSE_EFFECTS = PulseEffectManager.MAX_PULSE_EFFECTS;
 
     /**
-     * Specifies the max number of scene elements that can be created.
+     * Specifies the max number of scene elements that can be created in the controller.
      */
     public static final int MAX_SCENE_ELEMENTS = SceneElementManager.MAX_SCENE_ELEMENTS;
 
     /**
-     * Specifies the max number of scenes that can be created.
+     * Specifies the max number of scenes that can be created in the controller.
      */
     public static final int MAX_SCENES = MasterSceneManager.MAX_MASTER_SCENES;
 
     /**
-     * Specifies the max number of master scenes that can be created.
+     * Specifies the max number of master scenes that can be created in the controller.
      */
     public static final int MAX_MASTER_SCENES = MasterSceneManager.MAX_MASTER_SCENES;
 
@@ -363,13 +366,14 @@ public class LightingDirector {
     }
 
     /**
-     * Causes the LightingDirector to start interacting with the Lighting system. This
-     * method will create its own BusAttachment and default LightingSystemQueue.
+     * Causes the LightingDirector to start interacting with the Lighting system. The LightingDirector
+     * will try to connect to a lighting controller. This method will create its own BusAttachment and
+     * default LightingSystemQueue.
      * <p>
-     * <b>Note: This method should be called before interacting with the Lighting system.
+     * <b>Note: This method should be called before interacting with the LightingDirector.
      * Subsequent calls to this method must each be preceded by a call to stop().</b>
      * <p>
-     * <b>Note: You should ensure WiFi or some other network connection is available before
+     * <b>Note: You should ensure WiFi or Ethernet connection is available before
      * calling this method.</b>
      */
     public void start() {
@@ -378,13 +382,14 @@ public class LightingDirector {
 
     /**
      * Causes the LightingDirector to start interacting with the Lighting system using the
-     * specified application name. This method uses the application name when creating the
-     * AllJoyn bus attachment and creates its own default LightingSystemQueue.
+     * specified application name. The LightingDirector will try to connect to a lighting
+     * controller. This method uses the application name when creating the AllJoyn bus
+     * attachment and creates its own default LightingSystemQueue.
      * <p>
-     * <b>Note: This method should be called before interacting with the Lighting system.
+     * <b>Note: This method should be called before interacting with the LightingDirector.
      * Subsequent calls to this method must each be preceded by a call to stop().</b>
      * <p>
-     * <b>Note: You should ensure WiFi or some other network connection is available before
+     * <b>Note: You should ensure WiFi or Ethernet connection is available before
      * calling this method.</b>
      *
      * @param applicationName
@@ -397,13 +402,13 @@ public class LightingDirector {
 
     /**
      * Causes the LightingDirector to start interacting with the Lighting system using the
-     * specified AllJoyn bus attachment. This also method creates its own default
-     * LightingSystemQueue.
+     * specified AllJoyn bus attachment. The LightingDirector will try to connect to a lighting
+     * controller. This also method creates its own default LightingSystemQueue.
      * <p>
-     * <b>Note: This method should be called before interacting with the Lighting system.
+     * <b>Note: This method should be called before interacting with the LightingDirector.
      * Subsequent calls to this method must each be preceded by a call to stop().</b>
      * <p>
-     * <b>Note: You should ensure WiFi or some other network connection is available before
+     * <b>Note: You should ensure WiFi or Ethernet connection is available before
      * calling this method.</b>
      *
      * @param busAttachment
@@ -416,13 +421,14 @@ public class LightingDirector {
 
     /**
      * Causes the LightingDirector to start interacting with the Lighting system using the
-     * specified application name and queue. This method uses the application name when
-     * creating the AllJoyn bus attachment.
+     * specified application name and queue. The LightingDirector will try to connect to a
+     * lighting controller. This method uses the application name when creating the AllJoyn
+     * bus attachment.
      * <p>
-     * <b>Note: This method should be called before interacting with the Lighting system.
+     * <b>Note: This method should be called before interacting with the LightingDirector.
      * Subsequent calls to this method must each be preceded by a call to stop().</b>
      * <p>
-     * <b>Note: You should ensure WiFi or some other network connection is available before
+     * <b>Note: You should ensure WiFi or Ethernet connection is available before
      * calling this method.</b>
      *
      * @param applicationName
@@ -440,16 +446,17 @@ public class LightingDirector {
 
     /**
      * Causes the LightingDirector to start interacting with the Lighting system using the
-     * specified AllJoyn bus attachment and queue.
+     * specified AllJoyn bus attachment and queue. The LightingDirector will try to connect
+     * to a lighting controller.
      * <p>
-     * <b>Note: This method should be called before interacting with the Lighting system.
+     * <b>Note: This method should be called before interacting with the LightingDirector.
      * Subsequent calls to this method must each be preceded by a call to stop().</b>
      * <p>
-     * <b>Note: You should ensure WiFi or some other network connection is available before
+     * <b>Note: You should ensure WiFi or Ethernet connection is available before
      * calling this method.</b>
      *
      * @param busAttachment
-     *            AllJoyn BusAttachment to be used for the Lighting systen. See the AllJoyn
+     *            AllJoyn BusAttachment to be used for the Lighting system. See the AllJoyn
      *            core documentation for more information on bus attachments.
      * @param queue
      *            Instance of serial queue that will handle all lighting events on the provided
@@ -478,7 +485,10 @@ public class LightingDirector {
     }
 
     /**
-     * Causes the LightingDirector to stop interacting with the Lighting system.
+     * Causes the LightingDirector to stop interacting with the Lighting system. The LightingDirector
+     * will disconnect from the lighting controller, if a connection exists.
+     * <p>
+     * <b>Note: This method must be preceded by a call to {@link start()}.</b>
      */
     public void stop() {
         lightingManager.destroy();
@@ -486,12 +496,16 @@ public class LightingDirector {
 
     /**
      * Specifies if there is an active network connection for the Lighting System.
+     * This method must be called every time there is a major change to the underlying
+     * WiFi or Ethernet connection. Set this method to false when the WiFi or Ethernet connection
+     * disappears. Set this method back to true when the WiFi or Ethernet connection is
+     * reestablished.</b>
      * <p>
      * <b>This method must be called and set to true for the LightingDirector to
-     * successfully interact with the Lighting system.</b>
+     * successfully connect to a lighting controller.</b>
      *
      * @param isConnected
-     *            boolean that specifies true if there is an active network connection, false
+     *            boolean that specifies true if there is an active WiFi or Ethernet connection, false
      *            otherwise.
      */
     public void setNetworkConnectionStatus(boolean isConnected) {
@@ -508,7 +522,7 @@ public class LightingDirector {
     }
 
     /**
-     * Returns the AllJoyn BusAttachment being used to connect to the Lighting system.
+     * Returns the AllJoyn BusAttachment being used by the Lighting system.
      * <p>
      * The BusAttachment will be <code>null</code> until some time after the call to start().
      *
@@ -519,7 +533,7 @@ public class LightingDirector {
     }
 
     /**
-     * Returns the number of active Lamps in the Lighting system.
+     * Returns the number of Lamps stored in the Lighting controller.
      *
      * @return Number of active Lamps
      */
@@ -528,22 +542,23 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a snapshot of the active Lamps in the Lighting system including lamps that
-     * may not have received all data from the controller.
+     * Returns a snapshot of all the Lamps connected to the Lighting controller including
+     * lamps that may not have received all data.
      * <p>
      * <b>Note: The contents of this array may change in subsequent calls to this method
      * as new lamps are discovered or existing lamps are determined to be offline. This
      * array may also be empty.</b>
      *
-     * @return Array of active Lamps
+     * @return Array of Lamps
      */
     public Lamp[] getLamps() {
         return getLampCollectionManager().getLamps();
     }
 
     /**
-     * Returns the Lamps corresponding to the set of lamp IDs. Any lamp ID that is not matched
-     * to a Lamp will be skipped. The returned array may be empty.
+     * Returns the Lamps connected to the Lighting controller corresponding to the set of
+     * lamp IDs. Any ID that is not matched to a Lamp will be skipped. The returned
+     * array may be empty.
      *
      * @param lampIDs The IDs of the Lamps to retrieve
      *
@@ -554,8 +569,8 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a snapshot of the active Lamps in the Lighting system that have received all their
-     * data from the controller.
+     * Returns a snapshot of all the Lamps connected to the Lighting controller that have received all
+     * their data.
      * <p>
      * <b>Note: The contents of this array may change in subsequent calls to this method
      * as new lamps are discovered or existing lamps are determined to be offline. This
@@ -568,8 +583,8 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a reference to a Lamp with the corresponding lamp ID. If a match is not found for
-     * the lamp ID, this method will return null.
+     * Returns a reference to a Lamp with the corresponding ID. If a match is not found for the
+     * ID, this method will return null.
      *
      * @param lampId The ID of the Lamp
      *
@@ -580,7 +595,7 @@ public class LightingDirector {
     }
 
     /**
-     * Returns the number of active Groups in the Lighting system.
+     * Returns the number of Groups stored in the Lighting controller.
      *
      * @return Number of active Groups
      */
@@ -589,21 +604,22 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a snapshot of the active Groups in the Lighting system including groups that may
-     * not have received all data from the controller.
+     * Returns a snapshot of all the Groups stored in the Lighting controller including
+     * groups that may not have received all data.
      * <p>
      * <b>Note: The contents of this array may change in subsequent calls to this method as new
      * groups are created or existing groups are deleted. This array may also be empty.</b>
      *
-     * @return Array of active Groups
+     * @return Array of Groups
      */
     public Group[] getGroups() {
         return getGroupCollectionManager().getGroups();
     }
 
     /**
-     * Returns the Groups corresponding to the set of group IDs. Any group ID that is not matched
-     * to a Group will be skipped. The returned array may be empty.
+     * Returns the Groups stored in the Lighting controller corresponding to the set of
+     * group IDs. Any ID that is not matched to a Group will be skipped. The returned
+     * array may be empty.
      *
      * @param groupIDs The IDs of the Groups to retrieve
      *
@@ -614,8 +630,8 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a snapshot of the active Groups in the Lighting system that have received all their
-     * data from the controller.
+     * Returns a snapshot of all the Groups stored in the Lighting controller that have received all
+     * their data.
      * <p>
      * <b>Note: The contents of this array may change in subsequent calls to this method as new
      * groups are created or existing groups are deleted. This array may also be empty.</b>
@@ -627,8 +643,8 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a reference to a Group with the corresponding group ID. If a match is not found for
-     * the group ID, this method will return null.
+     * Returns a reference to a Group with the corresponding ID. If a match is not found for the
+     * ID, this method will return null.
      *
      * @param groupId The ID of the Group
      *
@@ -639,7 +655,7 @@ public class LightingDirector {
     }
 
     /**
-     * Returns the number of active Presets in the Lighting system.
+     * Returns the number of Presets stored in the Lighting controller.
      *
      * @return Number of active Presets
      */
@@ -648,21 +664,22 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a snapshot of the active Presets in the Lighting system including groups that may
-     * not have received all data from the controller.
+     * Returns a snapshot of all the Presets stored in the Lighting controller including
+     * presets that may not have received all data.
      * <p>
      * <b>Note: The contents of this array may change in subsequent calls to this method as new
      * presets are created or existing presets are deleted. This array may also be empty.</b>
      *
-     * @return Array of active Presets
+     * @return Array of Presets
      */
     public Preset[] getPresets() {
         return getPresetCollectionManager().getPresets();
     }
 
     /**
-     * Returns the Presets corresponding to the set of preset IDs. Any preset ID that is not matched
-     * to a Preset will be skipped. The returned array may be empty.
+     * Returns the Presets stored in the Lighting controller corresponding to the set of
+     * preset IDs. Any ID that is not matched to a Preset will be skipped. The returned
+     * array may be empty.
      *
      * @param presetIDs The IDs of the Presets to retrieve
      *
@@ -673,8 +690,8 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a snapshot of the active Presets in the Lighting system that have received all their
-     * data from the controller.
+     * Returns a snapshot of all the Presets stored in the Lighting controller that have received all
+     * their data.
      * <p>
      * <b>Note: The contents of this array may change in subsequent calls to this method as new
      * presets are created or existing presets are deleted. This array may also be empty.</b>
@@ -686,8 +703,8 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a reference to a Preset with the corresponding preset ID. If a match is not found for
-     * the preset ID, this method will return null.
+     * Returns a reference to a Preset with the corresponding ID. If a match is not found for the
+     * ID, this method will return null.
      *
      * @param presetId The ID of the Preset
      *
@@ -698,7 +715,7 @@ public class LightingDirector {
     }
 
     /**
-     * Returns the number of active TransitionEffects in the Lighting system.
+     * Returns the number of TransitionEffects stored in the Lighting controller.
      *
      * @return Number of active TransitionEffects
      */
@@ -707,23 +724,23 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a snapshot of the active TransitionEffects in the Lighting system including transition
-     * effects that may not have received all data from the controller.
+     * Returns a snapshot of all the TransitionEffects stored in the Lighting controller including
+     * transition effects that may not have received all data.
      * <p>
      * <b>Note: The contents of this array may change in subsequent calls to this method as new
      * transition effects are created or existing transition effects are deleted. This array may
      * also be empty.</b>
      *
-     * @return Array of active TransitionEffects
+     * @return Array of TransitionEffects
      */
     public TransitionEffect[] getTransitionEffects() {
         return getTransitionEffectCollectionManager().getTransitionEffects();
     }
 
     /**
-     * Returns the TransitionEffects corresponding to the set of transition effect IDs. Any transition
-     * effect ID that is not matched to a TransitionEffect will be skipped. The returned array may be
-     * empty.
+     * Returns the TransitionEffects stored in the Lighting controller corresponding to the set of
+     * transition effect IDs. Any ID that is not matched to a TransitionEffect will be skipped. The
+     * returned array may be empty.
      *
      * @param transitionEffectIDs The IDs of the TransitionEffects to retrieve
      *
@@ -734,8 +751,8 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a snapshot of the active TransitionEffects in the Lighting system that have received
-     * all their data from the controller.
+     * Returns a snapshot of all the TransitionEffects stored in the Lighting controller that have received all
+     * their data.
      * <p>
      * <b>Note: The contents of this array may change in subsequent calls to this method as new
      * transition effects are created or existing transition effects are deleted. This array may
@@ -748,8 +765,8 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a reference to a TransitionEffect with the corresponding transition effect ID. If
-     * a match is not found for the transition effect ID, this method will return null.
+     * Returns a reference to a TransitionEffect with the corresponding ID. If a match is not found for the
+     * ID, this method will return null.
      *
      * @param transitionEffectId The ID of the TransitionEffect
      *
@@ -760,7 +777,7 @@ public class LightingDirector {
     }
 
     /**
-     * Returns the number of active PulseEffects in the Lighting system.
+     * Returns the number of PulseEffects stored in the Lighting controller.
      *
      * @return Number of active PulseEffects
      */
@@ -769,23 +786,23 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a snapshot of the active PulseEffects in the Lighting system including pulse
-     * effects that may not have received all data from the controller.
+     * Returns a snapshot of all the PulseEffects stored in the Lighting controller including
+     * pulse effects that may not have received all data.
      * <p>
      * <b>Note: The contents of this array may change in subsequent calls to this method as new
      * pulse effects are created or existing pulse effects are deleted. This array may
      * also be empty.</b>
      *
-     * @return Array of active PulseEffects
+     * @return Array of PulseEffects
      */
     public PulseEffect[] getPulseEffects() {
         return getPulseEffectCollectionManager().getPulseEffects();
     }
 
     /**
-     * Returns the PulseEffects corresponding to the set of pulse effect IDs. Any pulse
-     * effect ID that is not matched to a PulseEffect will be skipped. The returned array
-     * may be empty.
+     * Returns the PulseEffects stored in the Lighting controller corresponding to the set of
+     * pulse effect IDs. Any ID that is not matched to a PulseEffect will be skipped. The returned
+     * array may be empty.
      *
      * @param pulseEffectIDs The IDs of the PulseEffects to retrieve
      *
@@ -796,8 +813,8 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a snapshot of the active PulseEffects in the Lighting system that have received
-     * all their data from the controller.
+     * Returns a snapshot of all the PulseEffects stored in the Lighting controller that have received all
+     * their data.
      * <p>
      * <b>Note: The contents of this array may change in subsequent calls to this method as new
      * pulse effects are created or existing pulse effects are deleted. This array may also be
@@ -810,8 +827,8 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a reference to a PulseEffect with the corresponding pulse effect ID. If
-     * a match is not found for the pulse effect ID, this method will return null.
+     * Returns a reference to a PulseEffect with the corresponding ID. If a match is not found for the
+     * ID, this method will return null.
      *
      * @param pulseEffectId The ID of the PulseEffect
      *
@@ -822,32 +839,32 @@ public class LightingDirector {
     }
 
     /**
-     * Returns the number of active SceneElements in the Lighting system.
+     * Returns the number of Scenes stored in the Lighting controller.
      *
-     * @return Number of active SceneElements
+     * @return Number of SceneElements
      */
     public int getSceneElementCount() {
         return getSceneElementCollectionManager().size();
     }
 
     /**
-     * Returns a snapshot of the active SceneElements in the Lighting system including scene
-     * elements that may not have received all data from the controller.
+     * Returns a snapshot of all the SceneElements stored in the Lighting controller including
+     * scene elements that may not have received all data.
      * <p>
      * <b>Note: The contents of this array may change in subsequent calls to this method as new
      * scene elements are created or existing scene elements are deleted. This array may also be
      * empty.</b>
      *
-     * @return Array of active SceneElements
+     * @return Array of SceneElements
      */
     public SceneElement[] getSceneElements() {
         return getSceneElementCollectionManager().getSceneElements();
     }
 
     /**
-     * Returns the SceneElements corresponding to the set of scene element IDs. Any scene
-     * element ID that is not matched to a SceneElement will be skipped. The returned array
-     * may be empty.
+     * Returns the SceneElements stored in the Lighting controller corresponding to the set of
+     * scene element IDs. Any ID that is not matched to a SceneElement will be skipped. The returned
+     * array may be empty.
      *
      * @param sceneElementIDs The IDs of the SceneElements to retrieve
      *
@@ -858,8 +875,8 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a snapshot of the active SceneElements in the Lighting system that have received
-     * all their data from the controller.
+     * Returns a snapshot of all the SceneElements stored in the Lighting controller that have received all
+     * their data.
      * <p>
      * <b>Note: The contents of this array may change in subsequent calls to this method as new
      * scene elements are created or existing scene elements are deleted. This array may also be
@@ -872,8 +889,8 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a reference to a SceneElement with the corresponding scene element ID. If
-     * a match is not found for the scene element ID, this method will return null.
+     * Returns a reference to the SceneElement with the corresponding ID. If a match is not found for
+     * the ID, this method will return null.
      *
      * @param sceneElementId The ID of the SceneElement
      *
@@ -884,9 +901,9 @@ public class LightingDirector {
     }
 
     /**
-     * Returns the number of active Scenes in the Lighting system.
+     * Returns the number of Scenes stored in the Lighting controller.
      *
-     * @return Number of active Scenes
+     * @return Number of Scenes
      */
     public int getSceneCount() {
         int count = getSceneCollectionManagerV2().size();
@@ -899,13 +916,13 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a snapshot of the active Scenes in the Lighting system including scenes that
-     * may not have received all data from the controller.
+     * Returns a snapshot of all the Scenes stored in the Lighting controller including
+     * scene that may not have received all data.
      * <p>
      * <b>Note: The contents of this array may change in subsequent calls to this method as new
      * scenes are created or existing scenes are deleted. This array may also be empty.</b>
      *
-     * @return Array of active Scenes
+     * @return Array of Scenes
      */
     public Scene[] getScenes() {
         Collection<Scene> scenes = new ArrayList<Scene>(getSceneCount());
@@ -920,8 +937,9 @@ public class LightingDirector {
     }
 
     /**
-     * Returns the Scenes corresponding to the set of scene IDs. Any scene ID that is not
-     * matched to a Scene will be skipped. The returned array may be empty.
+     * Returns the Scenes stored in the Lighting controller corresponding to the set of
+     * scene IDs. Any ID that is not matched to a Scene will be skipped. The returned
+     * array may be empty.
      *
      * @param sceneIDs The IDs of the Scenes to retrieve
      *
@@ -938,8 +956,8 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a snapshot of the active Scenes in the Lighting system that have received all
-     * their data from the controller.
+     * Returns a snapshot of all the Scenes stored in the Lighting controller that have received all
+     * their data.
      * <p>
      * <b>Note: The contents of this array may change in subsequent calls to this method as new
      * scenes are created or existing scenes are deleted. This array may also be empty.</b>
@@ -959,8 +977,8 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a reference to a Scene with the corresponding scene ID. If a match is not found
-     * for the scene ID, this method will return null.
+     * Returns a reference to the Scene with the corresponding ID. If a match is not found for
+     * the ID, this method will return null.
      *
      * @param sceneId The ID of the Scene
      *
@@ -973,31 +991,32 @@ public class LightingDirector {
     }
 
     /**
-     * Returns the number of active MasterScenes in the Lighting system.
+     * Returns the number of MasterScenes stored in the Lighting controller.
      *
-     * @return Number of active MasterScenes
+     * @return Number of MasterScenes
      */
     public int getMasterSceneCount() {
         return getMasterSceneCollectionManager().size();
     }
 
     /**
-     * Returns a snapshot of the active MasterScenes in the Lighting system including scenes that
-     * may not have received all data from the controller.
+     * Returns a snapshot of all the MasterScenes stored in the Lighting controller including master
+     * scene that may not have received all data.
      * <p>
      * <b>Note: The contents of this array may change in subsequent calls to this method as new
      * master scenes are created or existing master scenes are deleted. This array may also be
      * empty.</b>
      *
-     * @return Array of active MasterScenes
+     * @return Array of MasterScenes
      */
     public MasterScene[] getMasterScenes() {
         return getMasterSceneCollectionManager().getMasterScenes();
     }
 
     /**
-     * Returns the MasterScenes corresponding to the set of master scene IDs. Any master scene ID
-     * that is not matched to a MasterScene will be skipped. The returned array may be empty.
+     * Returns the MasterScenes stored in the Lighting controller corresponding to the set of
+     * master scene IDs. Any ID that is not matched to a MasterScene will be skipped. The
+     * returned array may be empty.
      *
      * @param masterSceneIDs The IDs of the MasterScenes to retrieve
      *
@@ -1008,8 +1027,8 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a snapshot of the active MasterScenes in the Lighting system that have received all
-     * their data from the controller.
+     * Returns a snapshot of all the MasterScenes stored in the Lighting controller that have received all
+     * their data.
      * <p>
      * <b>Note: The contents of this array may change in subsequent calls to this method as new
      * master scenes are created or existing master scenes are deleted. This array may also be
@@ -1022,8 +1041,8 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a reference to a MasterScene with the corresponding master scene ID. If a match is
-     * not found for the master scene ID, this method will return null.
+     * Returns a reference to the MasterScene with the corresponding ID. If a match is not found for
+     * the ID, this method will return null.
      *
      * @param masterSceneId The ID of the MasterScene
      *
@@ -1034,32 +1053,32 @@ public class LightingDirector {
     }
 
     /**
-    * Returns the number of active Effects (presets, transition effects, and pulse effects) in the
-    * Lighting system.
+    * Returns the number of Effects (presets, transition effects, and pulse effects) stored in the
+    * Lighting controller.
     *
-    * @return Number of active Effects
+    * @return Number of Effects
     */
     public int getEffectCount() {
         return getPresetCount() + getTransitionEffectCount() + getPulseEffectCount();
     }
 
     /**
-     * Returns a snapshot of the active Effects (presets, transition effects, and pulse effects) in the
-     * Lighting system including effects that may not have received all data from the controller.
+     * Returns a snapshot of all the Effects (presets, transition effects, and pulse effects) stored in the
+     * Lighting controller including effects that may not have received all data.
      * <p>
      * <b>Note: The contents of this array may change in subsequent calls to this method as new
      * effects are created or existing effects are deleted. This array may also be empty.</b>
      *
-     * @return Array of active MasterScenes
+     * @return Array of Effects
      */
     public Effect[] getEffects() {
         return getEffects(null);
     }
 
     /**
-     * Returns the Effects (presets, transition effects, and pulse effects) corresponding to the set of
-     * effect IDs. Any effect ID that is not matched to a effect will be skipped. The returned array may
-     * be empty.
+     * Returns the Effects (presets, transition effects, and pulse effects) stored in the Lighting controller
+     * corresponding to the set of effect IDs. Any ID that is not matched to an effect will be skipped.
+     * The returned array may be empty.
      *
      * @param effectIDs The IDs of the Effects to retrieve
      *
@@ -1070,8 +1089,8 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a snapshot of the active Effects (presets, transition effects, and pulse effects) in the
-     * Lighting system that have received all their data from the controller.
+     * Returns a snapshot of all the Effects (presets, transition effects, and pulse effects) stored in the
+     * Lighting controller that have received all their data.
      * <p>
      * <b>Note: The contents of this array may change in subsequent calls to this method as new
      * effects are created or existing effects are deleted. This array may also be empty.</b>
@@ -1083,8 +1102,8 @@ public class LightingDirector {
     }
 
     /**
-     * Returns a reference to an Effect (preset, transition effect, or pulse effect) with the corresponding
-     * effect ID. If a match is not found for the effect ID, this method will return null.
+     * Returns a reference to the Effect (preset, transition effect, or pulse effect) with the corresponding
+     * effect ID. If a match is not found for the ID, this method will return null.
      *
      * @param effectID The ID of the Effect
      *
@@ -1104,7 +1123,7 @@ public class LightingDirector {
         return effect;
     }
 
-    /*
+    /**
      * <b>WARNING: This method is not intended to be used by clients, and may change or be
      * removed in subsequent releases of the SDK.</b>
      */
@@ -1128,7 +1147,7 @@ public class LightingDirector {
     }
 
     /**
-     * Specifies a listener to invoke once a connection to a lighting system has been established.
+     * Specifies a listener to invoke once a connection to a lighting controller has been established.
      * After a connection is established, this listener will be invoked only one time.
      *
      * @param listener Listener to invoke on connection
@@ -1139,10 +1158,10 @@ public class LightingDirector {
     }
 
     /**
-     * Specifies a runnable task to execute once a connection to a lighting system has been
+     * Specifies a runnable task to execute once a connection to a lighting controller has been
      * established. After a connection is established, this task will execute only one time.
      *
-     * @param task Runnable task to run on connection
+     * @param task Runnable task to run after connection
      * @param delay Specifies a delay to wait before invoking the listener
      */
     public void postOnNextControllerConnection(Runnable task, int delay) {
@@ -1150,7 +1169,9 @@ public class LightingDirector {
     }
 
     /**
-     * Asynchronously creates a Group on the Lighting Controller.
+     * Asynchronously creates a Group on the Lighting controller. Once the group is successfully
+     * created, the {@link GroupListener#onGroupInitialized(TrackingID, Group)} method will be
+     * invoked and the tracking IDs will match.
      *
      * @param members Specifies the group's members
      * @param groupName Name of the Group
@@ -1170,13 +1191,15 @@ public class LightingDirector {
     }
 
     /**
-     * Asynchronously creates a Preset on the Lighting Controller.
+     * Asynchronously creates a Preset on the Lighting controller. Once the preset is successfully
+     * created, the {@link PresetListener#onPresetInitialized(TrackingID, Preset)} method will be
+     * invoked and the tracking IDs will match.
      *
      * @param power Specifies the Power of the Preset's lamp state
      * @param color Specifies the Color of the Preset's lamp state
      * @param presetName Name of the Preset
      *
-     * @return TrackingID associated with the create of the Preset
+     * @return TrackingID associated with the creation of the Preset
      */
     public TrackingID createPreset(Power power, Color color, String presetName) {
         TrackingID trackingId = new TrackingID(TrackingID.UNDEFINED);
@@ -1190,7 +1213,9 @@ public class LightingDirector {
 
 
     /**
-     * Asynchronously creates a TransitionEffect on the Lighting Controller.
+     * Asynchronously creates a TransitionEffect on the Lighting controller. Once the transition
+     * effects is successfully created, the {@link TransitionEffectListener#onTransitionEffectInitialized(TrackingID, TransitionEffect)}
+     * method will be invoked and the tracking IDs will match.
      *
      * @param state Specifies the lamp state of the TransitionEffect
      * @param duration Specifies how long the TransitionEffect will take
@@ -1215,7 +1240,9 @@ public class LightingDirector {
 
 
     /**
-     * Asynchronously creates a PulseEffect on the Lighting Controller.
+     * Asynchronously creates a PulseEffect on the Lighting controller. Once the transition
+     * effects is successfully created, the {@link PulseEffectListener#onPulseEffectInitialized(TrackingID, PulseEffect)}
+     * method will be invoked and the tracking IDs will match.
      *
      * @param fromState Specifies the starting LampState of the PulseEffect
      * @param toState Specifies the ending LampState of the PulseEffect
@@ -1244,7 +1271,9 @@ public class LightingDirector {
 
 
     /**
-     * Asynchronously creates a SceneElement on the Lighting Controller.
+     * Asynchronously creates a SceneElement on the Lighting controller. Once the transition
+     * effects is successfully created, the {@link SceneElementListener#onSceneElementInitialized(TrackingID, SceneElement)}
+     * method will be invoked and the tracking IDs will match.
      *
      * @param effect Specifies the SceneElement's effect
      * @param members Specifies the GroupMembers for which the effect will be applied
@@ -1266,7 +1295,9 @@ public class LightingDirector {
 
 
     /**
-     * Asynchronously creates a Scene on the Lighting Controller.
+     * Asynchronously creates a Scene on the Lighting controller. Once the transition
+     * effects is successfully created, the {@link SceneListener#onSceneInitialized(TrackingID, Scene)}
+     * method will be invoked and the tracking IDs will match.
      *
      * @param sceneElements Specifies the SceneElements that belong to the Scene
      * @param sceneName Name of the Scene
@@ -1288,12 +1319,14 @@ public class LightingDirector {
 
 
     /**
-     * Asynchronously creates a MasterScene on the Lighting Controller.
+     * Asynchronously creates a MasterScene on the Lighting controller. Once the transition
+     * effects is successfully created, the {@link MasterSceneListener#onMasterSceneInitialized(TrackingID, MasterScene)}
+     * method will be invoked and the tracking IDs will match.
      *
      * @param scenes Specifies the Scenes that belong to the MasterScene
      * @param masterSceneName Name of the MasterScene
      *
-     * @return TrackingID associate with the creation of the MasterScene
+     * @return TrackingID associated with the creation of the MasterScene
      */
     public TrackingID createMasterScene(Scene[] scenes, String masterSceneName) {
         TrackingID trackingId = new TrackingID(TrackingID.UNDEFINED);
@@ -1596,7 +1629,7 @@ public class LightingDirector {
 
 
     /**
-     * Returns the default language used by the Lighting System.
+     * Returns the default language used by the Lighting system.
      *
      * @return Language tag specifying the default language for the Lighting system
      */

@@ -24,10 +24,18 @@ import org.allseen.lsf.sdk.model.LightingItemUtil;
 import org.allseen.lsf.sdk.model.MasterSceneDataModel;
 
 /**
- * This class represents a MasterScene in the Lighting system.
+ * This class represents a MasterScene definition in the lighting controller. This class
+ * provides an interface to perform MasterScene operations. Supported operations include
+ * adding and removing scene members, renaming, applying and deleting the MasterScene.
+ * Master scenes contain an array of scenes and allow them to be applied simultaneously.
+ * Master scenes are considered fully initialized when the name and array of scenes have
+ * been received. Master scenes are still operational and can still be applied even in the
+ * uninitialized state.
  * <p>
  * <b>Note: This class is not meant to be instantiated directly. MasterScenes should be retrieved
  * from the LightingDirector using the {@link LightingDirector#getMasterScenes()} method.</b>
+ * <p>
+ * <b>Note: This class does not support MasterScene creation. See {@link LightingDirector#createMasterScene(Scene[], String)}.</b>
  */
 public class MasterScene extends SceneItem {
     /**
@@ -127,7 +135,7 @@ public class MasterScene extends SceneItem {
     }
 
     /**
-     * Deletes the current MasterScene from the Lighting system.
+     * Permanently deletes the current MasterScene from the lighting controller.
      */
     @Override
     public void delete() {

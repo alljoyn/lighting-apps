@@ -27,10 +27,19 @@ import org.allseen.lsf.sdk.model.SceneElementDataModel;
 import org.allseen.lsf.sdk.model.SceneElementDataModelV2;
 
 /**
- * This class represents a SceneElement in the Lighting system.
+ * This class represents a SceneElement definition in the lighting controller. This class
+ * provides an interface to perform SceneElement operations. Supported operations include
+ * modifying the scene element members and effect, applying the scene element, renaming, and
+ * deleting the scene element. Scene elements encapsulate an effect and a set of lamps and/or
+ * groups. Scene elements apply their effect to their lamps and groups. Scene elements are
+ * considered fully initialized when the name, lamp and group members, and the effect have been
+ * received. Scene elements are still operational and can still be applied even in the
+ * uninitialized state.
  * <p>
  * <b>Note: This class is not meant to be instantiated directly. SceneElements should be retrieved
  * from the LightingDirector using the {@link LightingDirector#getSceneElements()} method.</b>
+ * <p>
+ * <b>Note: This class does not support SceneElement creation. See {@link LightingDirector#createSceneElement(Effect, GroupMember[], String)}.</b>
  */
 public class SceneElement extends SceneItem {
     public static void setDefaultName(String defaultName) {
@@ -159,7 +168,10 @@ public class SceneElement extends SceneItem {
     }
 
     /**
-     * Deletes the current SceneElement from the Lighting system.
+     * Permanently deletes the current SceneElement from the lighting controller.
+     * <p>
+     * <b>Note: You cannot delete a scene element that is used by a scene. The dependency
+     * must be deleted first.</b>
      */
     @Override
     public void delete() {

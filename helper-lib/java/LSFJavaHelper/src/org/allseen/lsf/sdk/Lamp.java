@@ -25,7 +25,11 @@ import org.allseen.lsf.sdk.model.EmptyLampParameters;
 import org.allseen.lsf.sdk.model.LampDataModel;
 
 /**
- * This class represents a Lamp in the Lighting system.
+ * This class represents a Lamp that is connected to the lighting controller. This class
+ * provides an interface to perform Lamp operations. Supported operations include changing
+ * color and power state, renaming, applying effects and presets, and retrieving lamp data.
+ * Lamps are considered fully initialized when the name, power and color state, and lamp
+ * details have been received. Lamps are still operational even in the uninitialized state.
  * <p>
  * <b>Note: This class is not meant to be instantiated directly. Lamps should be retrieved
  * from the LightingDirector using the {@link LightingDirector#getLamps()} method.</b>
@@ -125,6 +129,9 @@ public class Lamp extends GroupMember {
 
     /**
      * Changes the color state of the current Lamp to the provided HSVT color.
+     * <p>
+     * <b>Note: If the provided HSVT values are outside the expected range, they will be normalized to the
+     * expected range</b>
      *
      * @param hueDegrees The hue component of the desired color (0-360)
      * @param saturationPercent The saturation component of the desired color (0-100)
@@ -159,7 +166,7 @@ public class Lamp extends GroupMember {
     }
 
     /**
-     * Returns the LampAbout object of the current Lamp.
+     * Returns the Lamp AllJoyn about data for the current Lamp.
      *
      * @return Reference to LampAbout object
      */
@@ -168,7 +175,7 @@ public class Lamp extends GroupMember {
     }
 
     /**
-     * Returns the LampDetails object of the current Lamp.
+     * Returns the LampDetails for the current Lamp.
      *
      * @return Reference to LampDetails object
      */
@@ -179,7 +186,7 @@ public class Lamp extends GroupMember {
     }
 
     /**
-     * Returns the LampParameters object of the current Lamp.
+     * Returns the LampParameters for the current Lamp.
      *
      * @return Reference to LampParameters object
      */

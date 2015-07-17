@@ -18,8 +18,10 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.listener.PulseEffectCollectionListener;
 
 /**
- * Provides an interface for developers to implement and receive all PulseEffect related
- * events in the Lighting system.
+ * Provides an interface for developers to implement and receive all pulse effect related events in the
+ * Lighting system. Developers will be notified when pulse effects are added, modified, initialized, and
+ * deleted from the lighting controller. Pulse effects are considered initialized when all pulse effect data has
+ * been received from the lighting controller.
  * <p>
  * <b>Note: Once implemented, the listener must be registered with the LightingDirector in order
  * to receive PulseEffect callbacks. See {@link LightingDirector#addPulseEffectListener(PulseEffectListener) addPulseEffectListener}
@@ -31,8 +33,10 @@ public interface PulseEffectListener extends PulseEffectCollectionListener<Pulse
      * Triggered when all data has been received from the lighting controller for a
      * particular PulseEffect.
      * <p>
-     * <b>Note: This callback will fire only once for each PulseEffect when it
-     * is initialized.</b>
+     * <b>Note: This callback will fire only once for each PulseEffect when all data has been received from
+     * the lighting controller.</b>
+     * <p>
+     * <b>Note: The tracking ID is only valid for pulse effects created within your application.</b>
      *
      * @param trackingId Reference to TrackingID
      * @param effect Reference to PulseEffect
@@ -50,10 +54,10 @@ public interface PulseEffectListener extends PulseEffectCollectionListener<Pulse
     public void onPulseEffectChanged(PulseEffect effect);
 
     /**
-     * Triggered when a particular PulseEffect has been removed from the Lighting system.
+     * Triggered when a particular PulseEffect has been deleted from the lighting controller.
      * <p>
-     * <b>Note: This callback will fire only once for each PulseEffect when it is removed from
-     * the Lighting system.</b>
+     * <b>Note: This callback will fire only once for each PulseEffect when it is deleted from
+     * the lighting controller.</b>
      *
      * @param effect Reference to PulseEffect
      */

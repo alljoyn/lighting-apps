@@ -16,28 +16,115 @@
 
 package org.allseen.lsf.sdk;
 
+/**
+ * Enum describing the response codes that will be returned by a controller
+ * client operation.
+ */
 public enum ResponseCode {
-    OK(0),                          /* Success status */
-    ERR_NULL(1),                    /* Unexpected NULL pointer */
-    ERR_UNEXPECTED(2),              /* An operation was unexpected at this time */
-    ERR_INVALID(3),                 /* A value was invalid */
-    ERR_UNKNOWN(4),                 /* A unknown value */
-    ERR_FAILURE(5),                 /* A failure has occurred */
-    ERR_BUSY(6),                    /* An operation failed and should be retried later */
-    ERR_REJECTED(7),                /* The request was rejected */
-    ERR_RANGE(8),                   /* Value provided was out of range */
-    ERR_UNDEFINED1(9),              /* [This response code is not defined] */
-    ERR_INVALID_FIELD(10),          /* Invalid param/state field */
-    ERR_MESSAGE(11),                /* Invalid message */
-    ERR_INVALID_ARGS(12),           /* The arguments were invalid */
-    ERR_EMPTY_NAME(13),             /* The name is empty */
-    ERR_RESOURCES(14),              /* not enough resources */
-    ERR_REPLY_WITH_INVALID_ARGS(15),/* The reply received for a message had invalid arguments */
-    ERR_PARTIAL(16),                /* The requested operation was only partially successful */
-    ERR_NOT_FOUND(17),              /* The entity of interest was not found */
-    ERR_NO_SLOT(18),                /* There is no slot for new entry */
-    ERR_DEPENDENCY(19),             /* There is a dependency of the entity for which a delete request was received */
-    RESPONSE_CODE_LAST(20);         /* The last LSF response code */
+    /**
+     * Indicates a success status.
+     */
+    OK(0),
+
+    /**
+     * Indicates an unexpected null pointer.
+     */
+    ERR_NULL(1),
+
+    /**
+     * Indictes an operation was unexpected.
+     */
+    ERR_UNEXPECTED(2),
+
+    /**
+     * Indicates a value was invalid.
+     */
+    ERR_INVALID(3),
+
+    /**
+     * Indicates a value was unknown.
+     */
+    ERR_UNKNOWN(4),
+
+    /**
+     * Indicates that the operation failed.
+     */
+    ERR_FAILURE(5),
+
+    /**
+     * Indicates that the operation failed and should be retried later.
+     */
+    ERR_BUSY(6),
+
+    /**
+     * Indicates that the operation request was rejected.
+     */
+    ERR_REJECTED(7),
+
+    /**
+     * Indicates that the value provided was out of range.
+     */
+    ERR_RANGE(8),
+
+    /**
+     * Indicates an undefined response code.
+     */
+    ERR_UNDEFINED1(9),
+
+    /**
+     * Indicates that the parameter or field was invalid.
+     */
+    ERR_INVALID_FIELD(10),
+
+    /**
+     * Indicates that the message sent was invalid.
+     */
+    ERR_MESSAGE(11),
+
+    /**
+     * Indicates that the arguments sent were invalid.
+     */
+    ERR_INVALID_ARGS(12),
+
+    /**
+     * Indicates that the name is empty.
+     */
+    ERR_EMPTY_NAME(13),
+
+    /**
+     * Indicates that the operation failed due to lack of resources.
+     */
+    ERR_RESOURCES(14),
+
+    /**
+     * Indicates that the reply received contained invalid arguments.
+     */
+    ERR_REPLY_WITH_INVALID_ARGS(15),
+
+    /**
+     * Indicates that the operation was only partially successful.
+     */
+    ERR_PARTIAL(16),
+
+    /**
+     * Indicates that entity of interest was not found.
+     */
+    ERR_NOT_FOUND(17),
+
+    /**
+     * Indicates that there is no slot to send the message.
+     */
+    ERR_NO_SLOT(18),
+
+    /**
+     * Indicates that there is a dependency for the entity for which a delete request was received.
+     */
+    ERR_DEPENDENCY(19),
+
+    /**
+     * The last LSF response code.
+     */
+    RESPONSE_CODE_LAST(20);
 
     /** Integer value */
     private int value;
@@ -60,7 +147,7 @@ public enum ResponseCode {
     }
 
     /**
-     * Gets the integer value.
+     * Gets the integer value of the enum.
      *
      * @return the integer value
      */

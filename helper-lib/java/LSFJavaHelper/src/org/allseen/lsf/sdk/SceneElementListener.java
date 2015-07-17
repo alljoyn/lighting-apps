@@ -18,8 +18,10 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.listener.SceneElementCollectionListener;
 
 /**
- * Provides an interface for developers to implement and receive all SceneElement related events in the
- * Lighting system.
+ * Provides an interface for developers to implement and receive all scene element related events in the
+ * Lighting system. Developers will be notified when scene elements are added, modified, initialized, and
+ * deleted from the lighting controller. Scene elements are considered initialized when all scene element data has
+ * been received from the lighting controller.
  * <p>
  * <b>Note: Once implemented, the listener must be registered with the LightingDirector in order
  * to receive SceneElement callbacks. See {@link LightingDirector#addSceneElementListener(SceneElementListener) addSceneElementListener}
@@ -31,7 +33,10 @@ public interface SceneElementListener extends SceneElementCollectionListener<Sce
      * Triggered when all data has been received from the lighting controller for a
      * particular SceneElement.
      * <p>
-     * <b>Note: This callback will fire only once for each SceneElement when it is initialized.</b>
+     * <b>Note: This callback will fire only once for each SceneElement when all data has been received from
+     * the lighting controller.</b>
+     * <p>
+     * <b>Note: The tracking ID is only valid for scene elements created within your application.</b>
      *
      * @param trackingId Reference to TrackingID
      * @param element Reference to SceneElement
@@ -49,10 +54,10 @@ public interface SceneElementListener extends SceneElementCollectionListener<Sce
     public void onSceneElementChanged(SceneElement element);
 
     /**
-     * Triggered when a particular SceneElement has been removed from the Lighting system.
+     * Triggered when a particular SceneElement has been deleted from the lighting controller.
      * <p>
-     * <b>Note: This callback will fire only once for each SceneElement when it is removed from
-     * the Lighting system.</b>
+     * <b>Note: This callback will fire only once for each SceneElement when it is deleted from
+     * the lighting controller.</b>
      *
      * @param element Reference to SceneElement
      */

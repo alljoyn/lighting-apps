@@ -16,12 +16,39 @@
 
 package org.allseen.lsf.sdk;
 
+/**
+ * Enum describing the of type of an LSF Device.
+ */
 public enum DeviceType {
+    /**
+     * Specifies an invalid DeviceType.
+     */
     INVALID,
+
+    /**
+     * Specifies the device type is a lamp.
+     */
     LAMP,
+
+    /**
+     * Specifies the device type is an outlet.
+     */
     OUTLET,
+
+    /**
+     * Specifies the device type is a Luminaire lamp.
+     */
     LUMINAIRE,
+
+    /**
+     * Specifies the device type is a switch.
+     */
     SWITCH,
+
+    /**
+     * Specifies that the DeviceType is unchanged and to use the last value
+     * that was received.
+     */
     LASTVALUE;
 
     /** Static lookup, used by the native code */
@@ -37,7 +64,7 @@ public enum DeviceType {
     }
 
     /**
-     * Gets the integer value.
+     * Gets the integer value of the enum.
      *
      * @return the integer value
      */

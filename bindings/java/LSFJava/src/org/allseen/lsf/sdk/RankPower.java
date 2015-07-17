@@ -15,11 +15,28 @@
  */
 package org.allseen.lsf.sdk;
 
+/**
+ * Enum describing how the device running the controller service is powered.
+ */
 public enum RankPower {
+    /**
+     * Indicates a device that is battery powered and not chargeable.
+     */
     BATTERY_POWERED_NOT_CHARGABLE,
+
+    /**
+     * Indicates a device that is battery powered and chargeable.
+     */
     BATTERY_POWERED_CHARGABLE,
+
+    /**
+     * Indicates a device that is always connected to a power source.
+     */
     ALWAYS_AC_POWERED,
-    /** If OEMs return this value, the Controller Service will use BATTERY_POWERED_NOT_CHARGABLE as this is not a valid value */
+
+    /**
+     * If OEMs return this value, the Controller Service will use BATTERY_POWERED_NOT_CHARGABLE as this is not a valid value
+     */
     OEM_CS_RANKPARAM_POWER_LAST_VALUE;
 
     /** Static lookup, used by the native code */
@@ -35,7 +52,7 @@ public enum RankPower {
     }
 
     /**
-     * Gets the integer value.
+     * Gets the integer value of the enum.
      *
      * @return the integer value
      */

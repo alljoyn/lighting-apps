@@ -20,7 +20,7 @@ import java.util.Collection;
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 
 /**
- * Abstract base class that represents generic Scene behavior in the Lighting system. Generic scenes
+ * Abstract base class that represents generic Scene operations that can be performed. Generic scenes
  * can be applied, renamed, and deleted.
  */
 public abstract class Scene extends SceneItem {
@@ -52,7 +52,10 @@ public abstract class Scene extends SceneItem {
     }
 
     /**
-     * Deletes the current Scene in the Lighting system.
+     * Permanently deletes the current Scene from the lighting controller.
+     * <p>
+     * <b>Note: You cannot delete a scene that is used by a master scene. The dependency
+     * must be deleted first.</b>
      */
     @Override
     public void delete() {

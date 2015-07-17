@@ -24,10 +24,18 @@ import org.allseen.lsf.sdk.model.LightingItemUtil;
 import org.allseen.lsf.sdk.model.PresetDataModel;
 
 /**
- * This class represents a Preset in the Lighting system.
+ * This class represents a Preset definition in the lighting controller. This class
+ * provides an interface to perform Preset operations. Supported operations include
+ * modifying the preset power and color properties, applying the preset to a lamp or
+ * group, renaming, and deleting the preset. Presets are considered fully initialized
+ * when the name and the power and color state have been received. Groups are still
+ * operational and can be applied to lamps and groups even in the uninitialized state.
+ * In general, presets are transitions effects that occur instantly.
  * <p>
  * <b>Note: This class is not meant to be instantiated directly. Presets should be retrieved
  * from the LightingDirector using the {@link LightingDirector#getPresets()} method.</b>
+ * <p>
+ * <b>Note: This class does not support Preset creation. See {@link LightingDirector#createPreset(Power, Color, String)}.</b>
  */
 public class Preset extends MutableColorItem implements Effect {
     /**
@@ -119,7 +127,10 @@ public class Preset extends MutableColorItem implements Effect {
     }
 
     /**
-     * Deletes the current Preset from the Lighting system.
+     * Permanently deletes the current Preset from the lighting controller.
+     * <p>
+     * <b>Note: You cannot delete a preset that is a member of a transition effect, pulse
+     * effect, or scene element. The dependency must be deleted first.</b>
      */
     @Override
     public void delete() {
@@ -141,6 +152,9 @@ public class Preset extends MutableColorItem implements Effect {
 
     /**
      * Modifies the color state of the current Preset to the provided HSVT color.
+     * <p>
+     * <b>Note: If the provided HSVT values are outside the expected range, they will be normalized to the
+     * expected range</b>
      *
      * @param hueDegrees The hue component of the desired color (0-360)
      * @param saturationPercent The saturation component of the desired color (0-100)

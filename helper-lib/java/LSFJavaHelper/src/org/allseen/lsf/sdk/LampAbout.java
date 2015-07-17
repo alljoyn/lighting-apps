@@ -15,11 +15,14 @@
 package org.allseen.lsf.sdk;
 
 /**
- * This class encapsulates the about data of a Lamp in the Lighting System.
+ * This class encapsulates the AllJoyn about data of a Lamp in the Lighting System.
+ * <p>
+ * See the AllJoyn core documentation for more information on the AllJoyn about data.
  */
 public class LampAbout extends org.allseen.lsf.sdk.model.LampAbout {
+
     /**
-     * Specifies the string to use when an about field is indeterminate.
+     * Specifies the string to use when an AllJoyn about field is indeterminate.
      *
      * @param dataNotFound String to use for indeterminate fields
      */

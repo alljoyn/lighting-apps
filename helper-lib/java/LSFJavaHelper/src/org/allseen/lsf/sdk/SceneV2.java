@@ -24,10 +24,18 @@ import org.allseen.lsf.sdk.model.LightingItemUtil;
 import org.allseen.lsf.sdk.model.SceneDataModelV2;
 
 /**
- * This class represents a SceneV2 in the Lighting system. SceneV2s are only relevant in 15.04 controllers.
+ * This class represents a SceneV2 definition in the lighting controller. This class
+ * provides an interface to perform SceneV2 operations. Supported operations include
+ * modifying the scene members, applying the scene, renaming, and deleting the scene.
+ * SceneV2s are only relevant in 15.04 controllers. Scenes contain an array of scene
+ * elements and allows them to be applied simultaneously. Scenes are considered fully
+ * initialized when the name and array of scene elements have been received. Scenes are
+ * still operational and can still be applied even in the uninitialized state.
  * <p>
  * <b>Note: This class is not meant to be instantiated directly. SceneV2s should be retrieved
  * from the LightingDirector using the {@link LightingDirector#getScenes()} method.</b>
+ * <p>
+ * <b>Note: This class does not support Scene creation. See {@link LightingDirector#createScene(SceneElement[], String)}.</b>
  */
 public class SceneV2 extends Scene {
     /**

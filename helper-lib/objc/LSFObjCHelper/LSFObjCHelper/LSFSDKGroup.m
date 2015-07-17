@@ -161,7 +161,11 @@
 
     for (NSString *lampID in lampIDs)
     {
-        [lamps addObject: [lightingDirector getLampWithID: lampID]];
+        LSFSDKLamp *lamp = [lightingDirector getLampWithID: lampID];
+        if (lamp != nil)
+        {
+            [lamps addObject: lamp];
+        }
     }
 
     return lamps;

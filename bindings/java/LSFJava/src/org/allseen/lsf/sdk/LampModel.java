@@ -16,9 +16,24 @@
 
 package org.allseen.lsf.sdk;
 
+/**
+ * Enum describing the model of a Lamp.
+ */
 public enum LampModel {
+    /**
+     * Specifies an invalid LampModel.
+     */
     INVALID,
+
+    /**
+     * Specifies an LED lamp model.
+     */
     LED,
+
+    /**
+     * Specifies that the LampModel is unchanged and to use the last value
+     * that was received.
+     */
     LASTVALUE;
 
     /** Static lookup, used by the native code */
@@ -34,7 +49,7 @@ public enum LampModel {
     }
 
     /**
-     * Gets the integer value.
+     * Gets the integer value of the enum.
      *
      * @return the integer value
      */

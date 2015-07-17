@@ -60,11 +60,14 @@
     NSUInteger allLampsIndex = -1;
     for (int i = 0; i < self.data.count; i++)
     {
-        LSFSDKGroup *group = [self.data objectAtIndex: i];
+        LSFSDKGroupMember *member = [self.data objectAtIndex: i];
 
-        if ([group isAllLampsGroup])
+        if ([member isKindOfClass: [LSFSDKGroup class]])
         {
-            allLampsIndex = i;
+            if ([((LSFSDKGroup *)member) isAllLampsGroup])
+            {
+                allLampsIndex = i;
+            }
         }
     }
 

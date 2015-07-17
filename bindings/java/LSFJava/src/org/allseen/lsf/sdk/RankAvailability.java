@@ -15,17 +15,54 @@
  */
 package org.allseen.lsf.sdk;
 
+/**
+ * Enum describing the average uptime for the device running the controller service
+ * over a 24 hour period.
+ */
 public enum RankAvailability {
+    /**
+     * Indicates uptime of 0-3 hours.
+     */
     ZERO_TO_THREE_HOURS,
+
+    /**
+     * Indicates uptime of 3-6 hours.
+     */
     THREE_TO_SIX_HOURS,
+
+    /**
+     * Indicates uptime of 6-9 hours.
+     */
     SIX_TO_NINE_HOURS,
+
+    /**
+     * Indicates uptime of 9-12 hours.
+     */
     NINE_TO_TWELVE_HOURS,
+
+    /**
+     * Indicates uptime of 12-15 hours.
+     */
     TWELVE_TO_FIFTEEN_HOURS,
+
+    /**
+     * Indicates uptime of 15-18 hours.
+     */
     FIFTEEN_TO_EIGHTEEN_HOURS,
+
+    /**
+     * Indicates uptime of 18-21 hours.
+     */
     EIGHTEEN_TO_TWENTY_ONE_HOURS,
-    /** Indicates 24 hours */
+
+    /**
+     * Indicates uptime of 24 hours.
+     */
     TWENTY_ONE_TO_TWENTY_FOUR_HOURS,
-    /** If OEMs return this value, the Controller Service will use ZERO_TO_THREE_HOURS as this is not a valid value */
+
+    /**
+     * If OEMs return this value, the Controller Service will use ZERO_TO_THREE_HOURS as this is not a valid value.
+     */
     OEM_CS_RANKPARAM_AVAILABILITY_LAST_VALUE;
 
     /** Static lookup, used by the native code */
@@ -41,7 +78,7 @@ public enum RankAvailability {
     }
 
     /**
-     * Gets the integer value.
+     * Gets the integer value of the enum.
      *
      * @return the integer value
      */

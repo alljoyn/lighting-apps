@@ -29,10 +29,17 @@ import org.allseen.lsf.sdk.model.GroupDataModel;
 import org.allseen.lsf.sdk.model.LightingItemUtil;
 
 /**
- * This class represents a Group in the Lighting system. Groups can contains Lamps and Groups.
+ * This class represents a Group definition in the lighting controller. This class
+ * provides an interface to perform Group operations. Supported operations include changing
+ * color and power state, renaming, applying effects and presets, adding and removing group
+ * members, and deleting the group. Groups are considered fully initialized when the name
+ * and the groups members have been received. Groups are still operational even in the
+ * uninitialized state.
  * <p>
  * <b>Note: This class is not meant to be instantiated directly. Groups should be retrieved
  * from the LightingDirector using the {@link LightingDirector#getGroups()} method.</b>
+ * <p>
+ * <b>Note: This class does not support Group creation. See {@link LightingDirector#createGroup(GroupMember[], String)}.</b>
  */
 public class Group extends GroupMember implements DeletableItem {
     /**
@@ -92,6 +99,9 @@ public class Group extends GroupMember implements DeletableItem {
 
     /**
      * Changes the color state of the current Group to the provided HSVT color.
+     * <p>
+     * <b>Note: If the provided HSVT values are outside the expected range, they will be normalized to the
+     * expected range</b>
      *
      * @param hueDegrees The hue component of the desired color (0-360)
      * @param saturationPercent The saturation component of the desired color (0-100)
@@ -172,7 +182,10 @@ public class Group extends GroupMember implements DeletableItem {
     }
 
     /**
-     * Deletes the current Group from the Lighting system.
+     * Permanently deletes the current Group from the lighting controller.
+     * <p>
+     * <b>Note: You cannot delete a group that is a member of another group. The dependence must
+     * be deleted first.</b>
      */
     @Override
     public void delete() {

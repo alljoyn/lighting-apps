@@ -16,15 +16,55 @@
 
 package org.allseen.lsf.sdk;
 
+/**
+ * Enum describing Error Codes that represent any internal errors in the Lighting
+ * controller client. The controller client will invoke the ControllerClientErrorCB
+ * with this error code to inform the user about an internal error.
+ */
 public enum ErrorCode {
+    /**
+     * Indicates no error in the controller client.
+     */
     NONE,
+
+    /**
+     * Indicates an error registering the AllJoyn signal handlers.
+     */
     ERR_REGISTERING_SIGNAL_HANDLERS,
+
+    /**
+     * Indicates that no controller service was found.
+     */
     ERR_NO_ACTIVE_CONTROLLER_SERVICE_FOUND,
+
+    /**
+     * Indicates that an AllJoyn method call timed out.
+     */
     ERR_ALLJOYN_METHOD_CALL_TIMEOUT,
+
+    /**
+     * Indicates an irrecoverable error.
+     */
     ERR_IRRECOVERABLE,
+
+    /**
+     * Indicates that the AllJoyn bus attachment is not connected.
+     */
     ERR_DISCONNECTED_FROM_BUS,
+
+    /**
+     * Indicates an error occurred while the controller client is shutting down.
+     */
     ERR_CONTROLLER_CLIENT_EXITING,
+
+    /**
+     * Indicates that an AllJoyn message was sent to the controller service with invalid args.
+     */
     ERR_MESSAGE_WITH_INVALID_ARGS,
+
+    /**
+     * Indicates that the same error occurred.
+     */
     ERROR_CODE_LAST;
 
     /** Static lookup, used by the native code */
@@ -40,7 +80,7 @@ public enum ErrorCode {
     }
 
     /**
-     * Gets the integer value.
+     * Gets the integer value of the enum.
      *
      * @return the integer value
      */

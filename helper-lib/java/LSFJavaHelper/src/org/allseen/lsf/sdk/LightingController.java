@@ -18,9 +18,11 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.model.BasicControllerService;
 
 /**
- * The LightingController provides access to the bundled controller in the Lighting
- * SDK. The LightingController serves as the proxy between all active Lighting
- * components on the network and the LightingDirector.
+ * The LightingController provides access to the bundled controller and connects to all
+ * lamps on the network as well as the LightingDirector. The LightingController also stores
+ * all group, preset, effect, and scene definitions.
+ * <p>
+ * <b>Note: The LightingController requires a WiFi or Ethernet network connection.</b>
  * <p>
  * Please see the LSFTutorial Project for an example of how to use the LightingController class.
  */
@@ -75,7 +77,8 @@ public class LightingController {
     }
 
     /**
-     * Causes the LightingController to start interacting with Lighting components on the network.
+     * Starts the bundled Lighting Controller. Once started, the controller will connect to
+     * any lamps that are on the network.
      * <p>
      * <b>Note: This method should be called before interacting with the LightingController. Subsequent
      * calls to this method must each be preceded by a call to stop().</b>
@@ -106,7 +109,10 @@ public class LightingController {
     }
 
     /**
-     * Causes the Lighting Controller to stop interacting with Lighting components on the network.
+     * Stops the Lighting Controller. All group, preset, effect, and scene definitions will
+     * be preserved for when the controller is started again.
+     * <p>
+     * <b>Note: This method must be preceded by a call to {@link start()}.</b>
      *
      * @return OK if the LightingController successfully stopped
      */
@@ -117,7 +123,10 @@ public class LightingController {
     }
 
     /**
-     * Causes the Lighting Controller to reset.
+     * Causes the Lighting Controller to reset. All group, preset, effect, and scene
+     * definitions will be preserved.
+     *  <p>
+     * <b>Note: This method must be preceded by a call to {@link start()}.</b>
      *
      * @return OK if the LightingController successfully reset
      */
@@ -128,7 +137,11 @@ public class LightingController {
     }
 
     /**
-     * Causes the Lighting Controller to factory reset.
+     * Causes the Lighting Controller to factory reset. Factory reset will return the
+     * controller to its default factory settings. All group, preset, effect, and scene
+     * definitions will be deleted.
+     * <p>
+     * <b>Note: This method must be preceded by a call to {@link start()}.</b>
      *
      * @return OK if the LightingController successfully factory reset
      */
@@ -148,7 +161,12 @@ public class LightingController {
     }
 
     /**
-     * Notifies the LightingController that a network connection has been established.
+     * Notifies the LightingController that a WiFi or Ethernet connection is available. Once
+     * a WiFi or Ethernet connection is established, the controller will begin connecting to lamps on
+     * the network.
+     * <p>
+     * <b>Note: This method must be preceded by a call to {@link start()} and should be called any time
+     * there is a change to the WiFi or Ethernet connection.</b>
      */
     public void sendNetworkConnected() {
         if (controllerRunning) {
@@ -157,7 +175,12 @@ public class LightingController {
     }
 
     /**
-     * Notifies the LightingController that a network connection has been lost.
+     * Notifies the LightingController that the WiFi or Ethernet connection has been lost. When a network
+     * connection is the lost the controller will enter a suspended state until a valid network
+     * connection is reestablished.
+     * <p>
+     * <b>Note: This method must be preceded by a call to {@link start()} and should be called any time
+     * there is a change to the WiFi or Ethernet connection.</b>
      */
     public void sendNetworkDisconnected() {
         if (controllerRunning) {

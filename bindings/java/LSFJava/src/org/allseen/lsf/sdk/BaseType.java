@@ -16,18 +16,69 @@
 
 package org.allseen.lsf.sdk;
 
+/**
+ * Enum describing the type of the lamp base.
+ */
 public enum BaseType {
+    /**
+     * Specifies an invalid BaseType.
+     */
     INVALID,
+
+    /**
+     * Specifies a lamp base type of E5.
+     */
     E5,
+
+    /**
+     * Specifies a lamp base type of E10.
+     */
     E10,
+
+    /**
+     * Specifies a lamp base type of E11.
+     */
     E11,
+
+    /**
+     * Specifies a lamp base type of E12.
+     */
     E12,
+
+    /**
+     * Specifies a lamp base type of E14.
+     */
     E14,
+
+    /**
+     * Specifies a lamp base type of E17.
+     */
     E17,
+
+    /**
+     * Specifies a lamp base type of E26.
+     */
     E26,
+
+    /**
+     * Specifies a lamp base type of E27.
+     */
     E27,
+
+    /**
+     * Specifies a lamp base type of E29.
+     */
     E29,
+
+    /**
+     * Specifies a lamp base type of E39.
+     */
     E39,
+
+    /**
+     * Specifies that the BaseType is unchanged and to use the last value
+     * that was received.
+     */
     LASTVALUE;
 
     /** Static lookup, used by the native code */
@@ -43,7 +94,7 @@ public enum BaseType {
     }
 
     /**
-     * Gets the integer value.
+     * Gets the integer value of the enum.
      *
      * @return the integer value
      */

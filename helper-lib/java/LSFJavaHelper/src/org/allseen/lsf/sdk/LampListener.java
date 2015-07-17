@@ -19,7 +19,9 @@ import org.allseen.lsf.sdk.listener.LampCollectionListener;
 
 /**
  * Provides an interface for developers to implement and receive all Lamp related events in the
- * Lighting system.
+ * Lighting system. Developers will be notified when lamps are found, modified, initialized, and
+ * lost from the lighting controller. Lamps are considered initialized when all lamp data has
+ * been received from the lighting controller.
  * <p>
  * <b>Note: Once implemented, the listener must be registered with the LightingDirector in order
  * to receive Lamp callbacks. See {@link LightingDirector#addLampListener(LampListener) addLampListener}
@@ -31,7 +33,8 @@ public interface LampListener extends LampCollectionListener<Lamp, LightingItemE
      * Triggered when all data has been received from the lighting controller for a
      * particular Lamp.
      * <p>
-     * <b>Note: This callback will fire only once for each Lamp when it is initialized.</b>
+     * <b>Note: This callback will fire only once for each Lamp when all data has been received from
+     * the lighting controller.</b>
      *
      * @param lamp Reference to Lamp
      */
@@ -48,10 +51,10 @@ public interface LampListener extends LampCollectionListener<Lamp, LightingItemE
     public void onLampChanged(Lamp lamp);
 
     /**
-     * Triggered when a particular Lamp has been removed from the Lighting system.
+     * Triggered when a particular Lamp has been lost from the lighting controller.
      * <p>
-     * <b>Note: This callback will fire only once for each Lamp when it is removed from
-     * the Lighting system.</b>
+     * <b>Note: This callback will fire only once for each Lamp when it is lost from
+     * the lighting controller.</b>
      *
      * @param lamp Reference to Lamp
      */

@@ -18,8 +18,10 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.listener.TransitionEffectCollectionListener;
 
 /**
- * Provides an interface for developers to implement and receive all TransitionEffect related
- * events in the Lighting system.
+ * Provides an interface for developers to implement and receive all transition effect related events in the
+ * Lighting system. Developers will be notified when transition effects are added, modified, initialized, and
+ * deleted from the lighting controller. Transition effects are considered initialized when all pulse effect data has
+ * been received from the lighting controller.
  * <p>
  * <b>Note: Once implemented, the listener must be registered with the LightingDirector in order
  * to receive TransitionEffect callbacks. See {@link LightingDirector#addTransitionEffectListener(TransitionEffectListener) addTransitionEffectListener}
@@ -31,8 +33,10 @@ public interface TransitionEffectListener extends TransitionEffectCollectionList
      * Triggered when all data has been received from the lighting controller for a
      * particular TransitionEffect.
      * <p>
-     * <b>Note: This callback will fire only once for each TransitionEffect when it
-     * is initialized.</b>
+     * <b>Note: This callback will fire only once for each TransitionEffect when all data has been received from
+     * the lighting controller.</b>
+     * <p>
+     * <b>Note: The tracking ID is only valid for transition effects created within your application.</b>
      *
      * @param trackingId Reference to TrackingID
      * @param effect Reference to TransitionEffect
@@ -50,10 +54,10 @@ public interface TransitionEffectListener extends TransitionEffectCollectionList
     public void onTransitionEffectChanged(TransitionEffect effect);
 
     /**
-     * Triggered when a particular TransitionEffect has been removed from the Lighting system.
+     * Triggered when a particular TransitionEffect has been deleted from the lighting controller.
      * <p>
-     * <b>Note: This callback will fire only once for each TransitionEffect when it is removed from
-     * the Lighting system.</b>
+     * <b>Note: This callback will fire only once for each TransitionEffect when it is deleted from
+     * the lighting controller.</b>
      *
      * @param effect Reference to TransitionEffect
      */

@@ -15,8 +15,9 @@
 package org.allseen.lsf.sdk;
 
 /**
- * Provides an interface for developers to implement and provide the Lighting system a Thread
- * to process all Lighting events
+ * Provides an interface for developers to implement and provide the Lighting system a thread
+ * to process all Lighting events. The lighting system will post all events and invoke all callbacks
+ * on the thread associated with the LightingSystemQueue.
  * <p>
  * <b>Note: Once implemented, the queue must be passed to the LightingDirector via the start method.
  * See {@link LightingDirector#start(String, LightingSystemQueue) start} for more information.</b>

@@ -73,7 +73,8 @@ public abstract class LightingItem implements LightingItemInterface {
     }
 
     /**
-     * Returns a boolean indicating whether or not the Lighting item is initialized.
+     * Returns a boolean indicating whether or not the Lighting item has received all
+     * its data from the lighting controller.
      *
      * @return Returns true if the Lighting item is initialized, false otherwise
      */

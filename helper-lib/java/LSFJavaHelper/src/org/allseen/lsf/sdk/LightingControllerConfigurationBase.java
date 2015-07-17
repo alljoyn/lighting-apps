@@ -106,9 +106,9 @@ public class LightingControllerConfigurationBase implements LightingControllerCo
     }
 
     /**
-     * Determines whether the LightingController is connected to a network.
+     * Determines if their is a network available for LightingController to connect.
      *
-     * @return Return true if the controller is connected to a network, false otherwise.
+     * @return Return true their is a network available for the controller, false otherwise.
      */
     @Override
     public boolean isNetworkConnected() {

@@ -16,10 +16,30 @@
 
 package org.allseen.lsf.sdk;
 
+/**
+ * Enum describing the status returned by a controller client function call.
+ */
 public enum ControllerClientStatus {
+    /**
+     * Indicates that controller client operation was successful.
+     */
     OK,
+
+    /**
+     * Indicates that the controller client operation failed because the controller
+     * client is not connected to a controller service.
+     */
     ERR_NOT_CONNECTED,
+
+    /**
+     * Indicates that the controller client operation failed. Look at the error logs
+     * to determine why the failure occurred.
+     */
     ERR_FAILURE,
+
+    /**
+     * Indicates that the controller client operation failed and should be retried.
+     */
     ERR_RETRY;
 
     /** Static lookup, used by the native code */
@@ -35,7 +55,7 @@ public enum ControllerClientStatus {
     }
 
     /**
-     * Gets the integer value.
+     * Gets the integer value of the enum.
      *
      * @return the integer value
      */

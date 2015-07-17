@@ -18,8 +18,10 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.listener.SceneCollectionListener;
 
 /**
- * Provides an interface for developers to implement and receive all Scene related events in the
- * Lighting system.
+ * Provides an interface for developers to implement and receive all scenes related events in the
+ * Lighting system. Developers will be notified when scenes are added, modified, initialized, and
+ * deleted from the lighting controller. Scenes are considered initialized when all scene data has
+ * been received from the lighting controller.
  * <p>
  * <b>Note: Once implemented, the listener must be registered with the LightingDirector in order
  * to receive Scene callbacks. See {@link LightingDirector#addSceneListener(SceneListener) addSceneListener}
@@ -31,7 +33,10 @@ public interface SceneListener extends SceneCollectionListener<Scene, LightingIt
      * Triggered when all data has been received from the lighting controller for a
      * particular Scene.
      * <p>
-     * <b>Note: This callback will fire only once for each Scene when it is initialized.</b>
+     * <b>Note: This callback will fire only once for each Scene when all data has been received from
+     * the lighting controller.</b>
+     * <p>
+     * <b>Note: The tracking ID is only valid for scenes created within your application.</b>
      *
      * @param trackingId Reference to TrackingID
      * @param scene Reference to Scene
@@ -49,10 +54,10 @@ public interface SceneListener extends SceneCollectionListener<Scene, LightingIt
     public void onSceneChanged(Scene scene);
 
     /**
-     * Triggered when a particular Scene has been removed from the Lighting system.
+     * Triggered when a particular Scene has been deleted from the lighting controller.
      * <p>
-     * <b>Note: This callback will fire only once for each Scene when it is removed from
-     * the Lighting system.</b>
+     * <b>Note: This callback will fire only once for each Scene when it is deleted from
+     * the lighting controller.</b>
      *
      * @param scene Reference to Scene
      */

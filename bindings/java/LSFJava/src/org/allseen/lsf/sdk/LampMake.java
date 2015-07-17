@@ -16,10 +16,29 @@
 
 package org.allseen.lsf.sdk;
 
+/**
+ * Enum describing the make of a Lamp.
+ */
 public enum LampMake {
+    /**
+     * Specifies an invalid LampMake.
+     */
     INVALID,
+
+    /**
+     * Specifies a lamp made by LIFX.
+     */
     LIFX,
+
+    /**
+     * Specifies a lamp made by a generic OEM.
+     */
     OEM1,
+
+    /**
+     * Specifies that the LampMake is unchanged and to use the last value
+     * that was received.
+     */
     LASTVALUE;
 
     /** Static lookup, used by the native code */
@@ -35,7 +54,7 @@ public enum LampMake {
     }
 
     /**
-     * Gets the integer value.
+     * Gets the integer value of the enum.
      *
      * @return the integer value
      */

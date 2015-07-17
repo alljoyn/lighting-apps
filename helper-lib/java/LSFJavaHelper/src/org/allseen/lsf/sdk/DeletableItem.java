@@ -16,12 +16,13 @@ package org.allseen.lsf.sdk;
 
 /**
  * Base interface that is implemented by all Lighting items that support a
- * delete operation.
+ * delete operation. When delete is called, the Lighting item will be permanently
+ * deleted from the Lighting Controller.
  */
 public interface DeletableItem extends LightingItemInterface {
 
     /**
-     * Delete the current Lighting item.
+     * Delete the current Lighting item from the Lighting Controller.
      */
     public void delete();
 }

@@ -18,8 +18,10 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.listener.GroupCollectionListener;
 
 /**
- * Provides an interface for developers to implement and receive all Group related events in the
- * Lighting system.
+ * Provides an interface for developers to implement and receive all group related events in the
+ * Lighting system. Developers will be notified when groups are added, modified, initialized, and
+ * deleted from the lighting controller. Groups are considered initialized when all group data has
+ * been received from the lighting controller.
  * <p>
  * <b>Note: Once implemented, the listener must be registered with the LightingDirector in order
  * to receive Group callbacks. See {@link LightingDirector#addGroupListener(GroupListener) addGroupListener}
@@ -31,7 +33,10 @@ public interface GroupListener extends GroupCollectionListener<Group, LightingIt
      * Triggered when all data has been received from the lighting controller for a
      * particular Group.
      * <p>
-     * <b>Note: This callback will fire only once for each Group when it is initialized.</b>
+     * <b>Note: This callback will fire only once for each Group when all data has been received from
+     * the lighting controller.</b>
+     * <p>
+     * <b>Note: The tracking ID is only valid for groups created within your application.</b>
      *
      * @param trackingId Reference to TrackingID
      * @param group Reference to Group
@@ -49,10 +54,10 @@ public interface GroupListener extends GroupCollectionListener<Group, LightingIt
     public void onGroupChanged(Group group);
 
     /**
-     * Triggered when a particular Group has been removed from the Lighting system.
+     * Triggered when a particular Group has been deleted from the lighting controller.
      * <p>
-     * <b>Note: This callback will fire only once for each Group when it is removed from
-     * the Lighting system.</b>
+     * <b>Note: This callback will fire only once for each Group when it is deleted from
+     * the lighting controller.</b>
      *
      * @param group Reference to Group
      */

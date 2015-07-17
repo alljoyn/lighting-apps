@@ -24,10 +24,19 @@ import org.allseen.lsf.sdk.model.LightingItemUtil;
 import org.allseen.lsf.sdk.model.PulseEffectDataModelV2;
 
 /**
- * This class represents a PulseEffect in the Lighting system.
+ * This class represents a PulseEffect definition in the lighting controller. This class
+ * provides an interface to perform PulseEffect operations. Supported operations include
+ * modifying the pulse effect properties, applying the pulse effect to a lamp or group,
+ * renaming, and deleting the pulse effect. Pulse effects alternate between two color states
+ * for a given duration and then return to their original state. Pulse effects are considered
+ * fully initialized when their name, start and end color state, duration, period, and number
+ * of pulses have been received. Pulse effects are still operational and can be applied to
+ * lamps or groups even in the uninitialized state.
  * <p>
  * <b>Note: This class is not meant to be instantiated directly. PulseEffects should be retrieved
  * from the LightingDirector using the {@link LightingDirector#getPulseEffects()} method.</b>
+ * <p>
+ * <b>Note: This class does not support PulseEffect creation. See {@link LightingDirector#createPulseEffect(LampState, LampState, long, long, long, String)}.</b>
  */
 public class PulseEffect extends ColorItem implements Effect {
     /**
@@ -127,7 +136,10 @@ public class PulseEffect extends ColorItem implements Effect {
     }
 
     /**
-     * Deletes the current PulseEffect from the Lighting system.
+     * Permanently deletes the current PulseEffect from the lighting controller.
+     * <p>
+     * <b>Note: You cannot delete a pulse effect that is used by a scene element. The dependency
+     * must be deleted first.</b>
      */
     @Override
     public void delete() {
@@ -166,7 +178,7 @@ public class PulseEffect extends ColorItem implements Effect {
     }
 
     /**
-     * Returns the Preset associated with the PulseEffects start state.
+     * Returns the Preset associated with the PulseEffect's start state.
      *
      * @return Reference to Preset object
      */
@@ -175,7 +187,7 @@ public class PulseEffect extends ColorItem implements Effect {
     }
 
     /**
-     * Returns the Preset associated with the PulseEffects end state.
+     * Returns the Preset associated with the PulseEffect's end state.
      *
      * @return Reference to Preset object
      */
@@ -184,7 +196,7 @@ public class PulseEffect extends ColorItem implements Effect {
     }
 
     /**
-     * Returns the preset ID associated with the PulseEffects start state.
+     * Returns the preset ID associated with the PulseEffect's start state.
      *
      * @return ID of the Preset
      */
@@ -193,7 +205,7 @@ public class PulseEffect extends ColorItem implements Effect {
     }
 
     /**
-     * Returns the preset ID associated with the PulseEffects end state.
+     * Returns the preset ID associated with the PulseEffect's end state.
      *
      * @return ID of the Preset
      */
@@ -220,9 +232,9 @@ public class PulseEffect extends ColorItem implements Effect {
     }
 
     /**
-     * Returns the number of pulsed in the PulseEffect.
+     * Returns the number of pulses in the PulseEffect.
      *
-     * @return Number of pulsed in the PulseEffect
+     * @return Number of pulses in the PulseEffect
      */
     public long getCount() {
         return pulseEffectModel.getCount();

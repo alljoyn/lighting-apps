@@ -48,7 +48,7 @@ public class Controller extends LightingItem {
     /**
      * Renames the lead controller in the Lighting system.
      * <p>
-     * WARNING: This method is not yet implemented and could change in future releases.
+     * <b>WARNING: This method is not yet implemented and could change in future releases.</b>
      */
     @Override
     public void rename(String name) {

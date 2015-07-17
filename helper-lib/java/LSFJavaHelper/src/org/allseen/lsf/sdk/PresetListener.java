@@ -18,8 +18,10 @@ package org.allseen.lsf.sdk;
 import org.allseen.lsf.sdk.listener.PresetCollectionListener;
 
 /**
- * Provides an interface for developers to implement and receive all Preset related events in the
- * Lighting system.
+ * Provides an interface for developers to implement and receive all preset related events in the
+ * Lighting system. Developers will be notified when presets are added, modified, initialized, and
+ * removed from the lighting controller. Presets are considered initialized when all preset data has
+ * been received from the lighting controller.
  * <p>
  * <b>Note: Once implemented, the listener must be registered with the LightingDirector in order
  * to receive Preset callbacks. See {@link LightingDirector#addPresetListener(PresetListener) addPresetListener}
@@ -31,7 +33,10 @@ public interface PresetListener extends PresetCollectionListener<Preset, Lightin
      * Triggered when all data has been received from the lighting controller for a
      * particular Preset.
      * <p>
-     * <b>Note: This callback will fire only once for each Preset when it is initialized.</b>
+     * <b>Note: This callback will fire only once for each Preset when all data has been received from
+     * the lighting controller.</b>
+     * <p>
+     * <b>Note: The tracking ID is only valid for presets created within your application.</b>
      *
      * @param trackingId Reference to TrackingID
      * @param preset Reference to Preset
@@ -49,9 +54,9 @@ public interface PresetListener extends PresetCollectionListener<Preset, Lightin
     public void onPresetChanged(Preset preset);
 
     /**
-     * Triggered when a particular Preset has been removed from the Lighting system.
+     * Triggered when a particular Preset has been deleted from the Lighting system.
      * <p>
-     * <b>Note: This callback will fire only once for each Preset when it is removed from
+     * <b>Note: This callback will fire only once for each Preset when it is deleted from
      * the Lighting system.</b>
      *
      * @param preset Reference to Preset

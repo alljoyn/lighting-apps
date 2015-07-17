@@ -18,11 +18,15 @@ import org.allseen.lsf.sdk.model.LightingItemDataModel;
 import org.allseen.lsf.sdk.model.SceneDataModel;
 
 /**
- * This class represents a SceneV1 in the Lighting system. SceneV1s are only relevant in pre
- * 15.04 controllers.
+ * This class represents a SceneV1 definition in the lighting controller. SceneV1s are only
+ * relevant in pre 15.04 controllers. This class provides an interface to perform SceneV1
+ * operations. Supported operations include renaming, applying, and deleting the SceneV1.
  * <p>
  * <b>Note: This class is not meant to be instantiated directly. SceneV1s should be retrieved
  * from the LightingDirector using the {@link LightingDirector#getScenes()} method.</b>
+ * <p>
+ * <b>Note: This class does not support SceneV1 creation. SceneV1s must already exist on the
+ * lighting controller.</b>
  */
 public class SceneV1 extends Scene {
     /**

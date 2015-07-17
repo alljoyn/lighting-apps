@@ -15,6 +15,10 @@
  */
 package org.allseen.lsf.sdk;
 
+/**
+ * The ColorAverager class is used to calculate the average HSVT state of all lamps
+ * that compose a group.
+ */
 public class ColorAverager extends org.allseen.lsf.sdk.model.ColorAverager {
 
 }

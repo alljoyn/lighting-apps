@@ -15,14 +15,27 @@
  */
 package org.allseen.lsf.sdk;
 
+/**
+ * Enum describing how the device runninf the controller service connects to the network.
+ */
 public enum RankNodeType {
-    /** Indicates device is connected to the access point over a wireless link */
+    /**
+     * Indicates device is connected to the access point over a wireless link
+     */
     WIRELESS,
-    /** Indicates device is connected to the access point over a wired link */
+    /**
+     * Indicates device is connected to the access point over a wired link
+     */
     WIRED,
-    /** Indicates device running the Controller Service is the access point itself */
+
+    /**
+     * Indicates device running the Controller Service is the access point itself
+     */
     ACCESS_POINT,
-    /** If OEMs return this value, the Controller Service will use WIRELESS as this is not a valid value */
+
+    /**
+     * If OEMs return this value, the Controller Service will use WIRELESS as this is not a valid value
+     */
     OEM_CS_RANKPARAM_NODETYPE_LAST_VALUE;
 
     /** Static lookup, used by the native code */
@@ -38,7 +51,7 @@ public enum RankNodeType {
     }
 
     /**
-     * Gets the integer value.
+     * Gets the integer value of the enum.
      *
      * @return the integer value
      */
