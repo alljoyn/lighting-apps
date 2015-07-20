@@ -14,7 +14,7 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-typedef enum {
+typedef NS_ENUM(NSInteger, Power) {
     OFF,
     ON
-} Power;
+};

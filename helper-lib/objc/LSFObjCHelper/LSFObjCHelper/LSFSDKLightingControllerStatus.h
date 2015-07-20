@@ -14,9 +14,9 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-typedef enum {
+typedef NS_ENUM(NSInteger, LightingControllerStatus) {
     OK,
     ERROR,
     ERROR_ALREADY_RUNNING,
     ERROR_INIT
-} LightingControllerStatus;
+};
