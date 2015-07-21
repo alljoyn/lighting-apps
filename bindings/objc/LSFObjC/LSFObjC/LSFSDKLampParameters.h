@@ -16,11 +16,33 @@
 
 #import "internal/LSFObject.h"
 
+/**
+ * This class encapsulates all of the parameters for lamps and illustrates the current energy usage and
+ * brightness output of the lamp.
+ */
 @interface LSFSDKLampParameters : LSFObject
 
+/** @name Class Properties */
+
+/**
+ * Specifies the current energy usage of the lamp, in milliwatts.
+ */
 @property (nonatomic) unsigned int energyUsageMilliwatts;
+
+/**
+ * Specifies the current brightness of the lamp, in lumens.
+ */
 @property (nonatomic) unsigned int lumens;
 
+/** @name Initializing an LSFSDKLampParameters Object */
+
+/**
+ * Constructs a LSFSDKLampParameters object.
+ *
+ * @warning This method is intended to be used internally. Client software should not instantiate
+ * LSFSDKLampParameters directly, but should instead get them from the LSFSDKLamp using the [LSFSDKLamp parameters]
+ * method.
+ */
 -(id)init;
 
 @end

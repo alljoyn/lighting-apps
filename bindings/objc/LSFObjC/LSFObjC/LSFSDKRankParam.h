@@ -17,6 +17,11 @@
 #ifndef LSFObjC_LSFSDKRankParam_h
 #define LSFObjC_LSFSDKRankParam_h
 
+/**
+ * Enum describing the following properties of the device running the controller service: average uptime over
+ * a 24 hour period, how the device is powered, how the device connects to a network, and how mobile the
+ * device is.
+ */
 #include <lsf/controllerservice/OEM_CS_Config.h>
 
 #endif

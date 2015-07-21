@@ -16,11 +16,40 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ * This class encapsulates the tracking ID that is returned when groups, presets, effect, and scenes are
+ * created in the Lighting system. The tracking ID can be matched to objects created by the developer
+ * themselves.
+ */
 @interface LSFSDKTrackingID : NSObject
 
+/** @name Class Properties */
+
+/**
+ * Specifies the value of the tracking ID.
+ */
 @property (nonatomic) uint32_t value;
 
+/** @name Initializing an LSFSDKTrackingID Object */
+
+/**
+ * Constructs a LSFSDKTrackingID object.
+ *
+ * @warning This method is intended to be used internally. Client software should not instantiate
+ * LSFSDKLampParameters directly, but should instead get them from the LSFSDKLamp using the [LSFSDKLamp parameters]
+ * method.
+ */
 -(id)init;
+
+/**
+ * Constructs a LSFSDKTrackingID object using the provided value.
+ *
+ * @warning This method is intended to be used internally. Client software should not instantiate
+ * LSFSDKLampParameters directly, but should instead get them from the LSFSDKLamp using the [LSFSDKLamp parameters]
+ * method.
+ *
+ * @param value  The value to use as the tracking ID
+ */
 -(id)initWithValue: (uint32_t)value;
 
 @end

@@ -17,8 +17,16 @@
 #import <Foundation/Foundation.h>
 #import "LSFSDKLightingItemProtocol.h"
 
+/**
+ * Base interface that is implemented by all Lighting items that support a
+ * delete operation. When delete is called, the Lighting item will be permanently
+ * deleted from the Lighting Controller.
+ */
 @protocol LSFSDKDeletableItem <LSFSDKLightingItemProtocol>
 
+/**
+ * Delete the current Lighting item from the Lighting Controller.
+ */
 -(void)deleteItem;
 
 @end

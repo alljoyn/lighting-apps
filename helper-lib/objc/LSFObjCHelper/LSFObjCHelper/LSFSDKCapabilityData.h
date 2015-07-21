@@ -16,6 +16,12 @@
 
 #import "model/LSFCapabilityData.h"
 
+/**
+ * This class represents the current capabilities of a lamp or group in the Lighting system.
+ * Such capabilities include: dimmable, color, and color temperature. For groups, if at least
+ * one lamp in the group supports dimming, color, or color temperature, the capability will
+ * be set to true.
+ */
 @interface LSFSDKCapabilityData : LSFCapabilityData
 
 @end

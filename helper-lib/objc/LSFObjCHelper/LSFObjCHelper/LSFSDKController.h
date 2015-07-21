@@ -17,18 +17,41 @@
 #import "LSFSDKLightingItem.h"
 #import "model/LSFControllerModel.h"
 
-// This class represents the client's info on a device providing the Lighting
-// Controller Service (LSF) functionality (currently only the lead controller
-// is exposed). In contrast, the LightingController class is an implementation
-// of the LSF, and is used by devices that want to provide the LSF functionality.
+/**
+ * This class provides an interface to retrieve information about a given controller
+ * in the Lighting system.
+ *
+ * @warning Client software should not instantiate the LSFSDKController directly, but should
+ * instead get it from the LSFSDKLightingDirector using the [LSFSDKLightingDirector leadController]
+ * method.
+ */
 @interface LSFSDKController : LSFSDKLightingItem
 {
     @protected LSFControllerModel *controllerModel;
 }
 
+/** @name Class Properties */
+
+/**
+ * Returns a boolean that indicates if it is the lead controller in the Lighting system.
+ *
+ * @return Return true if this is the lead controller, false otherwise
+ */
 @property (nonatomic, readonly) BOOL connected;
+
+/**
+ * Returns the version of the controller.
+ *
+ * @return Version of the controller.
+ */
 @property (nonatomic, readonly) unsigned int version;
 
+/** @name Protected methods */
+
+/**
+ * @warning This method is not intended to be used by clients, and may change or be
+ * removed in subsequent releases of the SDK.
+ */
 -(LSFControllerModel *) getControllerDataModel;
 
 @end

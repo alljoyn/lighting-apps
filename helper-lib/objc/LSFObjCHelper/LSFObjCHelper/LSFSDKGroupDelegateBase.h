@@ -17,6 +17,14 @@
 #import <Foundation/Foundation.h>
 #import "LSFSDKGroupDelegate.h"
 
+/**
+ * Provides a base class for developers to extend and implement to receive all Group related events in the
+ * Lighting system. Any method of the LSFSDKGroupDelegate interface that is not overridden in the subclass will
+ * be treated as a no-op.
+ *
+ * **Note:** Once implemented, the subclass must be registered with the LSFSDKLightingDirector in order
+ * to receive Group callbacks. See [LSFSDKLightingDirector addGroupDelegate:] for more information.
+ */
 @interface LSFSDKGroupDelegateBase : NSObject <LSFSDKGroupDelegate>
 
 @end

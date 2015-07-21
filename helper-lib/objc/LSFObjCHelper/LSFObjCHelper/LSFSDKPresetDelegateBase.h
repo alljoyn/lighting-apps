@@ -17,6 +17,14 @@
 #import <Foundation/Foundation.h>
 #import "LSFSDKPresetDelegate.h"
 
+/**
+ * Provides a base class for developers to extend and implement to receive all Preset related events in the
+ * Lighting system. Any method of the LSFSDKPresetDelegate interface that is not overridden in the subclass will
+ * be treated as a no-op.
+ *
+ * **Note:** Once implemented, the delegate must be registered with the LSFSDKLightingDirector in order
+ * to receive Preset callbacks. See [LSFSDKLightingDirector addPresetDelegate:] for more information.
+ */
 @interface LSFSDKPresetDelegateBase : NSObject <LSFSDKPresetDelegate>
 
 @end

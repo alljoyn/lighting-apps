@@ -16,8 +16,22 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ * Provides an interface for developers to implement and receive a callback when a connection is
+ * established with a LSFSDKLightingController.
+ *
+ * **Note:** Once implemented, the delegate must be registered with the LSFSDKLightingDirector in order
+ * to receive a connection callback. See [LSFSDKLightingDirector postOnNextControllerConnectionWithDelay:delegate:]
+ * for more information.
+ */
 @protocol LSFSDKNextControllerConnectionDelegate <NSObject>
 
+/**
+ * Triggered when a connection to a LSFSDKLightingController has been established.
+ *
+ * @warning This delegate will fire only once when a controller connection is established. This
+ * delegate must be reregistered if the controller connection is lost.
+ */
 -(void)onNextControllerConnection;
 
 @end

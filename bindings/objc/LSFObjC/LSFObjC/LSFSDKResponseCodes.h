@@ -17,6 +17,9 @@
 #ifndef LSFObjC_LSFSDKResponseCodes_h
 #define LSFObjC_LSFSDKResponseCodes_h
 
+/**
+ * Enum describing the response codes that will be returned by a controller client operation.
+ */
 #include <LSFResponseCodes.h>
 
 #endif

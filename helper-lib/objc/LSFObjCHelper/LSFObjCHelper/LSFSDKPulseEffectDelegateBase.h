@@ -17,6 +17,14 @@
 #import <Foundation/Foundation.h>
 #import "LSFSDKPulseEffectDelegate.h"
 
+/**
+ * Provides a base class for developers to extend and implement to receive all PulseEffect related events in the
+ * Lighting system. Any method of the LSFSDKPulseEffectDelegate interface that is not overridden in the subclass will
+ * be treated as a no-op.
+ *
+ * **Note:** Once implemented, the delegate must be registered with the LSFSDKLightingDirector in order
+ * to receive PulseEffect callbacks. See [LSFSDKLightingDirector addPulseEffectDelegate:] for more information.
+ */
 @interface LSFSDKPulseEffectDelegateBase : NSObject <LSFSDKPulseEffectDelegate>
 
 @end

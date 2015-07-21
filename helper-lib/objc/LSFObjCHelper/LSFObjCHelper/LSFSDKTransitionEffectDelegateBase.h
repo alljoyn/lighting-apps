@@ -17,6 +17,15 @@
 #import <Foundation/Foundation.h>
 #import "LSFSDKTransitionEffectDelegate.h"
 
+/**
+ * Provides a base class for developers to extend and implement to receive all TransitionEffect related events in the
+ * Lighting system. Any method of the LSFSDKTransitionEffectDelegate interface that is not overridden in the subclass will
+ * be treated as a no-op.
+ *
+ * **Note:** Once implemented, the delegate must be registered with the LSFSDKLightingDirector in order
+ * to receive TransitionEffect callbacks. See [LSFSDKLightingDirector addTransitionEffectDelegate:] for
+ * more information.
+ */
 @interface LSFSDKTransitionEffectDelegateBase : NSObject <LSFSDKTransitionEffectDelegate>
 
 @end

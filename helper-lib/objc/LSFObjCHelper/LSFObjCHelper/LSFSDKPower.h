@@ -14,7 +14,17 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
+/**
+ * Enum used to convey the power state.
+ */
 typedef NS_ENUM(NSInteger, Power) {
+    /**
+     * Item is off.
+     */
     OFF,
+
+    /**
+     * Item is on.
+     */
     ON
 };

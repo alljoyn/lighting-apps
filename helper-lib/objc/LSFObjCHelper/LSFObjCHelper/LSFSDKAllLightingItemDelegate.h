@@ -25,6 +25,14 @@
 #import "LSFSDKMasterSceneDelegate.h"
 #import "LSFSDKControllerDelegate.h"
 
+/**
+ * Provides an interface for developers to implement and receive all Lighting related events in the
+ * Lighting system. This includes events for lamps, groups, presets, transition/pulse effects, scene
+ * elements, scenes, master scenes, and controller.
+ *
+ * **Note:** Once implemented, the delegate must be registered with the LSFSDKLightingDirector in order
+ * to receive all Lighting callbacks. See [LSFSDKLightingDirector addDelegate:] for more information.
+ */
 @protocol LSFSDKAllLightingItemDelegate <LSFSDKLampDelegate, LSFSDKGroupDelegate, LSFSDKPresetDelegate, LSFSDKTransitionEffectDelegate, LSFSDKPulseEffectDelegate, LSFSDKSceneElementDelegate, LSFSDKSceneDelegate, LSFSDKMasterSceneDelegate, LSFSDKControllerDelegate>
 
 @end

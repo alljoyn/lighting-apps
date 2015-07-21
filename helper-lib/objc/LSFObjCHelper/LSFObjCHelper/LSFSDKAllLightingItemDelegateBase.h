@@ -17,6 +17,14 @@
 #import <Foundation/Foundation.h>
 #import "LSFSDKAllLightingItemDelegate.h"
 
+/**
+ * Provides a base class for developers to extend and implement to receive all Lighting related events in the
+ * Lighting system. Any method of the LSFSDKAllLightingItemDelegate interface that is not overridden in the
+ * subclass will be treated as a no-op.
+ *
+ * **Note:** Once implemented, the callback must be registered with the LSFSDKLightingDirector in order
+ * to receive all Lighting callbacks. See [LSFSDKLightingDirector addDelegate:] for more information.
+ */
 @interface LSFSDKAllLightingItemDelegateBase : NSObject <LSFSDKAllLightingItemDelegate>
 
 @end

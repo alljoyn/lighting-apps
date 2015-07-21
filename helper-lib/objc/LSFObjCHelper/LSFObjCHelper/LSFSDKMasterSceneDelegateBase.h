@@ -17,6 +17,14 @@
 #import <Foundation/Foundation.h>
 #import "LSFSDKMasterSceneDelegate.h"
 
+/**
+ * Provides a base class for developers to extend and implement to receive all MasterScene related events in the
+ * Lighting system. Any method of the LSFSDKMasterSceneDelegate interface that is not overridden in the subclass will
+ * be treated as a no-op.
+ *
+ * **Note:** Once implemented, the delegate must be registered with the LSDFSDKLightingDirector in order
+ * to receive MasterScene callbacks. See [LSFSDKLightingDirector addMasterSceneDelegate:] for more information.
+ */
 @interface LSFSDKMasterSceneDelegateBase : NSObject <LSFSDKMasterSceneDelegate>
 
 @end

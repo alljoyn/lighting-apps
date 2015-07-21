@@ -21,9 +21,28 @@
 
 @class LSFSDKControllerErrorEvent;
 
+/**
+ * Provides an interface for developers to implement and receive all controller related events in the
+ * Lighting system. Developers will be notified when a new controller becomes the leader on the network
+ * and when there are any controller related errors.
+ *
+ * **Note:** Once implemented, the delegate must be registered with the LSFSDKLightingDirector in order
+ * to receive Controller callbacks. See [LSFSDKLightingDirector addControllerDelegate:] for more information.
+ */
 @protocol LSFSDKControllerDelegate <LSFSDKLightingDelegate>
 
+/**
+ * Triggered when a new controller becomes the leader in the Lighting system.
+ *
+ * @param leader Reference to new lead controller
+ */
 -(void)onLeaderChange: (LSFSDKController *)leader;
+
+/**
+ * Triggered when an error occurs on a controller operation.
+ *
+ * @param errorEvent Reference to LSFSDKControllerErrorEvent
+ */
 -(void)onControllerError: (LSFSDKControllerErrorEvent *)errorEvent;
 
 @end

@@ -17,6 +17,9 @@
 #ifndef LSFObjC_LSFSDKLampResponseCodes_h
 #define LSFObjC_LSFSDKLampResponseCodes_h
 
-#include <LSFLampResponseCodes.h>
+/**
+ * Enum describing the response codes that will be returned by a lamp operation.
+ */
+#include <LampResponseCodes.h>
 
 #endif

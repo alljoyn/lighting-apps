@@ -19,9 +19,25 @@
 
 @class LSFSDKPreset;
 
+/**
+ * Base class for Lighting items that can be included in a Lighting Group.
+ *
+ * @warning Client software should not instantiate the LSFSDKGroupMember directly.
+ */
 @interface LSFSDKGroupMember : LSFSDKMutableColorItem
 
+/**
+ * Applies the provided LSFSDKPreset to the current LSFSDKGroupMember.
+ *
+ * @param preset Preset to apply to the current LSFSDKGroupMember
+ */
 -(void)applyPreset: (LSFSDKPreset *)preset;
+
+/**
+ * Applies the provided LSFSDKEffect to the current LSFSDKGroupMember.
+ *
+ * @param effect Effect to apply to the current LSFSDKGroupMember
+ */
 -(void)applyEffect: (id<LSFSDKEffect>)effect;
 
 @end

@@ -17,6 +17,9 @@
 #ifndef LSFObjC_LSFSDKLampValues_h
 #define LSFObjC_LSFSDKLampValues_h
 
+/**
+ * Enum describing the basic properties of the lamp including make, model, and type.
+ */
 #include <LampValues.h>
 
 #endif

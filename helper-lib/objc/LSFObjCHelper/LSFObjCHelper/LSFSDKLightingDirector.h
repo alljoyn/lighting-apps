@@ -46,12 +46,15 @@
 #endif
 
 /**
- * LSFSDKLightingDirector is the main class in the facade interface of the iOS Lighting SDK.
- * It provides access to instances of other facade classes that represent active components
- * in the Lighting system.
+ * LSFSDKLightingDirector is the main entry point to the Lighting SDK and provides access to the
+ * components in the Lighting system. This includes the lamps connected to the lighting controller
+ * and all group, preset, effect, and scene definitions stored in the lighting controller. The
+ * LSFSDKLightingDirector also provides an interface to create groups, presets, effects, and scenes as
+ * well as add/remove callbacks that will be notified when events occur in the Lighting system.
  *
- * *Note:* Please see the LSFTutorial project for an example of how to use the LSFSDKLightingDirector
- * class.
+ * Please see the LSFTutorial project for an example of how to use the LightingDirector class.
+ *
+ * @warning The LightingController requires a WiFi or Ethernet network connection.
  */
 @interface LSFSDKLightingDirector : NSObject
 {
@@ -60,287 +63,295 @@
 
 /** @name Class Properties */
 
+/**
+ * Readonly peopert that specifies the minimum hue
+ */
 @property (nonatomic, readonly) int HUE_MIN;
+
+/**
+ * Readonly peopert that specifies the maximum hue
+ */
 @property (nonatomic, readonly) int HUE_MAX;
+
+/**
+ * Readonly peopert that specifies the minimum saturation
+ */
 @property (nonatomic, readonly) int SATURATION_MIN;
+
+/**
+ * Readonly peopert that specifies the maximum saturation
+ */
 @property (nonatomic, readonly) int SATURATION_MAX;
+
+/**
+ * Readonly peopert that specifies the minimum brightness
+ */
 @property (nonatomic, readonly) int BRIGHTNESS_MIN;
+
+/**
+ * Readonly peopert that specifies the maximum brightness
+ */
 @property (nonatomic, readonly) int BRIGHTNESS_MAX;
+
+/**
+ * Readonly peopert that specifies the minimum color temperature
+ */
 @property (nonatomic, readonly) int COLORTEMP_MIN;
+
+/**
+ * Readonly peopert that specifies the maximum color temperature
+ */
 @property (nonatomic, readonly) int COLORTEMP_MAX;
 
 /**
- * The version number of the interface provided by this class
- *
- * @return The version number
+ * Readonly property that returns the version number of the Lighting SDK.
  */
 @property (nonatomic, readonly) unsigned int version;
 
 /**
- * Returns the AllJoyn BusAttachment object being used to connect to the Lighting System
+ * Readonly property that returns the AllJoyn BusAttachment object being used to connect to the Lighting System
  *
- * @warning *Note:* The BusAttachment will be nil until some time after the call start.
- *
- * @return AllJoyn BusAttachment object.
+ * @warning The BusAttachment will be nil until some time after the call start.
  */
 @property (nonatomic, readonly) ajn::BusAttachment *busAttachment;
 
 /*
- * TODO
+ * Readonly property that returns the dispatch queue being used by the lighting system.
  */
 @property (nonatomic, readonly) dispatch_queue_t queue;
 
 /**
- * Returns a snapshot of the active Lamps in the Lighting system including lamps that may not have
- * received all data from the controller.
+ * Readonly property that returns a snapshot of all the Lamps connected to the Lighting controller including
+ * lamps that may not have received all data.
  *
- * @warning *Note:* The contents of this array may change in subsequent calls to this method as
- * new lamps are discovered or existing lamps are determined to be offline. This array may be empty.
- *
- * @return Array of active Lamps.
+ * @warning The contents of this array may change in subsequent calls to this method as new lamps are discovered
+ * or existing lamps are determined to be offline. This array may also be empty.
  */
 @property (nonatomic, strong, readonly) NSArray *lamps;
 
 /**
- * Returns a snapshot of the active Lamps in the Lighting system including lamps that have received
- * all data from the controller.
+ * Readonly property that returns a snapshot of all the Lamps connected to the Lighting controller that have received all
+ * their data.
  *
- * @warning *Note:* The contents of this array may change in subsequent calls to this method as
- * new lamps are discovered or existing lamps are determined to be offline. This array may be empty.
- *
- * @return Array of active Lamps.
+ * @warning The contents of this array may change in subsequent calls to this method as new lamps are discovered or existing
+ * lamps are determined to be offline. This array may also be empty.
  */
 @property (nonatomic, strong, readonly) NSArray *initializedLamps;
 
 /*
- * TODO
+ * Readonly property that returns the number of lamps connected to the lighting controller.
  */
 @property (nonatomic, readonly) NSUInteger lampCount;
 
 /**
- * Returns a snapshot of the active Group definitions in the Lighting system including groups that may
- * not have received all data from the controller.
+ * Readonly property that returns a snapshot of all the Groups stored in the Lighting controller including
+ * groups that may not have received all data.
  *
- * @warning *Note:* The contents of this array may change in subsequent calls to this method as new groups
- * are created or existing groups are deleted. This array may be empty.
- *
- * @return Array of active Groups.
+ * @warning The contents of this array may change in subsequent calls to this method as new groups are created
+ * or existing groups are deleted. This array may also be empty.
  */
 @property (nonatomic, strong, readonly) NSArray *groups;
 
 /**
- * Returns a snapshot of the active Group definitions in the Lighting system that have received all data from the
- * controller.
+ * Readonly property that returns a snapshot of all the Groups stored in the Lighting controller that have received all
+ * their data.
  *
- * @warning *Note:* The contents of this array may change in subsequent calls to this method as new groups are created
- * or existing groups are deleted. This array may be empty.
- *
- * @return Array of active Groups.
+ * @warning The contents of this array may change in subsequent calls to this method as new groups are created or existing
+ * groups are deleted. This array may also be empty.
  */
 @property (nonatomic, strong, readonly) NSArray *initializedGroups;
 
 /*
- * TODO
+ * Readonly property that returns the number of groups stored in the lighting controller.
  */
 @property (nonatomic, readonly) NSUInteger groupCount;
 
 /**
- * Returns a snapshot of the active Preset definitions in the Lighting system including presets that may
- * not have received all data from the controller.
+ * Readonly property that returns a snapshot of all the Presets stored in the Lighting controller including
+ * presets that may not have received all data.
  *
- * @warning *Note:* The contents of this array may change in subsequent calls to this method as new presets
- * are created or existing presets are deleted. This array may be empty.
- *
- * @return Array of active Presets.
+ * @warning The contents of this array may change in subsequent calls to this method as new presets are created
+ * or existing presets are deleted. This array may also be empty.
  */
 @property (nonatomic, strong, readonly) NSArray *presets;
 
 /**
- * Returns a snapshot of the active Preset definitions in the Lighting system that have received all data from the
- * controller.
+ * Readonly property that returns a snapshot of all the Presets stored in the Lighting controller that have received all
+ * their data.
  *
- * @warning *Note:* The contents of this array may change in subsequent calls to this method as new presets are created
- * or existing presets are deleted. This array may be empty.
- *
- * @return Array of active Presets.
+ * @warning The contents of this array may change in subsequent calls to this method as new presets are created or existing
+ * presets are deleted. This array may also be empty.
  */
 @property (nonatomic, strong, readonly) NSArray *initializedPresets;
 
 /*
- * TODO
+ * Readonly property that returns the number of presets stored in the lighting controller.
  */
 @property (nonatomic, readonly) NSUInteger presetCount;
 
 /**
- * Returns a snapshot of the active Transition Effect definitions in the Lighting system including transition effects
- * that may not have received all data from the controller.
+ * Readonly property that returns a snapshot of all the Transition Effects stored in the Lighting controller including
+ * transition effects that may not have received all data.
  *
- * @warning *Note:* The contents of this array may change in subsequent calls to this method as new transition effects
- * are created or existing transtion effects are deleted. This array may be empty.
- *
- * @return Array of active Transition Effects.
+ * @warning The contents of this array may change in subsequent calls to this method as new transition effects are created
+ * or existing transition effects are deleted. This array may also be empty.
  */
 @property (nonatomic, strong, readonly) NSArray *transitionEffects;
 
 /**
- * Returns a snapshot of the active Transition Effect definitions in the Lighting system that have received all data
- * from the controller.
+ * Readonly property that returns a snapshot of all the Transition Effects stored in the Lighting controller that have received all
+ * their data.
  *
- * @warning *Note:* The contents of this array may change in subsequent calls to this method as new transition effects
- * are created or existing transition effects are deleted. This array may be empty.
- *
- * @return Array of active Transition Effects.
+ * @warning The contents of this array may change in subsequent calls to this method as new transition effects are created or existing
+ * transition effects are deleted. This array may also be empty.
  */
 @property (nonatomic, strong, readonly) NSArray *initializedTransitionEffects;
 
 /*
- * TODO
+ * Readonly property that returns the number of transition effects stored in the lighting controller.
  */
 @property (nonatomic, readonly) NSUInteger transitionEffectCount;
 
 /**
- * Returns a snapshot of the active Pulse Effect definitions in the Lighting system including pulse effects that may
- * not have received all data from the controller.
+ * Readonly property that returns a snapshot of all the Pulse Effects stored in the Lighting controller including
+ * pulse effects that may not have received all data.
  *
- * @warning *Note:* The contents of this array may change in subsequent calls to this method as new pulse effects
- * are created or existing pulse effects are deleted. This array may be empty.
- *
- * @return Array of active Pulse Effects.
+ * @warning The contents of this array may change in subsequent calls to this method as new pulse effects are created
+ * or existing pulse effects are deleted. This array may also be empty.
  */
 @property (nonatomic, strong, readonly) NSArray *pulseEffects;
 
 /**
- * Returns a snapshot of the active Pulse Effect definitions in the Lighting system that have received all data
- * from the controller.
+ * Readonly property that returns a snapshot of all the Pulse Effects stored in the Lighting controller that have received all
+ * their data.
  *
- * @warning *Note:* The contents of this array may change in subsequent calls to this method as new pulse effects
- * are created or existing pulse effects are deleted. This array may be empty.
- *
- * @return Array of active Pulse Effects.
+ * @warning The contents of this array may change in subsequent calls to this method as new pulse effects are created or existing
+ * pulse effects are deleted. This array may also be empty.
  */
 @property (nonatomic, strong, readonly) NSArray *initializedPulseEffects;
 
 /*
- * TODO
+ * Readonly property that returns the number of pulse effects stored in the lighting controller.
  */
 @property (nonatomic, readonly) NSUInteger pulseEffectCount;
 
-/*
- * TODO
+/**
+ * Readonly property that returns a snapshot of all the Effects (presets, transition effects, and pulse effects) stored in the
+ * Lighting controller including effects that may not have received all data.
+ *
+ * @warning The contents of this array may change in subsequent calls to this method as new effects are created or existing effects
+ * are deleted. This array may also be empty.
  */
 @property (nonatomic, strong, readonly) NSArray *effects;
 
-/*
- * TODO
+/**
+ * Readonly property that returns a snapshot of all the Effects (presets, transition effects, and pulse effects) stored in the
+ * Lighting controller that have received all their data.
+ *
+ * @warning The contents of this array may change in subsequent calls to this method as new effects are created or existing effects
+ * are deleted. This array may also be empty.
  */
 @property (nonatomic, strong, readonly) NSArray *initializedEffects;
 
 /*
- * TODO
+ * Readonly property that returns the number of effects stored in the lighting controller.
  */
 @property (nonatomic, readonly) NSUInteger effectCount;
 
 /**
- * Returns a snapshot of the active Scene Element definitions in the Lighting system including scene elements that may
- * not have received all data from the controller.
+ * Readonly property that returns a snapshot of all the SceneElements stored in the Lighting controller including
+ * scene elements that may not have received all data.
  *
- * @warning *Note:* The contents of this array may change in subsequent calls to this method as new scene elements
+ * @warning The contents of this array may change in subsequent calls to this method as new scene elements
  * are created or existing scene elements are deleted. This array may be empty.
- *
- * @return Array of active Scene Elements.
  */
 @property (nonatomic, strong, readonly) NSArray *sceneElements;
 
 /**
- * Returns a snapshot of the active Scene Element definitions in the Lighting system that have received all data
- * from the controller.
+ * Readonly property that returns a snapshot of all the Scene Elements stored in the Lighting controller that have received all
+ * their data.
  *
- * @warning *Note:* The contents of this array may change in subsequent calls to this method as new scene elements
+ * @warning The contents of this array may change in subsequent calls to this method as new scene elements
  * are created or existing scene elements are deleted. This array may be empty.
- *
- * @return Array of active Scene Elements.
  */
 @property (nonatomic, strong, readonly) NSArray *initializedSceneElements;
 
 /*
- * TODO
+ * Readonly property that returns the number of scene elements stored in the lighting controller.
  */
 @property (nonatomic, readonly) NSUInteger sceneElementCount;
 
 /**
- * Returns a snapshot of the active Scene definitions in the Lighting system including scenes that may not have received
- * all data from the controller.
+ * Readonly property that returns a snapshot of all the Scenes stored in the Lighting controller including
+ * scene that may not have received all data.
  *
- * @warning *Note:* The contents of this array may change in subsequent calls to this method as new scenes are created or
+ * @warning The contents of this array may change in subsequent calls to this method as new scenes are created or
  * existing scenes are deleted. This array may be empty.
- *
- * @return Array of active Scenes.
  */
 @property (nonatomic, strong, readonly) NSArray *scenes;
 
-/*
- * TODO
+/**
+ * Readonly property that returns the number of scenes stored in the lighting controller.
  */
 @property (nonatomic, readonly) NSUInteger sceneCount;
 
 /**
- * Returns a snapshot of the active Scene definitions in the Lighting system that have received all data from the controller.
+ * Readonly property that returns a snapshot of all the Scenes stored in the Lighting controller that have received all their data.
  *
- * @warning *Note:* The contents of this array may change in subsequent calls to this method as new scenes are created or
+ * @warning The contents of this array may change in subsequent calls to this method as new scenes are created or
  * existing scenes are deleted. This array may be empty.
- *
- * @return Array of active Scenes.
  */
 @property (nonatomic, strong, readonly) NSArray *initializedScenes;
 
 /**
- * Returns a snapshot of the active Master Scene definitions in the Lighting system including master scenes that may not
- * have received all data from the controller.
+ * Readonly property that returns a snapshot of all the Master Scenes stored in the Lighting controller includeing master scenes that may not
+ * have received all data.
  *
- * @warning *Note:* The contents of this array may change in subsequent calls to this method as new master scenes are created or
- * existing master scenes are deleted. This array may be empty.
- *
- * @return Array of active Master Scenes.
+ * @warning The contents of this array may change in subsequent calls to this method as new master scenes are created or existing master scenes
+ * are deleted. This array may be empty.
  */
 @property (nonatomic, strong, readonly) NSArray *masterScenes;
 
 /**
- * Returns a snapshot of the active Master Scene definitions in the Lighting system that have received all data from the
- * controller.
+ * Readonly property that returns a snapshot of all the Master Scenes stored in the Lighting controller that have received all
+ * their data.
  *
- * @warning *Note:* The contents of this array may change in subsequent calls to this method as new masterscenes are created or
- * existing master scenes are deleted. This array may be empty.
- *
- * @return Array of active Master Scenes.
+ * @warning The contents of this array may change in subsequent calls to this method as new master scenes are created or existing
+ * master scenes are deleted. This array may be empty.
  */
 @property (nonatomic, strong, readonly) NSArray *initializedMasterScenes;
 
-/*
- * TODO
+/**
+ * Readonly property that returns the number of master scenes stored in the lighting controller.
  */
 @property (nonatomic, readonly) NSUInteger masterSceneCount;
 
-/*
- * TODO
+/**
+ * Readonly property that returns the lead controller in the Lighting system.
  */
 @property (nonatomic, strong, readonly) LSFSDKController *leadController;
 
 /**
  * Specifies the default language used in the Lighting System.
  *
- * @warning *Note:* If this property is never called, the default language is english ("en").
+ * @warning If this property is never called, the default language is english ("en").
  */
 @property (nonatomic, strong) NSString *defaultLanguage;
 
+/*
+ * Readonly property that returns an instance of the LSFSDKLightingSystemManager.
+ *
+ * @warning This property is not intended for public use.
+ */
 @property (nonatomic, strong, readonly) LSFSDKLightingSystemManager *lightingManager;
 
-/** @name Creating LSFSDKLightingDirector */
+/** @name Getting the Shared LSFSDKLightingDirector Instance */
 
 /**
- * Constructs a LSFSDKLightingDirector instance.
+ * Returns an LSFSDKLightingDirector instance.
  *
- * @warning *Note:* The start() method must be called at some point after construction when you're
- * ready to begin working with the Lighting system.
+ * @warning The start method must be called at some point when you're ready
+ * to begin working with the Lighting system.
  *
  * @return The LSFSDKLightingDirector instance.
  */
@@ -349,274 +360,292 @@
 /** @name Starting/Stopping LSFSDKLightingDirector */
 
 /**
- * Causes the LightingDirector to start interacting with the Lighting system. This method will create
- * its own BusAttachment and use a default dispatch queue since none are provided.
+ * Causes the LSFSDKLightingDirector to start interacting with the Lighting system. The LSFSDKLightingDirector
+ * will try to connect to a lighting controller. This method will create its own BusAttachment and dispatch queue.
  *
- * @warning *Note:* start() should be called before interacting with the LSFSDKLightingDirector. Subsequent
- * calls to start() must each be preceded by a call to stop().
+ * @warning This method should be called before interacting with the LSFSDKLightingDirector.
+ * Subsequent calls to this method must each be preceded by a call to stop.
  *
- * @warning *Note:* you should make sure that Wi-Fi or other network connection is available before
- * calling this method.
+ * @warning You should ensure WiFi or Ethernet connection is available before calling this method.
  */
 -(void)start;
 
 /**
- * Causes the LightingDirector to start interacting with the Lighting system using the specified
- * application name. This method uses the application name when creating the AllJoyn bus attachment.
+ * Causes the LSFSDKLightingDirector to start interacting with the Lighting system using the
+ * specified application name. The LSFSDKLightingDirector will try to connect to a lighting
+ * controller. This method uses the application name when creating the AllJoyn bus
+ * attachment and creates its own dispatch queue.
  *
- * @warning *Note:* start() should be called before interacting with the LSFSDKLightingDirector. Subsequent
- * calls to start() must each be preceded by a call to stop().
+ * @warning This method should be called before interacting with the LSFSDKLightingDirector.
+ * Subsequent calls to this method must each be preceded by a call to stop.
  *
- * @warning *Note:* you should make sure that Wi-Fi or other network connection is available before
- * calling this method.
+ * @warning You should ensure WiFi or Ethernet connection is available before calling this method.
  *
- * @param applicationName  The name used to create the AllJoyn bus attachment. See the AllJoyn core documentation for more information on bus attachments.
+ * @param applicationName  Name for the AllJoyn BusAttachment. See the AllJoyn core documentation for more information on bus attachments.
  */
 -(void)startWithApplicationName: (NSString *)applicationName;
 
 /**
- * Causes the LightingDirector to start interacting with the Lighting system using the specified
- * AllJoyn bus attachment. In this method, the application name is not necessary since a bus
- * attachment is passed in directly
+ * Causes the LSFSDKLightingDirector to start interacting with the Lighting system using the
+ * specified AllJoyn bus attachment. The LSFSDKLightingDirector will try to connect to a lighting
+ * controller. This also method creates its own dispatch queue.
  *
- * @warning *Note:* start() should be called before interacting with the LSFSDKLightingDirector. Subsequent
- * calls to start() must each be preceded by a call to stop().
+ * @warning This method should be called before interacting with the LSFSDKLightingDirector.
+ * Subsequent calls to this method must each be preceded by a call to stop.
  *
- * @warning *Note:* you should make sure that Wi-Fi or other network connection is available before
- * calling this method.
+ * @warning You should ensure WiFi or Ethernet connection is available before calling this method.
  *
- * @param busAttachment  The AllJoyn bus attachment to use. See the AllJoyn core documentation for more information on bus attachments.
+ * @param busAttachment  AllJoyn BusAttachment to be used for the Lighting system. See the AllJoyn core documentation for more information on bus attachments.
  */
 -(void)startWithBusAttachment: (ajn::BusAttachment *)busAttachment;
 
 /**
- * Causes the LightingDirector to start interacting with the Lighting system using the specified
- * application name and dispatch queue. The provided application name will be used in creating an
- * AllJoyn bus attachment.
+ * Causes the LightingDirector to start interacting with the Lighting system using the
+ * specified application name and dispatch queue. The LightingDirector will try to connect
+ * to a lighting controller. This method uses the application name when creating the AllJoyn
+ * bus attachment.
  *
- * @warning *Note:* start() should be called before interacting with the LSFSDKLightingDirector. Subsequent
- * calls to start() must each be preceded by a call to stop().
+ * @warning This method should be called before interacting with the LSFSDKLightingDirector.
+ * Subsequent calls to this method must each be preceded by a call to stop.
  *
- * @warning *Note:* you should make sure that Wi-Fi or other network connection is available before
- * calling this method.
+ * @warning You should ensure WiFi or Ethernet connection is available before calling this method.
  *
- * @param applicationName  The name used to create the AllJoyn bus attachment. See the AllJoyn core documentation for more information on bus attachments.
- * @param queue  The dispatch queue used to handle all lighting events. The framework will process internal tasks and invoke the client listeners from the thread associated with this queue.
+ * @param applicationName  Name for the AllJoyn BusAttachment. See the AllJoyn core documentation for more information on bus attachments.
+ * @param queue  Instance of dispatch queue that will handle all lighting events on the provided thread. The SDK will process internal tasks and invoke all client delegates from the thread associated with this queue.
  */
 -(void)startWithApplicationName: (NSString *)applicationName dispatchQueue: (dispatch_queue_t)queue;
 
 /**
- * Causes the LightingDirector to start interacting with the Lighting system using the specified
- * AllJoyn bus attachment and dispatch queue.
+ * Causes the LSFSDKLightingDirector to start interacting with the Lighting system using the
+ * specified AllJoyn bus attachment and dispatch queue. The LSFSDKLightingDirector will try to
+ * connect to a lighting controller.
  *
- * @warning *Note:* start() should be called before interacting with the LSFSDKLightingDirector. Subsequent
- * calls to start() must each be preceded by a call to stop().
+ * @warning This method should be called before interacting with the LSFSDKLightingDirector.
+ * Subsequent calls to this method must each be preceded by a call to stop.
  *
- * @warning *Note:* you should make sure that Wi-Fi or other network connection is available before
- * calling this method.
+ * @warning You should ensure WiFi or Ethernet connection is available before calling this method.
  *
- * @param busAttachment  The AllJoyn bus attachment to use. See the AllJoyn core documentation for more information on bus attachments.
- * @param queue  The dispatch queue used to handle all lighting events. The framework will process internal tasks and invoke the client listeners from the thread associated with this queue.
+ * @param busAttachment  AllJoyn BusAttachment to be used for the Lighting system. See the AllJoyn core documentation for more information on bus attachments.
+ * @param queue  Instance of dispatch queue that will handle all lighting events on the provided thread. The SDK will process internal tasks and invoke all client delegates from the thread associated with this queue.
  */
 -(void)startWithBusAttachment: (ajn::BusAttachment *)busAttachment dispatchQueue: (dispatch_queue_t)queue;
 
 /**
- * Causes the LSFSDKLightingDirector to stop interacting with the Lighting system.
+ * Causes the LSFSDKLightingDirector to stop interacting with the Lighting system. The LSFSDKLightingDirector
+ * will disconnect from the lighting controller, if a connection exists.
+ *
+ * @warning This method must be preceded by a call to start.
  */
 -(void)stop;
 
-/** @name Getters for active Lighting System components */
+/** @name Getters for Lighting System components */
 
 /**
- * Returns an instance of the LSFSDKLamp with the corresponding lamp ID. If a Lamp corresponding
- * to the lamp ID is not found, this method will return nil.
+ * Returns a reference to a LSFSDKLamp with the corresponding ID. If a match is not found for the
+ * ID, this method will return nil.
  *
- * @param lampID  The ID of the Lamp.
+ * @param lampID  The ID of the LSFSDKLamp
  *
- * @return Instance of LSFSDKLamp or nil if the lamp does not exist.
+ * @return Reference to a LSFSDKLamp or null.
  */
 -(LSFSDKLamp *)getLampWithID: (NSString *)lampID;
 
 /**
- * Returns an instance of the LSFSDKGroup with the corresponding group ID. If a Group corresponding
- * to the group ID is not found, this method will return nil.
+ * Returns a reference to a LSFSDKGroup with the corresponding ID. If a match is not found for the
+ * ID, this method will return nil.
  *
- * @param groupID  The ID of the Group.
+ * @param groupID  The ID of the LSFSDKGroup
  *
- * @return Instance of LSFSDKGroup or nil if Group does not exist.
+ * @return Reference to a LSFSDKGroup or nil.
  */
 -(LSFSDKGroup *)getGroupWithID: (NSString *)groupID;
 
 /**
- * Returns an instance of the LSFSDKPreset with the corresponding preset ID. If a Preset corresponding
- * to the preset ID is not found, this method will return nil.
+ * Returns a reference to a LSFSDKPreset with the corresponding ID. If a match is not found for the
+ * ID, this method will return nil.
  *
- * @param presetID  The ID of the Preset.
+ * @param presetID  The ID of the LSFSDKPreset
  *
- * @return Instance of LSFSDKPreset or nil if Preset does not exist.
+ * @return Reference to a LSFSDKPreset or nil.
  */
 -(LSFSDKPreset *)getPresetWithID: (NSString *)presetID;
 
 /**
- * Returns an instance of the LSFSDKTransitionEffect with the corresponding transition effect ID. If aq 
- * transition effect corresponding to the transition effect ID is not found, this method will return nil.
+ * Returns a reference to a LSFSDKTransitionEffect with the corresponding ID. If a match is not found for the
+ * ID, this method will return nil.
  *
- * @param transitionEffectID  The ID of the Transition Effect.
+ * @param transitionEffectID  The ID of the LSFSDKTransitionEffect
  *
- * @return Instance of LSFSDKTransitionEffect or nil if TransitionEffect does not exist.
+ * @return Reference to a LSFSDKTransitionEffect or nil.
  */
 -(LSFSDKTransitionEffect *)getTransitionEffectWithID: (NSString *)transitionEffectID;
 
 /**
- * Returns an instance of the LSFSDKPulseEffect with the corresponding pulse effect ID. If a Pulse Effect corresponding
- * to the pulse effect ID is not found, this method will return nil.
+ * Returns a reference to a LSFSDKPulseEffect with the corresponding ID. If a match is not found for the
+ * ID, this method will return nil.
  *
- * @param pulseEffectID  The ID of the Pulse Effect.
+ * @param pulseEffectID  The ID of the LSFSDKPulseEffect
  *
- * @return Instance of LSFSDKPulseEffect or nil if Pulse Effect does not exist.
+ * @return Reference to a LSFSDKPulseEffect or nil.
  */
 -(LSFSDKPulseEffect *)getPulseEffectWithID: (NSString *)pulseEffectID;
 
-/*
- * TODO
+/**
+ * Returns a reference to the LSFSDKEffect (preset, transition effect, or pulse effect) with the corresponding
+ * effect ID. If a match is not found for the ID, this method will return nil.
+ *
+ * @param effectID  The ID of the LSFSDKEffect
+ *
+ * @return Reference to an LSFSDKEffect or nil.
  */
 -(id<LSFSDKEffect>)getEffectWithID: (NSString *)effectID;
 
 /**
- * Returns an instance of the LSFSDKSceneElement with the corresponding scene element ID. If a Scene Element
- * corresponding to the scene element ID is not found, this method will return nil.
+ * Returns a reference to the LSFSDKSceneElement with the corresponding ID. If a match is not found for
+ * the ID, this method will return nil.
  *
- * @param sceneElementID  The ID of the Scene Element.
+ * @param sceneElementID  The ID of the LSFSDKSceneElement
  *
- * @return Instance of LSFSDKSceneElement or nil if Scene Element does not exist.
+ * @return Reference to a LSFSDKSceneElement or nil.
  */
 -(LSFSDKSceneElement *)getSceneElementWithID: (NSString *)sceneElementID;
 
 /**
- * Returns an instance of the LSFSDKScene with the corresponding scene ID. If a Scene corresponding
- * to the scene ID is not found, this method will return nil.
+ * Returns a reference to the LSFSDKScene with the corresponding ID. If a match is not found for
+ * the ID, this method will return nil.
  *
- * @param sceneID  The ID of the Scene.
+ * @param sceneID  The ID of the LSFSDKScene
  *
- * @return Instance of LSFSDKScene or nil if Scene does not exist.
+ * @return Reference to a LSFSDKScene or nil.
  */
 -(LSFSDKScene *)getSceneWithID: (NSString *)sceneID;
 
 /**
- * Returns an instance of the LSFSDKMasterScene with the corresponding master scene ID. If a Master Scene corresponding
- * to the master scene ID is not found, this method will return nil.
+ * Returns a reference to the LSFSDKMasterScene with the corresponding ID. If a match is not found for
+ * the ID, this method will return nil.
  *
- * @param masterSceneID  The ID of the Master Scene.
+ * @param masterSceneID The ID of the LSFSDKMasterScene
  *
- * @return Instance of LSFSDKMasterScene or nil if Master Scene does not exist.
+ * @return Reference to a LSFSDKMasterScene or nil.
  */
 -(LSFSDKMasterScene *)getMasterSceneWithID: (NSString *)masterSceneID;
 
-/** @name Creating active Lighting System components */
+/** @name Creating Lighting System components */
 
 /**
- * Asynchronously creates a Group on the Lighting Controller.
+ * Asynchronously creates a Group on the Lighting controller. Once the group is successfully
+ * created, the [LSFSDKGroupDelegate onGroupInitializedWithTrackingID:andGroup:] method will be
+ * invoked and the tracking IDs will match.
  *
- * @param members  Array of LSFSDKGroupMember.
- * @param groupName  Name of the group.
+ * @param members  Specifies the group's members
+ * @param groupName  Name of the Group
  *
- * @return Instance of LSFTrackingID associate with the creation of the Group.
+ * @return LSFSDKTrackingID associated with the creation of the Group
  */
 -(LSFSDKTrackingID *)createGroupWithMembers: (NSArray *)members groupName: (NSString *)groupName;
 
 /**
- * Asynchronously creates a Preset on the Lighting Controller.
+ * Asynchronously creates a Preset on the Lighting controller. Once the preset is successfully
+ * created, the [LSFSDKPresetDelegate onPresetInitializedWithTrackingID:andPreset:] method will be
+ * invoked and the tracking IDs will match.
  *
- * @param power  Specifies the power of the preset's lamp state.
- * @param color  Specifies the color of the preset's lamp state.
- * @param presetName  Name of the preset.
+ * @param power  Specifies the Power of the Preset's lamp state
+ * @param color  Specifies the Color of the Preset's lamp state
+ * @param presetName  Name of the Preset
  *
- * @return Instance of LSFTrackingID associate with the creation of the Preset.
+ * @return LSFSDKTrackingID associated with the creation of the Preset
  */
 -(LSFSDKTrackingID *)createPresetWithPower: (Power)power color: (LSFSDKColor *)color presetName: (NSString *)presetName;
 
 /**
- * Asynchronously creates a Transtion Effect on the Lighting Controller.
+ * Asynchronously creates a Transition Effect on the Lighting controller. Once the transition
+ * effect is successfully created, the [LSFSDKTransitionEffectDelegate onTransitionEffectInitializedWithTrackingID:andTransitionEffect:]
+ * method will be invoked and the tracking IDs will match.
  *
- * @param state  Specifies the lamp state of the transition effect.
- * @param duration  Specifies how long the transition effect will take.
- * @param effectName  Name of the transition effect.
+ * @param state  Specifies the lamp state of the TransitionEffect
+ * @param duration  Specifies how long the TransitionEffect will take
+ * @param effectName  Name of the TransitionEffect
  *
- * @return Instance of LSFTrackingID associate with the creation of the Transition Effect.
+ * @return LSFSDKTrackingID associated with the creation of the TransitionEffect
  */
 -(LSFSDKTrackingID *)createTransitionEffectWithLampState: (id<LSFSDKLampState>)state duration: (unsigned int)duration name: (NSString *)effectName;
 
 /**
- * Asynchronously creates a Pulse Effect on the Lighting Controller.
+ * Asynchronously creates a Pulse Effect on the Lighting controller. Once the pulse
+ * effect is successfully created, the [LSFSDKPulseEffectDelegate onPulseEffectInitializedWithTrackingID:andPulseEffect:]
+ * method will be invoked and the tracking IDs will match.
  *
- * @param fromState  Specifies the starting lamp state of the pulse effect.
- * @param toState  Specifies the ending lamp state of the pulse effect.
- * @param period  Specifies the period of the pulse (in ms). Period refers to the time duration between the start of two pulses.
- * @param duration  Specifies the duration of a single pulse (in ms). This must be less than the period.
- * @param count  Specifies the number of pulses.
- * @param effectName  Name of the pulse effect.
+ * @param fromState  Specifies the starting LampState of the PulseEffect
+ * @param toState  Specifies the ending LampState of the PulseEffect
+ * @param period  Specifies the period of the pulse effect (in ms). Period refers to the time duration between the start of two pulses
+ * @param duration  Specifies the duration of a single pulse (in ms). This must be less than the period
+ * @param count  Specifies the number of pulses
+ * @param effectName  Name of the PulseEffect
  *
- * @return Instance of LSFTrackingID associate with the creation of the Pulse Effect.
+ * @return LSFSDKTrackingID associated with the creation of the PulseEffect
  */
 -(LSFSDKTrackingID *)createPulseEffectWithFromState: (id<LSFSDKLampState>)fromState toState: (id<LSFSDKLampState>)toState period: (unsigned int)period duration: (unsigned int)duration count: (unsigned int)count name: (NSString *)effectName;
 
 /**
- * Asynchronously creates a Scene Element on the Lighting Controller.
+ * Asynchronously creates a Scene Element on the Lighting controller. Once the scene
+ * element is successfully created, the [LSFSDKSceneElementDelegate onSceneElementInitializedWithTrackingID:andSceneElement:]
+ * method will be invoked and the tracking IDs will match.
  *
- * @param effect  Specifies the scene element's effect.
- * @param members  Specifies GroupMember's for which the effect will be applied.
- * @param sceneElementName  Name of the scene element.
+ * @param effect  Specifies the SceneElement's effect
+ * @param members  Specifies the GroupMembers for which the effect will be applied
+ * @param sceneElementName  Name of the SceneElement
  *
- * @return Instance of LSFTrackingID associate with the creation of the Scene Element.
+ * @return LSFSDKTrackingID associated with the creation of the SceneElement
  */
 -(LSFSDKTrackingID *)createSceneElementWithEffect: (id<LSFSDKEffect>)effect groupMembers: (NSArray *)members name: (NSString *)sceneElementName;
 
 /**
- * Asynchronously creates a Scene on the Lighting Controller.
+ * Asynchronously creates a Scene on the Lighting controller. Once the scene
+ * is successfully created, the [LSFSDKSceneDelegate onSceneInitializedWithTrackingID:andScene:]
+ * method will be invoked and the tracking IDs will match.
  *
- * @param sceneElements  Specifies the scene elements that belong to the scene.
- * @param sceneName  Name of the scene.
+ * @param sceneElements  Specifies the SceneElements that belong to the Scene
+ * @param sceneName  Name of the Scene
  *
- * @return Instance of LSFTrackingID associate with the creation of the Scene
+ * @return LSFSDKTrackingID associated with the creation of the Scene
  */
 -(LSFSDKTrackingID *)createSceneWithSceneElements: (NSArray *)sceneElements name: (NSString *)sceneName;
 
 /**
- * Asynchronously creates a Master Scene on the Lighting Controller.
+ * Asynchronously creates a Master Scene on the Lighting controller. Once the master
+ * scene is successfully created, the [LSFSDKMasterSceneDelegate onMasterSceneInitializedWithTrackingID:andMasterScene:]
+ * method will be invoked and the tracking IDs will match.
  *
- * @param scenes  Specifies the scenes that belong to the master scene.
- * @param masterSceneName  Name of the master scene.
+ * @param scenes  Specifies the Scenes that belong to the MasterScene
+ * @param masterSceneName  Name of the MasterScene
  *
- * @return Instance of LSFTrackingID associate with the creation of the Master Scene
+ * @return LSFSDKTrackingID associated with the creation of the MasterScene
  */
 -(LSFSDKTrackingID *)createMasterSceneWithScenes: (NSArray *)scenes name: (NSString *)masterSceneName;
 
 /** @name Add and Remove Lighting System delegates */
 
 /**
- * Specifies a delegate to invoke once a connection to a lighting system has been established. After a connection is established,
- * this listener will be invoked only one time.
+ * Specifies a delegate to invoke once a connection to a lighting controller has been established. After a connection is established,
+ * this delegate will be invoked only one time.
  *
- * This allows clients of the LSFSDKLightingDirector to be notified once a connection has been established.
- *
- * @param delay  Specifies a delay between when a connection occurs and when the delegate should be invoked.
+ * @param delay  Specifies a delay to wait before invoking the delegate
  * @param delegate  The delegate to invoke on connection.
  */
 -(void)postOnNextControllerConnectionWithDelay: (unsigned int)delay delegate: (id<LSFSDKNextControllerConnectionDelegate>)delegate;
 
 /**
- * Specifies a block to execute once a connection to a lighting system has been established. After a connection is established,
+ * Specifies a block to execute once a connection to a lighting controller has been established. After a connection is established,
  * this block will be executed only one time.
  *
- * This allows clients of the LightingDirector to be notified once a connection has been established.
- *
- * @param delay  Specifies a delay between when a connection occurs and when the block should be executed.
+ * @param delay  Specifies a delay to wait before executing the block
  * @param block  The block to execute on connection.
  */
 -(void)postOnNextControllerConnectionWithDelay: (unsigned int)delay block: (void (^)(void))block;
 
 /**
- * Adds a global delegate to receive all Lighting System events associated with the provided delegate.
+ * Adds a global delegate to receive all Lighting system events associated with the provided delegate's
+ * type. Adding multiple delegates of various types is supported.
  *
  * @param delegate  The delegate that receives Lighting System events.
  */
@@ -646,14 +675,14 @@
 /**
  * Adds a global delegate to receive all Transition Effect events.
  *
- * @param delegate  The delegate that receives all Lighting System transition effect events.
+ * @param delegate  The delegate that receives all transition effect events.
  */
 -(void)addTransitionEffectDelegate: (id<LSFSDKTransitionEffectDelegate>)delegate;
 
 /**
  * Adds a global delegate to receive all Pulse Effect events.
  *
- * @param delegate  The delegate that receives all Lighting System pulse effect events.
+ * @param delegate  The delegate that receives all pulse effect events.
  */
 -(void)addPulseEffectDelegate: (id<LSFSDKPulseEffectDelegate>)delegate;
 
@@ -686,7 +715,8 @@
 -(void)addControllerDelegate: (id<LSFSDKControllerDelegate>)delegate;
 
 /**
- * Removes a global delegate to receive all Lighting System events associated with the provided delegate.
+ * Removes a global delegate to receive all Lighting System events associated with the provided
+ * delegate's type.
  *
  * @param delegate  The delegate that receives Lighting System events.
  */
@@ -716,14 +746,14 @@
 /**
  * Removes a global delegate to receive all Transition Effect events.
  *
- * @param delegate  The delegate that receives all Lighting System transition effect events.
+ * @param delegate  The delegate that receives all transition effect events.
  */
 -(void)removeTransitionEffectDelegate: (id<LSFSDKTransitionEffectDelegate>)delegate;
 
 /**
  * Removes a global delegate to receive all Pulse Effect events.
  *
- * @param delegate  The delegate that receives all Lighting System pulse effect events.
+ * @param delegate  The delegate that receives all pulse effect events.
  */
 -(void)removePulseEffectDelegate: (id<LSFSDKPulseEffectDelegate>)delegate;
 

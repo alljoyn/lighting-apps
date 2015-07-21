@@ -20,8 +20,16 @@
 
 @class LSFSDKGroupMember;
 
+/**
+ * Base interface implemented by all Lighting items that are effects.
+ */
 @protocol LSFSDKEffect <LSFSDKLightingItemProtocol, LSFSDKDeletableItem>
 
+/**
+ * Applies the current effect to the provided Lighting item.
+ *
+ * @param member  Lighting item to apply the effect
+ */
 -(void)applyToGroupMember: (LSFSDKGroupMember *)member;
 
 @end

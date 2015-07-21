@@ -18,12 +18,24 @@
 #import "LSFSDKDeletableItem.h"
 
 /**
- * An LSFSDKScene object represents a set of lamps and associated states in the lighting system, and can be
- * used to apply the states to the lamps.
+ * Base class that represents generic Scene operations that can be performed. Generic scenes
+ * can be applied, renamed, and deleted.
  */
 @interface LSFSDKScene : LSFSDKLightingItem <LSFSDKDeletableItem>
 
+/** @name Scene Operations */
+
+/**
+ * Applies the current LSFSDKScene in the Lighting system.
+ */
 -(void)apply;
+
+/**
+ * Permanently deletes the current LSFSDKScene from the lighting controller.
+ *
+ * @warning You cannot delete a scene that is used by a master scene. The dependency
+ * must be deleted first.
+ */
 -(void)deleteItem;
 
 @end

@@ -16,6 +16,10 @@
 
 #import "model/LSFLampStateUniformity.h"
 
+/**
+ * This class specifies the uniformity of lamp state for a given Lighting item. The uniformity is only useful
+ * if you need to determine if an Group of lamps all have the same power and color state.
+ */
 @interface LSFSDKLampStateUniformity : LSFLampStateUniformity
 
 @end

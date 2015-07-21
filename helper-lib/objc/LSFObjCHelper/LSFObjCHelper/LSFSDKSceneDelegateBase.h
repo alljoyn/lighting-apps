@@ -17,6 +17,14 @@
 #import <Foundation/Foundation.h>
 #import "LSFSDKSceneDelegate.h"
 
+/**
+ * Provides a base class for developers to extend and implement to receive all Scene related events in the
+ * Lighting system. Any method of the LSFSDKSceneDelegate interface that is not overridden in the subclass will
+ * be treated as a no-op.
+ *
+ * **Note:** Once implemented, the delegate must be registered with the LSFSDKLightingDirector in order
+ * to receive Scene callbacks. See [LSFSDKLightingDirector addSceneDelegate:] for more information.
+ */
 @interface LSFSDKSceneDelegateBase : NSObject <LSFSDKSceneDelegate>
 
 @end

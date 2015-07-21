@@ -22,36 +22,158 @@
 #import "model/LSFGroupModel.h"
 
 /**
- * An LSFSDKGroup object represents a set of lamps in the lighting system, and can be used to send the
- * same command to all of them.
+ * This class represents a Group definition in the lighting controller. This class
+ * provides an interface to perform Group operations. Supported operations include changing
+ * color and power state, renaming, applying effects and presets, adding and removing group
+ * members, and deleting the group. Groups are considered fully initialized when the name
+ * and the groups members have been received. Groups are still operational even in the
+ * uninitialized state.
  *
- * Groups can contain lamps and nested groups.
+ * @warning This class is not meant to be instantiated directly. Groups should be retrieved
+ * from the LSFSDKLightingDirector using the [LSFSDKLightingDirector groups] method.
+ *
+ * @warning This class does not support Group creation. See [LSFSDKLightingDirector createGroupWithMembers:groupName:]
+ * to create a group on the lighting controller.
  */
 @interface LSFSDKGroup : LSFSDKGroupMember <LSFSDKDeletableItem>
 {
     @protected LSFGroupModel *groupModel;
 }
 
+/** @name Class Properties */
+
+/**
+ * Returns the absolute minimum color temperature value supported by the Lamps in the current LSFSDKGroup.
+ *
+ * @return The Lamps minimum color temperature value
+ */
 @property (nonatomic, readonly) int colorTempMin;
+
+/**
+ * Returns the absolute maximum color temperature value supported by the Lamps in the current LSFSDKGroup.
+ *
+ * @return The Lamps maximum color temperature value
+ */
 @property (nonatomic, readonly) int colorTempMax;
+
+/**
+ * Tests to see if the current LSFSDKGroup is the AllLampsGroup.
+ *
+ * @return Returns true if the current LSFSDKGroup is the AllLampsGroup, false otherwise
+ */
 @property (nonatomic, readonly) BOOL isAllLampsGroup;
 
+/** @name Initializing an LSFSDKGroup Object */
+
+/**
+ * @warning This method is not intended to be used by clients, and may change or be
+ * removed in subsequent releases of the SDK.
+ */
 -(instancetype)init NS_UNAVAILABLE;
+
+/** @name Group Operations */
+
+/**
+ * Adds a member to the current LSFSDKGroup.
+ *
+ * @param member The LSFSDKGroupMember object to be added to the LSFSDKGroup
+ */
 -(void)add: (LSFSDKGroupMember *)member;
+
+/**
+ * Removes a member from the current LSFSDKGroup.
+ *
+ * @param member The LSFSDKGroupMember object to be removed from the LSFSDKGroup
+ */
 -(void)remove: (LSFSDKGroupMember *)member;
+
+/**
+ * Replaces the current LSFSDKGroup memebers with the provided GroupMember array.
+ *
+ * @param members The array of LSFSDKGroupMembers
+ */
 -(void)modify: (NSArray *)members;
+
+/**
+ * Permanently deletes the current LSFSDKGroup from the lighting controller.
+ *
+ * @warning You cannot delete a group that is a member of another group. The dependency must
+ * be deleted first.
+ */
 -(void)deleteItem;
+
+/** @name Finding Objects in a Group */
+
+/**
+ * Tests to see if the current LSFSDKGroup contains the specified Lamp.
+ *
+ * @param lamp The LSFSDKLamp to be confirmed present in the LSFSDKGroup
+ *
+ * @return Returns true if the LSFSDKGroup contains the specified Lamp, false otherwise
+ */
 -(BOOL)hasLamp: (LSFSDKLamp *)lamp;
+
+/**
+ * Tests to see if the current LSFSDKGroup contains the specified LSFSDKGroup.
+ *
+ * @param group The LSFSDKGroup to be confirmed present in the LSFSDKGroup
+ *
+ * @return Returns true if the LSFSDKGroup contains the specified LSFSDKGroup, false otherwise
+ */
 -(BOOL)hasGroup: (LSFSDKGroup *)group;
+
+/**
+ * Tests to see if the current LSFSDKGroup contains the specified lamp ID.
+ *
+ * @param lampID The lamp ID to be confirmed present in the LSFSDKGroup.
+ *
+ * @return Returns true if the LSFSDKGroup contains the specified lamp ID, false otherwise
+ */
 -(BOOL)hasLampWithID: (NSString *)lampID;
+
+/**
+ * Tests to see if the current LSFSDKGroup contains the specified group ID.
+ *
+ * @param groupID The group ID to be confirmed present in the LSFSDKGroup.
+ *
+ * @return Returns true if the LSFSDKGroup contains the specified group ID, false otherwise
+ */
 -(BOOL)hasGroupWithID: (NSString *)groupID;
+
+/** @name Querying a Group */
+
+/**
+ * Returns an array of LSFSDKLamps that are members of the current LSFSDKGroup.
+ *
+ * @return Array of all LSFSDKLamps in the current LSFSDKGroup
+ */
 -(NSArray *)getLamps;
+
+/**
+ * Returns an array of LSFSDKGroups that are members of the current LSFSDKGroup.
+ *
+ * @return Array of all LSFSDKGroups in the current LSFSDKGroup
+ */
 -(NSArray *)getGroups;
+
+/**
+ * Returns an array of lamp IDs that are members of the current LSFSDKGroup.
+ *
+ * @return Array of all lamp IDs in the current LSFSDKGroup
+ */
 -(NSSet *)getLampIDs;
+
+/**
+ * Returns an array of group IDs that are members of the current LSFSDKGroup.
+ *
+ * @return Array of all group IDs in the current LSFSDKGroup
+ */
 -(NSSet *)getGroupIDs;
 
-/*
- * Note: This method is not intended to be used by clients, and may change or be
+/** @name Protected methods */
+
+/**
+ * @warning This method is not intended to be used by clients, and may change or be
  * removed in subsequent releases of the SDK.
  */
 -(LSFGroupModel *)getLampGroupDataModel;

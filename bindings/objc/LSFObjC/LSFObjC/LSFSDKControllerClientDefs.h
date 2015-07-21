@@ -17,6 +17,9 @@
 #ifndef LSFObjC_LSFSDKControllerClientDefs_h
 #define LSFObjC_LSFSDKControllerClientDefs_h
 
+/**
+ * Enum describing the status and error codes returned by a controller client function call.
+ */
 #include <ControllerClientDefs.h>
 
 #endif

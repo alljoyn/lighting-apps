@@ -16,6 +16,11 @@
 
 #import "model/LSFLampAbout.h"
 
+/**
+ * This class encapsulates the AllJoyn about data of a LSFSDKLamp in the Lighting System.
+ *
+ * See the AllJoyn core documentation for more information on the AllJoyn about data.
+ */
 @interface LSFSDKLampAbout : LSFLampAbout
 
 @end

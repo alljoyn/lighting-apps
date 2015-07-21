@@ -17,6 +17,14 @@
 #import <Foundation/Foundation.h>
 #import "LSFSDKLampDelegate.h"
 
+/**
+ * Provides a base class for developers to extend and implement to receive all Lamp related events in the
+ * Lighting system. Any method of the LSFSDKLampDelegate interface that is not overridden in the subclass will
+ * be treated as a no-op.
+ *
+ * **Note:** Once implemented, the subclass must be registered with the LSFSDKLightingDirector in order
+ * to receive Lamp callbacks. See [LSFSDKLightingDirector addLampDelegate:] for more information.
+ */
 @interface LSFSDKLampDelegateBase : NSObject <LSFSDKLampDelegate>
 
 @end
