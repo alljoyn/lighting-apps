@@ -441,6 +441,14 @@
 /** @name Getters for Lighting System components */
 
 /**
+ * Returns true if the lead controller service only supports the lighting controller
+ * interface version 1.
+ *
+ * @return true for a V1 controller service, false for V2 or later.
+ */
+-(BOOL)isControllerServiceLeaderV1;
+
+/**
  * Returns a reference to a LSFSDKLamp with the corresponding ID. If a match is not found for the
  * ID, this method will return nil.
  *

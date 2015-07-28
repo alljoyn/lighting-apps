@@ -15,23 +15,11 @@
  ******************************************************************************/
 
 #import "LSFSDKLightingItemCollectionManager.h"
-#import "LSFSDKSceneV1.h"
-#import "LSFSDKSceneDelegate.h"
+#import "LSFSDKScene.h"
 
 @interface LSFSDKSceneCollectionManager : LSFSDKLightingItemCollectionManager
 
--(id)init;
--(void)addSceneDelegate: (id<LSFSDKSceneDelegate>)sceneDelegate;
--(void)removeSceneDelegate: (id<LSFSDKSceneDelegate>)sceneDelegate;
--(LSFSDKSceneV1 *)addSceneWithID: (NSString *)sceneID;
--(LSFSDKSceneV1 *)addSceneWithModel: (LSFSceneDataModel *)sceneModel;
--(LSFSDKSceneV1 *)addSceneWithID: (NSString *)sceneID scene: (LSFSDKSceneV1 *)scene;
--(LSFSDKSceneV1 *)getSceneWithID: (NSString *)sceneID;
--(NSArray *)getScenes;
--(NSArray *)getScenesWithFilter: (id<LSFSDKLightingItemFilter>)filter;
--(NSArray *)getScenesCollectionWithFilter: (id<LSFSDKLightingItemFilter>)filter;
--(NSArray *)removeAllScenes;
--(LSFSDKSceneV1 *)removeSceneWithID: (NSString *)sceneID;
--(LSFSceneDataModel *)getModelWithID: (NSString *)sceneID;
+-(LSFSDKScene *)addSceneWithID: (NSString *)sceneID;
+-(LSFSDKScene *)removeSceneWithID: (NSString *)sceneID;
 
 @end

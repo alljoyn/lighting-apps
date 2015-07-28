@@ -111,8 +111,6 @@
 @synthesize transitionEffectManagerCB = _transitionEffectManagerCB;
 @synthesize pulseEffectManagerCB = _pulseEffectManagerCB;
 @synthesize sceneElementManagerCB = _sceneElementManagerCB;
-@synthesize sceneManagerCBV1 = _sceneManagerCBV1;
-@synthesize sceneWithSceneElementsManagerCB = _sceneWithSceneElementsManagerCB;
 @synthesize sceneManagerCB = _sceneManagerCB;
 @synthesize masterSceneManagerCB = _masterSceneManagerCB;
 @synthesize lampCollectionManager = _lampCollectionManager;
@@ -144,9 +142,7 @@
         _transitionEffectManagerCB = [[LSFSDKHelperTransitionEffectManagerCallback alloc] initWithLightingSystemManager:self];
         _pulseEffectManagerCB = [[LSFSDKHelperPulseEffectManagerCallback alloc] initWithLightingSystemManager: self];
         _sceneElementManagerCB = [[LSFSDKHelperSceneElementManagerCallback alloc] initWithLightingSystemManager: self];
-        _sceneManagerCBV1 = [[LSFSDKHelperSceneManagerCallbackV1 alloc] initWithLightingSystemManager: self];
-        _sceneWithSceneElementsManagerCB = [[LSFSDKHelperSceneManagerCallbackV2 alloc] initWithLightingSystemManager: self];
-        _sceneManagerCB = [[LSFSDKHelperSceneManagerCallback alloc] initWithSceneManagerCallbacks: [NSArray arrayWithObjects: _sceneManagerCBV1, _sceneWithSceneElementsManagerCB, nil]];
+        _sceneManagerCB = [[LSFSDKHelperSceneManagerCallback alloc] initWithLightingSystemManager: self];
         _masterSceneManagerCB = [[LSFSDKHelperMasterSceneManagerCallback alloc] initWithLightingSystemManager: self];
 
         _lampCollectionManager = [[LSFSDKLampCollectionManager alloc] init];
@@ -155,7 +151,7 @@
         _transitionEffectCollectionManager = [[LSFSDKTransitionEffectCollectionManager alloc] init];
         _pulseEffectCollectionManager = [[LSFSDKPulseEffectCollectionManager alloc] init];
         _sceneElementCollectionManager = [[LSFSDKSceneElementCollectionManager alloc] init];
-        _sceneCollectionManagerV1 = [[LSFSDKSceneCollectionManager alloc] init];
+        _sceneCollectionManagerV1 = [[LSFSDKSceneCollectionManagerV1 alloc] init];
         _sceneCollectionManager = [[LSFSDKSceneCollectionManagerV2 alloc] init];
         _masterSceneCollectionManager = [[LSFSDKMasterSceneCollectionManager alloc] init];
 
@@ -236,7 +232,7 @@
     return _sceneElementCollectionManager;
 }
 
--(LSFSDKSceneCollectionManager *)sceneCollectionManagerV1
+-(LSFSDKSceneCollectionManagerV1 *)sceneCollectionManagerV1
 {
     return _sceneCollectionManagerV1;
 }
@@ -305,7 +301,6 @@
 /*
  * LSFSDKControllerDelegate implementation
  */
-//-(void)onLeaderModelChange: (LSFControllerModel *)leadModel
 -(void)onLeaderChange:(LSFSDKController *)leader
 {
     NSLog(@"LSFSDKLightingSystemManager - onLeaderModelChange() callback executing");

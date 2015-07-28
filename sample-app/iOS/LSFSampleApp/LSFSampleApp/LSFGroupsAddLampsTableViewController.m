@@ -27,7 +27,7 @@
 -(void)buildTableArray;
 -(void)modifyAllRows: (BOOL)isSelected;
 -(void)processSelectedRows;
--(void)checkGroupCapability: (LSFCapabilityData *)capability;
+-(void)checkGroupCapability: (LSFSDKCapabilityData *)capability;
 -(void)createLampGroup;
 
 @end
@@ -216,7 +216,7 @@
 
 -(void)processSelectedRows
 {
-    LSFCapabilityData *capabilityData = [[LSFCapabilityData alloc] init];
+    LSFSDKCapabilityData *capabilityData = [[LSFSDKCapabilityData alloc] init];
     NSMutableArray *groupMembers = [[NSMutableArray alloc] init];
 
     for (NSIndexPath *indexPath in self.selectedRows)
@@ -232,7 +232,7 @@
     [self checkGroupCapability: capabilityData];
 }
 
--(void)checkGroupCapability: (LSFCapabilityData *)capability
+-(void)checkGroupCapability: (LSFSDKCapabilityData *)capability
 {
     if ([capability isMixed])
     {

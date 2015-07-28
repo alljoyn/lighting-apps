@@ -101,7 +101,7 @@
         [scenes addObject: scene];
     }
 
-    return [NSArray arrayWithArray: scenes];
+    return scenes;
 }
 
 -(BOOL)hasScene: (LSFSDKScene *)scene
@@ -137,6 +137,11 @@
 {
     NSString *errorContext = @"LSFSDKMasterScene hasComponent: error";
     return ([self postInvalidArgIfNull: errorContext object: item]) ? [self hasSceneWithID: item.theID] : NO;
+}
+
+-(NSArray *)getComponentCollection
+{
+    return [self getScenes];
 }
 
 -(void)postError:(NSString *)name status:(LSFResponseCode)status

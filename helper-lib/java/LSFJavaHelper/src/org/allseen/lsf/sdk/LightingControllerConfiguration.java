@@ -15,7 +15,6 @@
  */
 package org.allseen.lsf.sdk;
 
-import org.allseen.lsf.AboutData;
 import org.allseen.lsf.sdk.RankAvailability;
 import org.allseen.lsf.sdk.RankMobility;
 import org.allseen.lsf.sdk.RankNodeType;

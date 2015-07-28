@@ -18,7 +18,6 @@ package org.allseen.lsf.sdk;
 import java.util.Random;
 
 import org.alljoyn.bus.AboutKeys;
-import org.allseen.lsf.AboutData;
 
 /**
  * Provides a base class for developers to extend or use directly to define the application and device

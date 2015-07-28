@@ -44,6 +44,8 @@ public class EnterPeriodFragment extends EnterNumberFragment {
 
     @Override
     protected boolean setNumberValue(long numberValue) {
+        EnterPeriodFragment.period = numberValue;
+
         // Go back to the effect info display
         getActivity().onBackPressed();
 

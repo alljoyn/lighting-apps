@@ -31,7 +31,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class SceneElementV2InfoFragment extends PageFrameChildFragment implements View.OnClickListener {
+public class SceneElementV2InfoFragment extends SceneItemInfoFragment {
     public static PendingSceneElementV2 pendingSceneElement = null;
 
     @Override
@@ -121,6 +121,7 @@ public class SceneElementV2InfoFragment extends PageFrameChildFragment implement
         ((ScenesPageFragment)parent).showSelectMembersChildFragment();
     }
 
+    @Override
     public void updateInfoFields() {
         updateSceneElementInfoFields((SampleAppActivity)getActivity(), LightingDirector.get().getSceneElement(key));
     }

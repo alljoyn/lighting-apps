@@ -49,6 +49,7 @@
 +(BOOL)getControllerConnected;
 +(void)setControllerServiceLeaderVersion: (unsigned int)version;
 +(unsigned int)getControllerServiceLeaderVersion;
++(BOOL)isControllerServiceLeaderV1;
 +(LSFControllerClient *)getControllerClient;
 +(LSFControllerServiceManager *)getControllerServiceManager;
 +(LSFLampManager *)getLampManager;

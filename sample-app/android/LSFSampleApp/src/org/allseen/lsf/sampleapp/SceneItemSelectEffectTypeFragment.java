@@ -16,7 +16,6 @@
 package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.sampleapp.R;
-import org.allseen.lsf.sampleapp.scenesv1.BasicSceneUtil;
 import org.allseen.lsf.sdk.Effect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -40,7 +39,7 @@ public abstract class SceneItemSelectEffectTypeFragment extends SelectableItemTa
     @Override
     protected String getHeaderText() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        String members = BasicSceneUtil.formatMemberNamesString(activity, getPendingSceneElementMemberLampIDs(), getPendingSceneElementMemberGroupIDs(), MemberNamesOptions.en, 3, getPendingSceneItemName());
+        String members = Util.formatMemberNamesString(activity, getPendingSceneElementMemberLampIDs(), getPendingSceneElementMemberGroupIDs(), MemberNamesOptions.en, 3, getPendingSceneItemName());
 
         return String.format(getString(R.string.basic_scene_select_effect), members);
     }

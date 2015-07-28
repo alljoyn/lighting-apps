@@ -15,8 +15,8 @@
  */
 package org.allseen.lsf.sdk.model;
 
-import org.allseen.lsf.AboutData;
 import org.allseen.lsf.ControllerService;
+import org.allseen.lsf.sdk.AboutData;
 import org.allseen.lsf.sdk.LightingControllerConfiguration;
 import org.allseen.lsf.sdk.RankAvailability;
 import org.allseen.lsf.sdk.RankMobility;

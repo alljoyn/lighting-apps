@@ -23,7 +23,7 @@
 #import "manager/LSFSDKTransitionEffectCollectionManager.h"
 #import "manager/LSFSDKPulseEffectCollectionManager.h"
 #import "manager/LSFSDKSceneElementCollectionManager.h"
-#import "manager/LSFSDKSceneCollectionManager.h"
+#import "manager/LSFSDKSceneCollectionManagerV1.h"
 #import "manager/LSFSDKSceneCollectionManagerV2.h"
 #import "manager/LSFSDKMasterSceneCollectionManager.h"
 #import "manager/LSFSDKAllJoynManager.h"
@@ -41,7 +41,7 @@ static NSString *LANGUAGE_DEFAULT = @"en";
 -(LSFSDKTransitionEffectCollectionManager *)getTransitionEffectCollectionManager;
 -(LSFSDKPulseEffectCollectionManager *)getPulseEffectCollectionManager;
 -(LSFSDKSceneElementCollectionManager *)getSceneElementCollectionManager;
--(LSFSDKSceneCollectionManager *)getSceneCollectionManager;
+-(LSFSDKSceneCollectionManagerV1 *)getSceneCollectionManager;
 -(LSFSDKSceneCollectionManagerV2 *)getSceneCollectionManagerV2;
 -(LSFSDKMasterSceneCollectionManager *)getMasterSceneCollectionManager;
 -(LSFControllerManager *)getControllerManager;
@@ -184,6 +184,11 @@ static NSString *LANGUAGE_DEFAULT = @"en";
 -(void)stop
 {
     [self.lightingManager stop];
+}
+
+-(BOOL)isControllerServiceLeaderV1
+{
+    return [LSFSDKAllJoynManager isControllerServiceLeaderV1];
 }
 
 -(ajn::BusAttachment *)busAttachment
@@ -776,7 +781,7 @@ static NSString *LANGUAGE_DEFAULT = @"en";
     return [self.lightingManager sceneElementCollectionManager];
 }
 
--(LSFSDKSceneCollectionManager *)getSceneCollectionManager
+-(LSFSDKSceneCollectionManagerV1 *)getSceneCollectionManager
 {
     return [self.lightingManager sceneCollectionManagerV1];
 }

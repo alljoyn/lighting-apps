@@ -15,7 +15,6 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.sampleapp.scenesv1.BasicSceneUtil;
 import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.MasterScene;
 import org.allseen.lsf.sdk.Scene;
@@ -71,7 +70,7 @@ public class ScenesTableFragment extends DetailedItemTableFragment {
     }
 
     public void addBasicScene(SampleAppActivity activity, Scene basicScene) {
-        addItem(basicScene, BasicSceneUtil.createMemberNamesString(activity, basicScene, ", "), R.drawable.scene_set_icon);
+        addItem(basicScene, activity.basicSceneV1Module.createMemberNamesString(activity, basicScene, ", "), R.drawable.scene_set_icon);
         updateLoading();
     }
 

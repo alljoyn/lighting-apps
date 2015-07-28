@@ -40,5 +40,6 @@ extern NSArray *const LAMP_ABOUT_FIELDS;
 +(NSMutableAttributedString *)getNoticeText;
 +(BOOL)preset: (LSFSDKPreset *)preset matchesMyLampState: (LSFSDKMyLampState *)state;
 +(NSArray *)sortLightingItemsByName: (NSArray *)items;
++(void)disableActionSheet: (UIActionSheet *)actionSheet buttonAtIndex: (NSInteger)index;
 
 @end

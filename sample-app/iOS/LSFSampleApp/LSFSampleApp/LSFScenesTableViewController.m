@@ -15,11 +15,12 @@
  ******************************************************************************/
 
 #import "LSFScenesTableViewController.h"
-#import "LSFSceneInfoTableViewController.h"
-#import "LSFSceneV2InfoTableViewController.h"
-#import "LSFScenesEnterNameViewController.h"
-#import "LSFMasterScenesEnterNameViewController.h"
 #import "LSFSceneElementV2InfoTableViewController.h"
+#import "scenesV1/LSFSceneInfoTableViewController.h"
+#import "scenesV1/LSFScenesEnterNameViewController.h"
+#import "scenesV1/LSFScenesV1Util.h"
+#import "LSFSceneV2InfoTableViewController.h"
+#import "LSFMasterScenesEnterNameViewController.h"
 #import "LSFMasterScenesInfoTableViewController.h"
 #import "LSFItemNameViewController.h"
 #import "LSFSceneCell.h"
@@ -39,10 +40,6 @@
 -(void)masterSceneRemovedNotificationReceived: (NSNotification *)notification;
 -(void)plusButtonPressed;
 -(void)settingsButtonPressed;
--(NSString *)buildSceneDetailsString: (LSFSceneDataModel *)sceneModel;
--(NSString *)buildMasterSceneDetailsString: (LSFMasterSceneDataModel *)masterSceneModel;
--(void)appendLampNames: (NSArray *)lampIDs toString: (NSMutableString *)detailsString;
--(void)appendGroupNames: (NSArray *)groupIDs toString: (NSMutableString *)detailsString;
 -(void)appendSceneNames: (NSArray *)sceneIDs toString: (NSMutableString *)detailsString;
 -(NSArray *)sortScenesByName: (NSArray *)scenes;
 -(void)addObjectToTableAtIndex: (NSUInteger)insertIndex;
@@ -98,10 +95,7 @@
     NSMutableArray *scenesArray = [[NSMutableArray alloc] init];
     for (LSFSDKScene *scene in [[LSFSDKLightingDirector getLightingDirector] scenes])
     {
-        if (![[scenesArray valueForKeyPath: @"theID"] containsObject: scene.theID])
-        {
-            [scenesArray addObject: scene];
-        }
+        [scenesArray addObject: scene];
     }
 
     NSArray *masterScenes = [self sortScenesByName: [[LSFSDKLightingDirector getLightingDirector] masterScenes]];
@@ -239,7 +233,6 @@
     }
 }
 
-
 -(void)removeSceneElement: (LSFSDKSceneElement *)sceneElement
 {
     NSMutableArray *deleteIndexPaths = [[NSMutableArray alloc] init];
@@ -365,10 +358,15 @@
         cell.sceneID = basicScene.theID;
         cell.sceneImageView.image = [UIImage imageNamed: @"scene_set_icon.png"];
         cell.nameLabel.text = basicScene.name;
+        cell.accessoryType = UITableViewCellAccessoryDetailButton;
 
         if ([basicScene isKindOfClass: [LSFSDKSceneV1 class]])
         {
-            cell.detailsLabel.text = [self buildSceneDetailsString: [((LSFSDKSceneV1 *)scene) getSceneDataModel]];
+#ifdef LSF_SCENES_V1_MODULE
+            cell.detailsLabel.text = [LSFScenesV1Util buildSceneDetailsString: [((LSFSDKSceneV1 *)scene) getSceneDataModel]];
+#else
+            cell.accessoryType = UITableViewCellAccessoryNone;
+#endif
         }
         else if ([basicScene isKindOfClass: [LSFSDKSceneV2 class]])
         {
@@ -383,7 +381,8 @@
         cell.masterSceneID = masterScene.theID;
         cell.sceneImageView.image = [UIImage imageNamed: @"master_scene_set_icon.png"];
         cell.nameLabel.text = masterScene.name;
-        cell.detailsLabel.text = [self buildMasterSceneDetailsString: [masterScene getMasterSceneDataModel]];
+        cell.detailsLabel.text = [self buildMasterSceneDetailsString: masterScene];
+        cell.accessoryType = UITableViewCellAccessoryDetailButton;
     }
     else if ([scene isKindOfClass: [LSFSDKSceneElement class]])
     {
@@ -393,6 +392,7 @@
         cell.sceneImageView.image = [UIImage imageNamed: @"scene_element_set_icon.png"];
         cell.nameLabel.text = element.name;
         cell.detailsLabel.text = [self buildSceneElementDetailsString: element];
+        cell.accessoryType = UITableViewCellAccessoryDetailButton;
     }
 
     return cell;
@@ -625,7 +625,7 @@
 
     if ([scene isKindOfClass: [LSFSDKSceneV1 class]])
     {
-        [self performSegueWithIdentifier: @"SceneInfo" sender: indexPath];
+        [self doSegueToSceneInfo: indexPath];
     }
     else if ([scene isKindOfClass: [LSFSDKSceneV2 class]])
     {
@@ -650,12 +650,12 @@
     {
         // Do not need to pass any data
     }
+#ifdef LSF_SCENES_V1_MODULE
     else if ([segue.identifier isEqualToString: @"CreateScene"])
     {
-        UINavigationController *nc = (UINavigationController *)[segue destinationViewController];
-        LSFScenesEnterNameViewController *senvc = (LSFScenesEnterNameViewController *)nc.topViewController;
-        senvc.sceneModel = [[LSFSceneDataModel alloc] init];
+        [LSFScenesV1Util doSegueCreateSceneV1: segue];
     }
+#endif
     else if ([segue.identifier isEqualToString: @"CreateSceneV2"])
     {
         // Do not need to pass any data
@@ -673,13 +673,6 @@
 
         LSFSceneElementV2InfoTableViewController *seitvc = [segue destinationViewController];
         seitvc.pendingSceneElement = [[LSFPendingSceneElement alloc] initFromSceneElementID: elementID];
-    }
-    else if ([segue.identifier isEqualToString: @"SceneInfo"])
-    {
-        NSIndexPath *indexPath = (NSIndexPath *)sender;
-
-        LSFSceneInfoTableViewController *sitvc = [segue destinationViewController];
-        sitvc.sceneID = [NSString stringWithString: ((LSFSDKScene *)[self.data objectAtIndex: [indexPath row]]).theID];
     }
     else if ([segue.identifier isEqualToString: @"SceneV2Info"])
     {
@@ -717,9 +710,14 @@
         }
         case 1:
         {
-            // TODO-dynamically choose between scene types
-            //[self performSegueWithIdentifier: @"CreateScene" sender: self];
-            [self performSegueWithIdentifier: @"CreateSceneV2" sender: self];
+            if ([[LSFSDKLightingDirector getLightingDirector] isControllerServiceLeaderV1])
+            {
+                [self performSegueWithIdentifier: @"CreateScene" sender: self];
+            }
+            else
+            {
+                [self performSegueWithIdentifier: @"CreateSceneV2" sender: self];
+            }
             break;
         }
         case 2:
@@ -744,7 +742,19 @@
     if (wifiMonitor.isWifiConnected && [[[LSFSDKLightingDirector getLightingDirector] leadController] connected])
     {
         UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle: nil delegate: self cancelButtonTitle: @"Cancel" destructiveButtonTitle: nil otherButtonTitles: @"Add Scene Element", @"Add Scene", @"Add Master Scene", nil];
+
         [actionSheet showInView: self.view];
+
+        if ([[LSFSDKLightingDirector getLightingDirector] isControllerServiceLeaderV1])
+        {
+            // disable SceneElement creation
+            [LSFUtilityFunctions disableActionSheet: actionSheet buttonAtIndex: 0];
+
+#ifndef LSF_SCENES_V1_MODULE
+            // disable Scene creation
+            [LSFUtilityFunctions disableActionSheet: actionSheet buttonAtIndex: 1];
+#endif
+        }
     }
     else
     {
@@ -760,63 +770,6 @@
 -(void)settingsButtonPressed
 {
     [self performSegueWithIdentifier: @"ScenesSettings" sender: self];
-}
-
--(NSString *)buildSceneDetailsString: (LSFSceneDataModel *)sceneModel
-{
-    NSMutableString *detailsString = [[NSMutableString alloc] init];
-
-    for (LSFNoEffectDataModel *nedm in sceneModel.noEffects)
-    {
-        [self appendLampNames: nedm.members.lamps toString: detailsString];
-        [self appendGroupNames: nedm.members.lampGroups toString: detailsString];
-    }
-
-    for (LSFTransitionEffectDataModel *tedm in sceneModel.transitionEffects)
-    {
-        [self appendLampNames: tedm.members.lamps toString: detailsString];
-        [self appendGroupNames: tedm.members.lampGroups toString: detailsString];
-    }
-
-    for (LSFPulseEffectDataModel *pedm in sceneModel.pulseEffects)
-    {
-        [self appendLampNames: pedm.members.lamps toString: detailsString];
-        [self appendGroupNames: pedm.members.lampGroups toString: detailsString];
-    }
-
-    NSString *finalString;
-    if (detailsString.length > 0)
-    {
-        finalString = [detailsString substringToIndex: detailsString.length - 2];
-    }
-
-    return finalString;
-}
-
--(void)appendLampNames: (NSArray *)lampIDs toString: (NSMutableString *)detailsString
-{
-    for (NSString *lampID in lampIDs)
-    {
-        LSFSDKLamp *lamp = [[LSFSDKLightingDirector getLightingDirector] getLampWithID: lampID];
-
-        if (lamp != nil)
-        {
-            [detailsString appendString: [NSString stringWithFormat: @"%@, ", lamp.name]];
-        }
-    }
-}
-
--(void)appendGroupNames: (NSArray *)groupIDs toString: (NSMutableString *)detailsString
-{
-    for (NSString *groupID in groupIDs)
-    {
-        LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: groupID];
-
-        if (group != nil)
-        {
-            [detailsString appendString: [NSString stringWithFormat: @"%@, ", group.name]];
-        }
-    }
 }
 
 -(NSString *)buildSceneElementDetailsString: (LSFSDKSceneElement *)element
@@ -850,18 +803,15 @@
     return (detailsString.length > 2) ? [detailsString substringToIndex: (detailsString.length - 2)] : detailsString;
 }
 
--(NSString *)buildMasterSceneDetailsString: (LSFMasterSceneDataModel *)masterSceneModel
+-(NSString *)buildMasterSceneDetailsString: (LSFSDKMasterScene *)masterScene
 {
     NSMutableString *detailsString = [[NSMutableString alloc] init];
-    [self appendSceneNames: masterSceneModel.masterScene.sceneIDs toString: detailsString];
-
-    NSString *finalString;
-    if (detailsString.length > 0)
+    for (LSFSDKScene *item in [masterScene getScenes])
     {
-        finalString = [detailsString substringToIndex: detailsString.length - 2];
+        [detailsString appendString: [NSString stringWithFormat: @"%@, ", item.name]];
     }
 
-    return finalString;
+    return (detailsString.length > 2) ? [detailsString substringToIndex: (detailsString.length - 2)] : detailsString;
 }
 
 -(void)appendSceneNames: (NSArray *)sceneIDs toString: (NSMutableString *)detailsString
@@ -975,6 +925,17 @@
     }
 
     return names;
+}
+
+-(void)doSegueToSceneInfo: (id)sender
+{
+#ifdef LSF_SCENES_V1_MODULE
+    UIStoryboard *scenesV1StoryBoard = [UIStoryboard storyboardWithName:@"ScenesV1Storyboard" bundle: nil];
+    LSFSceneInfoTableViewController *sitvc = (LSFSceneInfoTableViewController *)[scenesV1StoryBoard instantiateViewControllerWithIdentifier:@"SceneV1Info"];
+    sitvc.sceneID = [NSString stringWithString: ((LSFSDKScene *)[self.data objectAtIndex: [(NSIndexPath *)sender row]]).theID];
+
+    [self.navigationController pushViewController: sitvc animated:YES];
+#endif
 }
 
 @end

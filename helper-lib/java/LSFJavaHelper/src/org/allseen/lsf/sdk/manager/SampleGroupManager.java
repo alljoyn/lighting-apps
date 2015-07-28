@@ -325,6 +325,6 @@ public class SampleGroupManager extends LampGroupManager {
     }
 
     protected boolean interceptAllLampsGroupStateChangeRequests() {
-        return AllJoynManager.controllerServiceLeaderVersion < 2;
+        return AllJoynManager.isControllerServiceLeaderV1();
     }
 }

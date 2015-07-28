@@ -38,7 +38,7 @@ import org.allseen.lsf.sdk.manager.LightingSystemQueue;
 import org.allseen.lsf.sdk.manager.MasterSceneCollectionManager;
 import org.allseen.lsf.sdk.manager.PresetCollectionManager;
 import org.allseen.lsf.sdk.manager.PulseEffectCollectionManager;
-import org.allseen.lsf.sdk.manager.SceneCollectionManager;
+import org.allseen.lsf.sdk.manager.SceneCollectionManagerV1;
 import org.allseen.lsf.sdk.manager.SceneCollectionManagerV2;
 import org.allseen.lsf.sdk.manager.SceneElementCollectionManager;
 import org.allseen.lsf.sdk.manager.TransitionEffectCollectionManager;
@@ -1147,6 +1147,16 @@ public class LightingDirector {
     }
 
     /**
+     * Returns true if the lead controller service only supports the
+     * lighting controller interface version 1.
+     *
+     * @return true for a V1 controller service, false for V2 or later
+     */
+    public boolean isControllerServiceLeaderV1() {
+        return AllJoynManager.isControllerServiceLeaderV1();
+    }
+
+    /**
      * Specifies a listener to invoke once a connection to a lighting controller has been established.
      * After a connection is established, this listener will be invoked only one time.
      *
@@ -1162,7 +1172,7 @@ public class LightingDirector {
      * established. After a connection is established, this task will execute only one time.
      *
      * @param task Runnable task to run after connection
-     * @param delay Specifies a delay to wait before invoking the listener
+     * @param delay Specifies a delay to wait before executing the runnable
      */
     public void postOnNextControllerConnection(Runnable task, int delay) {
         lightingManager.postOnNextControllerConnection(task, delay);
@@ -1240,8 +1250,8 @@ public class LightingDirector {
 
 
     /**
-     * Asynchronously creates a PulseEffect on the Lighting controller. Once the transition
-     * effects is successfully created, the {@link PulseEffectListener#onPulseEffectInitialized(TrackingID, PulseEffect)}
+     * Asynchronously creates a PulseEffect on the Lighting controller. Once the pulse
+     * effect is successfully created, the {@link PulseEffectListener#onPulseEffectInitialized(TrackingID, PulseEffect)}
      * method will be invoked and the tracking IDs will match.
      *
      * @param fromState Specifies the starting LampState of the PulseEffect
@@ -1271,8 +1281,8 @@ public class LightingDirector {
 
 
     /**
-     * Asynchronously creates a SceneElement on the Lighting controller. Once the transition
-     * effects is successfully created, the {@link SceneElementListener#onSceneElementInitialized(TrackingID, SceneElement)}
+     * Asynchronously creates a SceneElement on the Lighting controller. Once the scene
+     * element is successfully created, the {@link SceneElementListener#onSceneElementInitialized(TrackingID, SceneElement)}
      * method will be invoked and the tracking IDs will match.
      *
      * @param effect Specifies the SceneElement's effect
@@ -1295,8 +1305,8 @@ public class LightingDirector {
 
 
     /**
-     * Asynchronously creates a Scene on the Lighting controller. Once the transition
-     * effects is successfully created, the {@link SceneListener#onSceneInitialized(TrackingID, Scene)}
+     * Asynchronously creates a Scene on the Lighting controller. Once the scene
+     * is successfully created, the {@link SceneListener#onSceneInitialized(TrackingID, Scene)}
      * method will be invoked and the tracking IDs will match.
      *
      * @param sceneElements Specifies the SceneElements that belong to the Scene
@@ -1319,8 +1329,8 @@ public class LightingDirector {
 
 
     /**
-     * Asynchronously creates a MasterScene on the Lighting controller. Once the transition
-     * effects is successfully created, the {@link MasterSceneListener#onMasterSceneInitialized(TrackingID, MasterScene)}
+     * Asynchronously creates a MasterScene on the Lighting controller. Once the master
+     * scene is successfully created, the {@link MasterSceneListener#onMasterSceneInitialized(TrackingID, MasterScene)}
      * method will be invoked and the tracking IDs will match.
      *
      * @param scenes Specifies the Scenes that belong to the MasterScene
@@ -1696,7 +1706,7 @@ public class LightingDirector {
      * <b>WARNING: This method is not intended to be used by clients, and may change or be
      * removed in subsequent releases of the SDK.</b>
      */
-    protected SceneCollectionManager<SceneV1, LightingItemErrorEvent> getSceneCollectionManager() {
+    protected SceneCollectionManagerV1<SceneV1, LightingItemErrorEvent> getSceneCollectionManager() {
         return lightingManager.getSceneCollectionManagerV1();
     }
 

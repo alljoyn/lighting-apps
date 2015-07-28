@@ -50,6 +50,24 @@ public class Util {
         return createMemberNamesString(activity, sceneElement.getGroupIDs(), sceneElement.getLampIDs(), separator, R.string.member_group_not_found, R.string.member_lamp_not_found, noMembersStringID);
     }
 
+    // TODO-REF combine with next createMemberNamesString()?
+    public static String formatMemberNamesString(SampleAppActivity activity, String[] lampIDs, String[] groupIDs, MemberNamesOptions options, int maxCount, String noMembers) {
+        List<String> groupNames = new ArrayList<String>();
+        List<String> lampNames = new ArrayList<String>();
+
+        for (String groupID : groupIDs) {
+            Group group = LightingDirector.get().getGroup(groupID);
+            groupNames.add(group != null ? group.getName() : String.format(activity.getString(R.string.member_group_not_found), groupID));
+        }
+
+        for (String lampID : lampIDs) {
+            Lamp lamp = LightingDirector.get().getLamp(lampID);
+            lampNames.add(lamp != null ? lamp.getName() : String.format(activity.getString(R.string.member_lamp_not_found), lampID));
+        }
+
+        return MemberNamesString.format(activity, groupNames, lampNames, options, maxCount, noMembers);
+    }
+
     public static String createMemberNamesString(SampleAppActivity activity, Collection<String> groupIDs, Collection<String> lampIDs, String separator, int groupNotFoundStringID, int lampNotFoundStringID, int noMembersStringID) {
         List<String> groupNames = new ArrayList<String>();
         List<String> lampNames = new ArrayList<String>();
@@ -67,6 +85,7 @@ public class Util {
         return createMemberNamesString(activity, groupNames, lampNames, separator, noMembersStringID);
     }
 
+    //TODO-REF replace with MemberNamesString.format()?
     public static String createMemberNamesString(SampleAppActivity activity, List<String> groupNames, List<String> lampNames, String separator, int noMembersStringID) {
         Collections.sort(groupNames);
         Collections.sort(lampNames);

@@ -64,6 +64,47 @@
         layout="@layout/view_divider_row" />
 
     <TableRow
+        android:id="@+id/settingsRowModuleScenesV1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/dialog_button_bg" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="@dimen/margin_h"
+            android:layout_marginRight="@dimen/margin_h"
+            android:layout_marginTop="5dp"
+            android:background="@color/dialog_button_bg"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/settingsLabelModuleScenesV1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="@string/module_scenes_v1"
+                android:textColor="@color/detail_text_dark"
+                android:textSize="@dimen/font_size_1"
+                android:background="@color/dialog_button_bg" />
+
+            <TextView
+                android:id="@+id/settingsTextModuleScenesV1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/detail_text"
+                android:textSize="@dimen/font_size_2"
+                android:background="@color/dialog_button_bg" />
+        </LinearLayout>
+    </TableRow>
+
+    <include
+        android:id="@+id/settingsDividerModuleScenesV1"
+        layout="@layout/view_divider_row" />
+
+    <TableRow
         android:id="@+id/settingsRowController"
         android:layout_width="match_parent"
         android:clickable="true"
@@ -130,7 +171,6 @@
             android:text="@string/source_code"
             android:textColor="@color/detail_text_dark"
             android:textSize="@dimen/font_size_1" />
-
     </TableRow>
 
     <include
@@ -156,7 +196,6 @@
             android:text="@string/team"
             android:textColor="@color/detail_text_dark"
             android:textSize="@dimen/font_size_1" />
-
     </TableRow>
 
     <include
@@ -182,7 +221,6 @@
             android:text="@string/notice"
             android:textColor="@color/detail_text_dark"
             android:textSize="@dimen/font_size_1" />
-
     </TableRow>
 
     <include

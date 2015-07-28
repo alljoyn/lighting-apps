@@ -19,13 +19,25 @@ project. The steps to build the app and push it to an iOS device are as follows:
 5) Enter the following:
    a) "LSF_SDK_ROOT" for the Name
    b) "LSF SDK Root" for the Display Name
-   c) "<lsf_tutorial_install_dir>" for the Path (This should be the root folder of the LSF SDK)
+   c) "<lsf_sdk_install_dir>" for the Path (This should be the root folder of the LSF SDK)
 6) Create another variable by repeating steps 4-5 using the following information:
    a) "OPENSSL_ROOT" for the Name
    b) "OpenSSL Root" for the Display Name
    c) "<open_ssl_install_dir>" for the Path (see #4 in the prerequisites section)
 7) Open the LSFTutorial Xcode project at the following path:
-   "<lsf_tutorial_install_dir>/iOS/LSFTutorial/LSFTutorial.xcodeproj"
+   "<lsf_sdk_install_dir>/iOS/LSFTutorial/LSFTutorial.xcodeproj"
 8) In the top-left, ensure that "LSFTutorial" is set as the active build scheme and your are building
     for the connected iOS device.
 9) Click the "Play" button in the top-left to build and run the application on your iOS device.
+
+Threading Rules for LSF SDK Usage:
+1) One must not block the Lighting thread (note: all of the delegate methods are called on the Lighting thread)
+2) One must perform all interaction with the lighting system (i.e. the LightingDirector) on the lighting thread
+
+Example of Mandatory Calls to Initialize the Lighting Director:
+
+        lightingDirector = [LSFSDKLightingDirector getLightingDirector];
+        [lightingDirector addDelegate: YOUR_LISTENER];
+        [lightingDirector start: @"YOUR_APP_NAME"];
+
+Full Documentation can be found at <lsf_sdk_install_dir>/iOS/Libraries/LSFObjCHelper/doc/html/index.html

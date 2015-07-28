@@ -29,7 +29,7 @@
 -(void)buildTableArray;
 -(void)modifyAllRows: (BOOL)isSelected;
 -(void)processSelectedRows;
--(void)checkGroupCapability: (LSFCapabilityData *)capability;
+-(void)checkGroupCapability: (LSFSDKCapabilityData *)capability;
 -(void)createLampGroup;
 -(BOOL)isParentGroup: (LSFSDKGroup *)group;
 

@@ -70,7 +70,7 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         presetsButton.setOnClickListener(this);
 
         // state adapter
-        stateAdapter = new LampStateViewAdapter(stateView, itemID, getColorTempMin(), getColorTempSpan(), this);
+        stateAdapter = new LampStateViewAdapter(stateView, getLampStateViewAdapterTag(), getColorTempMin(), getColorTempSpan(), this);
 
         return view;
     }
@@ -146,6 +146,10 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         int color = lampState != null ? ViewColor.calculate(lampState, capability, viewColorTempDefault) : defaultIndicatorColor;
 
         parentStateView.findViewById(R.id.stateRowColorIndicator).getBackground().setColorFilter(color, Mode.MULTIPLY);
+    }
+
+    protected String getLampStateViewAdapterTag() {
+        return key;
     }
 
     protected abstract int getLayoutID();

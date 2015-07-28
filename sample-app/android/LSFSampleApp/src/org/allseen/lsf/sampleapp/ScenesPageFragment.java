@@ -15,11 +15,7 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.sampleapp.scenesv1.BasicSceneElementPresetsFragment;
-import org.allseen.lsf.sampleapp.scenesv1.BasicSceneV1SelectEffectTypeFragment;
-import org.allseen.lsf.sampleapp.scenesv1.NoEffectFragment;
-import org.allseen.lsf.sampleapp.scenesv1.PulseEffectFragment;
-import org.allseen.lsf.sampleapp.scenesv1.TransitionEffectFragment;
+import org.allseen.lsf.sdk.LightingDirector;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -62,6 +58,14 @@ public class ScenesPageFragment extends PageMainContainerFragment {
         return mode == Mode.BASIC;
     }
 
+    public boolean isBasicModeV1() {
+        return isBasicMode() && LightingDirector.get().isControllerServiceLeaderV1();
+    }
+
+    public boolean isBasicModeV2() {
+        return isBasicMode() && !LightingDirector.get().isControllerServiceLeaderV1();
+    }
+
     public boolean isMasterMode() {
         return mode == Mode.MASTER;
     }
@@ -79,22 +83,23 @@ public class ScenesPageFragment extends PageMainContainerFragment {
     }
 
     public void showConstantEffectChildFragment() {
-        showChildFragment(CHILD_TAG_CONSTANT_EFFECT, isBasicMode() ? NoEffectFragment.pendingNoEffectModel.id : PresetEffectFragment.pendingPresetEffect.id);
+        showChildFragment(CHILD_TAG_CONSTANT_EFFECT, isBasicMode() ? getBasicSceneV1Module().getPendingNoEffectID() : PresetEffectFragment.pendingPresetEffect.id);
     }
 
     public void showTransitionEffectChildFragment() {
-        showChildFragment(CHILD_TAG_TRANSITION_EFFECT, isBasicMode() ? TransitionEffectFragment.pendingTransitionEffectModel.id : TransitionEffectV2Fragment.pendingTransitionEffect.id);
+        showChildFragment(CHILD_TAG_TRANSITION_EFFECT, isBasicMode() ? getBasicSceneV1Module().getPendingTransitionEffectID() : TransitionEffectV2Fragment.pendingTransitionEffect.id);
     }
 
     public void showPulseEffectChildFragment() {
-        showChildFragment(CHILD_TAG_PULSE_EFFECT, isBasicMode() ? PulseEffectFragment.pendingPulseEffectModel.id : PulseEffectV2Fragment.pendingPulseEffect.id);
+        showChildFragment(CHILD_TAG_PULSE_EFFECT, isBasicMode() ? getBasicSceneV1Module().getPendingPulseEffectID() : PulseEffectV2Fragment.pendingPulseEffect.id);
     }
 
     public void showEnterDurationChildFragment() {
         String tag;
 
         if (isBasicMode()) {
-            tag = TransitionEffectFragment.pendingTransitionEffectModel != null ? TransitionEffectFragment.pendingTransitionEffectModel.id : PulseEffectFragment.pendingPulseEffectModel.id;
+            BasicSceneV1ModuleProxy basicSceneV1Manager = getBasicSceneV1Module();
+            tag = basicSceneV1Manager.isTransitionEffectPending() ? basicSceneV1Manager.getPendingTransitionEffectID() : basicSceneV1Manager.getPendingPulseEffectID();
         } else {
             tag = TransitionEffectV2Fragment.pendingTransitionEffect != null ? TransitionEffectV2Fragment.pendingTransitionEffect.id : PulseEffectV2Fragment.pendingPulseEffect.id;
         }
@@ -103,11 +108,11 @@ public class ScenesPageFragment extends PageMainContainerFragment {
     }
 
     public void showEnterPeriodChildFragment() {
-        showChildFragment(CHILD_TAG_EFFECT_PERIOD, isBasicMode() ? PulseEffectFragment.pendingPulseEffectModel.id : PulseEffectV2Fragment.pendingPulseEffect.id);
+        showChildFragment(CHILD_TAG_EFFECT_PERIOD, isBasicMode() ? getBasicSceneV1Module().getPendingPulseEffectID() : PulseEffectV2Fragment.pendingPulseEffect.id);
     }
 
     public void showEnterCountChildFragment() {
-        showChildFragment(CHILD_TAG_EFFECT_COUNT, isBasicMode() ? PulseEffectFragment.pendingPulseEffectModel.id : PulseEffectV2Fragment.pendingPulseEffect.id);
+        showChildFragment(CHILD_TAG_EFFECT_COUNT, isBasicMode() ? getBasicSceneV1Module().getPendingPulseEffectID() : PulseEffectV2Fragment.pendingPulseEffect.id);
     }
 
     @Override
@@ -145,7 +150,8 @@ public class ScenesPageFragment extends PageMainContainerFragment {
     public PageFrameChildFragment createInfoChildFragment() {
         return
             isMasterMode()  ? new MasterSceneInfoFragment() :
-            isBasicMode()   ? new BasicSceneV2InfoFragment() :
+            isBasicModeV1() ? getBasicSceneV1Module().createBasicSceneInfoFragment() :
+            isBasicModeV2() ? new BasicSceneV2InfoFragment() :
             isElementMode() ? new SceneElementV2InfoFragment() :
             null;
     }
@@ -154,7 +160,7 @@ public class ScenesPageFragment extends PageMainContainerFragment {
     public PageFrameChildFragment createPresetsChildFragment() {
         return
             isMasterMode()  ? null :
-            isBasicMode()   ? new BasicSceneElementPresetsFragment() : //TODO-FIX rename to SceneElementV1PresetsFragment()
+            isBasicMode()   ? getBasicSceneV1Module().createSceneElementPresetsFragment() :
             isElementMode() ? null : //TODO-FIX new SceneElementV2PresetsFragment();
             null;
     }
@@ -163,7 +169,8 @@ public class ScenesPageFragment extends PageMainContainerFragment {
     public PageFrameChildFragment createEnterNameChildFragment() {
         return
             isMasterMode()  ? new MasterSceneEnterNameFragment() :
-            isBasicMode()   ? new BasicSceneV2EnterNameFragment() :
+            isBasicModeV1() ? getBasicSceneV1Module().createBasicSceneEnterNameFragment() :
+            isBasicModeV2() ? new BasicSceneV2EnterNameFragment() :
             isElementMode() ? new SceneElementV2EnterNameFragment() :
             null;
     }
@@ -172,7 +179,8 @@ public class ScenesPageFragment extends PageMainContainerFragment {
     public PageFrameChildFragment createSelectMembersChildFragment() {
         return
             isMasterMode()  ? new MasterSceneSelectMembersFragment() :
-            isBasicMode()   ? new BasicSceneV2SelectMembersFragment() :
+            isBasicModeV1() ? getBasicSceneV1Module().createBasicSceneSelectMembersFragment():
+            isBasicModeV2() ? new BasicSceneV2SelectMembersFragment() :
             isElementMode() ? new SceneElementV2SelectMembersFragment() :
             null;
     }
@@ -192,7 +200,7 @@ public class ScenesPageFragment extends PageMainContainerFragment {
     public PageFrameChildFragment createSelectEffectTypeChildFragment() {
         return
             isMasterMode()  ? null :
-            isBasicMode()   ? new BasicSceneV1SelectEffectTypeFragment() :
+            isBasicMode()   ? getBasicSceneV1Module().createBasicSceneSelectEffectTypeFragment() :
             isElementMode() ? new SceneElementV2SelectEffectTypeFragment() :
             null;
     }
@@ -200,7 +208,7 @@ public class ScenesPageFragment extends PageMainContainerFragment {
     public PageFrameChildFragment createConstantEffectChildFragment() {
         return
             isMasterMode()  ? null :
-            isBasicMode()   ? new NoEffectFragment() :
+            isBasicMode()   ? getBasicSceneV1Module().createNoEffectFragment() :
             isElementMode() ? new PresetEffectFragment() :
             null;
     }
@@ -208,7 +216,7 @@ public class ScenesPageFragment extends PageMainContainerFragment {
     public PageFrameChildFragment createTransitionEffectChildFragment() {
         return
             isMasterMode()  ? null :
-            isBasicMode()   ? new TransitionEffectFragment() :
+            isBasicMode()   ? getBasicSceneV1Module().createTransitionEffectFragment() :
             isElementMode() ? new TransitionEffectV2Fragment() :
             null;
     }
@@ -216,7 +224,7 @@ public class ScenesPageFragment extends PageMainContainerFragment {
     public PageFrameChildFragment createPulseEffectChildFragment() {
         return
             isMasterMode()  ? null :
-            isBasicMode()   ? new PulseEffectFragment() :
+            isBasicMode()   ? getBasicSceneV1Module().createPulseEffectFragment() :
             isElementMode() ? new PulseEffectV2Fragment() :
             null;
     }
@@ -248,15 +256,19 @@ public class ScenesPageFragment extends PageMainContainerFragment {
         int backStackCount = super.onBackPressed();
 
         if (isBasicMode() && CHILD_TAG_ENTER_NAME.equals(startingChildTag)) {
-            // To support the basic scene creation workflow, when going backwards
-            // from the enter name fragment we have to skip over the dummy scene
-            // info fragment (see SampleAppActivity.doAddScene()). So we queue up
-            // a second back press here.
-
-            // TODO-FIX: need to execute the next line only if V2 scenes are not supported by the controller
-            //((SampleAppActivity)getActivity()).postOnBackPressed();
+            if (LightingDirector.get().isControllerServiceLeaderV1()) {
+                // To support the basic scene V1 creation workflow, when going backwards
+                // from the enter name fragment we have to skip over the dummy scene
+                // info fragment (see SampleAppActivity.doAddScene()). So we queue up
+                // a second back press here.
+                ((SampleAppActivity)getActivity()).postOnBackPressed();
+            }
         }
 
         return backStackCount;
+    }
+
+    private BasicSceneV1ModuleProxy getBasicSceneV1Module() {
+        return ((SampleAppActivity)getActivity()).basicSceneV1Module;
     }
 }

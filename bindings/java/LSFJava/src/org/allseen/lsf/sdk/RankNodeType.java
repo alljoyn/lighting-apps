@@ -16,7 +16,7 @@
 package org.allseen.lsf.sdk;
 
 /**
- * Enum describing how the device runninf the controller service connects to the network.
+ * Enum describing how the device running the controller service connects to the network.
  */
 public enum RankNodeType {
     /**

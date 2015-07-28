@@ -24,7 +24,6 @@ import org.allseen.lsf.PresetManager;
 import org.allseen.lsf.PulseEffectManager;
 import org.allseen.lsf.SceneElementManager;
 import org.allseen.lsf.SceneManager;
-import org.allseen.lsf.SceneManagerCallback;
 import org.allseen.lsf.TransitionEffectManager;
 import org.allseen.lsf.sdk.callback.HelperControllerClientCallback;
 import org.allseen.lsf.sdk.callback.HelperControllerServiceManagerCallback;
@@ -35,8 +34,6 @@ import org.allseen.lsf.sdk.callback.HelperPresetManagerCallback;
 import org.allseen.lsf.sdk.callback.HelperPulseEffectManagerCallback;
 import org.allseen.lsf.sdk.callback.HelperSceneElementManagerCallback;
 import org.allseen.lsf.sdk.callback.HelperSceneManagerCallback;
-import org.allseen.lsf.sdk.callback.HelperSceneManagerCallbackV1;
-import org.allseen.lsf.sdk.callback.HelperSceneManagerCallbackV2;
 import org.allseen.lsf.sdk.callback.HelperTransitionEffectManagerCallback;
 import org.allseen.lsf.sdk.factory.AllLightingItemsFactory;
 import org.allseen.lsf.sdk.listener.AllJoynListener;
@@ -83,9 +80,7 @@ public class LightingSystemManager
     public final HelperTransitionEffectManagerCallback<TRANSITIONEFFECT> transitionEffectManagerCB;
     public final HelperPulseEffectManagerCallback<PULSEEFFECT> pulseEffectManagerCB;
     public final HelperSceneElementManagerCallback<SCENEELEMENT> sceneElementManagerCB;
-    public final HelperSceneManagerCallbackV1<SCENEV1> sceneManagerCBV1;
-    public final HelperSceneManagerCallbackV2<SCENEV2> sceneWithSceneElementsManagerCB;
-    public final HelperSceneManagerCallback sceneManagerCB;
+    public final HelperSceneManagerCallback<SCENEV1, SCENEV2> sceneManagerCB;
     public final HelperMasterSceneManagerCallback<MASTERSCENE> masterSceneManagerCB;
 
     private final LampCollectionManager<LAMP, ERROR> lampCollectionManager;
@@ -94,17 +89,13 @@ public class LightingSystemManager
     private final TransitionEffectCollectionManager<TRANSITIONEFFECT, ERROR> transitionEffectCollectionManager;
     private final PulseEffectCollectionManager<PULSEEFFECT, ERROR> pulseEffectCollectionManager;
     private final SceneElementCollectionManager<SCENEELEMENT, ERROR> sceneElementCollectionManager;
-    private final SceneCollectionManager<SCENEV1, ERROR> sceneCollectionManagerV1;
+    private final SceneCollectionManagerV1<SCENEV1, ERROR> sceneCollectionManagerV1;
     private final SceneCollectionManagerV2<SCENEV2, ERROR> sceneCollectionManager;
     private final MasterSceneCollectionManager<MASTERSCENE, ERROR> masterSceneCollectionManager;
     private final ControllerCollectionManager<CONTROLLER, ERROR> controllerCollectionManager;
 
     public LightingSystemManager(final AllLightingItemsFactory<LAMP, GROUP, PRESET, TRANSITIONEFFECT, PULSEEFFECT, SCENEELEMENT, SCENEV1, SCENEV2, MASTERSCENE, CONTROLLER, ERROR> factory) {
         AllLampsLampGroup.instance.setLightingSystemManager(this);
-
-        // local callback manager, not to be directly registered with ControllerClient
-        sceneManagerCBV1 = new HelperSceneManagerCallbackV1<SCENEV1>(this);
-        sceneWithSceneElementsManagerCB = new HelperSceneManagerCallbackV2<SCENEV2>(this);
 
         controllerClientCB = new HelperControllerClientCallback<CONTROLLER>(this);
         controllerServiceManagerCB = new HelperControllerServiceManagerCallback(this);
@@ -115,15 +106,15 @@ public class LightingSystemManager
         pulseEffectManagerCB = new HelperPulseEffectManagerCallback<PULSEEFFECT>(this);
         sceneElementManagerCB = new HelperSceneElementManagerCallback<SCENEELEMENT>(this);
         masterSceneManagerCB = new HelperMasterSceneManagerCallback<MASTERSCENE>(this);
-        // sceneManagerCB is a composition of the two different types of scenes
-        sceneManagerCB = new HelperSceneManagerCallback(new SceneManagerCallback[] { sceneWithSceneElementsManagerCB, sceneManagerCBV1 });
+        sceneManagerCB = new HelperSceneManagerCallback<SCENEV1, SCENEV2>(this);
+
         lampCollectionManager = new LampCollectionManager<LAMP, ERROR>(this, factory);
         groupCollectionManager = new GroupCollectionManager<GROUP, ERROR>(this, factory);
         presetCollectionManager = new PresetCollectionManager<PRESET, ERROR>(this, factory);
         transitionEffectCollectionManager = new TransitionEffectCollectionManager<TRANSITIONEFFECT, ERROR>(this, factory);
         pulseEffectCollectionManager = new PulseEffectCollectionManager<PULSEEFFECT, ERROR>(this, factory);
         sceneElementCollectionManager = new SceneElementCollectionManager<SCENEELEMENT, ERROR>(this, factory);
-        sceneCollectionManagerV1 = new SceneCollectionManager<SCENEV1, ERROR>(this, factory);
+        sceneCollectionManagerV1 = new SceneCollectionManagerV1<SCENEV1, ERROR>(this, factory);
         sceneCollectionManager = new SceneCollectionManagerV2<SCENEV2, ERROR>(this, factory);
         masterSceneCollectionManager = new MasterSceneCollectionManager<MASTERSCENE, ERROR>(this, factory);
         controllerCollectionManager = new ControllerCollectionManager<CONTROLLER, ERROR>(this, factory);
@@ -271,7 +262,7 @@ public class LightingSystemManager
         return sceneElementCollectionManager;
     }
 
-    public SceneCollectionManager<SCENEV1, ERROR> getSceneCollectionManagerV1() {
+    public SceneCollectionManagerV1<SCENEV1, ERROR> getSceneCollectionManagerV1() {
         return sceneCollectionManagerV1;
     }
 

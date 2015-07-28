@@ -17,6 +17,7 @@
 <resources>
 
     <string name="app_name">LSF Sample App</string>
+    <string name="module_scenes_v1">Scenes V1 Module</string>
     <string name="controller">Controller</string>
     <string name="controller_enable_started">Enable bundled Controller Service (started)</string>
     <string name="controller_enable_stopped">Enable bundled Controller Service (stopped)</string>
@@ -208,6 +209,8 @@
     <string name="units_pulses">pulses</string>
     <string name="value_yes">Yes</string>
     <string name="value_no">No</string>
+    <string name="value_installed_yes">Installed</string>
+    <string name="value_installed_no">Not installed</string>
     <string name="data_not_found">-----</string>
     <string name="na">n/a</string>
     <string name="no_support_dimmable">Changing brightness is not supported.</string>
@@ -242,6 +245,7 @@
     <string name="error_title">Controller Service Error</string>
     <string name="error_code">Error code</string>
     <string name="error_dashboard">Onboarding Dashboard Error</string>
+    <string name="error_dashboard_text">Onboarding dashboard plugin not installed.</string>
     <string name="error_dependency">Cannot delete because another group, scene, or master scene depends on this.</string>
     <string name="error_dependency_group_title">Can\'t Delete Group</string>
     <string name="error_dependency_group_text">The group \"%1$s\" is being used by the following other groups or scenes: %2$s. It cannot be deleted until it is removed from those items, or those items are deleted.</string>

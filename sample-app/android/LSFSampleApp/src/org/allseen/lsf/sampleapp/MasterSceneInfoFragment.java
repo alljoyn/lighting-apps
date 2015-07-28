@@ -25,7 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class MasterSceneInfoFragment extends PageFrameChildFragment implements View.OnClickListener {
+public class MasterSceneInfoFragment extends SceneItemInfoFragment {
     public static PendingMasterScene pendingMasterScene = new PendingMasterScene();
 
     @Override
@@ -90,6 +90,7 @@ public class MasterSceneInfoFragment extends PageFrameChildFragment implements V
         ((ScenesPageFragment)parent).showSelectMembersChildFragment();
     }
 
+    @Override
     public void updateInfoFields() {
         updateMasterSceneInfoFields((SampleAppActivity)getActivity(), LightingDirector.get().getMasterScene(key));
     }

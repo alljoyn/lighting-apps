@@ -16,7 +16,6 @@
 package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.sdk.LightingDirector;
-import org.allseen.lsf.sdk.MasterScene;
 import org.allseen.lsf.sdk.Scene;
 import org.allseen.lsf.sdk.SceneV2;
 
@@ -29,7 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class BasicSceneV2InfoFragment extends PageFrameChildFragment implements View.OnClickListener {
+public class BasicSceneV2InfoFragment extends SceneItemInfoFragment {
     public static PendingSceneV2 pendingSceneV2 = null;
 
     @Override
@@ -62,6 +61,7 @@ public class BasicSceneV2InfoFragment extends PageFrameChildFragment implements 
         return view;
     }
 
+    @Override
     public void updateInfoFields() {
         updateBasicSceneInfoFields();
     }
@@ -101,9 +101,9 @@ public class BasicSceneV2InfoFragment extends PageFrameChildFragment implements 
 
     protected void onHeaderClick() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        MasterScene masterScene = LightingDirector.get().getMasterScene(key);
+        Scene basicScene = LightingDirector.get().getScene(key);
 
-        activity.showItemNameDialog(R.string.title_master_scene_rename, new UpdateMasterSceneNameAdapter(masterScene, activity));
+        activity.showItemNameDialog(R.string.title_basic_scene_rename, new UpdateBasicSceneNameAdapter(basicScene, activity));
     }
 
     protected void onMembersClick() {

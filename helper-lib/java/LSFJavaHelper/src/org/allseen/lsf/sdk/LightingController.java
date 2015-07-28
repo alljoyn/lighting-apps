@@ -30,7 +30,7 @@ public class LightingController {
 
     private static final LightingController instance = new LightingController();
 
-    private boolean controllerRunning;
+    private volatile boolean controllerRunning;
     private BasicControllerService controllerService;
 
     /*
@@ -101,6 +101,7 @@ public class LightingController {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                // Note: the start() call does not return until the controller service has stopped
                 controllerService.start(controllerService.getLightingControllerConfiguration().getKeystorePath());
             }
         }).start();
@@ -118,7 +119,15 @@ public class LightingController {
      */
     public LightingControllerStatus stop() {
         controllerRunning = false;
-        controllerService.stop();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Note: the stop() call does not return until the controller service has finished stopping
+                controllerService.stop();
+            }
+        }).start();
+
         return LightingControllerStatus.OK;
     }
 

@@ -27,8 +27,6 @@
 #import "../callback/LSFSDKHelperPulseEffectManagerCallback.h"
 #import "../callback/LSFSDKHelperSceneElementManagerCallback.h"
 #import "../callback/LSFSDKHelperSceneManagerCallback.h"
-#import "../callback/LSFSDKHelperSceneManagerCallbackV1.h"
-#import "../callback/LSFSDKHelperSceneManagerCallbackV2.h"
 #import "../callback/LSFSDKHelperTransitionEffectManagerCallback.h"
 #import "LSFSDKLampCollectionManager.h"
 #import "LSFSDKPresetCollectionManager.h"
@@ -36,7 +34,7 @@
 #import "LSFSDKTransitionEffectCollectionManager.h"
 #import "LSFSDKPulseEffectCollectionManager.h"
 #import "LSFSDKSceneElementCollectionManager.h"
-#import "LSFSDKSceneCollectionManager.h"
+#import "LSFSDKSceneCollectionManagerV1.h"
 #import "LSFSDKSceneCollectionManagerV2.h"
 #import "LSFSDKMasterSceneCollectionManager.h"
 #import "LSFControllerManager.h"
@@ -65,8 +63,6 @@
 @property (nonatomic, strong, readonly) LSFSDKHelperTransitionEffectManagerCallback *transitionEffectManagerCB;
 @property (nonatomic, strong, readonly) LSFSDKHelperPulseEffectManagerCallback *pulseEffectManagerCB;
 @property (nonatomic, strong, readonly) LSFSDKHelperSceneElementManagerCallback *sceneElementManagerCB;
-@property (nonatomic, strong, readonly) LSFSDKHelperSceneManagerCallbackV1 *sceneManagerCBV1;
-@property (nonatomic, strong, readonly) LSFSDKHelperSceneManagerCallbackV2 *sceneWithSceneElementsManagerCB;
 @property (nonatomic, strong, readonly) LSFSDKHelperSceneManagerCallback *sceneManagerCB;
 @property (nonatomic, strong, readonly) LSFSDKHelperMasterSceneManagerCallback *masterSceneManagerCB;
 @property (nonatomic, strong, readonly) LSFSDKLampCollectionManager *lampCollectionManager;
@@ -75,7 +71,7 @@
 @property (nonatomic, strong, readonly) LSFSDKTransitionEffectCollectionManager *transitionEffectCollectionManager;
 @property (nonatomic, strong, readonly) LSFSDKPulseEffectCollectionManager *pulseEffectCollectionManager;
 @property (nonatomic, strong, readonly) LSFSDKSceneElementCollectionManager *sceneElementCollectionManager;
-@property (nonatomic, strong, readonly) LSFSDKSceneCollectionManager *sceneCollectionManagerV1;
+@property (nonatomic, strong, readonly) LSFSDKSceneCollectionManagerV1 *sceneCollectionManagerV1;
 @property (nonatomic, strong, readonly) LSFSDKSceneCollectionManagerV2 *sceneCollectionManager;
 @property (nonatomic, strong, readonly) LSFSDKMasterSceneCollectionManager *masterSceneCollectionManager;
 @property (nonatomic, strong, readonly) LSFLampManager *lampManager;

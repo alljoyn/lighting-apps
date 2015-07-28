@@ -28,7 +28,7 @@ import org.allseen.lsf.sdk.model.SceneDataModelV2;
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
-public class SceneCollectionManagerV2<SCENEV2, ERROR> extends LightingItemCollectionManager<SCENEV2, SceneCollectionListener<? super SCENEV2, ? super ERROR>, SceneDataModelV2, ERROR> {
+public class SceneCollectionManagerV2<SCENEV2, ERROR> extends SceneCollectionManager<SCENEV2, SceneDataModelV2, ERROR> { //extends LightingItemCollectionManager<SCENEV2, SceneCollectionListener<? super SCENEV2, ? super ERROR>, SceneDataModelV2, ERROR> {
 
     protected final SceneV2Factory<SCENEV2, ERROR> factory;
 
@@ -38,6 +38,7 @@ public class SceneCollectionManagerV2<SCENEV2, ERROR> extends LightingItemCollec
         this.factory = factory;
     }
 
+    @Override
     public SCENEV2 addScene(String sceneID) {
         return addScene(sceneID, factory.createSceneV2(sceneID));
     }
@@ -71,6 +72,7 @@ public class SceneCollectionManagerV2<SCENEV2, ERROR> extends LightingItemCollec
         return removeAllAdapters();
     }
 
+    @Override
     public SCENEV2 removeScene(String sceneID) {
         return removeAdapter(sceneID);
     }

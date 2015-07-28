@@ -151,6 +151,78 @@ public class Lamp extends GroupMember {
     }
 
     /**
+     * Changes the color state of the current Lamp to the provided hue.
+     * <p>
+     * <b>Note: If the provided hue values are outside the expected range, they will be normalized to the
+     * expected range</b>
+     *
+     * @param hueDegrees The hue component of the desired color (0-360)
+     */
+    @Override
+    public void setHue(int hueDegrees) {
+        String errorContext = "Lamp.setHue() error";
+
+        long scaledHue = ColorStateConverter.convertHueViewToModel(hueDegrees);
+
+        postErrorIfFailure(errorContext,
+                AllJoynManager.lampManager.transitionLampStateHueField(lampModel.id, scaledHue, 0));
+    }
+
+    /**
+     * Changes the color state of the current Lamp to the provided saturation.
+     * <p>
+     * <b>Note: If the provided saturation values are outside the expected range, they will be normalized to the
+     * expected range</b>
+     *
+     * @param saturationPercent The saturation component of the desired color (0-100)
+     */
+    @Override
+    public  void setSaturation(int saturationPercent) {
+        String errorContext = "Lamp.setSaturation() error";
+
+        long scaledSaturation = ColorStateConverter.convertSaturationViewToModel(saturationPercent);
+
+        postErrorIfFailure(errorContext,
+                AllJoynManager.lampManager.transitionLampStateSaturationField(lampModel.id, scaledSaturation, 0));
+    }
+
+    /**
+     * Changes the color state of the current Lamp to the provided brightness.
+     * <p>
+     * <b>Note: If the provided brightness values are outside the expected range, they will be normalized to the
+     * expected range</b>
+     *
+     * @param brightnessPercent The brightness component of the desired color (0-100)
+     */
+    @Override
+    public  void setBrightness(int brightnessPercent) {
+        String errorContext = "Lamp.setBrightness() error";
+
+        long scaledBrightness = ColorStateConverter.convertBrightnessViewToModel(brightnessPercent);
+
+        postErrorIfFailure(errorContext,
+                AllJoynManager.lampManager.transitionLampStateBrightnessField(lampModel.id, scaledBrightness, 0));
+    }
+
+    /**
+     * Changes the color state of the current Lamp to the provided color temperature.
+     * <p>
+     * <b>Note: If the provided color temperature values are outside the expected range, they will be normalized to the
+     * expected range</b>
+     *
+     * @param colorTempDegrees The color temperature component of the desired color (1000-20000)
+     */
+    @Override
+    public  void setColorTemperature(int colorTempDegrees) {
+        String errorContext = "Lamp.setColorTemp() error";
+
+        long scaledColorTemp = ColorStateConverter.convertColorTempViewToModel(colorTempDegrees);
+
+        postErrorIfFailure(errorContext,
+                AllJoynManager.lampManager.transitionLampStateColorTempField(lampModel.id, scaledColorTemp, 0));
+    }
+
+    /**
      * Renames the current Lamp using the provided name.
      *
      * @param lampName The new name for the Lamp

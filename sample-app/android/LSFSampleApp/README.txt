@@ -51,4 +51,10 @@ The following steps will show you how to add the required variables to Eclipse.
     "<path_to_git_clones_folder>/apps/helper-lib/java/LSFJavaHelper"), or to the appropriate
     Libraries subfolder in the Lighting SDK for Android (e.g.,
     "<path_to_Lighting_SDK_root_folder>/tutorial-app/android/Libraries/LSFJavaHelper").
+17) Repeat steps 3-7 to create another variable named "LSF_SAMPLE_APP_SRC_MODULE_SCENESV1"
+    that points to the configurable scenes v1 source code. To enable full scenes v1
+    support, set this variable to
+    "<path_to_git_clones_folder>/apps/sample-app/android/LSFSampleApp/modules/scenesv1".
+    To disable creation and editing of v1 scenes, set this variable to:
+    "<path_to_git_clones_folder>/apps/sample-app/android/LSFSampleApp/modules/null".
 

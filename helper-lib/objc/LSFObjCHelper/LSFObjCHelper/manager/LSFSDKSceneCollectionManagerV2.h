@@ -14,11 +14,11 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFSDKLightingItemCollectionManager.h"
+#import "LSFSDKSceneCollectionManager.h"
 #import "LSFSDKSceneV2.h"
 #import "LSFSDKSceneDelegate.h"
 
-@interface LSFSDKSceneCollectionManagerV2 : LSFSDKLightingItemCollectionManager
+@interface LSFSDKSceneCollectionManagerV2 : LSFSDKSceneCollectionManager
 
 -(id)init;
 -(void)addSceneDelegate: (id<LSFSDKSceneDelegate>)sceneDelegate;

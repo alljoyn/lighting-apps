@@ -20,6 +20,23 @@
 
     <import file="${target.path.apps}/custom_rules.xml"/>
 
+    <!--
+     - -   This section handles the optional inclusion of the ScenesV1 module
+     -->
+    <condition property="apps.path.src.module.scenesv1" value="${env.LSF_SAMPLE_APP_SRC_MODULE_SCENESV1}">
+        <isset property="env.LSF_SAMPLE_APP_SRC_MODULE_SCENESV1" />
+    </condition>
+
+    <target name="pre-build-copy-scenesv1" if="apps.path.src.module.scenesv1">
+        <echo>Copying scenes V1 source files from ${apps.path.src.module.scenesv1}</echo>
+        <copy todir="${source.absolute.dir}">
+            <fileset dir="${apps.path.src.module.scenesv1}" includes="**" />
+        </copy>
+    </target>
+
+    <!--
+     - - This section handles the optional inclusion of the Dashboard AAR (Android ARchive) plugin
+     -->
     <condition property="apps.path.dashboard" value="${env.DASHBOARD_HOME}" else="${target.path.apps}/../../alljoyn_on">
         <isset property="env.DASHBOARD_HOME" />
     </condition>
@@ -56,7 +73,18 @@
         <copy file="${out.dir}/aar/DashboardPlugin/classes.jar" tofile="${basedir}/libs/dashboardplugin.jar"/>
     </target>
 
-    <target name="-pre-clean">
+    <!--
+     - - This section defines common targets
+     -->
+    <target name="common-delete-tmp" >
+        <delete dir="tmp-src" />
+    </target>
+
+    <!--
+     - - This section implements the customizable targets needed to support the optional
+     - - features (modules and plugins) in the app
+     -->
+    <target name="-pre-clean" depends="common-delete-tmp">
         <!-- Clean jars -->
         <delete quiet="true" file="${basedir}/libs/alljoyn.jar"/>
         <delete quiet="true" file="${basedir}/libs/alljoyn_about.jar"/>
@@ -80,7 +108,12 @@
         <delete quiet="true" file="${basedir}/libs/armeabi/libgnustl_shared.so"/>
     </target>
 
-    <target name="-pre-build" depends="pre-build-aar-files">
+    <target name="-pre-build" depends="pre-build-copy-scenesv1, pre-build-aar-files">
+        <!-- Copy the main source files -->
+        <copy todir="${source.absolute.dir}">
+            <fileset dir="src" includes="**" />
+        </copy>
+
         <!-- Copy jars -->
         <copy file="${apps.path.jar.alljoyn}" todir="${basedir}/libs"/>
         <copy file="${apps.path.jar.alljoyn.about}" todir="${basedir}/libs"/>
@@ -116,4 +149,7 @@
             <library refid="project.library.manifest.file.path" />
         </mergemanifest>
     </target>
+
+    <!-- Delete temp files -->
+    <target name="-post-build"  depends="common-delete-tmp"/>
 </project>

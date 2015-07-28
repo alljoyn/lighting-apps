@@ -11,7 +11,7 @@ the project and set up the necessary path variables are as follows:
  1) Start Eclipse, and on the top menu bar select File -> Import...
  2) In the Import dialog, open the General category and choose Existing
     Projects into Workspace
- 3) Browse to the LSFTutorial installation directory, and complete
+ 3) Browse to the <lsf_sdk_install_dir>/android/LSFTutorial, and complete
     the project import.
  4) After importing, open the Preferences dialog (Window -> Preferences or
     ADT -> Preferences). Note this is not the same as the Project Properties dialog.
@@ -23,12 +23,12 @@ the project and set up the necessary path variables are as follows:
  7) Enter "ALLJOYN_HOME" for the variable name.
  8) For location, click the "Folder..." button.
  9) Navigate to the installation directory, and set the "ALLJOYN_HOME"
-    variable to "<lsf_tutorial_install_dir>/android/Libraries/AllJoyn"
+    variable to "<lsf_sdk_install_dir>/android/Libraries/AllJoyn"
 10) Click OK and then OK again. You should see your newly created variable.
 11) Repeat steps 6-10 to create another variable named "LSF_JAVA_HOME" that's
-    set to "<lsf_tutorial_install_dir>/android/Libraries/LSFJava"
+    set to "<lsf_sdk_install_dir>/android/Libraries/LSFJava"
 12) Repeat steps 6-10 to create another variable named "LSF_JAVA_HELPER_HOME"
-    that's set to "<lsf_tutorial_install_dir>/android/Libraries/LSFJavaHelper"
+    that's set to "<lsf_sdk_install_dir>/android/Libraries/LSFJavaHelper"
 13) Repeat steps 6-10 to create another variable named "ANDROID_HOME" that's
     set to "<android_sdk_installation_dir>" (if you are using Eclipse with
     ADT, the Android SDK will be under the ADT installation directory
@@ -47,4 +47,4 @@ Example of Mandatory Calls to Initialize the Lighting Director:
         lightingDirector.addListener(YOUR_LISTENER);
         lightingDirector.start("YOUR_APP_NAME");
 
-Once Generated, Full Documentation can be found at [../../../helper-lib/java/LSFJavaHelper/doc/overview-summary.html]
+Full Documentation can be found at <lsf_sdk_install_dir>/android/Libraries/LSFJavaHelper/doc/index.html

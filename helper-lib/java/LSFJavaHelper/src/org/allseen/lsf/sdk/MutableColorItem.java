@@ -101,4 +101,32 @@ public abstract class MutableColorItem extends ColorItem implements LampState {
      */
     @Override
     public abstract void setColorHsvt(int hueDegrees, int saturationPercent, int brightnessPercent, int colorTempDegrees);
+
+    /**
+     * Changes the color state of the current Item to the provided hue.
+     *
+     * @param hueDegrees The hue component of the desired color (0-360)
+     */
+    public abstract void setHue(int hueDegrees);
+
+    /**
+     * Changes the color state of the current Item to the provided saturation.
+     *
+     * @param saturationPercent The saturation component of the desired color (0-100)
+     */
+    public abstract void setSaturation(int saturationPercent);
+
+    /**
+     * Changes the color state of the current Item to the provided brightness.
+     *
+     * @param brightnessPercent The brightness component of the desired color (0-100)
+     */
+    public abstract void setBrightness(int brightnessPercent);
+
+    /**
+     * Changes the color state of the current Item to the provided color temperature.
+     *
+     * @param colorTempDegrees The color temperature component of the desired color (1000-20000)
+     */
+    public abstract void setColorTemperature(int colorTempDegrees);
 }

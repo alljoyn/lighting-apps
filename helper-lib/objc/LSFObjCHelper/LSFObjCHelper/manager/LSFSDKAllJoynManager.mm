@@ -180,6 +180,11 @@ static unsigned int controllerServiceLeaderVersion = 0;
     return controllerServiceLeaderVersion;
 }
 
++(BOOL)isControllerServiceLeaderV1
+{
+    return [LSFSDKAllJoynManager getControllerServiceLeaderVersion] < 2;
+}
+
 +(LSFControllerClient *)getControllerClient
 {
     return controllerClient;

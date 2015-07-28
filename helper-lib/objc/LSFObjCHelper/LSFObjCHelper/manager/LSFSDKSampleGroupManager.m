@@ -488,7 +488,7 @@
 
 -(BOOL)interceptAllLampsGroupStateChangeRequests
 {
-    return [LSFSDKAllJoynManager getControllerServiceLeaderVersion] < 2;
+    return [LSFSDKAllJoynManager isControllerServiceLeaderV1];
 }
 
 @end

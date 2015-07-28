@@ -91,11 +91,13 @@ public class HelperControllerClientCallback<CONTROLLER> extends ControllerClient
         manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
+                AllJoynManager.controllerServiceLeaderVersion = 0;
+
                 ControllerDataModel leaderModel = manager.getControllerCollectionManager().getLeaderModel();
 
-                //TODO-CHK Logic here changed - is it right?
-                if (leaderModel.equalsID(controllerID) && leaderModel.connected) {
+                if (!leaderModel.equalsID(controllerID) || leaderModel.connected) {
                     leaderModel.setName(controllerName);
+                    leaderModel.version = 0;
                     leaderModel.connected = false;
                     leaderModel.updateTime();
 
@@ -167,13 +169,20 @@ public class HelperControllerClientCallback<CONTROLLER> extends ControllerClient
         }, 200);
     }
 
-    // Because of composite HelperSceneManagerCallback, this call will populate
-    // both SceneV1 and SceneWithSceneElements
+    // After the call to getAllSceneIDs(),  we will receive either SceneV1
+    // or SceneWithSceneElements items (depending on the version of the
+    // controller that we are connected to). The registered scene callback
+    // must be able to handle both cases.
     protected void postGetAllBasicSceneIDs() {
         manager.getQueue().postDelayed(new Runnable() {
             @Override
             public void run() {
-                AllJoynManager.sceneManager.getAllSceneIDs();
+                // Only get the scenes after we know the version of the controller
+                if (AllJoynManager.controllerServiceLeaderVersion > 0) {
+                    AllJoynManager.sceneManager.getAllSceneIDs();
+                } else {
+                    manager.getQueue().postDelayed(this, 300);
+                }
             }
         }, 300);
     }

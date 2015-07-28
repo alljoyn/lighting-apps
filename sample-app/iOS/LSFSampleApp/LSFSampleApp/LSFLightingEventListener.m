@@ -274,7 +274,6 @@
     NSLog(@"%s Error: %@", __FUNCTION__, [error name]);
 }
 
-//-(void)onLeaderModelChange: (LSFControllerModel *)leadModel
 -(void)onLeaderChange: (LSFSDKController *)leader
 {
     NSLog(@"%s", __FUNCTION__);

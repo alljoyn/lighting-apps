@@ -40,7 +40,7 @@
     //Set controller notification handler
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
 
-    [self.controllerNameLabel setText: [[[LSFSDKLightingDirector getLightingDirector] leadController] name]];
+    [self.controllerNameLabel setText: [NSString stringWithFormat: @"%@ (V%u)", [[[LSFSDKLightingDirector getLightingDirector] leadController] name], [[[LSFSDKLightingDirector getLightingDirector] leadController] version]]];
 
     if ([[LSFSDKLightingController getLightingController] isRunning])
     {
@@ -71,7 +71,7 @@
 -(void)leaderModelChangedNotificationReceived: (NSNotification *)notification
 {
     LSFSDKController *leader = [notification.userInfo valueForKey: @"leader"];
-    [self.controllerNameLabel setText: [leader name]];
+    [self.controllerNameLabel setText: [NSString stringWithFormat: @"%@ (V%u)", leader.name, leader.version]];
 }
 
 /*

@@ -49,6 +49,9 @@ public class SettingsFragment extends PageFrameChildFragment implements OnClickL
         }
         ((TextView) view.findViewById(R.id.settingsTextSampleApp)).setText(version);
 
+        int moduleScenesV1TextID = ((SampleAppActivity)getActivity()).basicSceneV1Module.isModuleInstalled() ? R.string.value_installed_yes : R.string.value_installed_no;
+        ((TextView) view.findViewById(R.id.settingsTextModuleScenesV1)).setText(getString(moduleScenesV1TextID));
+
         onUpdateView();
 
         return view;

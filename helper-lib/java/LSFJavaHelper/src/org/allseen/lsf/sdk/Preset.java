@@ -167,6 +167,66 @@ public class Preset extends MutableColorItem implements Effect {
     }
 
     /**
+     * Changes the color state of the current Lamp to the provided hue.
+     * <p>
+     * <b>Note: If the provided hue values are outside the expected range, they will be normalized to the
+     * expected range</b>
+     *
+     * @param hueDegrees The hue component of the desired color (0-360)
+     */
+    @Override
+    public void setHue(int hueDegrees) {
+        Color currentColor = getColor();
+        currentColor.setHue(hueDegrees);
+        modify(getPower(), currentColor);
+    }
+
+    /**
+     * Changes the color state of the current Lamp to the provided saturation.
+     * <p>
+     * <b>Note: If the provided saturation values are outside the expected range, they will be normalized to the
+     * expected range</b>
+     *
+     * @param saturationPercent The saturation component of the desired color (0-100)
+     */
+    @Override
+    public  void setSaturation(int saturationPercent) {
+        Color currentColor = getColor();
+        currentColor.setSaturation(saturationPercent);
+        modify(getPower(), currentColor);
+    }
+
+    /**
+     * Changes the color state of the current Lamp to the provided brightness.
+     * <p>
+     * <b>Note: If the provided brightness values are outside the expected range, they will be normalized to the
+     * expected range</b>
+     *
+     * @param brightnessPercent The brightness component of the desired color (0-100)
+     */
+    @Override
+    public  void setBrightness(int brightnessPercent) {
+        Color currentColor = getColor();
+        currentColor.setBrightness(brightnessPercent);
+        modify(getPower(), currentColor);
+    }
+
+    /**
+     * Changes the color state of the current Lamp to the provided color temperature.
+     * <p>
+     * <b>Note: If the provided color temperature values are outside the expected range, they will be normalized to the
+     * expected range</b>
+     *
+     * @param colorTempDegrees The color temperature component of the desired color (1000-20000)
+     */
+    @Override
+    public  void setColorTemperature(int colorTempDegrees) {
+        Color currentColor = getColor();
+        currentColor.setColorTemperature(colorTempDegrees);
+        modify(getPower(), currentColor);
+    }
+
+    /**
      * Tests to see if the current Preset lamp state matches the provided Preset.
      *
      * @param that The Preset for comparison.

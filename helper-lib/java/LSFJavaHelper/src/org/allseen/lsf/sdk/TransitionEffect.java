@@ -36,7 +36,7 @@ import org.allseen.lsf.sdk.model.TransitionEffectDataModelV2;
  * <b>Note: This class is not meant to be instantiated directly. TransitionEffects should be retrieved
  * from the LightingDirector using the {@link LightingDirector#getTransitionEffects()} method.</b>
  * <p>
- * <b>Note: This class does not support PulseEffect creation. See {@link LightingDirector#createTransitionEffect(LampState, long, String)}.</b>
+ * <b>Note: This class does not support TransitionEffect creation. See {@link LightingDirector#createTransitionEffect(LampState, long, String)}.</b>
  */
 public class TransitionEffect extends ColorItem implements Effect {
     /**

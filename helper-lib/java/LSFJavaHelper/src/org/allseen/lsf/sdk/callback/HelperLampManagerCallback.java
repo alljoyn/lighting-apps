@@ -297,7 +297,7 @@ public class HelperLampManagerCallback<LAMP> extends LampManagerCallback {
                 LampDataModel lampModel = lampManager.getModel(lampID);
 
                 if (LampDataModel.defaultName.equals(lampModel.getName())) {
-                    if (AllJoynManager.controllerServiceLeaderVersion < 2) {
+                    if (AllJoynManager.isControllerServiceLeaderV1()) {
                         // Since 14.12 and earlier controllers did not support the
                         // consolidated data set, we have to queue up 4 requests and
                         // process the 4 replies.

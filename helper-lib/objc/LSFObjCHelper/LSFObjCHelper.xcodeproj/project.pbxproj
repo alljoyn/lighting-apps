@@ -34,8 +34,6 @@
 		871F84051B20D1300048A84D /* LSFSDKHelperPulseEffectManagerCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 871F836F1B20D1300048A84D /* LSFSDKHelperPulseEffectManagerCallback.m */; };
 		871F84061B20D1300048A84D /* LSFSDKHelperSceneElementManagerCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 871F83711B20D1300048A84D /* LSFSDKHelperSceneElementManagerCallback.m */; };
 		871F84071B20D1300048A84D /* LSFSDKHelperSceneManagerCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 871F83731B20D1300048A84D /* LSFSDKHelperSceneManagerCallback.m */; };
-		871F84081B20D1300048A84D /* LSFSDKHelperSceneManagerCallbackV1.m in Sources */ = {isa = PBXBuildFile; fileRef = 871F83751B20D1300048A84D /* LSFSDKHelperSceneManagerCallbackV1.m */; };
-		871F84091B20D1300048A84D /* LSFSDKHelperSceneManagerCallbackV2.m in Sources */ = {isa = PBXBuildFile; fileRef = 871F83771B20D1300048A84D /* LSFSDKHelperSceneManagerCallbackV2.m */; };
 		871F840A1B20D1300048A84D /* LSFSDKHelperTransitionEffectManagerCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 871F83791B20D1300048A84D /* LSFSDKHelperTransitionEffectManagerCallback.m */; };
 		871F840D1B20D1300048A84D /* LSFControllerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 871F83801B20D1300048A84D /* LSFControllerManager.m */; };
 		871F84161B20D1300048A84D /* LSFSDKAboutManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 871F83931B20D1300048A84D /* LSFSDKAboutManager.mm */; };
@@ -49,7 +47,7 @@
 		871F841E1B20D1300048A84D /* LSFSDKPresetCollectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 871F83A31B20D1300048A84D /* LSFSDKPresetCollectionManager.m */; };
 		871F841F1B20D1300048A84D /* LSFSDKPulseEffectCollectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 871F83A51B20D1300048A84D /* LSFSDKPulseEffectCollectionManager.m */; };
 		871F84201B20D1300048A84D /* LSFSDKSampleGroupManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 871F83A71B20D1300048A84D /* LSFSDKSampleGroupManager.m */; };
-		871F84211B20D1300048A84D /* LSFSDKSceneCollectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 871F83A91B20D1300048A84D /* LSFSDKSceneCollectionManager.m */; };
+		871F84211B20D1300048A84D /* LSFSDKSceneCollectionManagerV1.m in Sources */ = {isa = PBXBuildFile; fileRef = 871F83A91B20D1300048A84D /* LSFSDKSceneCollectionManagerV1.m */; };
 		871F84221B20D1300048A84D /* LSFSDKSceneCollectionManagerV2.m in Sources */ = {isa = PBXBuildFile; fileRef = 871F83AB1B20D1300048A84D /* LSFSDKSceneCollectionManagerV2.m */; };
 		871F84231B20D1300048A84D /* LSFSDKSceneElementCollectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 871F83AD1B20D1300048A84D /* LSFSDKSceneElementCollectionManager.m */; };
 		871F84241B20D1300048A84D /* LSFSDKTransitionEffectCollectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 871F83AF1B20D1300048A84D /* LSFSDKTransitionEffectCollectionManager.m */; };
@@ -92,8 +90,6 @@
 		871F84601B20F7BB0048A84D /* LSFSDKHelperPulseEffectManagerCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 871F836E1B20D1300048A84D /* LSFSDKHelperPulseEffectManagerCallback.h */; };
 		871F84611B20F7BB0048A84D /* LSFSDKHelperSceneElementManagerCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 871F83701B20D1300048A84D /* LSFSDKHelperSceneElementManagerCallback.h */; };
 		871F84621B20F7BB0048A84D /* LSFSDKHelperSceneManagerCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 871F83721B20D1300048A84D /* LSFSDKHelperSceneManagerCallback.h */; };
-		871F84631B20F7BB0048A84D /* LSFSDKHelperSceneManagerCallbackV1.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 871F83741B20D1300048A84D /* LSFSDKHelperSceneManagerCallbackV1.h */; };
-		871F84641B20F7BB0048A84D /* LSFSDKHelperSceneManagerCallbackV2.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 871F83761B20D1300048A84D /* LSFSDKHelperSceneManagerCallbackV2.h */; };
 		871F84651B20F7BB0048A84D /* LSFSDKHelperTransitionEffectManagerCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 871F83781B20D1300048A84D /* LSFSDKHelperTransitionEffectManagerCallback.h */; };
 		871F84691B20F7F80048A84D /* LSFControllerManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 871F837F1B20D1300048A84D /* LSFControllerManager.h */; };
 		871F846B1B20F7F80048A84D /* LSFLampAnnouncementDelegate.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 871F83831B20D1300048A84D /* LSFLampAnnouncementDelegate.h */; };
@@ -108,7 +104,7 @@
 		871F847B1B20F7F80048A84D /* LSFSDKPresetCollectionManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 871F83A21B20D1300048A84D /* LSFSDKPresetCollectionManager.h */; };
 		871F847C1B20F7F80048A84D /* LSFSDKPulseEffectCollectionManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 871F83A41B20D1300048A84D /* LSFSDKPulseEffectCollectionManager.h */; };
 		871F847D1B20F7F80048A84D /* LSFSDKSampleGroupManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 871F83A61B20D1300048A84D /* LSFSDKSampleGroupManager.h */; };
-		871F847E1B20F7F80048A84D /* LSFSDKSceneCollectionManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 871F83A81B20D1300048A84D /* LSFSDKSceneCollectionManager.h */; };
+		871F847E1B20F7F80048A84D /* LSFSDKSceneCollectionManagerV1.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 871F83A81B20D1300048A84D /* LSFSDKSceneCollectionManagerV1.h */; };
 		871F847F1B20F7F80048A84D /* LSFSDKSceneCollectionManagerV2.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 871F83AA1B20D1300048A84D /* LSFSDKSceneCollectionManagerV2.h */; };
 		871F84801B20F7F80048A84D /* LSFSDKSceneElementCollectionManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 871F83AC1B20D1300048A84D /* LSFSDKSceneElementCollectionManager.h */; };
 		871F84811B20F7F80048A84D /* LSFSDKTransitionEffectCollectionManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 871F83AE1B20D1300048A84D /* LSFSDKTransitionEffectCollectionManager.h */; };
@@ -225,13 +221,14 @@
 		87E6305619BFA9BD00F447A1 /* LSFSDKLightingItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E6305519BFA9BD00F447A1 /* LSFSDKLightingItem.m */; };
 		87E6305919BFA9D500F447A1 /* LSFSDKColorItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E6305819BFA9D500F447A1 /* LSFSDKColorItem.m */; };
 		87F27F371AF27A5800D1C4FA /* LSFSDKMutableColorItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F27F361AF27A5800D1C4FA /* LSFSDKMutableColorItem.m */; };
-		87F7F8361B03D25C004EAEAD /* LSFSDKAnyCollectionDelegateBase.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87C7D9721B0180FC006A6487 /* LSFSDKAnyCollectionDelegateBase.h */; };
 		87FA42461A23AFEB00059BF7 /* libLSFObjC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87FA42341A23A57E00059BF7 /* libLSFObjC.a */; };
 		87FA42481A23AFFA00059BF7 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87FA42471A23AFFA00059BF7 /* SystemConfiguration.framework */; };
 		87FBBC881B0B7FAC00DF0015 /* LSFSDKSceneV1.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FBBC871B0B7FAC00DF0015 /* LSFSDKSceneV1.m */; };
 		87FBBC8B1B0B81E600DF0015 /* LSFSDKSceneV2.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FBBC8A1B0B81E600DF0015 /* LSFSDKSceneV2.m */; };
 		87FBBC941B0BB8E000DF0015 /* LSFSDKSceneV1.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87FBBC861B0B7FAC00DF0015 /* LSFSDKSceneV1.h */; };
 		87FBBC951B0BB8E100DF0015 /* LSFSDKSceneV2.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87FBBC891B0B81E600DF0015 /* LSFSDKSceneV2.h */; };
+		F9307B401B5C6DBB00E84354 /* LSFSDKSceneCollectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F9307B3F1B5C6DBB00E84354 /* LSFSDKSceneCollectionManager.m */; };
+		F9E5A4F81B5D813100D9CE67 /* LSFSDKSceneCollectionManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = F9307B3E1B5C6DBB00E84354 /* LSFSDKSceneCollectionManager.h */; };
 		FA3B553E1B387ED6000D3D4E /* LSFSDKLampAbout.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3B553D1B387ED6000D3D4E /* LSFSDKLampAbout.m */; };
 		FA3B55421B3882D8000D3D4E /* LSFSDKCapabilityData.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3B55411B3882D8000D3D4E /* LSFSDKCapabilityData.m */; };
 		FA3B55451B388422000D3D4E /* LSFSDKLampStateUniformity.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3B55441B388422000D3D4E /* LSFSDKLampStateUniformity.m */; };
@@ -316,8 +313,6 @@
 				871F84601B20F7BB0048A84D /* LSFSDKHelperPulseEffectManagerCallback.h in CopyFiles */,
 				871F84611B20F7BB0048A84D /* LSFSDKHelperSceneElementManagerCallback.h in CopyFiles */,
 				871F84621B20F7BB0048A84D /* LSFSDKHelperSceneManagerCallback.h in CopyFiles */,
-				871F84631B20F7BB0048A84D /* LSFSDKHelperSceneManagerCallbackV1.h in CopyFiles */,
-				871F84641B20F7BB0048A84D /* LSFSDKHelperSceneManagerCallbackV2.h in CopyFiles */,
 				871F84651B20F7BB0048A84D /* LSFSDKHelperTransitionEffectManagerCallback.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -328,6 +323,7 @@
 			dstPath = "include/$(PRODUCT_NAME)/manager";
 			dstSubfolderSpec = 16;
 			files = (
+				F9E5A4F81B5D813100D9CE67 /* LSFSDKSceneCollectionManager.h in CopyFiles */,
 				871F84691B20F7F80048A84D /* LSFControllerManager.h in CopyFiles */,
 				871F846B1B20F7F80048A84D /* LSFLampAnnouncementDelegate.h in CopyFiles */,
 				871F84731B20F7F80048A84D /* LSFSDKAboutManager.h in CopyFiles */,
@@ -341,7 +337,7 @@
 				871F847B1B20F7F80048A84D /* LSFSDKPresetCollectionManager.h in CopyFiles */,
 				871F847C1B20F7F80048A84D /* LSFSDKPulseEffectCollectionManager.h in CopyFiles */,
 				871F847D1B20F7F80048A84D /* LSFSDKSampleGroupManager.h in CopyFiles */,
-				871F847E1B20F7F80048A84D /* LSFSDKSceneCollectionManager.h in CopyFiles */,
+				871F847E1B20F7F80048A84D /* LSFSDKSceneCollectionManagerV1.h in CopyFiles */,
 				871F847F1B20F7F80048A84D /* LSFSDKSceneCollectionManagerV2.h in CopyFiles */,
 				871F84801B20F7F80048A84D /* LSFSDKSceneElementCollectionManager.h in CopyFiles */,
 				871F84811B20F7F80048A84D /* LSFSDKTransitionEffectCollectionManager.h in CopyFiles */,
@@ -409,7 +405,6 @@
 				87E2EEF81B1F4995007BF2FC /* LSFSDKLightingControllerStatus.h in CopyFiles */,
 				87FBBC941B0BB8E000DF0015 /* LSFSDKSceneV1.h in CopyFiles */,
 				87FBBC951B0BB8E100DF0015 /* LSFSDKSceneV2.h in CopyFiles */,
-				87F7F8361B03D25C004EAEAD /* LSFSDKAnyCollectionDelegateBase.h in CopyFiles */,
 				87045E9C1AF7BD1B00C43641 /* LSFSDKLightingItemProtocol.h in CopyFiles */,
 				87045E9D1AF7BD1B00C43641 /* LSFSDKMutableColorItem.h in CopyFiles */,
 				87D213981ADF08B7005CAF2A /* LSFSDKColor.h in CopyFiles */,
@@ -511,10 +506,6 @@
 		871F83711B20D1300048A84D /* LSFSDKHelperSceneElementManagerCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSDKHelperSceneElementManagerCallback.m; sourceTree = "<group>"; };
 		871F83721B20D1300048A84D /* LSFSDKHelperSceneManagerCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSDKHelperSceneManagerCallback.h; sourceTree = "<group>"; };
 		871F83731B20D1300048A84D /* LSFSDKHelperSceneManagerCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSDKHelperSceneManagerCallback.m; sourceTree = "<group>"; };
-		871F83741B20D1300048A84D /* LSFSDKHelperSceneManagerCallbackV1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSDKHelperSceneManagerCallbackV1.h; sourceTree = "<group>"; };
-		871F83751B20D1300048A84D /* LSFSDKHelperSceneManagerCallbackV1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSDKHelperSceneManagerCallbackV1.m; sourceTree = "<group>"; };
-		871F83761B20D1300048A84D /* LSFSDKHelperSceneManagerCallbackV2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSDKHelperSceneManagerCallbackV2.h; sourceTree = "<group>"; };
-		871F83771B20D1300048A84D /* LSFSDKHelperSceneManagerCallbackV2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSDKHelperSceneManagerCallbackV2.m; sourceTree = "<group>"; };
 		871F83781B20D1300048A84D /* LSFSDKHelperTransitionEffectManagerCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSDKHelperTransitionEffectManagerCallback.h; sourceTree = "<group>"; };
 		871F83791B20D1300048A84D /* LSFSDKHelperTransitionEffectManagerCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSDKHelperTransitionEffectManagerCallback.m; sourceTree = "<group>"; };
 		871F837F1B20D1300048A84D /* LSFControllerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFControllerManager.h; sourceTree = "<group>"; };
@@ -542,8 +533,8 @@
 		871F83A51B20D1300048A84D /* LSFSDKPulseEffectCollectionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSDKPulseEffectCollectionManager.m; sourceTree = "<group>"; };
 		871F83A61B20D1300048A84D /* LSFSDKSampleGroupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSDKSampleGroupManager.h; sourceTree = "<group>"; };
 		871F83A71B20D1300048A84D /* LSFSDKSampleGroupManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSDKSampleGroupManager.m; sourceTree = "<group>"; };
-		871F83A81B20D1300048A84D /* LSFSDKSceneCollectionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSDKSceneCollectionManager.h; sourceTree = "<group>"; };
-		871F83A91B20D1300048A84D /* LSFSDKSceneCollectionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSDKSceneCollectionManager.m; sourceTree = "<group>"; };
+		871F83A81B20D1300048A84D /* LSFSDKSceneCollectionManagerV1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSDKSceneCollectionManagerV1.h; sourceTree = "<group>"; };
+		871F83A91B20D1300048A84D /* LSFSDKSceneCollectionManagerV1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSDKSceneCollectionManagerV1.m; sourceTree = "<group>"; };
 		871F83AA1B20D1300048A84D /* LSFSDKSceneCollectionManagerV2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSDKSceneCollectionManagerV2.h; sourceTree = "<group>"; };
 		871F83AB1B20D1300048A84D /* LSFSDKSceneCollectionManagerV2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSDKSceneCollectionManagerV2.m; sourceTree = "<group>"; };
 		871F83AC1B20D1300048A84D /* LSFSDKSceneElementCollectionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSDKSceneElementCollectionManager.h; sourceTree = "<group>"; };
@@ -709,6 +700,8 @@
 		87FBBC871B0B7FAC00DF0015 /* LSFSDKSceneV1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSDKSceneV1.m; sourceTree = "<group>"; };
 		87FBBC891B0B81E600DF0015 /* LSFSDKSceneV2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSDKSceneV2.h; sourceTree = "<group>"; };
 		87FBBC8A1B0B81E600DF0015 /* LSFSDKSceneV2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSDKSceneV2.m; sourceTree = "<group>"; };
+		F9307B3E1B5C6DBB00E84354 /* LSFSDKSceneCollectionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSDKSceneCollectionManager.h; sourceTree = "<group>"; };
+		F9307B3F1B5C6DBB00E84354 /* LSFSDKSceneCollectionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSDKSceneCollectionManager.m; sourceTree = "<group>"; };
 		FA3B553C1B387ED6000D3D4E /* LSFSDKLampAbout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSDKLampAbout.h; sourceTree = "<group>"; };
 		FA3B553D1B387ED6000D3D4E /* LSFSDKLampAbout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSDKLampAbout.m; sourceTree = "<group>"; };
 		FA3B55401B3882D8000D3D4E /* LSFSDKCapabilityData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSDKCapabilityData.h; sourceTree = "<group>"; };
@@ -892,10 +885,6 @@
 				871F83711B20D1300048A84D /* LSFSDKHelperSceneElementManagerCallback.m */,
 				871F83721B20D1300048A84D /* LSFSDKHelperSceneManagerCallback.h */,
 				871F83731B20D1300048A84D /* LSFSDKHelperSceneManagerCallback.m */,
-				871F83741B20D1300048A84D /* LSFSDKHelperSceneManagerCallbackV1.h */,
-				871F83751B20D1300048A84D /* LSFSDKHelperSceneManagerCallbackV1.m */,
-				871F83761B20D1300048A84D /* LSFSDKHelperSceneManagerCallbackV2.h */,
-				871F83771B20D1300048A84D /* LSFSDKHelperSceneManagerCallbackV2.m */,
 				871F83781B20D1300048A84D /* LSFSDKHelperTransitionEffectManagerCallback.h */,
 				871F83791B20D1300048A84D /* LSFSDKHelperTransitionEffectManagerCallback.m */,
 			);
@@ -930,8 +919,10 @@
 				871F83A51B20D1300048A84D /* LSFSDKPulseEffectCollectionManager.m */,
 				871F83A61B20D1300048A84D /* LSFSDKSampleGroupManager.h */,
 				871F83A71B20D1300048A84D /* LSFSDKSampleGroupManager.m */,
-				871F83A81B20D1300048A84D /* LSFSDKSceneCollectionManager.h */,
-				871F83A91B20D1300048A84D /* LSFSDKSceneCollectionManager.m */,
+				F9307B3E1B5C6DBB00E84354 /* LSFSDKSceneCollectionManager.h */,
+				F9307B3F1B5C6DBB00E84354 /* LSFSDKSceneCollectionManager.m */,
+				871F83A81B20D1300048A84D /* LSFSDKSceneCollectionManagerV1.h */,
+				871F83A91B20D1300048A84D /* LSFSDKSceneCollectionManagerV1.m */,
 				871F83AA1B20D1300048A84D /* LSFSDKSceneCollectionManagerV2.h */,
 				871F83AB1B20D1300048A84D /* LSFSDKSceneCollectionManagerV2.m */,
 				871F83AC1B20D1300048A84D /* LSFSDKSceneElementCollectionManager.h */,
@@ -1296,7 +1287,6 @@
 				8732A5171A26539700AF641B /* LSFSDKMasterScene.m in Sources */,
 				871F84231B20D1300048A84D /* LSFSDKSceneElementCollectionManager.m in Sources */,
 				871F84351B20D1300048A84D /* LSFModel.m in Sources */,
-				871F84081B20D1300048A84D /* LSFSDKHelperSceneManagerCallbackV1.m in Sources */,
 				87E3AAE41ADEF03800DCE2AC /* LSFSDKMasterSceneDelegateBase.m in Sources */,
 				871F84331B20D1300048A84D /* LSFLampStateUniformity.m in Sources */,
 				87E6305019BFA90300F447A1 /* LSFSDKGroup.m in Sources */,
@@ -1306,6 +1296,7 @@
 				FA3B55531B3B388D000D3D4E /* LSFSDKLightingItemIDCollectionFilter.m in Sources */,
 				871F841E1B20D1300048A84D /* LSFSDKPresetCollectionManager.m in Sources */,
 				871F84281B20D1300048A84D /* LSFCapabilityData.m in Sources */,
+				F9307B401B5C6DBB00E84354 /* LSFSDKSceneCollectionManager.m in Sources */,
 				872B4CFF1A2E44B10019E9F1 /* LSFSDKControllerDelegateBase.m in Sources */,
 				871F841D1B20D1300048A84D /* LSFSDKMasterSceneCollectionManager.m in Sources */,
 				87E3AAF81ADEF18700DCE2AC /* LSFSDKTransitionEffectDelegateBase.m in Sources */,
@@ -1335,7 +1326,7 @@
 				871F84061B20D1300048A84D /* LSFSDKHelperSceneElementManagerCallback.m in Sources */,
 				87E6304D19BFA8E100F447A1 /* LSFSDKLamp.m in Sources */,
 				871F84161B20D1300048A84D /* LSFSDKAboutManager.mm in Sources */,
-				871F84211B20D1300048A84D /* LSFSDKSceneCollectionManager.m in Sources */,
+				871F84211B20D1300048A84D /* LSFSDKSceneCollectionManagerV1.m in Sources */,
 				87E3AAE81ADEF09600DCE2AC /* LSFSDKPresetDelegateBase.m in Sources */,
 				872B4CFB1A2E3B4C0019E9F1 /* LSFSDKControllerErrorEvent.m in Sources */,
 				871F84031B20D1300048A84D /* LSFSDKHelperMasterSceneManagerCallback.m in Sources */,
@@ -1357,7 +1348,6 @@
 				871F84201B20D1300048A84D /* LSFSDKSampleGroupManager.m in Sources */,
 				871F83FF1B20D1300048A84D /* LSFSDKHelperControllerClientCallback.m in Sources */,
 				871F843F1B20D1300048A84D /* LSFSDKAllLampsLampGroup.m in Sources */,
-				871F84091B20D1300048A84D /* LSFSDKHelperSceneManagerCallbackV2.m in Sources */,
 				871F84291B20D1300048A84D /* LSFColorAverager.m in Sources */,
 				87E3AAF01ADEF10900DCE2AC /* LSFSDKSceneDelegateBase.m in Sources */,
 				871F841F1B20D1300048A84D /* LSFSDKPulseEffectCollectionManager.m in Sources */,

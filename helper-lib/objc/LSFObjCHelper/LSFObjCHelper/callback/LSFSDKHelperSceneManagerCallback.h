@@ -16,8 +16,10 @@
 
 #import <internal/LSFSceneManagerCallbackDelegate.h>
 
+@class LSFSDKLightingSystemManager;
+
 @interface LSFSDKHelperSceneManagerCallback : NSObject <LSFSceneManagerCallbackDelegate>
 
--(id)initWithSceneManagerCallbacks: (NSArray *)sceneManagerCBs;
+-(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)manager;
 
 @end

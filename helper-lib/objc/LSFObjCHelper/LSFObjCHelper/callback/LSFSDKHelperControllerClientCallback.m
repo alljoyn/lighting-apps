@@ -22,7 +22,8 @@
 
 @property (nonatomic, strong) LSFSDKLightingSystemManager *manager;
 
--(void)postUpdateControllerID: (NSString *)controllerID controllerName: (NSString *)controllerName isConnected: (BOOL)connected withDelay: (unsigned int)delay;
+-(void)postOnConnectedControllerID: (NSString *)controllerID controllerName: (NSString *)controllerName withDelay: (int)delay;
+-(void)postOnDisconnectedControllerID: (NSString *)controllerID controllerName: (NSString *)controllerName withDelay: (int)delay;
 -(void)postGetAllLampIDs;
 -(void)postGetAllLampGroupIDs;
 -(void)postGetAllPresetIDs;
@@ -61,29 +62,30 @@
     [LSFSDKAllJoynManager setControllerConnected: YES];
     [[LSFSDKAllJoynManager getControllerServiceManager] getControllerServiceVersion];
 
-    [self postUpdateControllerID: controllerServiceID controllerName: controllerServiceName isConnected: YES withDelay: 0];
+    [self postOnConnectedControllerID:controllerServiceID controllerName:controllerServiceName withDelay:0];
+
     [self postGetAllLampIDs];
     [self postGetAllLampGroupIDs];
     [self postGetAllPresetIDs];
+    [self postGetAllTransitionEffectIDs];
+    [self postGetAllPulseEffectIDs];
     [self postGetAllSceneElementIDs];
     [self postGetAllSceneIDs];
     [self postGetAllMasterSceneIDs];
-    [self postGetAllTransitionEffectIDs];
-    [self postGetAllPulseEffectIDs];
 }
 
 -(void)connectToControllerServiceFailedForID: (NSString *)controllerServiceID andName: (NSString *)controllerServiceName
 {
     NSLog(@"Connect to Controller Service with name: %@ and ID: %@ failed", controllerServiceName, controllerServiceID);
     [LSFSDKAllJoynManager setControllerConnected: NO];
-    [self postUpdateControllerID: controllerServiceID controllerName: controllerServiceName isConnected: NO withDelay: 0];
+    [self postOnDisconnectedControllerID:controllerServiceID controllerName:controllerServiceName withDelay:0];
 }
 
 -(void)disconnectedFromControllerServiceWithID: (NSString *)controllerServiceID andName: (NSString *)controllerServiceName
 {
     NSLog(@"Disconnected from Controller Service with name: %@ and ID: %@", controllerServiceName, controllerServiceID);
     [LSFSDKAllJoynManager setControllerConnected: NO];
-    [self postUpdateControllerID: controllerServiceID controllerName: @"[Loading Controller Name...]" isConnected: NO withDelay: 0];
+    [self postOnDisconnectedControllerID:controllerServiceID controllerName:controllerServiceName withDelay:0];
 }
 
 -(void)controllerClientError: (NSArray *)ec
@@ -103,21 +105,39 @@
 /*
  * Private functions
  */
--(void)postUpdateControllerID: (NSString *)controllerID controllerName: (NSString *)controllerName isConnected: (BOOL)connected withDelay: (unsigned int)delay
+-(void)postOnConnectedControllerID: (NSString *)controllerID controllerName: (NSString *)controllerName withDelay: (int)delay
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), self.manager.dispatchQueue, ^{
-        LSFSDKController *controller = [self.manager.controllerManager getLeader];
+        LSFControllerModel *leaderModel = [[self.manager.controllerManager getLeader] getControllerDataModel];
 
-        if (connected || [controllerID isEqualToString: controller.theID])
+        if  (![leaderModel.theID isEqualToString: controllerID] || !leaderModel.connected)
         {
-            LSFControllerModel *controllerModel = [controller getControllerDataModel];
-            controllerModel.theID = controllerID;
-            controllerModel.name = controllerName;
-            controllerModel.connected = connected;
-            controllerModel.timestamp = (long long)([[NSDate date] timeIntervalSince1970] * 1000);
-        }
+            leaderModel.theID = controllerID;
+            leaderModel.name = controllerName;
+            leaderModel.connected = YES;
+            leaderModel.timestamp = (long long)([[NSDate date] timeIntervalSince1970] * 1000);
 
-        [self postSendControllerChanged];
+            [self postSendControllerChanged];
+        }
+    });
+}
+
+-(void)postOnDisconnectedControllerID: (NSString *)controllerID controllerName: (NSString *)controllerName withDelay: (int)delay
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), self.manager.dispatchQueue, ^{
+        [LSFSDKAllJoynManager setControllerServiceLeaderVersion: 0];
+
+        LSFControllerModel *leaderModel = [[self.manager.controllerManager getLeader] getControllerDataModel];
+
+        if ([leaderModel.theID isEqualToString: controllerID] && leaderModel.connected)
+        {
+            leaderModel.name = controllerName;
+            leaderModel.controllerVersion = 0;
+            leaderModel.connected = NO;
+            leaderModel.timestamp = (long long)([[NSDate date] timeIntervalSince1970] * 1000);
+
+            [self postSendControllerChanged];
+        }
     });
 }
 
@@ -152,8 +172,23 @@
 -(void)postGetAllSceneIDs
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), self.manager.dispatchQueue, ^{
-        [[LSFSDKAllJoynManager getSceneManager] getAllSceneIDs];
+        [self doGetAllSceneIDs];
     });
+}
+
+-(void)doGetAllSceneIDs
+{
+    // only get Scenes after the Controller version is known
+    if ([LSFSDKAllJoynManager getControllerServiceLeaderVersion] > 0)
+    {
+        [[LSFSDKAllJoynManager getSceneManager] getAllSceneIDs];
+    }
+    else
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC), self.manager.dispatchQueue, ^{
+            [self doGetAllSceneIDs];
+        });
+    }
 }
 
 -(void)postGetAllMasterSceneIDs

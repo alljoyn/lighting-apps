@@ -339,4 +339,26 @@
     return sortedArray;
 }
 
++(void)disableActionSheet: (UIActionSheet *)actionSheet buttonAtIndex: (NSInteger)index
+{
+    NSInteger buttonCount = 0;
+
+    for (UIView *view in [actionSheet subviews])
+    {
+        if ([view isKindOfClass:[UIButton class]])
+        {
+            if (buttonCount == index)
+            {
+                if ([view respondsToSelector:@selector(setEnabled:)])
+                {
+                    UIButton *button = (UIButton *)view;
+                    button.enabled = NO;
+                }
+            }
+
+            buttonCount++;
+        }
+    }
+}
+
 @end

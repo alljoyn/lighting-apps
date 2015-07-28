@@ -19,5 +19,6 @@
 	<classpathentry kind="lib" path="links/jar/Base/onboarding/alljoyn_onboarding.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="src" path="src-module-scenesv1"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

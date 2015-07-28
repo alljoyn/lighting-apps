@@ -239,4 +239,8 @@ public class AllJoynManager {
             }
         });
     }
+
+    public static boolean isControllerServiceLeaderV1() {
+        return AllJoynManager.controllerServiceLeaderVersion < 2;
+    }
 }

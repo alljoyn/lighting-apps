@@ -31,6 +31,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>src-module-scenesv1/org</name>
+			<type>2</type>
+			<locationURI>LSF_SAMPLE_APP_SRC_MODULE_SCENESV1/org</locationURI>
+		</link>
+		<link>
 			<name>links/jar/AllJoyn/alljoyn-sources.jar</name>
 			<type>1</type>
 			<locationURI>ALLJOYN_HOME/java/jar/alljoyn-sources.jar</locationURI>

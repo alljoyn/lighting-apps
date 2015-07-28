@@ -121,6 +121,78 @@ public class Group extends GroupMember implements DeletableItem {
     }
 
     /**
+     * Changes the color state of the current Group to the provided hue.
+     * <p>
+     * <b>Note: If the provided hue values are outside the expected range, they will be normalized to the
+     * expected range</b>
+     *
+     * @param hueDegrees The hue component of the desired color (0-360)
+     */
+    @Override
+    public void setHue(int hueDegrees) {
+        String errorContext = "Group.setHue() error";
+
+        long scaledHue = ColorStateConverter.convertHueViewToModel(hueDegrees);
+
+        postErrorIfFailure(errorContext,
+                AllJoynManager.groupManager.transitionLampGroupStateHueField(groupModel.id, scaledHue, 0));
+    }
+
+    /**
+     * Changes the color state of the current Group to the provided saturation.
+     * <p>
+     * <b>Note: If the provided saturation values are outside the expected range, they will be normalized to the
+     * expected range</b>
+     *
+     * @param saturationPercent The saturation component of the desired color (0-100)
+     */
+    @Override
+    public  void setSaturation(int saturationPercent) {
+        String errorContext = "Group.setSaturation() error";
+
+        long scaledSaturation = ColorStateConverter.convertSaturationViewToModel(saturationPercent);
+
+        postErrorIfFailure(errorContext,
+                AllJoynManager.groupManager.transitionLampGroupStateSaturationField(groupModel.id, scaledSaturation, 0));
+    }
+
+    /**
+     * Changes the color state of the current Group to the provided brightness.
+     * <p>
+     * <b>Note: If the provided brightness values are outside the expected range, they will be normalized to the
+     * expected range</b>
+     *
+     * @param brightnessPercent The brightness component of the desired color (0-100)
+     */
+    @Override
+    public  void setBrightness(int brightnessPercent) {
+        String errorContext = "Group.setBrightness() error";
+
+        long scaledBrightness = ColorStateConverter.convertBrightnessViewToModel(brightnessPercent);
+
+        postErrorIfFailure(errorContext,
+                AllJoynManager.groupManager.transitionLampGroupStateBrightnessField(groupModel.id, scaledBrightness, 0));
+    }
+
+    /**
+     * Changes the color state of the current Group to the provided color temperature.
+     * <p>
+     * <b>Note: If the provided color temperature values are outside the expected range, they will be normalized to the
+     * expected range</b>
+     *
+     * @param colorTempDegrees The color temperature component of the desired color (1000-20000)
+     */
+    @Override
+    public  void setColorTemperature(int colorTempDegrees) {
+        String errorContext = "Group.setColorTemp() error";
+
+        long scaledColorTemp = ColorStateConverter.convertColorTempViewToModel(colorTempDegrees);
+
+        postErrorIfFailure(errorContext,
+                AllJoynManager.groupManager.transitionLampGroupStateColorTempField(groupModel.id, scaledColorTemp, 0));
+    }
+
+    /**
      * Adds a member to the current Group.
      *
      * @param member The GroupMember object to be added to the Group

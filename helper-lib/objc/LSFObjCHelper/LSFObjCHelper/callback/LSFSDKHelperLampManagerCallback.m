@@ -449,7 +449,7 @@ static const unsigned int ABOUT_DELAY_IN_MS = 250;
 
         if ([lampModel.name isEqualToString: LAMP_DEFAULT_NAME])
         {
-            if ([LSFSDKAllJoynManager getControllerServiceLeaderVersion] < 2)
+            if ([LSFSDKAllJoynManager isControllerServiceLeaderV1])
             {
                 // 14.12 and earlier controllers do no support consolidated
                 // data set. Thus, we must make individual requests.
