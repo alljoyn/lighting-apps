@@ -132,20 +132,34 @@ public abstract class LightingItemCollectionManager<ADAPTER, LISTENER, MODEL, ER
     }
 
     public void sendInitializedEvent(String itemID, TrackingID trackingID) {
-        for (LISTENER listener : itemListeners) {
-            sendInitializedEvent(listener, getAdapter(itemID), trackingID);
+        sendInitializedEvent(getAdapter(itemID), trackingID);
+    }
+
+    public void sendInitializedEvent(ADAPTER item, TrackingID trackingID) {
+        if (item != null) {
+            for (LISTENER listener : itemListeners) {
+                sendInitializedEvent(listener, item, trackingID);
+            }
         }
     }
 
     public void sendChangedEvent(String itemID) {
-        for (LISTENER listener : itemListeners) {
-            sendChangedEvent(listener, getAdapter(itemID));
+        sendChangedEvent(getAdapter(itemID));
+    }
+
+    public void sendChangedEvent(ADAPTER item) {
+        if (item != null) {
+            for (LISTENER listener : itemListeners) {
+                sendChangedEvent(listener, item);
+            }
         }
     }
 
     public void sendRemovedEvent(ADAPTER item) {
-        for (LISTENER listener : itemListeners) {
-            sendRemovedEvent(listener, item);
+        if (item != null) {
+            for (LISTENER listener : itemListeners) {
+                sendRemovedEvent(listener, item);
+            }
         }
     }
 

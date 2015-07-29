@@ -67,6 +67,7 @@
         self.appID = aboutData.appID;
         self.defaultLanguage = aboutData.defaultLanguage;
         self.deviceName = aboutData.deviceName;
+        self.deviceID = aboutData.deviceID;
         self.appName = aboutData.appName;
         self.manufacturer = aboutData.manufacturer;
         self.modelNumber = aboutData.modelNumber;
