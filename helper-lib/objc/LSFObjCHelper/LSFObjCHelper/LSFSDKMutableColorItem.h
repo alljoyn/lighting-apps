@@ -64,4 +64,32 @@
  */
 -(void)setColorHsvt: (NSArray *)hsvt;
 
+/**
+ * Changes the color state of the current Item to the provided hue.
+ *
+ * @param hueDegrees The hue component of the desired color (0-360)
+ */
+-(void)setHue: (unsigned int)hueDegrees;
+
+/**
+ * Changes the color state of the current Item to the provide saturation.
+ *
+ * @param saturationPercent The saturation component of the desired color (0-100)
+ */
+-(void)setSaturation: (unsigned int)saturationPercent;
+
+/**
+ * Changes the color state of the current Item to the provided brightness.
+ *
+ * @param brightnessPercent The brightness component of the desired color (0-100)
+ */
+-(void)setBrightness: (unsigned int)brightnessPercent;
+
+/**
+ * Changes the color state of the current Item to the provided color temperature.
+ *
+ * @param colorTempDegrees The color temperature component of the desired color (1000-20000)
+ */
+-(void)setColorTemp: (unsigned int)colorTempDegrees;
+
 @end

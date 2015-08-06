@@ -38,16 +38,16 @@
             layout="@layout/view_divider_row" />
 
         <include
-            android:id="@+id/sceneElementInfoEffect"
-            layout="@layout/view_scene_element_row" />
+            android:id="@+id/sceneElementInfoMembers"
+            layout="@layout/view_name_value_row" />
 
         <include
             android:id="@+id/sceneElementInfoDivider2"
             layout="@layout/view_divider_row" />
 
         <include
-            android:id="@+id/sceneElementInfoMembers"
-            layout="@layout/view_name_value_row" />
+            android:id="@+id/sceneElementInfoEffect"
+            layout="@layout/view_scene_element_row" />
 
         <include
             android:id="@+id/sceneElementInfoDivider3"

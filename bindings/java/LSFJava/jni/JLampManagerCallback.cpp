@@ -245,11 +245,6 @@ void JLampManagerCallback::GetLampSupportedLanguagesReplyCB(const LSFResponseCod
     XJavaDelegator::Call_Void_ResponseCode_String_StringList(jdelegate, __func__, responseCode, lampID, supportedLanguages);
 }
 
-void JLampManagerCallback::GetLampVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const uint32_t& lampVersion)
-{
-    XJavaDelegator::Call_Void_ResponseCode_String_UInt32(jdelegate, __func__, responseCode, lampID, lampVersion);
-}
-
 void JLampManagerCallback::SetLampEffectReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const LSFString& effectID)
 {
     XJavaDelegator::Call_Void_ResponseCode_String_String(jdelegate, __func__, responseCode, lampID, effectID);

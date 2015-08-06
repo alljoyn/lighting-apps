@@ -29,7 +29,7 @@ public abstract class SceneItemSelectEffectTypeFragment extends SelectableItemTa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
 
-        updateSelectableItemRow(inflater, root, Effect.EFFECT_TYPE_PRESET, getResources().getString(R.string.effect_sort_constant), R.drawable.list_constant_icon, getResources().getString(R.string.effect_name_none), true);
+        updateSelectableItemRow(inflater, root, Effect.EFFECT_TYPE_PRESET, getResources().getString(R.string.effect_sort_constant), R.drawable.list_constant_icon, getResources().getString(getPresetEffectNameID()), true);
         updateSelectableItemRow(inflater, root, Effect.EFFECT_TYPE_TRANSITION, getResources().getString(R.string.effect_sort_transition), R.drawable.list_transition_icon, getResources().getString(R.string.effect_name_transition), false);
         updateSelectableItemRow(inflater, root, Effect.EFFECT_TYPE_PULSE, getResources().getString(R.string.effect_sort_pulse), R.drawable.list_pulse_icon, getResources().getString(R.string.effect_name_pulse), false);
 
@@ -49,7 +49,7 @@ public abstract class SceneItemSelectEffectTypeFragment extends SelectableItemTa
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        ((SampleAppActivity)getActivity()).updateActionBar(R.string.title_basic_scene_add, false, false, true, false, true);
+        ((SampleAppActivity)getActivity()).updateActionBar(R.string.title_effect_add, false, false, true, false, true);
     }
 
     @Override
@@ -57,6 +57,7 @@ public abstract class SceneItemSelectEffectTypeFragment extends SelectableItemTa
         return true;
     }
 
+    protected abstract int getPresetEffectNameID();
     protected abstract String getPendingSceneItemName();
     protected abstract String[] getPendingSceneElementMemberLampIDs();
     protected abstract String[] getPendingSceneElementMemberGroupIDs();

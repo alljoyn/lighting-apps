@@ -38,6 +38,6 @@ public class PendingTransitionEffectV2 extends PendingLightingItem {
         state = transitionEffect != null ? transitionEffect.getState() : new MyLampState(Power.ON, new Color(Color.DEFAULT));
         presetID = transitionEffect != null ? transitionEffect.getPresetID() : "";
 
-        EnterDurationFragment.duration = transitionEffect != null ? transitionEffect.getDuration() : 500;
+        EnterDurationFragment.duration = transitionEffect != null ? transitionEffect.getDuration() : 5000;
     }
 }

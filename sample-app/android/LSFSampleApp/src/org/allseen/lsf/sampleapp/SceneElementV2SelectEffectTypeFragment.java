@@ -29,6 +29,11 @@ public class SceneElementV2SelectEffectTypeFragment extends SceneItemSelectEffec
     }
 
     @Override
+    protected int getPresetEffectNameID() {
+        return R.string.effect_name_preset;
+    }
+
+    @Override
     protected String getPendingSceneItemName() {
         return SceneElementV2InfoFragment.pendingSceneElement.name;
     }

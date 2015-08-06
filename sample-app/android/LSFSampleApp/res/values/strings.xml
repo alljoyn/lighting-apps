@@ -68,6 +68,7 @@
     <string name="title_presets">Presets</string>
     <string name="title_preset_add">Add Preset</string>
     <string name="title_presets_save_new">Save New Preset</string>
+    <string name="title_effect_add">Add Effect</string>
     <string name="title_effect_transition_add">Add Transition Effect</string>
     <string name="title_effect_transition_duration">Transition Duration</string>
     <string name="title_effect_pulse_add">Add Pulse Effect</string>
@@ -126,6 +127,7 @@
     <string name="scene_element_members_none">No scene element members</string>
     <string name="basic_scene_info_name">Scene Name</string>
     <string name="basic_scene_info_elements">SCENE ELEMENTS</string>
+    <string name="basic_scene_v2_info_elements">Scene elements in this Scene</string>
     <string name="basic_scene_select_members">Select one or more lamps and groups to be in this scene</string>
     <string name="basic_scene_select_elements">Select one or more elements to be in this scene</string>
     <string name="basic_scene_select_effect">Choose an optional effect for %1$s</string>
@@ -175,6 +177,7 @@
     <string name="effect_sort_transition">B</string>
     <string name="effect_sort_pulse">C</string>
     <string name="effect_name_none">None</string>
+    <string name="effect_name_preset">Preset</string>
     <string name="effect_name_transition">Transition</string>
     <string name="effect_name_pulse">Pulse</string>
     <string name="effect_info_period_name">Period</string>

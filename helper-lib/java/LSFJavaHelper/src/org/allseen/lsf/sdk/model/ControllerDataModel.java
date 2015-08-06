@@ -22,7 +22,7 @@ package org.allseen.lsf.sdk.model;
 public class ControllerDataModel extends LightingItemDataModel {
     public static final char TAG_PREFIX_CONTROLLER = 'C';
 
-    public static String defaultName = "<Loading controller info...>";
+    public static String defaultName = "<Controller not found>";
 
     public long version;
     public boolean connected;

@@ -46,7 +46,6 @@ class XPresetManagerCallback : public PresetManagerCallback {
     virtual void PresetsUpdatedCB(const LSFStringList& presetIDs) LSF_OVERRIDE;
     virtual void DeletePresetReplyCB(const LSFResponseCode& responseCode, const LSFString& presetID) LSF_OVERRIDE;
     virtual void PresetsDeletedCB(const LSFStringList& presetIDs) LSF_OVERRIDE;
-    virtual void GetPresetVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& presetID, const uint32_t& presetVersion) LSF_OVERRIDE;
     virtual void CreatePresetWithTrackingReplyCB(const LSFResponseCode& responseCode, const LSFString& presetID, const uint32_t& trackingID) LSF_OVERRIDE;
 
   protected:

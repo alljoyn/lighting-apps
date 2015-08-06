@@ -18,7 +18,7 @@ package org.allseen.lsf.sdk.model;
 import org.allseen.lsf.SceneWithSceneElements;
 
 public class SceneDataModelV2 extends LightingItemDataModel {
-    public static final char TAG_PREFIX_SCENE_WITH_ELEMENTS = 'V';
+    public static final char TAG_PREFIX_SCENE_WITH_ELEMENTS = 'S';
 
     public static String defaultName = "<Loading scene info ...>";
 

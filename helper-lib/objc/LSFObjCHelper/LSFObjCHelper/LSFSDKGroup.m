@@ -205,6 +205,42 @@
     [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getGroupManager] transitionLampGroupID: groupModel.theID toState: lampState]];
 }
 
+-(void)setHue:(unsigned int)hueDegrees
+{
+    NSString *errorContext = @"LSFSDKGroup setHue: error";
+
+    unsigned int scaledHue = [[LSFConstants getConstants] scaleLampStateValue: hueDegrees withMax: 360];
+
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getGroupManager] transitionLampGroupID: groupModel.theID hueField: scaledHue]];
+}
+
+-(void)setSaturation:(unsigned int)saturationPercent
+{
+    NSString *errorContext = @"LSFSDKGroup setSaturation: error";
+
+    unsigned int scaledSaturation = [[LSFConstants getConstants] scaleLampStateValue: saturationPercent withMax: 100];
+
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getGroupManager] transitionLampGroupID: groupModel.theID saturationField: scaledSaturation]];
+}
+
+-(void)setBrightness:(unsigned int)brightnessPercent
+{
+    NSString *errorContext = @"LSFSDKGroup setBrightness: error";
+
+    unsigned int scaledBrightness = [[LSFConstants getConstants] scaleLampStateValue: brightnessPercent withMax: 100];
+
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getGroupManager] transitionLampGroupID: groupModel.theID brightnessField: scaledBrightness]];
+}
+
+-(void)setColorTemp:(unsigned int)colorTempDegrees
+{
+    NSString *errorContext = @"LSFSDKGroup setColorTemperature: error";
+
+    unsigned int scaledColorTemp = [[LSFConstants getConstants] scaleColorTemp: colorTempDegrees];
+
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getGroupManager] transitionLampGroupID: groupModel.theID colorTempField:scaledColorTemp]];
+}
+
 -(void)rename: (NSString *)name
 {
     NSString *errorContext = @"LSFSDKGroup rename: error";

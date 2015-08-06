@@ -22,7 +22,7 @@ import org.allseen.lsf.MasterScene;
  * in subsequent releases of the SDK</b>.
  */
 public class MasterSceneDataModel extends LightingItemDataModel {
-    public static final char TAG_PREFIX_MASTER_SCENE = 'M';
+    public static final char TAG_PREFIX_MASTER_SCENE = 'S';
 
     public static String defaultName = "<Loading master scene info...>";
 

@@ -20,7 +20,7 @@ package org.allseen.lsf.sdk.model;
  * in subsequent releases of the SDK</b>.
  */
 public class TransitionEffectDataModelV2 extends ColorItemDataModel {
-    public static final char TAG_PREFIX_TRANSITION = 'T';
+    public static final char TAG_PREFIX_TRANSITION = 'E';
 
     public static String defaultName = "<Loading transition effect info...>";
     public static long defaultDuration = 5000;

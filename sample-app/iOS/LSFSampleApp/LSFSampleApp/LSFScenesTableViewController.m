@@ -56,6 +56,10 @@
 @synthesize settingsButton = _settingsButton;
 @synthesize addButton = _addButton;
 
+const int SCENE_ELEMENT_ACTION_INDEX = 0;
+const int SCENE_ACTION_INDEX = 1;
+const int MASTER_SCENE_ACTION_INDEX = 2;
+
 -(void)viewDidLoad
 {
     [super viewDidLoad];
@@ -701,35 +705,7 @@
  */
 -(void)actionSheet: (UIActionSheet *)actionSheet clickedButtonAtIndex: (NSInteger)buttonIndex
 {
-    switch (buttonIndex)
-    {
-        case 0:
-        {
-            [self performSegueWithIdentifier: @"CreateSceneElement" sender: self];
-            break;
-        }
-        case 1:
-        {
-            if ([[LSFSDKLightingDirector getLightingDirector] isControllerServiceLeaderV1])
-            {
-                [self performSegueWithIdentifier: @"CreateScene" sender: self];
-            }
-            else
-            {
-                [self performSegueWithIdentifier: @"CreateSceneV2" sender: self];
-            }
-            break;
-        }
-        case 2:
-        {
-            [self performSegueWithIdentifier: @"CreateMasterScene" sender: self];
-            break;
-        }
-        case 3:
-        {
-            break;
-        }
-     }
+    [self doCreateSceneSegueAtIndex: (int)buttonIndex];
 }
 
 /*
@@ -741,20 +717,76 @@
 
     if (wifiMonitor.isWifiConnected && [[[LSFSDKLightingDirector getLightingDirector] leadController] connected])
     {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle: nil delegate: self cancelButtonTitle: @"Cancel" destructiveButtonTitle: nil otherButtonTitles: @"Add Scene Element", @"Add Scene", @"Add Master Scene", nil];
-
-        [actionSheet showInView: self.view];
-
-        if ([[LSFSDKLightingDirector getLightingDirector] isControllerServiceLeaderV1])
+        if (NSClassFromString(@"UIAlertController"))
         {
-            // disable SceneElement creation
-            [LSFUtilityFunctions disableActionSheet: actionSheet buttonAtIndex: 0];
+            // In iOS 8 and above UIActionSheet has been deprecated. Thus,
+            // attempt to use the newer UIAlertController class on any devices
+            // that support it.
+
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
+
+            void (^handleAlertAction)(UIAlertAction *) =  ^(UIAlertAction *action)
+            {
+                if([action.title isEqualToString: @"Add Scene Element"])
+                {
+                    [self doCreateSceneSegueAtIndex: SCENE_ELEMENT_ACTION_INDEX];
+                }
+                else if([action.title isEqualToString: @"Add Scene"])
+                {
+                    [self doCreateSceneSegueAtIndex: SCENE_ACTION_INDEX];
+                }
+                else if([action.title isEqualToString: @"Add Master Scene"])
+                {
+                    [self doCreateSceneSegueAtIndex: MASTER_SCENE_ACTION_INDEX];
+                }
+
+                [alertController dismissViewControllerAnimated:YES completion:nil];
+            };
+
+            UIAlertAction* sceneElementAction = [UIAlertAction actionWithTitle:@"Add Scene Element" style: UIAlertActionStyleDefault handler: handleAlertAction];
+            UIAlertAction* basicSceneAction = [UIAlertAction actionWithTitle:@"Add Scene" style: UIAlertActionStyleDefault handler: handleAlertAction];
+            UIAlertAction* masterSceneAction = [UIAlertAction actionWithTitle:@"Add Master Scene" style: UIAlertActionStyleDefault handler: handleAlertAction];
+            UIAlertAction* cancel = [UIAlertAction actionWithTitle:@"Cancel" style: UIAlertActionStyleCancel handler: handleAlertAction];
+
+            [alertController addAction: sceneElementAction];
+            [alertController addAction: basicSceneAction];
+            [alertController addAction: masterSceneAction];
+            [alertController addAction: cancel];
+
+            if ([[LSFSDKLightingDirector getLightingDirector] isControllerServiceLeaderV1])
+            {
+                // disable SceneElement creation
+                [sceneElementAction setEnabled: NO];
 
 #ifndef LSF_SCENES_V1_MODULE
-            // disable Scene creation
-            [LSFUtilityFunctions disableActionSheet: actionSheet buttonAtIndex: 1];
+                // disable Scene creation
+                [basicSceneAction setEnabled: NO];
 #endif
+            }
+
+            alertController.popoverPresentationController.barButtonItem = self.addButton;
+            alertController.popoverPresentationController.sourceView = self.view;
+
+            [self presentViewController:alertController animated:YES completion:nil];
         }
+        else
+        {
+            UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle: nil delegate: self cancelButtonTitle: @"Cancel" destructiveButtonTitle: nil otherButtonTitles: @"Add Scene Element", @"Add Scene", @"Add Master Scene", nil];
+
+            [actionSheet showInView: self.view];
+
+            if ([[LSFSDKLightingDirector getLightingDirector] isControllerServiceLeaderV1])
+            {
+                // disable SceneElement creation
+                [LSFUtilityFunctions disableActionSheet: actionSheet buttonAtIndex: 0];
+
+#ifndef LSF_SCENES_V1_MODULE
+                // disable Scene creation
+                [LSFUtilityFunctions disableActionSheet: actionSheet buttonAtIndex: 1];
+#endif
+            }
+        }
+
     }
     else
     {
@@ -925,6 +957,39 @@
     }
 
     return names;
+}
+
+-(void)doCreateSceneSegueAtIndex: (int)actionIndex
+{
+    switch(actionIndex)
+    {
+        case SCENE_ELEMENT_ACTION_INDEX:
+        {
+            [self performSegueWithIdentifier: @"CreateSceneElement" sender: self];
+            break;
+        }
+        case SCENE_ACTION_INDEX:
+        {
+            if ([[LSFSDKLightingDirector getLightingDirector] isControllerServiceLeaderV1])
+            {
+                [self performSegueWithIdentifier: @"CreateScene" sender: self];
+            }
+            else
+            {
+                [self performSegueWithIdentifier: @"CreateSceneV2" sender: self];
+            }
+            break;
+        }
+        case MASTER_SCENE_ACTION_INDEX:
+        {
+            [self performSegueWithIdentifier: @"CreateMasterScene" sender: self];
+            break;
+        }
+        default:
+        {
+            NSLog(@"Unknown segue for action index %d", actionIndex);
+        }
+    }
 }
 
 -(void)doSegueToSceneInfo: (id)sender

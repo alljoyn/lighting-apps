@@ -52,7 +52,6 @@ class XSceneManagerCallback : public SceneManagerCallback {
     virtual void CreateSceneWithSceneElementsReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const uint32_t& trackingID) LSF_OVERRIDE;
     virtual void UpdateSceneWithSceneElementsReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID) LSF_OVERRIDE;
     virtual void GetSceneWithSceneElementsReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const SceneWithSceneElements& scene) LSF_OVERRIDE;
-    virtual void GetSceneVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const uint32_t& sceneVersion) LSF_OVERRIDE;
 
   protected:
     jweak jdelegate;

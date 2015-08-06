@@ -48,7 +48,6 @@ class XTransitionEffectManagerCallback : public TransitionEffectManagerCallback 
     virtual void TransitionEffectsUpdatedCB(const LSFStringList& transitionEffectIDs) LSF_OVERRIDE;
     virtual void DeleteTransitionEffectReplyCB(const LSFResponseCode& responseCode, const LSFString& transitionEffectID) LSF_OVERRIDE;
     virtual void TransitionEffectsDeletedCB(const LSFStringList& transitionEffectIDs) LSF_OVERRIDE;
-    virtual void GetTransitionEffectVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& transitionEffectID, const uint32_t& transitionEffectVersion) LSF_OVERRIDE;
 
   protected:
     jweak jdelegate;

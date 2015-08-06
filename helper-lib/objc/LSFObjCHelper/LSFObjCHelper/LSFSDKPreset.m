@@ -87,6 +87,34 @@
     [self modifyWithPower: [self getPower] color: color];
 }
 
+-(void)setHue:(unsigned int)hueDegrees
+{
+    LSFSDKColor *currentColor = [self getColor];
+    [currentColor setHue: hueDegrees];
+    [self modifyWithPower: [self getPower] color: currentColor];
+}
+
+-(void)setSaturation:(unsigned int)saturationPercent
+{
+    LSFSDKColor *currentColor = [self getColor];
+    [currentColor setSaturation: saturationPercent];
+    [self modifyWithPower: [self getPower] color: currentColor];
+}
+
+-(void)setBrightness:(unsigned int)brightnessPercent
+{
+    LSFSDKColor *currentColor = [self getColor];
+    [currentColor setBrightness: brightnessPercent];
+    [self modifyWithPower: [self getPower] color: currentColor];
+}
+
+-(void)setColorTemp:(unsigned int)colorTempDegrees
+{
+    LSFSDKColor *currentColor = [self getColor];
+    [currentColor setColorTemp: colorTempDegrees];
+    [self modifyWithPower: [self getPower] color: currentColor];
+}
+
 -(void)rename:(NSString *)name
 {
     NSString *errorContext = @"LSFSDKPreset rename: error";

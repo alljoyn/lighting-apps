@@ -69,8 +69,7 @@
             LSFSDKColor* color = [group getColor];
             if ([color brightness] == 0)
             {
-                color.brightness = 25;
-                [group setColor: color];
+                [group setBrightness: 25];
             }
 
             [group setPowerOn: YES];
@@ -82,10 +81,7 @@
 {
     dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
         LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
-        LSFSDKColor *color = [group getColor];
-
-        color.brightness = (uint32_t)sender.value;
-        [group setColor: color];
+        [group setBrightness: (uint32_t)sender.value];
 
         if ([[group getColor] brightness] == 0)
         {
@@ -127,10 +123,8 @@
 
     dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
         LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
-        LSFSDKColor *color = [group getColor];
 
-        color.brightness = newBrightness;
-        [group setColor: color];
+        [group setBrightness: newBrightness];
 
         if ([[group getColor] brightness] == 0)
         {

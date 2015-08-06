@@ -61,7 +61,6 @@ class JLampGroupManagerCallback : public LampGroupManagerCallback {
     virtual void LampGroupsUpdatedCB(const LampGroupIDList& lampGroupIDs) LSF_OVERRIDE;
     virtual void TransitionLampGroupStateToPresetReplyCB(const LSFResponseCode& responseCode, const LampGroupID& lampGroupID) LSF_OVERRIDE;
     virtual void CreateLampGroupWithTrackingReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const uint32_t& trackingID) LSF_OVERRIDE;
-    virtual void GetLampGroupVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const uint32_t& lampGroupVersion) LSF_OVERRIDE;
     virtual void SetLampGroupEffectReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const LSFString& effectID) LSF_OVERRIDE;
 
   protected:

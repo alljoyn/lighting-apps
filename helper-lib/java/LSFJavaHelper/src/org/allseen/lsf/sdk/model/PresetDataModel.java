@@ -20,7 +20,7 @@ package org.allseen.lsf.sdk.model;
  * in subsequent releases of the SDK</b>.
  */
 public class PresetDataModel extends ColorItemDataModel {
-    public static final char TAG_PREFIX_PRESET = 'P';
+    public static final char TAG_PREFIX_PRESET = 'E';
 
     public static String defaultName = "<Loading preset info...>";
 

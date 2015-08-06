@@ -54,7 +54,7 @@ public class BasicSceneV2InfoFragment extends SceneItemInfoFragment {
         rowMembers.setClickable(true);
         rowMembers.setOnClickListener(this);
 
-        setTextViewValue(rowMembers, R.id.sceneMembersRowLabel, getString(R.string.basic_scene_info_elements), 0);
+        setTextViewValue(rowMembers, R.id.sceneMembersRowLabel, getString(R.string.basic_scene_v2_info_elements), 0);
 
         updateInfoFields();
 

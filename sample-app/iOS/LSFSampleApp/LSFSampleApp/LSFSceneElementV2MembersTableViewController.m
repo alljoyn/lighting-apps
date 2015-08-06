@@ -71,7 +71,10 @@
         }
     }
 
-    [self.data removeObjectAtIndex: allLampsIndex];
+    if (allLampsIndex != -1)
+    {
+        [self.data removeObjectAtIndex: allLampsIndex];
+    }
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

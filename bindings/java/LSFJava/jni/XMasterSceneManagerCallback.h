@@ -46,7 +46,6 @@ public:
     virtual void ApplyMasterSceneReplyCB(const LSFResponseCode& responseCode, const LSFString& masterSceneID) LSF_OVERRIDE;
     virtual void MasterScenesAppliedCB(const LSFStringList& masterSceneIDs) LSF_OVERRIDE;
     virtual void CreateMasterSceneWithTrackingReplyCB(const LSFResponseCode& responseCode, const LSFString& masterSceneID, const uint32_t& trackingID) LSF_OVERRIDE;
-    virtual void GetMasterSceneVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& masterSceneID, const uint32_t& masterSceneVersion) LSF_OVERRIDE;
 
 protected:
     jweak jdelegate;

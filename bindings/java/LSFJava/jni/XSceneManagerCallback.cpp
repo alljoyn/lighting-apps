@@ -143,9 +143,4 @@ void XSceneManagerCallback::GetSceneWithSceneElementsReplyCB(const LSFResponseCo
     XJavaDelegator::Call_Void_ResponseCode_String_Object<SceneWithSceneElements, XSceneWithSceneElements>(jdelegate, __func__, XClass::xSceneWithSceneElements, responseCode, sceneID, scene);
 }
 
-void XSceneManagerCallback::GetSceneVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const uint32_t& sceneVersion)
-{
-    XJavaDelegator::Call_Void_ResponseCode_String_UInt32(jdelegate, __func__, responseCode, sceneID, sceneVersion);
-}
-
 } /* namespace lsf */

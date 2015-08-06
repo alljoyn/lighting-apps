@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class SceneElementDataModelV2 extends LightingItemDataModel {
-    public static final char TAG_PREFIX_SCENE_ELEMENT = 'v';
+    public static final char TAG_PREFIX_SCENE_ELEMENT = 'S';
 
     public static String defaultName = "<Loading scene element info...>";
 

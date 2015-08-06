@@ -22,7 +22,7 @@ import org.allseen.lsf.LampState;
  * in subsequent releases of the SDK</b>.
  */
 public class PulseEffectDataModelV2 extends ColorItemDataModel {
-    public static final char TAG_PREFIX_PULSE = 'p';
+    public static final char TAG_PREFIX_PULSE = 'E';
 
     public static String defaultName = "<Loading pulse effect info...>";
     public static long defaultPeriod = 1000;

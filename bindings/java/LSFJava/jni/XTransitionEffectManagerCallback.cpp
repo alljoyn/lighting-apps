@@ -122,9 +122,4 @@ void XTransitionEffectManagerCallback::GetTransitionEffectReplyCB(const LSFRespo
     XJavaDelegator::Call_Void_ResponseCode_String_Object<TransitionEffect, XTransitionEffectV2>(jdelegate, __func__, XClass::xTransitionEffectV2, responseCode, transitionEffectID, transitionEffect);
 }
 
-void XTransitionEffectManagerCallback::GetTransitionEffectVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& transitionEffectID, const uint32_t& transitionEffectVersion)
-{
-    XJavaDelegator::Call_Void_ResponseCode_String_UInt32(jdelegate, __func__, responseCode, transitionEffectID, transitionEffectVersion);
-}
-
 } /* namespace lsf */

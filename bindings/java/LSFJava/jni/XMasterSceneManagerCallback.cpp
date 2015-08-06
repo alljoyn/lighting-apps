@@ -127,10 +127,4 @@ void XMasterSceneManagerCallback::CreateMasterSceneWithTrackingReplyCB(const LSF
     XJavaDelegator::Call_Void_ResponseCode_String_UInt32(jdelegate, __func__, responseCode, masterSceneID, trackingID);
 }
 
-void XMasterSceneManagerCallback::GetMasterSceneVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& masterSceneID, const uint32_t& masterSceneVersion)
-{
-    XJavaDelegator::Call_Void_ResponseCode_String_UInt32(jdelegate, __func__, responseCode, masterSceneID, masterSceneVersion);
-}
-
-
 } /* namespace lsf */

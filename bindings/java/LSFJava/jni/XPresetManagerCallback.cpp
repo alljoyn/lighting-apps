@@ -112,11 +112,6 @@ void XPresetManagerCallback::PresetsDeletedCB(const LSFStringList& presetIDs)
     XJavaDelegator::Call_Void_StringList(jdelegate, __func__, presetIDs);
 }
 
-void XPresetManagerCallback::GetPresetVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& presetID, const uint32_t& presetVersion)
-{
-    XJavaDelegator::Call_Void_ResponseCode_String_UInt32(jdelegate, __func__, responseCode, presetID, presetVersion);
-}
-
 void XPresetManagerCallback::CreatePresetWithTrackingReplyCB(const LSFResponseCode& responseCode, const LSFString& presetID, const uint32_t& trackingID)
 {
     XJavaDelegator::Call_Void_ResponseCode_String_UInt32(jdelegate, __func__, responseCode, presetID, trackingID);

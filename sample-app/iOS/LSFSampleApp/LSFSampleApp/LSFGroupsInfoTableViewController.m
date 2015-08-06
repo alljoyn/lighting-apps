@@ -408,8 +408,7 @@
         LSFSDKColor *color = [group getColor];
         if (sender.isOn && self.isDimmable && [color brightness] == 0)
         {
-            color.brightness = 25;
-            [group setColor: color];
+            [group setBrightness: 25];
         }
 
         [group setPowerOn: sender.isOn];
@@ -629,10 +628,8 @@
 
     dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
         LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
-        LSFSDKColor *color = [group getColor];
 
-        color.brightness = (uint32_t)value;
-        [group setColor: color];
+        [group setBrightness: (uint32_t)value];
 
         if ([[group getColor] brightness] == 0)
         {
@@ -658,10 +655,7 @@
 
     dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
         LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
-        LSFSDKColor *color = [group getColor];
-
-        color.hue = (uint32_t)value;
-        [group setColor: color];
+        [group setHue: (uint32_t)value];
     });
 }
 
@@ -682,10 +676,7 @@
 
     dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
         LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
-        LSFSDKColor *color = [group getColor];
-
-        color.saturation = (uint32_t)value;
-        [group setColor: color];
+        [group setSaturation: (uint32_t)value];
     });
 }
 
@@ -706,10 +697,7 @@
 
     dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
         LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
-        LSFSDKColor *color = [group getColor];
-
-        color.colorTemp = (uint32_t)value;
-        [group setColor: color];
+        [group setColorTemp: (uint32_t)value];
     });
 }
 
@@ -744,10 +732,7 @@
 {
     dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
         LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
-        LSFSDKColor *color = [group getColor];
-
-        color.brightness = (uint32_t)((UISlider *)sender).value;
-        [group setColor: color];
+        [group setBrightness: (uint32_t)((UISlider *)sender).value];
 
         if ([[group getColor] brightness] == 0)
         {
@@ -760,10 +745,7 @@
 {
     dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
         LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
-        LSFSDKColor *color = [group getColor];
-
-        color.hue = (uint32_t)((UISlider *)sender).value;
-        [group setColor: color];
+        [group setHue: (uint32_t)((UISlider *)sender).value];
     });
 }
 
@@ -771,10 +753,7 @@
 {
     dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
         LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
-        LSFSDKColor *color = [group getColor];
-
-        color.saturation = (uint32_t)((UISlider *)sender).value;
-        [group setColor: color];
+        [group setSaturation: (uint32_t)((UISlider *)sender).value];
     });
 }
 
@@ -782,10 +761,7 @@
 {
     dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
         LSFSDKGroup *group = [[LSFSDKLightingDirector getLightingDirector] getGroupWithID: self.groupID];
-        LSFSDKColor *color = [group getColor];
-
-        color.colorTemp = (uint32_t)((UISlider *)sender).value;
-        [group setColor: color];
+        [group setColorTemp: (uint32_t)((UISlider *)sender).value];
     });
 }
 

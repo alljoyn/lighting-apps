@@ -77,6 +77,42 @@
     [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getLampManager] transitionLampID: lampModel.theID toLampState: lampState]];
 }
 
+-(void)setHue:(unsigned int)hueDegrees
+{
+    NSString *errorContext = @"LSFSDKLamp setHue: error";
+
+    unsigned int scaledHue = [[LSFConstants getConstants] scaleLampStateValue: hueDegrees withMax: 360];
+
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getLampManager] transitionLampID: lampModel.theID hueField: scaledHue]];
+}
+
+-(void)setSaturation:(unsigned int)saturationPercent
+{
+    NSString *errorContext = @"LSFSDKLamp setSaturation: error";
+
+    unsigned int scaledSaturation = [[LSFConstants getConstants] scaleLampStateValue: saturationPercent withMax: 100];
+
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getLampManager] transitionLampID: lampModel.theID saturationField: scaledSaturation]];
+}
+
+-(void)setBrightness:(unsigned int)brightnessPercent
+{
+    NSString *errorContext = @"LSFSDKLamp setBrightness: error";
+
+    unsigned int scaledBrightness = [[LSFConstants getConstants] scaleLampStateValue: brightnessPercent withMax: 100];
+
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getLampManager] transitionLampID: lampModel.theID brightnessField: scaledBrightness]];
+}
+
+-(void)setColorTemp:(unsigned int)colorTempDegrees
+{
+    NSString *errorContext = @"LSFSDKLamp setColorTemperature: error";
+
+    unsigned int scaledColorTemp = [[LSFConstants getConstants] scaleColorTemp: colorTempDegrees];
+
+    [self postErrorIfFailure: errorContext status: [[LSFSDKAllJoynManager getLampManager] transitionLampID: lampModel.theID colorTempField:scaledColorTemp]];
+}
+
 -(void)rename: (NSString *)name
 {
     NSString *errorContext = @"LSFSDKLamp rename: error";

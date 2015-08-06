@@ -17,11 +17,17 @@ package org.allseen.lsf.sampleapp.scenesv1;
 
 import java.util.List;
 
+import org.allseen.lsf.sampleapp.R;
 import org.allseen.lsf.sampleapp.SceneItemSelectEffectTypeFragment;
 import org.allseen.lsf.sampleapp.ScenesPageFragment;
 import org.allseen.lsf.sdk.model.EffectType;
 
 public class BasicSceneV1SelectEffectTypeFragment extends SceneItemSelectEffectTypeFragment {
+    @Override
+    protected int getPresetEffectNameID() {
+        return R.string.effect_name_none;
+    }
+
     @Override
     protected String getPendingSceneItemName() {
         return BasicSceneV1InfoFragment.pendingBasicSceneModel.getName();

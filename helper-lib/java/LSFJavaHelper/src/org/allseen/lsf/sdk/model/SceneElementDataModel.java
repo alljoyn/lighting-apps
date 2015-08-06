@@ -22,7 +22,7 @@ import org.allseen.lsf.LampGroup;
  * in subsequent releases of the SDK</b>.
  */
 public class SceneElementDataModel extends ColorItemDataModel {
-    public static final char TAG_PREFIX_SCENE_ELEMENT = 's';
+    public static final char TAG_PREFIX_SCENE_ELEMENT = 'S';
 
     public static String defaultName = "<Loading scene element info ...>";
 
