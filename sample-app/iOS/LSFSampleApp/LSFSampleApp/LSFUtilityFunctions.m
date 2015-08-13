@@ -333,7 +333,14 @@
     NSMutableArray *sortedArray = [NSMutableArray arrayWithArray: [items sortedArrayUsingComparator: ^NSComparisonResult(id a, id b) {
         NSString *first = [(LSFSDKLightingItem *)a name];
         NSString *second = [(LSFSDKLightingItem *)b name];
-        return [first localizedCaseInsensitiveCompare: second];
+
+        NSComparisonResult result = [first localizedCaseInsensitiveCompare: second];
+        if (result == NSOrderedSame)
+        {
+            result = [((LSFSDKLightingItem *)a).theID localizedCaseInsensitiveCompare: ((LSFSDKLightingItem *)b).theID];
+        }
+
+        return result;
     }]];
 
     return sortedArray;

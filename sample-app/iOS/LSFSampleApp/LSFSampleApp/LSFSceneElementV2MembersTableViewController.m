@@ -104,7 +104,7 @@
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return @"Select the Scene Elements in this Master Scene";
+    return @"Select the Lamps in this Scene Element";
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

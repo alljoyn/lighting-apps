@@ -15,6 +15,7 @@
  ******************************************************************************/
 
 #import "LSFGroupsAddLampsTableViewController.h"
+#import "LSFUtilityFunctions.h"
 #import <LSFSDKLightingDirector.h>
 
 @interface LSFGroupsAddLampsTableViewController ()
@@ -184,8 +185,8 @@
 
     NSMutableArray *lampsArray = [[NSMutableArray alloc] initWithArray: [[LSFSDKLightingDirector getLightingDirector] lamps]];
 
-    self.lampsGroupsArray = [NSMutableArray arrayWithArray: [self sortGroupMembersByName: groupsArray]];
-    [self.lampsGroupsArray addObjectsFromArray: [self sortGroupMembersByName: lampsArray]];
+    self.lampsGroupsArray = [NSMutableArray arrayWithArray: [LSFUtilityFunctions sortLightingItemsByName: groupsArray]];
+    [self.lampsGroupsArray addObjectsFromArray: [LSFUtilityFunctions sortLightingItemsByName:lampsArray]];
 }
 
 -(void)modifyAllRows: (BOOL)isSelected
@@ -256,15 +257,6 @@
     });
 
     [self dismissViewControllerAnimated: YES completion: nil];
-}
-
--(NSArray*) sortGroupMembersByName: (NSArray *)data
-{
-    return [data sortedArrayUsingComparator: ^NSComparisonResult(id obj1, id obj2) {
-        LSFSDKGroupMember *member1 = (LSFSDKGroupMember *)obj1;
-        LSFSDKGroupMember *member2 = (LSFSDKGroupMember *)obj1;
-        return [(NSString *)[member1 name] compare: (NSString *)[member2 name] options:NSCaseInsensitiveSearch];
-    }];
 }
 
 /*

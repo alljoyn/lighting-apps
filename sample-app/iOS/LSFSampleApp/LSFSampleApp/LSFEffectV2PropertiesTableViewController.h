@@ -60,17 +60,4 @@
 
 -(IBAction)doneButtonPressed:(id)sender;
 
-enum EffectV2Type {
-    PRESET,
-    TRANSITION,
-    PULSE
-};
-
-enum EffectV2Property {
-    STATE,
-    DURATION,
-    PERIOD,
-    NUM_PULSES
-};
-
 @end

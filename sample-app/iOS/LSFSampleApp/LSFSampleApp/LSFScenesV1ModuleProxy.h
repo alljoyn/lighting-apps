@@ -14,35 +14,12 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFControllerModel.h"
+#import "LSFScenesV1ModuleDelegate.h"
 
-@implementation LSFControllerModel
+@interface LSFScenesV1ModuleProxy : NSObject
 
-@synthesize controllerVersion = _controllerVersion;
+@property (readonly, strong, nonatomic) id<LSFScenesV1ModuleDelegate> scenesV1Delegate;
 
-+(LSFControllerModel *)getControllerModel
-{
-    static LSFControllerModel *controllerModel = nil;
-    static dispatch_once_t onceToken;
-
-    dispatch_once(&onceToken, ^{
-        controllerModel = [[self alloc] init];
-    });
-
-    return controllerModel;
-}
-
--(id)init
-{
-    self = [super initWithID: 0 andName: @"[Controller not found]"];
-
-    if (self)
-    {
-        self.connected = NO;
-        self.controllerVersion = 0;
-    }
-
-    return self;
-}
++(LSFScenesV1ModuleProxy *)getProxy;
 
 @end

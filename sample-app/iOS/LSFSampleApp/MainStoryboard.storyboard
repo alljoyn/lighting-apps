@@ -1560,12 +1560,12 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="80R-7N-UEe" kind="relationship" relationship="rootViewController" id="5fN-Qx-j1b"/>
+                        <segue destination="tzb-So-bBV" kind="relationship" relationship="rootViewController" id="J3O-ez-O1f"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W7t-MB-E4S" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4822" y="1918"/>
+            <point key="canvasLocation" x="4782" y="1918"/>
         </scene>
         <!--EffectV2 Name-->
         <scene sceneID="Fzt-Yw-Yef">
@@ -1588,11 +1588,6 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Effect Name" id="Bz2-OL-pr5">
-                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="e3o-C2-w2Z">
-                            <connections>
-                                <action selector="cancelButtonPressed:" destination="80R-7N-UEe" id="p9W-7S-5Az"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Next" id="IOq-kn-uK1">
                             <connections>
                                 <action selector="nextButtonPressed:" destination="80R-7N-UEe" id="ZRv-bb-1Rf"/>
@@ -1601,12 +1596,14 @@
                     </navigationItem>
                     <connections>
                         <outlet property="nameTextField" destination="G2q-Ks-ErV" id="iBa-v5-4T7"/>
-                        <segue destination="tzb-So-bBV" kind="push" identifier="EffectV2Type" id="Y5g-NW-1IC"/>
+                        <segue destination="QGL-8c-qfN" kind="push" identifier="PresetEffect" id="fth-uS-KtR"/>
+                        <segue destination="diZ-db-wgh" kind="push" identifier="TransitionEffect" id="v1r-oW-42A"/>
+                        <segue destination="Hv7-je-Act" kind="push" identifier="PulseEffect" id="iZb-oK-Q5t"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ip4-gA-OXf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5254" y="1918"/>
+            <point key="canvasLocation" x="5747" y="1918"/>
         </scene>
         <!--EffectV2 Type Table View Controller-->
         <scene sceneID="X7b-P7-GgZ">
@@ -1638,6 +1635,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Effect Type" id="I9e-Wp-xOK">
+                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="DUK-I1-YzJ">
+                            <connections>
+                                <action selector="cancelButtonPressed:" destination="tzb-So-bBV" id="aBj-De-kRP"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Next" id="aJG-LR-svK">
                             <connections>
                                 <action selector="nextButtonPressed:" destination="tzb-So-bBV" id="aI6-54-v65"/>
@@ -1645,14 +1647,12 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="diZ-db-wgh" kind="push" identifier="TransitionEffect" id="KWK-s2-M1b"/>
-                        <segue destination="Hv7-je-Act" kind="push" identifier="PulseEffect" id="46Q-oo-Yqh"/>
-                        <segue destination="QGL-8c-qfN" kind="push" identifier="PresetEffect" id="hke-Jb-fvo"/>
+                        <segue destination="80R-7N-UEe" kind="push" identifier="EffectV2Name" id="STv-gz-h0O"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lRG-dy-mOH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5665" y="1918"/>
+            <point key="canvasLocation" x="5327" y="1918"/>
         </scene>
         <!--Save Preset-->
         <scene sceneID="jQU-C9-VC7">
@@ -1805,7 +1805,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Effect" textLabel="4gV-Fn-bMm" style="IBUITableViewCellStyleDefault" id="3HP-oe-Cnp">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Effect" textLabel="4gV-Fn-bMm" detailTextLabel="KBQ-Ku-rHP" style="IBUITableViewCellStyleSubtitle" id="3HP-oe-Cnp">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3HP-oe-Cnp" id="gmy-p6-DNV">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -1813,6 +1813,12 @@
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4gV-Fn-bMm">
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="KBQ-Ku-rHP">
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -1980,11 +1986,36 @@
         <scene sceneID="aJR-12-fzD">
             <objects>
                 <tableViewController id="JbX-Yx-3BO" customClass="LSFSettingsTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="pAB-uy-bio">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="pAB-uy-bio">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="380"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <sections>
+                            <tableViewSection id="fPG-Bq-G4d">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="controllerNameCell" id="4f7-Ey-mCi" userLabel="scenesV1ModuleCell">
+                                        <rect key="frame" x="0.0" y="35" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4f7-Ey-mCi" id="nv1-u7-bCR">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Scenes V1 Module" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kqg-st-769">
+                                                    <rect key="frame" x="20" y="11" width="144" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gfj-e7-Tw8">
+                                                    <rect key="frame" x="172" y="11" width="128" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                             <tableViewSection id="6AL-ho-lFQ">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="controllerNameCell" id="qbG-o5-Y2X">
@@ -2001,7 +2032,8 @@
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PIG-Lr-6S3">
                                                     <rect key="frame" x="112" y="11" width="188" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -2068,18 +2100,24 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="Bundled Controller" id="fc7-uG-EoH">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="controllerCell" id="jgz-cu-DCF">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="controllerCell" id="jgz-cu-DCF">
                                         <rect key="frame" x="0.0" y="227" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jgz-cu-DCF" id="LYa-AP-Rup">
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Start Controller" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zb9-or-oGg">
-                                                    <rect key="frame" x="20" y="12" width="259" height="21"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Bundled Controller Service" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zb9-or-oGg">
+                                                    <rect key="frame" x="20" y="12" width="227" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IGN-0I-Wvr">
+                                                    <rect key="frame" x="263" y="6" width="51" height="31"/>
+                                                    <connections>
+                                                        <action selector="controllerSwitchValueChanged:" destination="JbX-Yx-3BO" eventType="valueChanged" id="B27-FY-nFP"/>
+                                                    </connections>
+                                                </switch>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -2090,6 +2128,8 @@
                     <navigationItem key="navigationItem" id="3lw-0X-Ndk"/>
                     <connections>
                         <outlet property="controllerNameLabel" destination="PIG-Lr-6S3" id="CdJ-YN-JwZ"/>
+                        <outlet property="controllerOnOffSwitch" destination="IGN-0I-Wvr" id="XF0-l7-Ub5"/>
+                        <outlet property="scenesV1ModuleLabel" destination="gfj-e7-Tw8" id="WGI-Fh-jDj"/>
                         <outlet property="startControllerLabel" destination="Zb9-or-oGg" id="FB2-8w-D0p"/>
                         <segue destination="wgc-EN-u7h" kind="push" identifier="ScenesSettingInfo" id="K9o-cC-vM3"/>
                     </connections>
@@ -2274,7 +2314,7 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1OO-RQ-7K1">
+                                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1OO-RQ-7K1">
                                                     <rect key="frame" x="145" y="12" width="133" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <state key="normal" title="Preset">
@@ -2284,7 +2324,7 @@
                                                         <segue destination="M3t-hF-m5T" kind="push" identifier="PulsePreset" id="fDD-e6-qML"/>
                                                     </connections>
                                                 </button>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="arrow_details_up_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="xbB-Wv-gUx">
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="arrow_details_up_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="xbB-Wv-gUx">
                                                     <rect key="frame" x="285" y="19" width="15" height="15"/>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Use lamp's current properties" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zCw-m9-dLo">
@@ -2430,7 +2470,7 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xz4-uQ-TYK">
+                                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xz4-uQ-TYK">
                                                     <rect key="frame" x="139" y="12" width="138" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <state key="normal" title="Preset">
@@ -2440,7 +2480,7 @@
                                                         <segue destination="M3t-hF-m5T" kind="push" identifier="PulsePresetEnd" id="TEI-sl-WC7"/>
                                                     </connections>
                                                 </button>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="arrow_details_up_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="amc-BT-STH">
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="arrow_details_up_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="amc-BT-STH">
                                                     <rect key="frame" x="285" y="19" width="15" height="15"/>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Brightness" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jbP-bT-Gl5">
@@ -2756,7 +2796,7 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q0k-3K-hG3">
+                                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q0k-3K-hG3">
                                                     <rect key="frame" x="101" y="12" width="176" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <state key="normal" title="Preset">
@@ -2766,7 +2806,7 @@
                                                         <segue destination="M3t-hF-m5T" kind="push" identifier="TransitionPreset" id="Emc-EQ-f5e"/>
                                                     </connections>
                                                 </button>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="arrow_details_up_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="Wwv-nx-RcM">
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="arrow_details_up_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="Wwv-nx-RcM">
                                                     <rect key="frame" x="285" y="19" width="15" height="15"/>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Brightness" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jdH-LE-4Xl">
@@ -3470,12 +3510,12 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="Emc-EQ-f5e"/>
         <segue reference="pyj-48-h3f"/>
         <segue reference="Upf-Jh-pY6"/>
         <segue reference="blw-RZ-KcS"/>
         <segue reference="0DY-aH-zef"/>
         <segue reference="xLS-9b-3A3"/>
+        <segue reference="Emc-EQ-f5e"/>
         <segue reference="Re0-H5-5Fu"/>
     </inferredMetricsTieBreakers>
 </document>

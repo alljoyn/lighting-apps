@@ -15,7 +15,10 @@
  ******************************************************************************/
 
 #import "LSFItemNameViewController.h"
+#import "LSFPendingEffect.h"
 
 @interface LSFEnterEffectV2NameViewController : LSFItemNameViewController
+
+@property (nonatomic, strong) LSFPendingEffect *pendingEffect;
 
 @end

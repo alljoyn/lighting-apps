@@ -865,7 +865,14 @@ const int MASTER_SCENE_ACTION_INDEX = 2;
             ^NSComparisonResult(id a, id b) {
                 NSString *first = [(LSFSDKLightingItem *)a name];
                 NSString *second = [(LSFSDKLightingItem *)b name];
-                return [first localizedCaseInsensitiveCompare: second];
+
+                NSComparisonResult result = [first localizedCaseInsensitiveCompare: second];
+                if (result == NSOrderedSame)
+                {
+                    result = [((LSFSDKLightingItem *)a).theID localizedCaseInsensitiveCompare: ((LSFSDKLightingItem *)b).theID];
+                }
+
+                return result;
             }];
 }
 
@@ -874,7 +881,14 @@ const int MASTER_SCENE_ACTION_INDEX = 2;
     NSMutableArray *sortedArray = [NSMutableArray arrayWithArray: [scenes sortedArrayUsingComparator: ^NSComparisonResult(id a, id b) {
         NSString *first = [(LSFSDKLightingItem *)a name];
         NSString *second = [(LSFSDKLightingItem *)b name];
-        return [first localizedCaseInsensitiveCompare: second];
+
+        NSComparisonResult result = [first localizedCaseInsensitiveCompare: second];
+        if (result == NSOrderedSame)
+        {
+            result = [((LSFSDKLightingItem *)a).theID localizedCaseInsensitiveCompare: ((LSFSDKLightingItem *)b).theID];
+        }
+
+        return result;
     }]];
 
     return sortedArray;

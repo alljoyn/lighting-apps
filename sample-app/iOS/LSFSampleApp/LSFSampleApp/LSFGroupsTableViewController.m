@@ -194,7 +194,6 @@
         self.tableView.backgroundView = customView;
         return 0;
     }
-//    else if (![[[[[LSFSDKLightingDirector getLightingDirector] lightingManager] controllerManager] getLeadControllerModel] connected])
     else if (![[[LSFSDKLightingDirector getLightingDirector] leadController] connected])
     {
         CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
@@ -220,7 +219,6 @@
         return self.data.count;
     }
 }
-
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -407,7 +405,14 @@
             ^NSComparisonResult(id a, id b) {
                 NSString *first = [(LSFSDKGroup *)a name];
                 NSString *second = [(LSFSDKGroup *)b name];
-                return [first localizedCaseInsensitiveCompare: second];
+
+                NSComparisonResult result = [first localizedCaseInsensitiveCompare: second];
+                if (result == NSOrderedSame)
+                {
+                    result = [((LSFSDKGroup *)a).theID localizedCaseInsensitiveCompare: ((LSFSDKGroup *)b).theID];
+                }
+
+                return result;
             }];
 }
 
@@ -416,7 +421,14 @@
     NSMutableArray *sortedArray = [NSMutableArray arrayWithArray: [self.data sortedArrayUsingComparator: ^NSComparisonResult(id a, id b) {
         NSString *first = [(LSFSDKGroup *)a name];
         NSString *second = [(LSFSDKGroup *)b name];
-        return [first localizedCaseInsensitiveCompare: second];
+
+        NSComparisonResult result = [first localizedCaseInsensitiveCompare: second];
+        if (result == NSOrderedSame)
+        {
+            result = [((LSFSDKGroup *)a).theID localizedCaseInsensitiveCompare: ((LSFSDKGroup *)b).theID];
+        }
+
+        return result;
     }]];
 
     LSFSDKGroup *allLampsGroup;

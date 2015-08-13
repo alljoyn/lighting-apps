@@ -16,12 +16,10 @@
 
 #import "LSFEnterEffectV2NameViewController.h"
 #import "LSFEffectV2TypeTableViewController.h"
-#import "LSFPendingEffect.h"
+#import "LSFEffectV2PropertiesTableViewController.h"
 #import <LSFSDKLightingDirector.h>
 
 @interface LSFEnterEffectV2NameViewController ()
-
-@property (nonatomic, strong) LSFPendingEffect *pendingEffect;
 
 @end
 
@@ -33,7 +31,6 @@
 {
     [super viewWillAppear: animated];
     self.entity = @"Effect";
-    self.pendingEffect = [[LSFPendingEffect alloc] init];
 }
 
 -(IBAction)nextButtonPressed:(id)sender
@@ -50,15 +47,28 @@
 
 -(void)doSegue
 {
-    [self performSegueWithIdentifier: @"EffectV2Type" sender: self];
+    switch (self.pendingEffect.type)
+    {
+        case PRESET:
+            [self performSegueWithIdentifier: @"PresetEffect" sender: self];
+            break;
+        case TRANSITION:
+            [self performSegueWithIdentifier: @"TransitionEffect" sender: self];
+            break;
+        case PULSE:
+            [self performSegueWithIdentifier: @"PulseEffect" sender: self];
+            break;
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString: @"EffectV2Type"])
+    NSString *identifier = segue.identifier;
+
+    if ([identifier isEqualToString: @"PresetEffect"] || [identifier isEqualToString: @"TransitionEffect"] || [identifier isEqualToString: @"PulseEffect"])
     {
-        LSFEffectV2TypeTableViewController *etvc = [segue destinationViewController];
-        etvc.pendingEffect = self.pendingEffect;
+        LSFEffectV2PropertiesTableViewController *eptvc = [segue destinationViewController];
+        eptvc.pendingEffect = self.pendingEffect;
     }
 }
 

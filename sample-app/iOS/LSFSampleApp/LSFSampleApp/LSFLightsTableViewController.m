@@ -325,7 +325,14 @@
             ^NSComparisonResult(id a, id b) {
                 NSString *first = [(LSFSDKLamp *)a name];
                 NSString *second = [(LSFSDKLamp *)b name];
-                return [first localizedCaseInsensitiveCompare: second];
+
+                NSComparisonResult result = [first localizedCaseInsensitiveCompare: second];
+                if (result == NSOrderedSame)
+                {
+                    result = [((LSFSDKLamp *)a).theID localizedCaseInsensitiveCompare: ((LSFSDKLamp *)b).theID];
+                }
+
+                return result;
             }];
 }
 
@@ -334,7 +341,14 @@
     NSMutableArray *sortedArray = [NSMutableArray arrayWithArray: [self.data sortedArrayUsingComparator: ^NSComparisonResult(id a, id b) {
         NSString *first = [(LSFSDKLamp *)a name];
         NSString *second = [(LSFSDKLamp *)b name];
-        return [first localizedCaseInsensitiveCompare: second];
+
+        NSComparisonResult result = [first localizedCaseInsensitiveCompare: second];
+        if (result == NSOrderedSame)
+        {
+            result = [((LSFSDKLamp *)a).theID localizedCaseInsensitiveCompare: ((LSFSDKLamp *)b).theID];
+        }
+
+        return result;
     }]];
 
     self.data = [NSMutableArray arrayWithArray: sortedArray];

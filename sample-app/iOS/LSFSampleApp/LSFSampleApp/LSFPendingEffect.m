@@ -32,7 +32,7 @@
     {
         _state = nil;
         _endState = nil;
-        _duration = 500;
+        _duration = 5000;
         _period = 1000;
         _pulses = 10;
     }

@@ -14,32 +14,37 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFControllerModel.h"
+#import "LSFScenesV1ModuleProxy.h"
+#import "scenesV1/LSFScenesV1SupportDelegate.h"
+#import "LSFScenesV1NoSupportDelegate.h"
 
-@implementation LSFControllerModel
+@implementation LSFScenesV1ModuleProxy
 
-@synthesize controllerVersion = _controllerVersion;
+@synthesize scenesV1Delegate = _scenesV1Delegate;
 
-+(LSFControllerModel *)getControllerModel
++(LSFScenesV1ModuleProxy *)getProxy
 {
-    static LSFControllerModel *controllerModel = nil;
+    static LSFScenesV1ModuleProxy *proxy = nil;
     static dispatch_once_t onceToken;
 
     dispatch_once(&onceToken, ^{
-        controllerModel = [[self alloc] init];
+        proxy = [[self alloc] init];
     });
 
-    return controllerModel;
+    return proxy;
 }
 
 -(id)init
 {
-    self = [super initWithID: 0 andName: @"[Controller not found]"];
+    self = [super init];
 
     if (self)
     {
-        self.connected = NO;
-        self.controllerVersion = 0;
+#ifdef LSF_SCENES_V1_MODULE
+        _scenesV1Delegate = [[LSFScenesV1SupportDelegate alloc] init];
+#else
+        _scenesV1Delegate = [[LSFScenesV1NoSupportDelegate alloc] init];
+#endif
     }
 
     return self;

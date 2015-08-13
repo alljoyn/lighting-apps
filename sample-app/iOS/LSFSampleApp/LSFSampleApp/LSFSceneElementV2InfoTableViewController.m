@@ -73,21 +73,24 @@
     else if (indexPath.section == 2)
     {
         cell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleValue1 reuseIdentifier: nil];
-        cell.textLabel.text = @"Scene Element Effect";
 
         cell.detailTextLabel.text = [self.pendingSceneElement.effect name];
 
         if ([self.pendingSceneElement.effect isKindOfClass: [LSFSDKPreset class]])
         {
             cell.imageView.image = [UIImage imageNamed: @"list_constant_icon.png"];
+            cell.textLabel.text = @"Preset Effect";
         }
         else if ([self.pendingSceneElement.effect isKindOfClass: [LSFSDKTransitionEffect class]])
         {
-           cell.imageView.image = [UIImage imageNamed: @"list_transition_icon.png"];
+            cell.imageView.image = [UIImage imageNamed: @"list_transition_icon.png"];
+            cell.textLabel.text = @"Transition Effect";
         }
         else if ([self.pendingSceneElement.effect isKindOfClass: [LSFSDKPulseEffect class]])
+
         {
             cell.imageView.image = [UIImage imageNamed: @"list_pulse_icon.png"];
+            cell.textLabel.text = @"Pulse Effect";
         }
 
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

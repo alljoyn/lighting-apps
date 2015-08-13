@@ -14,35 +14,15 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFControllerModel.h"
+#import <Foundation/Foundation.h>
+#import <LSFSDKLightingDirector.h>
 
-@implementation LSFControllerModel
+@interface LSFTableViewUtil : NSObject
 
-@synthesize controllerVersion = _controllerVersion;
-
-+(LSFControllerModel *)getControllerModel
-{
-    static LSFControllerModel *controllerModel = nil;
-    static dispatch_once_t onceToken;
-
-    dispatch_once(&onceToken, ^{
-        controllerModel = [[self alloc] init];
-    });
-
-    return controllerModel;
-}
-
--(id)init
-{
-    self = [super initWithID: 0 andName: @"[Controller not found]"];
-
-    if (self)
-    {
-        self.connected = NO;
-        self.controllerVersion = 0;
-    }
-
-    return self;
-}
++(NSUInteger)findAlphaInsertIndexOf: (LSFSDKLightingItem *)item inItems: (NSArray*)items;
++(void)addObjectToTable: (UITableView *)tableView atIndex: (NSUInteger)insertIndex;
++(void)moveObjectInTable: (UITableView *)tableView fromIndex: (NSUInteger)fromIndex toIndex: (NSUInteger)toIndex;
++(void)refreshRowInTable: (UITableView *)tableView atIndex: (NSUInteger)index;
++(void)deleteRowsInTable: (UITableView *)tableView atIndex: (NSArray *)cellIndexPaths;
 
 @end

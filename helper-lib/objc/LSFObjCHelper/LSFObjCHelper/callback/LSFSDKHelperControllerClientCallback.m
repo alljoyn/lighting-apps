@@ -131,7 +131,7 @@
 
         if ([leaderModel.theID isEqualToString: controllerID] && leaderModel.connected)
         {
-            leaderModel.name = controllerName;
+            leaderModel.name = @"[Controller not found]";
             leaderModel.controllerVersion = 0;
             leaderModel.connected = NO;
             leaderModel.timestamp = (long long)([[NSDate date] timeIntervalSince1970] * 1000);

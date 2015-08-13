@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import "LSFEffectV2TypeTableViewController.h"
-#import "LSFEffectV2PropertiesTableViewController.h"
+#import "LSFEnterEffectV2NameViewController.h"
 
 @interface LSFEffectV2TypeTableViewController ()
 
@@ -24,6 +24,12 @@
 @implementation LSFEffectV2TypeTableViewController
 
 @synthesize pendingEffect = _pendingEffect;
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear: animated];
+    self.pendingEffect = [[LSFPendingEffect alloc] init];
+}
 
 -(void)buildTable
 {
@@ -68,12 +74,10 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSString *identifer = segue.identifier;
-
-    if ([identifer isEqualToString: @"PresetEffect"] || [identifer isEqualToString: @"TransitionEffect"] || [identifer isEqualToString: @"PulseEffect"])
+    if ([segue.identifier isEqualToString: @"EffectV2Name"])
     {
-        LSFEffectV2PropertiesTableViewController *eptvc = [segue destinationViewController];
-        eptvc.pendingEffect = self.pendingEffect;
+        LSFEnterEffectV2NameViewController *eenvc = [segue destinationViewController];
+        eenvc.pendingEffect = self.pendingEffect;
     }
 }
 
@@ -82,15 +86,22 @@
     switch (self.selectedIndexPath.row)
     {
         case 0:
-            [self performSegueWithIdentifier: @"PresetEffect" sender: self];
+            self.pendingEffect.type = PRESET;
             break;
         case 1:
-            [self performSegueWithIdentifier: @"TransitionEffect" sender: self];
+            self.pendingEffect.type = TRANSITION;
             break;
         case 2:
-            [self performSegueWithIdentifier: @"PulseEffect" sender: self];
+            self.pendingEffect.type = PULSE;
             break;
     }
+
+    [self performSegueWithIdentifier: @"EffectV2Name" sender: self];
+}
+
+-(IBAction)cancelButtonPressed: (id)sender
+{
+    [self dismissViewControllerAnimated: YES completion: nil];
 }
 
 @end

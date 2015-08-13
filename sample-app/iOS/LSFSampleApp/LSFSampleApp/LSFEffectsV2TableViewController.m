@@ -16,6 +16,7 @@
 
 #import "LSFEffectsV2TableViewController.h"
 #import "LSFUtilityFunctions.h"
+#import "LSFTableViewUtil.h"
 #import <LSFSDKLightingDirector.h>
 #import <LSFSDKEffect.h>
 
@@ -80,14 +81,17 @@
     if ([effect isKindOfClass: [LSFSDKPreset class]])
     {
         cell.imageView.image = [UIImage imageNamed: @"list_constant_icon.png"];
+        cell.detailTextLabel.text = @"Preset";
     }
     else if ([effect isKindOfClass: [LSFSDKTransitionEffect class]])
     {
         cell.imageView.image = [UIImage imageNamed: @"list_transition_icon.png"];
+        cell.detailTextLabel.text = @"Transition Effect";
     }
     else
     {
         cell.imageView.image = [UIImage imageNamed: @"list_pulse_icon.png"];
+        cell.detailTextLabel.text = @"Pulse Effect";
     }
 
     if (self.selectedIndexPath == nil && indexPath.row == 0 && self.pendingSceneElement.effect.theID == nil)
@@ -204,32 +208,59 @@
 
 -(void)effectChanged: (NSNotification *)notification
 {
-
     id<LSFSDKEffect> effect = [self getEffectFromNotification: notification];
 
     @synchronized(self.data)
     {
-        if (![self.data containsObject: effect])
-        {
-            [self.data addObject: effect];
-        }
+        NSUInteger existingIndex = [self.data indexOfObject: effect];
+        NSUInteger insertionIndex = [LSFTableViewUtil findAlphaInsertIndexOf: effect inItems: self.data];
 
-        [self.tableView reloadData];
+        if (existingIndex == NSNotFound)
+        {
+            // new effect
+            [self.data insertObject: effect atIndex: insertionIndex];
+            [LSFTableViewUtil addObjectToTable: self.tableView atIndex: insertionIndex];
+        }
+        else
+        {
+            if (existingIndex == insertionIndex)
+            {
+                // refresh sceneElement
+                [LSFTableViewUtil refreshRowInTable: self.tableView atIndex: existingIndex];
+            }
+            else
+            {
+                // reorder sceneElement
+                if (existingIndex < insertionIndex)
+                {
+                    insertionIndex--;
+                }
+
+                [self.data removeObjectAtIndex: existingIndex];
+                [self.data insertObject: effect atIndex: insertionIndex];
+
+                [LSFTableViewUtil moveObjectInTable: self.tableView fromIndex: existingIndex toIndex: insertionIndex];
+            }
+        }
     }
 }
 
 -(void)effectRemoved: (NSNotification *)notification
 {
-
     id<LSFSDKEffect> effect = [self getEffectFromNotification: notification];
 
     @synchronized(self.data)
     {
-        if ([self.data containsObject: effect])
+        NSMutableArray *deleteIndexPaths = [[NSMutableArray alloc] init];
+
+        NSUInteger exisitingIndex = [self.data indexOfObject: effect];
+        if (exisitingIndex != NSNotFound)
         {
-            [self.data removeObject: effect];
-            [self.tableView reloadData];
+            [self.data removeObjectAtIndex: exisitingIndex];
+            [deleteIndexPaths addObject: [NSIndexPath indexPathForRow: exisitingIndex inSection:0]];
         }
+
+        [LSFTableViewUtil deleteRowsInTable: self.tableView atIndex: deleteIndexPaths];
     }
 }
 

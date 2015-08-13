@@ -213,7 +213,7 @@
 			attributes = {
 				CLASSPREFIX = SimpleTable;
 				LastUpgradeCheck = 0630;
-				ORGANIZATIONNAME = "Allseen Alliance";
+				ORGANIZATIONNAME = "AllSeen Alliance";
 				TargetAttributes = {
 					A229B09D1B43449000B3D1A3 = {
 						CreatedOnToolsVersion = 6.3.2;

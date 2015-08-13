@@ -239,7 +239,14 @@
 		F9589E791B59A37E003D920E /* LSFScenesPresetsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F90751361B59A17B00398239 /* LSFScenesPresetsTableViewController.m */; };
 		F9589E7A1B59A37E003D920E /* LSFTransitionEffectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F90751381B59A17B00398239 /* LSFTransitionEffectTableViewController.m */; };
 		F9589E7B1B59A38A003D920E /* ScenesV1Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F90751391B59A17B00398239 /* ScenesV1Storyboard.storyboard */; };
+		F96B35981B6FE847004EC255 /* LSFScenesV1ModuleProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = F96B35971B6FE847004EC255 /* LSFScenesV1ModuleProxy.m */; };
+		F96B359F1B6FF137004EC255 /* LSFScenesV1NoSupportDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F96B359E1B6FF137004EC255 /* LSFScenesV1NoSupportDelegate.m */; };
+		F97A72931B7A745A006A0C81 /* LSFTableViewUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F97A72921B7A745A006A0C81 /* LSFTableViewUtil.m */; };
+		F97A72971B7A7C1D006A0C81 /* LSFTableViewUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F97A72921B7A745A006A0C81 /* LSFTableViewUtil.m */; };
 		F9A0796C1B68024E00FF298A /* LSFScenesV1Util.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A0796A1B68005A00FF298A /* LSFScenesV1Util.m */; };
+		F9B101871B6FF4B20072C001 /* LSFScenesV1ModuleProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = F96B35971B6FE847004EC255 /* LSFScenesV1ModuleProxy.m */; };
+		F9B101881B6FF4B20072C001 /* LSFScenesV1NoSupportDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F96B359E1B6FF137004EC255 /* LSFScenesV1NoSupportDelegate.m */; };
+		F9B101891B6FF4EB0072C001 /* LSFScenesV1SupportDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F96B359B1B6FEC0D004EC255 /* LSFScenesV1SupportDelegate.m */; };
 		F9B6B1DD1B4866700052AC86 /* LSFPresetEffectV2TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B6B1DC1B4866700052AC86 /* LSFPresetEffectV2TableViewController.m */; };
 		F9B6B1EC1B48A1890052AC86 /* LSFPendingItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B6B1EB1B48A1890052AC86 /* LSFPendingItem.m */; };
 		F9B6B1EF1B48A2340052AC86 /* LSFPendingEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B6B1EE1B48A2340052AC86 /* LSFPendingEffect.m */; };
@@ -458,6 +465,15 @@
 		F919407A1B49D29200A383CC /* LSFEnterSceneV2NameTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFEnterSceneV2NameTableViewController.m; sourceTree = "<group>"; };
 		F919407C1B4A2E0A00A383CC /* LSFSavePresetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSavePresetViewController.h; sourceTree = "<group>"; };
 		F919407D1B4A2E0A00A383CC /* LSFSavePresetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFSavePresetViewController.m; sourceTree = "<group>"; };
+		F96B35961B6FE847004EC255 /* LSFScenesV1ModuleProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFScenesV1ModuleProxy.h; sourceTree = "<group>"; };
+		F96B35971B6FE847004EC255 /* LSFScenesV1ModuleProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFScenesV1ModuleProxy.m; sourceTree = "<group>"; };
+		F96B35991B6FE90B004EC255 /* LSFScenesV1ModuleDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSFScenesV1ModuleDelegate.h; sourceTree = "<group>"; };
+		F96B359A1B6FEC0D004EC255 /* LSFScenesV1SupportDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LSFScenesV1SupportDelegate.h; path = scenesV1/LSFScenesV1SupportDelegate.h; sourceTree = "<group>"; };
+		F96B359B1B6FEC0D004EC255 /* LSFScenesV1SupportDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LSFScenesV1SupportDelegate.m; path = scenesV1/LSFScenesV1SupportDelegate.m; sourceTree = "<group>"; };
+		F96B359D1B6FF137004EC255 /* LSFScenesV1NoSupportDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFScenesV1NoSupportDelegate.h; sourceTree = "<group>"; };
+		F96B359E1B6FF137004EC255 /* LSFScenesV1NoSupportDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFScenesV1NoSupportDelegate.m; sourceTree = "<group>"; };
+		F97A72911B7A745A006A0C81 /* LSFTableViewUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFTableViewUtil.h; sourceTree = "<group>"; };
+		F97A72921B7A745A006A0C81 /* LSFTableViewUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFTableViewUtil.m; sourceTree = "<group>"; };
 		F9A079691B68005A00FF298A /* LSFScenesV1Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LSFScenesV1Util.h; path = scenesV1/LSFScenesV1Util.h; sourceTree = "<group>"; };
 		F9A0796A1B68005A00FF298A /* LSFScenesV1Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LSFScenesV1Util.m; path = scenesV1/LSFScenesV1Util.m; sourceTree = "<group>"; };
 		F9B6B1DB1B4866700052AC86 /* LSFPresetEffectV2TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFPresetEffectV2TableViewController.h; sourceTree = "<group>"; };
@@ -574,6 +590,8 @@
 		8771D677195207800027D3A1 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				F97A72911B7A745A006A0C81 /* LSFTableViewUtil.h */,
+				F97A72921B7A745A006A0C81 /* LSFTableViewUtil.m */,
 				FA3B55461B388A4E000D3D4E /* LSFEnumConversions.h */,
 				FA3B55471B388A4E000D3D4E /* LSFEnumConversions.m */,
 				87C1598C19DDBB93005D912B /* LSFTabManager.h */,
@@ -672,6 +690,11 @@
 				87074B851991322A001E807D /* LSFSceneCell.m */,
 				8702033B1986C1D700A9314C /* LSFScenesTableViewController.h */,
 				8702033C1986C1D700A9314C /* LSFScenesTableViewController.m */,
+				F96B35991B6FE90B004EC255 /* LSFScenesV1ModuleDelegate.h */,
+				F96B35961B6FE847004EC255 /* LSFScenesV1ModuleProxy.h */,
+				F96B35971B6FE847004EC255 /* LSFScenesV1ModuleProxy.m */,
+				F96B359D1B6FF137004EC255 /* LSFScenesV1NoSupportDelegate.h */,
+				F96B359E1B6FF137004EC255 /* LSFScenesV1NoSupportDelegate.m */,
 			);
 			name = Scenes;
 			sourceTree = "<group>";
@@ -861,6 +884,8 @@
 				F90751341B59A17B00398239 /* LSFScenesModifyMembersTableViewController.m */,
 				F90751351B59A17B00398239 /* LSFScenesPresetsTableViewController.h */,
 				F90751361B59A17B00398239 /* LSFScenesPresetsTableViewController.m */,
+				F96B359A1B6FEC0D004EC255 /* LSFScenesV1SupportDelegate.h */,
+				F96B359B1B6FEC0D004EC255 /* LSFScenesV1SupportDelegate.m */,
 				F9A079691B68005A00FF298A /* LSFScenesV1Util.h */,
 				F9A0796A1B68005A00FF298A /* LSFScenesV1Util.m */,
 				F90751371B59A17B00398239 /* LSFTransitionEffectTableViewController.h */,
@@ -1010,7 +1035,7 @@
 			attributes = {
 				CLASSPREFIX = LSF;
 				LastUpgradeCheck = 0510;
-				ORGANIZATIONNAME = "Allseen Alliance";
+				ORGANIZATIONNAME = "AllSeen Alliance";
 				TargetAttributes = {
 					87D813EC18CA536700903D59 = {
 						DevelopmentTeam = 9W47496HLT;
@@ -1180,9 +1205,11 @@
 				87074B861991322A001E807D /* LSFSceneCell.m in Sources */,
 				874F4C521981AEFF007EE9E0 /* LSFGroupsAddNameViewController.m in Sources */,
 				F919407E1B4A2E0A00A383CC /* LSFSavePresetViewController.m in Sources */,
+				F96B35981B6FE847004EC255 /* LSFScenesV1ModuleProxy.m in Sources */,
 				872AFE2019D9B48E0002350B /* LSFRootTableViewController.m in Sources */,
 				87693CED199C054F00CD3BE6 /* LSFMasterSceneMemberTableViewController.m in Sources */,
 				F9B6B1EC1B48A1890052AC86 /* LSFPendingItem.m in Sources */,
+				F96B359F1B6FF137004EC255 /* LSFScenesV1NoSupportDelegate.m in Sources */,
 				874D7806197F33B2005F816D /* LSFGroupsPresetsTableViewController.m in Sources */,
 				FA101E4D1B43668300B5BD25 /* LSFEffectV2NumericPropertyViewController.m in Sources */,
 				87D2A4D91975AB790079B5ED /* LSFLightsCreatePresetViewController.m in Sources */,
@@ -1214,6 +1241,7 @@
 				874F4C26197FFBB5007EE9E0 /* LSFGroupsCreatePresetViewController.m in Sources */,
 				874F4C551981CE5B007EE9E0 /* LSFGroupsAddLampsTableViewController.m in Sources */,
 				FA3B55481B388A4E000D3D4E /* LSFEnumConversions.m in Sources */,
+				F97A72931B7A745A006A0C81 /* LSFTableViewUtil.m in Sources */,
 				F91940751B49BB5F00A383CC /* LSFEnterSceneElementV2NameViewController.m in Sources */,
 				F919407B1B49D29200A383CC /* LSFEnterSceneV2NameTableViewController.m in Sources */,
 				1923B00219A646A500525A39 /* LSFUtilityFunctions.m in Sources */,
@@ -1239,6 +1267,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9B101891B6FF4EB0072C001 /* LSFScenesV1SupportDelegate.m in Sources */,
+				F9B101871B6FF4B20072C001 /* LSFScenesV1ModuleProxy.m in Sources */,
+				F9B101881B6FF4B20072C001 /* LSFScenesV1NoSupportDelegate.m in Sources */,
 				F9A0796C1B68024E00FF298A /* LSFScenesV1Util.m in Sources */,
 				F9589E6D1B59A37E003D920E /* LSFEffectTableViewController.m in Sources */,
 				F9589E6E1B59A37E003D920E /* LSFNoEffectTableViewController.m in Sources */,
@@ -1261,6 +1292,7 @@
 				F90750971B599F2C00398239 /* LSFTabManager.m in Sources */,
 				F90750981B599F2C00398239 /* LSFGroupsMembersTableViewController.m in Sources */,
 				F90750991B599F2C00398239 /* LSFLightsPresetsTableViewController.m in Sources */,
+				F97A72971B7A7C1D006A0C81 /* LSFTableViewUtil.m in Sources */,
 				F907509A1B599F2C00398239 /* LSFLightInfoTableViewController.m in Sources */,
 				F907509B1B599F2C00398239 /* LSFWifiMonitor.m in Sources */,
 				F907509D1B599F2C00398239 /* LSFLightDetailsTableViewController.m in Sources */,
@@ -1461,7 +1493,7 @@
 					"-lajrouter",
 					"-lssl",
 					"-lcrypto",
-					"-lLSFObjcHelper",
+					"-lLSFObjCHelper",
 				);
 				PRODUCT_NAME = LSFSampleApp;
 				PROVISIONING_PROFILE = "";
@@ -1514,7 +1546,7 @@
 					"-lajrouter",
 					"-lssl",
 					"-lcrypto",
-					"-lLSFObjcHelper",
+					"-lLSFObjCHelper",
 				);
 				PRODUCT_NAME = LSFSampleApp;
 				PROVISIONING_PROFILE = "";

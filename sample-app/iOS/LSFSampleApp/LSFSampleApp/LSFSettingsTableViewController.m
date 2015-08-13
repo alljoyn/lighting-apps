@@ -16,13 +16,13 @@
 
 #import "LSFSettingsTableViewController.h"
 #import "LSFSettingsInfoViewController.h"
+#import "LSFScenesV1ModuleProxy.h"
 #import <LSFSDKLightingDirector.h>
 #import <LSFSDKLightingController.h>
 
 @interface LSFSettingsTableViewController ()
 
 -(void)leaderModelChangedNotificationReceived: (NSNotification *)notification;
--(void)startBundledController;
 
 @end
 
@@ -40,15 +40,21 @@
     //Set controller notification handler
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
 
-    [self.controllerNameLabel setText: [NSString stringWithFormat: @"%@ (V%u)", [[[LSFSDKLightingDirector getLightingDirector] leadController] name], [[[LSFSDKLightingDirector getLightingDirector] leadController] version]]];
+    // scenes v1 installed? label
+    [self.scenesV1ModuleLabel setText: ([[[LSFScenesV1ModuleProxy getProxy] scenesV1Delegate] isInstalled] ? @"Installed" : @"Not Installed")];
+
+    // controller label
+    [self.controllerNameLabel setText: [NSString stringWithFormat: @"%@", [[[LSFSDKLightingDirector getLightingDirector] leadController] name]]];
 
     if ([[LSFSDKLightingController getLightingController] isRunning])
     {
-        self.startControllerLabel.text = @"Stop Controller";
+        [self.controllerNameLabel setText: [NSString stringWithFormat: @"%@ (V%u)", self.controllerNameLabel.text, [[[LSFSDKLightingDirector getLightingDirector] leadController] version]]];
+
+        self.controllerOnOffSwitch.on = YES;
     }
     else
     {
-        self.startControllerLabel.text = @"Start Controller";
+        self.controllerOnOffSwitch.on = NO;
     }
 }
 
@@ -65,13 +71,35 @@
     [super didReceiveMemoryWarning];
 }
 
+-(IBAction)controllerSwitchValueChanged: (id)sender
+{
+    if ([sender isOn])
+    {
+        NSLog(@"Starting Controller...");
+        [[LSFSDKLightingController getLightingController] start];
+    }
+    else
+    {
+        NSLog(@"Stopping Controller...");
+        [[LSFSDKLightingController getLightingController] stop];
+    }
+}
+
 /*
  * ControllerNotification Handler
  */
 -(void)leaderModelChangedNotificationReceived: (NSNotification *)notification
 {
     LSFSDKController *leader = [notification.userInfo valueForKey: @"leader"];
-    [self.controllerNameLabel setText: [NSString stringWithFormat: @"%@ (V%u)", leader.name, leader.version]];
+
+    if ([leader connected])
+    {
+        [self.controllerNameLabel setText: [NSString stringWithFormat: @"%@ (V%u)", leader.name, leader.version]];
+    }
+    else
+    {
+        [self.controllerNameLabel setText: [NSString stringWithFormat: @"%@", leader.name]];
+    }
 }
 
 /*
@@ -83,18 +111,12 @@
 
     switch (indexPath.section)
     {
-        case 1:
+        case 2:
+        case 3:
+        case 4:
             [self performSegueWithIdentifier: @"ScenesSettingInfo" sender: cell]; //reuseIdentifier = sourceCodeInfoCell
             break;
-        case 2:
-            [self performSegueWithIdentifier: @"ScenesSettingInfo" sender: cell]; //reuseIdentifier = teamInfoCell
-            break;
-        case 3:
-            [self performSegueWithIdentifier: @"ScenesSettingInfo" sender: cell]; //reuseIdentifier = noticeInfoCell
-            break;
-        case 4:
-            [self startBundledController];
-            [self.tableView deselectRowAtIndexPath: indexPath animated: YES];
+        case 5:
         default:
             break;
     }
@@ -124,23 +146,6 @@
             ssivc.title = @"Notice";
             ssivc.inputText = @"Notice";
         }
-
-    }
-}
-
--(void)startBundledController
-{
-    if ([self.startControllerLabel.text isEqualToString: @"Start Controller"])
-    {
-        NSLog(@"Starting Controller...");
-        self.startControllerLabel.text = @"Stop Controller";
-        [[LSFSDKLightingController getLightingController] start];
-    }
-    else
-    {
-        NSLog(@"Stopping Controller...");
-        self.startControllerLabel.text = @"Start Controller";
-        [[LSFSDKLightingController getLightingController] stop];
     }
 }
 

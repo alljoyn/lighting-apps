@@ -18,7 +18,11 @@
 
 @interface LSFSettingsTableViewController : UITableViewController
 
+@property (weak, nonatomic) IBOutlet UILabel *scenesV1ModuleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *controllerNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *startControllerLabel;
+@property (weak, nonatomic) IBOutlet UISwitch *controllerOnOffSwitch;
+
+- (IBAction)controllerSwitchValueChanged:(id)sender;
 
 @end

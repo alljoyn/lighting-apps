@@ -19,10 +19,24 @@
 
 @interface LSFPendingEffect : LSFPendingItem
 
+enum EffectV2Type {
+    PRESET,
+    TRANSITION,
+    PULSE
+};
+
+enum EffectV2Property {
+    STATE,
+    DURATION,
+    PERIOD,
+    NUM_PULSES
+};
+
 @property (nonatomic, strong) LSFSDKMyLampState *state;
 @property (nonatomic, strong) LSFSDKMyLampState *endState;
 @property (nonatomic) int duration;
 @property (nonatomic) int period;
 @property (nonatomic) int pulses;
+@property (nonatomic) EffectV2Type type;
 
 @end

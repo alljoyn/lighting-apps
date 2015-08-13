@@ -1186,7 +1186,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0510;
-				ORGANIZATIONNAME = "Allseen Alliance";
+				ORGANIZATIONNAME = "AllSeen Alliance";
 			};
 			buildConfigurationList = 87D8139218CA483C00903D59 /* Build configuration list for PBXProject "LSFObjC" */;
 			compatibilityVersion = "Xcode 3.2";
