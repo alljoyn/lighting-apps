@@ -412,9 +412,21 @@
             LSFGroupModel *groupModel = [group getLampGroupDataModel];
             NSSet *lampIDs = [groupModel lamps];
 
-            if (lampIDs != nil && [lampIDs containsObject: lampID])
+            if (lampIDs != nil)
             {
-                [self postUpdateLampGroupState: groupModel];
+                if ([[LSFSDKAllLampsDataModel getAllLampsGroupID] isEqualToString: groupModel.theID])
+                {
+                    NSMutableSet *updatedLampIDs = [[NSMutableSet alloc] initWithSet: lampIDs];
+                    [updatedLampIDs addObject: lampID];
+                    [groupModel setLamps: updatedLampIDs];
+
+                    lampIDs = updatedLampIDs;
+                }
+
+                if ([lampIDs containsObject: lampID])
+                {
+                    [self postUpdateLampGroupState: groupModel];
+                }
             }
         }
     });
@@ -555,7 +567,7 @@
 }
 
 /*
- * Lamp Delegate to determine when to create the AllLamps virtual group
+ * Lamp Delegate to determine when to create/remove the AllLamps virtual group
  */
 -(void)onLampInitialized: (LSFSDKLamp *)lamp
 {
@@ -572,7 +584,13 @@
 
 -(void)onLampRemoved: (LSFSDKLamp *)lamp
 {
-    // intentionally left blank
+    if ([[self.manager.lampCollectionManager getLamps] count] == 0)
+    {
+        if ([self.manager.groupCollectionManager hasID: [LSFSDKAllLampsDataModel getAllLampsGroupID]])
+        {
+            [self lampGroupsDeleted: @[[LSFSDKAllLampsDataModel getAllLampsGroupID]]];
+        }
+    }
 }
 
 -(void)onLampError: (LSFSDKLightingItemErrorEvent *)error

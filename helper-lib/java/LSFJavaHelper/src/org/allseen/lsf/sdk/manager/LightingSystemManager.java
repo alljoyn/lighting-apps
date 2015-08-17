@@ -93,6 +93,7 @@ public class LightingSystemManager
     private final SceneCollectionManagerV2<SCENEV2, ERROR> sceneCollectionManager;
     private final MasterSceneCollectionManager<MASTERSCENE, ERROR> masterSceneCollectionManager;
     private final ControllerCollectionManager<CONTROLLER, ERROR> controllerCollectionManager;
+    private boolean isAllLampsGroupCreated = false;
 
     public LightingSystemManager(final AllLightingItemsFactory<LAMP, GROUP, PRESET, TRANSITIONEFFECT, PULSEEFFECT, SCENEELEMENT, SCENEV1, SCENEV2, MASTERSCENE, CONTROLLER, ERROR> factory) {
         AllLampsLampGroup.instance.setLightingSystemManager(this);
@@ -126,12 +127,20 @@ public class LightingSystemManager
             }
         });
 
-        //TODO-FIX remove once the all lamps group consistency bug is fixed
         lampCollectionManager.addListener(new LampCollectionListenerBase<LAMP, ERROR>() {
             @Override
             public void onLampChanged(final LAMP lamp) {
-                if (!groupCollectionManager.hasID(AllLampsDataModel.ALL_LAMPS_GROUP_ID)) {
+                if (!isAllLampsGroupCreated) {
+                    isAllLampsGroupCreated = true;
                     groupManagerCB.postProcessLampGroupID(AllLampsDataModel.ALL_LAMPS_GROUP_ID, true, true);
+                }
+            }
+
+            @Override
+            public void onLampRemoved(final LAMP lamp) {
+                if (lampCollectionManager.getLamps().length == 0) {
+                    groupManagerCB.lampGroupsDeletedCB(new String [] {AllLampsDataModel.ALL_LAMPS_GROUP_ID});
+                    isAllLampsGroupCreated = false;
                 }
             }
         });

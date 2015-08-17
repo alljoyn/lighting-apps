@@ -67,7 +67,14 @@
 
 -(void)controllerServiceNameChangedForControllerID: (NSString *)controllerID andName: (NSString *)controllerName
 {
-    //TODO - should be handled by the AboutManager
+    LSFControllerModel *leaderModel = [[self.manager.controllerManager getLeader] getControllerDataModel];
+
+    if ([leaderModel.theID isEqualToString: controllerID])
+    {
+        leaderModel.name = controllerName;
+    }
+
+    [self postSendControllerChanged];
 }
 
 -(void)postSendControllerChanged

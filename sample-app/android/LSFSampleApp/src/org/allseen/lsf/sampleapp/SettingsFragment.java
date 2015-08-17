@@ -67,8 +67,9 @@ public class SettingsFragment extends PageFrameChildFragment implements OnClickL
     public void onUpdateView() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
         Controller leader = LightingDirector.get().getLeadController();
+        String leaderName = leader != null && leader.isConnected() ? leader.getName() : getString(R.string.default_controller_name);
 
-        ((TextView)view.findViewById(R.id.settingsTextController)).setText(leader.getName());
+        ((TextView)view.findViewById(R.id.settingsTextController)).setText(leaderName);
 
         CheckBox checkBox = (CheckBox)view.findViewById(R.id.settingsStartController);
         checkBox.setChecked(activity.isControllerServiceEnabled());

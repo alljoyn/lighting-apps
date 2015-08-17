@@ -115,35 +115,29 @@
             self.saturationSliderButton.enabled = YES;
         }
 
+        self.colorTempSlider.value = self.tedm.state.colorTemp < self.tedm.colorTempMin ? self.tedm.colorTempMin : self.tedm.state.colorTemp;
+        self.colorTempSlider.minimumValue = self.tedm.colorTempMin;
+        self.colorTempSlider.maximumValue = self.tedm.colorTempMax;
+
         if (self.tedm.capability.temp >= SOME)
         {
             if (self.tedm.state.saturation == 100)
             {
-                self.colorTempSlider.value = self.tedm.state.colorTemp;
                 self.colorTempSlider.enabled = NO;
                 self.colorTempLabel.text = @"N/A";
                 self.colorTempSliderButton.enabled = YES;
             }
             else
             {
-                self.colorTempSlider.value = self.tedm.state.colorTemp;
                 self.colorTempSlider.enabled = YES;
-                self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", self.tedm.state.colorTemp];
+                self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", (uint32_t)self.colorTempSlider.value];
                 self.colorTempSliderButton.enabled = NO;
             }
-
-            self.colorTempSlider.minimumValue = self.tedm.colorTempMin;
-            self.colorTempSlider.maximumValue = self.tedm.colorTempMax;
         }
         else
         {
-            unsigned int colorTemp = self.tedm.colorTempMin;
-            self.colorTempSlider.value = colorTemp;
             self.colorTempSlider.enabled = NO;
             self.colorTempLabel.text = @"N/A";
-            self.colorTempSlider.minimumValue = self.tedm.colorTempMin;
-            self.colorTempSlider.maximumValue = self.tedm.colorTempMax;
-            //NSLog(@"Color Temp Slider - Min = %i; Max = %i", (int)self.colorTempSlider.minimumValue, (int)self.colorTempSlider.maximumValue);
             self.colorTempSliderButton.enabled = YES;
         }
     }

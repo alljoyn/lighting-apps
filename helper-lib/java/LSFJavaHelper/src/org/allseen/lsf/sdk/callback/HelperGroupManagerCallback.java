@@ -29,6 +29,7 @@ import org.allseen.lsf.sdk.TrackingID;
 import org.allseen.lsf.sdk.manager.AllJoynManager;
 import org.allseen.lsf.sdk.manager.GroupCollectionManager;
 import org.allseen.lsf.sdk.manager.LightingSystemManager;
+import org.allseen.lsf.sdk.model.AllLampsDataModel;
 import org.allseen.lsf.sdk.model.ColorAverager;
 import org.allseen.lsf.sdk.model.ColorStateConverter;
 import org.allseen.lsf.sdk.model.GroupDataModel;
@@ -71,11 +72,6 @@ public class HelperGroupManagerCallback<GROUP> extends LampGroupManagerCallback 
         if (!responseCode.equals(ResponseCode.OK)) {
             manager.getGroupCollectionManager().sendErrorEvent("getAllLampGroupIDsReplyCB", responseCode);
         }
-
-// TODO-FIX temporary fix for all lamps group state inconsistency bug.
-// Reintroduce call and remove lamp listener from LightingSystemManager
-// once the underlying issue is resolved.
-//        postProcessLampGroupID(AllLampsDataModel.ALL_LAMPS_GROUP_ID, true, true);
 
         for (final String groupID : groupIDs) {
             postProcessLampGroupID(groupID, true, true);
@@ -195,7 +191,6 @@ public class HelperGroupManagerCallback<GROUP> extends LampGroupManagerCallback 
         }
     }
 
-    //TODO-FIX make protected once the all lamps group consistency bug is fixed
     public void postProcessLampGroupID(final String groupID, final boolean needName, final boolean needState) {
         manager.getQueue().post(new Runnable() {
             @Override
@@ -295,12 +290,18 @@ public class HelperGroupManagerCallback<GROUP> extends LampGroupManagerCallback 
                 GroupCollectionManager<GROUP, ?> groupManager = manager.getGroupCollectionManager();
                 Iterator<GROUP> i = groupManager.getGroupIterator();
 
-                while(i.hasNext()) {
+                while (i.hasNext()) {
                     GroupDataModel groupModel = groupManager.getModel(i.next());
                     Set<String> lampIDs = groupModel.getLamps();
 
-                    if (lampIDs != null && lampIDs.contains(lampID)) {
-                        postUpdateLampGroupState(groupModel);
+                    if (lampIDs != null) {
+                        if (AllLampsDataModel.ALL_LAMPS_GROUP_ID.equals(groupModel.id)){
+                            lampIDs.add(lampID);
+                        }
+
+                        if (lampIDs.contains(lampID)) {
+                            postUpdateLampGroupState(groupModel);
+                        }
                     }
                 }
             }

@@ -20,6 +20,8 @@
 
 @interface LSFRootTableViewController ()
 
+@property (nonatomic) BOOL wasControllerConnected;
+
 -(void)leaderModelChangedNotificationReceived:(NSNotification *)notification;
 -(void)wifiNotificationReceived: (NSNotification *)notification;
 
@@ -28,6 +30,7 @@
 @implementation LSFRootTableViewController
 
 @synthesize data = _data;
+@synthesize wasControllerConnected = _wasControllerConnected;
 
 -(void)viewDidLoad
 {
@@ -37,6 +40,7 @@
 -(void)viewWillAppear: (BOOL)animated
 {
     [super viewWillAppear: animated];
+    self.wasControllerConnected = [[[LSFSDKLightingDirector getLightingDirector] leadController] connected];
 
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(wifiNotificationReceived:) name: @"WifiNotification" object: nil];
@@ -59,8 +63,15 @@
  */
 -(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
 {
-    [self.data removeAllObjects];
-    [self.tableView reloadData];
+    LSFSDKController *leaderModel = [notification.userInfo valueForKey: @"leader"];
+    BOOL connected = leaderModel.connected;
+
+    if (connected != self.wasControllerConnected)
+    {
+        self.wasControllerConnected = connected;
+        [self.data removeAllObjects];
+        [self.tableView reloadData];
+    }
 }
 
 -(void)wifiNotificationReceived: (NSNotification *)notification

@@ -112,34 +112,29 @@
             self.saturationSliderButton.enabled = YES;
         }
 
+        self.colorTempSlider.value = self.nedm.state.colorTemp < self.nedm.colorTempMin ? self.nedm.colorTempMin : self.nedm.state.colorTemp;
+        self.colorTempSlider.minimumValue = self.nedm.colorTempMin;
+        self.colorTempSlider.maximumValue = self.nedm.colorTempMax;
+
         if (self.nedm.capability.temp >= SOME)
         {
             if (self.nedm.state.saturation == 100)
             {
-                self.colorTempSlider.value = self.nedm.state.colorTemp;
                 self.colorTempSlider.enabled = NO;
                 self.colorTempLabel.text = @"N/A";
                 self.colorTempSliderButton.enabled = YES;
             }
             else
             {
-                self.colorTempSlider.value = self.nedm.state.colorTemp;
                 self.colorTempSlider.enabled = YES;
-                self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", self.nedm.state.colorTemp];
+                self.colorTempLabel.text = [NSString stringWithFormat: @"%iK", (uint32_t)self.colorTempSlider.value];
                 self.colorTempSliderButton.enabled = NO;
             }
-
-            self.colorTempSlider.minimumValue = self.nedm.colorTempMin;
-            self.colorTempSlider.maximumValue = self.nedm.colorTempMax;
         }
         else
         {
-            unsigned int colorTemp = self.nedm.colorTempMin;
-            self.colorTempSlider.value = colorTemp;
             self.colorTempSlider.enabled = NO;
             self.colorTempLabel.text = @"N/A";
-            self.colorTempSlider.minimumValue = self.nedm.colorTempMin;
-            self.colorTempSlider.maximumValue = self.nedm.colorTempMax;
             self.colorTempSliderButton.enabled = YES;
         }
     }

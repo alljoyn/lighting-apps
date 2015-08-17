@@ -32,7 +32,7 @@
         self.period = 1000;
         self.duration = 500;
         self.numPulses = 10;
-        self.endState = [[LSFLampState alloc] initWithOnOff: YES brightness: 0 hue: 0 saturation: 0 colorTemp: 2700];
+        self.endState = [[LSFLampState alloc] init];
     }
 
     return self;
