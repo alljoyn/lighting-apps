@@ -38,8 +38,10 @@ class XJavaDelegator {
     static void Call_Void_UInt32(const jweak jdelegate, char const *func, const uint32_t &uint32Value);
     static void Call_Void_VoidPointer(const jweak jdelegate, char const *func, const void *voidPointer);
     static void Call_Void_ResponseCode(const jweak jdelegate, char const *func, const LSFResponseCode &responseCode);
-    static void Call_Void_EnumList(const jweak jdelegate, char const *func, const jobjectArray &enumList, char const *enumClass);
     static void Call_Void_StringList(const jweak jdelegate, char const *func, const LSFStringList &strList);
+
+    template <typename CTYPE>
+    static void Call_Void_EnumList(const jweak jdelegate, char const *func, JEnum *xEnum, const std::list<CTYPE> &cEnumList);
 
     // Void / 2 Args
     static void Call_Void_ResponseCode_String(const jweak jdelegate, char const *func, const LSFResponseCode &responseCode, const LSFString &strValue);

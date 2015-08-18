@@ -18,6 +18,7 @@
 
 #include "JEnum.h"
 #include "JStringArray.h"
+#include "JEnumArray.h"
 #include "XLongArray.h"
 #include "XJavaDelegator.h"
 
@@ -30,7 +31,6 @@ namespace lsf {
 // methods must be defined there. The following #ifndef prevents the
 // non-templated code from being visible there.
 #ifndef LSF_JNI_XJAVADELEGATOR_H_INCLUDE_TEMPLATE_METHODS
-
 void XJavaDelegator::Call_Void(const jweak jdelegate, char const *func)
 {
     // Get the JNIEnv for the current native thread
@@ -69,17 +69,6 @@ void XJavaDelegator::Call_Void_ResponseCode(const jweak jdelegate, char const *f
     Call_Void_Variadic(env, jdelegate, func, "(Lorg/allseen/lsf/sdk/ResponseCode;)V", jresponseCode);
 }
 
-void XJavaDelegator::Call_Void_EnumList(const jweak jdelegate, char const *func, const jobjectArray &jEnumList, char const *enumClass)
-{
-    // Get the JNIEnv for the current native thread
-    JScopedEnv env;
-
-    char sig[512];
-    snprintf(sig, sizeof(sig), "([L%s;)V", enumClass);
-
-    Call_Void_Variadic(env, jdelegate, func, sig, jEnumList);
-}
-
 void XJavaDelegator::Call_Void_StringList(const jweak jdelegate, char const *func, const LSFStringList &strList)
 {
     // Get the JNIEnv for the current native thread
@@ -93,7 +82,35 @@ void XJavaDelegator::Call_Void_StringList(const jweak jdelegate, char const *fun
 
     Call_Void_Variadic(env, jdelegate, func, "([Ljava/lang/String;)V", jstrList);
 }
+#endif //LSF_JNI_XJAVADELEGATOR_H_INCLUDE_TEMPLATE_METHODS
 
+// This .cpp file is #include'd in the .h file because some templated
+// methods must be defined there. The following #ifdef allows the
+// templated code to be visible there.
+#ifdef LSF_JNI_XJAVADELEGATOR_H_INCLUDE_TEMPLATE_METHODS
+template <typename CTYPE>
+void XJavaDelegator::Call_Void_EnumList(const jweak jdelegate, char const *func, JEnum *xEnum, const std::list<CTYPE> &cEnumList)
+{
+    // Get the JNIEnv for the current native thread
+    JScopedEnv env;
+
+    jobjectArray jEnumList = JEnumArray::NewEnumArray<CTYPE>(*xEnum, cEnumList);
+    if (env->ExceptionCheck() || !jEnumList) {
+        QCC_LogError(ER_FAIL, ("NewEnumArray() failed"));
+        return;
+    }
+
+    char sig[512];
+    snprintf(sig, sizeof(sig), "([L%s;)V", xEnum->getClassName());
+
+    Call_Void_Variadic(env, jdelegate, func, sig, jEnumList);
+}
+#endif //LSF_JNI_XJAVADELEGATOR_H_INCLUDE_TEMPLATE_METHODS
+
+// This .cpp file is #include'd in the .h file because some templated
+// methods must be defined there. The following #ifndef prevents the
+// non-templated code from being visible there.
+#ifndef LSF_JNI_XJAVADELEGATOR_H_INCLUDE_TEMPLATE_METHODS
 void XJavaDelegator::Call_Void_ResponseCode_String(const jweak jdelegate, char const *func, const LSFResponseCode &responseCode, const LSFString &strValue)
 {
     // Get the JNIEnv for the current native thread

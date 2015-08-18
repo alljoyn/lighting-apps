@@ -23,15 +23,15 @@
 
 namespace lsf {
 
-template <typename T> jobjectArray JEnumArray::NewEnumArray(JEnum &jenum, const std::list<T> &cenums)
+template <typename T> jobjectArray JEnumArray::NewEnumArray(JEnum &jenum, const std::list<T> &cEnums)
 {
-    typename std::list<T>::size_type count = cenums.size();
+    JScopedEnv env;
+
+    typename std::list<T>::size_type count = cEnums.size();
     if (!count) {
         QCC_LogError(ER_FAIL, ("Empty list"));
         return NULL;
     }
-
-    JScopedEnv env;
 
     jobjectArray jarr = env->NewObjectArray(count, jenum.getClass(), NULL);
     if (env->ExceptionCheck() || !jarr) {
@@ -39,7 +39,7 @@ template <typename T> jobjectArray JEnumArray::NewEnumArray(JEnum &jenum, const 
         return NULL;
     }
 
-    typename std::list<T>::const_iterator it = cenums.begin();
+    typename std::list<T>::const_iterator it = cEnums.begin();
     for (int i = 0; i < count; i++, it++) {
         jobject jobj = jenum.getObject((int)*it);
         if (env->ExceptionCheck() || !jobj) {

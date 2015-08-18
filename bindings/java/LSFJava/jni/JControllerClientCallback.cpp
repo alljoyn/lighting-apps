@@ -74,7 +74,7 @@ void JControllerClientCallback::ConnectToControllerServiceFailedCB(const LSFStri
 
 void JControllerClientCallback::ControllerClientErrorCB(const ErrorCodeList& errorCodeList)
 {
-    //TODO: Re-enable (ASALIGHT-209 workaround) XJavaDelegator::Call_Void_EnumList(jdelegate, __func__, JEnumArray::NewEnumArray<ErrorCode>(*JEnum::jErrorCodeEnum, errorCodeList), JEnum::jErrorCodeEnum->getClassName());
+    XJavaDelegator::Call_Void_EnumList<ErrorCode>(jdelegate, __func__, JEnum::jErrorCodeEnum, errorCodeList);
 }
 
 } /* namespace lsf */
