@@ -43,11 +43,6 @@ void LSFLampManagerCallback::GetLampNameReplyCB(const LSFResponseCode& responseC
     [_lmDelegate getLampNameReplyWithCode: responseCode lampID: [NSString stringWithUTF8String: lampID.c_str()] language: [NSString stringWithUTF8String: language.c_str()] andLampName: [NSString stringWithUTF8String: lampName.c_str()]];
 }
 
-void LSFLampManagerCallback::GetLampVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const uint32_t& lampVersion)
-{
-    [_lmDelegate getLampVersionReplyWithCode: responseCode lampID: [NSString stringWithUTF8String: lampID.c_str()] andVersion: lampVersion];
-}
-
 void LSFLampManagerCallback::GetLampManufacturerReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const LSFString& language, const LSFString& manufacturer)
 {
     [_lmDelegate getLampManufacturerReplyWithCode: responseCode lampID: [NSString stringWithUTF8String: lampID.c_str()] language: [NSString stringWithUTF8String: language.c_str()] andManufacturer: [NSString stringWithUTF8String: manufacturer.c_str()]];

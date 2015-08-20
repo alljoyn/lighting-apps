@@ -123,14 +123,6 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_getSceneWithSceneEle
 
 /*
  * Class:     org_allseen_lsf_SceneManager
- * Method:    getSceneVersion
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
- */
-JNIEXPORT jobject JNICALL Java_org_allseen_lsf_SceneManager_getSceneVersion
-  (JNIEnv *, jobject, jstring);
-
-/*
- * Class:     org_allseen_lsf_SceneManager
  * Method:    getSceneDataSet
  * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */

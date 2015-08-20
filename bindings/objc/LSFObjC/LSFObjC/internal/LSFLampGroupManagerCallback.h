@@ -28,7 +28,6 @@ class LSFLampGroupManagerCallback : public LampGroupManagerCallback {
     ~LSFLampGroupManagerCallback();    
     void GetAllLampGroupIDsReplyCB(const LSFResponseCode& responseCode, const LSFStringList& lampGroupIDs);
     void GetLampGroupNameReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const LSFString& language, const LSFString& lampGroupName);
-    void GetLampGroupVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const uint32_t& lampGroupVersion);
     void SetLampGroupNameReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const LSFString& language);
     void LampGroupsNameChangedCB(const LSFStringList& lampGroupIDs);
     void CreateLampGroupReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID);

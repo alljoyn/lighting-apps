@@ -104,11 +104,6 @@
     [self postUpdateTransitionEffectNameForID: transitionEffectID transitionEffectName: transitionEffectName];
 }
 
--(void)getTransitionEffectVersionReplyWithCode: (LSFResponseCode)rc transitionEffectID: (NSString *)transitionEffectID andTransitionEffectVersion: (unsigned int)transitionEffectVersion
-{
-    //Currently does nothing
-}
-
 -(void)setTransitionEffectNameReplyWithCode: (LSFResponseCode)rc transitionEffectID: (NSString *)transitionEffectID andLanguage: (NSString *)language
 {
     if (rc != LSF_OK)

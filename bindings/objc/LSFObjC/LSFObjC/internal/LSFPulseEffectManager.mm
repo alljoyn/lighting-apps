@@ -90,12 +90,6 @@
     return self.pulseEffectManager->GetPulseEffectName(peid, lang);
 }
 
--(ControllerClientStatus)getPulseEffectVersionWithID: (NSString *)pulseEffectID
-{
-    std::string peid([pulseEffectID UTF8String]);
-    return CONTROLLER_CLIENT_OK; //self.pulseEffectManager->GetPulseEffectVersion(peid);
-}
-
 -(ControllerClientStatus)setPulseEffectNameWithID: (NSString *)pulseEffectID pulseEffectName: (NSString *)pulseEffectName
 {
     std::string peid([pulseEffectID UTF8String]);

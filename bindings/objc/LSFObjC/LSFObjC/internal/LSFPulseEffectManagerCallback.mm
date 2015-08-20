@@ -112,14 +112,6 @@ void LSFPulseEffectManagerCallback::GetPulseEffectNameReplyCB(const LSFResponseC
     }
 }
 
-void LSFPulseEffectManagerCallback::GetPulseEffectVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& pulseEffectID, const uint32_t& pulseEffectVersion)
-{
-    if (_pemDelegate != nil)
-    {
-        [_pemDelegate getPulseEffectVersionReplyWithCode: responseCode pulseEffectID: [NSString stringWithUTF8String: pulseEffectID.c_str()] andPulseEffectVersion: pulseEffectVersion];
-    }
-}
-
 void LSFPulseEffectManagerCallback::SetPulseEffectNameReplyCB(const LSFResponseCode& responseCode, const LSFString& pulseEffectID, const LSFString& language)
 {
     if (_pemDelegate != nil)

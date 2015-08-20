@@ -72,12 +72,6 @@
     return self.lampManager->GetLampName(lid, lang);
 }
 
--(ControllerClientStatus)getLampVersion: (NSString *)lampID
-{
-    std::string lid([lampID UTF8String]);
-    return CONTROLLER_CLIENT_OK; //self.lampManager->GetLampVersion(lid);
-}
-
 -(ControllerClientStatus)setLampNameWithID: (NSString *)lampID andName: (NSString *)name
 {
     std::string lid([lampID UTF8String]);

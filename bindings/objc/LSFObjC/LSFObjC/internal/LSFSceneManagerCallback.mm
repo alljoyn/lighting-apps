@@ -50,14 +50,6 @@ void LSFSceneManagerCallback::GetSceneNameReplyCB(const LSFResponseCode& respons
     }
 }
 
-void LSFSceneManagerCallback::GetSceneVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const uint32_t& sceneVersion)
-{
-    if (_smDelegate != nil)
-    {
-        [_smDelegate getSceneVersionReplyWithCode: responseCode sceneID: [NSString stringWithUTF8String: sceneID.c_str()] andSceneVersion: sceneVersion];
-    }
-}
-
 void LSFSceneManagerCallback::SetSceneNameReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const LSFString& language)
 {
     if (_smDelegate != nil)

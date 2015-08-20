@@ -28,7 +28,6 @@
 -(ControllerClientStatus)getAllSceneIDs;
 -(ControllerClientStatus)getSceneNameWithID: (NSString *)sceneID;
 -(ControllerClientStatus)getSceneNameWithID: (NSString *)sceneID andLanguage: (NSString *)language;
--(ControllerClientStatus)getSceneVersionWithID: (NSString *)sceneID;
 -(ControllerClientStatus)setSceneNameWithID: (NSString *)sceneID andSceneName: (NSString *)sceneName;
 -(ControllerClientStatus)setSceneNameWithID: (NSString *)sceneID sceneName: (NSString *)sceneName andLanguage: (NSString *)language;
 -(ControllerClientStatus)createScene: (LSFScene *)scene andSceneName: (NSString *)sceneName;

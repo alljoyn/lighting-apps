@@ -31,7 +31,6 @@ using namespace lsf;
 -(ControllerClientStatus)getLampGroupNameForID: (NSString *)groupID andLanguage: (NSString *)language;
 -(ControllerClientStatus)setLampGroupNameForID: (NSString *)groupID andName: (NSString *)name;
 -(ControllerClientStatus)setLampGroupNameForID: (NSString *)groupID andName: (NSString *)name andLanguage: (NSString *)language;
--(ControllerClientStatus)getLampGroupVersionForID: (NSString *)groupID;
 -(ControllerClientStatus)createLampGroup: (LSFLampGroup *)lampGroup withName: (NSString *)lampGroupName;
 -(ControllerClientStatus)createLampGroup: (LSFLampGroup *)lampGroup withName: (NSString *)lampGroupName andLanguage: (NSString *)language;
 -(ControllerClientStatus)createLampGroupWithTracking: (uint32_t *)trackingID lampGroup: (LSFLampGroup *)lampGroup withName: (NSString *)lampGroupName;

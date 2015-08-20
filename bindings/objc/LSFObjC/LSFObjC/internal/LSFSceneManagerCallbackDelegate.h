@@ -24,7 +24,6 @@
 @required
 -(void)getAllSceneIDsReplyWithCode: (LSFResponseCode)rc andSceneIDs: (NSArray *)sceneIDs;
 -(void)getSceneNameReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID language: (NSString *)language andName: (NSString *)sceneName;
--(void)getSceneVersionReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID andSceneVersion: (unsigned int)sceneVersion;
 -(void)setSceneNameReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID andLanguage: (NSString *)language;
 -(void)scenesNameChanged: (NSArray *)sceneIDs;
 -(void)createSceneReplyWithCode: (LSFResponseCode)rc andSceneID: (NSString *)sceneID;

@@ -76,13 +76,6 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_deletePulseEff
     return XCppDelegator::Call_ControllerClientStatus_String<XPulseEffectManager>(env, thiz, jPulseEffectID, &XPulseEffectManager::DeletePulseEffect);
 }
 
-JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_getPulseEffectVersion(JNIEnv *env, jobject thiz, jstring jPulseEffectID)
-{
-    // TODO-FIX uncomment whrn GetPulseEffectVersion is implemented in ControllerService
-//    return XCppDelegator::Call_ControllerClientStatus_String<XPulseEffectManager>(env, thiz, jPulseEffectID, &XPulseEffectManager::GetPulseEffectVersion);
-    return NULL;
-}
-
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PulseEffectManager_getPulseEffectDataSet(JNIEnv *env, jobject thiz, jstring jPulseEffectID, jstring jLanguage)
 {
     return XCppDelegator::Call_ControllerClientStatus_String_String<XPulseEffectManager>(env, thiz, jPulseEffectID, jLanguage, &XPulseEffectManager::GetPulseEffectDataSet);

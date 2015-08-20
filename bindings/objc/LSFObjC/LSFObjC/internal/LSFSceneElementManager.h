@@ -26,7 +26,6 @@
 -(ControllerClientStatus)getAllSceneElementIDs;
 -(ControllerClientStatus)getSceneElementNameWithID: (NSString *)sceneElementID;
 -(ControllerClientStatus)getSceneElementNameWithID: (NSString *)sceneElementID andLanguage: (NSString *)language;
--(ControllerClientStatus)getSceneElementVersionWithID: (NSString *)sceneElementID;
 -(ControllerClientStatus)setSceneElementNameWithID: (NSString *)sceneElementID andSceneElementName: (NSString *)sceneElementName;
 -(ControllerClientStatus)setSceneElementNameWithID: (NSString *)sceneElementID sceneElementName: (NSString *)sceneElementName andLanguage: (NSString *)language;
 -(ControllerClientStatus)createSceneElementWithTracking: (uint32_t *)trackingID sceneElement: (LSFSceneElement *)sceneElement andSceneElementName: (NSString *)sceneElementName;

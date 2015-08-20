@@ -121,11 +121,6 @@
     }
 }
 
--(void)getLampGroupVersionReplyWithCode: (LSFResponseCode)rc groupID: (NSString *)groupID andVersion: (unsigned int)version
-{
-    //TODO - implement, unused at this time
-}
-
 -(void)setLampGroupNameReplyWithCode: (LSFResponseCode)rc groupID: (NSString*)groupID andLanguage: (NSString *)language
 {
     if (rc != LSF_OK)

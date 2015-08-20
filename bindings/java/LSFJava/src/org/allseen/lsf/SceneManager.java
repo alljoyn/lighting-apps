@@ -37,7 +37,6 @@ public class SceneManager extends BaseNativeClassWrapper {
     public native ControllerClientStatus createSceneWithSceneElements(TrackingID trackingID, SceneWithSceneElements scene, String sceneName, String language);
     public native ControllerClientStatus updateSceneWithSceneElements(String sceneID, SceneWithSceneElements scene);
     public native ControllerClientStatus getSceneWithSceneElements(String sceneID);
-    public native ControllerClientStatus getSceneVersion(String sceneID);
     public native ControllerClientStatus getSceneDataSet(String sceneID, String language);
     public native ControllerClientStatus getSceneWithSceneElementsDataSet(String sceneID, String language);
 

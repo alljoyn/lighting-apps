@@ -110,11 +110,6 @@ static const unsigned int ABOUT_DELAY_IN_MS = 250;
     }
 }
 
--(void)getLampVersionReplyWithCode: (LSFResponseCode)rc lampID: (NSString*)lampID andVersion: (unsigned int)version
-{
-    //TODO - implement later, unused at this time
-}
-
 -(void)getLampManufacturerReplyWithCode: (LSFResponseCode)rc lampID: (NSString*)lampID language: (NSString*)language andManufacturer: (NSString*)manufacturer
 {
     //TODO - implement later, unused at this time

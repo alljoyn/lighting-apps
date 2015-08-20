@@ -60,12 +60,6 @@
     return self.masterSceneManager->GetMasterSceneName(msid, lang);
 }
 
--(ControllerClientStatus)getMasterSceneVersionWithID: (NSString *)masterSceneID
-{
-    std::string msid([masterSceneID UTF8String]);
-    return CONTROLLER_CLIENT_OK; //self.masterSceneManager->GetMasterSceneVersion(msid);
-}
-
 -(ControllerClientStatus)setMasterSceneNameWithID: (NSString *)masterSceneID andMasterSceneName: (NSString *)masterSceneName
 {
     std::string msid([masterSceneID UTF8String]);

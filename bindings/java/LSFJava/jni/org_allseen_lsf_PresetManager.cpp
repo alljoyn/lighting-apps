@@ -76,13 +76,6 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_setDefaultLampState
     return XCppDelegator::Call_ControllerClientStatus_Object<XPresetManager, JLampState, LampState>(env, thiz, jDefaultLampState, &XPresetManager::SetDefaultLampState);
 }
 
-JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_getPresetVersion(JNIEnv *env, jobject thiz, jstring jPresetID)
-{
-    // TODO-FIX uncomment when GetPresetVersion is implemented in ControllerClient
-//    return XCppDelegator::Call_ControllerClientStatus_String<XPresetManager>(env, thiz, jPresetID, &XPresetManager::GetPresetVersion);
-    return NULL;
-}
-
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_createPresetWithTracking(JNIEnv *env, jobject thiz, jobject jTrackingID, jobject jPreset, jstring jPresetName, jstring jLanguage)
 {
     return XCppDelegator::Call_ControllerClientStatus_TrackingID_Object_String_String<XPresetManager, JLampState, LampState>(env, thiz, jTrackingID, jPreset, jPresetName, jLanguage, &XPresetManager::CreatePresetWithTracking);

@@ -29,7 +29,6 @@ public:
     void GetPresetReplyCB(const LSFResponseCode& responseCode, const LSFString& presetID, const LampState& preset);
     void GetAllPresetIDsReplyCB(const LSFResponseCode& responseCode, const LSFStringList& presetIDs);
     void GetPresetNameReplyCB(const LSFResponseCode& responseCode, const LSFString& presetID, const LSFString& language, const LSFString& presetName);
-    void GetPresetVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& presetID, const uint32_t& presetVersion);
     void SetPresetNameReplyCB(const LSFResponseCode& responseCode, const LSFString& presetID, const LSFString& language);
     void PresetsNameChangedCB(const LSFStringList& presetIDs);
     void CreatePresetReplyCB(const LSFResponseCode& responseCode, const LSFString& presetID);

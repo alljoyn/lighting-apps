@@ -39,7 +39,6 @@ public class MasterSceneManagerCallback extends DefaultNativeClassWrapper {
     public void applyMasterSceneReplyCB(ResponseCode responseCode, String masterSceneID)                                                { }
     public void masterScenesAppliedCB(String[] masterSceneIDs)                                                                          { }
     public void createMasterSceneWithTrackingReplyCB(ResponseCode responseCode, String masterSceneID, long trackingID)                  { }
-    public void getMasterSceneVersionReplyCB(ResponseCode responseCode, String masterSceneID, long masterSceneVersion)                  { }
 
     // @Override
     @Override

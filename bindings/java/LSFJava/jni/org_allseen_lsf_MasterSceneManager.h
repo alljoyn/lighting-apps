@@ -91,14 +91,6 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_MasterSceneManager_applyMasterSce
 
 /*
  * Class:     org_allseen_lsf_MasterSceneManager
- * Method:    getMasterSceneVersion
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
- */
-JNIEXPORT jobject JNICALL Java_org_allseen_lsf_MasterSceneManager_getMasterSceneVersion
-  (JNIEnv *, jobject, jstring);
-
-/*
- * Class:     org_allseen_lsf_MasterSceneManager
  * Method:    createMasterSceneWithTracking
  * Signature: (Lorg/allseen/lsf/sdk/TrackingID;Lorg/allseen/lsf/MasterScene;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */

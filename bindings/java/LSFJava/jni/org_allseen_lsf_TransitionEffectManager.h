@@ -99,14 +99,6 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_deleteTra
 
 /*
  * Class:     org_allseen_lsf_TransitionEffectManager
- * Method:    getTransitionEffectVersion
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
- */
-JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_getTransitionEffectVersion
-  (JNIEnv *, jobject, jstring);
-
-/*
- * Class:     org_allseen_lsf_TransitionEffectManager
  * Method:    getTransitionEffectDataSet
  * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */

@@ -60,12 +60,6 @@
     return self.sceneManager->GetSceneName(sid, lang);
 }
 
--(ControllerClientStatus)getSceneVersionWithID: (NSString *)sceneID
-{
-    std::string sid([sceneID UTF8String]);
-    return CONTROLLER_CLIENT_OK; //self.sceneManager->GetSceneVersion(sid);
-}
-
 -(ControllerClientStatus)setSceneNameWithID: (NSString *)sceneID andSceneName: (NSString *)sceneName
 {
     std::string sid([sceneID UTF8String]);

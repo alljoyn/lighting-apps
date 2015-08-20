@@ -28,7 +28,6 @@ using namespace lsf;
 @required
 -(void)getAllLampIDsReplyWithCode: (LSFResponseCode)rc andLampIDs: (NSArray *)lampIDs;
 -(void)getLampNameReplyWithCode: (LSFResponseCode)rc lampID: (NSString*)lampID language: (NSString*)language andLampName: (NSString*)name;
--(void)getLampVersionReplyWithCode: (LSFResponseCode)rc lampID: (NSString*)lampID andVersion: (unsigned int)version;
 -(void)getLampManufacturerReplyWithCode: (LSFResponseCode)rc lampID: (NSString*)lampID language: (NSString*)language andManufacturer: (NSString*)manufacturer;
 -(void)setLampNameReplyWithCode: (LSFResponseCode)rc lampID: (NSString*)lampID andLanguage: (NSString*)language;
 -(void)lampsNameChangedWithID: (NSString *)lampID andName: (NSString *)name;

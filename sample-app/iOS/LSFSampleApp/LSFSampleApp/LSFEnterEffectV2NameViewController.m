@@ -16,7 +16,9 @@
 
 #import "LSFEnterEffectV2NameViewController.h"
 #import "LSFEffectV2TypeTableViewController.h"
-#import "LSFEffectV2PropertiesTableViewController.h"
+#import "LSFPresetEffectV2TableViewController.h"
+#import "LSFTransitionEffectV2TableViewController.h"
+#import "LSFPulseEffectV2TableViewController.h"
 #import <LSFSDKLightingDirector.h>
 
 @interface LSFEnterEffectV2NameViewController ()
@@ -65,10 +67,24 @@
 {
     NSString *identifier = segue.identifier;
 
-    if ([identifier isEqualToString: @"PresetEffect"] || [identifier isEqualToString: @"TransitionEffect"] || [identifier isEqualToString: @"PulseEffect"])
+    if ([identifier isEqualToString: @"PresetEffect"])
     {
-        LSFEffectV2PropertiesTableViewController *eptvc = [segue destinationViewController];
-        eptvc.pendingEffect = self.pendingEffect;
+        LSFPresetEffectV2TableViewController *petvc = [segue destinationViewController];
+        petvc.pendingEffect = self.pendingEffect;
+    }
+    else if ([identifier isEqualToString: @"TransitionEffect"])
+    {
+        self.pendingEffect.duration = 5000;
+
+        LSFTransitionEffectV2TableViewController *tetvc = [segue destinationViewController];
+        tetvc.pendingEffect = self.pendingEffect;
+    }
+    else if ([identifier isEqualToString: @"PulseEffect"])
+    {
+        self.pendingEffect.duration = 500;
+
+        LSFPulseEffectV2TableViewController *petvc = [segue destinationViewController];
+        petvc.pendingEffect = self.pendingEffect;
     }
 }
 

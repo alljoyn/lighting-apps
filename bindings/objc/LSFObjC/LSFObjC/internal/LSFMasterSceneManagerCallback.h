@@ -28,7 +28,6 @@ public:
     ~LSFMasterSceneManagerCallback();
     void GetAllMasterSceneIDsReplyCB(const LSFResponseCode& responseCode, const LSFStringList& masterSceneList);
     void GetMasterSceneNameReplyCB(const LSFResponseCode& responseCode, const LSFString& masterSceneID, const LSFString& language, const LSFString& masterSceneName);
-    void GetMasterSceneVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& masterSceneID, const uint32_t& masterSceneVersion);
     void SetMasterSceneNameReplyCB(const LSFResponseCode& responseCode, const LSFString& masterSceneID, const LSFString& language);
     void MasterScenesNameChangedCB(const LSFStringList& masterSceneIDs);
     void CreateMasterSceneReplyCB(const LSFResponseCode& responseCode, const LSFString& masterSceneID);

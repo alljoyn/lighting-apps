@@ -25,7 +25,6 @@ using namespace lsf;
 @required
 -(void)getAllLampGroupIDsReplyWithCode: (LSFResponseCode)rc andGroupIDs: (NSArray*)groupIDs;
 -(void)getLampGroupNameReplyWithCode: (LSFResponseCode)rc groupID: (NSString*)groupID language: (NSString *)language andGroupName: (NSString*)name;
--(void)getLampGroupVersionReplyWithCode: (LSFResponseCode)rc groupID: (NSString *)groupID andVersion: (unsigned int)version;
 -(void)setLampGroupNameReplyWithCode: (LSFResponseCode)rc groupID: (NSString*)groupID andLanguage: (NSString *)language;
 -(void)lampGroupsNameChanged: (NSArray *)groupIDs;
 -(void)createLampGroupReplyWithCode: (LSFResponseCode)rc andGroupID: (NSString *)groupID;

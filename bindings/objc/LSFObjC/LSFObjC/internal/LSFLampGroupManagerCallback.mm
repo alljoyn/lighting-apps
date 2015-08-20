@@ -49,14 +49,6 @@ void LSFLampGroupManagerCallback::GetLampGroupNameReplyCB(const LSFResponseCode&
     }
 }
 
-void LSFLampGroupManagerCallback::GetLampGroupVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const uint32_t& lampGroupVersion)
-{
-    if (_lgmDelegate != nil)
-    {
-        [_lgmDelegate getLampGroupVersionReplyWithCode: responseCode groupID: [NSString stringWithUTF8String: lampGroupID.c_str()] andVersion: lampGroupVersion];
-    }
-}
-
 void LSFLampGroupManagerCallback::SetLampGroupNameReplyCB(const LSFResponseCode& responseCode, const LSFString& lampGroupID, const LSFString& language)
 {
     if (_lgmDelegate != nil)

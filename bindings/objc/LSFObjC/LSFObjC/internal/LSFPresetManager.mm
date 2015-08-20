@@ -66,12 +66,6 @@
     return self.presetManager->GetPresetName(pid, lang);
 }
 
--(ControllerClientStatus)getPresetVersionWithID: (NSString *)presetID
-{
-    std::string pid([presetID UTF8String]);
-    return CONTROLLER_CLIENT_OK; //self.presetManager->GetPresetVersion(pid);
-}
-
 -(ControllerClientStatus)setPresetNameWithID: (NSString *)presetID andPresetName: (NSString *)name
 {
     std::string pid([presetID UTF8String]);

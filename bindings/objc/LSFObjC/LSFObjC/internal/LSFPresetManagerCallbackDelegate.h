@@ -26,7 +26,6 @@ using namespace lsf;
 -(void)getPresetReplyWithCode: (LSFResponseCode)rc presetID: (NSString *)presetID andPreset: (LSFLampState *)preset;
 -(void)getAllPresetIDsReplyWithCode: (LSFResponseCode)rc andPresetIDs: (NSArray *)presetIDs;
 -(void)getPresetNameReplyWithCode: (LSFResponseCode)rc presetID: (NSString *)presetID language: (NSString *)language andPresetName: (NSString *)presetName;
--(void)getPresetVersionReplyWithCode: (LSFResponseCode)rc presetID: (NSString *)presetID andPresetVersion: (unsigned int)version;
 -(void)setPresetNameReplyWithCode: (LSFResponseCode)rc presetID: (NSString *)presetID andLanguage: (NSString *)language;
 -(void)presetsNameChanged: (NSArray *)presetIDs;
 -(void)createPresetReplyWithCode: (LSFResponseCode)rc andPresetID: (NSString *)presetID;

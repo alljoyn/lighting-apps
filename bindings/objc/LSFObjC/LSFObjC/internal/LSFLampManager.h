@@ -30,7 +30,6 @@ using namespace lsf;
 -(ControllerClientStatus)getLampManufacturerForID: (NSString *)lampID andLanguage: (NSString *)language;
 -(ControllerClientStatus)getLampName: (NSString *)lampID;
 -(ControllerClientStatus)getLampName: (NSString *)lampID andLanguage: (NSString *)language;
--(ControllerClientStatus)getLampVersion: (NSString *)lampID;
 -(ControllerClientStatus)setLampNameWithID: (NSString *)lampID andName: (NSString *)name;
 -(ControllerClientStatus)setLampNameWithID: (NSString *)lampID name: (NSString *)name andLanguage: (NSString *)language;
 -(ControllerClientStatus)getLampDetailsForID: (NSString *)lampID;

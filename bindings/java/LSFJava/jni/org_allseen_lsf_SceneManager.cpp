@@ -106,14 +106,6 @@ jobject JNICALL Java_org_allseen_lsf_SceneManager_getSceneWithSceneElements(JNIE
 }
 
 JNIEXPORT
-jobject JNICALL Java_org_allseen_lsf_SceneManager_getSceneVersion(JNIEnv *env, jobject thiz, jstring jSceneID)
-{
-    // TODO-FIX uncomment once GetSceneVersion is implemented in ControllerClient
-//    return XCppDelegator::Call_ControllerClientStatus_String<XSceneManager>(env, thiz, jSceneID, &XSceneManager::GetSceneVersion);
-    return NULL;
-}
-
-JNIEXPORT
 jobject JNICALL Java_org_allseen_lsf_SceneManager_getSceneDataSet(JNIEnv *env, jobject thiz, jstring jSceneID, jstring jLanguage)
 {
     return XCppDelegator::Call_ControllerClientStatus_String_String<XSceneManager>(env, thiz, jSceneID, jLanguage, &XSceneManager::GetSceneDataSet);

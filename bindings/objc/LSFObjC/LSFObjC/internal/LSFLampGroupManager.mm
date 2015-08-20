@@ -75,12 +75,6 @@
     return self.lampGroupManager->SetLampGroupName(gid, groupName, lang);
 }
 
--(ControllerClientStatus)getLampGroupVersionForID: (NSString *)groupID
-{
-    std::string gid([groupID UTF8String]);
-    return CONTROLLER_CLIENT_OK; //self.lampGroupManager->GetLampGroupVersion(gid);
-}
-
 -(ControllerClientStatus)createLampGroup: (LSFLampGroup *)lampGroup withName: (NSString *)lampGroupName
 {
     std::string groupName([lampGroupName UTF8String]);

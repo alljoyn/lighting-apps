@@ -90,12 +90,6 @@
     return self.transitionEffectManager->GetTransitionEffectName(teid, lang);
 }
 
--(ControllerClientStatus)getTransitionEffectVersionWithID: (NSString *)transitionEffectID
-{
-    std::string teid([transitionEffectID UTF8String]);
-    return CONTROLLER_CLIENT_OK; //self.transitionEffectManager->GetTransitionEffectVersion(teid);
-}
-
 -(ControllerClientStatus)setTransitionEffectNameWithID: (NSString *)transitionEffectID transitionEffectName: (NSString *)transitionEffectName
 {
     std::string teid([transitionEffectID UTF8String]);

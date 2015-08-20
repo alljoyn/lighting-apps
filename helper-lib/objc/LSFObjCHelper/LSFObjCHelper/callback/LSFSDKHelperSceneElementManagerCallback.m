@@ -77,11 +77,6 @@
     [self postUpdateSceneElementNameForID: sceneElementID sceneElementName: sceneElementName];
 }
 
--(void)getSceneElementVersionReplyWithCode: (LSFResponseCode)rc sceneElementID: (NSString *)sceneElementID andSceneElementVersion: (unsigned int)sceneElementVersion
-{
-    //Currently does nothing
-}
-
 -(void)setSceneElementNameReplyWithCode: (LSFResponseCode)rc sceneElementID: (NSString *)sceneElementID andLanguage: (NSString *)language
 {
     if (rc != LSF_OK)

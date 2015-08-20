@@ -77,11 +77,6 @@
     [self postUpdateMasterSceneNameForID: masterSceneID masterSceneName: masterSceneName];
 }
 
--(void)getMasterSceneVersionReplyWithCode: (LSFResponseCode)rc masterSceneID: (NSString *)masterSceneID andMasterSceneVersion: (unsigned int)masterSceneVersion
-{
-    //Currently does nothing
-}
-
 -(void)setMasterSceneNameReplyWithCode: (LSFResponseCode)rc masterSceneID: (NSString *)masterSceneID andLanguage: (NSString *)language
 {
     if (rc != LSF_OK)

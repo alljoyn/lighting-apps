@@ -76,13 +76,6 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_deleteTra
     return XCppDelegator::Call_ControllerClientStatus_String<XTransitionEffectManager>(env, thiz, jTransitionEffectID, &XTransitionEffectManager::DeleteTransitionEffect);
 }
 
-JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_getTransitionEffectVersion(JNIEnv *env, jobject thiz, jstring jTransitionEffectID)
-{
-    // TODO-FIX uncomment whrn GetTransitionEffectVersion is implmeneted in ControllerClient
-//    return XCppDelegator::Call_ControllerClientStatus_String<XTransitionEffectManager>(env, thiz, jTransitionEffectID, &XTransitionEffectManager::GetTransitionEffectVersion);
-    return NULL;
-}
-
 JNIEXPORT jobject JNICALL Java_org_allseen_lsf_TransitionEffectManager_getTransitionEffectDataSet(JNIEnv *env, jobject thiz, jstring jTransitionEffectID, jstring jLanguage)
 {
     return XCppDelegator::Call_ControllerClientStatus_String_String<XTransitionEffectManager>(env, thiz, jTransitionEffectID, jLanguage, &XTransitionEffectManager::GetTransitionEffectDataSet);

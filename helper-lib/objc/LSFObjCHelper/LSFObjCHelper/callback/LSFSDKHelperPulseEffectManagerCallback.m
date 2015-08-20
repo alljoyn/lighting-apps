@@ -104,11 +104,6 @@
     [self postUpdatePulseEffectNameForID: pulseEffectID pulseEffectName: pulseEffectName];
 }
 
--(void)getPulseEffectVersionReplyWithCode: (LSFResponseCode)rc pulseEffectID: (NSString *)pulseEffectID andPulseEffectVersion: (unsigned int)pulseEffectVersion
-{
-    //Currently does nothing
-}
-
 -(void)setPulseEffectNameReplyWithCode: (LSFResponseCode)rc pulseEffectID: (NSString *)pulseEffectID andLanguage: (NSString *)language
 {
     if (rc != LSF_OK)

@@ -28,7 +28,6 @@ public:
     ~LSFSceneManagerCallback();
     void GetAllSceneIDsReplyCB(const LSFResponseCode& responseCode, const LSFStringList& sceneIDs);
     void GetSceneNameReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const LSFString& language, const LSFString& sceneName);
-    void GetSceneVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const uint32_t& sceneVersion);
     void SetSceneNameReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID, const LSFString& language);
     void ScenesNameChangedCB(const LSFStringList& sceneIDs);
     void CreateSceneReplyCB(const LSFResponseCode& responseCode, const LSFString& sceneID);

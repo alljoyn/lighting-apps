@@ -64,14 +64,6 @@ void LSFPresetManagerCallback::GetPresetNameReplyCB(const LSFResponseCode& respo
     }
 }
 
-void LSFPresetManagerCallback::GetPresetVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& presetID, const uint32_t& presetVersion)
-{
-    if (_pmDelegate != nil)
-    {
-        [_pmDelegate getPresetVersionReplyWithCode: responseCode presetID: [NSString stringWithUTF8String: presetID.c_str()] andPresetVersion: presetVersion];
-    }
-}
-
 void LSFPresetManagerCallback::SetPresetNameReplyCB(const LSFResponseCode& responseCode, const LSFString& presetID, const LSFString& language)
 {
     if (_pmDelegate != nil)

@@ -66,11 +66,6 @@
     [self postUpdateSceneNameForID: sceneID sceneName: sceneName];
 }
 
--(void)getSceneVersionReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID andSceneVersion: (unsigned int)sceneVersion
-{
-    //TODO - unsused at this time
-}
-
 -(void)setSceneNameReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID andLanguage: (NSString *)language
 {
     if (rc != LSF_OK)

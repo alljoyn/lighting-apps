@@ -24,7 +24,6 @@ using namespace lsf;
 
 -(void)getAllSceneElementIDsReplyWithCode: (LSFResponseCode)rc andSceneElementIDs: (NSArray *)sceneElementIDs;
 -(void)getSceneElementNameReplyWithCode: (LSFResponseCode)rc sceneElementID: (NSString *)sceneElementID language: (NSString *)language andSceneElementName: (NSString *)sceneElementName;
--(void)getSceneElementVersionReplyWithCode: (LSFResponseCode)rc sceneElementID: (NSString *)sceneElementID andSceneElementVersion: (unsigned int)sceneElementVersion;
 -(void)setSceneElementNameReplyWithCode: (LSFResponseCode)rc sceneElementID: (NSString *)sceneElementID andLanguage: (NSString *)language;
 -(void)sceneElementsNameChanged: (NSArray *)sceneElementIDs;
 -(void)createSceneElementReplyWithCode: (LSFResponseCode)rc sceneElementID: (NSString *)sceneElementID andTrackingID: (unsigned int)trackingID;

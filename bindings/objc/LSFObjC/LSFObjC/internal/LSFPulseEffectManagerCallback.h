@@ -31,7 +31,6 @@ public:
     void ApplyPulseEffectOnLampGroupsReplyCB(const LSFResponseCode& responseCode, const LSFString& pulseEffectID, const LSFStringList& lampGroupIDs);
     void GetAllPulseEffectIDsReplyCB(const LSFResponseCode& responseCode, const LSFStringList& pulseEffectIDs);
     void GetPulseEffectNameReplyCB(const LSFResponseCode& responseCode, const LSFString& pulseEffectID, const LSFString& language, const LSFString& pulseEffectName);
-    void GetPulseEffectVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& pulseEffectID, const uint32_t& pulseEffectVersion);
     void SetPulseEffectNameReplyCB(const LSFResponseCode& responseCode, const LSFString& pulseEffectID, const LSFString& language);
     void PulseEffectsNameChangedCB(const LSFStringList& pulseEffectIDs);
     void CreatePulseEffectReplyCB(const LSFResponseCode& responseCode, const LSFString& pulseEffectID, const uint32_t& trackingID);

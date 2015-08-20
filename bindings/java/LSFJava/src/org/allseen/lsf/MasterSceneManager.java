@@ -33,7 +33,6 @@ public class MasterSceneManager extends BaseNativeClassWrapper {
     public native ControllerClientStatus getMasterScene(String masterSceneID);
     public native ControllerClientStatus deleteMasterScene(String masterSceneID);
     public native ControllerClientStatus applyMasterScene(String masterSceneID);
-    public native ControllerClientStatus getMasterSceneVersion(String masterSceneID);
     public native ControllerClientStatus createMasterSceneWithTracking(TrackingID trackingID, MasterScene masterScene, String masterSceneName, String language);
     public native ControllerClientStatus getMasterSceneDataSet(String masterSceneID, String language);
 

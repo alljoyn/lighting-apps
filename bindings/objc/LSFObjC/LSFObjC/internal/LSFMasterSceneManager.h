@@ -26,7 +26,6 @@
 -(ControllerClientStatus)getAllMasterSceneIDs;
 -(ControllerClientStatus)getMasterSceneNameWithID: (NSString *)masterSceneID;
 -(ControllerClientStatus)getMasterSceneNameWithID: (NSString *)masterSceneID andLanguage: (NSString *)language;
--(ControllerClientStatus)getMasterSceneVersionWithID: (NSString *)masterSceneID;
 -(ControllerClientStatus)setMasterSceneNameWithID: (NSString *)masterSceneID andMasterSceneName: (NSString *)masterSceneName;
 -(ControllerClientStatus)setMasterSceneNameWithID: (NSString *)masterSceneID masterSceneName: (NSString *)masterSceneName andLanguage: (NSString *)language;
 -(ControllerClientStatus)createMasterScene: (LSFMasterScene *)masterScene withName: (NSString *)masterSceneName;

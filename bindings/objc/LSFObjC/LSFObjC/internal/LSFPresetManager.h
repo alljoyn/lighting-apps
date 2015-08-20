@@ -28,7 +28,6 @@
 -(ControllerClientStatus)getPresetWithID: (NSString *)presetID;
 -(ControllerClientStatus)getPresetNameWithID: (NSString *)presetID;
 -(ControllerClientStatus)getPresetNameWithID: (NSString *)presetID andLanguage: (NSString *)language;
--(ControllerClientStatus)getPresetVersionWithID: (NSString *)presetID; //Not Implemented in PresetManager.cc
 -(ControllerClientStatus)setPresetNameWithID: (NSString *)presetID andPresetName: (NSString *)name;
 -(ControllerClientStatus)setPresetNameWithID: (NSString *)presetID presetName: (NSString *)name andLanguage: (NSString *)language;
 -(ControllerClientStatus)createPresetWithState: (LSFLampState *)preset andPresetName: (NSString *)name;

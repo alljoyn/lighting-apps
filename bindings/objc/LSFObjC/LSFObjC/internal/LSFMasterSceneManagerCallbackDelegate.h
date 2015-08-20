@@ -23,7 +23,6 @@
 @required
 -(void)getAllMasterSceneIDsReplyWithCode: (LSFResponseCode)rc andMasterSceneIDs: (NSArray *)masterSceneIDs;
 -(void)getMasterSceneNameReplyWithCode: (LSFResponseCode)rc masterSceneID: (NSString *)masterSceneID language: (NSString *)language andName: (NSString *)masterSceneName;
--(void)getMasterSceneVersionReplyWithCode: (LSFResponseCode)rc masterSceneID: (NSString *)masterSceneID andMasterSceneVersion: (unsigned int)masterSceneVersion;
 -(void)setMasterSceneNameReplyWithCode: (LSFResponseCode)rc masterSceneID: (NSString *)masterSceneID andLanguage: (NSString *)language;
 -(void)masterScenesNameChanged: (NSArray *)masterSceneIDs;
 -(void)createMasterSceneReplyWithCode: (LSFResponseCode)rc andMasterSceneID: (NSString *)masterSceneID;

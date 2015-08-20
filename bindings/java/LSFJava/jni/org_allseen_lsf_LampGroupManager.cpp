@@ -162,14 +162,6 @@ jobject JNICALL Java_org_allseen_lsf_LampGroupManager_resetLampGroupStateColorTe
 }
 
 JNIEXPORT
-jobject JNICALL Java_org_allseen_lsf_LampGroupManager_getLampGroupVersion(JNIEnv *env, jobject thiz, jstring jGroupID)
-{
-    // TODO-FIX uncomment when implemented in ControllerClient
-//    return XCppDelegator::Call_ControllerClientStatus_String<JLampGroupManager>(env, thiz, jGroupID, &JLampGroupManager::GetLampGroupVersion);
-    return NULL;
-}
-
-JNIEXPORT
 jobject JNICALL Java_org_allseen_lsf_LampGroupManager_createLampGroupWithTracking(JNIEnv *env, jobject thiz, jobject jTrackingID, jobject jGroup, jstring jGroupName, jstring jLanguage)
 {
     return XCppDelegator::Call_ControllerClientStatus_TrackingID_Object_String_String<JLampGroupManager, JLampGroup, LampGroup>(env, thiz, jTrackingID, jGroup, jGroupName, jLanguage, &JLampGroupManager::CreateLampGroupWithTracking);

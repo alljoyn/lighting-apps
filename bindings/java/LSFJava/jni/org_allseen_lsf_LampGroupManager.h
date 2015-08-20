@@ -203,14 +203,6 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_resetLampGroupSt
 
 /*
  * Class:     org_allseen_lsf_LampGroupManager
- * Method:    getLampGroupVersion
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
- */
-JNIEXPORT jobject JNICALL Java_org_allseen_lsf_LampGroupManager_getLampGroupVersion
-  (JNIEnv *, jobject, jstring);
-
-/*
- * Class:     org_allseen_lsf_LampGroupManager
  * Method:    createLampGroupWithTracking
  * Signature: (Lorg/allseen/lsf/sdk/TrackingID;Lorg/allseen/lsf/LampGroup;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */

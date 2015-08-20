@@ -27,7 +27,6 @@
 -(ControllerClientStatus)applyPulseEffectWithID: (NSString *)pulseEffectID onLampGroups: (NSArray *)lampGroupIDs;
 -(ControllerClientStatus)getPulseEffectNameWithID: (NSString *)pulseEffectID;
 -(ControllerClientStatus)getPulseEffectNameWithID: (NSString *)pulseEffectID andLanguage: (NSString *)language;
--(ControllerClientStatus)getPulseEffectVersionWithID: (NSString *)pulseEffectID;
 -(ControllerClientStatus)setPulseEffectNameWithID: (NSString *)pulseEffectID pulseEffectName: (NSString *)pulseEffectName;
 -(ControllerClientStatus)setPulseEffectNameWithID: (NSString *)pulseEffectID pulseEffectName: (NSString *)pulseEffectName andLanguage: (NSString *)language;
 -(ControllerClientStatus)createPulseEffectWithTracking: (uint32_t *)trackingID pulseEffect: (LSFPulseEffectV2 *)pulseEffect andPulseEffectName: (NSString *)pulseEffectName;

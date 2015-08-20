@@ -88,11 +88,6 @@
     [self postUpdatePresetNameForID: presetID andPresetName: presetName];
 }
 
--(void)getPresetVersionReplyWithCode: (LSFResponseCode)rc presetID: (NSString *)presetID andPresetVersion: (unsigned int)version
-{
-    //Currently does nothing
-}
-
 -(void)setPresetNameReplyWithCode: (LSFResponseCode)rc presetID: (NSString *)presetID andLanguage: (NSString *)language
 {
     if (rc != LSF_OK)

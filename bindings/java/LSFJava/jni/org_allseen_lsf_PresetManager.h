@@ -99,14 +99,6 @@ JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_setDefaultLampState
 
 /*
  * Class:     org_allseen_lsf_PresetManager
- * Method:    getPresetVersion
- * Signature: (Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
- */
-JNIEXPORT jobject JNICALL Java_org_allseen_lsf_PresetManager_getPresetVersion
-  (JNIEnv *, jobject, jstring);
-
-/*
- * Class:     org_allseen_lsf_PresetManager
  * Method:    createPresetWithTracking
  * Signature: (Lorg/allseen/lsf/sdk/TrackingID;Lorg/allseen/lsf/LampState;Ljava/lang/String;Ljava/lang/String;)Lorg/allseen/lsf/sdk/ControllerClientStatus;
  */

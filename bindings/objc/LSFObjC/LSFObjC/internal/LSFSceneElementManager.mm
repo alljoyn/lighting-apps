@@ -60,12 +60,6 @@
     return self.sceneElementManager->GetSceneElementName(seid, lang);
 }
 
--(ControllerClientStatus)getSceneElementVersionWithID: (NSString *)sceneElementID
-{
-    std::string seid([sceneElementID UTF8String]);
-    return CONTROLLER_CLIENT_OK; //return self.sceneElementManager->GetSceneElementVersion(seid);
-}
-
 -(ControllerClientStatus)setSceneElementNameWithID: (NSString *)sceneElementID andSceneElementName: (NSString *)sceneElementName
 {
     std::string seid([sceneElementID UTF8String]);

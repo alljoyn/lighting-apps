@@ -27,7 +27,6 @@
 -(ControllerClientStatus)applyTranstionEffectWithID: (NSString *)transitionEffectID onLampGroups: (NSArray *)lampGroupIDs;
 -(ControllerClientStatus)getTransitionEffectNameWithID: (NSString *)transitionEffectID;
 -(ControllerClientStatus)getTransitionEffectNameWithID: (NSString *)transitionEffectID andLanguage: (NSString *)language;
--(ControllerClientStatus)getTransitionEffectVersionWithID: (NSString *)transitionEffectID;
 -(ControllerClientStatus)setTransitionEffectNameWithID: (NSString *)transitionEffectID transitionEffectName: (NSString *)transitionEffectName;
 -(ControllerClientStatus)setTransitionEffectNameWithID: (NSString *)transitionEffectID transitionEffectName: (NSString *)transitionEffectName andLanguage: (NSString *)language;
 -(ControllerClientStatus)createTransitionEffectWithTracking: (uint32_t *)trackingID transitionEffect: (LSFTransitionEffectV2 *)transitionEffect andTransitionEffectName: (NSString *)transitionEffectName;

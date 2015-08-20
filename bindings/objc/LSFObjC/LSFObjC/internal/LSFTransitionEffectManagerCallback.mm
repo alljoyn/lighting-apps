@@ -101,14 +101,6 @@ void LSFTransitionEffectManagerCallback::GetTransitionEffectNameReplyCB(const LS
     }
 }
 
-void LSFTransitionEffectManagerCallback::GetTransitionEffectVersionReplyCB(const LSFResponseCode& responseCode, const LSFString& transitionEffectID, const uint32_t& transitionEffectVersion)
-{
-    if (_temDelegate != nil)
-    {
-        [_temDelegate getTransitionEffectVersionReplyWithCode: responseCode transitionEffectID: [NSString stringWithUTF8String: transitionEffectID.c_str()] andTransitionEffectVersion: transitionEffectVersion];
-    }
-}
-
 void LSFTransitionEffectManagerCallback::SetTransitionEffectNameReplyCB(const LSFResponseCode& responseCode, const LSFString& transitionEffectID, const LSFString& language)
 {
     if (_temDelegate != nil)

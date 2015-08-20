@@ -41,7 +41,6 @@ public class SceneManagerCallback extends DefaultNativeClassWrapper {
     public void createSceneWithSceneElementsReplyCB(ResponseCode responseCode, String sceneID, long trackingID)             { }
     public void updateSceneWithSceneElementsReplyCB(ResponseCode responseCode, String sceneID)                              { }
     public void getSceneWithSceneElementsReplyCB(ResponseCode responseCode, String sceneID, SceneWithSceneElements scene)   { }
-    public void getSceneVersionReplyCB(ResponseCode responseCode, String sceneID, long sceneVersion)                        { }
 
     // @Override
     @Override
