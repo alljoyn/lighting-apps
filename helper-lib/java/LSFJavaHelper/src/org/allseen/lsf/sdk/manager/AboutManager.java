@@ -142,9 +142,9 @@ public class AboutManager implements AboutListener {
     }
 
     public void getLampQueriedAboutData(String lampID, String busName, short port) {
-        try {
-            Mutable.IntegerValue sessionId = new Mutable.IntegerValue();;
+        Mutable.IntegerValue sessionId = new Mutable.IntegerValue();;
 
+        try {
             SessionOpts sessionOpts = new SessionOpts();
             sessionOpts.traffic = SessionOpts.TRAFFIC_MESSAGES;
             sessionOpts.isMultipoint = false;
@@ -170,6 +170,8 @@ public class AboutManager implements AboutListener {
             }
         } catch (BusException e) {
             manager.getLampCollectionManager().sendErrorEvent("getLampQueriedAboutData(): " + e.getMessage(), ResponseCode.ERR_FAILURE, lampID);
+        } finally {
+            bus.leaveSession(sessionId.value);
         }
     }
 
