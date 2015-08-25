@@ -263,7 +263,7 @@ public class Preset extends MutableColorItem implements Effect {
                 ColorStateConverter.convertHueViewToModel(color.getHue()),
                 ColorStateConverter.convertSaturationViewToModel(color.getSaturation()),
                 ColorStateConverter.convertBrightnessViewToModel(color.getBrightness()),
-                ColorStateConverter.convertColorTempViewToModel(color.getHue()));
+                ColorStateConverter.convertColorTempViewToModel(color.getColorTemperature()));
     }
 
     /**

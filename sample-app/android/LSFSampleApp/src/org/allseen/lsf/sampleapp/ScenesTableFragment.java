@@ -15,6 +15,7 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import org.allseen.lsf.sdk.Effect;
 import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.MasterScene;
 import org.allseen.lsf.sdk.Scene;
@@ -75,7 +76,10 @@ public class ScenesTableFragment extends DetailedItemTableFragment {
     }
 
     public void addSceneElement(SampleAppActivity activity, SceneElement sceneElement) {
-        addItem(sceneElement, Util.createMemberNamesString(activity, sceneElement, ", ", R.string.scene_element_members_none), R.drawable.scene_element_set_icon);
+        Effect effect = sceneElement.getEffect();
+        String effectPrefix = effect != null ? effect.getName() + " - " : "";
+
+        addItem(sceneElement, effectPrefix + Util.createMemberNamesString(activity, sceneElement, ", ", R.string.scene_element_members_none), R.drawable.scene_element_set_icon);
         updateLoading();
     }
 

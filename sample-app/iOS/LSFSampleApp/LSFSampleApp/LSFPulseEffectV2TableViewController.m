@@ -81,31 +81,25 @@
     NSLog(@"Done Button Pressed for PulseEffect");
 
     // set start state
-    [super doneButtonPressed: sender];
+    self.pendingEffect.state = [self getSlidersState];
 
+    // handle preset match
+    NSArray* matchingPresets = [LSFUtilityFunctions getPresetsWithMyLampState: self.pendingEffect.state];
+    id<LSFSDKLampState> effectLampState = (matchingPresets.count > 0)? [matchingPresets objectAtIndex: 0] : self.pendingEffect.state;
+
+    // handle switch state
     if (self.startPropertiesSwitch.on)
     {
         self.pendingEffect.state = [[LSFSDKMyLampState alloc] init];
     }
 
     // set end state
-    Power power = (self.endBrightnessSlider.value == 0) ? OFF : ON;
-    unsigned int brightness = self.endBrightnessSlider.value;
-    unsigned int hue = self.endHueSlider.value;
-    unsigned int saturation = self.endSaturationSlider.value;
-    unsigned int colorTemp = self.endColorTempSlider.value;
-
-    LSFSDKMyLampState *state = [[LSFSDKMyLampState alloc] initWithPower: power hue: hue saturation: saturation brightness: brightness colorTemp: colorTemp];
-
-    NSLog(@"%@ - %u", @"End Brightness", brightness);
-    NSLog(@"%@ - %u", @"End Hue", hue);
-    NSLog(@"%@ - %u", @"End Saturation", saturation);
-    NSLog(@"%@ - %u", @"End ColorTemp", colorTemp);
-
-    self.pendingEffect.endState = state;
+    self.pendingEffect.endState = [self getEndSlidersState];
+    matchingPresets = [LSFUtilityFunctions getPresetsWithMyLampState: self.pendingEffect.endState];
+    id<LSFSDKLampState> effectLampEndState = (matchingPresets.count > 0)? [matchingPresets objectAtIndex: 0] : self.pendingEffect.endState;
 
     //create effect
-    [[LSFSDKLightingDirector getLightingDirector] createPulseEffectWithFromState: self.pendingEffect.state toState: self.pendingEffect.endState period: self.pendingEffect.period duration: self.pendingEffect.duration count: self.pendingEffect.pulses name: self.pendingEffect.name];
+    [[LSFSDKLightingDirector getLightingDirector] createPulseEffectWithFromState: effectLampState toState: effectLampEndState period: self.pendingEffect.period duration: self.pendingEffect.duration count: self.pendingEffect.pulses name: self.pendingEffect.name];
 
     [self dismissViewControllerAnimated: YES completion: nil];
 }
@@ -172,11 +166,19 @@
     }
     else if ([segue.identifier isEqualToString: @"PulsePreset"])
     {
+        // store the latest slider state into the pending effect
+        self.pendingEffect.state = [self getSlidersState];
+        self.pendingEffect.endState = [self getEndSlidersState];
+
         LSFSelectPresetTableViewController *sptvc = [segue destinationViewController];
         sptvc.state = self.pendingEffect.state;
     }
     else if ([segue.identifier isEqualToString: @"PulsePresetEnd"])
     {
+        // store the latest slider state into the pending effect
+        self.pendingEffect.state = [self getSlidersState];
+        self.pendingEffect.endState = [self getEndSlidersState];
+
         LSFSelectPresetTableViewController *sptvc = [segue destinationViewController];
         sptvc.state = self.pendingEffect.endState;
     }
@@ -245,6 +247,24 @@
 {
     NSString *endColorTempText = [NSString stringWithFormat: @"%iK", (uint32_t)sender.value];
     self.endColorTempLabel.text = endColorTempText;
+}
+
+-(LSFSDKMyLampState *)getEndSlidersState
+{
+    Power power = (self.brightnessSlider.value == 0) ? OFF : ON;
+    unsigned int brightness = self.endBrightnessSlider.value;
+    unsigned int hue = self.endHueSlider.value;
+    unsigned int saturation = self.endSaturationSlider.value;
+    unsigned int colorTemp = self.endColorTempSlider.value;
+
+    LSFSDKMyLampState *state = [[LSFSDKMyLampState alloc] initWithPower: power hue: hue saturation: saturation brightness: brightness colorTemp: colorTemp];
+
+    NSLog(@"%@ - %u", @"End Brightness", brightness);
+    NSLog(@"%@ - %u", @"End Hue", hue);
+    NSLog(@"%@ - %u", @"End Saturation", saturation);
+    NSLog(@"%@ - %u", @"End ColorTemp", colorTemp);
+
+    return state;
 }
 
 -(void)updateEndPresetButtonTitle: (UIButton*)presetButton

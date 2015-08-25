@@ -328,6 +328,22 @@
     presetColor.colorTemp == lampStateColor.colorTemp;
 }
 
++(NSArray *)getPresetsWithMyLampState: (LSFSDKMyLampState *)state
+{
+    NSMutableArray *presetsArray = [[NSMutableArray alloc] init];
+    for (LSFSDKPreset *preset in [[LSFSDKLightingDirector getLightingDirector] presets])
+    {
+        BOOL matchesPreset = [self preset: preset matchesMyLampState: state];
+
+        if (matchesPreset)
+        {
+            [presetsArray addObject: preset];
+        }
+    }
+
+    return presetsArray;
+}
+
 +(NSArray *)sortLightingItemsByName: (NSArray *)items
 {
     NSMutableArray *sortedArray = [NSMutableArray arrayWithArray: [items sortedArrayUsingComparator: ^NSComparisonResult(id a, id b) {

@@ -216,7 +216,7 @@
         NSUInteger insertionIndex = [LSFTableViewUtil findAlphaInsertIndexOf: effect inItems: self.data];
 
         // re-adjust the selected index if necessary
-        if (self.selectedIndexPath.row > insertionIndex)
+        if (self.selectedIndexPath.row >= insertionIndex)
         {
             NSIndexPath *newSelectedPath = [NSIndexPath indexPathForRow:(self.selectedIndexPath.row + 1) inSection:0];
             [self tableView: self.tableView didSelectRowAtIndexPath: newSelectedPath];

@@ -2314,7 +2314,7 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1OO-RQ-7K1">
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1OO-RQ-7K1">
                                                     <rect key="frame" x="145" y="12" width="133" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <state key="normal" title="Preset">
@@ -2324,7 +2324,7 @@
                                                         <segue destination="M3t-hF-m5T" kind="push" identifier="PulsePreset" id="fDD-e6-qML"/>
                                                     </connections>
                                                 </button>
-                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="arrow_details_up_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="xbB-Wv-gUx">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="arrow_details_up_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="xbB-Wv-gUx">
                                                     <rect key="frame" x="285" y="19" width="15" height="15"/>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Use lamp's current properties" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zCw-m9-dLo">
@@ -2470,7 +2470,7 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xz4-uQ-TYK">
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xz4-uQ-TYK">
                                                     <rect key="frame" x="139" y="12" width="138" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <state key="normal" title="Preset">
@@ -2480,7 +2480,7 @@
                                                         <segue destination="M3t-hF-m5T" kind="push" identifier="PulsePresetEnd" id="TEI-sl-WC7"/>
                                                     </connections>
                                                 </button>
-                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="arrow_details_up_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="amc-BT-STH">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="arrow_details_up_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="amc-BT-STH">
                                                     <rect key="frame" x="285" y="19" width="15" height="15"/>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Brightness" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jbP-bT-Gl5">
@@ -2796,7 +2796,7 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q0k-3K-hG3">
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q0k-3K-hG3">
                                                     <rect key="frame" x="101" y="12" width="176" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <state key="normal" title="Preset">
@@ -2806,7 +2806,7 @@
                                                         <segue destination="M3t-hF-m5T" kind="push" identifier="TransitionPreset" id="Emc-EQ-f5e"/>
                                                     </connections>
                                                 </button>
-                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="arrow_details_up_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="Wwv-nx-RcM">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="arrow_details_up_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="Wwv-nx-RcM">
                                                     <rect key="frame" x="285" y="19" width="15" height="15"/>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Brightness" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jdH-LE-4Xl">
@@ -3510,12 +3510,12 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="pyj-48-h3f"/>
-        <segue reference="Upf-Jh-pY6"/>
         <segue reference="blw-RZ-KcS"/>
-        <segue reference="0DY-aH-zef"/>
+        <segue reference="Upf-Jh-pY6"/>
+        <segue reference="pyj-48-h3f"/>
+        <segue reference="Nvq-kV-1XH"/>
+        <segue reference="fDD-e6-qML"/>
         <segue reference="xLS-9b-3A3"/>
-        <segue reference="Emc-EQ-f5e"/>
-        <segue reference="Re0-H5-5Fu"/>
+        <segue reference="0DY-aH-zef"/>
     </inferredMetricsTieBreakers>
 </document>

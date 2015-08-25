@@ -16,7 +16,6 @@
 package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.sdk.Effect;
-import org.allseen.lsf.sdk.Preset;
 import org.allseen.lsf.sdk.PulseEffect;
 import org.allseen.lsf.sdk.SceneElement;
 import org.allseen.lsf.sdk.LightingDirector;
@@ -135,22 +134,27 @@ public class SceneElementV2InfoFragment extends SceneItemInfoFragment {
     }
 
     protected void updateEffectFields(SampleAppActivity activity, View effectView, String effectID, Effect effect) {
-        int iconID =
-            effect instanceof Preset            ? R.drawable.list_constant_icon :
-            effect instanceof TransitionEffect  ? R.drawable.list_transition_icon :
-            effect instanceof PulseEffect       ? R.drawable.list_pulse_icon :
-            /* unknown effect */                  R.drawable.list_constant_icon;
+        int iconID = R.drawable.list_constant_icon;
+        int textID = R.string.effect_name_preset;
+
+        if (effect instanceof TransitionEffect) {
+            iconID = R.drawable.list_transition_icon;
+            textID = R.string.effect_name_transition;
+        } else if (effect instanceof PulseEffect) {
+            iconID = R.drawable.list_pulse_icon;
+            textID = R.string.effect_name_pulse;
+        }
 
         String effectName = effect != null ? effect.getName() : String.format(getString(R.string.member_effect_not_found), effectID);
 
         ((ImageButton)effectView.findViewById(R.id.detailedItemButtonIcon)).setImageResource(iconID);
 
         TextView textHeader = (TextView)effectView.findViewById(R.id.detailedItemRowTextHeader);
-        textHeader.setText(effectName);
+        textHeader.setText(getString(textID));
         textHeader.setTag(effectID);
 
         TextView textDetails = (TextView)effectView.findViewById(R.id.detailedItemRowTextDetails);
-        textDetails.setText("");
+        textDetails.setText(effectName);
         textDetails.setTag(effectID);
 
         ImageButton moreButton = (ImageButton)effectView.findViewById(R.id.detailedItemButtonMore);

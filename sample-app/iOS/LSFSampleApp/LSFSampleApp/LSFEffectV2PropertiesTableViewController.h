@@ -42,6 +42,7 @@
 -(void)updatePresetButtonTitle: (UIButton*)presetButton;
 -(void)updateSlider: (UISlider *)slider withValue: (int)value;
 -(void)checkSaturationValue;
+-(LSFSDKMyLampState *)getSlidersState;
 
 -(void)onSliderTapped: (UIGestureRecognizer *)gr;
 -(IBAction)onSliderTouchUpInside: (UISlider *)slider;

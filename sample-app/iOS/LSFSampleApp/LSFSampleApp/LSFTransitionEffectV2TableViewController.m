@@ -17,6 +17,7 @@
 #import "LSFTransitionEffectV2TableViewController.h"
 #import "LSFEffectV2NumericPropertyViewController.h"
 #import "LSFSelectPresetTableViewController.h"
+#import "LSFUtilityFunctions.h"
 #import <LSFSDKLightingDirector.h>
 
 @interface LSFTransitionEffectV2TableViewController ()
@@ -40,7 +41,10 @@
 
     [super doneButtonPressed: sender];
 
-    [[LSFSDKLightingDirector getLightingDirector] createTransitionEffectWithLampState:self.pendingEffect.state duration:self.pendingEffect.duration name: self.pendingEffect.name];
+    NSArray* matchingPresets = [LSFUtilityFunctions getPresetsWithMyLampState: self.pendingEffect.state];
+    id<LSFSDKLampState> effectLampState = (matchingPresets.count > 0)? [matchingPresets objectAtIndex: 0] : self.pendingEffect.state;
+
+    [[LSFSDKLightingDirector getLightingDirector] createTransitionEffectWithLampState: effectLampState duration: self.pendingEffect.duration name: self.pendingEffect.name];
 
     [self dismissViewControllerAnimated: YES completion: nil];
 }
@@ -62,6 +66,9 @@
     }
     else if ([segue.identifier isEqualToString: @"TransitionPreset"])
     {
+        // store the latest slider state into the pending effect
+        self.pendingEffect.state = [self getSlidersState];
+
         LSFSelectPresetTableViewController *sptvc = [segue destinationViewController];
         sptvc.state = self.pendingEffect.state;
     }

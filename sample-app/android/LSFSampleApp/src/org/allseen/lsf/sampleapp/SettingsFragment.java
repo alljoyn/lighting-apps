@@ -69,6 +69,18 @@ public class SettingsFragment extends PageFrameChildFragment implements OnClickL
         Controller leader = LightingDirector.get().getLeadController();
         String leaderName = leader != null && leader.isConnected() ? leader.getName() : getString(R.string.default_controller_name);
 
+        if (leader != null && leader.isConnected()) {
+            long leaderVersion = leader.getVersion();
+
+            if (leaderVersion > 0) {
+                leaderName = leader.getName() + " (V" + leader.getVersion() + ")";
+            } else {
+                leaderName = leader.getName();
+            }
+        } else {
+            leaderName = getString(R.string.default_controller_name);
+        }
+
         ((TextView)view.findViewById(R.id.settingsTextController)).setText(leaderName);
 
         CheckBox checkBox = (CheckBox)view.findViewById(R.id.settingsStartController);

@@ -161,7 +161,7 @@ public class ScenesPageFragment extends PageMainContainerFragment {
         return
             isMasterMode()  ? null :
             isBasicMode()   ? getBasicSceneV1Module().createSceneElementPresetsFragment() :
-            isElementMode() ? null : //TODO-FIX new SceneElementV2PresetsFragment();
+            isElementMode() ? new SceneElementV2PresetsFragment() :
             null;
     }
 

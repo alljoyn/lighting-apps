@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 public abstract class SelectEffectsFragment extends SelectableItemTableFragment {
     protected int labelStringID;
@@ -76,7 +77,7 @@ public abstract class SelectEffectsFragment extends SelectableItemTableFragment 
 
     @Override
     protected int getTableRowLayout() {
-        return R.layout.view_selectable_preset_row;
+        return R.layout.view_selectable_effect_row;
     }
 
     @Override
@@ -107,31 +108,30 @@ public abstract class SelectEffectsFragment extends SelectableItemTableFragment 
         }
 
         if (showPresets()) {
-            addItems(director.getPresets(), pendingItemID, inflater, root, R.drawable.list_constant_icon);
+            addItems(director.getPresets(), pendingItemID, inflater, root, R.drawable.list_constant_icon, R.string.effect_name_preset);
         }
 
         if (showTransitionEffects()) {
-            addItems(director.getTransitionEffects(), pendingItemID, inflater, root, R.drawable.list_transition_icon);
+            addItems(director.getTransitionEffects(), pendingItemID, inflater, root, R.drawable.list_transition_icon, R.string.effect_name_transition);
         }
 
         if (showPulseEffects()) {
-            addItems(director.getPulseEffects(), pendingItemID, inflater, root, R.drawable.list_pulse_icon);
+            addItems(director.getPulseEffects(), pendingItemID, inflater, root, R.drawable.list_pulse_icon, R.string.effect_name_pulse);
         }
     }
 
     //TODO-REF Common w/SelectMembersFragment
-    protected void addItems(LightingItem[] items, String pendingItemID, LayoutInflater inflater, View root, int imageID) {
+    protected void addItems(LightingItem[] items, String pendingItemID, LayoutInflater inflater, View root, int imageID, int detailsID) {
         for (LightingItem item : items) {
             String itemID = item.getId();
 
             if (!pendingItemID.equals(itemID)) {
-                updateSelectableItemRow(inflater, root, itemID, item.getTag(), R.drawable.nav_more_menu_icon, item.getName(), isItemSelected(itemID));
+                updateSelectableItemRow(inflater, root, itemID, item.getTag(), R.drawable.nav_more_menu_icon, getString(detailsID), isItemSelected(itemID));
 
                 TableRow tableRow = (TableRow)table.findViewWithTag(itemID);
                 if (tableRow != null) {
-                    ImageButton imageButton = (ImageButton)tableRow.findViewById(R.id.selectableItemRowIcon);
-                    imageButton.setBackgroundResource(imageID);
-                    imageButton.setVisibility(View.VISIBLE);
+                    ((ImageButton)tableRow.findViewById(R.id.selectableItemRowIcon)).setBackgroundResource(imageID);
+                    ((TextView)tableRow.findViewById(R.id.selectableItemRowTextDetails)).setText(item.getName());
                 } else {
                     Log.w(SampleAppActivity.TAG, "Missing row: " + itemID);
                 }

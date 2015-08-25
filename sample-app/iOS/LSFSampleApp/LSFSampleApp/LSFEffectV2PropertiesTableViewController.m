@@ -180,22 +180,11 @@
     unsigned int colorTemp = (uint32_t)self.colorTempSlider.value;
     LSFSDKColor *color = [[LSFSDKColor alloc] initWithHue: hue saturation: saturation brightness: brightness colorTemp: colorTemp];
 
-    NSMutableArray *presetsArray = [[NSMutableArray alloc] init];
-    BOOL presetMatched = NO;
-    for (LSFSDKPreset *preset in [[LSFSDKLightingDirector getLightingDirector] presets])
-    {
-        BOOL matchesPreset = [LSFUtilityFunctions preset: preset matchesMyLampState: [[LSFSDKMyLampState alloc] initWithPower: (brightness == 0 ? OFF : ON) color: color]];
+    NSArray *presetsArray = [LSFUtilityFunctions getPresetsWithMyLampState: [[LSFSDKMyLampState alloc] initWithPower: (brightness == 0 ? OFF : ON) color: color]];
 
-        if (matchesPreset)
-        {
-            [presetsArray addObject: preset.name];
-            presetMatched = YES;
-        }
-    }
-
-    if (presetMatched)
+    if (presetsArray.count > 0)
     {
-        NSArray *sortedArray = [presetsArray sortedArrayUsingSelector: @selector(localizedCaseInsensitiveCompare:)];
+        NSArray *sortedArray = [[presetsArray valueForKeyPath: @"name"] sortedArrayUsingSelector: @selector(localizedCaseInsensitiveCompare:)];
         NSMutableString *presetsMatched = [[NSMutableString alloc] init];
 
         for (NSString *presetName in sortedArray)
@@ -265,6 +254,11 @@
 {
     NSLog(@"Done button pressed");
 
+    self.pendingEffect.state = [self getSlidersState];
+}
+
+-(LSFSDKMyLampState *)getSlidersState
+{
     Power power = (self.brightnessSlider.value == 0) ? OFF : ON;
     unsigned int brightness = self.brightnessSlider.value;
     unsigned int hue = self.hueSlider.value;
@@ -278,7 +272,7 @@
     NSLog(@"%@ - %u", @"Saturation", saturation);
     NSLog(@"%@ - %u", @"ColorTemp", colorTemp);
 
-    self.pendingEffect.state = state;
+    return state;
 }
 
 -(void)leaderModelChangedNotificationReceived:(NSNotification *)notification
