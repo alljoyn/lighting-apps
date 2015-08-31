@@ -15,6 +15,8 @@
  */
 package org.allseen.lsf.sdk.manager;
 
+import java.util.Iterator;
+
 import org.allseen.lsf.sdk.ErrorCode;
 import org.allseen.lsf.sdk.ResponseCode;
 import org.allseen.lsf.sdk.factory.ControllerFactory;
@@ -46,8 +48,14 @@ public class ControllerCollectionManager<CONTROLLER, ERROR> extends LightingItem
     }
 
     public void sendLeaderStateChangeEvent() {
-        for (ControllerCollectionListener<? super CONTROLLER, ? super ERROR> listener : itemListeners) {
+        processAddedListeners();
+
+        Iterator<ControllerCollectionListener<? super CONTROLLER, ? super ERROR>> i = currentListeners.iterator();
+        ControllerCollectionListener<? super CONTROLLER, ? super ERROR> listener = getNext(i);
+
+        while (listener != null) {
             listener.onLeaderChange(leader);
+            listener = getNext(i);
         }
     }
 
@@ -60,8 +68,14 @@ public class ControllerCollectionManager<CONTROLLER, ERROR> extends LightingItem
     }
 
     public void sendErrorEvent(ERROR errorEvent) {
-        for (ControllerCollectionListener<? super CONTROLLER, ? super ERROR> listener : itemListeners) {
+        processAddedListeners();
+
+        Iterator<ControllerCollectionListener<? super CONTROLLER, ? super ERROR>> i = currentListeners.iterator();
+        ControllerCollectionListener<? super CONTROLLER, ? super ERROR> listener = getNext(i);
+
+        while (listener != null) {
             sendErrorEvent(listener, errorEvent);
+            listener = getNext(i);
         }
     }
 

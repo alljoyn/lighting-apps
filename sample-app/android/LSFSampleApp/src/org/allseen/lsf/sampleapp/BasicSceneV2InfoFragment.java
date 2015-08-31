@@ -17,23 +17,42 @@ package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.Scene;
-import org.allseen.lsf.sdk.SceneV2;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 public class BasicSceneV2InfoFragment extends SceneItemInfoFragment {
     public static PendingSceneV2 pendingSceneV2 = null;
 
+    public static int indexOfElementID(String elementID) {
+        int index = -1;
+
+        for (int i = 0; index < 0 && i < pendingSceneV2.current.size(); i++) {
+            if (elementID.equals(pendingSceneV2.current.get(i).id)) {
+                index = i;
+            }
+        }
+
+        return index;
+    }
+
+    public static void onPendingSceneElementDone() {
+        int index = indexOfElementID(SceneElementV2InfoFragment.pendingSceneElement.id);
+
+        if (index >= 0) {
+            BasicSceneV2InfoFragment.pendingSceneV2.current.set(index, SceneElementV2InfoFragment.pendingSceneElement);
+        } else {
+            BasicSceneV2InfoFragment.pendingSceneV2.current.add(SceneElementV2InfoFragment.pendingSceneElement);
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_basic_scene_v2_info, container, false);
+        view = inflater.inflate(R.layout.fragment_basic_scene_info, container, false);
 
         View statusView = view.findViewById(R.id.infoStatusRow);
 
@@ -49,13 +68,6 @@ public class BasicSceneV2InfoFragment extends SceneItemInfoFragment {
         nameText.setClickable(true);
         nameText.setOnClickListener(this);
 
-        // Members
-        View rowMembers = view.findViewById(R.id.sceneV2InfoRowMembers);
-        rowMembers.setClickable(true);
-        rowMembers.setOnClickListener(this);
-
-        setTextViewValue(rowMembers, R.id.sceneMembersRowLabel, getString(R.string.basic_scene_v2_info_elements), 0);
-
         updateInfoFields();
 
         return view;
@@ -63,29 +75,36 @@ public class BasicSceneV2InfoFragment extends SceneItemInfoFragment {
 
     @Override
     public void updateInfoFields() {
-        updateBasicSceneInfoFields();
-    }
-
-    protected void updateBasicSceneInfoFields() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
-        Scene basicScene = LightingDirector.get().getScene(key);
+        TableLayout elementsTable = (TableLayout) view.findViewById(R.id.sceneInfoElementTable);
 
-        // Update name
-        setTextViewValue(view, R.id.statusTextName, basicScene.getName(), 0);
+        elementsTable.removeAllViews();
 
-        if (basicScene instanceof SceneV2) {
-            // update members
-            String members = Util.createSceneElementNamesString(activity, (SceneV2)basicScene);
+        setTextViewValue(view, R.id.statusTextName, pendingSceneV2.name, 0);
 
-            setTextViewValue(view.findViewById(R.id.sceneV2InfoRowMembers), R.id.sceneMembersRowText, members, 0);
-        } else {
-            Log.e(SampleAppActivity.TAG, "Invalid scene type");
+        for (PendingSceneElementV2 sceneElement : pendingSceneV2.current) {
+            int iconID;
+            int textID;
+
+            if (sceneElement.pendingPresetEffect != null) {
+                iconID = R.drawable.list_constant_icon;
+                textID = R.string.effect_name_preset;
+            } else if (sceneElement.pendingTransitionEffect != null) {
+                iconID = R.drawable.list_transition_icon;
+                textID = R.string.effect_name_transition;
+            } else if (sceneElement.pendingPulseEffect != null) {
+                iconID = R.drawable.list_pulse_icon;
+                textID = R.string.effect_name_pulse;
+            } else {
+                Log.w(SampleAppActivity.TAG, "Unknown effect type");
+
+                iconID = R.drawable.list_constant_icon;
+                textID = R.string.effect_name_unknown;
+            }
+
+            addElementRow(activity, elementsTable, iconID, sceneElement.id, Util.createMemberNamesString(activity, sceneElement, ", ", R.string.scene_element_members_none), textID);
         }
-    }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        ((SampleAppActivity)getActivity()).updateActionBar(R.string.title_basic_scene_info, false, false, false, false, true);
     }
 
     @Override
@@ -94,8 +113,10 @@ public class BasicSceneV2InfoFragment extends SceneItemInfoFragment {
 
         if (viewID == R.id.statusLabelName || viewID == R.id.statusTextName) {
             onHeaderClick();
-        } else if (viewID == R.id.sceneInfoRowMembers){
-            onMembersClick();
+        } else if (viewID == R.id.detailedItemRowTextHeader || viewID == R.id.detailedItemRowTextDetails) {
+            onElementTextClick(view.getTag().toString());
+        } else if (viewID == R.id.detailedItemButtonMore) {
+            onElementMoreClick(view, view.getTag().toString());
         }
     }
 
@@ -106,15 +127,33 @@ public class BasicSceneV2InfoFragment extends SceneItemInfoFragment {
         activity.showItemNameDialog(R.string.title_basic_scene_rename, new UpdateBasicSceneNameAdapter(basicScene, activity));
     }
 
-    protected void onMembersClick() {
-        Scene basicScene = LightingDirector.get().getScene(key);
+    protected void onElementTextClick(String elementID) {
+        int index = indexOfElementID(elementID);
 
-        if (basicScene instanceof SceneV2) {
-            pendingSceneV2 = new PendingSceneV2((SceneV2)basicScene);
+        if (index >= 0) {
+            SceneElementV2InfoFragment.pendingSceneElement = new PendingSceneElementV2(pendingSceneV2.current.get(index));
 
             ((ScenesPageFragment)parent).showSelectMembersChildFragment();
         } else {
-            Log.e(SampleAppActivity.TAG, "Invalid scene type");
+            Log.e(SampleAppActivity.TAG, "Missing scene element ID " + elementID);
         }
+    }
+
+    @Override
+    public void onActionAdd() {
+        SceneElementV2InfoFragment.pendingSceneElement = new PendingSceneElementV2();
+
+        ((PageMainContainerFragment)parent).showSelectMembersChildFragment();
+    }
+
+    protected void onElementMoreClick(View anchor, String elementID) {
+        ((SampleAppActivity)getActivity()).onItemButtonMore(parent, SampleAppActivity.Type.ELEMENT, anchor, key, elementID);
+    }
+
+    @Override
+    public void onActionDone() {
+        new BasicSceneV2TransactionManager(pendingSceneV2).start();
+
+        parent.clearBackStack();
     }
 }

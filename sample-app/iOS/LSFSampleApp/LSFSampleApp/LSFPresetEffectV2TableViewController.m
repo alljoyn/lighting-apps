@@ -15,6 +15,7 @@
  ******************************************************************************/
 
 #import "LSFPresetEffectV2TableViewController.h"
+#import "LSFUtilityFunctions.h"
 #import <LSFSDKLightingDirector.h>
 
 @interface LSFPresetEffectV2TableViewController ()
@@ -23,16 +24,25 @@
 
 @implementation LSFPresetEffectV2TableViewController
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear: animated];
+
+    if (!self.pendingEffect.theID)
+    {
+        self.pendingEffect.name = [PRESET_NAME_PREFIX stringByAppendingString: [LSFUtilityFunctions generateRandomHexStringWithLength: 16]];
+    }
+}
+
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return (section == 0) ? [NSString stringWithFormat: @"Select the properties that %@ will change to", [LSFUtilityFunctions memberStringForPendingSceneElement: self.pendingSceneElement]] : @"";
+}
+
 -(IBAction)doneButtonPressed:(id)sender
 {
     NSLog(@"Done Button Pressed for Preset");
-
     [super doneButtonPressed: sender];
-
-    LSFSDKMyLampState *presetState = self.pendingEffect.state;
-
-    [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: presetState.power color: presetState.color presetName: self.pendingEffect.name];
-
     [self dismissViewControllerAnimated: YES completion: nil];
 }
 

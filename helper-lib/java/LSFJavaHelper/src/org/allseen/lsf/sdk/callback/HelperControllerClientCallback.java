@@ -113,7 +113,6 @@ public class HelperControllerClientCallback<CONTROLLER> extends ControllerClient
             public void run() {
                 ControllerDataModel leaderModel = manager.getControllerCollectionManager().getLeaderModel();
 
-                //TODO-CHK Logic here changed - is it right?
                 if (leaderModel.equalsID(controllerID)) {
                     leaderModel.setName(controllerName);
                     leaderModel.updateTime();

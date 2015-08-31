@@ -25,17 +25,21 @@ public class PendingPresetEffect extends PendingLightingItem {
     public final LampStateUniformity uniformity = new LampStateUniformity();
 
     public MyLampState state;
-    public String presetID;
 
     public PendingPresetEffect() {
         this((Preset)null);
     }
 
     public PendingPresetEffect(Preset preset) {
-        super.init(preset);
+        init(preset);
 
         // Note the lamp state must have its own instance of a Color object
         state = preset != null ? preset.getState() : new MyLampState(Power.ON, new Color(Color.DEFAULT));
-        presetID = preset != null ? preset.getId() : null;
+    }
+
+    public PendingPresetEffect(PendingPresetEffect pendingPresetEffect) {
+        init(pendingPresetEffect.id, pendingPresetEffect.name);
+
+        state = new MyLampState(pendingPresetEffect.state);
     }
 }

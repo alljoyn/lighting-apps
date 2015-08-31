@@ -46,6 +46,10 @@ public class EnterPeriodFragment extends EnterNumberFragment {
     protected boolean setNumberValue(long numberValue) {
         EnterPeriodFragment.period = numberValue;
 
+        if (PulseEffectV2Fragment.pendingPulseEffect != null) {
+            PulseEffectV2Fragment.pendingPulseEffect.period = numberValue;
+        }
+
         // Go back to the effect info display
         getActivity().onBackPressed();
 

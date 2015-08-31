@@ -15,11 +15,11 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFSDKTrackingID.h"
-#import "LSFSDKLightingItem.h"
-#import "LSFSDKLightingItemErrorEvent.h"
+#import <LSFSDKTrackingID.h>
+#import <LSFSDKLightingItem.h>
+#import <LSFSDKLightingItemErrorEvent.h>
 
-@protocol LSFSDKTrackingIDDelegate <NSObject>
+@protocol LSFTrackingIDDelegate <NSObject>
 
 -(void)onTrackingIDReceived: (LSFSDKTrackingID *)trackingID lightingItem: (id)item;
 -(void)onTrackingIDError: (LSFSDKLightingItemErrorEvent *)error;

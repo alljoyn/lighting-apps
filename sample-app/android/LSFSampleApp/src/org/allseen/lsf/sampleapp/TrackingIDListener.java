@@ -1,4 +1,4 @@
-/******************************************************************************
+/*
  * Copyright AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
@@ -12,24 +12,14 @@
  *    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
  *    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- ******************************************************************************/
+ */
+package org.allseen.lsf.sampleapp;
 
-#import "LSFSDKLightingDelegate.h"
-#import "LSFSDKTrackingID.h"
+import org.allseen.lsf.sdk.LightingItem;
+import org.allseen.lsf.sdk.LightingItemErrorEvent;
+import org.allseen.lsf.sdk.TrackingID;
 
-typedef enum {
-    GROUP,
-    PRESET,
-    TRANSITION_EFFECT,
-    PULSE_EFFECT,
-    SCENE_ELEMENT,
-    SCENE,
-    MASTER_SCENE
-
-} LightingObjectType;
-
-@interface LSFSDKLightingEventUtil : NSObject
-
-+(void)listenForTrackingID: (LSFSDKTrackingID *)trackingID lightingDelegate: (id<LSFSDKLightingDelegate>)delegate objectType: (LightingObjectType)lightingObjectType;
-
-@end
+public interface TrackingIDListener {
+    public void onTrackingIDReceived(TrackingID trackingID, LightingItem item);
+    public void onTrackingIDError(LightingItemErrorEvent error);
+}

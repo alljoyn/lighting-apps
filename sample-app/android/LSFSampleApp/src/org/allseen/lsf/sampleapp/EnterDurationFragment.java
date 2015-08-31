@@ -52,6 +52,14 @@ public class EnterDurationFragment extends EnterNumberFragment {
     protected boolean setNumberValue(long numberValue) {
         EnterDurationFragment.duration = numberValue;
 
+        if (TransitionEffectV2Fragment.pendingTransitionEffect != null) {
+            TransitionEffectV2Fragment.pendingTransitionEffect.duration = numberValue;
+        }
+
+        if (PulseEffectV2Fragment.pendingPulseEffect != null) {
+            PulseEffectV2Fragment.pendingPulseEffect.duration = numberValue;
+        }
+
         // Go back to the effect info display
         getActivity().onBackPressed();
 

@@ -18,6 +18,9 @@
 
 @interface LSFPendingSceneV2 : LSFPendingItem
 
-@property (nonatomic, strong) NSMutableArray *membersSceneElements;
+@property (nonatomic, strong) NSMutableArray *pendingSceneElements;
+
+-(id)initFromSceneID: (NSString *)sceneID;
+-(BOOL)hasValidSceneElements;
 
 @end

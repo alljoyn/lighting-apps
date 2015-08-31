@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) AllSeen Alliance. All rights reserved.
+ * Copyright AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -14,13 +14,22 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFItemListTableViewController.h"
-#import "LSFPendingSceneElement.h"
+#import "LSFAnyCollectionDelegateBase.h"
+#import "LSFTrackingIDDelegate.h"
 
-@interface LSFEffectsV2TableViewController : LSFItemListTableViewController
+/*
+ * AnyCollectionAdapter w/ one-shot trigger when objects are created. Wrapper
+ * for TrackingIDDelegate.
+ */
+@interface LSFAnyCollectionOneShotWrapper : LSFAnyCollectionDelegateBase
 
-@property (nonatomic, strong) LSFPendingSceneElement *pendingSceneElement;
+@property (nonatomic, strong) LSFSDKTrackingID *trackingID;
+@property (nonatomic, strong) id<LSFTrackingIDDelegate> trackingDelegate;
+@property (nonatomic, strong) void (^action) (id item);
+@property (nonatomic, strong) void (^errorAction) (id item);
 
--(IBAction)doneButtonPressed:(id)sender;
+-(id)initWithTrackingID: (LSFSDKTrackingID *)tid trackingIDDelegate: (id<LSFTrackingIDDelegate>)delegate;
+-(id)initWithTrackingID: (LSFSDKTrackingID *)tid action: (void (^)(id item))actionOnFound;
+-(id)initWithTrackingID: (LSFSDKTrackingID *)tid action: (void (^)(id item))actionOnFound onError: (void (^)(id item))actionOnError;
 
 @end

@@ -35,7 +35,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-//TODO-DEL Needs cleanup
 public abstract class SelectMembersFragment extends SelectableItemTableFragment {
 
     protected int labelStringID;

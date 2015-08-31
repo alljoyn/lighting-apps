@@ -21,6 +21,11 @@
 
 @implementation LSFUtilityFunctions
 
+NSString* const PRESET_NAME_PREFIX = @"LSF_PRE_";
+NSString* const TRANSITION_NAME_PREFIX = @"LSF_TRN_";
+NSString* const PULSE_NAME_PREFIX = @"LSF_PLS_";
+NSString* const SCENE_ELEMENT_NAME_PREFIX = @"LSF_SEL_";
+
 +(BOOL)checkNameEmpty: (NSString *)name entity: (NSString *)entity
 {
     if ([name isEqualToString: @""])
@@ -333,11 +338,14 @@
     NSMutableArray *presetsArray = [[NSMutableArray alloc] init];
     for (LSFSDKPreset *preset in [[LSFSDKLightingDirector getLightingDirector] presets])
     {
-        BOOL matchesPreset = [self preset: preset matchesMyLampState: state];
-
-        if (matchesPreset)
+        if (![preset.name hasPrefix: PRESET_NAME_PREFIX])
         {
-            [presetsArray addObject: preset];
+            BOOL matchesPreset = [self preset: preset matchesMyLampState: state];
+
+            if (matchesPreset)
+            {
+                [presetsArray addObject: preset];
+            }
         }
     }
 
@@ -381,6 +389,131 @@
 
             buttonCount++;
         }
+    }
+}
+
++(NSString *)memberStringForPendingSceneElement: (LSFPendingSceneElement *)sceneElement
+{
+    NSMutableString *memberString = [[NSMutableString alloc] init];
+    NSUInteger numMembers = sceneElement.members.count;
+
+    if (numMembers > 0)
+    {
+        [memberString appendString: [[sceneElement.members objectAtIndex: 0] name]];
+
+        if (sceneElement.members.count > 1)
+        {
+            [memberString appendString: [NSString stringWithFormat: @" (and %lu more)", (unsigned long)sceneElement.members.count - 1]];
+        }
+    }
+
+    return memberString;
+}
+
++(NSString *) generateRandomHexStringWithLength: (int)len
+{
+    NSString *digits = @"0123456789ABCDEF";
+    NSMutableString *randomString = [NSMutableString stringWithCapacity: len];
+
+    for (int i = 0; i < len; i++)
+    {
+        unichar c = [digits characterAtIndex: (arc4random() % [digits length])];
+        [randomString appendFormat: @"%C", c];
+    }
+
+    return randomString;
+}
+
++(LSFSDKTrackingID *)createEffectFromPendingItem: (LSFPendingEffect *)effect
+{
+    NSArray* matchingPresets = nil;
+    id<LSFSDKLampState> effectLampState = nil;
+    id<LSFSDKLampState> effectEndLampState = nil;
+
+    switch (effect.type)
+    {
+        case PRESET:
+            return [[LSFSDKLightingDirector getLightingDirector] createPresetWithPower: effect.state.power color: effect.state.color presetName: effect.name];
+            break;
+        case TRANSITION:
+            matchingPresets = [LSFUtilityFunctions getPresetsWithMyLampState: effect.state];
+            effectLampState = (matchingPresets.count > 0)? [matchingPresets objectAtIndex: 0] : effect.state;
+
+            return [[LSFSDKLightingDirector getLightingDirector] createTransitionEffectWithLampState: effectLampState duration: effect.duration name: effect.name];
+        case PULSE:
+            matchingPresets = [LSFUtilityFunctions getPresetsWithMyLampState: effect.state];
+            effectLampState = (matchingPresets.count > 0)? [matchingPresets objectAtIndex: 0] : effect.state;
+
+            matchingPresets = [LSFUtilityFunctions getPresetsWithMyLampState: effect.endState];
+            effectEndLampState = (matchingPresets.count > 0)? [matchingPresets objectAtIndex: 0] : effect.endState;
+
+            return [[LSFSDKLightingDirector getLightingDirector] createPulseEffectWithFromState: effectLampState toState: effectEndLampState period: effect.period duration: effect.duration count: effect.pulses name: effect.name];
+        default:
+            return nil;
+    }
+}
+
++(LSFSDKTrackingID *)createSceneElementFromPendingItem: (LSFPendingSceneElement *)sceneElement
+{
+    id<LSFSDKEffect> effect = [[LSFSDKLightingDirector getLightingDirector] getEffectWithID: sceneElement.pendingEffect.theID];
+
+    return [[LSFSDKLightingDirector getLightingDirector] createSceneElementWithEffect: effect groupMembers: sceneElement.members name: sceneElement.name];
+}
+
++(LSFSDKTrackingID *)createSceneFromPendingItem: (LSFPendingSceneV2 *)scene
+{
+    NSArray *sceneElementIDs = [scene.pendingSceneElements valueForKeyPath: @"theID"];
+    NSMutableArray *sceneElements = [[NSMutableArray alloc] init];
+    for (NSString *elementID in sceneElementIDs)
+    {
+        [sceneElements addObject: [[LSFSDKLightingDirector getLightingDirector] getSceneElementWithID: elementID]];
+    }
+
+    return [[LSFSDKLightingDirector getLightingDirector] createSceneWithSceneElements: sceneElements name: scene.name];
+}
+
++(void)updateSceneElementWithID: (NSString *)elementID pendingItem: (LSFPendingSceneElement *)pendingElement
+{
+    LSFSDKSceneElement *element = [[LSFSDKLightingDirector getLightingDirector] getSceneElementWithID: elementID];
+    id<LSFSDKEffect> effect = [[LSFSDKLightingDirector getLightingDirector] getEffectWithID: pendingElement.pendingEffect.theID];
+    [element modifyWithEffect: effect groupMembers: pendingElement.members];
+}
+
++(void)updateEffectWithID: (NSString *)effectID pendingItem: (LSFPendingEffect *)pendingEffect
+{
+    id<LSFSDKEffect> effect = [[LSFSDKLightingDirector getLightingDirector] getEffectWithID: effectID];
+
+    if ([effect isKindOfClass: [LSFSDKPreset class]])
+    {
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            LSFSDKPreset *preset = (LSFSDKPreset *)effect;
+            [preset modifyWithPower: pendingEffect.state.power color: pendingEffect.state.color];
+        });
+    }
+    else if ([effect isKindOfClass: [LSFSDKTransitionEffect class]])
+    {
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            LSFSDKTransitionEffect *transition = (LSFSDKTransitionEffect *)effect;
+
+            NSArray *matchingPresets = [LSFUtilityFunctions getPresetsWithMyLampState: pendingEffect.state];
+            id<LSFSDKLampState> effectLampState = (matchingPresets.count > 0)? [matchingPresets objectAtIndex: 0] : pendingEffect.state;
+
+            [transition modify: effectLampState duration: pendingEffect.duration];
+        });
+    }
+    else if ([effect isKindOfClass: [LSFSDKPulseEffect class]])
+    {
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+            LSFSDKPulseEffect *pulse = (LSFSDKPulseEffect *)effect;
+
+            NSArray *matchingPresets = [LSFUtilityFunctions getPresetsWithMyLampState: pendingEffect.state];
+            id<LSFSDKLampState> effectLampState = (matchingPresets.count > 0)? [matchingPresets objectAtIndex: 0] : pendingEffect.state;
+
+            matchingPresets = [LSFUtilityFunctions getPresetsWithMyLampState: pendingEffect.endState];
+            id<LSFSDKLampState> effectEndLampState = (matchingPresets.count >0)? [matchingPresets objectAtIndex: 0] : pendingEffect.endState;
+
+            [pulse modifyFromState: effectLampState toState: effectEndLampState period: pendingEffect.period duration: pendingEffect.duration count: pendingEffect.pulses];
+        });
     }
 }
 

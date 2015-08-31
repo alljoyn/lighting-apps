@@ -14,7 +14,10 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
+#import "LSFPendingSceneV2.h"
+#import "LSFPendingSceneElement.h"
 #import <Foundation/Foundation.h>
+#import <LSFSDKTrackingID.h>
 #import <LSFSDKCapabilityData.h>
 #import <LSFSDKLampDetails.h>
 #import <LSFSDKColor.h>
@@ -22,6 +25,11 @@
 #import <LSFSDKMyLampState.h>
 
 @interface LSFUtilityFunctions : NSObject
+
+extern NSString* const PRESET_NAME_PREFIX;
+extern NSString* const TRANSITION_NAME_PREFIX;
+extern NSString* const PULSE_NAME_PREFIX;
+extern NSString* const SCENE_ELEMENT_NAME_PREFIX;
 
 extern NSArray *const LAMP_DETAILS_FIELDS;
 extern NSArray *const LAMP_ABOUT_FIELDS;
@@ -42,5 +50,12 @@ extern NSArray *const LAMP_ABOUT_FIELDS;
 +(NSArray *)getPresetsWithMyLampState: (LSFSDKMyLampState *)state;
 +(NSArray *)sortLightingItemsByName: (NSArray *)items;
 +(void)disableActionSheet: (UIActionSheet *)actionSheet buttonAtIndex: (NSInteger)index;
++(NSString *)memberStringForPendingSceneElement: (LSFPendingSceneElement *)sceneElement;
++(NSString *) generateRandomHexStringWithLength: (int)len;
++(LSFSDKTrackingID *)createEffectFromPendingItem: (LSFPendingEffect *)effect;
++(LSFSDKTrackingID *)createSceneElementFromPendingItem: (LSFPendingSceneElement *)sceneElement;
++(LSFSDKTrackingID *)createSceneFromPendingItem: (LSFPendingSceneV2 *)scene;
++(void)updateSceneElementWithID: (NSString *)elementID pendingItem: (LSFPendingSceneElement *)pendingElement;
++(void)updateEffectWithID: (NSString *)effectID pendingItem: (LSFPendingEffect *)pendingEffect;
 
 @end

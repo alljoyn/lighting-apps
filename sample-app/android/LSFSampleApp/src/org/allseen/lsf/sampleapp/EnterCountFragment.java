@@ -61,6 +61,10 @@ public class EnterCountFragment extends EnterNumberFragment {
     protected boolean setNumberValue(long numberValue) {
         EnterCountFragment.count = numberValue;
 
+        if (PulseEffectV2Fragment.pendingPulseEffect != null) {
+            PulseEffectV2Fragment.pendingPulseEffect.count = numberValue;
+        }
+
         // Go back to the effect info display
         getActivity().onBackPressed();
 

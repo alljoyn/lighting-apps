@@ -15,12 +15,8 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.sdk.Effect;
-import org.allseen.lsf.sdk.PulseEffect;
 import org.allseen.lsf.sdk.SceneElement;
 import org.allseen.lsf.sdk.LightingDirector;
-import org.allseen.lsf.sdk.TransitionEffect;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -75,10 +71,7 @@ public class SceneElementV2InfoFragment extends SceneItemInfoFragment {
         moreButton.setOnClickListener(this);
 
         // Update values
-        SampleAppActivity activity = (SampleAppActivity) getActivity();
-        SceneElement sceneElement = LightingDirector.get().getSceneElement(key);
-
-        updateSceneElementInfoFields(activity, sceneElement);
+        updateInfoFields();
 
         return view;
     }
@@ -122,31 +115,26 @@ public class SceneElementV2InfoFragment extends SceneItemInfoFragment {
 
     @Override
     public void updateInfoFields() {
-        updateSceneElementInfoFields((SampleAppActivity)getActivity(), LightingDirector.get().getSceneElement(key));
+        updateSceneElementInfoFields((SampleAppActivity)getActivity(), pendingSceneElement);
     }
 
-    protected void updateSceneElementInfoFields(SampleAppActivity activity, SceneElement sceneElement) {
+    protected void updateSceneElementInfoFields(SampleAppActivity activity, PendingSceneElementV2 pendingSceneElement) {
         // Update name and members
-        setTextViewValue(view.findViewById(R.id.sceneElementInfoStatus), R.id.statusTextName, sceneElement.getName(), 0);
-        setTextViewValue(view.findViewById(R.id.sceneElementInfoMembers), R.id.nameValueValueText, Util.createMemberNamesString(activity, sceneElement, ", ", R.string.scene_element_members_none), 0);
+        setTextViewValue(view.findViewById(R.id.sceneElementInfoStatus), R.id.statusTextName, pendingSceneElement.name, 0);
+        setTextViewValue(view.findViewById(R.id.sceneElementInfoMembers), R.id.nameValueValueText, Util.createMemberNamesString(activity, pendingSceneElement, ", ", R.string.scene_element_members_none), 0);
 
-        updateEffectFields(activity, view.findViewById(R.id.sceneElementInfoEffect), sceneElement.getEffectID(), sceneElement.getEffect());
+        View effectView = view.findViewById(R.id.sceneElementInfoEffect);
+
+        if (pendingSceneElement.pendingPresetEffect != null) {
+            updateEffectFields(activity, effectView, pendingSceneElement.pendingPresetEffect.id, pendingSceneElement.pendingPresetEffect.name, R.drawable.list_constant_icon, R.string.effect_name_preset);
+        } else if (pendingSceneElement.pendingTransitionEffect != null) {
+            updateEffectFields(activity, effectView, pendingSceneElement.pendingTransitionEffect.id, pendingSceneElement.pendingTransitionEffect.name, R.drawable.list_transition_icon, R.string.effect_name_transition);
+        } else if (pendingSceneElement.pendingPulseEffect != null) {
+            updateEffectFields(activity, effectView, pendingSceneElement.pendingPulseEffect.id, pendingSceneElement.pendingPulseEffect.name, R.drawable.list_pulse_icon, R.string.effect_name_pulse);
+        }
     }
 
-    protected void updateEffectFields(SampleAppActivity activity, View effectView, String effectID, Effect effect) {
-        int iconID = R.drawable.list_constant_icon;
-        int textID = R.string.effect_name_preset;
-
-        if (effect instanceof TransitionEffect) {
-            iconID = R.drawable.list_transition_icon;
-            textID = R.string.effect_name_transition;
-        } else if (effect instanceof PulseEffect) {
-            iconID = R.drawable.list_pulse_icon;
-            textID = R.string.effect_name_pulse;
-        }
-
-        String effectName = effect != null ? effect.getName() : String.format(getString(R.string.member_effect_not_found), effectID);
-
+    protected void updateEffectFields(SampleAppActivity activity, View effectView, String effectID, String effectName, int iconID, int textID) {
         ((ImageButton)effectView.findViewById(R.id.detailedItemButtonIcon)).setImageResource(iconID);
 
         TextView textHeader = (TextView)effectView.findViewById(R.id.detailedItemRowTextHeader);

@@ -176,6 +176,7 @@
     <string name="effect_sort_constant">A</string>
     <string name="effect_sort_transition">B</string>
     <string name="effect_sort_pulse">C</string>
+    <string name="effect_name_unknown">Unknown</string>
     <string name="effect_name_none">None</string>
     <string name="effect_name_preset">Preset</string>
     <string name="effect_name_transition">Transition</string>

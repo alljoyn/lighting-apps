@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import "LSFPendingItem.h"
-#import <LSFSDKEffect.h>
+#import "LSFPendingEffect.h"
 #import <LSFSDKCapabilityData.h>
 
 @interface LSFPendingSceneElement : LSFPendingItem
@@ -23,7 +23,7 @@
 -(id)initFromSceneElementID: (NSString *)sceneElementID;
 
 @property (nonatomic, strong) NSMutableArray *members;
-@property (nonatomic, strong) id<LSFSDKEffect> effect;
+@property (nonatomic, strong) LSFPendingEffect *pendingEffect;
 @property (nonatomic, strong) LSFSDKCapabilityData *capability;
 @property (nonatomic) BOOL hasEffect;
 

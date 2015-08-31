@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) AllSeen Alliance. All rights reserved.
+ * Copyright AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -14,11 +14,13 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFItemNameViewController.h"
-#import "LSFPendingEffect.h"
+#import "LSFTrackingIDDelegate.h"
+#import <LSFSDKTrackingID.h>
 
-@interface LSFEnterEffectV2NameViewController : LSFItemNameViewController
+@interface LSFLightingListenerUtil : NSObject
 
-@property (nonatomic, strong) LSFPendingEffect *pendingEffect;
++(void)listenForTrackingID: (LSFSDKTrackingID *)trackingID delegate: (id<LSFTrackingIDDelegate>)delegate;
++(void)listenForTrackingID: (LSFSDKTrackingID *)trackingID perform: (void (^)(id item))performBlock;
++(void)listenForTrackingID: (LSFSDKTrackingID *)trackingID perform: (void (^)(id item))performBlock onError: (void (^)(id item))performError;
 
 @end

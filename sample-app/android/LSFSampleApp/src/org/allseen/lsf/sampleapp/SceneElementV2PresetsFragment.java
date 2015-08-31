@@ -19,6 +19,8 @@ import org.allseen.lsf.sampleapp.DimmableItemPresetsFragment;
 import org.allseen.lsf.sdk.MyLampState;
 import org.allseen.lsf.sdk.Preset;
 
+import android.util.Log;
+
 public class SceneElementV2PresetsFragment extends DimmableItemPresetsFragment {
 
     @Override
@@ -41,8 +43,7 @@ public class SceneElementV2PresetsFragment extends DimmableItemPresetsFragment {
     @Override
     protected void doApplyPreset(Preset preset) {
         if (PresetEffectFragment.pendingPresetEffect != null) {
-            PresetEffectFragment.pendingPresetEffect.presetID = preset.getId();
-            PresetEffectFragment.pendingPresetEffect.state = preset.getState();
+            Log.e(SampleAppActivity.TAG, "Cannot assign a preset to a preset");
         } else if (TransitionEffectV2Fragment.pendingTransitionEffect != null) {
             TransitionEffectV2Fragment.pendingTransitionEffect.presetID = preset.getId();
             TransitionEffectV2Fragment.pendingTransitionEffect.state = preset.getState();

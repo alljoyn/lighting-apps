@@ -176,9 +176,9 @@
             self.saturationSliderButton.enabled = YES;
         }
 
-        self.colorTempSlider.value = self.pedm.state.colorTemp < self.pedm.colorTempMin ? self.pedm.colorTempMin : self.pedm.state.colorTemp;
         self.colorTempSlider.minimumValue = self.pedm.colorTempMin;
         self.colorTempSlider.maximumValue = self.pedm.colorTempMax;
+        self.colorTempSlider.value = self.pedm.colorTempMin;
 
         if (self.pedm.capability.temp >= SOME)
         {
@@ -258,9 +258,9 @@
         self.endSaturationButton.enabled = YES;
     }
 
-    self.endColorTempSlider.value = self.pedm.endState.colorTemp < self.pedm.colorTempMin ? self.pedm.colorTempMin : self.pedm.endState.colorTemp;
     self.endColorTempSlider.minimumValue = self.pedm.colorTempMin;
     self.endColorTempSlider.maximumValue = self.pedm.colorTempMax;
+    self.endColorTempSlider.value = self.pedm.colorTempMin;
 
     if (self.pedm.capability.temp >= SOME)
     {
@@ -696,6 +696,7 @@
     self.pedm.endState.hue = scaledEndHue;
     self.pedm.endState.saturation = scaledEndSaturation;
     self.pedm.endState.colorTemp = scaledEndColorTemp;
+    self.pedm.endState.isNull = NO;
 
     [self.sceneModel updatePulseEffect: self.pedm];
 

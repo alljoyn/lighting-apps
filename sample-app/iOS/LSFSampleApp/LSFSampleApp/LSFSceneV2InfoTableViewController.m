@@ -16,7 +16,9 @@
 
 #import "LSFSceneV2InfoTableViewController.h"
 #import "LSFEnterSceneV2NameTableViewController.h"
-#import "LSFScenesV2Members.h"
+#import "LSFPendingSceneElement.h"
+#import "LSFSceneElementV2MembersTableViewController.h"
+#import "LSFUtilityFunctions.h"
 #import <LSFSDKLightingDirector.h>
 
 @interface LSFSceneV2InfoTableViewController ()
@@ -34,6 +36,15 @@
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(leaderModelChangedNotificationReceived:) name: @"LSFContollerLeaderModelChange" object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneChangedNotificationReceived:) name: @"LSFSceneChangedNotification" object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneRemovedNotificationReceived:) name: @"LSFSceneRemovedNotification" object: nil];
+
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc]
+                                  initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                  target: self
+                                  action: @selector(plusButtonPressed)];
+
+    self.navigationItem.rightBarButtonItems = @[self.editButtonItem, addButton];
+
+    [self.tableView reloadData];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -49,7 +60,17 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    return (section == 0) ? 1 : self.pendingScene.pendingSceneElements.count;
+}
+
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return (section == 1) ? @"Scene Element" : @"";
+}
+
+-(NSString *)tableView: (UITableView *)tableView titleForFooterInSection: (NSInteger)section
+{
+    return (section == 1) ? @"Tap + to add a new scene element" : @"";
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -65,8 +86,32 @@
     else
     {
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: nil];
-        cell.textLabel.text = @"Scene Elements in the scene";
+
+        LSFPendingSceneElement *sceneElement = [self.pendingScene.pendingSceneElements objectAtIndex: indexPath.row];
+
+        cell.textLabel.text = [LSFUtilityFunctions memberStringForPendingSceneElement: sceneElement];
+
+        switch (sceneElement.pendingEffect.type)
+        {
+            case PRESET:
+                cell.imageView.image = [UIImage imageNamed: @"list_constant_icon.png"];
+                cell.detailTextLabel.text = @"Preset";
+                break;
+            case TRANSITION:
+                cell.imageView.image = [UIImage imageNamed: @"list_transition_icon.png"];
+                cell.detailTextLabel.text = @"Transition Effect";
+                break;
+            case PULSE:
+                cell.imageView.image = [UIImage imageNamed: @"list_pulse_icon.png"];
+                cell.detailTextLabel.text = @"Pulse Effect";
+                break;
+            default:
+                NSLog(@"Unknown effect type");
+                break;
+        }
+
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+
         return cell;
     }
 }
@@ -79,24 +124,79 @@
     }
     else if (indexPath.section == 1)
     {
-        [self performSegueWithIdentifier: @"ChangeSceneMembers" sender: nil];
+        [self performSegueWithIdentifier: @"SceneElementV2" sender: indexPath];
     }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString: @"ChangeSceneMembers"])
-    {
-        UINavigationController *nc = (UINavigationController *)[segue destinationViewController];
-        LSFScenesV2Members *smtvc = (LSFScenesV2Members *)nc.topViewController;
-        smtvc.allowCancel = YES;
-        smtvc.pendingScene = self.pendingScene;
-    }
-    else if ([segue.identifier isEqualToString: @"ChangeSceneName"])
+    if ([segue.identifier isEqualToString: @"ChangeSceneName"])
     {
         LSFEnterSceneV2NameTableViewController *esnvc = [segue destinationViewController];
         esnvc.pendingScene = self.pendingScene;
     }
+    else if ([segue.identifier isEqualToString: @"SceneElementV2"])
+    {
+        UINavigationController *nc = [segue destinationViewController];
+        LSFSceneElementV2MembersTableViewController *semtvc = (LSFSceneElementV2MembersTableViewController *)[nc topViewController];
+        semtvc.pendingScene = self.pendingScene;
+        semtvc.pendingSceneElement = (sender) ? [self.pendingScene.pendingSceneElements objectAtIndex: ((NSIndexPath *)sender).row] : [[LSFPendingSceneElement alloc] init];
+        semtvc.hasNextButton = YES;
+        semtvc.allowCancel = YES;
+    }
+}
+
+-(BOOL)tableView: (UITableView *)tableView canEditRowAtIndexPath: (NSIndexPath *)indexPath
+{
+    return indexPath.section == 1 && self.pendingScene.pendingSceneElements.count > 1;
+}
+
+-(void)tableView: (UITableView *)tableView commitEditingStyle: (UITableViewCellEditingStyle)editingStyle forRowAtIndexPath: (NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        NSLog(@"Delete button pressed");
+
+        NSString *sceneElementID = [[self.pendingScene.pendingSceneElements objectAtIndex: indexPath.row] theID];
+        NSString *effectID = [[[self.pendingScene.pendingSceneElements objectAtIndex: indexPath.row] pendingEffect] theID];
+        [self.pendingScene.pendingSceneElements removeObjectAtIndex: indexPath.row];
+
+        // Delete the row from the data source
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation: UITableViewRowAnimationFade];
+
+        dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+
+            LSFSDKScene *scene = [[LSFSDKLightingDirector getLightingDirector] getSceneWithID: self.pendingScene.theID];
+            if ([scene isKindOfClass: [LSFSDKSceneV2 class]])
+            {
+                LSFSDKSceneV2 *sceneV2 = (LSFSDKSceneV2 *)scene;
+
+                NSMutableArray *elementsInScene = [[NSMutableArray alloc] init];
+                for (LSFPendingSceneElement *pendingElem in self.pendingScene.pendingSceneElements)
+                {
+                    LSFSDKSceneElement *elem = [[LSFSDKLightingDirector getLightingDirector] getSceneElementWithID: pendingElem.theID];
+                    if (elem)
+                    {
+                        [elementsInScene addObject: elem];
+                    }
+                }
+
+                [sceneV2 modify: elementsInScene];
+            }
+
+            dispatch_async([[LSFSDKLightingDirector getLightingDirector] queue], ^{
+                [[[LSFSDKLightingDirector getLightingDirector] getSceneElementWithID: sceneElementID] deleteItem];
+                [[[LSFSDKLightingDirector getLightingDirector] getEffectWithID: effectID] deleteItem];
+            });
+        });
+
+    }
+}
+
+-(void)plusButtonPressed
+{
+    NSLog(@"Plus button pressed");
+    [self performSegueWithIdentifier: @"SceneElementV2" sender: nil];
 }
 
 -(void)leaderModelChangedNotificationReceived:(NSNotification *)notification

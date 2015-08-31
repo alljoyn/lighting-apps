@@ -14,13 +14,10 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFItemMultiSelectionListTableViewController.h"
 #import "LSFPendingSceneV2.h"
 
-@interface LSFScenesV2Members : LSFItemMultiSelectionListTableViewController
+@interface LSFSceneElementV2TableViewController : UITableViewController
 
 @property (nonatomic, strong) LSFPendingSceneV2 *pendingScene;
-
--(IBAction)doneButtonPressed:(id)sender;
 
 @end

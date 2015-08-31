@@ -18,10 +18,7 @@ package org.allseen.lsf.sampleapp;
 import org.allseen.lsf.sdk.Color;
 import org.allseen.lsf.sdk.LampCapabilities;
 import org.allseen.lsf.sdk.LampStateUniformity;
-import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.MyLampState;
-import org.allseen.lsf.sdk.Preset;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -129,13 +126,13 @@ public class PulseEffectV2Fragment extends EffectV2InfoFragment implements OnChe
         stateAdapter2.setSaturation(endColor.getSaturation(), true);
         stateAdapter2.setColorTemp(endColor.getColorTemperature(), true);
 
-        String periodValue = String.format(getString(R.string.effect_info_period_format), EnterPeriodFragment.period / 1000.0);
+        String periodValue = String.format(getString(R.string.effect_info_period_format), pendingPulseEffect.period / 1000.0);
         setTextViewValue(view.findViewById(R.id.infoPeriodRow), R.id.nameValueValueText, periodValue, R.string.units_seconds);
 
-        String durationValue = String.format(getString(R.string.effect_info_period_format), EnterDurationFragment.duration / 1000.0);
+        String durationValue = String.format(getString(R.string.effect_info_period_format), pendingPulseEffect.duration / 1000.0);
         setTextViewValue(view.findViewById(R.id.infoDurationRow), R.id.nameValueValueText, durationValue, R.string.units_seconds);
 
-        setTextViewValue(view.findViewById(R.id.infoCountRow), R.id.nameValueValueText, EnterCountFragment.count, 0);
+        setTextViewValue(view.findViewById(R.id.infoCountRow), R.id.nameValueValueText, pendingPulseEffect.count, 0);
     }
 
     @Override
@@ -158,14 +155,21 @@ public class PulseEffectV2Fragment extends EffectV2InfoFragment implements OnChe
     }
 
     protected void onPeriodClick() {
+        EnterPeriodFragment.period = pendingPulseEffect.period;
+
         ((ScenesPageFragment)parent).showEnterPeriodChildFragment();
     }
 
     protected void onDurationClick() {
+        EnterDurationFragment.transition = false;
+        EnterDurationFragment.duration = pendingPulseEffect.duration;
+
         ((ScenesPageFragment)parent).showEnterDurationChildFragment();
     }
 
     protected void onCountClick() {
+        EnterCountFragment.count = pendingPulseEffect.count;
+
         ((ScenesPageFragment)parent).showEnterCountChildFragment();
     }
 
@@ -237,28 +241,10 @@ public class PulseEffectV2Fragment extends EffectV2InfoFragment implements OnChe
 
     @Override
     public void onActionDone() {
-        LightingDirector director = LightingDirector.get();
+        SceneElementV2InfoFragment.pendingSceneElement.pendingPulseEffect = pendingPulseEffect;
 
-        Preset startPreset = director.getPreset(pendingPulseEffect.startPresetID);
-        Preset endPreset = director.getPreset(pendingPulseEffect.endPresetID);
+        BasicSceneV2InfoFragment.onPendingSceneElementDone();
 
-        if (!isAddMode()) {
-            director.getPulseEffect(pendingPulseEffect.id).modify(
-                startPreset != null ? startPreset : pendingPulseEffect.startState,
-                endPreset != null ? endPreset : pendingPulseEffect.endState,
-                EnterPeriodFragment.period,
-                EnterDurationFragment.duration,
-                EnterCountFragment.count);
-        } else {
-            director.createPulseEffect(
-                startPreset != null ? startPreset : pendingPulseEffect.startState,
-                endPreset != null ? endPreset : pendingPulseEffect.endState,
-                EnterPeriodFragment.period,
-                EnterDurationFragment.duration,
-                EnterCountFragment.count,
-                pendingPulseEffect.name);
-        }
-
-        parent.popBackStack(ScenesPageFragment.CHILD_TAG_SELECT_EFFECT);
+        parent.popBackStack(ScenesPageFragment.CHILD_TAG_INFO);
     }
 }

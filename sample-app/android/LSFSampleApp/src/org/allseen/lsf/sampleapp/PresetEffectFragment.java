@@ -18,7 +18,6 @@ package org.allseen.lsf.sampleapp;
 import org.allseen.lsf.sampleapp.R;
 import org.allseen.lsf.sdk.LampCapabilities;
 import org.allseen.lsf.sdk.LampStateUniformity;
-import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.MyLampState;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -87,19 +86,17 @@ public class PresetEffectFragment extends EffectV2InfoFragment {
 
     @Override
     protected void setPendingPresetID(int index, String presetID) {
+        // Preset effects cannot reference other presets, so we
+        // just validate the index here.
         logErrorOnInvalidIndex(index);
-
-        pendingPresetEffect.id = presetID;
     }
 
     @Override
     public void onActionDone() {
-        if (!isAddMode()) {
-            LightingDirector.get().getPreset(pendingPresetEffect.id).modify(pendingPresetEffect.state.getPower(), pendingPresetEffect.state.getColor());
-        } else {
-            LightingDirector.get().createPreset(pendingPresetEffect.state.getPower(), pendingPresetEffect.state.getColor(), pendingPresetEffect.name);
-        }
+        SceneElementV2InfoFragment.pendingSceneElement.pendingPresetEffect = pendingPresetEffect;
 
-        parent.popBackStack(ScenesPageFragment.CHILD_TAG_SELECT_EFFECT);
+        BasicSceneV2InfoFragment.onPendingSceneElementDone();
+
+        parent.popBackStack(ScenesPageFragment.CHILD_TAG_INFO);
     }
 }

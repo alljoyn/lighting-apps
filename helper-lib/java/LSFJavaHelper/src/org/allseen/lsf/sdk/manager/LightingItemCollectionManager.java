@@ -116,17 +116,6 @@ public abstract class LightingItemCollectionManager<ADAPTER, LISTENER, MODEL, ER
         return itemAdapters.values();
     }
 
-    @Override
-    public void addListener(LISTENER listener) {
-        super.addListener(listener);
-
-        Iterator<ADAPTER> i = itemAdapters.values().iterator();
-
-        while (i.hasNext()) {
-            sendChangedEvent(listener, i.next());
-        }
-    }
-
     public void sendInitializedEvent(String itemID) {
         sendInitializedEvent(itemID, null);
     }
@@ -136,9 +125,15 @@ public abstract class LightingItemCollectionManager<ADAPTER, LISTENER, MODEL, ER
     }
 
     public void sendInitializedEvent(ADAPTER item, TrackingID trackingID) {
+        processAddedListeners();
+
         if (item != null) {
-            for (LISTENER listener : itemListeners) {
+            Iterator<LISTENER> i = currentListeners.iterator();
+            LISTENER listener = getNext(i);
+
+            while (listener != null) {
                 sendInitializedEvent(listener, item, trackingID);
+                listener = getNext(i);
             }
         }
     }
@@ -148,17 +143,29 @@ public abstract class LightingItemCollectionManager<ADAPTER, LISTENER, MODEL, ER
     }
 
     public void sendChangedEvent(ADAPTER item) {
+        processAddedListeners();
+
         if (item != null) {
-            for (LISTENER listener : itemListeners) {
+            Iterator<LISTENER> i = currentListeners.iterator();
+            LISTENER listener = getNext(i);
+
+            while (listener != null) {
                 sendChangedEvent(listener, item);
+                listener = getNext(i);
             }
         }
     }
 
     public void sendRemovedEvent(ADAPTER item) {
+        processAddedListeners();
+
         if (item != null) {
-            for (LISTENER listener : itemListeners) {
+            Iterator<LISTENER> i = currentListeners.iterator();
+            LISTENER listener = getNext(i);
+
+            while (listener != null) {
                 sendRemovedEvent(listener, item);
+                listener = getNext(i);
             }
         }
     }
@@ -176,8 +183,14 @@ public abstract class LightingItemCollectionManager<ADAPTER, LISTENER, MODEL, ER
     }
 
     public void sendErrorEvent(ERROR errorEvent) {
-        for (LISTENER listener : itemListeners) {
+        processAddedListeners();
+
+        Iterator<LISTENER> i = currentListeners.iterator();
+        LISTENER listener = getNext(i);
+
+        while (listener != null) {
             sendErrorEvent(listener, errorEvent);
+            listener = getNext(i);
         }
     }
 

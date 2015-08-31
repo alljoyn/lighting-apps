@@ -33,19 +33,22 @@
     [self updatePresetButtonTitle: self.presetButton];
 
     self.durationLabel.text = [NSString stringWithFormat:@"%@ seconds", [@(self.pendingEffect.duration / 1000.0) stringValue]];
+
+    if (!self.pendingEffect.theID)
+    {
+        self.pendingEffect.name = [TRANSITION_NAME_PREFIX stringByAppendingString: [LSFUtilityFunctions generateRandomHexStringWithLength: 16]];
+    }
+}
+
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return (section == 0) ? [NSString stringWithFormat: @"Select the properties that %@ will transition to", [LSFUtilityFunctions memberStringForPendingSceneElement: self.pendingSceneElement]] : @"";
 }
 
 -(IBAction)doneButtonPressed:(id)sender
 {
     NSLog(@"Done Button Pressed for TransitionEffect");
-
     [super doneButtonPressed: sender];
-
-    NSArray* matchingPresets = [LSFUtilityFunctions getPresetsWithMyLampState: self.pendingEffect.state];
-    id<LSFSDKLampState> effectLampState = (matchingPresets.count > 0)? [matchingPresets objectAtIndex: 0] : self.pendingEffect.state;
-
-    [[LSFSDKLightingDirector getLightingDirector] createTransitionEffectWithLampState: effectLampState duration: self.pendingEffect.duration name: self.pendingEffect.name];
-
     [self dismissViewControllerAnimated: YES completion: nil];
 }
 

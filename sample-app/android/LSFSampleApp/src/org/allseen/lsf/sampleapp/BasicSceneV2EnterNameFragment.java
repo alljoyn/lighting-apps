@@ -46,4 +46,11 @@ public class BasicSceneV2EnterNameFragment extends EnterNameFragment {
     protected boolean duplicateName(String sceneElementName) {
         return Util.isDuplicateName(LightingDirector.get().getSceneElements(), sceneElementName);
     }
+
+    @Override
+    protected void showNextFragment() {
+        SceneElementV2InfoFragment.pendingSceneElement = new PendingSceneElementV2();
+
+        super.showNextFragment();
+    }
 }

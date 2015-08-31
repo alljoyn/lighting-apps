@@ -34,13 +34,9 @@ import org.allseen.lsf.sdk.model.TransitionEffectDataModel;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 public class BasicSceneV1InfoFragment extends SceneItemInfoFragment {
@@ -72,11 +68,6 @@ public class BasicSceneV1InfoFragment extends SceneItemInfoFragment {
         updateBasicSceneInfoFields(activity, pendingBasicSceneModel);
 
         return view;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        ((SampleAppActivity)getActivity()).updateActionBar(R.string.title_basic_scene_info, false, true, false, true, true);
     }
 
     @Override
@@ -215,32 +206,6 @@ public class BasicSceneV1InfoFragment extends SceneItemInfoFragment {
     }
 
     protected void addElementRow(SampleAppActivity activity, TableLayout elementTable, int iconID, String elementID, LampGroup members, int detailsID) {
-        addElementRow(activity, elementTable, iconID, elementID, members, getString(detailsID));
-    }
-
-    protected void addElementRow(SampleAppActivity activity, TableLayout elementTable, int iconID, String elementID, LampGroup members, String details) {
-        TableRow tableRow = new TableRow(view.getContext());
-        activity.getLayoutInflater().inflate(R.layout.view_scene_element_row, tableRow);
-
-        ((ImageButton)tableRow.findViewById(R.id.detailedItemButtonIcon)).setImageResource(iconID);
-
-        TextView textHeader = (TextView)tableRow.findViewById(R.id.detailedItemRowTextHeader);
-        textHeader.setText(BasicSceneV1Util.createMemberNamesString(activity, members, System.getProperty("line.separator"), R.string.basic_scene_members_none));
-        textHeader.setTag(elementID);
-        textHeader.setClickable(true);
-        textHeader.setOnClickListener(this);
-
-        TextView textDetails = (TextView)tableRow.findViewById(R.id.detailedItemRowTextDetails);
-        textDetails.setText(details);
-        textDetails.setTag(elementID);
-        textDetails.setClickable(true);
-        textDetails.setOnClickListener(this);
-
-        ImageButton moreButton = (ImageButton)tableRow.findViewById(R.id.detailedItemButtonMore);
-        moreButton.setImageResource(R.drawable.group_more_menu_icon);
-        moreButton.setTag(elementID);
-        moreButton.setOnClickListener(this);
-
-        elementTable.addView(tableRow);
+        addElementRow(activity, elementTable, iconID, elementID, BasicSceneV1Util.createMemberNamesString(activity, members, System.getProperty("line.separator"), R.string.basic_scene_members_none), getString(detailsID));
     }
 }

@@ -30,6 +30,10 @@ public class PendingPulseEffectV2 extends PendingLightingItem {
     public String startPresetID;
     public String endPresetID;
 
+    public long period; //TODO-SV2-FIX
+    public long duration; //TODO-SV2-FIX
+    public long count; //TODO-SV2-FIX
+
     public final LampStateUniformity uniformity = new LampStateUniformity();
 
     public PendingPulseEffectV2() {
@@ -48,8 +52,24 @@ public class PendingPulseEffectV2 extends PendingLightingItem {
         startPresetID = pulseEffect != null ? pulseEffect.getStartPresetID() : "";
         endPresetID = pulseEffect != null ? pulseEffect.getEndPresetID() : "";
 
-        EnterPeriodFragment.period = pulseEffect != null ? pulseEffect.getPeriod() : 1000;
-        EnterDurationFragment.duration = pulseEffect != null ? pulseEffect.getDuration() : 500;
-        EnterCountFragment.count = pulseEffect != null ? pulseEffect.getCount() : 10;
+        period = pulseEffect != null ? pulseEffect.getPeriod() : 1000;
+        duration = pulseEffect != null ? pulseEffect.getDuration() : 500;
+        count = pulseEffect != null ? pulseEffect.getCount() : 10;
+    }
+
+    public PendingPulseEffectV2(PendingPulseEffectV2 pendingPulseEffect) {
+        init(pendingPulseEffect.id, pendingPulseEffect.name);
+
+        startWithCurrent = pendingPulseEffect.startWithCurrent;
+
+        startState = new MyLampState(pendingPulseEffect.startState);
+        endState = new MyLampState(pendingPulseEffect.endState);
+
+        startPresetID = pendingPulseEffect.startPresetID;
+        endPresetID = pendingPulseEffect.endPresetID;
+
+        period = pendingPulseEffect.period;
+        duration = pendingPulseEffect.duration;
+        count = pendingPulseEffect.count;
     }
 }

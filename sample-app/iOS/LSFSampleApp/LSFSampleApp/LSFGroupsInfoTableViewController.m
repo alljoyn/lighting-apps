@@ -352,12 +352,15 @@
 
     for (LSFSDKPreset *preset in [[LSFSDKLightingDirector getLightingDirector] presets])
     {
-        BOOL matchesPreset = [self checkIfGroup: group matchesPreset: preset];
-
-        if (matchesPreset)
+        if (![preset.name hasPrefix: PRESET_NAME_PREFIX])
         {
-            [presetsArray addObject: [preset name]];
-            presetMatched = YES;
+            BOOL matchesPreset = [self checkIfGroup: group matchesPreset: preset];
+
+            if (matchesPreset)
+            {
+                [presetsArray addObject: [preset name]];
+                presetMatched = YES;
+            }
         }
     }
 

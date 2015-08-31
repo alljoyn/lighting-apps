@@ -39,4 +39,6 @@ enum EffectV2Property {
 @property (nonatomic) int pulses;
 @property (nonatomic) EffectV2Type type;
 
+-(id)initFromEffectID: (NSString *)effectID;
+
 @end

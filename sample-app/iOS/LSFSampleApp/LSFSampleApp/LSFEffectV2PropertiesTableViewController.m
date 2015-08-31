@@ -16,6 +16,7 @@
 
 #import "LSFEffectV2PropertiesTableViewController.h"
 #import "LSFUtilityFunctions.h"
+#import "LSFLightingListenerUtil.h"
 #import <LSFSDKLightingDirector.h>
 
 @interface LSFEffectV2PropertiesTableViewController ()
@@ -24,6 +25,8 @@
 
 @implementation LSFEffectV2PropertiesTableViewController
 
+@synthesize pendingScene = _pendingScene;
+@synthesize pendingSceneElement = _pendingSceneElement;
 @synthesize pendingEffect = _pendingEffect;
 
 -(void)viewDidLoad
@@ -144,10 +147,6 @@
     if (value != -1)
     {
         [self updateSlider: (UISlider *)gr.view withValue: value];
-//        UISlider *slider = (UISlider *)gr.view;
-//        slider.value = value;
-//        [slider sendActionsForControlEvents: UIControlEventValueChanged];
-//        [slider sendActionsForControlEvents: UIControlEventTouchUpInside];
     }
 }
 
@@ -161,7 +160,6 @@
 -(IBAction)onSliderTouchUpInside: (UISlider *)slider
 {
     [self updateColorIndicator];
-//    [self updatePresetButtonTitle: self.presetButton];
 }
 
 -(void)updateColorIndicator
@@ -255,6 +253,7 @@
     NSLog(@"Done button pressed");
 
     self.pendingEffect.state = [self getSlidersState];
+    [self handlePendingData];
 }
 
 -(LSFSDKMyLampState *)getSlidersState
@@ -281,6 +280,42 @@
     if (![leaderModel connected])
     {
         [self dismissViewControllerAnimated: YES completion: nil];
+    }
+}
+
+-(void)handlePendingData
+{
+    self.pendingSceneElement.pendingEffect = self.pendingEffect;
+
+    if (!self.pendingSceneElement.theID)
+    {
+        [self.pendingScene.pendingSceneElements addObject: self.pendingSceneElement];
+
+        if (self.pendingScene.theID)
+        {
+            [LSFLightingListenerUtil listenForTrackingID: [LSFUtilityFunctions createEffectFromPendingItem: self.pendingEffect] perform: ^(id item){
+                self.pendingEffect.theID = ((id<LSFSDKEffect>)item).theID;
+
+                [LSFLightingListenerUtil listenForTrackingID: [LSFUtilityFunctions createSceneElementFromPendingItem: self.pendingSceneElement] perform: ^(id item) {
+
+                    self.pendingSceneElement.theID = ((LSFSDKSceneElement *)item).theID;
+
+                    LSFSDKSceneV2 *scene = (LSFSDKSceneV2 *) [[LSFSDKLightingDirector getLightingDirector] getSceneWithID: self.pendingScene.theID];
+
+                    NSMutableArray *elementIDs = [NSMutableArray arrayWithArray: [scene getSceneElementIDs]];
+                    [elementIDs addObject: self.pendingSceneElement.theID];
+
+                    [scene modify: self.pendingScene.pendingSceneElements];
+                }];
+            }];
+        }
+    }
+    else
+    {
+        // update effect
+        [LSFUtilityFunctions updateEffectWithID: self.pendingEffect.theID pendingItem: self.pendingEffect];
+        // update sceneElement
+        [LSFUtilityFunctions updateSceneElementWithID: self.pendingSceneElement.theID pendingItem: self.pendingSceneElement];
     }
 }
 

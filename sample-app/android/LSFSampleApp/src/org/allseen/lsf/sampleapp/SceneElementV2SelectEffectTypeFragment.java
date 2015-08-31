@@ -76,12 +76,13 @@ public class SceneElementV2SelectEffectTypeFragment extends SceneItemSelectEffec
 
         if (effectID.equals(Effect.EFFECT_TYPE_PRESET)) {
             PresetEffectFragment.pendingPresetEffect = new PendingPresetEffect();
+            ((ScenesPageFragment)parent).showConstantEffectChildFragment();
         } else if (effectID.equals(Effect.EFFECT_TYPE_TRANSITION)) {
             TransitionEffectV2Fragment.pendingTransitionEffect = new PendingTransitionEffectV2();
+            ((ScenesPageFragment)parent).showTransitionEffectChildFragment();
         } else if (effectID.equals(Effect.EFFECT_TYPE_PULSE)) {
             PulseEffectV2Fragment.pendingPulseEffect = new PendingPulseEffectV2();
+            ((ScenesPageFragment)parent).showPulseEffectChildFragment();
         }
-
-        ((ScenesPageFragment)parent).showEnterEffectNameChildFragment();
     }
 }

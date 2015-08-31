@@ -124,12 +124,7 @@ public class LightingSystemManager
             @Override
             public void onLampChanged(final LAMP lamp) {
                 groupManagerCB.postUpdateDependentLampGroups(factory.findLampDataModel(lamp).id);
-            }
-        });
 
-        lampCollectionManager.addListener(new LampCollectionListenerBase<LAMP, ERROR>() {
-            @Override
-            public void onLampChanged(final LAMP lamp) {
                 if (!isAllLampsGroupCreated) {
                     isAllLampsGroupCreated = true;
                     groupManagerCB.postProcessLampGroupID(AllLampsDataModel.ALL_LAMPS_GROUP_ID, true, true);

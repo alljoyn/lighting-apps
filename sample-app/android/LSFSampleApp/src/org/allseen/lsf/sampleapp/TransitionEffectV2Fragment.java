@@ -17,10 +17,7 @@ package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.sdk.LampCapabilities;
 import org.allseen.lsf.sdk.LampStateUniformity;
-import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.MyLampState;
-import org.allseen.lsf.sdk.Preset;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,7 +66,7 @@ public class TransitionEffectV2Fragment extends EffectV2InfoFragment {
         // Superclass updates the icon, so we have to re-override
         setImageButtonBackgroundResource(statusView, R.id.statusButtonPower, R.drawable.list_transition_icon);
 
-        String durationValue = String.format(getString(R.string.effect_info_duration_format), EnterDurationFragment.duration / 1000.0);
+        String durationValue = String.format(getString(R.string.effect_info_duration_format), pendingTransitionEffect.duration / 1000.0);
         setTextViewValue(view.findViewById(R.id.infoDurationRow), R.id.nameValueValueText, durationValue, R.string.units_seconds);
     }
 
@@ -85,6 +82,9 @@ public class TransitionEffectV2Fragment extends EffectV2InfoFragment {
     }
 
     protected void onDurationClick() {
+        EnterDurationFragment.transition = false;
+        EnterDurationFragment.duration = pendingTransitionEffect.duration;
+
         ((ScenesPageFragment)parent).showEnterDurationChildFragment();
     }
 
@@ -120,16 +120,10 @@ public class TransitionEffectV2Fragment extends EffectV2InfoFragment {
 
     @Override
     public void onActionDone() {
-        LightingDirector director = LightingDirector.get();
+        SceneElementV2InfoFragment.pendingSceneElement.pendingTransitionEffect = pendingTransitionEffect;
 
-        Preset preset = director.getPreset(pendingTransitionEffect.presetID);
+        BasicSceneV2InfoFragment.onPendingSceneElementDone();
 
-        if (!isAddMode()) {
-            director.getTransitionEffect(pendingTransitionEffect.id).modify(preset != null ? preset : pendingTransitionEffect.state, EnterDurationFragment.duration);
-        } else {
-            director.createTransitionEffect(preset != null ? preset : pendingTransitionEffect.state, EnterDurationFragment.duration, pendingTransitionEffect.name);
-        }
-
-        parent.popBackStack(ScenesPageFragment.CHILD_TAG_SELECT_EFFECT);
+        parent.popBackStack(ScenesPageFragment.CHILD_TAG_INFO);
     }
 }

@@ -145,7 +145,8 @@
 
 -(LSFSDKMyLampState *)endState
 {
-    return [[LSFSDKMyLampState alloc] initWithLSFLampState: [pulseEffectDataModel endState]];
+    LSFLampState *state = [pulseEffectDataModel endState];
+    return [[LSFSDKMyLampState alloc] initWithPower: (state.brightness ? ON : OFF) color: [[LSFSDKColor alloc] initWithHue: state.hue saturation: state.saturation brightness: state.brightness colorTemp: state.colorTemp]];
 }
 
 -(LSFSDKPreset *)startPreset

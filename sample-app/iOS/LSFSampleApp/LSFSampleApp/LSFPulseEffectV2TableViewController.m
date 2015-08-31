@@ -68,6 +68,11 @@
         self.pendingEffect.endState = [[LSFSDKMyLampState alloc] init];
     }
 
+    if (!self.pendingEffect.theID)
+    {
+        self.pendingEffect.name = [PULSE_NAME_PREFIX stringByAppendingString: [LSFUtilityFunctions generateRandomHexStringWithLength: 16]];
+    }
+
     [self updatePresetButtonTitle: self.presetButton];
     [self updateEndPresetButtonTitle: self.endPresetButton];
 
@@ -76,31 +81,22 @@
     self.numPulsesLabel.text = [NSString stringWithFormat:@"%@", [@(self.pendingEffect.pulses) stringValue]];
 }
 
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return (section == 0) ? [NSString stringWithFormat: @"Select the start and end properties that %@ will cycle through", [LSFUtilityFunctions memberStringForPendingSceneElement: self.pendingSceneElement]] : @"";
+}
+
 -(IBAction)doneButtonPressed:(id)sender
 {
     NSLog(@"Done Button Pressed for PulseEffect");
 
-    // set start state
-    self.pendingEffect.state = [self getSlidersState];
-
-    // handle preset match
-    NSArray* matchingPresets = [LSFUtilityFunctions getPresetsWithMyLampState: self.pendingEffect.state];
-    id<LSFSDKLampState> effectLampState = (matchingPresets.count > 0)? [matchingPresets objectAtIndex: 0] : self.pendingEffect.state;
-
-    // handle switch state
-    if (self.startPropertiesSwitch.on)
-    {
-        self.pendingEffect.state = [[LSFSDKMyLampState alloc] init];
-    }
+    // set the start state
+    self.pendingEffect.state = self.startPropertiesSwitch.on ? [[LSFSDKMyLampState alloc] init] : [self getSlidersState];
 
     // set end state
     self.pendingEffect.endState = [self getEndSlidersState];
-    matchingPresets = [LSFUtilityFunctions getPresetsWithMyLampState: self.pendingEffect.endState];
-    id<LSFSDKLampState> effectLampEndState = (matchingPresets.count > 0)? [matchingPresets objectAtIndex: 0] : self.pendingEffect.endState;
 
-    //create effect
-    [[LSFSDKLightingDirector getLightingDirector] createPulseEffectWithFromState: effectLampState toState: effectLampEndState period: self.pendingEffect.period duration: self.pendingEffect.duration count: self.pendingEffect.pulses name: self.pendingEffect.name];
-
+    [self handlePendingData];
     [self dismissViewControllerAnimated: YES completion: nil];
 }
 

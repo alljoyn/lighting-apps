@@ -14,10 +14,10 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFSDKAnyCollectionDelegateBase.h"
-#import "LSFSDKLightingItem.h"
+#import "LSFAnyCollectionDelegateBase.h"
+#import <LSFSDKLightingItem.h>
 
-@implementation LSFSDKAnyCollectionDelegateBase
+@implementation LSFAnyCollectionDelegateBase
 
 -(void)onAnyInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andLightingItem: (id)item
 {

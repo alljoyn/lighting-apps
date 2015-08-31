@@ -91,7 +91,7 @@ public class SceneV2 extends Scene {
 
             String[] sceneElementIds = new String[elements.length];
             for (int i = 0; i < elements.length; i++) {
-                sceneElementIds[i] = elements[0].getId();
+                sceneElementIds[i] = elements[i].getId();
             }
 
             postErrorIfFailure(errorContext,

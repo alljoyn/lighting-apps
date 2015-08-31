@@ -24,6 +24,7 @@ import org.allseen.lsf.sdk.TransitionEffect;
 public class PendingTransitionEffectV2 extends PendingLightingItem {
     public MyLampState state;
     public String presetID;
+    public long duration;//TODO-SV2-FIX
 
     public final LampStateUniformity uniformity = new LampStateUniformity();
 
@@ -37,7 +38,14 @@ public class PendingTransitionEffectV2 extends PendingLightingItem {
         // Note the state must have its own instance of a Color object
         state = transitionEffect != null ? transitionEffect.getState() : new MyLampState(Power.ON, new Color(Color.DEFAULT));
         presetID = transitionEffect != null ? transitionEffect.getPresetID() : "";
+        duration = transitionEffect != null ? transitionEffect.getDuration() : 5000;
+    }
 
-        EnterDurationFragment.duration = transitionEffect != null ? transitionEffect.getDuration() : 5000;
+    public PendingTransitionEffectV2(PendingTransitionEffectV2 pendingTransitionEffect) {
+        init(pendingTransitionEffect.id, pendingTransitionEffect.name);
+
+        state = new MyLampState(pendingTransitionEffect.state);
+        presetID = pendingTransitionEffect.presetID;
+        duration = pendingTransitionEffect.duration;
     }
 }

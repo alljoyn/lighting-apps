@@ -15,10 +15,14 @@
  ******************************************************************************/
 
 #import "LSFItemListTableViewController.h"
+#import "LSFPendingSceneV2.h"
+#import "LSFPendingSceneElement.h"
 #import "LSFPendingEffect.h"
 
 @interface LSFEffectV2TypeTableViewController : LSFItemListTableViewController
 
+@property (nonatomic, strong) LSFPendingSceneV2 *pendingScene;
+@property (nonatomic, strong) LSFPendingSceneElement *pendingSceneElement;
 @property (nonatomic, strong) LSFPendingEffect *pendingEffect;
 
 -(IBAction)nextButtonPressed:(id)sender;

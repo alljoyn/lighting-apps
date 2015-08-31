@@ -27,8 +27,6 @@ import org.allseen.lsf.sdk.LightingItem;
 import org.allseen.lsf.sdk.MasterScene;
 import org.allseen.lsf.sdk.MyLampState;
 import org.allseen.lsf.sdk.Preset;
-import org.allseen.lsf.sdk.SceneElement;
-import org.allseen.lsf.sdk.SceneV2;
 
 public class Util {
     public static boolean isDuplicateName(LightingItem[] items, String itemName) {
@@ -46,8 +44,8 @@ public class Util {
         return createMemberNamesString(activity, group.getGroupIDs(), group.getLampIDs(), separator, R.string.member_group_not_found, R.string.member_lamp_not_found, noMembersStringID);
     }
 
-    public static String createMemberNamesString(SampleAppActivity activity, SceneElement sceneElement, String separator, int noMembersStringID) {
-        return createMemberNamesString(activity, sceneElement.getGroupIDs(), sceneElement.getLampIDs(), separator, R.string.member_group_not_found, R.string.member_lamp_not_found, noMembersStringID);
+    public static String createMemberNamesString(SampleAppActivity activity, PendingSceneElementV2 pendingSceneElement, String separator, int noMembersStringID) {
+      return createMemberNamesString(activity, pendingSceneElement.groups, pendingSceneElement.lamps, separator, R.string.member_group_not_found, R.string.member_lamp_not_found, noMembersStringID);
     }
 
     // TODO-REF combine with next createMemberNamesString()?
@@ -133,10 +131,6 @@ public class Util {
     // Creates a details string, containing a list of all scenes
     public static String createSceneNamesString(SampleAppActivity activity, MasterScene masterScene) {
         return createSceneItemNamesString(activity, masterScene.getScenes(), R.string.member_scene_not_found, R.string.master_scene_members_none);
-    }
-
-    public static String createSceneElementNamesString(SampleAppActivity activity, SceneV2 basicScene) {
-        return createSceneItemNamesString(activity, basicScene.getSceneElements(), R.string.member_scene_element_not_found, R.string.basic_scene_members_none);
     }
 
     public static String createSceneItemNamesString(SampleAppActivity activity, LightingItem[] sceneItems, int notFoundID, int noMembersID) {

@@ -17,12 +17,24 @@ package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.sdk.LightingItem;
 
+import android.util.Log;
+
 public class PendingLightingItem {
     public String id;
     public String name;
 
     protected void init(LightingItem item) {
-        id = item != null ? item.getId() : null;
-        name = item != null ? item.getName() : "";
+        init(item != null ? item.getId() : null, item != null ? item.getName() : "");
+    }
+
+    protected void init(String id, String name) {
+        this.id = ensureValidID(id);
+        this.name = name;
+
+        Log.d(SampleAppActivity.TAG, "init: " + this.getClass().getSimpleName() + ", id: " + id);
+    }
+
+    protected String ensureValidID(String pendingID) {
+        return pendingID;
     }
 }

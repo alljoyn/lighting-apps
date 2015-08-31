@@ -25,6 +25,8 @@
     if (self)
     {
         delegates = [[NSMutableArray alloc] init];
+        delegatesPendingRemoval = [[NSMutableSet alloc] init];
+        delegatesPendingAddition = [[NSMutableSet alloc] init];
     }
 
     return self;
@@ -32,12 +34,34 @@
 
 -(void)addDelegate: (id<LSFSDKLightingDelegate>)delegate
 {
-    [delegates addObject: delegate];
+    [delegatesPendingAddition addObject: delegate];
+    [delegatesPendingRemoval removeObject: delegate];
 }
 
 -(void)removeDelegate: (id<LSFSDKLightingDelegate>)delegate
 {
-    [delegates removeObject: delegate];
+    [delegatesPendingAddition removeObject: delegate];
+    [delegatesPendingRemoval addObject: delegate];
+}
+
+-(void)processPendingRemovals
+{
+    for (id<LSFSDKLightingDelegate> delegate in delegatesPendingRemoval)
+    {
+        [delegates removeObject: delegate];
+    }
+
+    [delegatesPendingRemoval removeAllObjects];
+}
+
+-(void)processPendingAdditions
+{
+    for (id<LSFSDKLightingDelegate> delegate in delegatesPendingAddition)
+    {
+        [delegates addObject: delegate];
+    }
+
+    [delegatesPendingAddition removeAllObjects];
 }
 
 @end

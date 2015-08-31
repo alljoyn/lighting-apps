@@ -112,9 +112,9 @@
             self.saturationSliderButton.enabled = YES;
         }
 
-        self.colorTempSlider.value = self.nedm.state.colorTemp < self.nedm.colorTempMin ? self.nedm.colorTempMin : self.nedm.state.colorTemp;
         self.colorTempSlider.minimumValue = self.nedm.colorTempMin;
         self.colorTempSlider.maximumValue = self.nedm.colorTempMax;
+        self.colorTempSlider.value = self.nedm.colorTempMin;
 
         if (self.nedm.capability.temp >= SOME)
         {

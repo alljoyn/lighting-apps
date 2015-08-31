@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) AllSeen Alliance. All rights reserved.
+ * Copyright AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -14,12 +14,15 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFItemNameViewController.h"
-#import "LSFPendingSceneElement.h"
+#import <LSFSDKAllLightingItemDelegateBase.h>
 
-@interface LSFEnterSceneElementV2NameViewController : LSFItemNameViewController
+@class LSFSDKLightingItemErrorEvent;
 
-@property (nonatomic, strong) LSFPendingSceneElement *pendingSceneElement;
-- (IBAction)nameDidEndEditing:(id)sender;
+@interface LSFAnyCollectionDelegateBase : LSFSDKAllLightingItemDelegateBase
+
+-(void)onAnyInitializedWithTrackingID: (LSFSDKTrackingID *)trackingID andLightingItem: (id)item;
+-(void)onAnyChanged: (id)item;
+-(void)onAnyRemoved: (id)item;
+-(void)onAnyError: (LSFSDKLightingItemErrorEvent *)error;
 
 @end

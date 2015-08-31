@@ -16,6 +16,7 @@
 
 #import "LSFGroupsPresetsTableViewController.h"
 #import "LSFGroupsCreatePresetViewController.h"
+#import "LSFUtilityFunctions.h"
 #import <LSFSDKLightingDirector.h>
 #import <LSFSDKMyLampState.h>
 
@@ -119,6 +120,7 @@
 {
     self.presetData = [[LSFSDKLightingDirector getLightingDirector] presets];
     [self sortPresetData];
+    [self filterPresetData];
 
     [self.tableView reloadData];
 }
@@ -286,6 +288,24 @@
         NSString *second = [(LSFSDKPreset *)b name];
         return [first localizedCaseInsensitiveCompare: second];
     }]];
+}
+
+-(void)filterPresetData
+{
+    NSMutableArray *presetsToRemove = [[NSMutableArray alloc] init];
+
+    for (LSFSDKPreset *preset in self.presetDataSorted)
+    {
+        if ([preset.name hasPrefix: PRESET_NAME_PREFIX])
+        {
+            [presetsToRemove addObject: preset];
+        }
+    }
+
+    for (LSFSDKPreset *preset in presetsToRemove)
+    {
+        [self.presetDataSorted removeObject: preset];
+    }
 }
 
 /*

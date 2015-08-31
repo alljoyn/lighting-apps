@@ -16,14 +16,20 @@
 package org.allseen.lsf.sdk.manager;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <b>WARNING: This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK</b>.
  */
 public abstract class LightingItemListenerManager<LISTENER> {
-    protected final List<LISTENER> itemListeners = new ArrayList<LISTENER>();
+    protected final Set<LISTENER> addedListeners = new HashSet<LISTENER>();
+    protected final List<LISTENER> currentListeners = new ArrayList<LISTENER>();
+    protected final Set<LISTENER> removedListeners = new HashSet<LISTENER>();
+
     protected final LightingSystemManager<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> manager;
 
     public LightingItemListenerManager(LightingSystemManager<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> manager) {
@@ -33,10 +39,33 @@ public abstract class LightingItemListenerManager<LISTENER> {
     }
 
     public void addListener(LISTENER listener) {
-        itemListeners.add(listener);
+        removedListeners.remove(listener);
+        addedListeners.add(listener);
     }
 
     public void removeListener(LISTENER listener) {
-        itemListeners.remove(listener);
+        addedListeners.remove(listener);
+        removedListeners.add(listener);
+    }
+
+    protected void processAddedListeners() {
+        currentListeners.addAll(addedListeners);
+        addedListeners.clear();
+    }
+
+    protected LISTENER getNext(Iterator<LISTENER> iterator) {
+        LISTENER nextListener = null;
+
+        while (iterator.hasNext() && nextListener == null) {
+            LISTENER tempListener = iterator.next();
+
+            if (removedListeners.remove(tempListener)) {
+                iterator.remove();
+            } else {
+                nextListener = tempListener;
+            }
+        }
+
+        return nextListener;
     }
 }

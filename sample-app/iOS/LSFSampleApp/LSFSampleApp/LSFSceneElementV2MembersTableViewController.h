@@ -15,13 +15,14 @@
  ******************************************************************************/
 
 #import "LSFItemMultiSelectionListTableViewController.h"
+#import "LSFPendingSceneV2.h"
 #import "LSFPendingSceneElement.h"
 
 @interface LSFSceneElementV2MembersTableViewController : LSFItemMultiSelectionListTableViewController
 
+@property (nonatomic, strong) LSFPendingSceneV2 *pendingScene;
 @property (nonatomic, strong) LSFPendingSceneElement *pendingSceneElement;
 
-@property (nonatomic) BOOL hasDoneButton;
 @property (nonatomic) BOOL hasNextButton;
 
 @end

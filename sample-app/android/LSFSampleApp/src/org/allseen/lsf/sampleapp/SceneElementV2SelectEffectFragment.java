@@ -75,7 +75,7 @@ public class SceneElementV2SelectEffectFragment extends SelectEffectsFragment {
 
     @Override
     protected boolean isItemSelected(String itemID) {
-        return itemID.equals(SceneElementV2InfoFragment.pendingSceneElement.effectID);
+        return false; //TODO-FIX itemID.equals(SceneElementV2InfoFragment.pendingSceneElement.effectID);
     }
 
     @Override

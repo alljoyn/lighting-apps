@@ -258,12 +258,15 @@
     BOOL presetMatched = NO;
     for (LSFSDKPreset *preset in presets)
     {
-        BOOL matchesPreset = [self checkIfLamp: lamp matchesPreset: preset];
-
-        if (matchesPreset)
+        if (![preset.name hasPrefix: PRESET_NAME_PREFIX])
         {
-            [presetsArray addObject: [preset name]];
-            presetMatched = YES;
+            BOOL matchesPreset = [self checkIfLamp: lamp matchesPreset: preset];
+
+            if (matchesPreset)
+            {
+                [presetsArray addObject: [preset name]];
+                presetMatched = YES;
+            }
         }
     }
 

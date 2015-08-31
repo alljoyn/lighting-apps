@@ -154,7 +154,16 @@
 
 -(void)loadPresets
 {
-    self.data = [NSMutableArray arrayWithArray: [self sortByNameProperty: [[LSFSDKLightingDirector getLightingDirector] presets]]];
+    NSArray *allPresets = [self sortByNameProperty: [[LSFSDKLightingDirector getLightingDirector] presets]];
+    self.data = [[NSMutableArray alloc] init];
+
+    for (LSFSDKPreset *preset in allPresets)
+    {
+        if (![preset.name hasPrefix: PRESET_NAME_PREFIX])
+        {
+            [self.data addObject: preset];
+        }
+    }
 }
 
 -(NSArray *)sortByNameProperty: (NSArray *)array

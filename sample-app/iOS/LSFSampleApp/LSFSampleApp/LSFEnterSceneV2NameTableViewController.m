@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import "LSFEnterSceneV2NameTableViewController.h"
-#import "LSFScenesV2Members.h"
+#import "LSFSceneElementV2TableViewController.h"
 #import "LSFPendingSceneV2.h"
 #import <LSFSDKLightingDirector.h>
 
@@ -70,8 +70,8 @@
 {
     if ([segue.identifier isEqualToString: @"SceneV2Members"])
     {
-        LSFScenesV2Members *smvc = [segue destinationViewController];
-        smvc.pendingScene = self.pendingScene;
+        LSFSceneElementV2TableViewController *semtvc = [segue destinationViewController];
+        semtvc.pendingScene = self.pendingScene;
     }
 }
 

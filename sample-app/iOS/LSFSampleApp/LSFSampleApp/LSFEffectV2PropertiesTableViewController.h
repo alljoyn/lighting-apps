@@ -15,10 +15,14 @@
  ******************************************************************************/
 
 #import <UIKit/UIKit.h>
+#import "LSFPendingSceneV2.h"
+#import "LSFPendingSceneElement.h"
 #import "LSFPendingEffect.h"
 
 @interface LSFEffectV2PropertiesTableViewController : UITableViewController
 
+@property (nonatomic, strong) LSFPendingSceneV2 *pendingScene;
+@property (nonatomic, strong) LSFPendingSceneElement *pendingSceneElement;
 @property (nonatomic, strong) LSFPendingEffect *pendingEffect;
 
 @property (weak, nonatomic) IBOutlet UIImageView *colorIndicatorImage;
@@ -43,6 +47,7 @@
 -(void)updateSlider: (UISlider *)slider withValue: (int)value;
 -(void)checkSaturationValue;
 -(LSFSDKMyLampState *)getSlidersState;
+-(void)handlePendingData;
 
 -(void)onSliderTapped: (UIGestureRecognizer *)gr;
 -(IBAction)onSliderTouchUpInside: (UISlider *)slider;

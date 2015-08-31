@@ -45,7 +45,7 @@ public class BasicSceneV2SelectMembersFragment extends SelectMembersFragment {
 
     @Override
     protected String[] getPendingSceneElements() {
-        return BasicSceneV2InfoFragment.pendingSceneV2.sceneElementIDs;
+        return null; //TODO-FIX BasicSceneV2InfoFragment.pendingSceneV2.sceneElementIDs;
     }
 
     @Override

@@ -15,10 +15,12 @@
  ******************************************************************************/
 
 #import "LSFPendingSceneV2.h"
+#import "LSFPendingSceneElement.h"
+#import <LSFSDKLightingDirector.h>
 
 @implementation LSFPendingSceneV2
 
-@synthesize membersSceneElements = _membersSceneElements;
+@synthesize pendingSceneElements = _pendingSceneElements;
 
 -(id)init
 {
@@ -26,10 +28,54 @@
 
     if (self)
     {
-        _membersSceneElements = nil;
+        _pendingSceneElements = nil;
     }
 
     return self;
+}
+
+-(id)initFromSceneID: (NSString *)sceneID
+{
+    self = [super init];
+
+    LSFSDKScene *scene = [[LSFSDKLightingDirector getLightingDirector] getSceneWithID: sceneID];
+
+    if (scene && [scene isKindOfClass: [LSFSDKSceneV2 class]])
+    {
+        LSFSDKSceneV2 *sceneV2 = (LSFSDKSceneV2 *) scene;
+
+        self.theID = sceneV2.theID;
+        self.name = sceneV2.name;
+
+        self.pendingSceneElements = [[NSMutableArray alloc] init];
+        for (LSFSDKSceneElement *element in [sceneV2 getSceneElements])
+        {
+            NSString *elementID = element.theID;
+            [self.pendingSceneElements addObject: [[LSFPendingSceneElement alloc] initFromSceneElementID: elementID]];
+        }
+    }
+    else
+    {
+        NSLog(@"SceneV2 not found in Lighting Director. Returning default pending object");
+    }
+
+    return self;
+}
+
+-(BOOL)hasValidSceneElements
+{
+    if (self.pendingSceneElements)
+    {
+        for (LSFPendingSceneElement *elem in self.pendingSceneElements)
+        {
+            if (!elem.theID)
+            {
+                return NO;
+            }
+        }
+    }
+
+    return YES;
 }
 
 @end

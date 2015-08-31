@@ -127,6 +127,9 @@
 
 -(void)sendInitializedEvent: (NSString *)itemID withTrackingID: (LSFSDKTrackingID *)trackingID
 {
+    [self processPendingAdditions];
+    [self processPendingRemovals];
+
     for (id<LSFSDKLightingDelegate> delegate in delegates)
     {
         [self sendInitializedEvent: delegate item: [self getAdapterForID: itemID] trackingID: trackingID];
@@ -135,6 +138,9 @@
 
 -(void)sendChangedEvent: (NSString *)itemID
 {
+    [self processPendingAdditions];
+    [self processPendingRemovals];
+
     for (id<LSFSDKLightingDelegate> delegate in delegates)
     {
         [self sendChangedEvent: delegate item: [self getAdapterForID: itemID]];
@@ -143,6 +149,9 @@
 
 -(void)sendRemovedEvent: (id)item
 {
+    [self processPendingAdditions];
+    [self processPendingRemovals];
+
     for (id<LSFSDKLightingDelegate> delegate in delegates)
     {
         [self sendRemovedEvent: delegate item: item];
@@ -166,6 +175,9 @@
 
 -(void)sendErrorEvent: (LSFSDKLightingItemErrorEvent *)errorEvent
 {
+    [self processPendingAdditions];
+    [self processPendingRemovals];
+
     for (id<LSFSDKLightingDelegate> delegate in delegates)
     {
         [self sendErrorEvent: delegate errorEvent: errorEvent];

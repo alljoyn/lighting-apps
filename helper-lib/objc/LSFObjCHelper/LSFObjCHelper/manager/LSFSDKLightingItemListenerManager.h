@@ -24,10 +24,14 @@
 @interface LSFSDKLightingItemListenerManager : NSObject
 {
     @protected NSMutableArray *delegates;
+    @protected NSMutableSet *delegatesPendingRemoval;
+    @protected NSMutableSet *delegatesPendingAddition;
 }
 
 -(id)init;
 -(void)addDelegate: (id<LSFSDKLightingDelegate>)delegate;
 -(void)removeDelegate: (id<LSFSDKLightingDelegate>)delegate;
+-(void)processPendingRemovals;
+-(void)processPendingAdditions;
 
 @end

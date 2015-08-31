@@ -15,7 +15,10 @@
  ******************************************************************************/
 
 #import "LSFEffectV2TypeTableViewController.h"
-#import "LSFEnterEffectV2NameViewController.h"
+#import "LSFEffectV2PropertiesTableViewController.h"
+#import "LSFPresetEffectV2TableViewController.h"
+#import "LSFTransitionEffectV2TableViewController.h"
+#import "LSFPulseEffectV2TableViewController.h"
 
 @interface LSFEffectV2TypeTableViewController ()
 
@@ -23,12 +26,19 @@
 
 @implementation LSFEffectV2TypeTableViewController
 
+@synthesize pendingScene = _pendingScene;
+@synthesize pendingSceneElement = _pendingSceneElement;
 @synthesize pendingEffect = _pendingEffect;
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear: animated];
-    self.pendingEffect = [[LSFPendingEffect alloc] init];
+
+    if (self.pendingEffect.theID)
+    {
+        self.selectedIndexPath = [NSIndexPath indexPathForRow: self.pendingEffect.type inSection: 0];
+        [self nextButtonPressed: nil];
+    }
 }
 
 -(void)buildTable
@@ -74,29 +84,40 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString: @"EffectV2Name"])
+    NSString *identifier = segue.identifier;
+    LSFEffectV2PropertiesTableViewController *etvc = [segue destinationViewController];
+    etvc.pendingSceneElement = self.pendingSceneElement;
+    etvc.pendingScene = self.pendingScene;
+    etvc.pendingEffect = self.pendingEffect;
+
+    if ([identifier isEqualToString: @"TransitionEffect"])
     {
-        LSFEnterEffectV2NameViewController *eenvc = [segue destinationViewController];
-        eenvc.pendingEffect = self.pendingEffect;
+        etvc.pendingEffect.duration = 5000;
+    }
+    else if ([identifier isEqualToString: @"PulseEffect"])
+    {
+        etvc.pendingEffect.duration = 500;
     }
 }
 
 -(IBAction)nextButtonPressed:(id)sender
 {
+    NSLog(@"%s", __FUNCTION__);
     switch (self.selectedIndexPath.row)
     {
         case 0:
             self.pendingEffect.type = PRESET;
+            [self performSegueWithIdentifier: @"PresetEffect" sender: self];
             break;
         case 1:
             self.pendingEffect.type = TRANSITION;
+            [self performSegueWithIdentifier: @"TransitionEffect" sender: self];
             break;
         case 2:
             self.pendingEffect.type = PULSE;
+            [self performSegueWithIdentifier: @"PulseEffect" sender: self];
             break;
     }
-
-    [self performSegueWithIdentifier: @"EffectV2Name" sender: self];
 }
 
 -(IBAction)cancelButtonPressed: (id)sender

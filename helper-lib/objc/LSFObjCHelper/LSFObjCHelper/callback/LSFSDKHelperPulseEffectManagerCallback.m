@@ -176,7 +176,7 @@
 {
     if (rc != LSF_OK)
     {
-        [self.manager.transitionEffectCollectionManager sendErrorEvent: @"deletePulseEffectReplyCB" statusCode: rc itemID: pulseEffectID];
+        [self.manager.pulseEffectCollectionManager sendErrorEvent: @"deletePulseEffectReplyCB" statusCode: rc itemID: pulseEffectID];
     }
 }
 

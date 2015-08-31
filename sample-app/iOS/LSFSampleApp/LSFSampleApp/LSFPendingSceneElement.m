@@ -20,7 +20,7 @@
 @implementation LSFPendingSceneElement
 
 @synthesize members = _members;
-@synthesize effect = _effect;
+@synthesize pendingEffect = _pendingEffect;
 @synthesize capability = _capability;
 @synthesize hasEffect = _hasEffect;
 
@@ -31,7 +31,7 @@
     if (self)
     {
         _members = nil;
-        _effect = nil;
+        _pendingEffect = nil;
         _capability = nil;
         _hasEffect = NO;
     }
@@ -45,30 +45,38 @@
 
     LSFSDKSceneElement *element = [[LSFSDKLightingDirector getLightingDirector] getSceneElementWithID: sceneElementID];
 
-    self.theID = element.theID;
-    self.name = element.name;
-    self.effect = [element getEffect];
-
-    self.members = [NSMutableArray arrayWithArray: [element getGroups]];
-    [self.members addObjectsFromArray: [element getLamps]];
-
-    self.capability = [[LSFSDKCapabilityData alloc] init];
-
-    for (LSFSDKGroupMember *member in self.members)
+    if (element)
     {
-        [self.capability includeData: [member getCapabilities]];
+        self.theID = element.theID;
+        self.name = element.name;
 
-        if ([member isKindOfClass: [LSFSDKLamp class]])
+        self.pendingEffect = [[LSFPendingEffect alloc] initFromEffectID: [[element getEffect] theID]];
+
+        self.members = [NSMutableArray arrayWithArray: [element getGroups]];
+        [self.members addObjectsFromArray: [element getLamps]];
+
+        self.capability = [[LSFSDKCapabilityData alloc] init];
+
+        for (LSFSDKGroupMember *member in self.members)
         {
-            self.hasEffect = self.hasEffect || ((LSFSDKLamp *)member).details.hasEffects;
-        }
-        else if ([member isKindOfClass: [LSFSDKGroup class]])
-        {
-            for (LSFSDKLamp *lamp in [((LSFSDKGroup *) member) getLamps])
+            [self.capability includeData: [member getCapabilities]];
+
+            if ([member isKindOfClass: [LSFSDKLamp class]])
             {
-                self.hasEffect = self.hasEffect || lamp.details.hasEffects;
+                self.hasEffect = self.hasEffect || ((LSFSDKLamp *)member).details.hasEffects;
+            }
+            else if ([member isKindOfClass: [LSFSDKGroup class]])
+            {
+                for (LSFSDKLamp *lamp in [((LSFSDKGroup *) member) getLamps])
+                {
+                    self.hasEffect = self.hasEffect || lamp.details.hasEffects;
+                }
             }
         }
+    }
+    else
+    {
+        NSLog(@"SceneElement not found in Lighting Director. Returning default pending object");
     }
 
     return self;

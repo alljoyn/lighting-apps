@@ -57,13 +57,11 @@
         [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(lampNotificationReceived:) name: @"LSFLampChangedNotification" object: nil];
         [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(groupNotificationRecieved:) name: @"LSFGroupChangedNotification" object: nil];
         [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneNotificationReceived:) name: @"LSFSceneChangedNotification" object: nil];
-        [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneNotificationReceived:) name: @"LSFSceneElementChangedNotification" object: nil];
         [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneNotificationReceived:) name: @"LSFMasterSceneChangedNotification" object: nil];
 
         [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(lampNotificationReceived:) name: @"LSFLampRemovedNotification" object: nil];
         [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(groupNotificationRecieved:) name: @"LSFGroupRemovedNotification" object: nil];
         [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneNotificationReceived:) name: @"LSFSceneRemovedNotification" object: nil];
-        [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneNotificationReceived:) name: @"LSFSceneElementRemovedNotification" object: nil];
         [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(sceneNotificationReceived:) name: @"LSFMasterRemovedNotification" object: nil];
 
         [self lampNotificationReceived: nil];
@@ -86,7 +84,7 @@
 
 -(void)sceneNotificationReceived: (NSNotification *)notification
 {
-    unsigned long totalScenes = ([[LSFSDKLightingDirector getLightingDirector] sceneCount]) + [[LSFSDKLightingDirector getLightingDirector] masterSceneCount] + [[LSFSDKLightingDirector getLightingDirector] sceneElementCount];
+    unsigned long totalScenes = ([[LSFSDKLightingDirector getLightingDirector] sceneCount]) + [[LSFSDKLightingDirector getLightingDirector] masterSceneCount];
 
     [[self.tabBarController.tabBar.items objectAtIndex: 2] setTitle: [NSString stringWithFormat: @"Scenes (%lu)", totalScenes]];
 }

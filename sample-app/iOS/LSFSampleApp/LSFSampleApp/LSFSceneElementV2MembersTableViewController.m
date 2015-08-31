@@ -15,7 +15,8 @@
  ******************************************************************************/
 
 #import "LSFSceneElementV2MembersTableViewController.h"
-#import "LSFEffectsV2TableViewController.h"
+#import "LSFEffectV2TypeTableViewController.h"
+#import "LSFPresetEffectV2TableViewController.h"
 #import "LSFUtilityFunctions.h"
 #import <LSFSDKLightingDirector.h>
 
@@ -25,20 +26,13 @@
 
 @implementation LSFSceneElementV2MembersTableViewController
 
+@synthesize pendingScene = _pendingScene;
 @synthesize pendingSceneElement = _pendingSceneElement;
-@synthesize hasDoneButton = _hasDoneButton;
 @synthesize hasNextButton = _hasNextButton;
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear: animated];
-
-    if (self.hasDoneButton)
-    {
-        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle: @"Done" style: UIBarButtonItemStyleDone target: self action: @selector(doneButtonPressed)];
-
-        self.navigationItem.rightBarButtonItem = doneButton;
-    }
 
     if (self.hasNextButton)
     {
@@ -49,6 +43,11 @@
                                         action: @selector(nextButtonPressed)];
 
         self.navigationItem.rightBarButtonItem = nextButton;
+    }
+
+    if (!self.pendingSceneElement.theID)
+    {
+        self.pendingSceneElement.name = [SCENE_ELEMENT_NAME_PREFIX stringByAppendingString: [LSFUtilityFunctions generateRandomHexStringWithLength: 16]];
     }
 }
 
@@ -104,37 +103,55 @@
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return @"Select the Lamps in this Scene Element";
+    return @"Tap + to add a new scene element";
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString: @"SceneElementEffect"])
+    if ([segue.identifier isEqualToString: @"CreateV2Effect"])
     {
-        LSFEffectsV2TableViewController *etvc = [segue destinationViewController];
-        etvc.pendingSceneElement = self.pendingSceneElement;
+        LSFEffectV2TypeTableViewController *ettvc = [segue destinationViewController];
+        ettvc.pendingScene = self.pendingScene;
+        ettvc.pendingSceneElement = self.pendingSceneElement;
+        ettvc.pendingEffect = (self.pendingSceneElement.pendingEffect) ?  self.pendingSceneElement.pendingEffect : [[LSFPendingEffect alloc] init];
     }
-}
-
--(void)doneButtonPressed
-{
-    if (self.pendingSceneElement.theID != nil)
+    else if ([segue.identifier isEqualToString: @"PresetEffect"] || [segue.identifier isEqualToString: @"TransitionEffect"] || [segue.identifier isEqualToString: @"PulseEffect"])
     {
-        if ([self processSelections])
-        {
-            LSFSDKSceneElement *element = [[LSFSDKLightingDirector getLightingDirector] getSceneElementWithID: self.pendingSceneElement.theID];
-            [element modifyWithEffect: self.pendingSceneElement.effect groupMembers: self.pendingSceneElement.members];
-
-            [self dismissViewControllerAnimated: YES completion: nil];
-        }
+        LSFEffectV2TypeTableViewController *etvc = [segue destinationViewController];
+        etvc.pendingScene = self.pendingScene;
+        etvc.pendingSceneElement = self.pendingSceneElement;
+        etvc.pendingEffect = (self.pendingSceneElement.pendingEffect) ?  self.pendingSceneElement.pendingEffect : [[LSFPendingEffect alloc] init];
     }
 }
 
 -(void)nextButtonPressed
 {
+    NSLog(@"%s", __FUNCTION__);
     if ([self processSelections])
     {
-        [self performSegueWithIdentifier: @"SceneElementEffect" sender: self];
+        if (self.pendingSceneElement.pendingEffect.theID)
+        {
+            switch (self.pendingSceneElement.pendingEffect.type)
+            {
+                case PRESET:
+                    [self performSegueWithIdentifier: @"PresetEffect" sender: self];
+                    break;
+                case TRANSITION:
+                    [self performSegueWithIdentifier: @"TransitionEffect" sender: self];
+                    break;
+                case PULSE:
+                    [self performSegueWithIdentifier: @"PulseEffect" sender: self];
+                    break;
+            }
+        }
+        else if (self.pendingSceneElement.hasEffect)
+        {
+            [self performSegueWithIdentifier: @"CreateV2Effect" sender: self];
+        }
+        else
+        {
+            [self performSegueWithIdentifier: @"PresetEffect" sender: self];
+        }
     }
 }
 

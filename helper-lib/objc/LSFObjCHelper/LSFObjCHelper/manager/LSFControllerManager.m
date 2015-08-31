@@ -44,6 +44,9 @@
 
 -(void)sendLeaderStateChangedEvent
 {
+    [self processPendingAdditions];
+    [self processPendingRemovals];
+
     for (id delegate in delegates)
     {
         if ([delegate conformsToProtocol: @protocol(LSFSDKControllerDelegate)])
@@ -60,6 +63,9 @@
 
 -(void)sendErrorEventWithName: (NSString *)name andResonseCode: (LSFResponseCode)responseCode
 {
+    [self processPendingAdditions];
+    [self processPendingRemovals];
+
     [self sendErrorEvent: [[LSFSDKControllerErrorEvent alloc] initWithName: name andResponseCode: responseCode]];
 }
 
