@@ -2280,33 +2280,6 @@
                             </tableViewSection>
                             <tableViewSection id="QJO-S7-z7d">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="w8P-UH-Lqj" detailTextLabel="6ZQ-xP-ZeM" style="IBUITableViewCellStyleValue1" id="uWi-v1-umX">
-                                        <rect key="frame" x="0.0" y="871" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uWi-v1-umX" id="rqA-NU-zlK">
-                                            <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Duration" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="w8P-UH-Lqj">
-                                                    <rect key="frame" x="15" y="11" width="66" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="0 seconds" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="6ZQ-xP-ZeM">
-                                                    <rect key="frame" x="205" y="11" width="80" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="Hrx-kv-a9s" kind="push" identifier="PulseDuration" id="7gk-YC-OV2"/>
-                                        </connections>
-                                    </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="sf3-M9-Xe5" detailTextLabel="HPp-0j-Tv5" style="IBUITableViewCellStyleValue1" id="5wF-aW-3wn">
                                         <rect key="frame" x="0.0" y="915" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
@@ -2334,6 +2307,33 @@
                                             <segue destination="Hrx-kv-a9s" kind="push" identifier="PulsePeriod" id="Nvq-kV-1XH"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="w8P-UH-Lqj" detailTextLabel="6ZQ-xP-ZeM" style="IBUITableViewCellStyleValue1" id="uWi-v1-umX">
+                                        <rect key="frame" x="0.0" y="871" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uWi-v1-umX" id="rqA-NU-zlK">
+                                            <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Pulse duration" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="w8P-UH-Lqj">
+                                                    <rect key="frame" x="15" y="11" width="66" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="0 seconds" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="6ZQ-xP-ZeM">
+                                                    <rect key="frame" x="205" y="11" width="80" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="Hrx-kv-a9s" kind="push" identifier="PulseDuration" id="7gk-YC-OV2"/>
+                                        </connections>
+                                    </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="mqt-qR-oOK" detailTextLabel="LLo-Hu-pOA" style="IBUITableViewCellStyleValue1" id="uGc-RU-jH7">
                                         <rect key="frame" x="0.0" y="959" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
@@ -2341,7 +2341,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Num Pulses" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="mqt-qR-oOK">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Number of pulses" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="mqt-qR-oOK" userLabel="Number of pulses">
                                                     <rect key="frame" x="15" y="11" width="93" height="21"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -3200,13 +3200,13 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="blw-RZ-KcS"/>
-        <segue reference="cqU-0S-d4j"/>
         <segue reference="Z0B-fq-0fu"/>
-        <segue reference="pMI-s5-qTs"/>
-        <segue reference="LQM-TX-hGj"/>
-        <segue reference="Re0-H5-5Fu"/>
-        <segue reference="Emc-EQ-f5e"/>
+        <segue reference="cqU-0S-d4j"/>
+        <segue reference="blw-RZ-KcS"/>
         <segue reference="xLS-9b-3A3"/>
+        <segue reference="LQM-TX-hGj"/>
+        <segue reference="pMI-s5-qTs"/>
+        <segue reference="fDD-e6-qML"/>
+        <segue reference="Nvq-kV-1XH"/>
     </inferredMetricsTieBreakers>
 </document>

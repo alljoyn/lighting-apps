@@ -104,22 +104,6 @@
     }
 }
 
-/*
- * Override addDelegate function from super class
- */
--(void)addDelegate: (id<LSFSDKLightingDelegate>)delegate
-{
-    [super addDelegate: delegate];
-
-    NSEnumerator *valueEnumerator = [itemAdapters objectEnumerator];
-    id value;
-
-    while ((value = [valueEnumerator nextObject]))
-    {
-        [self sendChangedEvent: delegate item: value];
-    }
-}
-
 -(void)sendInitializedEvent: (NSString *)itemID
 {
     [self sendInitializedEvent: itemID withTrackingID: nil];
