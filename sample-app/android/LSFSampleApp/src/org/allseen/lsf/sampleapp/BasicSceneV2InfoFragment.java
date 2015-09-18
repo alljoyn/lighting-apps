@@ -147,7 +147,7 @@ public class BasicSceneV2InfoFragment extends SceneItemInfoFragment {
     }
 
     protected void onElementMoreClick(View anchor, String elementID) {
-        ((SampleAppActivity)getActivity()).onItemButtonMore(parent, SampleAppActivity.Type.ELEMENT, anchor, key, elementID);
+        ((SampleAppActivity)getActivity()).onItemButtonMore(parent, SampleAppActivity.Type.ELEMENT, anchor, key, elementID, pendingSceneV2.current.size() > 1);
     }
 
     @Override

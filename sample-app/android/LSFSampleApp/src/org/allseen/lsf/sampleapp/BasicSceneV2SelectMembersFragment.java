@@ -65,7 +65,7 @@ public class BasicSceneV2SelectMembersFragment extends SelectMembersFragment {
         if (view.getId() == R.id.selectHeader) {
             //TODO-FIX
         } else if (view.getId() == R.id.selectableItemButtonIcon) {
-            ((SampleAppActivity)getActivity()).showSceneElementMorePopup(view, getPendingItemID(), view.getTag().toString());
+            ((SampleAppActivity)getActivity()).showSceneElementMorePopup(view, getPendingItemID(), view.getTag().toString(), true);
         } else {
             super.onClick(view);
         }

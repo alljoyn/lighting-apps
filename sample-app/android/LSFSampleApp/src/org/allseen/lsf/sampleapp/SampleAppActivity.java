@@ -17,8 +17,10 @@
 package org.allseen.lsf.sampleapp;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
 import org.allseen.lsf.sdk.AllLightingItemListener;
@@ -421,7 +423,7 @@ public class SampleAppActivity extends FragmentActivity implements
         resetActionBar();
     }
 
-    public void onItemButtonMore(PageFrameParentFragment parent, Type type, View button, String itemID, String subItemID) {
+    public void onItemButtonMore(PageFrameParentFragment parent, Type type, View button, String itemID, String subItemID, boolean enabled) {
         switch (type) {
             case LAMP:
                 showInfoFragment(parent, itemID);
@@ -433,7 +435,7 @@ public class SampleAppActivity extends FragmentActivity implements
                 showSceneMorePopup(button, itemID);
                 return;
             case ELEMENT:
-                showSceneElementMorePopup(button, itemID, subItemID);
+                showSceneElementMorePopup(button, itemID, subItemID, enabled);
                 return;
         }
     }
@@ -606,7 +608,7 @@ public class SampleAppActivity extends FragmentActivity implements
         }
     }
 
-    private void showConfirmDeleteItemDialog(final DeletableItem item, int confirmTitleID, int confirmLableID, int errorTitleID, int errorMessageID) {
+    private void showConfirmDeleteItemDialog(final DeletableItem item, final List<DeletableItem> components, int confirmTitleID, int confirmLableID, int errorTitleID, int errorMessageID) {
         if (item != null) {
             final String itemName = item.getName();
             final LightingItem[] dependents = item.getDependents();
@@ -618,6 +620,10 @@ public class SampleAppActivity extends FragmentActivity implements
                         Log.d(SampleAppActivity.TAG, "Delete item: " + itemName);
 
                         item.delete();
+
+                        for (DeletableItem component : components) {
+                            component.delete();
+                        }
                     }});
             } else {
                 String memberNames = MemberNamesString.format(this, dependents, MemberNamesOptions.en, 3, "");
@@ -632,6 +638,7 @@ public class SampleAppActivity extends FragmentActivity implements
         if (sceneElementID != null) {
             showConfirmDeleteItemDialog(
                 LightingDirector.get().getSceneElement(sceneElementID),
+                null,
                 R.string.menu_scene_element_delete,
                 R.string.label_scene_element,
                 R.string.error_dependency_scene_element_title,
@@ -640,9 +647,20 @@ public class SampleAppActivity extends FragmentActivity implements
     }
 
     private void showConfirmDeleteBasicSceneDialog(final String basicSceneID) {
+        Scene basicScene = LightingDirector.get().getScene(basicSceneID);
+        List<DeletableItem> sceneComponents = new ArrayList<DeletableItem>();
+
+        if (basicScene instanceof SceneV2) {
+            for (SceneElement sceneElement : ((SceneV2)basicScene).getSceneElements()) {
+                sceneComponents.add(sceneElement);
+                sceneComponents.add(sceneElement.getEffect());
+            }
+        }
+
         if (basicSceneID != null) {
             showConfirmDeleteItemDialog(
-                LightingDirector.get().getScene(basicSceneID),
+                basicScene,
+                sceneComponents,
                 R.string.menu_basic_scene_delete,
                 R.string.label_basic_scene,
                 R.string.error_dependency_scene_title,
@@ -664,6 +682,7 @@ public class SampleAppActivity extends FragmentActivity implements
         if (masterSceneID != null) {
             showConfirmDeleteItemDialog(
                 LightingDirector.get().getMasterScene(masterSceneID),
+                null,
                 R.string.menu_master_scene_delete,
                 R.string.label_master_scene,
                 0,
@@ -675,6 +694,7 @@ public class SampleAppActivity extends FragmentActivity implements
         if (groupID != null) {
             showConfirmDeleteItemDialog(
                 LightingDirector.get().getGroup(groupID),
+                null,
                 R.string.menu_group_delete,
                 R.string.label_group,
                 R.string.error_dependency_group_title,
@@ -686,6 +706,7 @@ public class SampleAppActivity extends FragmentActivity implements
         if (presetID != null) {
             showConfirmDeleteItemDialog(
                 LightingDirector.get().getPreset(presetID),
+                null,
                 R.string.menu_preset_delete,
                 R.string.label_preset,
                 R.string.error_dependency_preset_title,
@@ -697,6 +718,7 @@ public class SampleAppActivity extends FragmentActivity implements
         if (transitionEffectID != null) {
             showConfirmDeleteItemDialog(
                 LightingDirector.get().getTransitionEffect(transitionEffectID),
+                null,
                 R.string.menu_preset_delete,
                 R.string.label_transition_effect,
                 R.string.error_dependency_transition_effect_title,
@@ -708,6 +730,7 @@ public class SampleAppActivity extends FragmentActivity implements
         if (pulseEffectID != null) {
             showConfirmDeleteItemDialog(
                 LightingDirector.get().getPulseEffect(pulseEffectID),
+                null,
                 R.string.menu_pulse_effect_delete,
                 R.string.label_pulse_effect,
                 R.string.error_dependency_pulse_effect_title,
@@ -842,12 +865,13 @@ public class SampleAppActivity extends FragmentActivity implements
         popup.show();
     }
 
-    public void showSceneElementMorePopup(View anchor, String itemID, String subItemID) {
+    public void showSceneElementMorePopup(View anchor, String itemID, String subItemID, boolean enabled) {
         popupItemID = itemID;
         popupSubItemID = subItemID;
 
         PopupMenu popup = new PopupMenu(this, anchor);
         popup.inflate(R.menu.basic_scene_element_more);
+        popup.getMenu().findItem(R.id.basic_scene_element_delete).setEnabled(enabled);
         popup.setOnMenuItemClickListener(this);
         popup.show();
     }

@@ -42,6 +42,20 @@
  */
 @property (nonatomic, readonly) BOOL isRunning;
 
+/*
+ * Returns a boolean representing whether the Controller is the leader.
+ *
+ * @return True if the LSFSDKLightingController is the leader, false otherwise
+ */
+@property (nonatomic, readonly) BOOL isLeader;
+
+/*
+ * Returns the device name of the Controller.
+ *
+ * @return The name of the LSFSDKLightingController if running, otherwise nil
+ */
+@property (nonatomic, strong, readonly) NSString *name;
+
 /** @name Getting the Shared LSFSDKLightingController Instance */
 
 /**

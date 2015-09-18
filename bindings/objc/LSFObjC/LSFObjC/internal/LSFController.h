@@ -19,6 +19,9 @@
 
 @interface LSFController : LSFObject
 
+@property (nonatomic, readonly) BOOL isLeader;
+@property (nonatomic, strong, readonly) NSString *name;
+
 -(id)init;
 -(void)initializeWithControllerServiceDelegate: (id<LSFControllerServiceDelegate>)csd;
 -(void)startControllerWithKeyStoreFilePath: (NSString *)keyStoreFilePath;

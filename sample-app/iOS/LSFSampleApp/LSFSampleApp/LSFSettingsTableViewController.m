@@ -56,6 +56,10 @@
     {
         self.controllerOnOffSwitch.on = NO;
     }
+
+    self.isLeaderLabel.text = ([[LSFSDKLightingController getLightingController] isLeader]) ? @"true" : @"false";
+
+    self.myControllerNameLabel.text = [[LSFSDKLightingController getLightingController] name];
 }
 
 -(void)viewWillDisappear: (BOOL)animated
@@ -95,10 +99,12 @@
     if ([leader connected])
     {
         [self.controllerNameLabel setText: [NSString stringWithFormat: @"%@ (V%u)", leader.name, leader.version]];
+        self.isLeaderLabel.text = ([[LSFSDKLightingController getLightingController] isLeader]) ? @"true" : @"false";
     }
     else
     {
         [self.controllerNameLabel setText: [NSString stringWithFormat: @"%@", leader.name]];
+        self.isLeaderLabel.text = @"false";
     }
 }
 

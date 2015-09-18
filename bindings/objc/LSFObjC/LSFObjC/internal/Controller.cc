@@ -164,3 +164,22 @@ void Controller::SendNetworkDisconnected()
         networkCallbackReference->Disconnected();
     }
 }
+
+qcc::String Controller::GetControllerName()
+{
+    if (controllerSvcManagerPtrForLuminaire != NULL)
+    {
+        LSFAboutDataStore dataStore = controllerSvcManagerPtrForLuminaire->GetControllerServicePtr()->GetAboutDataStore();
+
+        char* controllerName = NULL;
+        dataStore.GetDeviceName(&controllerName);
+        return qcc::String(controllerName);
+    }
+
+    return qcc::String();
+}
+
+bool Controller::IsControllerLeader()
+{
+    return (controllerSvcManagerPtrForLuminaire) ? controllerSvcManagerPtrForLuminaire->GetControllerServicePtr()->IsLeader() : false;
+}

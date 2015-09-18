@@ -50,26 +50,8 @@ public class BasicSceneV2TransactionManager {
     public void start() {
         LightingDirector director = LightingDirector.get();
 
-        for (PendingSceneElementV2 deletedSceneElement : pendingScene.deleted) {
-            delete(director, deletedSceneElement);
-        }
-
         for (PendingSceneElementV2 pendingSceneElement : pendingScene.current) {
             createOrModify(director, pendingSceneElement);
-        }
-    }
-
-    protected void delete(LightingDirector director, PendingSceneElementV2 deletedSceneElement) {
-        SceneElement sceneElement = director.getSceneElement(deletedSceneElement.id);
-
-        if (sceneElement != null) {
-            Effect effect = sceneElement.getEffect();
-
-            sceneElement.delete();
-
-            if (effect != null) {
-                effect.delete();
-            }
         }
     }
 
@@ -189,6 +171,24 @@ public class BasicSceneV2TransactionManager {
         }
     }
 
+    protected void delete(LightingDirector director, PendingSceneElementV2 deletedSceneElement) {
+        SceneElement sceneElement = director.getSceneElement(deletedSceneElement.id);
+
+        if (sceneElement != null) {
+            Effect effect = sceneElement.getEffect();
+
+            sceneElement.delete();
+
+            if (effect != null) {
+                effect.delete();
+            } else {
+                Log.w(SampleAppActivity.TAG, "Effect deletion failed for scene element id" + deletedSceneElement.id);
+            }
+        } else {
+            Log.w(SampleAppActivity.TAG, "Scene element deletion failed for id" + deletedSceneElement.id);
+        }
+    }
+
     protected void onSceneElementCompletion(SceneElement sceneElement) {
         sceneElements.add(sceneElement);
 
@@ -202,6 +202,13 @@ public class BasicSceneV2TransactionManager {
                 director.createScene(sceneElementArray, pendingScene.name);
             } else {
                 ((SceneV2)director.getScene(pendingScene.id)).modify(sceneElementArray);
+            }
+
+            // Deletions must be processed after all of the effects, scene elements, and
+            // the parent scene have been created or modified. This is so there are no
+            // longer any dependencies on the items to be deleted.
+            for (PendingSceneElementV2 deletedSceneElement : pendingScene.deleted) {
+                delete(director, deletedSceneElement);
             }
         }
     }

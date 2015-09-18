@@ -162,7 +162,7 @@ public abstract class DimmableItemTableFragment
             if (buttonID == R.id.dimmableItemButtonPower) {
                 ((SampleAppActivity)getActivity()).togglePower(type, button.getTag().toString());
             } else if (buttonID == R.id.dimmableItemButtonMore) {
-                ((SampleAppActivity)getActivity()).onItemButtonMore(parent, type, button, button.getTag().toString(), null);
+                ((SampleAppActivity)getActivity()).onItemButtonMore(parent, type, button, button.getTag().toString(), null, true);
             } else if (!((SeekBar)button.findViewById(R.id.dimmableItemRowSlider)).isEnabled()) {
             	((SampleAppActivity)getActivity()).showToast(R.string.no_support_dimmable);
             }

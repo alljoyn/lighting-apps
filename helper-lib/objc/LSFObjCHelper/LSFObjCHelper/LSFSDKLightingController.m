@@ -104,6 +104,16 @@
     return controllerRunning;
 }
 
+-(BOOL)isLeader
+{
+    return [controllerService isLeader];
+}
+
+-(NSString *)name
+{
+    return [controllerService name];
+}
+
 -(void)sendNetworkConnected
 {
     if (controllerRunning)

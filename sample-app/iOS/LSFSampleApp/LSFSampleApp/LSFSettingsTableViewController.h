@@ -21,7 +21,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *scenesV1ModuleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *controllerNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *startControllerLabel;
+@property (weak, nonatomic) IBOutlet UILabel *myControllerNameLabel;
 @property (weak, nonatomic) IBOutlet UISwitch *controllerOnOffSwitch;
+@property (weak, nonatomic) IBOutlet UILabel *isLeaderLabel;
 
 - (IBAction)controllerSwitchValueChanged:(id)sender;
 

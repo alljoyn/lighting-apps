@@ -78,6 +78,8 @@ class Controller {
         void LightingResetController();
         void SendNetworkConnected();
         void SendNetworkDisconnected();
+        qcc::String GetControllerName();
+        bool IsControllerLeader();
 };
 
 #endif

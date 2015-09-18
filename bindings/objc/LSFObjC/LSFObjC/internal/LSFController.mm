@@ -26,6 +26,8 @@
 @implementation LSFController
 
 @synthesize controller = _controller;
+@synthesize isLeader = _isLeader;
+@synthesize name = _name;
 
 -(id)init
 {
@@ -88,6 +90,18 @@
 -(void)sendNetworkDisconnected
 {
     self.controller->SendNetworkDisconnected();
+}
+
+-(BOOL)isLeader
+{
+    return self.controller->IsControllerLeader();
+}
+
+-(NSString *)name
+{
+    qcc::String controllerName = self.controller->GetControllerName();
+    NSString *name = [NSString stringWithUTF8String: controllerName.c_str()];
+    return name;
 }
 
 /*

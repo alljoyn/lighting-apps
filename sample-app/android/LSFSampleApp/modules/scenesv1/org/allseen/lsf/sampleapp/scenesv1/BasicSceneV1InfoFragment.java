@@ -166,7 +166,9 @@ public class BasicSceneV1InfoFragment extends SceneItemInfoFragment {
     }
 
     protected void onElementMoreClick(View anchor, String elementID) {
-        ((SampleAppActivity)getActivity()).onItemButtonMore(parent, SampleAppActivity.Type.ELEMENT, anchor, key, elementID);
+        int count = pendingBasicSceneModel.noEffects.size() + pendingBasicSceneModel.transitionEffects.size() + pendingBasicSceneModel.pulseEffects.size();
+
+        ((SampleAppActivity)getActivity()).onItemButtonMore(parent, SampleAppActivity.Type.ELEMENT, anchor, key, elementID, count > 1);
     }
 
     @Override

@@ -75,42 +75,63 @@
     [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::SOFTWARE_VERSION] withStringValue: @"1"];
     [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::SUPPORT_URL] withStringValue: @"http://www.company_a.com"];
     [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::SUPPORTED_LANGUAGES] withStringArrayValue: [NSArray arrayWithObjects: @"en", @"de-AT", nil]];
-    [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::APP_NAME] withStringValue: @"LightingControllerService" andLanguage: @"en"];
-    [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::APP_NAME] withStringValue: @"LightingControllerService" andLanguage: @"de-AT"];
-    [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::DESCRIPTION] withStringValue: @"Controller Service" andLanguage: @"en"];
-    [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::DESCRIPTION] withStringValue: @"Controller Service" andLanguage: @"de-AT"];
-    [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::DEVICE_NAME] withStringValue: @"LightingController" andLanguage: @"en"];
-    [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::DEVICE_NAME] withStringValue: @"LightingController" andLanguage: @"de-AT"];
+
+    NSString *appName = @"LightingControllerService";
+    NSString *description = @"Controller Service";
+    NSString *appIDHex = [self generateRandomHexStringWithLength: 32];
+    NSData *appID = [self hexStringToBytes: appIDHex];
+    NSString *deviceName = [[NSString alloc] initWithFormat: @"%@%@", @"LightingC-", [appIDHex substringFromIndex: appIDHex.length - 5]];
+
+    [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::APP_NAME] withStringValue: appName andLanguage: @"en"];
+    [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::APP_NAME] withStringValue: appName andLanguage: @"de-AT"];
+    [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::DESCRIPTION] withStringValue: description andLanguage: @"en"];
+    [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::DESCRIPTION] withStringValue: description andLanguage: @"de-AT"];
+    [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::DEVICE_NAME] withStringValue: deviceName andLanguage: @"en"];
+    [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::DEVICE_NAME] withStringValue: deviceName andLanguage: @"de-AT"];
     [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::MANUFACTURER] withStringValue: @"Company A (EN)" andLanguage: @"en"];
     [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::MANUFACTURER] withStringValue: @"Firma A (DE-AT)" andLanguage: @"de-AT"];
-    [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::APP_ID] witDataValue: [self generateRandomAppID]];
+    [aboutData putKey: [NSString stringWithUTF8String: AboutKeys::APP_ID] witDataValue: appID];
 }
 
 -(NSString *) generateRandomHexStringWithLength: (int) len
 {
-    NSString *digits = @"0123456789ABCDEF";
+    NSString *digits = @"0123456789abcdef";
     NSMutableString *randomString = [NSMutableString stringWithCapacity: len];
 
     for (int i = 0; i < len; i++)
     {
         unichar c = [digits characterAtIndex: (arc4random() % [digits length])];
-        [randomString appendFormat: @"%C", c];
+        [randomString appendFormat: @"%c", c];
     }
 
     return randomString;
 }
 
--(NSData *) generateRandomAppID
+-(char)hexToChar:(char)c
 {
-    NSMutableData *data = [[NSMutableData alloc] init];
-    int numBytes = 16;
-    for (int i = 0; i < (numBytes / sizeof(u_int32_t)); i++)
-    {
-        u_int32_t randomBits = arc4random();
-        [data appendBytes: (void *)&randomBits length: 4];
+    if ('0' <= c && c <= '9') {
+        return c - '0';
+    } else if ('a' <= c && c <= 'f') {
+        return c + 10 - 'a';
+    } else if ('A' <= c && c <= 'F') {
+        return c + 10 - 'A';
     }
 
-    return data;
+    return -1;
+}
+
+-(NSData *)hexStringToBytes: (NSString *)hex
+{
+    uint8_t bytes[16];
+
+    for (int i = 0; i < 16; i++)
+    {
+        char a = [self hexToChar: [hex characterAtIndex: i * 2]];
+        char b = [self hexToChar: [hex characterAtIndex: i * 2 + 1]];
+        bytes[i] = ((a << 4) | b);
+    }
+
+    return [[NSData alloc] initWithBytes: bytes length: 16];
 }
 
 @end

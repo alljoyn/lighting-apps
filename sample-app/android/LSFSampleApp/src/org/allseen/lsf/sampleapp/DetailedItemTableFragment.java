@@ -92,7 +92,7 @@ public abstract class DetailedItemTableFragment extends ScrollableTableFragment 
 
         if (parent != null) {
             if (clickedID == R.id.detailedItemButtonMore) {
-                ((SampleAppActivity)getActivity()).onItemButtonMore(parent, type, clickedView, clickedView.getTag().toString(), null);
+                ((SampleAppActivity)getActivity()).onItemButtonMore(parent, type, clickedView, clickedView.getTag().toString(), null, true);
             } else if (clickedID == R.id.detailedItemRowTextHeader || clickedID == R.id.detailedItemRowTextDetails) {
                 onClickRowText(clickedView.getTag().toString());
             }
