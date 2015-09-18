@@ -21,7 +21,6 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Queue;
-
 import org.allseen.lsf.sdk.AllLightingItemListener;
 import org.allseen.lsf.sdk.Color;
 import org.allseen.lsf.sdk.Controller;
@@ -1268,35 +1267,34 @@ public class SampleAppActivity extends FragmentActivity implements
     public void onLampChanged(final Lamp lamp) {
         Log.d(SampleAppActivity.TAG, "onLampChanged() " + lamp.getName());
 
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Fragment lampsPageFragment = getSupportFragmentManager().findFragmentByTag(LampsPageFragment.TAG);
+        Fragment lampsPageFragment = getSupportFragmentManager().findFragmentByTag(LampsPageFragment.TAG);
 
-                if (lampsPageFragment != null) {
-                    LampsTableFragment tableFragment = (LampsTableFragment)lampsPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
+        if (lampsPageFragment != null) {
+            LampsTableFragment tableFragment = (LampsTableFragment)lampsPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
 
-                    if (tableFragment != null) {
-                        // Call addLamp() rather than addItem() to update the color indicator
-                        tableFragment.addLamp(lamp);
-                    }
-
-                    LampInfoFragment infoFragment = (LampInfoFragment)lampsPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
-
-                    if (infoFragment != null) {
-                        infoFragment.updateInfoFields(lamp);
-                    }
-
-                    LampDetailsFragment detailsFragment = (LampDetailsFragment)lampsPageFragment.getChildFragmentManager().findFragmentByTag(LampsPageFragment.CHILD_TAG_DETAILS);
-
-                    if (detailsFragment != null) {
-                        detailsFragment.updateDetailFields(lamp);
-                    }
-                }
-
-                refreshScene(null);
+            if (tableFragment != null) {
+                // Call addLamp() rather than addItem() to update the color indicator
+                tableFragment.addLamp(lamp);
             }
-        });
+
+            LampInfoFragment infoFragment = (LampInfoFragment)lampsPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
+
+            if (infoFragment != null) {
+                infoFragment.updateInfoFields(lamp);
+            }
+
+            LampDetailsFragment detailsFragment = (LampDetailsFragment)lampsPageFragment.getChildFragmentManager().findFragmentByTag(LampsPageFragment.CHILD_TAG_DETAILS);
+
+            if (detailsFragment != null) {
+                detailsFragment.updateDetailFields(lamp);
+            }
+        }
+
+        if (LightingDirector.get().isControllerServiceLeaderV1()) {
+            refreshScene(null);
+        } else {
+            updateDependentScenesV2(lamp);
+        }
     }
 
     @Override
@@ -1305,24 +1303,25 @@ public class SampleAppActivity extends FragmentActivity implements
 
         Log.d(SampleAppActivity.TAG, "onLampRemoved() " + lampID);
 
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Fragment pageFragment = getSupportFragmentManager().findFragmentByTag(LampsPageFragment.TAG);
+        Fragment pageFragment = getSupportFragmentManager().findFragmentByTag(LampsPageFragment.TAG);
 
-                if (pageFragment != null) {
-                    LampsTableFragment tableFragment = (LampsTableFragment) pageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
+        if (pageFragment != null) {
+            LampsTableFragment tableFragment = (LampsTableFragment) pageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
 
-                    if (tableFragment != null) {
-                        tableFragment.removeElement(lampID);
+            if (tableFragment != null) {
+                tableFragment.removeElement(lampID);
 
-                        if (LightingDirector.get().getLampCount() == 0) {
-                            tableFragment.updateLoading();
-                        }
-                    }
+                if (LightingDirector.get().getLampCount() == 0) {
+                    tableFragment.updateLoading();
                 }
             }
-        });
+        }
+
+        if (LightingDirector.get().isControllerServiceLeaderV1()) {
+            refreshScene(null);
+        } else {
+            updateDependentScenesV2(lamp);
+        }
     }
 
     @Override
@@ -1364,6 +1363,12 @@ public class SampleAppActivity extends FragmentActivity implements
             if (infoFragment != null) {
                 infoFragment.updateInfoFields(group);
             }
+        }
+
+        if (LightingDirector.get().isControllerServiceLeaderV1()) {
+            refreshScene(null);
+        } else {
+            updateDependentScenesV2(group);
         }
     }
 
@@ -1523,6 +1528,40 @@ public class SampleAppActivity extends FragmentActivity implements
     private void removePreset(DimmableItemPresetsFragment presetFragment, String presetID) {
         if (presetFragment != null) {
             presetFragment.removeElement(presetID);
+        }
+    }
+
+    private void updateDependentScenesV2(final Lamp lamp) {
+        Scene[] scenes = LightingDirector.get().getScenes();
+
+        for (Scene scene : scenes) {
+            SceneElement[] sceneElements = ((SceneV2)scene).getSceneElements();
+            boolean found = false;
+
+            for (int sceneElementIndex = 0; !found && sceneElementIndex < sceneElements.length; sceneElementIndex++) {
+                found = sceneElements[sceneElementIndex].hasLamp(lamp);
+            }
+
+            if (found) {
+                refreshScene(scene);
+            }
+        }
+    }
+
+    private void updateDependentScenesV2(final Group group) {
+        Scene[] scenes = LightingDirector.get().getScenes();
+
+        for (Scene scene : scenes) {
+            SceneElement[] sceneElements = ((SceneV2)scene).getSceneElements();
+            boolean found = false;
+
+            for (int sceneElementIndex = 0; !found && sceneElementIndex < sceneElements.length; sceneElementIndex++) {
+                found = sceneElements[sceneElementIndex].hasGroup(group);
+            }
+
+            if (found) {
+                refreshScene(scene);
+            }
         }
     }
 
@@ -1766,8 +1805,15 @@ public class SampleAppActivity extends FragmentActivity implements
     }
 
     @Override
-    public void onTransitionEffectError(LightingItemErrorEvent error) {
-        // TODO-IMPL
+    public void onTransitionEffectError(final LightingItemErrorEvent error) {
+        Log.d(SampleAppActivity.TAG, "onTransitionEffectError() " + error.name);
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                showErrorResponseCode(error.responseCode, error.name, error.responseCode == ResponseCode.ERR_DEPENDENCY);
+            }
+        });
     }
 
     @Override
@@ -1786,8 +1832,15 @@ public class SampleAppActivity extends FragmentActivity implements
     }
 
     @Override
-    public void onPulseEffectError(LightingItemErrorEvent error) {
-        // TODO-IMPL
+    public void onPulseEffectError(final LightingItemErrorEvent error) {
+        Log.d(SampleAppActivity.TAG, "onPulseEffectError() " + error.name);
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                showErrorResponseCode(error.responseCode, error.name, error.responseCode == ResponseCode.ERR_DEPENDENCY);
+            }
+        });
     }
 
     @Override
@@ -1808,43 +1861,25 @@ public class SampleAppActivity extends FragmentActivity implements
     }
 
     @Override
-    public void onSceneElementError(LightingItemErrorEvent error) {
-        // TODO-IMPL
+    public void onSceneElementError(final LightingItemErrorEvent error) {
+        Log.d(SampleAppActivity.TAG, "onSceneElementError() " + error.name);
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                showErrorResponseCode(error.responseCode, error.name, error.responseCode == ResponseCode.ERR_DEPENDENCY);
+            }
+        });
     }
 
     @Override
     public void onSceneElementRemoved(SceneElement sceneElement) {
         Log.d(SampleAppActivity.TAG, "onSceneElementRemoved() " + sceneElement.getName());
 
-        Fragment pageFragment = getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
-        FragmentManager childManager = pageFragment != null ? pageFragment.getChildFragmentManager() : null;
-        ScenesTableFragment tableFragment = childManager != null ? (ScenesTableFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE) : null;
-        PageFrameChildFragment infoFragment = childManager != null ? (PageFrameChildFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO) : null;
-
-        if (tableFragment != null) {
-            tableFragment.removeElement(sceneElement.getId());
-
-            if (isSwipeable()) {
-                resetActionBar();
-            }
-        }
-
-        if ((infoFragment != null) && (infoFragment.key.equals(sceneElement.getId()))) {
-            createLostConnectionErrorDialog(sceneElement.getName());
-        }
+        refreshSceneElement(sceneElement);
     }
 
     private void refreshSceneElement(SceneElement sceneElement) {
-        ScenesPageFragment scenesPageFragment = (ScenesPageFragment)getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
-
-        if (scenesPageFragment != null) {
-            if (scenesPageFragment.isBasicModeV2()) {
-                BasicSceneV2InfoFragment sceneInfoFragment = (BasicSceneV2InfoFragment)scenesPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
-
-                if (sceneInfoFragment != null) {
-                    sceneInfoFragment.updateInfoFields();
-                }
-            }
-        }
+        refreshScene(null);
     }
 }

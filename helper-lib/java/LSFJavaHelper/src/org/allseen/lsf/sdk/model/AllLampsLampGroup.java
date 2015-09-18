@@ -26,8 +26,6 @@ import org.allseen.lsf.sdk.manager.LightingSystemManager;
 public class AllLampsLampGroup extends LampGroup {
     public static final AllLampsLampGroup instance = new AllLampsLampGroup();
 
-    protected static final String[] emptyList = new String[0];
-
     protected LightingSystemManager<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> manager;
 
     protected AllLampsLampGroup() {
@@ -48,7 +46,7 @@ public class AllLampsLampGroup extends LampGroup {
 
     @Override
     public String[] getLamps() {
-        return manager != null ? manager.getLampCollectionManager().getIDArray() : emptyList;
+        return manager != null ? manager.getLampCollectionManager().getIDArray() : LightingItemUtil.NO_ITEM_IDS;
     }
 
     @Override

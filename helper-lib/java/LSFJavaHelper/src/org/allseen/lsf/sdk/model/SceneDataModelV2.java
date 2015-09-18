@@ -49,6 +49,10 @@ public class SceneDataModelV2 extends LightingItemDataModel {
         sceneWithSceneElementsInitialized = other.sceneWithSceneElementsInitialized;
     }
 
+    public String[] getSceneElementIDs() {
+        return sceneWithSceneElements != null ? sceneWithSceneElements.getSceneElements() : LightingItemUtil.NO_ITEM_IDS;
+    }
+
     public SceneWithSceneElements getSceneWithSceneElements() {
         return sceneWithSceneElements;
     }

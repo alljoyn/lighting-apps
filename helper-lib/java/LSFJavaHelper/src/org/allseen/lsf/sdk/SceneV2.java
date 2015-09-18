@@ -108,7 +108,7 @@ public class SceneV2 extends Scene {
         String errorContext = "SceneV2.add() error";
 
         if (postInvalidArgIfNull(errorContext, element)) {
-            Set<String> sceneElementIds = new HashSet<String>(Arrays.asList(sceneModel.getSceneWithSceneElements().getSceneElements()));
+            Set<String> sceneElementIds = new HashSet<String>(Arrays.asList(getSceneElementIDs()));
             // only update this SceneElement if it does not already contain the Scene to add
             if (sceneElementIds.add(element.getId())) {
                 postErrorIfFailure(errorContext,
@@ -127,7 +127,7 @@ public class SceneV2 extends Scene {
         String errorContext = "SceneV2.remove() error";
 
         if (postInvalidArgIfNull(errorContext, element)) {
-            Set<String> sceneElementIds = new HashSet<String>(Arrays.asList(sceneModel.getSceneWithSceneElements().getSceneElements()));
+            Set<String> sceneElementIds = new HashSet<String>(Arrays.asList(getSceneElementIDs()));
             // only update this SceneElement if it contains the scene to remove
             if (sceneElementIds.remove(element.getId())) {
                 postErrorIfFailure(errorContext,
@@ -152,7 +152,7 @@ public class SceneV2 extends Scene {
      * @return Array of scene element IDs of the SceneElements in the SceneV2
      */
     public String[] getSceneElementIDs() {
-        return sceneModel.getSceneWithSceneElements().getSceneElements();
+        return sceneModel.getSceneElementIDs();
     }
 
     /**

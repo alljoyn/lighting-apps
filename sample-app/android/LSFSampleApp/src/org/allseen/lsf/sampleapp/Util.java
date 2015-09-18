@@ -18,7 +18,9 @@ package org.allseen.lsf.sampleapp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.allseen.lsf.sdk.Group;
 import org.allseen.lsf.sdk.Lamp;
@@ -27,6 +29,8 @@ import org.allseen.lsf.sdk.LightingItem;
 import org.allseen.lsf.sdk.MasterScene;
 import org.allseen.lsf.sdk.MyLampState;
 import org.allseen.lsf.sdk.Preset;
+import org.allseen.lsf.sdk.SceneElement;
+import org.allseen.lsf.sdk.SceneV2;
 
 public class Util {
     public static boolean isDuplicateName(LightingItem[] items, String itemName) {
@@ -46,6 +50,18 @@ public class Util {
 
     public static String createMemberNamesString(SampleAppActivity activity, PendingSceneElementV2 pendingSceneElement, String separator, int noMembersStringID) {
       return createMemberNamesString(activity, pendingSceneElement.groups, pendingSceneElement.lamps, separator, R.string.member_group_not_found, R.string.member_lamp_not_found, noMembersStringID);
+    }
+
+    public static String createMemberNamesString(SampleAppActivity activity, SceneV2 basicScene, String separator, int noMembersStringID) {
+        Set<String> groupIDs = new HashSet<String>();
+        Set<String> lampIDs = new HashSet<String>();
+
+        for (SceneElement sceneElement : basicScene.getSceneElements()) {
+            groupIDs.addAll(sceneElement.getGroupIDs());
+            lampIDs.addAll(sceneElement.getLampIDs());
+        }
+
+        return createMemberNamesString(activity, groupIDs, lampIDs, separator, R.string.member_group_not_found, R.string.member_lamp_not_found, noMembersStringID);
     }
 
     // TODO-REF combine with next createMemberNamesString()?

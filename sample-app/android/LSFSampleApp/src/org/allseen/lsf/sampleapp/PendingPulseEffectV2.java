@@ -30,9 +30,9 @@ public class PendingPulseEffectV2 extends PendingLightingItem {
     public String startPresetID;
     public String endPresetID;
 
-    public long period; //TODO-SV2-FIX
-    public long duration; //TODO-SV2-FIX
-    public long count; //TODO-SV2-FIX
+    public long period;
+    public long duration;
+    public long count;
 
     public final LampStateUniformity uniformity = new LampStateUniformity();
 

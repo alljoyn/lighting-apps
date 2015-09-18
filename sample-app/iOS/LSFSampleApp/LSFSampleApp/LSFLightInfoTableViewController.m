@@ -136,7 +136,11 @@
 -(void)lampChangedNotificationReceived: (NSNotification *)notification
 {
     NSString *lampID = [[notification.userInfo valueForKey: @"lamp"] theID];
-    [self reloadLampWithID: lampID];
+
+    if ([lampID isEqualToString: self.lampID])
+    {
+        [self reloadLampWithID: lampID];
+    }
 }
 
 -(void)lampRemovedNotificationReceived: (NSNotification *)notification

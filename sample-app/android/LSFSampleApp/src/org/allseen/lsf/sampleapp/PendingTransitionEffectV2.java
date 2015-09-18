@@ -24,7 +24,7 @@ import org.allseen.lsf.sdk.TransitionEffect;
 public class PendingTransitionEffectV2 extends PendingLightingItem {
     public MyLampState state;
     public String presetID;
-    public long duration;//TODO-SV2-FIX
+    public long duration;
 
     public final LampStateUniformity uniformity = new LampStateUniformity();
 

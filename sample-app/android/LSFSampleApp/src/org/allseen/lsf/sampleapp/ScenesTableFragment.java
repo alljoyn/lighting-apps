@@ -18,6 +18,9 @@ package org.allseen.lsf.sampleapp;
 import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.MasterScene;
 import org.allseen.lsf.sdk.Scene;
+import org.allseen.lsf.sdk.SceneV1;
+import org.allseen.lsf.sdk.SceneV2;
+
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -64,7 +67,17 @@ public class ScenesTableFragment extends DetailedItemTableFragment {
     }
 
     public void addBasicScene(SampleAppActivity activity, Scene basicScene) {
-        addItem(basicScene, activity.basicSceneV1Module.createMemberNamesString(activity, basicScene, ", "), R.drawable.scene_set_icon);
+        String memberNames;
+
+        if (basicScene instanceof SceneV2) {
+            memberNames = Util.createMemberNamesString(activity, (SceneV2)basicScene, ", ", R.string.basic_scene_members_none);
+        } else if (basicScene instanceof SceneV1) {
+            memberNames = activity.basicSceneV1Module.createMemberNamesString(activity, basicScene, ", ");
+        } else {
+            memberNames = getString(R.string.basic_scene_members_none);
+        }
+
+        addItem(basicScene, memberNames, R.drawable.scene_set_icon);
         updateLoading();
     }
 

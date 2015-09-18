@@ -24,6 +24,7 @@ import org.allseen.lsf.SceneWithSceneElements;
 import org.allseen.lsf.TransitionEffectV2;
 
 public class LightingItemUtil {
+    public static final String[] NO_ITEM_IDS = new String[0];
 
     public static LampState createLampStateFromView(boolean powerOn, int viewHue, int viewSaturation, int viewBrightness, int viewColorTemp) {
         LampState lampState = new LampState();
