@@ -32,7 +32,26 @@ import org.allseen.lsf.sdk.Preset;
 import org.allseen.lsf.sdk.SceneElement;
 import org.allseen.lsf.sdk.SceneV2;
 
+import android.graphics.drawable.Drawable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
+
 public class Util {
+    public static SpannableStringBuilder createTextWithIcon(SampleAppActivity activity, int stringID, char placeholder, int drawableID) {
+        CharSequence text = activity.getText(stringID);
+        SpannableStringBuilder builder = new SpannableStringBuilder(text);
+        Drawable icon = activity.getResources().getDrawable(drawableID);
+
+        // The icon is scaled down slightly to look less "floaty" as it is bottom aligned to the text
+        icon.setBounds(0, 0, (int)(icon.getIntrinsicWidth() * 0.8), (int)(icon.getIntrinsicHeight() * 0.8));
+
+        int iconIndex = text.toString().indexOf(placeholder);
+        builder.setSpan(new ImageSpan(icon, ImageSpan.ALIGN_BOTTOM), iconIndex, iconIndex + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return builder;
+    }
+
     public static boolean isDuplicateName(LightingItem[] items, String itemName) {
         for (LightingItem item : items) {
             if (item.getName().equals(itemName)) {

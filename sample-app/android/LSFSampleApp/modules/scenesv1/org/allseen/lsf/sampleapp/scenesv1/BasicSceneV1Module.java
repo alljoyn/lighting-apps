@@ -19,8 +19,6 @@ import org.allseen.lsf.LampGroup;
 import org.allseen.lsf.sampleapp.PageFrameChildFragment;
 import org.allseen.lsf.sampleapp.R;
 import org.allseen.lsf.sampleapp.SampleAppActivity;
-import org.allseen.lsf.sampleapp.scenesv1.BasicSceneV1EnterNameFragment;
-import org.allseen.lsf.sampleapp.scenesv1.BasicSceneV1InfoFragment;
 import org.allseen.lsf.sdk.LampCapabilities;
 import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.Scene;
@@ -65,7 +63,7 @@ public class BasicSceneV1Module {
         PulseEffectV1Fragment.pendingPulseEffect = null;
     }
 
-    public String createMemberNamesString(SampleAppActivity activity, SceneV1 basicScene, String separator) {
+    public String createMemberNamesString(SampleAppActivity activity, Scene basicScene, String separator) {
         return BasicSceneV1Util.createMemberNamesString(activity, basicScene, separator);
     }
 

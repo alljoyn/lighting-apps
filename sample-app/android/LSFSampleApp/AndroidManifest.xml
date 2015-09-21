@@ -17,11 +17,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.allseen.lsf.sampleapp"
     android:versionCode="1"
-    android:versionName="01_00_0452" >
+    android:versionName="01_00_0454" >
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="21" />
 
     <!-- Permission required to use the TCP transport -->
     <uses-permission android:name="android.permission.INTERNET" />

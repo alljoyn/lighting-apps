@@ -26,6 +26,7 @@ import org.allseen.lsf.sampleapp.Util;
 import org.allseen.lsf.sdk.Group;
 import org.allseen.lsf.sdk.Lamp;
 import org.allseen.lsf.sdk.LightingDirector;
+import org.allseen.lsf.sdk.Scene;
 import org.allseen.lsf.sdk.SceneV1;
 import org.allseen.lsf.sdk.model.NoEffectDataModel;
 import org.allseen.lsf.sdk.model.PulseEffectDataModel;
@@ -42,11 +43,11 @@ public class BasicSceneV1Util {
     }
 
     // Creates a details string, containing a list of all lamps and groups in a basic scene
-    public static String createMemberNamesString(SampleAppActivity activity, SceneV1 basicScene, String separator) {
+    public static String createMemberNamesString(SampleAppActivity activity, Scene basicScene, String separator) {
         String details = null;
 
-        if (basicScene != null) {
-            SceneDataModel basicSceneModel = BasicSceneV1Util.createSceneDataModelFrom(basicScene);
+        if (basicScene instanceof SceneV1) {
+            SceneDataModel basicSceneModel = BasicSceneV1Util.createSceneDataModelFrom((SceneV1)basicScene);
 
             if (basicSceneModel.noEffects != null) {
                 for (NoEffectDataModel elementModel : basicSceneModel.noEffects) {

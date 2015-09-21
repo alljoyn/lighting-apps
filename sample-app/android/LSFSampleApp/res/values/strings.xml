@@ -225,9 +225,11 @@
     <string name="select_lamps">Select the lamps</string>
     <string name="no_controller">No controller service is available on the network</string>
     <string name="no_lamps">No lamps have been detected on the network</string>
+    <string name="no_groups">There are no groups available.</string>
     <string name="no_scenes">There are no scenes available.</string>
     <string name="loading_controller">Searching for controller service&#8230;</string>
     <string name="loading_lamps">Searching for lamps&#8230;</string>
+    <string name="create_groups">To create a group using the currently detected lamps, tap the + button above.</string>
     <string name="create_scenes">To create a scene from the current lamp settings, tap the + button above.</string>
     <string name="source_code">Source Code</string>
     <string name="source_code_text"><![CDATA[<a href="https://wiki.allseenalliance.org/tsc/connected_lighting">AllSeen Alliance Lighting Working Group</a>]]></string>

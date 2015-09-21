@@ -21,6 +21,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.TextView.BufferType;
 
 public class GroupsTableFragment extends DimmableItemTableFragment {
 
@@ -46,5 +48,24 @@ public class GroupsTableFragment extends DimmableItemTableFragment {
         addItems(LightingDirector.get().getGroups());
 
         return root;
+    }
+
+    @Override
+    public void updateLoading() {
+        super.updateLoading();
+
+        SampleAppActivity activity = (SampleAppActivity) getActivity();
+        boolean hasGroups = LightingDirector.get().getGroupCount() > 0;
+
+        if (activity.isControllerConnected() && !hasGroups) {
+            // Connected but no groups found; display groups help screen, hide the scroll table
+            layout.findViewById(R.id.scrollLoadingView).setVisibility(View.VISIBLE);
+            layout.findViewById(R.id.scrollScrollView).setVisibility(View.GONE);
+
+            View loadingView = layout.findViewById(R.id.scrollLoadingView);
+
+            ((TextView) loadingView.findViewById(R.id.loadingText1)).setText(activity.getText(R.string.no_groups));
+            ((TextView) loadingView.findViewById(R.id.loadingText2)).setText(Util.createTextWithIcon(activity, R.string.create_groups, '+', R.drawable.nav_add_icon_normal), BufferType.SPANNABLE);
+        }
     }
 }

@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
+
 import org.allseen.lsf.sdk.AllLightingItemListener;
 import org.allseen.lsf.sdk.Color;
 import org.allseen.lsf.sdk.Controller;
@@ -48,6 +49,8 @@ import org.allseen.lsf.sdk.SceneV1;
 import org.allseen.lsf.sdk.SceneV2;
 import org.allseen.lsf.sdk.TrackingID;
 import org.allseen.lsf.sdk.TransitionEffect;
+
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
@@ -60,8 +63,12 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -187,17 +194,8 @@ public class SampleAppActivity extends FragmentActivity implements
         initDashboard();
         basicSceneV1Module = new BasicSceneV1ModuleProxy();
 
-        // Handle wifi disconnect errors
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-
-        registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(final Context context, Intent intent) {
-                postUpdateControllerDisplay();
-                wifiConnectionStateUpdate(isWifiConnected());
-            }
-        }, filter);
+        // Handle wifi connect and disconnect
+        initWifiMonitoring();
 
         // Controller service support
         controllerServiceEnabled = getSharedPreferences("PREFS_READ", Context.MODE_PRIVATE).getBoolean(CONTROLLER_ENABLED, true);
@@ -470,8 +468,53 @@ public class SampleAppActivity extends FragmentActivity implements
         return doApply;
     }
 
-    public void wifiConnectionStateUpdate(boolean connected) {
+    private void initWifiMonitoring() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            initWifiMonitoringApi14();
+        } else {
+            initWifiMonitoringApi21();
+        }
+    }
+
+    private void initWifiMonitoringApi14() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(final Context context, Intent intent) {
+                wifiConnectionStateUpdate(isWifiConnected());
+            }
+        }, filter);
+    }
+
+    @SuppressLint("NewApi")
+    private void initWifiMonitoringApi21() {
+        // Set the initial wifi state
+        wifiConnectionStateUpdate(isWifiConnected());
+
+        // Listen for wifi state changes
+        NetworkRequest networkRequest = (new NetworkRequest.Builder()).addTransportType(NetworkCapabilities.TRANSPORT_WIFI).build();
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        connectivityManager.registerNetworkCallback(networkRequest, new ConnectivityManager.NetworkCallback() {
+
+            @Override
+            public void onAvailable(Network network) {
+                wifiConnectionStateUpdate(true);
+            }
+
+            @Override
+            public void onLost(Network network) {
+                wifiConnectionStateUpdate(false);
+            }
+        });
+    }
+
+    private void wifiConnectionStateUpdate(boolean connected) {
         final SampleAppActivity activity = this;
+
+        postUpdateControllerDisplay();
+
         if (connected) {
             handler.post(new Runnable() {
                 @Override
@@ -852,6 +895,8 @@ public class SampleAppActivity extends FragmentActivity implements
 
     public void showSceneAddPopup(View anchor) {
         LightingDirector director = LightingDirector.get();
+        boolean isControllerServiceLeaderV1 = director.isControllerServiceLeaderV1();
+        boolean isSceneCreationUIAvailable = !isControllerServiceLeaderV1 || basicSceneV1Module.isModuleInstalled();
         int sceneCount = director.getSceneCount();
         int masterSceneCount = director.getMasterSceneCount();
 
@@ -859,7 +904,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
         PopupMenu popup = new PopupMenu(this, anchor);
         popup.inflate(R.menu.scene_add);
-        popup.getMenu().findItem(R.id.scene_add_basic).setEnabled(sceneCount < LightingDirector.MAX_SCENES);
+        popup.getMenu().findItem(R.id.scene_add_basic).setEnabled(isSceneCreationUIAvailable && sceneCount < LightingDirector.MAX_SCENES);
         popup.getMenu().findItem(R.id.scene_add_master).setEnabled(masterSceneCount < LightingDirector.MAX_MASTER_SCENES);
         popup.setOnMenuItemClickListener(this);
         popup.show();
