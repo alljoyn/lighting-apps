@@ -19,12 +19,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.allseen.lsf.sdk.ColorAverager;
 import org.allseen.lsf.sdk.Group;
 import org.allseen.lsf.sdk.Lamp;
 import org.allseen.lsf.sdk.LampCapabilities;
 import org.allseen.lsf.sdk.LampDetails;
 import org.allseen.lsf.sdk.LightingDirector;
-import org.allseen.lsf.sdk.ColorAverager;
 
 public abstract class SceneItemSelectMembersFragment extends SelectMembersFragment {
     public SceneItemSelectMembersFragment(int labelStringID) {
@@ -103,11 +103,10 @@ public abstract class SceneItemSelectMembersFragment extends SelectMembersFragme
                         }
 
                         if (lampValidColorTempMin && lampValidColorTempMax) {
-                            if (lampMinTemperature < getPendingMembersMinColorTemp() || getPendingMembersMinColorTemp() == -1) {
+                            if (lampMinTemperature > getPendingMembersMinColorTemp() || getPendingMembersMinColorTemp() == -1) {
                                 setPendingMembersMinColorTemp(lampMinTemperature);
                             }
 
-                            //TODO-CHK should be >?
                             if (lampMaxTemperature < getPendingMembersMaxColorTemp() || getPendingMembersMaxColorTemp() == -1) {
                                 setPendingMembersMaxColorTemp(lampMaxTemperature);
                             }

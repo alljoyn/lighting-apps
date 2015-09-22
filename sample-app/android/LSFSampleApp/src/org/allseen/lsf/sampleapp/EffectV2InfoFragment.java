@@ -16,7 +16,6 @@
 package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.sdk.LampCapabilities;
-import org.allseen.lsf.sdk.LightingDirector;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -40,12 +39,12 @@ public abstract class EffectV2InfoFragment extends EffectInfoFragment {
 
     @Override
     protected int getColorTempMin() {
-        return LightingDirector.COLORTEMP_MIN;
+        return SceneElementV2InfoFragment.pendingSceneElement.minColorTemp;
     }
 
     @Override
     protected int getColorTempSpan() {
-        return LightingDirector.COLORTEMP_MAX - getColorTempMin();
+        return SceneElementV2InfoFragment.pendingSceneElement.maxColorTemp - getColorTempMin();
     }
 
     @Override

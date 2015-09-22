@@ -76,6 +76,16 @@ public enum BaseType {
     E39,
 
     /**
+     * Specifies a lamp base type of B22.
+     */
+    B22,
+
+    /**
+     * Specifies a lamp base type of GU10.
+     */
+    GU10,
+
+    /**
      * Specifies that the BaseType is unchanged and to use the last value
      * that was received.
      */
