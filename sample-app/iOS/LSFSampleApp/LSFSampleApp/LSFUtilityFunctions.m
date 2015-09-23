@@ -517,4 +517,34 @@ NSString* const SCENE_ELEMENT_NAME_PREFIX = @"LSF_SEL_";
     }
 }
 
++(int)getBoundedMinColorTempForMembers: (NSArray *)members
+{
+    int minTemp = INT_MIN;
+
+    for (id member in members)
+    {
+        if ([member isKindOfClass: [LSFSDKGroupMember class]])
+        {
+            minTemp = MAX(minTemp, [member colorTempMin]);
+        }
+    }
+
+    return minTemp;
+}
+
++(int)getBoundedMaxColorTempForMembers: (NSArray *)members
+{
+    int maxTemp = INT_MAX;
+
+    for (id member in members)
+    {
+        if ([member isKindOfClass: [LSFSDKGroupMember class]])
+        {
+            maxTemp = MIN(maxTemp, [member colorTempMax]);
+        }
+    }
+
+    return maxTemp;
+}
+
 @end

@@ -47,6 +47,11 @@
     [self.endColorTempSlider setThumbImage: [UIImage imageNamed: @"power_slider_normal_icon.png"] forState: UIControlStateNormal];
     [self.endColorTempSlider setThumbImage: [UIImage imageNamed: @"power_slider_pressed_icon.png"] forState: UIControlStateHighlighted];
 
+    self.endColorTempSlider.minimumValue = [LSFUtilityFunctions getBoundedMinColorTempForMembers: self.pendingSceneElement.members];
+    self.endColorTempSlider.maximumValue = [LSFUtilityFunctions getBoundedMaxColorTempForMembers: self.pendingSceneElement.members];
+    self.endColorTempSlider.value = self.endColorTempSlider.minimumValue;
+    self.endColorTempLabel.text = [NSString stringWithFormat: @"%iK", (uint32_t)self.endColorTempSlider.value];
+
     self.endColorIndicatorImage.layer.rasterizationScale = [UIScreen mainScreen].scale;
     self.endColorIndicatorImage.layer.shouldRasterize = YES;
 }
@@ -58,10 +63,10 @@
     if (self.pendingEffect.endState != nil)
     {
         LSFSDKColor *color = [self.pendingEffect.endState color];
+        [self updateSlider: self.endColorTempSlider withValue: color.colorTemp];
         [self updateSlider: self.endBrightnessSlider withValue: color.brightness];
         [self updateSlider: self.endHueSlider withValue: color.hue];
         [self updateSlider: self.endSaturationSlider withValue: color.saturation];
-        [self updateSlider: self.endColorTempSlider withValue: color.colorTemp];
     }
     else
     {

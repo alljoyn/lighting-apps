@@ -57,5 +57,7 @@ extern NSArray *const LAMP_ABOUT_FIELDS;
 +(LSFSDKTrackingID *)createSceneFromPendingItem: (LSFPendingSceneV2 *)scene;
 +(void)updateSceneElementWithID: (NSString *)elementID pendingItem: (LSFPendingSceneElement *)pendingElement;
 +(void)updateEffectWithID: (NSString *)effectID pendingItem: (LSFPendingEffect *)pendingEffect;
++(int)getBoundedMinColorTempForMembers: (NSArray *)members;
++(int)getBoundedMaxColorTempForMembers: (NSArray *)members;
 
 @end
