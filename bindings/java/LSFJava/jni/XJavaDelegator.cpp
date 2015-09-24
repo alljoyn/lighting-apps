@@ -242,28 +242,6 @@ void XJavaDelegator::Call_Void_ResponseCode_String_Boolean(const jweak jdelegate
     Call_Void_Variadic(env, jdelegate, func, "(Lorg/allseen/lsf/sdk/ResponseCode;Ljava/lang/String;Z)V", jresponseCode, jstrValue, jboolValue);
 }
 
-void XJavaDelegator::Call_Void_ResponseCode_String_SInt32(const jweak jdelegate, char const *func, const LSFResponseCode &responseCode, const LSFString &strValue, const uint32_t &uint32Value)
-{
-    // Get the JNIEnv for the current native thread
-    JScopedEnv env;
-
-    jobject jresponseCode = JEnum::jResponseCodeEnum->getObject(responseCode);
-    if (env->ExceptionCheck() || !jresponseCode) {
-        QCC_LogError(ER_FAIL, ("getObject() failed"));
-        return;
-    }
-
-    jstring jstrValue = env->NewStringUTF(strValue.c_str());
-    if (env->ExceptionCheck() || !jstrValue) {
-        QCC_LogError(ER_FAIL, ("NewStringUTF() failed"));
-        return;
-    }
-
-    jint jintValue = (jint)uint32Value;
-
-    Call_Void_Variadic(env, jdelegate, func, "(Lorg/allseen/lsf/sdk/ResponseCode;Ljava/lang/String;I)V", jresponseCode, jstrValue, jintValue);
-}
-
 void XJavaDelegator::Call_Void_ResponseCode_String_UInt32(const jweak jdelegate, char const *func, const LSFResponseCode &responseCode, const LSFString &strValue, const uint32_t &uint32Value)
 {
     // Get the JNIEnv for the current native thread

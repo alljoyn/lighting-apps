@@ -42,6 +42,8 @@ public abstract class ControllerService extends DefaultNativeClassWrapper {
     public native void factoryReset();
     public native void sendNetworkConnected();
     public native void sendNetworkDisconnected();
+    public native String getName();
+    public native boolean isLeader();
 
     protected void populateDefaultProperties(long nativeAboutDataHandle) {
         populateDefaultProperties(new AboutData(nativeAboutDataHandle));

@@ -156,7 +156,7 @@ public class LampManagerCallbackTest extends TestCase {
             }
 
             @Override
-            public void getLampParametersEnergyUsageMilliwattsFieldReplyCB(ResponseCode rc, String lampID, int energyUsageMilliwatts)
+            public void getLampParametersEnergyUsageMilliwattsFieldReplyCB(ResponseCode rc, String lampID, long energyUsageMilliwatts)
             {
                 results.add((new Object() { public String getName() { return getClass().getEnclosingMethod().getName(); }}).getName());
                 results.add(rc);
@@ -165,12 +165,12 @@ public class LampManagerCallbackTest extends TestCase {
             }
 
             @Override
-            public void getLampParametersLumensFieldReplyCB(ResponseCode rc, String lampID, int brightness)
+            public void getLampParametersLumensFieldReplyCB(ResponseCode rc, String lampID, long brightnessLumens)
             {
                 results.add((new Object() { public String getName() { return getClass().getEnclosingMethod().getName(); }}).getName());
                 results.add(rc);
                 results.add(lampID);
-                results.add(brightness);
+                results.add(brightnessLumens);
             }
 
             @Override
@@ -256,7 +256,7 @@ public class LampManagerCallbackTest extends TestCase {
             }
 
             @Override
-            public void getLampServiceVersionReplyCB(ResponseCode rc, String lampID, int lampServiceVersion) {
+            public void getLampServiceVersionReplyCB(ResponseCode rc, String lampID, long lampServiceVersion) {
                 results.add((new Object() { public String getName() { return getClass().getEnclosingMethod().getName(); }}).getName());
                 results.add(rc);
                 results.add(lampID);
@@ -755,43 +755,39 @@ public class LampManagerCallbackTest extends TestCase {
       assertTrue(Arrays.deepEquals(new Object[] {method, rc, lampID, faultCode}, results.toArray()));
   }
 
-  //TODO- fix method to take in long instead of int
-  /*
-  private native String getLampParametersLumensFieldReplyCB(LampManagerCallback lmcb, ResponseCode responseCode, String lampID, int brightnessLumens);
+  private native String getLampParametersLumensFieldReplyCB(LampManagerCallback lmcb, ResponseCode responseCode, String lampID, long brightnessLumens);
   public void testGetLampParametersLumensFieldReplyCB()
   {
       ResponseCode rc = ResponseCode.ERR_REJECTED;
       String lampID = "LampID-1";
-      int brightness = 789;
+      long brightnessLumens = 789;
 
-      String method = getLampParametersLumensFieldReplyCB(callback, rc, lampID, brightness);
+      String method = getLampParametersLumensFieldReplyCB(callback, rc, lampID, brightnessLumens);
 
-      assertTrue(Arrays.deepEquals(new Object[] {method, rc, lampID, brightness}, results.toArray()));
+      assertTrue(Arrays.deepEquals(new Object[] {method, rc, lampID, brightnessLumens}, results.toArray()));
   }
 
-  private native String getLampParametersEnergyUsageMilliwattsFieldReplyCB(LampManagerCallback lmcb, ResponseCode responseCode, String lampID, int energyUsageMilliwatts);
+  private native String getLampParametersEnergyUsageMilliwattsFieldReplyCB(LampManagerCallback lmcb, ResponseCode responseCode, String lampID, long energyUsageMilliwatts);
   public void testGetLampParametersEnergyUsageMilliwattsFieldReplyCB()
   {
       ResponseCode rc = ResponseCode.ERR_REJECTED;
       String lampID = "LampID-1";
-      int energyUsageMilliwatts = 5000;
+      long energyUsageMilliwatts = 5000;
 
       String method = getLampParametersEnergyUsageMilliwattsFieldReplyCB(callback, rc, lampID, energyUsageMilliwatts);
 
       assertTrue(Arrays.deepEquals(new Object[] {method, rc, lampID, energyUsageMilliwatts}, results.toArray()));
   }
 
-  private native String getLampServiceVersionReplyCB(LampManagerCallback lmcb, ResponseCode responseCode, String lampID, int lampServiceVersion);
+  private native String getLampServiceVersionReplyCB(LampManagerCallback lmcb, ResponseCode responseCode, String lampID, long lampServiceVersion);
   public void testGetLampServiceVersionReplyCB()
   {
       ResponseCode rc = ResponseCode.ERR_REJECTED;
       String lampID = "LampID-1";
-      int lampServiceVersion = 789;
+      long lampServiceVersion = 789;
 
       String method = getLampServiceVersionReplyCB(callback, rc, lampID, lampServiceVersion);
 
       assertTrue(Arrays.deepEquals(new Object[] {method, rc, lampID, lampServiceVersion}, results.toArray()));
   }
-  */
-
 }

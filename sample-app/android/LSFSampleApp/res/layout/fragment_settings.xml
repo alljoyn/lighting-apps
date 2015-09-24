@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--  
+<!--
  * Copyright (c) AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
@@ -135,6 +135,44 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/font_size_2"
                 android:textColor="@color/detail_text" />
+        </LinearLayout>
+    </TableRow>
+
+    <include
+        android:id="@+id/settingsDividerController"
+        layout="@layout/view_divider_row" />
+
+    <TableRow
+        android:id="@+id/settingsRowBundledController"
+        android:layout_width="match_parent"
+        android:clickable="true"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="@dimen/margin_h"
+            android:layout_marginRight="@dimen/margin_h"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/settingsLabelBundledController"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="@string/bundled_controller"
+                android:textColor="@color/detail_text_dark"
+                android:textSize="@dimen/font_size_1" />
+
+            <TextView
+                android:id="@+id/settingsTextBundledController"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_size_2"
+                android:textColor="@color/detail_text" />
 
             <CheckBox
                 android:id="@+id/settingsStartController"
@@ -144,7 +182,6 @@
                 android:text="@string/controller_enable_stopped"
                 android:textColor="@color/detail_text"
                 android:textSize="@dimen/font_size_2" />
-
         </LinearLayout>
     </TableRow>
 

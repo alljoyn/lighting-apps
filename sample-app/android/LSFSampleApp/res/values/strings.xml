@@ -18,7 +18,8 @@
 
     <string name="app_name">LSF Sample App</string>
     <string name="module_scenes_v1">Scenes V1 Module</string>
-    <string name="controller">Controller</string>
+    <string name="controller">Lead Controller</string>
+    <string name="bundled_controller">Bundled Controller</string>
     <string name="controller_enable_started">Enable bundled Controller Service (started)</string>
     <string name="controller_enable_stopped">Enable bundled Controller Service (stopped)</string>
     <string name="action_add">Add</string>

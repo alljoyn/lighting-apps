@@ -170,6 +170,24 @@ public class LightingController {
     }
 
     /**
+     * Returns the name of the Controller.
+     *
+     * @return the name of the controller
+     */
+    public String getName() {
+        return isRunning() ? controllerService.getName() : null;
+    }
+
+    /**
+     * Returns a boolean representing whether the Controller is the lead controller.
+     *
+     * @return True if the Controller is the leader, false otherwise
+     */
+    public boolean isLeader() {
+        return controllerService.isLeader();
+    }
+
+    /**
      * Notifies the LightingController that a WiFi or Ethernet connection is available. Once
      * a WiFi or Ethernet connection is established, the controller will begin connecting to lamps on
      * the network.

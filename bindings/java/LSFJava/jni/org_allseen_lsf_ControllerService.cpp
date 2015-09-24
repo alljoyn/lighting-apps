@@ -81,6 +81,16 @@ void JNICALL Java_org_allseen_lsf_ControllerService_destroyNativeObject(JNIEnv* 
     DestroyHandle<XControllerService>(thiz);
 }
 
+JNIEXPORT jstring JNICALL Java_org_allseen_lsf_ControllerService_getName(JNIEnv* env, jobject thiz)
+{
+    return XControllerService::getActive()->GetName();
+}
+
+JNIEXPORT jboolean JNICALL Java_org_allseen_lsf_ControllerService_isLeader(JNIEnv* env, jobject thiz)
+{
+    return XControllerService::getActive()->IsLeader();
+}
+
 #ifdef __cplusplus
 }
 #endif

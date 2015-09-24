@@ -18,6 +18,7 @@ package org.allseen.lsf.sdk;
 import java.util.Random;
 
 import org.alljoyn.bus.AboutKeys;
+import org.allseen.lsf.sdk.manager.AboutManager;
 
 /**
  * Provides a base class for developers to extend or use directly to define the application and device
@@ -69,6 +70,9 @@ public class LightingControllerConfigurationBase implements LightingControllerCo
 
         random.nextBytes(randomAppID);
 
+        String hexString = AboutManager.bytesToHexString(randomAppID).replaceAll("\\s", "");
+        String deviceName = "LightingC-" + hexString.substring(hexString.length() - 5);
+
         aboutData.put(AboutKeys.ABOUT_APP_ID, randomAppID);
         aboutData.put(AboutKeys.ABOUT_DATE_OF_MANUFACTURE, "10/1/2199");
         aboutData.put(AboutKeys.ABOUT_DEFAULT_LANGUAGE, "en");
@@ -82,8 +86,8 @@ public class LightingControllerConfigurationBase implements LightingControllerCo
         aboutData.put(AboutKeys.ABOUT_APP_NAME, "LightingControllerService", "de-AT");
         aboutData.put(AboutKeys.ABOUT_DESCRIPTION, "Controller Service", "en");
         aboutData.put(AboutKeys.ABOUT_DESCRIPTION, "Controller Service", "de-AT");
-        aboutData.put(AboutKeys.ABOUT_DEVICE_NAME, "My device name", "en");
-        aboutData.put(AboutKeys.ABOUT_DEVICE_NAME, "Mein Gerätename", "de-AT");
+        aboutData.put(AboutKeys.ABOUT_DEVICE_NAME, deviceName, "en");
+        aboutData.put(AboutKeys.ABOUT_DEVICE_NAME, deviceName, "de-AT");
         aboutData.put(AboutKeys.ABOUT_MANUFACTURER, "Company A (EN)", "en");
         aboutData.put(AboutKeys.ABOUT_MANUFACTURER, "Firma A (DE-AT)", "de-AT");
     }

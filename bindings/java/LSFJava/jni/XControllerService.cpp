@@ -174,6 +174,66 @@ void XControllerService::SendNetworkDisconnected()
     cNetworkCallback->Disconnected();
 }
 
+jstring XControllerService::GetName()
+{
+    JScopedEnv env;
+
+    if (cActive != this) {
+        QCC_DbgPrintf(("Inactive"));
+        return (jstring) NULL;
+    }
+
+    if (managerInstance == NULL) {
+        QCC_DbgPrintf(("Invalid manager"));
+        return (jstring) NULL;
+    }
+
+    ControllerService *controller = managerInstance->GetControllerServicePtr();
+
+    if (controller == NULL) {
+        QCC_DbgPrintf(("Invalid LSFAboutDataStore"));
+        return (jstring) NULL;
+    }
+
+    char *controllerName = NULL;
+    controller->GetAboutDataStore().GetDeviceName(&controllerName);
+
+    if (controllerName == NULL) {
+        QCC_DbgPrintf(("Invalid Controller Name"));
+        return (jstring) NULL;
+    }
+
+    jstring jstrValue = env->NewStringUTF(controllerName);
+    if (env->ExceptionCheck() || !jstrValue) {
+        QCC_LogError(ER_FAIL, ("NewStringUTF() failed"));
+        return NULL;
+    }
+
+    return jstrValue;
+}
+
+jboolean XControllerService::IsLeader()
+{
+    if (cActive != this) {
+        QCC_DbgPrintf(("Inactive"));
+        return (jboolean) false;
+    }
+
+    if (managerInstance == NULL) {
+        QCC_DbgPrintf(("Invalid manager"));
+        return (jboolean) false;
+    }
+
+    ControllerService *controller = managerInstance->GetControllerServicePtr();
+
+    if (controller == NULL) {
+        QCC_DbgPrintf(("Invalid ControllerServicePtr"));
+        return (jboolean) false;
+    }
+
+    return (jboolean) controller->IsLeader();
+}
+
 void XControllerService::PopulateDefaultProperties(const AboutData *aboutData)
 {
     return XJavaDelegator::Call_Void_VoidPointer(jdelegate, __func__, (void *)aboutData);

@@ -74,6 +74,22 @@ JNIEXPORT void JNICALL Java_org_allseen_lsf_ControllerService_sendNetworkDisconn
 
 /*
  * Class:     org_allseen_lsf_ControllerService
+ * Method:    getName
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_org_allseen_lsf_ControllerService_getName
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_allseen_lsf_ControllerService
+ * Method:    isLeader
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_allseen_lsf_ControllerService_isLeader
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_allseen_lsf_ControllerService
  * Method:    createNativeObject
  * Signature: ()V
  */

@@ -82,10 +82,10 @@ JNIEXPORT jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_lamp
 /*
  * Class:     org_allseen_lsf_test_LampManagerCallbackTest
  * Method:    getLampParametersEnergyUsageMilliwattsFieldReplyCB
- * Signature: (Lorg/allseen/lsf/LampManagerCallback;Lorg/allseen/lsf/ResponseCode;Ljava/lang/String;I)Ljava/lang/String;
+ * Signature: (Lorg/allseen/lsf/LampManagerCallback;Lorg/allseen/lsf/ResponseCode;Ljava/lang/String;J)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_getLampParametersEnergyUsageMilliwattsFieldReplyCB
-  (JNIEnv *, jobject, jobject, jobject, jstring, jint);
+  (JNIEnv *, jobject, jobject, jobject, jstring, jlong);
 
 /*
  * Class:     org_allseen_lsf_test_LampManagerCallbackTest
@@ -114,10 +114,10 @@ JNIEXPORT jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_getL
 /*
  * Class:     org_allseen_lsf_test_LampManagerCallbackTest
  * Method:    getLampParametersLumensFieldReplyCB
- * Signature: (Lorg/allseen/lsf/LampManagerCallback;Lorg/allseen/lsf/ResponseCode;Ljava/lang/String;I)Ljava/lang/String;
+ * Signature: (Lorg/allseen/lsf/LampManagerCallback;Lorg/allseen/lsf/ResponseCode;Ljava/lang/String;J)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_getLampParametersLumensFieldReplyCB
-  (JNIEnv *, jobject, jobject, jobject, jstring, jint);
+  (JNIEnv *, jobject, jobject, jobject, jstring, jlong);
 
 /*
  * Class:     org_allseen_lsf_test_LampManagerCallbackTest
@@ -210,10 +210,10 @@ JNIEXPORT jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_tran
 /*
  * Class:     org_allseen_lsf_test_LampManagerCallbackTest
  * Method:    getLampServiceVersionReplyCB
- * Signature: (Lorg/allseen/lsf/LampManagerCallback;Lorg/allseen/lsf/ResponseCode;Ljava/lang/String;I)Ljava/lang/String;
+ * Signature: (Lorg/allseen/lsf/LampManagerCallback;Lorg/allseen/lsf/ResponseCode;Ljava/lang/String;J)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_getLampServiceVersionReplyCB
-  (JNIEnv *, jobject, jobject, jobject, jstring, jint);
+  (JNIEnv *, jobject, jobject, jobject, jstring, jlong);
 
 /*
  * Class:     org_allseen_lsf_test_LampManagerCallbackTest

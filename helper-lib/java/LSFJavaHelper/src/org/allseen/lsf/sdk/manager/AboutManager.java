@@ -211,18 +211,7 @@ public class AboutManager implements AboutListener {
                 if (variant != null) {
                     byte[] bytes = variant.getObject(byte[].class);
 
-                    StringBuilder sb = new StringBuilder("0x");
-
-                    for (int i = 0; i < bytes.length; i++) {
-                        sb.append(String.format("%02X", bytes[i]));
-
-                        // group the bytes into groups of 4
-                        if((i + 1) % 4 == 0) {
-                            sb.append(" ");
-                        }
-                    }
-
-                    value = sb.toString();
+                    value = bytesToHexString(bytes);
                 }
             } catch (BusException e) {
                 value = defaultValue;
@@ -231,5 +220,20 @@ public class AboutManager implements AboutListener {
         }
 
        return value;
+    }
+
+    public static String bytesToHexString(byte[] bytes) {
+        StringBuilder sb = new StringBuilder("0x");
+
+        for (int i = 0; i < bytes.length; i++) {
+            sb.append(String.format("%02X", bytes[i]));
+
+            // group the bytes into groups of 4
+            if((i + 1) % 4 == 0) {
+                sb.append(" ");
+            }
+        }
+
+        return sb.toString();
     }
 }

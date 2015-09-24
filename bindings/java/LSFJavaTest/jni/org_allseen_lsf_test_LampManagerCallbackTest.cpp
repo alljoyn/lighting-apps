@@ -61,17 +61,15 @@ jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_lampsLostCB(JN
 }
 
 JNIEXPORT
-jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_getLampParametersEnergyUsageMilliwattsFieldReplyCB(JNIEnv *env, jobject thiz, jobject jCallback, jobject jResponseCode, jstring jLampID, jint jEnergyUsageMilliwatts)
+jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_getLampParametersEnergyUsageMilliwattsFieldReplyCB(JNIEnv *env, jobject thiz, jobject jCallback, jobject jResponseCode, jstring jLampID, jlong jEnergyUsageMilliwatts)
 {
-    return NULL;
-    //return XCppTestDelegator::Call_Void_ResponseCode_String_UInt32<JLampManagerCallback>(env, jCallback, jResponseCode, jLampID, jEnergyUsageMilliwatts, &JLampManagerCallback::GetLampParametersEnergyUsageMilliwattsFieldReplyCB, __func__);
+    return XCppTestDelegator::Call_Void_ResponseCode_String_UInt32<JLampManagerCallback>(env, jCallback, jResponseCode, jLampID, jEnergyUsageMilliwatts, &JLampManagerCallback::GetLampParametersEnergyUsageMilliwattsFieldReplyCB, __func__);
 }
 
 JNIEXPORT
-jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_getLampParametersLumensFieldReplyCB(JNIEnv *env, jobject thiz, jobject jCallback, jobject jResponseCode, jstring jLampID, jint jBrightnessLumens)
+jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_getLampParametersLumensFieldReplyCB(JNIEnv *env, jobject thiz, jobject jCallback, jobject jResponseCode, jstring jLampID, jlong jBrightnessLumens)
 {
-    return NULL;
-    //return XCppTestDelegator::Call_Void_ResponseCode_String_UInt32<JLampManagerCallback>(env, jCallback, jResponseCode, jLampID, jBrightnessLumens, &JLampManagerCallback::GetLampParametersLumensFieldReplyCB, __func__);
+    return XCppTestDelegator::Call_Void_ResponseCode_String_UInt32<JLampManagerCallback>(env, jCallback, jResponseCode, jLampID, jBrightnessLumens, &JLampManagerCallback::GetLampParametersLumensFieldReplyCB, __func__);
 }
 
 JNIEXPORT
@@ -83,7 +81,6 @@ jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_getLampStateOn
 JNIEXPORT
 jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_getLampStateHueFieldReplyCB(JNIEnv *env, jobject thiz, jobject jCallback, jobject jResponseCode, jstring jLampID, jlong jHue)
 {
-
     return XCppTestDelegator::Call_Void_ResponseCode_String_UInt32<JLampManagerCallback>(env, jCallback, jResponseCode, jLampID, jHue, &JLampManagerCallback::GetLampStateHueFieldReplyCB, __func__);
 }
 
@@ -96,21 +93,18 @@ jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_getLampStateSa
 JNIEXPORT
 jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_getLampStateBrightnessFieldReplyCB(JNIEnv *env, jobject thiz, jobject jCallback, jobject jResponseCode, jstring jLampID, jlong jBrightness)
 {
-
     return XCppTestDelegator::Call_Void_ResponseCode_String_UInt32<JLampManagerCallback>(env, jCallback, jResponseCode, jLampID, jBrightness, &JLampManagerCallback::GetLampStateBrightnessFieldReplyCB, __func__);
 }
 
 JNIEXPORT
 jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_getLampStateColorTempFieldReplyCB(JNIEnv *env, jobject thiz, jobject jCallback, jobject jResponseCode, jstring jLampID, jlong jColorTemp)
 {
-
     return XCppTestDelegator::Call_Void_ResponseCode_String_UInt32<JLampManagerCallback>(env, jCallback, jResponseCode, jLampID, jColorTemp, &JLampManagerCallback::GetLampStateColorTempFieldReplyCB, __func__);
 }
 
 JNIEXPORT
 jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_clearLampFaultReplyCB(JNIEnv *env, jobject thiz, jobject jCallback, jobject jResponseCode, jstring jLampID, jlong jFaultCode)
 {
-
     return XCppTestDelegator::Call_Void_ResponseCode_String_UInt32<JLampManagerCallback>(env, jCallback, jResponseCode, jLampID, jFaultCode, &JLampManagerCallback::ClearLampFaultReplyCB, __func__);
 }
 
@@ -127,11 +121,9 @@ jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_getLampFaultsR
 }
 
 JNIEXPORT
-jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_getLampServiceVersionReplyCB(JNIEnv *env, jobject thiz, jobject jCallback, jobject jResponseCode, jstring jLampID, jint jLampServiceVersion)
+jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_getLampServiceVersionReplyCB(JNIEnv *env, jobject thiz, jobject jCallback, jobject jResponseCode, jstring jLampID, jlong jLampServiceVersion)
 {
-
-    return NULL;
-    //return XCppTestDelegator::Call_Void_ResponseCode_String_UInt32<JLampManagerCallback>(env, jCallback, jResponseCode, jLampID, jLampServiceVersion, &JLampManagerCallback::GetLampServiceVersionReplyCB, __func__);
+    return XCppTestDelegator::Call_Void_ResponseCode_String_UInt32<JLampManagerCallback>(env, jCallback, jResponseCode, jLampID, jLampServiceVersion, &JLampManagerCallback::GetLampServiceVersionReplyCB, __func__);
 }
 
 JNIEXPORT
@@ -273,11 +265,9 @@ jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_transitionLamp
     return XCppTestDelegator::Call_Void_ResponseCode_String<JLampManagerCallback>(env, jCallback, jResponseCode, jLampID, &JLampManagerCallback::TransitionLampStateToPresetReplyCB, __func__);
 }
 
-
 JNIEXPORT
 jstring JNICALL Java_org_allseen_lsf_test_LampManagerCallbackTest_setLampEffectReplyCB(JNIEnv *env, jobject thiz, jobject jCallback, jobject jResponseCode, jstring jLampID, jstring jEffectID)
 {
-
     return XCppTestDelegator::Call_Void_ResponseCode_String_String<JLampManagerCallback>(env, jCallback, jResponseCode, jLampID, jEffectID, &JLampManagerCallback::SetLampEffectReplyCB, __func__);
 }
 

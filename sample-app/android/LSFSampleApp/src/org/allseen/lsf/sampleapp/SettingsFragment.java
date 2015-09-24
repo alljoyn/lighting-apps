@@ -16,7 +16,9 @@
 package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.sdk.Controller;
+import org.allseen.lsf.sdk.LightingController;
 import org.allseen.lsf.sdk.LightingDirector;
+
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.util.Log;
@@ -66,6 +68,13 @@ public class SettingsFragment extends PageFrameChildFragment implements OnClickL
 
     public void onUpdateView() {
         SampleAppActivity activity = (SampleAppActivity)getActivity();
+
+        LightingController bundledController = LightingController.get();
+        String bundledControllerName = bundledController.getName();
+        if (bundledControllerName == null || bundledControllerName.isEmpty()) {
+            bundledControllerName = "N/A";
+        }
+
         Controller leader = LightingDirector.get().getLeadController();
         String leaderName = leader != null && leader.isConnected() ? leader.getName() : getString(R.string.default_controller_name);
 
@@ -77,11 +86,25 @@ public class SettingsFragment extends PageFrameChildFragment implements OnClickL
             } else {
                 leaderName = leader.getName();
             }
+
+            if (bundledController.isRunning() && leader.getName().equals(bundledControllerName)) {
+                leaderName += " (this)";
+            }
         } else {
             leaderName = getString(R.string.default_controller_name);
         }
 
         ((TextView)view.findViewById(R.id.settingsTextController)).setText(leaderName);
+
+        if (bundledController.isRunning()) {
+            boolean isLeader = bundledController.isLeader();
+
+            if (isLeader) {
+                bundledControllerName += " (leader)";
+            }
+        }
+
+        ((TextView) view.findViewById(R.id.settingsTextBundledController)).setText(bundledControllerName);
 
         CheckBox checkBox = (CheckBox)view.findViewById(R.id.settingsStartController);
         checkBox.setChecked(activity.isControllerServiceEnabled());

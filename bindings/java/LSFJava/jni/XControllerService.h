@@ -41,6 +41,8 @@ public:
 
     void SendNetworkConnected();
     void SendNetworkDisconnected();
+    jstring GetName();
+    jboolean IsLeader();
 
     // Methods calling into Java
     void PopulateDefaultProperties(const AboutData *aboutData);

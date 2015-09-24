@@ -107,12 +107,12 @@ void JLampManagerCallback::GetLampParametersReplyCB(const LSFResponseCode& respo
 
 void JLampManagerCallback::GetLampParametersEnergyUsageMilliwattsFieldReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const uint32_t& energyUsageMilliwatts)
 {
-    XJavaDelegator::Call_Void_ResponseCode_String_SInt32(jdelegate, __func__, responseCode, lampID, energyUsageMilliwatts);
+    XJavaDelegator::Call_Void_ResponseCode_String_UInt32(jdelegate, __func__, responseCode, lampID, energyUsageMilliwatts);
 }
 
 void JLampManagerCallback::GetLampParametersLumensFieldReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const uint32_t& brightnessLumens)
 {
-    XJavaDelegator::Call_Void_ResponseCode_String_SInt32(jdelegate, __func__, responseCode, lampID, brightnessLumens);
+    XJavaDelegator::Call_Void_ResponseCode_String_UInt32(jdelegate, __func__, responseCode, lampID, brightnessLumens);
 }
 
 void JLampManagerCallback::GetLampStateReplyCB(const LSFResponseCode& responseCode, const LSFString& lampID, const LampState& lampState)
