@@ -16,7 +16,7 @@
 
 #import "LSFLampGroupManagerCallbackTests.h"
 #import "MockLampGroupManageCallbackDelegateHandler.h"
-#import "LSFObjC/LSFLampGroupManagerCallback.h"
+#import <internal/LSFLampGroupManagerCallback.h>
 
 @interface LSFLampGroupManagerCallbackTests()
 
@@ -204,6 +204,35 @@
     std::string gid([lampGroupID UTF8String]);
     self.lgmc->CreateLampGroupReplyCB(code, gid);
     
+    //Test the data using NSSet
+    NSSet *startData = [[NSSet alloc] initWithArray: self.dataArray];
+    NSSet *endData = [[NSSet alloc] initWithArray: [self.lgmcdh getCallbackData]];
+    BOOL isSetsEqual = [startData isEqualToSet: endData];
+    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+}
+
+-(void)testCreateLampGroupWithTracking
+{
+    //Ensure array is empty
+    [self.dataArray removeAllObjects];
+
+    //Populate array with test data
+    NSString *functionName = @"createLampGroupWithTracking";
+    LSFResponseCode code = LSF_ERR_INVALID;
+    NSNumber *responseCode = [[NSNumber alloc] initWithInt: code];
+    NSString *lampGroupID = @"lampGroupID";
+    unsigned int tid = 1234;
+    NSNumber *trackingID = [[NSNumber alloc] initWithUnsignedInt: tid];
+
+    [self.dataArray addObject: functionName];
+    [self.dataArray addObject: responseCode];
+    [self.dataArray addObject: lampGroupID];
+    [self.dataArray addObject: trackingID];
+
+    //Call callback method
+    std::string gid([lampGroupID UTF8String]);
+    self.lgmc->CreateLampGroupWithTrackingReplyCB(code, gid, tid);
+
     //Test the data using NSSet
     NSSet *startData = [[NSSet alloc] initWithArray: self.dataArray];
     NSSet *endData = [[NSSet alloc] initWithArray: [self.lgmcdh getCallbackData]];
@@ -795,6 +824,35 @@
     std::string gid([lampGroupID UTF8String]);
     self.lgmc->TransitionLampGroupStateToPresetReplyCB(code, gid);
     
+    //Test the data using NSSet
+    NSSet *startData = [[NSSet alloc] initWithArray: self.dataArray];
+    NSSet *endData = [[NSSet alloc] initWithArray: [self.lgmcdh getCallbackData]];
+    BOOL isSetsEqual = [startData isEqualToSet: endData];
+    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+}
+
+-(void)testSetLampGroupEffect
+{
+    //Ensure array is empty
+    [self.dataArray removeAllObjects];
+
+    //Populate array with test data
+    NSString *functionName = @"setLampGroupEffect";
+    LSFResponseCode code = LSF_ERR_INVALID;
+    NSNumber *responseCode = [[NSNumber alloc] initWithInt: code];
+    NSString *lampGroupID = @"lampGroupID";
+    NSString *effectID = @"testEffectID";
+
+    [self.dataArray addObject: functionName];
+    [self.dataArray addObject: responseCode];
+    [self.dataArray addObject: lampGroupID];
+    [self.dataArray addObject: effectID];
+
+    //Call callback method
+    std::string gid([lampGroupID UTF8String]);
+    std::string eid([effectID UTF8String]);
+    self.lgmc->SetLampGroupEffectReplyCB(code, gid, eid);
+
     //Test the data using NSSet
     NSSet *startData = [[NSSet alloc] initWithArray: self.dataArray];
     NSSet *endData = [[NSSet alloc] initWithArray: [self.lgmcdh getCallbackData]];

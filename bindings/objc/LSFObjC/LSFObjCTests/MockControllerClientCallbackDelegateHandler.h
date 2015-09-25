@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFObjC/LSFControllerClientCallbackDelegate.h"
+#import <internal/LSFControllerClientCallbackDelegate.h>
 
 @interface MockControllerClientCallbackDelegateHandler : NSObject <LSFControllerClientCallbackDelegate>
 

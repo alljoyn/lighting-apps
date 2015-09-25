@@ -91,6 +91,28 @@
     [self.dataArray addObject: sceneID];
 }
 
+-(void)createSceneTrackingReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID andTrackingID: (unsigned int)trackingID
+{
+    [self.dataArray removeAllObjects];
+    NSNumber *responseCode = [[NSNumber alloc] initWithInt: rc];
+    NSNumber *tid = [[NSNumber alloc] initWithUnsignedInt: trackingID];
+    [self.dataArray addObject: @"createSceneWithTracking"];
+    [self.dataArray addObject: responseCode];
+    [self.dataArray addObject: sceneID];
+    [self.dataArray addObject: tid];
+}
+
+-(void)createSceneWithSceneElementsReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID andTrackingID: (unsigned int)trackingID
+{
+    [self.dataArray removeAllObjects];
+    NSNumber *responseCode = [[NSNumber alloc] initWithInt: rc];
+    NSNumber *tid = [[NSNumber alloc] initWithUnsignedInt: trackingID];
+    [self.dataArray addObject: @"createSceneWithSceneElements"];
+    [self.dataArray addObject: responseCode];
+    [self.dataArray addObject: sceneID];
+    [self.dataArray addObject: tid];
+}
+
 -(void)scenesCreated: (NSArray *)sceneIDs
 {
     [self.dataArray removeAllObjects];
@@ -103,6 +125,15 @@
     [self.dataArray removeAllObjects];
     NSNumber *responseCode = [[NSNumber alloc] initWithInt: rc];
     [self.dataArray addObject: @"updateScene"];
+    [self.dataArray addObject: responseCode];
+    [self.dataArray addObject: sceneID];
+}
+
+-(void)updateSceneWithSceneElementsReplyWithCode: (LSFResponseCode)rc andSceneID: (NSString *)sceneID
+{
+    [self.dataArray removeAllObjects];
+    NSNumber *responseCode = [[NSNumber alloc] initWithInt: rc];
+    [self.dataArray addObject: @"updateSceneWithSceneElements"];
     [self.dataArray addObject: responseCode];
     [self.dataArray addObject: sceneID];
 }
@@ -146,6 +177,16 @@
     [self.dataArray addObject: pte.lampGroups];
     [self.dataArray addObject: pte.presetID];
     [self.dataArray addObject: tp];
+}
+
+-(void)getSceneWithSceneElementsReplyWithCode: (LSFResponseCode)rc sceneID: (NSString *)sceneID andSceneWithSceneElements: (LSFSceneWithSceneElements *)sceneWithSceneElements
+{
+    [self.dataArray removeAllObjects];
+    NSNumber *responseCode = [[NSNumber alloc] initWithInt: rc];
+    [self.dataArray addObject: @"getSceneWithSceneElements"];
+    [self.dataArray addObject: responseCode];
+    [self.dataArray addObject: sceneID];
+    [self.dataArray addObject: sceneWithSceneElements.sceneElements];
 }
 
 -(void)applySceneReplyWithCode: (LSFResponseCode)rc andSceneID: (NSString *)sceneID

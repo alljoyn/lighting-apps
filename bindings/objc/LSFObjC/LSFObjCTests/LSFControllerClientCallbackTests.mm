@@ -16,7 +16,7 @@
 
 #import "LSFControllerClientCallbackTests.h"
 #import "MockControllerClientCallbackDelegateHandler.h"
-#import "LSFObjC/LSFControllerClientCallback.h"
+#import <internal/LSFControllerClientCallback.h>
 
 @interface LSFControllerClientCallbackTests()
 

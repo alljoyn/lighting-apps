@@ -51,7 +51,6 @@
     [self.dataArray addObject: @"getAllLampIDs"];
     [self.dataArray addObject: responseCode];
     [self.dataArray addObject: lampIDs];
-
 }
 
 -(void)getLampNameReplyWithCode: (LSFResponseCode)rc lampID: (NSString*)lampID language: (NSString*)language andLampName: (NSString*)name
@@ -87,11 +86,12 @@
     [self.dataArray addObject: lampID];
 }
 
--(void)lampsNameChanged: (NSArray *)lampIDs
+-(void)lampsNameChangedWithID: (NSString *)lampID andName: (NSString *)name
 {
     [self.dataArray removeAllObjects];
-    [self.dataArray addObject: @"lampsNameChanged"];
-    [self.dataArray addObject: lampIDs];
+    [self.dataArray addObject: @"lampNameChanged"];
+    [self.dataArray addObject: lampID];
+    [self.dataArray addObject: name];
 }
 
 -(void)lampsFound: (NSArray *)lampIDs
@@ -108,40 +108,31 @@
     [self.dataArray addObject: lampIDs];
 }
 
--(void)pingLampReplyWithCode: (LSFResponseCode)rc andLampID: (NSString *)lampID
-{
-    [self.dataArray removeAllObjects];
-    NSNumber *responseCode = [[NSNumber alloc] initWithInt: rc];
-    [self.dataArray addObject: @"pingLamp"];
-    [self.dataArray addObject: responseCode];
-    [self.dataArray addObject: lampID];
-}
-
--(void)getLampDetailsReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID andLampDetails: (LSFLampDetails *)details
+-(void)getLampDetailsReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID andLampDetails: (LSFSDKLampDetails *)details
 {
     [self.dataArray removeAllObjects];
     NSNumber *responseCode = [[NSNumber alloc] initWithInt: rc];
     [self.dataArray addObject: @"getLampDetails"];
     [self.dataArray addObject: responseCode];
     [self.dataArray addObject: lampID];
-    NSNumber *make = [[NSNumber alloc] initWithInt: MAKE_LIFX];
-    NSNumber *model = [[NSNumber alloc] initWithInt: MODEL_LED];
-    NSNumber *type = [[NSNumber alloc] initWithInt: TYPE_LAMP];
-    NSNumber *lampType = [[NSNumber alloc] initWithInt: LAMPTYPE_A15];
-    NSNumber *lampBaseType = [[NSNumber alloc] initWithInt: BASETYPE_E5];
-    NSNumber *lampBeamAngle = [[NSNumber alloc] initWithUnsignedInt: 100];
-    NSNumber *dimmable = [[NSNumber alloc] initWithBool: YES];
-    NSNumber *color = [[NSNumber alloc] initWithBool: YES];
-    NSNumber *variableColorTemp = [[NSNumber alloc] initWithBool: NO];
-    NSNumber *hasEffects = [[NSNumber alloc] initWithBool: NO];
-    NSNumber *maxVoltage = [[NSNumber alloc] initWithUnsignedInt: 120];
-    NSNumber *minVoltage = [[NSNumber alloc] initWithUnsignedInt: 120];
-    NSNumber *wattage = [[NSNumber alloc] initWithUnsignedInt: 100];
-    NSNumber *incandescentEquivalent = [[NSNumber alloc] initWithUnsignedInt: 9];
-    NSNumber *maxLumens = [[NSNumber alloc] initWithUnsignedInt: 100];
-    NSNumber *minTemp = [[NSNumber alloc] initWithUnsignedInt: 2400];
-    NSNumber *maxTemp = [[NSNumber alloc] initWithUnsignedInt: 5000];
-    NSNumber *cri = [[NSNumber alloc] initWithUnsignedInt: 93];
+    NSNumber *make = [[NSNumber alloc] initWithInt: details.lampMake];
+    NSNumber *model = [[NSNumber alloc] initWithInt: details.lampModel];
+    NSNumber *type = [[NSNumber alloc] initWithInt: details.deviceType];
+    NSNumber *lampType = [[NSNumber alloc] initWithInt: details.lampType];
+    NSNumber *lampBaseType = [[NSNumber alloc] initWithInt: details.baseType];
+    NSNumber *lampBeamAngle = [[NSNumber alloc] initWithUnsignedInt: details.lampBeamAngle];
+    NSNumber *dimmable = [[NSNumber alloc] initWithBool: details.dimmable];
+    NSNumber *color = [[NSNumber alloc] initWithBool: details.color];
+    NSNumber *variableColorTemp = [[NSNumber alloc] initWithBool: details.variableColorTemp];
+    NSNumber *hasEffects = [[NSNumber alloc] initWithBool: details.hasEffects];
+    NSNumber *maxVoltage = [[NSNumber alloc] initWithUnsignedInt: details.maxVoltage];
+    NSNumber *minVoltage = [[NSNumber alloc] initWithUnsignedInt: details.minVoltage];
+    NSNumber *wattage = [[NSNumber alloc] initWithUnsignedInt: details.wattage];
+    NSNumber *incandescentEquivalent = [[NSNumber alloc] initWithUnsignedInt: details.incandescentEquivalent];
+    NSNumber *maxLumens = [[NSNumber alloc] initWithUnsignedInt: details.maxLumens];
+    NSNumber *minTemp = [[NSNumber alloc] initWithUnsignedInt: details.minTemperature];
+    NSNumber *maxTemp = [[NSNumber alloc] initWithUnsignedInt: details.maxTemperature];
+    NSNumber *cri = [[NSNumber alloc] initWithUnsignedInt: details.colorRenderingIndex];
     [self.dataArray addObject: make];
     [self.dataArray addObject: model];
     [self.dataArray addObject: type];
@@ -162,7 +153,7 @@
     [self.dataArray addObject: cri];
 }
 
--(void)getLampParametersReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID andLampParameters: (LSFLampParameters *)params
+-(void)getLampParametersReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID andLampParameters: (LSFSDKLampParameters *)params
 {
     [self.dataArray removeAllObjects];
     NSNumber *responseCode = [[NSNumber alloc] initWithInt: rc];
@@ -280,11 +271,21 @@
     [self.dataArray addObject: lampID];
 }
 
--(void)lampsStateChanged: (NSArray *)lampIDs
+-(void)lampsStateChangedWithID: (NSString *)lampID andLampState: (LSFLampState *)state
 {
     [self.dataArray removeAllObjects];
-    [self.dataArray addObject: @"lampsStateChanged"];
-    [self.dataArray addObject: lampIDs];
+    [self.dataArray addObject: @"lampStateChanged"];
+    [self.dataArray addObject: lampID];
+    NSNumber *onOff = [[NSNumber alloc] initWithBool: state.onOff];
+    NSNumber *brightness = [[NSNumber alloc] initWithUnsignedInt: state.brightness];
+    NSNumber *hue = [[NSNumber alloc] initWithUnsignedInt: state.hue];
+    NSNumber *saturation = [[NSNumber alloc] initWithUnsignedInt: state.saturation];
+    NSNumber *colorTemp = [[NSNumber alloc] initWithUnsignedInt: state.colorTemp];
+    [self.dataArray addObject: onOff];
+    [self.dataArray addObject: brightness];
+    [self.dataArray addObject: hue];
+    [self.dataArray addObject: saturation];
+    [self.dataArray addObject: colorTemp];
 }
 
 -(void)transitionLampStateReplyWithCode: (LSFResponseCode)rc andLampID: (NSString*)lampID
@@ -453,6 +454,77 @@
     [self.dataArray addObject: responseCode];
     [self.dataArray addObject: lampID];
     [self.dataArray addObject: supportedLanguages];
+}
+
+-(void)setLampEffectReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID andEffectID: (NSString *)effectID
+{
+    [self.dataArray removeAllObjects];
+    NSNumber *responseCode = [[NSNumber alloc] initWithInt: rc];
+    [self.dataArray addObject: @"setLampEffect"];
+    [self.dataArray addObject: responseCode];
+    [self.dataArray addObject: lampID];
+    [self.dataArray addObject: effectID];
+}
+
+-(void)getConsolidatedLampDataSetReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID language:(NSString *)language lampName: (NSString *)lampName lampDetails:(LSFSDKLampDetails *)lampDetails lampState: (LSFLampState *)lampState andLampParameters: (LSFSDKLampParameters *)lampParameters
+{
+    [self.dataArray removeAllObjects];
+    NSNumber *responseCode = [[NSNumber alloc] initWithInt: rc];
+    NSNumber *make = [[NSNumber alloc] initWithInt: lampDetails.lampMake];
+    NSNumber *model = [[NSNumber alloc] initWithInt: lampDetails.lampModel];
+    NSNumber *type = [[NSNumber alloc] initWithInt: lampDetails.deviceType];
+    NSNumber *lampType = [[NSNumber alloc] initWithInt: lampDetails.lampType];
+    NSNumber *lampBaseType = [[NSNumber alloc] initWithInt: lampDetails.baseType];
+    NSNumber *lampBeamAngle = [[NSNumber alloc] initWithUnsignedInt: lampDetails.lampBeamAngle];
+    NSNumber *dimmable = [[NSNumber alloc] initWithBool: lampDetails.dimmable];
+    NSNumber *color = [[NSNumber alloc] initWithBool: lampDetails.color];
+    NSNumber *variableColorTemp = [[NSNumber alloc] initWithBool: lampDetails.variableColorTemp];
+    NSNumber *hasEffects = [[NSNumber alloc] initWithBool: lampDetails.hasEffects];
+    NSNumber *maxVoltage = [[NSNumber alloc] initWithUnsignedInt: lampDetails.maxVoltage];
+    NSNumber *minVoltage = [[NSNumber alloc] initWithUnsignedInt: lampDetails.minVoltage];
+    NSNumber *wattage = [[NSNumber alloc] initWithUnsignedInt: lampDetails.wattage];
+    NSNumber *incandescentEquivalent = [[NSNumber alloc] initWithUnsignedInt: lampDetails.incandescentEquivalent];
+    NSNumber *maxLumens = [[NSNumber alloc] initWithUnsignedInt: lampDetails.maxLumens];
+    NSNumber *minTemp = [[NSNumber alloc] initWithUnsignedInt: lampDetails.minTemperature];
+    NSNumber *maxTemp = [[NSNumber alloc] initWithUnsignedInt: lampDetails.maxTemperature];
+    NSNumber *cri = [[NSNumber alloc] initWithUnsignedInt: lampDetails.colorRenderingIndex];
+    NSNumber *onOff = [[NSNumber alloc] initWithBool: lampState.onOff];
+    NSNumber *brightness = [[NSNumber alloc] initWithUnsignedInt: lampState.brightness];
+    NSNumber *hue = [[NSNumber alloc] initWithUnsignedInt: lampState.hue];
+    NSNumber *saturation = [[NSNumber alloc] initWithUnsignedInt: lampState.saturation];
+    NSNumber *colorTemp = [[NSNumber alloc] initWithUnsignedInt: lampState.colorTemp];
+    NSNumber *eum = [[NSNumber alloc] initWithUnsignedInt: lampParameters.energyUsageMilliwatts];
+    NSNumber *lume = [[NSNumber alloc] initWithUnsignedInt: lampParameters.lumens];
+    [self.dataArray addObject: @"getConsolidatedLampDataSet"];
+    [self.dataArray addObject: responseCode];
+    [self.dataArray addObject: lampID];
+    [self.dataArray addObject: language];
+    [self.dataArray addObject: lampName];
+    [self.dataArray addObject: onOff];
+    [self.dataArray addObject: brightness];
+    [self.dataArray addObject: hue];
+    [self.dataArray addObject: saturation];
+    [self.dataArray addObject: colorTemp];
+    [self.dataArray addObject: eum];
+    [self.dataArray addObject: lume];
+    [self.dataArray addObject: make];
+    [self.dataArray addObject: model];
+    [self.dataArray addObject: type];
+    [self.dataArray addObject: lampType];
+    [self.dataArray addObject: lampBaseType];
+    [self.dataArray addObject: lampBeamAngle];
+    [self.dataArray addObject: dimmable];
+    [self.dataArray addObject: color];
+    [self.dataArray addObject: variableColorTemp];
+    [self.dataArray addObject: hasEffects];
+    [self.dataArray addObject: maxVoltage];
+    [self.dataArray addObject: minVoltage];
+    [self.dataArray addObject: wattage];
+    [self.dataArray addObject: incandescentEquivalent];
+    [self.dataArray addObject: maxLumens];
+    [self.dataArray addObject: minTemp];
+    [self.dataArray addObject: maxTemp];
+    [self.dataArray addObject: cri];
 }
 
 @end

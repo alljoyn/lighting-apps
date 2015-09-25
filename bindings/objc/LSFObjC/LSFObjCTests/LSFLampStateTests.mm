@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import "LSFLampStateTests.h"
-#import "LSFObjC/LSFLampState.h"
+#import <internal/LSFLampState.h>
 
 @interface LSFLampStateTests()
 
@@ -27,7 +27,7 @@
 
 @synthesize lampState = _lampState;
 
-- (void)setUp
+-(void)setUp
 {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -35,7 +35,7 @@
     self.lampState = [[LSFLampState alloc] init];
 }
 
-- (void)tearDown
+-(void)tearDown
 {
     self.lampState = nil;
     
@@ -43,84 +43,97 @@
     [super tearDown];
 }
 
+-(void)testConstructor
+{
+    BOOL onOff = YES;
+    unsigned int brightnessData = 100;
+    unsigned int hueData = 360;
+    unsigned int saturationData = 100;
+    unsigned int colorTempData = 20000;
+
+    self.lampState = [[LSFLampState alloc] initWithOnOff: onOff brightness: brightnessData hue: hueData saturation: saturationData colorTemp: colorTempData];
+
+    XCTAssertTrue(self.lampState.onOff, @"OnOff field should be on");
+    XCTAssertTrue((self.lampState.brightness == brightnessData), @"Brightness should be equal to 100");
+    XCTAssertTrue((self.lampState.hue == hueData), @"Hue should be equal to 360");
+    XCTAssertTrue((self.lampState.saturation == saturationData), @"Saturation should be equal to 100");
+    XCTAssertTrue((self.lampState.colorTemp == colorTempData), @"ColorTemp should be equal to 20000");
+}
+
 -(void)testOnOff
 {
-    BOOL onOff = self.lampState.onOff;
-    XCTAssertFalse(onOff, @"OnOff field should be off initially");
+    XCTAssertFalse(self.lampState.onOff, @"OnOff field should be off initially");
     
     //Test turn on
     self.lampState.onOff = YES;
-    onOff = self.lampState.onOff;
-    XCTAssertTrue(onOff, @"OnOff field should be on");
+    XCTAssertTrue(self.lampState.onOff, @"OnOff field should be on");
     
     //Test turn off
     self.lampState.onOff = NO;
-    onOff = self.lampState.onOff;
-    XCTAssertFalse(onOff, @"OnOff field should be off");
+    XCTAssertFalse(self.lampState.onOff, @"OnOff field should be off");
 }
 
 -(void)testBrightness
 {
-    int brightness = self.lampState.brightness;
-    XCTAssertTrue((brightness == 0), @"Brightness should be zero initially");
+    XCTAssertTrue((self.lampState.brightness == 0), @"Brightness should be zero initially");
     
-    int brightnessData = 100;
+    unsigned int brightnessData = 100;
     self.lampState.brightness = brightnessData;
-    brightness = self.lampState.brightness;
-    XCTAssertTrue((brightness == brightnessData), @"Brightness should be equal to 100");
+    XCTAssertTrue((self.lampState.brightness == brightnessData), @"Brightness should be equal to 100");
     
     brightnessData = 50;
     self.lampState.brightness = brightnessData;
-    brightness = self.lampState.brightness;
-    XCTAssertTrue((brightness == brightnessData), @"Brightness should be equal to 50");
+    XCTAssertTrue((self.lampState.brightness == brightnessData), @"Brightness should be equal to 50");
 }
 
 -(void)testHue
 {
-    int hue = self.lampState.hue;
-    XCTAssertTrue((hue == 0), @"Hue should be zero initially");
+    XCTAssertTrue((self.lampState.hue == 0), @"Hue should be zero initially");
     
-    int hueData = 100;
+    unsigned int hueData = 100;
     self.lampState.hue = hueData;
-    hue = self.lampState.hue;
-    XCTAssertTrue((hue == hueData), @"Hue should be equal to 100");
+    XCTAssertTrue((self.lampState.hue == hueData), @"Hue should be equal to 100");
     
     hueData = 50;
     self.lampState.hue = hueData;
-    hue = self.lampState.hue;
-    XCTAssertTrue((hue == hueData), @"Hue should be equal to 50");
+    XCTAssertTrue((self.lampState.hue == hueData), @"Hue should be equal to 50");
 }
 
 -(void)testSaturation
 {
-    int saturation = self.lampState.saturation;
-    XCTAssertTrue((saturation == 0), @"Saturation should be zero initially");
+    XCTAssertTrue((self.lampState.saturation == 0), @"Saturation should be zero initially");
     
-    int saturationData = 100;
+    unsigned int saturationData = 100;
     self.lampState.saturation = saturationData;
-    saturation = self.lampState.saturation;
-    XCTAssertTrue((saturation == saturationData), @"Saturation should be equal to 100");
+    XCTAssertTrue((self.lampState.saturation == saturationData), @"Saturation should be equal to 100");
     
     saturationData = 50;
     self.lampState.saturation = saturationData;
-    saturation = self.lampState.saturation;
-    XCTAssertTrue((saturation == saturationData), @"Saturation should be equal to 50");
+    XCTAssertTrue((self.lampState.saturation == saturationData), @"Saturation should be equal to 50");
 }
 
 -(void)testColorTemp
 {
-    int colorTemp = self.lampState.colorTemp;
-    XCTAssertTrue((colorTemp == 0), @"Color Temp should be zero initially");
+    XCTAssertTrue((self.lampState.colorTemp == 0), @"Color Temp should be zero initially");
     
-    int colorTempData = 100;
+    unsigned int colorTempData = 100;
     self.lampState.colorTemp = colorTempData;
-    colorTemp = self.lampState.colorTemp;
-    XCTAssertTrue((colorTemp == colorTempData), @"Color Temp should be equal to 100");
+    XCTAssertTrue((self.lampState.colorTemp == colorTempData), @"Color Temp should be equal to 100");
     
     colorTempData = 50;
     self.lampState.colorTemp = colorTempData;
-    colorTemp = self.lampState.colorTemp;
-    XCTAssertTrue((colorTemp == colorTempData), @"Color Temp should be equal to 50");
+    XCTAssertTrue((self.lampState.colorTemp == colorTempData), @"Color Temp should be equal to 50");
+}
+
+-(void)testIsNull
+{
+    XCTAssertTrue(self.lampState.isNull, @"IsNull should be true initially");
+
+    self.lampState.isNull = NO;
+    XCTAssertFalse(self.lampState.isNull, @"IsNull should be false");
+
+    self.lampState.isNull = YES;
+    XCTAssertTrue(self.lampState.isNull, @"IsNull should be true");
 }
 
 @end

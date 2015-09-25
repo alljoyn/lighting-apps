@@ -90,6 +90,17 @@
     [self.dataArray addObject: masterSceneID];
 }
 
+-(void)createMasterSceneTrackingReplyWithCode: (LSFResponseCode)rc masterSceneID: (NSString *)masterSceneID andTrackingID: (unsigned int)trackingID
+{
+    [self.dataArray removeAllObjects];
+    NSNumber *responseCode = [[NSNumber alloc] initWithInt: rc];
+    NSNumber *tid = [[NSNumber alloc] initWithUnsignedInt: trackingID];
+    [self.dataArray addObject: @"createMasterSceneWithTracking"];
+    [self.dataArray addObject: responseCode];
+    [self.dataArray addObject: masterSceneID];
+    [self.dataArray addObject: tid];
+}
+
 -(void)masterScenesCreated: (NSArray *)masterSceneIDs
 {
     [self.dataArray removeAllObjects];

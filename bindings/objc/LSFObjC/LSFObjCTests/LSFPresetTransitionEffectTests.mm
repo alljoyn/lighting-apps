@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import "LSFPresetTransitionEffectTests.h"
-#import "LSFObjC/LSFPresetTransitionEffect.h"
+#import <internal/LSFPresetTransitionEffect.h>
 
 @interface LSFPresetTransitionEffectTests()
 
@@ -37,6 +37,12 @@
 {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
+}
+
+-(void)testNoArgConstructor
+{
+    self.presetTransitionEffect = [[LSFPresetTransitionEffect alloc] init];
+    XCTAssertNotNil(self.presetTransitionEffect, @"Preset Transition Effect should not be nil");
 }
 
 -(void)testStateTransitionEffectWithoutTransitionPeriod

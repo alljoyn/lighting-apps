@@ -16,7 +16,7 @@
 
 #import "LSFLampManagerCallbackTests.h"
 #import "MockLampManagerCallbackDelegateHandler.h"
-#import "LSFObjC/LSFLampManagerCallback.h"
+#import <internal/LSFLampManagerCallback.h>
 
 @interface LSFLampManagerCallbackTests()
 
@@ -182,33 +182,24 @@
     XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
 }
 
--(void)testLampsNameChanged
+-(void)testLampNameChanged
 {
     //Ensure array is empty
     [self.dataArray removeAllObjects];
     
     //Populate array with test data
-    NSString *functionName = @"lampsNameChanged";
-    NSString *lampID1 = @"lampID1";
-    NSString *lampID2 = @"lampID2";
-    NSString *lampID3 = @"lampID3";
-    NSString *lampID4 = @"lampID4";
-    NSArray *lampIDsArray = [[NSArray alloc] initWithObjects: lampID1, lampID2, lampID3, lampID4, nil];
+    NSString *functionName = @"lampNameChanged";
+    NSString *lampID = @"lampID";
+    NSString *lampName = @"lampName";
     
     [self.dataArray addObject: functionName];
-    [self.dataArray addObject: lampIDsArray];
+    [self.dataArray addObject: lampID];
+    [self.dataArray addObject: lampName];
     
     //Call callback method
-    LSFStringList lampIDList;
-    std::string id1([lampID1 UTF8String]);
-    lampIDList.push_back(id1);
-    std::string id2([lampID2 UTF8String]);
-    lampIDList.push_back(id2);
-    std::string id3([lampID3 UTF8String]);
-    lampIDList.push_back(id3);
-    std::string id4([lampID4 UTF8String]);
-    lampIDList.push_back(id4);
-    self.lmc->LampsNameChangedCB(lampIDList);
+    std::string lid([lampID UTF8String]);
+    std::string name([lampName UTF8String]);
+    self.lmc->LampNameChangedCB(lid, name);
     
     //Test the data using NSSet
     NSSet *startData = [[NSSet alloc] initWithArray: self.dataArray];
@@ -287,33 +278,7 @@
     XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
 }
 
--(void)testPingLamp
-{
-    //Ensure array is empty
-    [self.dataArray removeAllObjects];
-
-    //Populate array with test data
-    LSFResponseCode code = LSF_ERR_INVALID;
-    NSNumber *responseCode = [[NSNumber alloc] initWithInt: code];
-    NSString *lampID = @"lampID1";
-    NSString *functionName = @"pingLamp";
-
-    [self.dataArray addObject: responseCode];
-    [self.dataArray addObject: functionName];
-    [self.dataArray addObject: lampID];
-
-    //Call callback method
-    std::string lid([lampID UTF8String]);
-    self.lmc->PingLampReplyCB(code, lid);
-
-    //Test the data using NSSet
-    NSSet *startData = [[NSSet alloc] initWithArray: self.dataArray];
-    NSSet *endData = [[NSSet alloc] initWithArray: [self.lmcdh getCallbackData]];
-    BOOL isSetsEqual = [startData isEqualToSet: endData];
-    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
-}
-
--(void)testGetLampDetails //(LSFResponseCode)rc lampID: (NSString *)lampID andLampDetails: (LSFLampDetails *)details
+-(void)testGetLampDetails
 {
     //Ensure array is empty
     [self.dataArray removeAllObjects];
@@ -691,27 +656,27 @@
     [self.dataArray removeAllObjects];
     
     //Populate array with test data
-    NSString *functionName = @"lampsStateChanged";
-    NSString *lampID1 = @"lampID1";
-    NSString *lampID2 = @"lampID2";
-    NSString *lampID3 = @"lampID3";
-    NSString *lampID4 = @"lampID4";
-    NSArray *lampIDsArray = [[NSArray alloc] initWithObjects: lampID1, lampID2, lampID3, lampID4, nil];
+    NSString *functionName = @"lampStateChanged";
+    NSString *lampID = @"lampID";
+    NSNumber *onOff = [[NSNumber alloc] initWithBool: YES];
+    NSNumber *brightness = [[NSNumber alloc] initWithUnsignedInt: 100];
+    NSNumber *hue = [[NSNumber alloc] initWithUnsignedInt: 360];
+    NSNumber *saturation = [[NSNumber alloc] initWithUnsignedInt: 100];
+    NSNumber *colorTemp = [[NSNumber alloc] initWithUnsignedInt: 2000];
     
     [self.dataArray addObject: functionName];
-    [self.dataArray addObject: lampIDsArray];
+    [self.dataArray addObject: lampID];
+    [self.dataArray addObject: onOff];
+    [self.dataArray addObject: brightness];
+    [self.dataArray addObject: hue];
+    [self.dataArray addObject: saturation];
+    [self.dataArray addObject: colorTemp];
+
+    lsf::LampState *state = new lsf::LampState(true, 360, 100, 2000, 100);
     
     //Call callback method
-    LSFStringList lampIDList;
-    std::string id1([lampID1 UTF8String]);
-    lampIDList.push_back(id1);
-    std::string id2([lampID2 UTF8String]);
-    lampIDList.push_back(id2);
-    std::string id3([lampID3 UTF8String]);
-    lampIDList.push_back(id3);
-    std::string id4([lampID4 UTF8String]);
-    lampIDList.push_back(id4);
-    self.lmc->LampsStateChangedCB(lampIDList);
+    std::string lid([lampID UTF8String]);
+    self.lmc->LampStateChangedCB(lid, *state);
     
     //Test the data using NSSet
     NSSet *startData = [[NSSet alloc] initWithArray: self.dataArray];
@@ -928,7 +893,7 @@
     XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
 }
 
--(void)testGetLampFaults //(LSFResponseCode)rc lampID: (NSString *)lampID andFaultCodes: (NSArray *)codes
+-(void)testGetLampFaults
 {
     //Ensure array is empty
     [self.dataArray removeAllObjects];
@@ -1173,7 +1138,7 @@
     XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
 }
 
--(void)testGetLampSupportedLanguages //(LSFResponseCode)rc lampID: (NSString*)lampID andSupportedLanguages: (NSArray*)supportedLanguages;
+-(void)testGetLampSupportedLanguages
 {
     //Ensure array is empty
     [self.dataArray removeAllObjects];
@@ -1201,6 +1166,139 @@
     std::string lid([lampID UTF8String]);
     self.lmc->GetLampSupportedLanguagesReplyCB(code, lid, langList);
     
+    //Test the data using NSSet
+    NSSet *startData = [[NSSet alloc] initWithArray: self.dataArray];
+    NSSet *endData = [[NSSet alloc] initWithArray: [self.lmcdh getCallbackData]];
+    BOOL isSetsEqual = [startData isEqualToSet: endData];
+    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+}
+
+-(void)testSetLampEffect
+{
+    //Ensure array is empty
+    [self.dataArray removeAllObjects];
+
+    //Populate array with test data
+    LSFResponseCode code = LSF_ERR_INVALID;
+    NSNumber *responseCode = [[NSNumber alloc] initWithInt: code];
+    NSString *lampID = @"lampID1";
+    NSString *functionName = @"setLampEffect";
+    NSString *effectID = @"effectID1";
+
+    [self.dataArray addObject: responseCode];
+    [self.dataArray addObject: functionName];
+    [self.dataArray addObject: lampID];
+    [self.dataArray addObject: effectID];
+
+    //Call callback method
+    std::string lid([lampID UTF8String]);
+    std::string eid([effectID UTF8String]);
+    self.lmc->SetLampEffectReplyCB(code, lid, eid);
+
+    //Test the data using NSSet
+    NSSet *startData = [[NSSet alloc] initWithArray: self.dataArray];
+    NSSet *endData = [[NSSet alloc] initWithArray: [self.lmcdh getCallbackData]];
+    BOOL isSetsEqual = [startData isEqualToSet: endData];
+    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+}
+
+-(void)testGetConsolidatedLampDataSet
+{
+    //Ensure array is empty
+    [self.dataArray removeAllObjects];
+
+    //Populate array with test data
+    LSFResponseCode code = LSF_ERR_INVALID;
+    NSNumber *responseCode = [[NSNumber alloc] initWithInt: code];
+    NSString *lampID = @"lampID1";
+    NSString *lampName = @"lampName";
+    NSString *language = @"en";
+    NSString *functionName = @"getConsolidatedLampDataSet";
+    NSNumber *make = [[NSNumber alloc] initWithInt: MAKE_LIFX];
+    NSNumber *model = [[NSNumber alloc] initWithInt: MODEL_LED];
+    NSNumber *type = [[NSNumber alloc] initWithInt: TYPE_LAMP];
+    NSNumber *lampType = [[NSNumber alloc] initWithInt: LAMPTYPE_A15];
+    NSNumber *lampBaseType = [[NSNumber alloc] initWithInt: BASETYPE_E5];
+    NSNumber *lampBeamAngle = [[NSNumber alloc] initWithUnsignedInt: 100];
+    NSNumber *dimmable = [[NSNumber alloc] initWithBool: YES];
+    NSNumber *color = [[NSNumber alloc] initWithBool: YES];
+    NSNumber *variableColorTemp = [[NSNumber alloc] initWithBool: NO];
+    NSNumber *hasEffects = [[NSNumber alloc] initWithBool: NO];
+    NSNumber *maxVoltage = [[NSNumber alloc] initWithUnsignedInt: 120];
+    NSNumber *minVoltage = [[NSNumber alloc] initWithUnsignedInt: 120];
+    NSNumber *wattage = [[NSNumber alloc] initWithUnsignedInt: 100];
+    NSNumber *incandescentEquivalent = [[NSNumber alloc] initWithUnsignedInt: 9];
+    NSNumber *maxLumens = [[NSNumber alloc] initWithUnsignedInt: 100];
+    NSNumber *minTemp = [[NSNumber alloc] initWithUnsignedInt: 2400];
+    NSNumber *maxTemp = [[NSNumber alloc] initWithUnsignedInt: 5000];
+    NSNumber *cri = [[NSNumber alloc] initWithUnsignedInt: 93];
+    NSNumber *onOff = [[NSNumber alloc] initWithBool: YES];
+    NSNumber *brightness = [[NSNumber alloc] initWithUnsignedInt: 100];
+    NSNumber *hue = [[NSNumber alloc] initWithUnsignedInt: 200];
+    NSNumber *saturation = [[NSNumber alloc] initWithUnsignedInt: 300];
+    NSNumber *colorTemp = [[NSNumber alloc] initWithUnsignedInt: 400];
+    NSNumber *eum = [[NSNumber alloc] initWithUnsignedInt: 0];
+    NSNumber *lume = [[NSNumber alloc] initWithUnsignedInt: 0];
+
+    [self.dataArray addObject: responseCode];
+    [self.dataArray addObject: lampID];
+    [self.dataArray addObject: lampName];
+    [self.dataArray addObject: language];
+    [self.dataArray addObject: functionName];
+    [self.dataArray addObject: make];
+    [self.dataArray addObject: model];
+    [self.dataArray addObject: type];
+    [self.dataArray addObject: lampType];
+    [self.dataArray addObject: lampBaseType];
+    [self.dataArray addObject: lampBeamAngle];
+    [self.dataArray addObject: dimmable];
+    [self.dataArray addObject: color];
+    [self.dataArray addObject: variableColorTemp];
+    [self.dataArray addObject: hasEffects];
+    [self.dataArray addObject: maxVoltage];
+    [self.dataArray addObject: minVoltage];
+    [self.dataArray addObject: wattage];
+    [self.dataArray addObject: incandescentEquivalent];
+    [self.dataArray addObject: maxLumens];
+    [self.dataArray addObject: minTemp];
+    [self.dataArray addObject: maxTemp];
+    [self.dataArray addObject: cri];
+    [self.dataArray addObject: onOff];
+    [self.dataArray addObject: brightness];
+    [self.dataArray addObject: hue];
+    [self.dataArray addObject: saturation];
+    [self.dataArray addObject: colorTemp];
+    [self.dataArray addObject: eum];
+    [self.dataArray addObject: lume];
+
+    //Call callback method
+    lsf::LampDetails *ld = new lsf::LampDetails();
+    ld->make = MAKE_LIFX;
+    ld->model = MODEL_LED;
+    ld->type = TYPE_LAMP;
+    ld->lampType = LAMPTYPE_A15;
+    ld->lampBaseType = BASETYPE_E5;
+    ld->lampBeamAngle = 100;
+    ld->dimmable = true;
+    ld->color = true;
+    ld->variableColorTemp = false;
+    ld->hasEffects = false;
+    ld->maxVoltage = 120;
+    ld->minVoltage = 120;
+    ld->wattage = 100;
+    ld->incandescentEquivalent = 9;
+    ld->maxLumens = 100;
+    ld->minTemperature = 2400;
+    ld->maxTemperature = 5000;
+    ld->colorRenderingIndex = 93;
+    lsf::LampState *state = new lsf::LampState(true, 100, 200, 300, 400);
+    lsf::LampParameters *params = new lsf::LampParameters();
+    std::string lid([lampID UTF8String]);
+    std::string name([lampName UTF8String]);
+    std::string lang([language UTF8String]);
+    self.lmc->GetConsolidatedLampDataSetReplyCB(code, lid, lang, name, *ld, *state, *params);
+
+
     //Test the data using NSSet
     NSSet *startData = [[NSSet alloc] initWithArray: self.dataArray];
     NSSet *endData = [[NSSet alloc] initWithArray: [self.lmcdh getCallbackData]];

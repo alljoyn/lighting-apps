@@ -15,7 +15,8 @@
  ******************************************************************************/
 
 #import "LSFMasterSceneTests.h"
-#import "LSFObjC/LSFMasterScene.h"
+#import <internal/LSFMasterScene.h>
+#import <alljoyn/Init.h>
 
 @interface LSFMasterSceneTests()
 
@@ -31,19 +32,21 @@
 {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
-    
+
+    AllJoynInit();
     self.masterScene = [[LSFMasterScene alloc] init];
 }
 
 - (void)tearDown
 {
     self.masterScene = nil;
+    AllJoynShutdown();
     
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
 
--(void)testInitWithSceneIDs
+-(void)testNoArgConstructor
 {
     //Create Scene IDs Array
     NSString *sceneID1 = @"sceneID1";
@@ -53,15 +56,8 @@
     
     //Create Master Scene Object
     self.masterScene = [[LSFMasterScene alloc] initWithSceneIDs: initialSceneIDs];
-    
-    //Get Scene IDs
-    NSArray *sceneIDs = self.masterScene.sceneIDs;
-    
-    //Test
-    NSSet *initialSceneIDsSet = [NSSet setWithArray: initialSceneIDs];
-    NSSet *sceneIDSet = [NSSet setWithArray: sceneIDs];
-    BOOL isSetsEqual = [sceneIDSet isEqualToSet: initialSceneIDsSet];
-    XCTAssertTrue(isSetsEqual, @"Sets should be equal");
+
+    XCTAssertTrue([self.masterScene.sceneIDs isEqualToArray: initialSceneIDs], @"Arrays should be equal");
 }
 
 -(void)testSetGetSceneIDs
@@ -75,14 +71,7 @@
     //Set Scene IDs
     self.masterScene.sceneIDs = initialSceneIDs;
     
-    //Get Scene IDs
-    NSArray *sceneIDs = self.masterScene.sceneIDs;
-    
-    //Test
-    NSSet *initialSceneIDsSet = [NSSet setWithArray: initialSceneIDs];
-    NSSet *sceneIDSet = [NSSet setWithArray: sceneIDs];
-    BOOL isSetsEqual = [sceneIDSet isEqualToSet: initialSceneIDsSet];
-    XCTAssertTrue(isSetsEqual, @"Sets should be equal");
+    XCTAssertTrue([self.masterScene.sceneIDs isEqualToArray: initialSceneIDs], @"Arrays should be equal");
 }
 
 -(void)testIsDependentScene

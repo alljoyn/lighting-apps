@@ -14,18 +14,18 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import "LSFPresetPulseEffectTests.h"
-#import "LSFObjC/LSFPresetPulseEffect.h"
+#import "LSFStatePulseEffectTests.h"
+#import <internal/LSFStatePulseEffect.h>
 
-@interface LSFPresetPulseEffectTests()
+@interface LSFStatePulseEffectTests()
 
-@property (nonatomic) LSFPresetPulseEffect *presetPulseEffect;
+@property (nonatomic) LSFStatePulseEffect *statePulseEffect;
 
 @end
 
-@implementation LSFPresetPulseEffectTests
+@implementation LSFStatePulseEffectTests
 
-@synthesize presetPulseEffect = _presetPulseEffect;
+@synthesize statePulseEffect = _statePulseEffect;
 
 - (void)setUp
 {
@@ -39,54 +39,13 @@
     [super tearDown];
 }
 
--(void)testStatePulseEffectWithoutFromPreset
+-(void)testNoArgConstructor
 {
-    //Create data objects for LSFStatePulseEffect
-    NSString *lampID1 = @"lampID1";
-    NSString *lampID2 = @"lampID2";
-    NSString *lampID3 = @"lampID3";
-    NSArray *initialLampIDs = [NSArray arrayWithObjects: lampID1, lampID2, lampID3, nil];
-    
-    NSString *lampGroupID1 = @"lampGroupID1";
-    NSString *lampGroupID2 = @"lampGroupID2";
-    NSArray *initialLampGroupIDs = [NSArray arrayWithObjects: lampGroupID1, lampGroupID2, nil];
-    
-    NSString *initialToPresetID = @"initialToPresetID";
-    
-    unsigned int initialPeriod = 15;
-    unsigned int initialDuration = 60;
-    unsigned int initialNumPulses = 10;
-    
-    //Create LSFStatePulseEffect
-    self.presetPulseEffect = [[LSFPresetPulseEffect alloc] initWithLampIDs: initialLampIDs lampGroupIDs: initialLampGroupIDs toPresetID: initialToPresetID period:initialPeriod duration: initialDuration andNumPulses: initialNumPulses];
-    
-    //Test extracting the data
-    unsigned int period = self.presetPulseEffect.period;
-    unsigned int duration = self.presetPulseEffect.duration;
-    unsigned int numPulses = self.presetPulseEffect.numPulses;
-    XCTAssertTrue(initialPeriod == period, @"Period should be equal to 15");
-    XCTAssertTrue(initialDuration == duration, @"Duration should be equal to 60");
-    XCTAssertTrue(initialNumPulses == numPulses, @"NumPulses should be equal to 10");
-    
-    NSArray *lampIDs = self.presetPulseEffect.lamps;
-    NSSet *initialLampsSet = [NSSet setWithArray: initialLampIDs];
-    NSSet *lampsSet = [NSSet setWithArray: lampIDs];
-    BOOL isSetsEqual = [initialLampsSet isEqualToSet: lampsSet];
-    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
-    
-    NSArray *lampGroupIDs = self.presetPulseEffect.lampGroups;
-    NSSet *initialLampGroupsSet = [NSSet setWithArray: initialLampGroupIDs];
-    NSSet *lampGroupsSet = [NSSet setWithArray: lampGroupIDs];
-    isSetsEqual = [initialLampGroupsSet isEqualToSet: lampGroupsSet];
-    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
-    
-    NSString *fromPresetID = self.presetPulseEffect.fromPresetID;
-    NSString *toPresetID = self.presetPulseEffect.toPresetID;
-    XCTAssertTrue([fromPresetID isEqualToString: @"CURRENT_STATE"], @"From preset ID should be equal to CURRENT_STATE");
-    XCTAssertTrue([toPresetID isEqualToString: initialToPresetID], @"To preset ID should be equal to initialPresetID");
+    self.statePulseEffect = [[LSFStatePulseEffect alloc] init];
+    XCTAssertNotNil(self.statePulseEffect, @"State Pulse Effect should not be nil");
 }
 
--(void)testStatePulseEffectWithFromPreset
+-(void)testStatePulseEffectWithoutFromState
 {
     //Create data objects for LSFStatePulseEffect
     NSString *lampID1 = @"lampID1";
@@ -98,40 +57,105 @@
     NSString *lampGroupID2 = @"lampGroupID2";
     NSArray *initialLampGroupIDs = [NSArray arrayWithObjects: lampGroupID1, lampGroupID2, nil];
     
-    NSString *initialFromPresetID = @"initialFromPresetID";
-    NSString *initialToPresetID = @"initialToPresetID";
+    LSFLampState *initialToState = [[LSFLampState alloc] initWithOnOff: YES brightness: 100 hue: 360 saturation: 100 colorTemp: 2700];
     
     unsigned int initialPeriod = 15;
     unsigned int initialDuration = 60;
     unsigned int initialNumPulses = 10;
     
     //Create LSFStatePulseEffect
-    self.presetPulseEffect = [[LSFPresetPulseEffect alloc] initWithLampIDs: initialLampIDs lampGroupIDs: initialLampGroupIDs fromPresetID: initialFromPresetID toPresetID: initialToPresetID period:initialPeriod duration: initialDuration andNumPulses: initialNumPulses];
+    self.statePulseEffect = [[LSFStatePulseEffect alloc] initWithLampIDs: initialLampIDs lampGroupIDs: initialLampGroupIDs toState: initialToState period: initialPeriod duration: initialDuration andNumPulses: initialNumPulses];
     
     //Test extracting the data
-    unsigned int period = self.presetPulseEffect.period;
-    unsigned int duration = self.presetPulseEffect.duration;
-    unsigned int numPulses = self.presetPulseEffect.numPulses;
+    unsigned int period = self.statePulseEffect.period;
+    unsigned int duration = self.statePulseEffect.duration;
+    unsigned int numPulses = self.statePulseEffect.numPulses;
     XCTAssertTrue(initialPeriod == period, @"Period should be equal to 15");
     XCTAssertTrue(initialDuration == duration, @"Duration should be equal to 60");
     XCTAssertTrue(initialNumPulses == numPulses, @"NumPulses should be equal to 10");
     
-    NSArray *lampIDs = self.presetPulseEffect.lamps;
+    NSArray *lampIDs = self.statePulseEffect.lamps;
     NSSet *initialLampsSet = [NSSet setWithArray: initialLampIDs];
     NSSet *lampsSet = [NSSet setWithArray: lampIDs];
     BOOL isSetsEqual = [initialLampsSet isEqualToSet: lampsSet];
     XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
     
-    NSArray *lampGroupIDs = self.presetPulseEffect.lampGroups;
+    NSArray *lampGroupIDs = self.statePulseEffect.lampGroups;
     NSSet *initialLampGroupsSet = [NSSet setWithArray: initialLampGroupIDs];
     NSSet *lampGroupsSet = [NSSet setWithArray: lampGroupIDs];
     isSetsEqual = [initialLampGroupsSet isEqualToSet: lampGroupsSet];
     XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
     
-    NSString *fromPresetID = self.presetPulseEffect.fromPresetID;
-    NSString *toPresetID = self.presetPulseEffect.toPresetID;
-    XCTAssertTrue([fromPresetID isEqualToString: initialFromPresetID], @"From preset ID should be equal to initialFromPresetID");
-    XCTAssertTrue([toPresetID isEqualToString: initialToPresetID], @"To preset ID should be equal to initialToPresetID");
+    LSFLampState *fromState = self.statePulseEffect.fromLampState;
+    XCTAssertFalse(fromState.onOff, @"State should be on");
+    XCTAssertTrue(fromState.brightness == 0, @"Brightness should be 0");
+    XCTAssertTrue(fromState.hue == 0, @"Hue should be 0");
+    XCTAssertTrue(fromState.saturation == 0, @"Saturation should be 0");
+    XCTAssertTrue(fromState.colorTemp == 0, @"Color Temp should be 0");
+    
+    LSFLampState *toState = self.statePulseEffect.toLampState;
+    XCTAssertTrue(toState.onOff, @"State should be on");
+    XCTAssertTrue(toState.brightness == 100, @"Brightness should be 100");
+    XCTAssertTrue(toState.hue == 360, @"Hue should be 360");
+    XCTAssertTrue(toState.saturation == 100, @"Saturation should be 100");
+    XCTAssertTrue(toState.colorTemp == 2700, @"Color Temp should be 2700");
+}
+
+-(void)testStatePulseEffectWithFromState
+{
+    //Create data objects for LSFStatePulseEffect
+    NSString *lampID1 = @"lampID1";
+    NSString *lampID2 = @"lampID2";
+    NSString *lampID3 = @"lampID3";
+    NSArray *initialLampIDs = [NSArray arrayWithObjects: lampID1, lampID2, lampID3, nil];
+    
+    NSString *lampGroupID1 = @"lampGroupID1";
+    NSString *lampGroupID2 = @"lampGroupID2";
+    NSArray *initialLampGroupIDs = [NSArray arrayWithObjects: lampGroupID1, lampGroupID2, nil];
+    
+    LSFLampState *initialFromState = [[LSFLampState alloc] initWithOnOff: YES brightness: 50 hue: 180 saturation: 50 colorTemp: 2700];
+    LSFLampState *initialToState = [[LSFLampState alloc] initWithOnOff: YES brightness: 100 hue: 360 saturation: 100 colorTemp: 9000];
+    
+    unsigned int initialPeriod = 15;
+    unsigned int initialDuration = 60;
+    unsigned int initialNumPulses = 10;
+    
+    //Create LSFStatePulseEffect
+    self.statePulseEffect = [[LSFStatePulseEffect alloc] initWithLampIDs: initialLampIDs lampGroupIDs: initialLampGroupIDs fromState: initialFromState toState: initialToState period: initialPeriod duration: initialDuration andNumPulses: initialNumPulses];
+    
+    //Test extracting the data
+    unsigned int period = self.statePulseEffect.period;
+    unsigned int duration = self.statePulseEffect.duration;
+    unsigned int numPulses = self.statePulseEffect.numPulses;
+    XCTAssertTrue(initialPeriod == period, @"Period should be equal to 15");
+    XCTAssertTrue(initialDuration == duration, @"Duration should be equal to 60");
+    XCTAssertTrue(initialNumPulses == numPulses, @"NumPulses should be equal to 10");
+    
+    NSArray *lampIDs = self.statePulseEffect.lamps;
+    NSSet *initialLampsSet = [NSSet setWithArray: initialLampIDs];
+    NSSet *lampsSet = [NSSet setWithArray: lampIDs];
+    BOOL isSetsEqual = [initialLampsSet isEqualToSet: lampsSet];
+    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+    
+    NSArray *lampGroupIDs = self.statePulseEffect.lampGroups;
+    NSSet *initialLampGroupsSet = [NSSet setWithArray: initialLampGroupIDs];
+    NSSet *lampGroupsSet = [NSSet setWithArray: lampGroupIDs];
+    isSetsEqual = [initialLampGroupsSet isEqualToSet: lampGroupsSet];
+    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+    
+    LSFLampState *fromState = self.statePulseEffect.fromLampState;
+    XCTAssertTrue(fromState.onOff, @"State should be on");
+    XCTAssertTrue(fromState.brightness == 50, @"Brightness should be 0");
+    XCTAssertTrue(fromState.hue == 180, @"Hue should be 0");
+    XCTAssertTrue(fromState.saturation == 50, @"Saturation should be 0");
+    XCTAssertTrue(fromState.colorTemp == 2700, @"Color Temp should be 0");
+    
+    LSFLampState *toState = self.statePulseEffect.toLampState;
+    XCTAssertTrue(toState.onOff, @"State should be on");
+    XCTAssertTrue(toState.brightness == 100, @"Brightness should be 100");
+    XCTAssertTrue(toState.hue == 360, @"Hue should be 360");
+    XCTAssertTrue(toState.saturation == 100, @"Saturation should be 100");
+    XCTAssertTrue(toState.colorTemp == 9000, @"Color Temp should be 2700");
 }
 
 -(void)testSetGetLamps
@@ -146,25 +170,25 @@
     NSString *lampGroupID2 = @"lampGroupID2";
     NSArray *initialLampGroupIDs = [NSArray arrayWithObjects: lampGroupID1, lampGroupID2, nil];
     
-    NSString *initialFromPresetID = @"initialFromPresetID";
-    NSString *initialToPresetID = @"initialToPresetID";
+    LSFLampState *initialFromState = [[LSFLampState alloc] initWithOnOff: YES brightness: 50 hue: 180 saturation: 50 colorTemp: 2700];
+    LSFLampState *initialToState = [[LSFLampState alloc] initWithOnOff: YES brightness: 100 hue: 360 saturation: 100 colorTemp: 9000];
     
     unsigned int initialPeriod = 15;
     unsigned int initialDuration = 60;
     unsigned int initialNumPulses = 10;
     
     //Create LSFStatePulseEffect
-    self.presetPulseEffect = [[LSFPresetPulseEffect alloc] initWithLampIDs: initialLampIDs lampGroupIDs: initialLampGroupIDs fromPresetID: initialFromPresetID toPresetID: initialToPresetID period:initialPeriod duration: initialDuration andNumPulses: initialNumPulses];
+    self.statePulseEffect = [[LSFStatePulseEffect alloc] initWithLampIDs: initialLampIDs lampGroupIDs: initialLampGroupIDs fromState: initialFromState toState: initialToState period: initialPeriod duration: initialDuration andNumPulses: initialNumPulses];
     
     //Set lamps with new array
     NSString *lampID4 = @"lampID4";
     NSString *lampID5 = @"lampID5";
     NSArray *newLampIDs = [NSArray arrayWithObjects: lampID4, lampID5, nil];
     
-    self.presetPulseEffect.lamps = newLampIDs;
+    self.statePulseEffect.lamps = newLampIDs;
     
     //Get lamps
-    NSArray *lampIDs = self.presetPulseEffect.lamps;
+    NSArray *lampIDs = self.statePulseEffect.lamps;
     NSSet *initialLampsSet = [NSSet setWithArray: newLampIDs];
     NSSet *lampsSet = [NSSet setWithArray: lampIDs];
     BOOL isSetsEqual = [initialLampsSet isEqualToSet: lampsSet];
@@ -183,27 +207,27 @@
     NSString *lampGroupID2 = @"lampGroupID2";
     NSArray *initialLampGroupIDs = [NSArray arrayWithObjects: lampGroupID1, lampGroupID2, nil];
     
-    NSString *initialFromPresetID = @"initialFromPresetID";
-    NSString *initialToPresetID = @"initialToPresetID";
+    LSFLampState *initialFromState = [[LSFLampState alloc] initWithOnOff: YES brightness: 50 hue: 180 saturation: 50 colorTemp: 2700];
+    LSFLampState *initialToState = [[LSFLampState alloc] initWithOnOff: YES brightness: 100 hue: 360 saturation: 100 colorTemp: 9000];
     
     unsigned int initialPeriod = 15;
     unsigned int initialDuration = 60;
     unsigned int initialNumPulses = 10;
     
     //Create LSFStatePulseEffect
-    self.presetPulseEffect = [[LSFPresetPulseEffect alloc] initWithLampIDs: initialLampIDs lampGroupIDs: initialLampGroupIDs fromPresetID: initialFromPresetID toPresetID: initialToPresetID period:initialPeriod duration: initialDuration andNumPulses: initialNumPulses];
+    self.statePulseEffect = [[LSFStatePulseEffect alloc] initWithLampIDs: initialLampIDs lampGroupIDs: initialLampGroupIDs fromState: initialFromState toState: initialToState period: initialPeriod duration: initialDuration andNumPulses: initialNumPulses];
     
     //Set lamp groups with new array
     NSString *lampGroupID3 = @"lampGroupID3";
     NSArray *newLampGroupIDs = [NSArray arrayWithObjects: lampGroupID3, nil];
     
-    self.presetPulseEffect.lampGroups = newLampGroupIDs;
+    self.statePulseEffect.lampGroups = newLampGroupIDs;
     
     //Get lamp groups
-    NSArray *lampGroupIDs = self.presetPulseEffect.lampGroups;
-    NSSet *initialLampGroupsSet = [NSSet setWithArray: newLampGroupIDs];
-    NSSet *lampGroupsSet = [NSSet setWithArray: lampGroupIDs];
-    BOOL isSetsEqual = [initialLampGroupsSet isEqualToSet: lampGroupsSet];
+    NSArray *lampIDs = self.statePulseEffect.lampGroups;
+    NSSet *initialLampsSet = [NSSet setWithArray: newLampGroupIDs];
+    NSSet *lampsSet = [NSSet setWithArray: lampIDs];
+    BOOL isSetsEqual = [initialLampsSet isEqualToSet: lampsSet];
     XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
 }
 
@@ -219,21 +243,21 @@
     NSString *lampGroupID2 = @"lampGroupID2";
     NSArray *initialLampGroupIDs = [NSArray arrayWithObjects: lampGroupID1, lampGroupID2, nil];
     
-    NSString *initialFromPresetID = @"initialFromPresetID";
-    NSString *initialToPresetID = @"initialToPresetID";
+    LSFLampState *initialFromState = [[LSFLampState alloc] initWithOnOff: YES brightness: 50 hue: 180 saturation: 50 colorTemp: 2700];
+    LSFLampState *initialToState = [[LSFLampState alloc] initWithOnOff: YES brightness: 100 hue: 360 saturation: 100 colorTemp: 9000];
     
     unsigned int initialPeriod = 15;
     unsigned int initialDuration = 60;
     unsigned int initialNumPulses = 10;
     
     //Create LSFStatePulseEffect
-    self.presetPulseEffect = [[LSFPresetPulseEffect alloc] initWithLampIDs: initialLampIDs lampGroupIDs: initialLampGroupIDs fromPresetID: initialFromPresetID toPresetID: initialToPresetID period:initialPeriod duration: initialDuration andNumPulses: initialNumPulses];
+    self.statePulseEffect = [[LSFStatePulseEffect alloc] initWithLampIDs: initialLampIDs lampGroupIDs: initialLampGroupIDs fromState: initialFromState toState: initialToState period: initialPeriod duration: initialDuration andNumPulses: initialNumPulses];
     
     //Set period
-    self.presetPulseEffect.period = 30;
+    self.statePulseEffect.period = 30;
     
     //Get period
-    unsigned int newPeriod = self.presetPulseEffect.period;
+    unsigned int newPeriod = self.statePulseEffect.period;
     XCTAssertTrue(newPeriod == 30, @"Period should be equal to 30");
 }
 
@@ -249,21 +273,21 @@
     NSString *lampGroupID2 = @"lampGroupID2";
     NSArray *initialLampGroupIDs = [NSArray arrayWithObjects: lampGroupID1, lampGroupID2, nil];
     
-    NSString *initialFromPresetID = @"initialFromPresetID";
-    NSString *initialToPresetID = @"initialToPresetID";
+    LSFLampState *initialFromState = [[LSFLampState alloc] initWithOnOff: YES brightness: 50 hue: 180 saturation: 50 colorTemp: 2700];
+    LSFLampState *initialToState = [[LSFLampState alloc] initWithOnOff: YES brightness: 100 hue: 360 saturation: 100 colorTemp: 9000];
     
     unsigned int initialPeriod = 15;
     unsigned int initialDuration = 60;
     unsigned int initialNumPulses = 10;
     
     //Create LSFStatePulseEffect
-    self.presetPulseEffect = [[LSFPresetPulseEffect alloc] initWithLampIDs: initialLampIDs lampGroupIDs: initialLampGroupIDs fromPresetID: initialFromPresetID toPresetID: initialToPresetID period:initialPeriod duration: initialDuration andNumPulses: initialNumPulses];
+    self.statePulseEffect = [[LSFStatePulseEffect alloc] initWithLampIDs: initialLampIDs lampGroupIDs: initialLampGroupIDs fromState: initialFromState toState: initialToState period: initialPeriod duration: initialDuration andNumPulses: initialNumPulses];
     
     //Set duration
-    self.presetPulseEffect.duration = 120;
+    self.statePulseEffect.duration = 120;
     
     //Get duration
-    unsigned int newDuration = self.presetPulseEffect.duration;
+    unsigned int newDuration = self.statePulseEffect.duration;
     XCTAssertTrue(newDuration == 120, @"Duration should be equal to 120");
 }
 
@@ -279,25 +303,25 @@
     NSString *lampGroupID2 = @"lampGroupID2";
     NSArray *initialLampGroupIDs = [NSArray arrayWithObjects: lampGroupID1, lampGroupID2, nil];
     
-    NSString *initialFromPresetID = @"initialFromPresetID";
-    NSString *initialToPresetID = @"initialToPresetID";
+    LSFLampState *initialFromState = [[LSFLampState alloc] initWithOnOff: YES brightness: 50 hue: 180 saturation: 50 colorTemp: 2700];
+    LSFLampState *initialToState = [[LSFLampState alloc] initWithOnOff: YES brightness: 100 hue: 360 saturation: 100 colorTemp: 9000];
     
     unsigned int initialPeriod = 15;
     unsigned int initialDuration = 60;
     unsigned int initialNumPulses = 10;
     
     //Create LSFStatePulseEffect
-    self.presetPulseEffect = [[LSFPresetPulseEffect alloc] initWithLampIDs: initialLampIDs lampGroupIDs: initialLampGroupIDs fromPresetID: initialFromPresetID toPresetID: initialToPresetID period:initialPeriod duration: initialDuration andNumPulses: initialNumPulses];
+    self.statePulseEffect = [[LSFStatePulseEffect alloc] initWithLampIDs: initialLampIDs lampGroupIDs: initialLampGroupIDs fromState: initialFromState toState: initialToState period: initialPeriod duration: initialDuration andNumPulses: initialNumPulses];
     
     //Set num pulses
-    self.presetPulseEffect.numPulses = 20;
+    self.statePulseEffect.numPulses = 20;
     
     //Get num pulses
-    unsigned int newNumPulses = self.presetPulseEffect.numPulses;
+    unsigned int newNumPulses = self.statePulseEffect.numPulses;
     XCTAssertTrue(newNumPulses == 20, @"Num Pulses should be equal to 20");
 }
 
--(void)testSetGetFromPresetID
+-(void)testSetGetFromLampState
 {
     //Create data objects for LSFStatePulseEffect
     NSString *lampID1 = @"lampID1";
@@ -309,26 +333,30 @@
     NSString *lampGroupID2 = @"lampGroupID2";
     NSArray *initialLampGroupIDs = [NSArray arrayWithObjects: lampGroupID1, lampGroupID2, nil];
     
-    NSString *initialFromPresetID = @"initialFromPresetID";
-    NSString *initialToPresetID = @"initialToPresetID";
+    LSFLampState *initialFromState = [[LSFLampState alloc] initWithOnOff: YES brightness: 50 hue: 180 saturation: 50 colorTemp: 2700];
+    LSFLampState *initialToState = [[LSFLampState alloc] initWithOnOff: YES brightness: 100 hue: 360 saturation: 100 colorTemp: 9000];
     
     unsigned int initialPeriod = 15;
     unsigned int initialDuration = 60;
     unsigned int initialNumPulses = 10;
     
     //Create LSFStatePulseEffect
-    self.presetPulseEffect = [[LSFPresetPulseEffect alloc] initWithLampIDs: initialLampIDs lampGroupIDs: initialLampGroupIDs fromPresetID: initialFromPresetID toPresetID: initialToPresetID period:initialPeriod duration: initialDuration andNumPulses: initialNumPulses];
+    self.statePulseEffect = [[LSFStatePulseEffect alloc] initWithLampIDs: initialLampIDs lampGroupIDs: initialLampGroupIDs fromState: initialFromState toState: initialToState period: initialPeriod duration: initialDuration andNumPulses: initialNumPulses];
     
-    //Set from preset ID
-    NSString *newFromPresetID = @"newFromPresetID";
-    self.presetPulseEffect.fromPresetID = newFromPresetID;
+    //Set from lamp state with new data
+    LSFLampState *newFromState = [[LSFLampState alloc] initWithOnOff: YES brightness: 100 hue: 360 saturation: 100 colorTemp: 9000];
+    self.statePulseEffect.fromLampState = newFromState;
     
-    //Get from preset ID
-    NSString *fromPresetID = self.presetPulseEffect.fromPresetID;
-    XCTAssertTrue([fromPresetID isEqualToString: newFromPresetID], @"From preset ID should be newFromPresetID");
+    //Get from lamp state
+    LSFLampState *fromState = self.statePulseEffect.fromLampState;
+    XCTAssertTrue(fromState.onOff, @"State should be on");
+    XCTAssertTrue(fromState.brightness == 100, @"Brightness should be 100");
+    XCTAssertTrue(fromState.hue == 360, @"Hue should be 360");
+    XCTAssertTrue(fromState.saturation == 100, @"Saturation should be 100");
+    XCTAssertTrue(fromState.colorTemp == 9000, @"Color Temp should be 2700");
 }
 
--(void)testSetGetToPresetID
+-(void)testSetGetToLampState
 {
     //Create data objects for LSFStatePulseEffect
     NSString *lampID1 = @"lampID1";
@@ -340,23 +368,27 @@
     NSString *lampGroupID2 = @"lampGroupID2";
     NSArray *initialLampGroupIDs = [NSArray arrayWithObjects: lampGroupID1, lampGroupID2, nil];
     
-    NSString *initialFromPresetID = @"initialFromPresetID";
-    NSString *initialToPresetID = @"initialToPresetID";
+    LSFLampState *initialFromState = [[LSFLampState alloc] initWithOnOff: YES brightness: 50 hue: 180 saturation: 50 colorTemp: 2700];
+    LSFLampState *initialToState = [[LSFLampState alloc] initWithOnOff: YES brightness: 100 hue: 360 saturation: 100 colorTemp: 9000];
     
     unsigned int initialPeriod = 15;
     unsigned int initialDuration = 60;
     unsigned int initialNumPulses = 10;
     
     //Create LSFStatePulseEffect
-    self.presetPulseEffect = [[LSFPresetPulseEffect alloc] initWithLampIDs: initialLampIDs lampGroupIDs: initialLampGroupIDs fromPresetID: initialFromPresetID toPresetID: initialToPresetID period:initialPeriod duration: initialDuration andNumPulses: initialNumPulses];
+    self.statePulseEffect = [[LSFStatePulseEffect alloc] initWithLampIDs: initialLampIDs lampGroupIDs: initialLampGroupIDs fromState: initialFromState toState: initialToState period: initialPeriod duration: initialDuration andNumPulses: initialNumPulses];
     
-    //Set to preset ID
-    NSString *newToPresetID = @"newToPresetID";
-    self.presetPulseEffect.toPresetID = newToPresetID;
+    //Set to lamp state with new data
+    LSFLampState *newToState = [[LSFLampState alloc] initWithOnOff: NO brightness: 50 hue: 180 saturation: 50 colorTemp: 2700];
+    self.statePulseEffect.toLampState = newToState;
     
-    //Get to preset ID
-    NSString *toPresetID = self.presetPulseEffect.toPresetID;
-    XCTAssertTrue([toPresetID isEqualToString: newToPresetID], @"To preset ID should be newToPresetID");
+    //Get to lamp state
+    LSFLampState *toState = self.statePulseEffect.toLampState;
+    XCTAssertFalse(toState.onOff, @"State should be on");
+    XCTAssertTrue(toState.brightness == 50, @"Brightness should be 50");
+    XCTAssertTrue(toState.hue == 180, @"Hue should be 180");
+    XCTAssertTrue(toState.saturation == 50, @"Saturation should be 50");
+    XCTAssertTrue(toState.colorTemp == 2700, @"Color Temp should be 2700");
 }
 
 @end

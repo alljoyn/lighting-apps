@@ -16,7 +16,8 @@
 
 #import "LSFSceneManagerCallbackTests.h"
 #import "MockSceneManagerCallbackDelegateHandler.h"
-#import "LSFObjC/LSFSceneManagerCallback.h"
+#import <internal/LSFSceneManagerCallback.h>
+#import <alljoyn/Init.h>
 
 @interface LSFSceneManagerCallbackTests()
 
@@ -36,7 +37,8 @@
 {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
-    
+
+    AllJoynInit();
     self.smcdh = [[MockSceneManagerCallbackDelegateHandler alloc] init];
     self.smc = new LSFSceneManagerCallback(self.smcdh);
     self.dataArray = [[NSMutableArray alloc] init];
@@ -46,6 +48,7 @@
 {
     delete self.smc;
     self.smcdh = nil;
+    AllJoynShutdown();
     
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
@@ -211,6 +214,64 @@
     XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
 }
 
+-(void)testCreateSceneWithTracking
+{
+    //Ensure array is empty
+    [self.dataArray removeAllObjects];
+
+    //Populate array with test data
+    LSFResponseCode code = LSF_ERR_INVALID;
+    NSNumber *responseCode = [[NSNumber alloc] initWithInt: code];
+    unsigned int tid = 1234;
+    NSNumber *trackingID = [[NSNumber alloc] initWithUnsignedInt: tid];
+    NSString *sceneID = @"sceneID1";
+    NSString *functionName = @"createSceneWithTracking";
+
+    [self.dataArray addObject: responseCode];
+    [self.dataArray addObject: functionName];
+    [self.dataArray addObject: sceneID];
+    [self.dataArray addObject: trackingID];
+
+    //Call callback method
+    std::string sid([sceneID UTF8String]);
+    self.smc->CreateSceneWithTrackingReplyCB(code, sid, tid);
+
+    //Test the data using NSSet
+    NSSet *startData = [[NSSet alloc] initWithArray: self.dataArray];
+    NSSet *endData = [[NSSet alloc] initWithArray: [self.smcdh getCallbackData]];
+    BOOL isSetsEqual = [startData isEqualToSet: endData];
+    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+}
+
+-(void)testCreateSceneWithSceneElements
+{
+    //Ensure array is empty
+    [self.dataArray removeAllObjects];
+
+    //Populate array with test data
+    LSFResponseCode code = LSF_ERR_INVALID;
+    NSNumber *responseCode = [[NSNumber alloc] initWithInt: code];
+    unsigned int tid = 1234;
+    NSNumber *trackingID = [[NSNumber alloc] initWithUnsignedInt: tid];
+    NSString *sceneID = @"sceneID1";
+    NSString *functionName = @"createSceneWithSceneElements";
+
+    [self.dataArray addObject: responseCode];
+    [self.dataArray addObject: functionName];
+    [self.dataArray addObject: sceneID];
+    [self.dataArray addObject: trackingID];
+
+    //Call callback method
+    std::string sid([sceneID UTF8String]);
+    self.smc->CreateSceneWithSceneElementsReplyCB(code, sid, tid);
+
+    //Test the data using NSSet
+    NSSet *startData = [[NSSet alloc] initWithArray: self.dataArray];
+    NSSet *endData = [[NSSet alloc] initWithArray: [self.smcdh getCallbackData]];
+    BOOL isSetsEqual = [startData isEqualToSet: endData];
+    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+}
+
 -(void)testScenesCreated
 {
     //Ensure array is empty
@@ -265,6 +326,32 @@
     std::string sid([sceneID UTF8String]);
     self.smc->UpdateSceneReplyCB(code, sid);
     
+    //Test the data using NSSet
+    NSSet *startData = [[NSSet alloc] initWithArray: self.dataArray];
+    NSSet *endData = [[NSSet alloc] initWithArray: [self.smcdh getCallbackData]];
+    BOOL isSetsEqual = [startData isEqualToSet: endData];
+    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+}
+
+-(void)testUpdateSceneWithSceneElements
+{
+    //Ensure array is empty
+    [self.dataArray removeAllObjects];
+
+    //Populate array with test data
+    LSFResponseCode code = LSF_ERR_INVALID;
+    NSNumber *responseCode = [[NSNumber alloc] initWithInt: code];
+    NSString *sceneID = @"sceneID1";
+    NSString *functionName = @"updateSceneWithSceneElements";
+
+    [self.dataArray addObject: responseCode];
+    [self.dataArray addObject: functionName];
+    [self.dataArray addObject: sceneID];
+
+    //Call callback method
+    std::string sid([sceneID UTF8String]);
+    self.smc->UpdateSceneWithSceneElementsReplyCB(code, sid);
+
     //Test the data using NSSet
     NSSet *startData = [[NSSet alloc] initWithArray: self.dataArray];
     NSSet *endData = [[NSSet alloc] initWithArray: [self.smcdh getCallbackData]];
@@ -411,6 +498,40 @@
     std::string sid([sceneID UTF8String]);
     self.smc->GetSceneReplyCB(code, sid, *(static_cast<lsf::Scene*>(scene.handle)));
     
+    //Test the data using NSSet
+    NSSet *startData = [[NSSet alloc] initWithArray: self.dataArray];
+    NSSet *endData = [[NSSet alloc] initWithArray: [self.smcdh getCallbackData]];
+    BOOL isSetsEqual = [startData isEqualToSet: endData];
+    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+}
+
+-(void)testGetSceneWithSceneElements
+{
+    //Ensure array is empty
+    [self.dataArray removeAllObjects];
+
+    //Populate array with test data
+    LSFResponseCode code = LSF_ERR_INVALID;
+    NSNumber *responseCode = [[NSNumber alloc] initWithInt: code];
+    NSString *sceneID = @"sceneID1";
+    NSString *functionName = @"getSceneWithSceneElements";
+
+    NSString *sceneElementID1 = @"sceneElementID1";
+    NSString *sceneElementID2 = @"sceneElementID2";
+    NSString *sceneElementID3 = @"sceneElementID3";
+    NSArray *sceneElementIDs = [NSArray arrayWithObjects: sceneElementID1, sceneElementID2, sceneElementID3, nil];
+
+    LSFSceneWithSceneElements *swse = [[LSFSceneWithSceneElements alloc] initWithSceneElementIDs: sceneElementIDs];
+
+    [self.dataArray addObject: functionName];
+    [self.dataArray addObject: sceneID];
+    [self.dataArray addObject: responseCode];
+    [self.dataArray addObject: sceneElementIDs];
+
+    //Call callback method
+    std::string sid([sceneID UTF8String]);
+    self.smc->GetSceneWithSceneElementsReplyCB(code, sid, *static_cast<lsf::SceneWithSceneElements*>(swse.handle));
+
     //Test the data using NSSet
     NSSet *startData = [[NSSet alloc] initWithArray: self.dataArray];
     NSSet *endData = [[NSSet alloc] initWithArray: [self.smcdh getCallbackData]];

@@ -109,6 +109,17 @@
     [self.dataArray addObject: presetID];
 }
 
+-(void)createPresetTrackingReplyWithCode: (LSFResponseCode)rc presetID: (NSString *)presetID andTrackingID: (unsigned int)trackingID
+{
+    [self.dataArray removeAllObjects];
+    NSNumber *responseCode = [[NSNumber alloc] initWithInt: rc];
+    NSNumber *tid = [[NSNumber alloc] initWithUnsignedInt: trackingID];
+    [self.dataArray addObject: @"createPresetWithTracking"];
+    [self.dataArray addObject: responseCode];
+    [self.dataArray addObject: presetID];
+    [self.dataArray addObject: tid];
+}
+
 -(void)presetsCreated: (NSArray *)presetIDs
 {
     [self.dataArray removeAllObjects];

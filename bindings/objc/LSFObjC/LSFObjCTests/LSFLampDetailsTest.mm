@@ -15,13 +15,13 @@
  ******************************************************************************/
 
 #import "LSFLampDetailsTest.h"
-#import "LSFObjC/LSFLampDetails.h"
+#import <LSFSDKLampDetails.h>
 #import "LampValues.h"
 #import "LSFTypes.h"
 
 @interface LSFLampDetailsTest()
 
-@property (nonatomic) LSFLampDetails *lampDetails;
+@property (nonatomic) LSFSDKLampDetails *lampDetails;
 
 @end
 
@@ -59,7 +59,7 @@
     
     ld->lampID = lid;
     
-    self.lampDetails = [[LSFLampDetails alloc] initWithHandle: (LSFHandle)ld];
+    self.lampDetails = [[LSFSDKLampDetails alloc] initWithHandle: (LSFHandle)ld];
 }
 
 -(void)tearDown

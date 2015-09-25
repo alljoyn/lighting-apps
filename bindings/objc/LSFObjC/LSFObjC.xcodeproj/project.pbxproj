@@ -7,10 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		870690191B98BA6300879758 /* LSFTransitionEffectV2Tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 870690181B98BA6300879758 /* LSFTransitionEffectV2Tests.mm */; };
+		8706901C1B98C5D200879758 /* LSFPulseEffectV2Tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8706901B1B98C5D200879758 /* LSFPulseEffectV2Tests.mm */; };
+		8706901F1B98E27400879758 /* LSFSceneElementTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8706901E1B98E27400879758 /* LSFSceneElementTests.mm */; };
+		870690221B98E79100879758 /* LSFSceneWithSceneElementsTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 870690211B98E79100879758 /* LSFSceneWithSceneElementsTests.mm */; };
+		870690251B9F547000879758 /* LSFSceneElementManagerCallbackTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 870690241B9F547000879758 /* LSFSceneElementManagerCallbackTests.mm */; };
+		870690291B9F55C600879758 /* MockSceneElementManagerCallbackDelegateHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 870690281B9F55C600879758 /* MockSceneElementManagerCallbackDelegateHandler.mm */; };
+		8706902C1B9F637D00879758 /* MockTransitionEffectManagerCallbackDelegateHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8706902B1B9F637D00879758 /* MockTransitionEffectManagerCallbackDelegateHandler.mm */; };
+		8706902F1B9F64C900879758 /* MockPulseEffectManagerCallbackDelegateHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8706902E1B9F64C900879758 /* MockPulseEffectManagerCallbackDelegateHandler.mm */; };
+		870690321B9F65F900879758 /* LSFTransitionEffectManagerCallbackTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 870690311B9F65F900879758 /* LSFTransitionEffectManagerCallbackTests.mm */; };
+		870690351B9F81EC00879758 /* LSFPulseEffectManagerCallbackTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 870690341B9F81EC00879758 /* LSFPulseEffectManagerCallbackTests.mm */; };
 		870C0B1E196A3D9A009E1408 /* MockPresetManagerCallbackDelegateHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 870C0B1D196A3D9A009E1408 /* MockPresetManagerCallbackDelegateHandler.mm */; };
 		870C0B21196A3F05009E1408 /* LSFPresetManagerCallbackTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 870C0B20196A3F05009E1408 /* LSFPresetManagerCallbackTests.mm */; };
 		8719C92118D90DF60011CD45 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87D813D218CA4B8300903D59 /* SystemConfiguration.framework */; };
-		8719C92318D90ECD0011CD45 /* LSFObjCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D813B618CA483D00903D59 /* LSFObjCTests.m */; };
 		8719C92618D910630011CD45 /* LSFLampStateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8719C92518D910630011CD45 /* LSFLampStateTests.mm */; };
 		8719C95118DA28A70011CD45 /* libstdc++.6.0.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8719C95018DA28A70011CD45 /* libstdc++.6.0.9.dylib */; };
 		8747E73F18E5C5BD00900199 /* LSFLampParametersTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8747E73E18E5C5BD00900199 /* LSFLampParametersTests.mm */; };
@@ -26,16 +35,16 @@
 		875155971ADC600400B540E6 /* SceneElementManager.cc in Sources */ = {isa = PBXBuildFile; fileRef = 875155961ADC600400B540E6 /* SceneElementManager.cc */; };
 		875155991ADC610E00B540E6 /* SceneElementManager.cc in Sources */ = {isa = PBXBuildFile; fileRef = 875155981ADC610E00B540E6 /* SceneElementManager.cc */; };
 		8755907A18F43C9100CA8715 /* LSFControllerClientCallbackTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8755907918F43C9100CA8715 /* LSFControllerClientCallbackTests.mm */; };
-		8755907E18F4426B00CA8715 /* MockControllerClientCallbackDelegateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8755907D18F4426B00CA8715 /* MockControllerClientCallbackDelegateHandler.m */; };
+		8755907E18F4426B00CA8715 /* MockControllerClientCallbackDelegateHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8755907D18F4426B00CA8715 /* MockControllerClientCallbackDelegateHandler.mm */; };
 		8770E3731AC0987100B59348 /* liballjoyn_config_cpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8770E3601AC0984D00B59348 /* liballjoyn_config_cpp.a */; };
 		8770E3741AC0987100B59348 /* liballjoyn_notification_cpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8770E3661AC0985600B59348 /* liballjoyn_notification_cpp.a */; };
 		8770E3751AC0987100B59348 /* liballjoyn_services_common_cpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8770E36C1AC0985F00B59348 /* liballjoyn_services_common_cpp.a */; };
 		8771850018E4B3400085D153 /* LSFLampDetailsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 877184FF18E4B3400085D153 /* LSFLampDetailsTest.mm */; };
 		879694F519711C5700C4C81D /* LSFSceneTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 879694F419711C5700C4C81D /* LSFSceneTests.mm */; };
-		879A3FDA197094600082B204 /* LSFStateTransitionEffectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 879A3FD9197094600082B204 /* LSFStateTransitionEffectTests.m */; };
-		879A3FE01970A68E0082B204 /* LSFPresetTransitionEffectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 879A3FDF1970A68E0082B204 /* LSFPresetTransitionEffectTests.m */; };
-		879A3FE71970B3B80082B204 /* LSFStatePulseEffectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 879A3FE61970B3B80082B204 /* LSFStatePulseEffectTests.m */; };
-		879A3FED1970CF1B0082B204 /* LSFPresetPulseEffectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 879A3FEC1970CF1B0082B204 /* LSFPresetPulseEffectTests.m */; };
+		879A3FDA197094600082B204 /* LSFStateTransitionEffectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 879A3FD9197094600082B204 /* LSFStateTransitionEffectTests.mm */; };
+		879A3FE01970A68E0082B204 /* LSFPresetTransitionEffectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 879A3FDF1970A68E0082B204 /* LSFPresetTransitionEffectTests.mm */; };
+		879A3FE71970B3B80082B204 /* LSFStatePulseEffectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 879A3FE61970B3B80082B204 /* LSFStatePulseEffectTests.mm */; };
+		879A3FED1970CF1B0082B204 /* LSFPresetPulseEffectTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 879A3FEC1970CF1B0082B204 /* LSFPresetPulseEffectTests.mm */; };
 		87A4F7281AD5BAB20059F3B6 /* Alarm.cc in Sources */ = {isa = PBXBuildFile; fileRef = 87A4F3F81AD5BAB00059F3B6 /* Alarm.cc */; };
 		87A4F7291AD5BAB20059F3B6 /* LSFKeyListener.cc in Sources */ = {isa = PBXBuildFile; fileRef = 87A4F3F91AD5BAB00059F3B6 /* LSFKeyListener.cc */; };
 		87A4F72A1AD5BAB20059F3B6 /* LSFResponseCodes.cc in Sources */ = {isa = PBXBuildFile; fileRef = 87A4F3FA1AD5BAB00059F3B6 /* LSFResponseCodes.cc */; };
@@ -331,6 +340,26 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		870690181B98BA6300879758 /* LSFTransitionEffectV2Tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFTransitionEffectV2Tests.mm; sourceTree = "<group>"; };
+		8706901A1B98BA8E00879758 /* LSFTransitionEffectV2Tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSFTransitionEffectV2Tests.h; sourceTree = "<group>"; };
+		8706901B1B98C5D200879758 /* LSFPulseEffectV2Tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFPulseEffectV2Tests.mm; sourceTree = "<group>"; };
+		8706901D1B98C60A00879758 /* LSFPulseEffectV2Tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSFPulseEffectV2Tests.h; sourceTree = "<group>"; };
+		8706901E1B98E27400879758 /* LSFSceneElementTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFSceneElementTests.mm; sourceTree = "<group>"; };
+		870690201B98E29B00879758 /* LSFSceneElementTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSFSceneElementTests.h; sourceTree = "<group>"; };
+		870690211B98E79100879758 /* LSFSceneWithSceneElementsTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFSceneWithSceneElementsTests.mm; sourceTree = "<group>"; };
+		870690231B98E7B900879758 /* LSFSceneWithSceneElementsTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSFSceneWithSceneElementsTests.h; sourceTree = "<group>"; };
+		870690241B9F547000879758 /* LSFSceneElementManagerCallbackTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFSceneElementManagerCallbackTests.mm; sourceTree = "<group>"; };
+		870690261B9F54F800879758 /* LSFSceneElementManagerCallbackTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSFSceneElementManagerCallbackTests.h; sourceTree = "<group>"; };
+		870690271B9F55C600879758 /* MockSceneElementManagerCallbackDelegateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockSceneElementManagerCallbackDelegateHandler.h; sourceTree = "<group>"; };
+		870690281B9F55C600879758 /* MockSceneElementManagerCallbackDelegateHandler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MockSceneElementManagerCallbackDelegateHandler.mm; sourceTree = "<group>"; };
+		8706902A1B9F637D00879758 /* MockTransitionEffectManagerCallbackDelegateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockTransitionEffectManagerCallbackDelegateHandler.h; sourceTree = "<group>"; };
+		8706902B1B9F637D00879758 /* MockTransitionEffectManagerCallbackDelegateHandler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MockTransitionEffectManagerCallbackDelegateHandler.mm; sourceTree = "<group>"; };
+		8706902D1B9F64C900879758 /* MockPulseEffectManagerCallbackDelegateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockPulseEffectManagerCallbackDelegateHandler.h; sourceTree = "<group>"; };
+		8706902E1B9F64C900879758 /* MockPulseEffectManagerCallbackDelegateHandler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MockPulseEffectManagerCallbackDelegateHandler.mm; sourceTree = "<group>"; };
+		870690301B9F65F900879758 /* LSFTransitionEffectManagerCallbackTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFTransitionEffectManagerCallbackTests.h; sourceTree = "<group>"; };
+		870690311B9F65F900879758 /* LSFTransitionEffectManagerCallbackTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFTransitionEffectManagerCallbackTests.mm; sourceTree = "<group>"; };
+		870690331B9F81EC00879758 /* LSFPulseEffectManagerCallbackTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFPulseEffectManagerCallbackTests.h; sourceTree = "<group>"; };
+		870690341B9F81EC00879758 /* LSFPulseEffectManagerCallbackTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFPulseEffectManagerCallbackTests.mm; sourceTree = "<group>"; };
 		870C0B1C196A3D9A009E1408 /* MockPresetManagerCallbackDelegateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockPresetManagerCallbackDelegateHandler.h; sourceTree = "<group>"; };
 		870C0B1D196A3D9A009E1408 /* MockPresetManagerCallbackDelegateHandler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MockPresetManagerCallbackDelegateHandler.mm; sourceTree = "<group>"; };
 		870C0B1F196A3F05009E1408 /* LSFPresetManagerCallbackTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFPresetManagerCallbackTests.h; sourceTree = "<group>"; };
@@ -372,7 +401,7 @@
 		8755907818F43C9100CA8715 /* LSFControllerClientCallbackTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFControllerClientCallbackTests.h; sourceTree = "<group>"; };
 		8755907918F43C9100CA8715 /* LSFControllerClientCallbackTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFControllerClientCallbackTests.mm; sourceTree = "<group>"; };
 		8755907C18F4426B00CA8715 /* MockControllerClientCallbackDelegateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockControllerClientCallbackDelegateHandler.h; sourceTree = "<group>"; };
-		8755907D18F4426B00CA8715 /* MockControllerClientCallbackDelegateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MockControllerClientCallbackDelegateHandler.m; sourceTree = "<group>"; };
+		8755907D18F4426B00CA8715 /* MockControllerClientCallbackDelegateHandler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MockControllerClientCallbackDelegateHandler.mm; sourceTree = "<group>"; };
 		8770E35B1AC0984D00B59348 /* alljoyn_config_cpp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = alljoyn_config_cpp.xcodeproj; path = ../../../../../base/config/ios/samples/alljoyn_services_cpp/alljoyn_config_cpp.xcodeproj; sourceTree = "<group>"; };
 		8770E3611AC0985600B59348 /* alljoyn_notification_cpp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = alljoyn_notification_cpp.xcodeproj; path = ../../../../../base/notification/ios/samples/alljoyn_services_cpp/alljoyn_notification_cpp.xcodeproj; sourceTree = "<group>"; };
 		8770E3671AC0985F00B59348 /* alljoyn_services_common_cpp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = alljoyn_services_common_cpp.xcodeproj; path = ../../../../../base/services_common/ios/samples/alljoyn_services_cpp/alljoyn_services_common_cpp.xcodeproj; sourceTree = "<group>"; };
@@ -381,13 +410,13 @@
 		879694F319711C5700C4C81D /* LSFSceneTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFSceneTests.h; sourceTree = "<group>"; };
 		879694F419711C5700C4C81D /* LSFSceneTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFSceneTests.mm; sourceTree = "<group>"; };
 		879A3FD8197094600082B204 /* LSFStateTransitionEffectTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFStateTransitionEffectTests.h; sourceTree = "<group>"; };
-		879A3FD9197094600082B204 /* LSFStateTransitionEffectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFStateTransitionEffectTests.m; sourceTree = "<group>"; };
+		879A3FD9197094600082B204 /* LSFStateTransitionEffectTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFStateTransitionEffectTests.mm; sourceTree = "<group>"; };
 		879A3FDE1970A68E0082B204 /* LSFPresetTransitionEffectTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFPresetTransitionEffectTests.h; sourceTree = "<group>"; };
-		879A3FDF1970A68E0082B204 /* LSFPresetTransitionEffectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFPresetTransitionEffectTests.m; sourceTree = "<group>"; };
+		879A3FDF1970A68E0082B204 /* LSFPresetTransitionEffectTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFPresetTransitionEffectTests.mm; sourceTree = "<group>"; };
 		879A3FE51970B3B80082B204 /* LSFStatePulseEffectTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFStatePulseEffectTests.h; sourceTree = "<group>"; };
-		879A3FE61970B3B80082B204 /* LSFStatePulseEffectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFStatePulseEffectTests.m; sourceTree = "<group>"; };
+		879A3FE61970B3B80082B204 /* LSFStatePulseEffectTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFStatePulseEffectTests.mm; sourceTree = "<group>"; };
 		879A3FEB1970CF1B0082B204 /* LSFPresetPulseEffectTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSFPresetPulseEffectTests.h; sourceTree = "<group>"; };
-		879A3FEC1970CF1B0082B204 /* LSFPresetPulseEffectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSFPresetPulseEffectTests.m; sourceTree = "<group>"; };
+		879A3FEC1970CF1B0082B204 /* LSFPresetPulseEffectTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LSFPresetPulseEffectTests.mm; sourceTree = "<group>"; };
 		87A4F3E31AD5BAB00059F3B6 /* LampResponseCodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LampResponseCodes.h; sourceTree = "<group>"; };
 		87A4F3E41AD5BAB00059F3B6 /* LampValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LampValues.h; sourceTree = "<group>"; };
 		87A4F3EF1AD5BAB00059F3B6 /* Alarm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Alarm.h; sourceTree = "<group>"; };
@@ -482,7 +511,6 @@
 		87D813AB18CA483C00903D59 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		87D813B218CA483D00903D59 /* LSFObjCTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "LSFObjCTests-Info.plist"; sourceTree = "<group>"; };
 		87D813B418CA483D00903D59 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		87D813B618CA483D00903D59 /* LSFObjCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSFObjCTests.m; sourceTree = "<group>"; };
 		87D813D218CA4B8300903D59 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		87D813D418CA4B8B00903D59 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
 		87E778591B13ACC7003444EE /* AJInitializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AJInitializer.h; sourceTree = "<group>"; };
@@ -732,8 +760,14 @@
 				874CFEDF19723B0700E30A48 /* LSFMasterSceneManagerCallbackTest.mm */,
 				870C0B1F196A3F05009E1408 /* LSFPresetManagerCallbackTests.h */,
 				870C0B20196A3F05009E1408 /* LSFPresetManagerCallbackTests.mm */,
+				870690331B9F81EC00879758 /* LSFPulseEffectManagerCallbackTests.h */,
+				870690341B9F81EC00879758 /* LSFPulseEffectManagerCallbackTests.mm */,
+				870690261B9F54F800879758 /* LSFSceneElementManagerCallbackTests.h */,
+				870690241B9F547000879758 /* LSFSceneElementManagerCallbackTests.mm */,
 				874CFEDB1972247900E30A48 /* LSFSceneManagerCallbackTests.h */,
 				874CFEDC1972247900E30A48 /* LSFSceneManagerCallbackTests.mm */,
+				870690301B9F65F900879758 /* LSFTransitionEffectManagerCallbackTests.h */,
+				870690311B9F65F900879758 /* LSFTransitionEffectManagerCallbackTests.mm */,
 			);
 			name = CallbackClassesUnitTests;
 			sourceTree = "<group>";
@@ -742,7 +776,7 @@
 			isa = PBXGroup;
 			children = (
 				8755907C18F4426B00CA8715 /* MockControllerClientCallbackDelegateHandler.h */,
-				8755907D18F4426B00CA8715 /* MockControllerClientCallbackDelegateHandler.m */,
+				8755907D18F4426B00CA8715 /* MockControllerClientCallbackDelegateHandler.mm */,
 				874B22EE18F855D300C486CC /* MockControllerServiceManagerCallbackDelegateHandler.h */,
 				874B22EF18F855D300C486CC /* MockControllerServiceManagerCallbackDelegateHandler.mm */,
 				874B22F818F8651600C486CC /* MockLampGroupManageCallbackDelegateHandler.h */,
@@ -753,8 +787,14 @@
 				874CFEE219723C8F00E30A48 /* MockMasterSceneManagerCallbackDelegateHandler.mm */,
 				870C0B1C196A3D9A009E1408 /* MockPresetManagerCallbackDelegateHandler.h */,
 				870C0B1D196A3D9A009E1408 /* MockPresetManagerCallbackDelegateHandler.mm */,
+				8706902D1B9F64C900879758 /* MockPulseEffectManagerCallbackDelegateHandler.h */,
+				8706902E1B9F64C900879758 /* MockPulseEffectManagerCallbackDelegateHandler.mm */,
+				870690271B9F55C600879758 /* MockSceneElementManagerCallbackDelegateHandler.h */,
+				870690281B9F55C600879758 /* MockSceneElementManagerCallbackDelegateHandler.mm */,
 				874CFED61972224100E30A48 /* MockSceneManagerCallbackDelegateHandler.h */,
 				874CFED71972224100E30A48 /* MockSceneManagerCallbackDelegateHandler.mm */,
+				8706902A1B9F637D00879758 /* MockTransitionEffectManagerCallbackDelegateHandler.h */,
+				8706902B1B9F637D00879758 /* MockTransitionEffectManagerCallbackDelegateHandler.mm */,
 			);
 			name = TestDelegateClasses;
 			sourceTree = "<group>";
@@ -1079,7 +1119,6 @@
 				8755907B18F4423300CA8715 /* TestDelegateClasses */,
 				8755907518F43C5100CA8715 /* CallbackClassesUnitTests */,
 				87E7622118EDF639007B773B /* DataClassesUnitTests */,
-				87D813B618CA483D00903D59 /* LSFObjCTests.m */,
 				87D813B118CA483D00903D59 /* Supporting Files */,
 			);
 			path = LSFObjCTests;
@@ -1108,15 +1147,23 @@
 				874CFEC51971B14700E30A48 /* LSFMasterSceneTests.h */,
 				874CFEC61971B14700E30A48 /* LSFMasterSceneTests.mm */,
 				879A3FEB1970CF1B0082B204 /* LSFPresetPulseEffectTests.h */,
-				879A3FEC1970CF1B0082B204 /* LSFPresetPulseEffectTests.m */,
+				879A3FEC1970CF1B0082B204 /* LSFPresetPulseEffectTests.mm */,
 				879A3FDE1970A68E0082B204 /* LSFPresetTransitionEffectTests.h */,
-				879A3FDF1970A68E0082B204 /* LSFPresetTransitionEffectTests.m */,
+				879A3FDF1970A68E0082B204 /* LSFPresetTransitionEffectTests.mm */,
+				8706901D1B98C60A00879758 /* LSFPulseEffectV2Tests.h */,
+				8706901B1B98C5D200879758 /* LSFPulseEffectV2Tests.mm */,
 				879694F319711C5700C4C81D /* LSFSceneTests.h */,
 				879694F419711C5700C4C81D /* LSFSceneTests.mm */,
+				870690201B98E29B00879758 /* LSFSceneElementTests.h */,
+				8706901E1B98E27400879758 /* LSFSceneElementTests.mm */,
+				870690231B98E7B900879758 /* LSFSceneWithSceneElementsTests.h */,
+				870690211B98E79100879758 /* LSFSceneWithSceneElementsTests.mm */,
 				879A3FE51970B3B80082B204 /* LSFStatePulseEffectTests.h */,
-				879A3FE61970B3B80082B204 /* LSFStatePulseEffectTests.m */,
+				879A3FE61970B3B80082B204 /* LSFStatePulseEffectTests.mm */,
 				879A3FD8197094600082B204 /* LSFStateTransitionEffectTests.h */,
-				879A3FD9197094600082B204 /* LSFStateTransitionEffectTests.m */,
+				879A3FD9197094600082B204 /* LSFStateTransitionEffectTests.mm */,
+				8706901A1B98BA8E00879758 /* LSFTransitionEffectV2Tests.h */,
+				870690181B98BA6300879758 /* LSFTransitionEffectV2Tests.mm */,
 			);
 			name = DataClassesUnitTests;
 			sourceTree = "<group>";
@@ -1350,30 +1397,39 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				879A3FED1970CF1B0082B204 /* LSFPresetPulseEffectTests.m in Sources */,
+				879A3FED1970CF1B0082B204 /* LSFPresetPulseEffectTests.mm in Sources */,
+				8706901F1B98E27400879758 /* LSFSceneElementTests.mm in Sources */,
+				8706901C1B98C5D200879758 /* LSFPulseEffectV2Tests.mm in Sources */,
+				870690221B98E79100879758 /* LSFSceneWithSceneElementsTests.mm in Sources */,
 				874B22F018F855D300C486CC /* MockControllerServiceManagerCallbackDelegateHandler.mm in Sources */,
-				879A3FE01970A68E0082B204 /* LSFPresetTransitionEffectTests.m in Sources */,
+				879A3FE01970A68E0082B204 /* LSFPresetTransitionEffectTests.mm in Sources */,
 				874CFEE319723C8F00E30A48 /* MockMasterSceneManagerCallbackDelegateHandler.mm in Sources */,
 				8771850018E4B3400085D153 /* LSFLampDetailsTest.mm in Sources */,
 				874B22FD18F8682300C486CC /* LSFLampGroupManagerCallbackTests.mm in Sources */,
 				874B22F518F857FB00C486CC /* LSFControllerServiceManagerCallbackTests.mm in Sources */,
 				870C0B1E196A3D9A009E1408 /* MockPresetManagerCallbackDelegateHandler.mm in Sources */,
 				874B22FA18F8651600C486CC /* MockLampGroupManageCallbackDelegateHandler.mm in Sources */,
-				8755907E18F4426B00CA8715 /* MockControllerClientCallbackDelegateHandler.m in Sources */,
+				8755907E18F4426B00CA8715 /* MockControllerClientCallbackDelegateHandler.mm in Sources */,
+				8706902F1B9F64C900879758 /* MockPulseEffectManagerCallbackDelegateHandler.mm in Sources */,
 				874CFED81972224100E30A48 /* MockSceneManagerCallbackDelegateHandler.mm in Sources */,
 				870C0B21196A3F05009E1408 /* LSFPresetManagerCallbackTests.mm in Sources */,
 				874CFEE019723B0700E30A48 /* LSFMasterSceneManagerCallbackTest.mm in Sources */,
-				8719C92318D90ECD0011CD45 /* LSFObjCTests.m in Sources */,
-				879A3FE71970B3B80082B204 /* LSFStatePulseEffectTests.m in Sources */,
+				879A3FE71970B3B80082B204 /* LSFStatePulseEffectTests.mm in Sources */,
+				8706902C1B9F637D00879758 /* MockTransitionEffectManagerCallbackDelegateHandler.mm in Sources */,
+				870690191B98BA6300879758 /* LSFTransitionEffectV2Tests.mm in Sources */,
 				87AD9F2318F48DFA000D0608 /* LSFLampManagerCallbackTests.mm in Sources */,
 				87AAF0AF18E22F4100742828 /* LSFLampGroupTests.mm in Sources */,
-				879A3FDA197094600082B204 /* LSFStateTransitionEffectTests.m in Sources */,
+				879A3FDA197094600082B204 /* LSFStateTransitionEffectTests.mm in Sources */,
 				87AD9F2818F48EF6000D0608 /* MockLampManagerCallbackDelegateHandler.mm in Sources */,
 				879694F519711C5700C4C81D /* LSFSceneTests.mm in Sources */,
 				874CFEDD1972247900E30A48 /* LSFSceneManagerCallbackTests.mm in Sources */,
 				8719C92618D910630011CD45 /* LSFLampStateTests.mm in Sources */,
+				870690351B9F81EC00879758 /* LSFPulseEffectManagerCallbackTests.mm in Sources */,
+				870690321B9F65F900879758 /* LSFTransitionEffectManagerCallbackTests.mm in Sources */,
 				874CFEC71971B14700E30A48 /* LSFMasterSceneTests.mm in Sources */,
 				8747E73F18E5C5BD00900199 /* LSFLampParametersTests.mm in Sources */,
+				870690291B9F55C600879758 /* MockSceneElementManagerCallbackDelegateHandler.mm in Sources */,
+				870690251B9F547000879758 /* LSFSceneElementManagerCallbackTests.mm in Sources */,
 				8755907A18F43C9100CA8715 /* LSFControllerClientCallbackTests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1632,6 +1688,8 @@
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LSFObjC/LSFObjC-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1641,26 +1699,20 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"\"$(ALLJOYN_HOME)/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
-					"\"$(ALLJOYN_HOME)/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
-					"\"(ALLJOYN_HOME)/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/about/inc\"",
-					"\"$(ALLJOYN_HOME)/build/darwin/arm/iphonesimulator/$(CONFIGURATION)/dist/cpp/inc\"",
-					"\"$(ALLJOYN_HOME)/build/darwin/arm/iphonesimulator/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
-					"\"$(ALLJOYN_HOME)/build/darwin/arm/iphonesimulator/$(CONFIGURATION)/dist/about/inc\"",
-					"\"$(ALLJOYN_HOME)/alljoyn_objc/AllJoynFramework\"",
-					"\"$(OPENSSL_SRC)/include\"",
+					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
 					"\"$(LSF_HOME)/standard_core_library/lighting_controller_client/inc\"",
 					"\"$(LSF_HOME)/standard_core_library/common/inc\"",
 					"\"$(LSF_HOME)/common/inc\"",
-					"\"$(APPS_HOME)/apps/bindings/objc/LSFObjC\"",
+					"\"$(ALLSEEN_BASE_SERVICES_ROOT)/config/cpp/inc\"",
+					"\"$(ALLSEEN_BASE_SERVICES_ROOT)/notification/cpp/inc\"",
+					"\"$(ALLSEEN_BASE_SERVICES_ROOT)/services_common/cpp/inc\"",
+					"\"$(APPS_HOME)/apps/bindings/objc/LSFObjC/LSFObjC\"",
 				);
 				INFOPLIST_FILE = "LSFObjCTests/LSFObjCTests-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(ALLJOYN_HOME)/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/lib\"",
-					"\"$(ALLJOYN_HOME)/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/about/lib\"",
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/iphonesimulator/$(CONFIGURATION)/dist/cpp/lib\"",
-					"\"$(ALLJOYN_HOME)/build/darwin/arm/iphonesimulator/$(CONFIGURATION)/dist/about/lib\"",
+					"\"$(ALLJOYN_HOME)/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/lib\"",
 					"\"$(OPENSSL_ROOT)/build/$(CONFIGURATION)-$(PLATFORM_NAME)\"",
 				);
 				OTHER_CFLAGS = (
@@ -1673,7 +1725,6 @@
 					XCTest,
 					"-lalljoyn",
 					"-lajrouter",
-					"-lBundledRouter.o",
 					"-lssl",
 					"-lcrypto",
 				);
@@ -1694,31 +1745,27 @@
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LSFObjC/LSFObjC-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"\"$(ALLJOYN_HOME)/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
-					"\"$(ALLJOYN_HOME)/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
-					"\"(ALLJOYN_HOME)/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/about/inc\"",
-					"\"$(ALLJOYN_HOME)/build/darwin/arm/iphonesimulator/$(CONFIGURATION)/dist/cpp/inc\"",
-					"\"$(ALLJOYN_HOME)/build/darwin/arm/iphonesimulator/$(CONFIGURATION)/dist/cpp/inc/alljoyn\"",
-					"\"$(ALLJOYN_HOME)/build/darwin/arm/iphonesimulator/$(CONFIGURATION)/dist/about/inc\"",
-					"\"$(ALLJOYN_HOME)/alljoyn_objc/AllJoynFramework\"",
-					"\"$(OPENSSL_SRC)/include\"",
+					"\"$(ALLJOYN_HOME)/build/darwin/arm/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/inc\"",
 					"\"$(LSF_HOME)/standard_core_library/lighting_controller_client/inc\"",
 					"\"$(LSF_HOME)/standard_core_library/common/inc\"",
 					"\"$(LSF_HOME)/common/inc\"",
-					"\"$(APPS_HOME)/apps/bindings/objc/LSFObjC\"",
+					"\"$(ALLSEEN_BASE_SERVICES_ROOT)/config/cpp/inc\"",
+					"\"$(ALLSEEN_BASE_SERVICES_ROOT)/notification/cpp/inc\"",
+					"\"$(ALLSEEN_BASE_SERVICES_ROOT)/services_common/cpp/inc\"",
+					"\"$(APPS_HOME)/apps/bindings/objc/LSFObjC/LSFObjC\"",
 				);
 				INFOPLIST_FILE = "LSFObjCTests/LSFObjCTests-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(ALLJOYN_HOME)/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/lib\"",
-					"\"$(ALLJOYN_HOME)/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/about/lib\"",
 					"\"$(ALLJOYN_HOME)/build/darwin/arm/iphonesimulator/$(CONFIGURATION)/dist/cpp/lib\"",
-					"\"$(ALLJOYN_HOME)/build/darwin/arm/iphonesimulator/$(CONFIGURATION)/dist/about/lib\"",
+					"\"$(ALLJOYN_HOME)/build/darwin/$(CURRENT_ARCH)/$(PLATFORM_NAME)/$(CONFIGURATION)/dist/cpp/lib\"",
 					"\"$(OPENSSL_ROOT)/build/$(CONFIGURATION)-$(PLATFORM_NAME)\"",
 				);
 				OTHER_CFLAGS = (
@@ -1732,7 +1779,6 @@
 					XCTest,
 					"-lalljoyn",
 					"-lajrouter",
-					"-lBundledRouter.o",
 					"-lssl",
 					"-lcrypto",
 				);

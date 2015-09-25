@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import "LSFLampGroupTests.h"
-#import "LSFObjC/LSFLampGroup.h"
+#import <internal/LSFLampGroup.h>
 
 @interface LSFLampGroupTests()
 
@@ -27,7 +27,7 @@
 
 @synthesize lampGroup = _lampGroup;
 
-- (void)setUp
+-(void)setUp
 {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -35,7 +35,7 @@
     self.lampGroup = [[LSFLampGroup alloc] init];
 }
 
-- (void)tearDown
+-(void)tearDown
 {
     self.lampGroup = nil;
     
@@ -43,44 +43,35 @@
     [super tearDown];
 }
 
--(void)testLamps
+-(void)testBasicSet
 {
-    //Test lamp ID set
-    NSString *lampID1 = @"lampID1";
-    NSString *lampID2 = @"lampID2";
-    NSString *lampID3 = @"lampID3";
-    
-    NSArray *setLampIDs = [NSArray arrayWithObjects: lampID1, lampID2, lampID3, nil];
-    [self.lampGroup setLamps: setLampIDs];
-    
-    NSArray *getlampIDs = [self.lampGroup lamps];
-   
-    NSSet *startData = [[NSSet alloc] initWithArray: setLampIDs];
-    NSSet *endData = [[NSSet alloc] initWithArray: getlampIDs];
-    BOOL isSetsEqual = [startData isEqualToSet: endData];
-    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+    NSArray *lampIDs = [NSArray arrayWithObjects: @"A", @"B", @"C", @"D", @"E", nil];
+    NSArray *lampGroupIDs = [NSArray arrayWithObjects: @"F", @"G", @"H", nil];
+
+    [self.lampGroup setLamps: lampIDs];
+    [self.lampGroup setLampGroups: lampGroupIDs];
+
+    XCTAssertTrue([[self.lampGroup lamps] isEqualToArray: lampIDs], @"Start and end lamp IDs should be equal");
+    XCTAssertTrue([[self.lampGroup lampGroups] isEqualToArray: lampGroupIDs], @"Start and end lamp group IDs should be equal");
 }
 
--(void)testGroups
+-(void)testDoubleSet
 {
-    //Test lamp group ID set
-    NSString *lampGroupID1 = @"lampGroupID1";
-    NSString *lampGroupID2 = @"lampGroupID2";
-    
-    NSArray *setLampGroupIDs = [NSArray arrayWithObjects: lampGroupID1, lampGroupID2, nil];
-    [self.lampGroup setLampGroups: setLampGroupIDs];
-    
-    NSArray *getlampGroupIDs = [self.lampGroup lampGroups];
-    
-    NSSet *startData = [[NSSet alloc] initWithArray: setLampGroupIDs];
-    NSSet *endData = [[NSSet alloc] initWithArray: getlampGroupIDs];
-    BOOL isSetsEqual = [startData isEqualToSet: endData];
-    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+    NSArray *lampIDs = [NSArray arrayWithObjects: @"A", @"B", @"C", @"D", @"E", nil];
+    NSArray *lampGroupIDs = [NSArray arrayWithObjects: @"F", @"G", @"H", nil];
+
+    [self.lampGroup setLamps: lampIDs];
+    [self.lampGroup setLampGroups: lampGroupIDs];
+
+    [self.lampGroup setLamps: lampIDs];
+    [self.lampGroup setLampGroups: lampGroupIDs];
+
+    XCTAssertTrue([[self.lampGroup lamps] isEqualToArray: lampIDs], @"Start and end lamp IDs should be equal");
+    XCTAssertTrue([[self.lampGroup lampGroups] isEqualToArray: lampGroupIDs], @"Start and end lamp group IDs should be equal");
 }
 
 -(void)testIsDependentGroup;
 {
-    //Test lamp group ID set
     NSString *lampGroupID1 = @"lampGroupID1";
     NSString *lampGroupID2 = @"lampGroupID2";
     NSString *nonDependentGroupID = @"nonDependentGroupID";

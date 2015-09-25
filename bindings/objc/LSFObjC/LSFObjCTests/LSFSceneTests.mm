@@ -15,7 +15,8 @@
  ******************************************************************************/
 
 #import "LSFSceneTests.h"
-#import "LSFObjC/LSFScene.h"
+#import <internal/LSFScene.h>
+#import <alljoyn/Init.h>
 
 @interface LSFSceneTests()
 
@@ -31,16 +32,242 @@
 {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
-    
+
+    AllJoynInit();
     self.scene = [[LSFScene alloc] init];
 }
 
 - (void)tearDown
 {
     self.scene = nil;
+    AllJoynShutdown();
     
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
+}
+
+-(void)testSceneConstructor
+{
+    //Create LSFStateTransitionEffect
+    NSString *lampID1 = @"lampID1";
+    NSString *lampID2 = @"lampID2";
+    NSArray *ste1LampIDs = [NSArray arrayWithObjects: lampID1, lampID2, nil];
+
+    NSString *lampGroupID1 = @"lampGroupID1";
+    NSArray *ste1LampGroupIDs = [NSArray arrayWithObjects: lampGroupID1, nil];
+
+    LSFLampState *ste1State = [[LSFLampState alloc] initWithOnOff: NO brightness: 50 hue: 180 saturation: 25 colorTemp: 2700];
+
+    unsigned int ste1TransitionPeriod = 30;
+
+    LSFStateTransitionEffect *stateTransitionEffect1 = [[LSFStateTransitionEffect alloc] initWithLampIDs: ste1LampIDs lampGroupIDs: ste1LampGroupIDs lampState: ste1State andTransitionPeriod: ste1TransitionPeriod];
+
+    NSArray *transitionToStateComponents = [NSArray arrayWithObjects: stateTransitionEffect1, nil];
+
+    //Create LSFPresetTransitionEffect
+    NSString *lampID3 = @"lampID3";
+    NSString *lampID4 = @"lampID4";
+    NSArray *pte1LampIDs = [NSArray arrayWithObjects: lampID3, lampID4, nil];
+
+    NSString *lampGroupID3 = @"lampGroupID3";
+    NSArray *pte1LampGroupIDs = [NSArray arrayWithObjects: lampGroupID3, nil];
+
+    NSString *pte1PresetID = @"presetID1";
+
+    unsigned int pte1TransitionPeriod = 30;
+
+    LSFPresetTransitionEffect *presetTransitionEffect1 = [[LSFPresetTransitionEffect alloc] initWithLampIDs: pte1LampIDs lampGroupIDs: pte1LampGroupIDs presetID: pte1PresetID andTransitionPeriod: pte1TransitionPeriod];
+
+    NSArray *transitionToPresetComponents = [NSArray arrayWithObjects: presetTransitionEffect1, nil];
+
+    //Create LSFStatePulseEffect
+    NSString *lampID5 = @"lampID5";
+    NSString *lampID6 = @"lampID6";
+    NSArray *spe1LampIDs = [NSArray arrayWithObjects: lampID5, lampID6, nil];
+
+    NSString *lampGroupID4 = @"lampGroupID4";
+    NSArray *spe1LampGroupIDs = [NSArray arrayWithObjects: lampGroupID4, nil];
+
+    LSFLampState *spe1FromState = [[LSFLampState alloc] initWithOnOff: YES brightness: 25 hue: 90 saturation: 25 colorTemp: 2700];
+    LSFLampState *spe1ToState = [[LSFLampState alloc] initWithOnOff: YES brightness: 50 hue: 180 saturation: 50 colorTemp: 5000];
+
+    unsigned int spe1Period = 15;
+    unsigned int spe1Duration = 60;
+    unsigned int spe1NumPulses = 10;
+
+    LSFStatePulseEffect *statePulseEffect1 = [[LSFStatePulseEffect alloc] initWithLampIDs: spe1LampIDs lampGroupIDs: spe1LampGroupIDs fromState: spe1FromState toState: spe1ToState period: spe1Period duration: spe1Duration andNumPulses: spe1NumPulses];
+
+    NSArray *pulseWithStateComponent = [NSArray arrayWithObjects: statePulseEffect1, nil];
+
+    //Create LSFPresetPulseEffect
+    NSString *lampID7 = @"lampID7";
+    NSString *lampID8 = @"lampID8";
+    NSArray *ppe1LampIDs = [NSArray arrayWithObjects: lampID7, lampID8, nil];
+
+    NSString *lampGroupID5 = @"lampGroupID5";
+    NSArray *ppe1LampGroupIDs = [NSArray arrayWithObjects: lampGroupID5, nil];
+
+    NSString *ppe1FromPresetID = @"fromPresetID1";
+    NSString *ppe1ToPresetID = @"toPresetID1";
+
+    unsigned int ppe1Period = 15;
+    unsigned int ppe1Duration = 60;
+    unsigned int ppe1NumPulses = 10;
+
+    LSFPresetPulseEffect *presetPulseEffect1 = [[LSFPresetPulseEffect alloc] initWithLampIDs: ppe1LampIDs lampGroupIDs: ppe1LampGroupIDs fromPresetID: ppe1FromPresetID toPresetID: ppe1ToPresetID period: ppe1Period duration: ppe1Duration andNumPulses: ppe1NumPulses];
+
+    NSArray *pulseWithPresetComponent = [NSArray arrayWithObjects: presetPulseEffect1, nil];
+
+    //Create Scene using ctor with arguments
+    self.scene = [[LSFScene alloc] initWithStateTransitionEffects: transitionToStateComponents presetTransitionEffects: transitionToPresetComponents statePulseEffects: pulseWithStateComponent andPresetPulseEffects: pulseWithPresetComponent];
+
+    //Get TransitionToStateComponents
+    NSArray *ttsc = self.scene.transitionToStateComponent;
+    XCTAssertTrue([ttsc count] == 1, @"Array should contain only one object");
+
+    LSFStateTransitionEffect *ste = [ttsc objectAtIndex: 0];
+
+    //Get lamps
+    NSArray *lampIDs = ste.lamps;
+    NSSet *initialLampsSet = [NSSet setWithArray: ste1LampIDs];
+    NSSet *lampsSet = [NSSet setWithArray: lampIDs];
+    BOOL isSetsEqual = [initialLampsSet isEqualToSet: lampsSet];
+    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+
+    //Get lamp groups
+    NSArray *lampGroupIDs = ste.lampGroups;
+    NSSet *initialLampGroupsSet = [NSSet setWithArray: ste1LampGroupIDs];
+    NSSet *lampGroupsSet = [NSSet setWithArray: lampGroupIDs];
+    isSetsEqual = [initialLampGroupsSet isEqualToSet: lampGroupsSet];
+    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+
+    //Get transition period
+    unsigned int newTransitionPeriod = ste.transitionPeriod;
+    XCTAssertTrue(newTransitionPeriod == 30, @"Transition period should be 30");
+
+    //Get lamp state
+    LSFLampState *state = ste.lampState;
+    XCTAssertFalse(state.onOff, @"State should be of");
+    XCTAssertTrue(state.brightness == 50, @"Brightness should be 50");
+    XCTAssertTrue(state.hue == 180, @"Hue should be 180");
+    XCTAssertTrue(state.saturation == 25, @"Saturation should be 25");
+    XCTAssertTrue(state.colorTemp == 2700, @"Color Temp should be 2700");
+
+    //Get TransitionToPresetComponents
+    NSArray *ttpc = self.scene.transitionToPresetComponent;
+    XCTAssertTrue([ttpc count] == 1, @"Array should contain only one object");
+
+    LSFPresetTransitionEffect *pte = [ttpc objectAtIndex: 0];
+
+    //Get lamps
+    lampIDs = pte.lamps;
+    initialLampsSet = [NSSet setWithArray: pte1LampIDs];
+    lampsSet = [NSSet setWithArray: lampIDs];
+    isSetsEqual = [initialLampsSet isEqualToSet: lampsSet];
+    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+
+    //Get lamp groups
+    lampGroupIDs = pte.lampGroups;
+    initialLampGroupsSet = [NSSet setWithArray: pte1LampGroupIDs];
+    lampGroupsSet = [NSSet setWithArray: lampGroupIDs];
+    isSetsEqual = [initialLampGroupsSet isEqualToSet: lampGroupsSet];
+    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+
+    //Get transition period
+    newTransitionPeriod = pte.transitionPeriod;
+    XCTAssertTrue(newTransitionPeriod == 30, @"Transition period should be 30");
+
+    //Get preset
+    NSString *presetID = pte.presetID;
+    XCTAssertTrue([presetID isEqualToString: pte1PresetID], @"Preset IDs should be equal");
+
+    //Get PulseWithStateComponents
+    NSArray *pwsc = self.scene.pulseWithStateComponent;
+    XCTAssertTrue([pwsc count] == 1, @"Array should contain only one object");
+
+    LSFStatePulseEffect *spe = [pwsc objectAtIndex: 0];
+
+    //Get lamps
+    lampIDs = spe.lamps;
+    initialLampsSet = [NSSet setWithArray: spe1LampIDs];
+    lampsSet = [NSSet setWithArray: lampIDs];
+    isSetsEqual = [initialLampsSet isEqualToSet: lampsSet];
+    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+
+    //Get lamp groups
+    lampGroupIDs = spe.lampGroups;
+    initialLampGroupsSet = [NSSet setWithArray: spe1LampGroupIDs];
+    lampGroupsSet = [NSSet setWithArray: lampGroupIDs];
+    isSetsEqual = [initialLampGroupsSet isEqualToSet: lampGroupsSet];
+    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+
+    //Get period
+    unsigned int newPeriod = spe.period;
+    XCTAssertTrue(newPeriod == 15, @"Period should be 15");
+
+    //Get duration
+    unsigned int newDuration = spe.duration;
+    XCTAssertTrue(newDuration == 60, @"Duration should be 60");
+
+    //Get num pulses
+    unsigned int newNumPulses = spe.numPulses;
+    XCTAssertTrue(newNumPulses == 10, @"NumPulses should be 10");
+
+    //Get from lamp state
+    state = spe.fromLampState;
+    XCTAssertTrue(state.onOff, @"State should be of");
+    XCTAssertTrue(state.brightness == 25, @"Brightness should be 25");
+    XCTAssertTrue(state.hue == 90, @"Hue should be 90");
+    XCTAssertTrue(state.saturation == 25, @"Saturation should be 25");
+    XCTAssertTrue(state.colorTemp == 2700, @"Color Temp should be 2700");
+
+    //Get to lamp state
+    state = spe.toLampState;
+    XCTAssertTrue(state.onOff, @"State should be of");
+    XCTAssertTrue(state.brightness == 50, @"Brightness should be 50");
+    XCTAssertTrue(state.hue == 180, @"Hue should be 180");
+    XCTAssertTrue(state.saturation == 50, @"Saturation should be 50");
+    XCTAssertTrue(state.colorTemp == 5000, @"Color Temp should be 5000");
+
+    //Get PulseWithPresetComponents
+    NSArray *pwpc = self.scene.pulseWithPresetComponent;
+    XCTAssertTrue([pwpc count] == 1, @"Array should contain only one object");
+
+    LSFPresetPulseEffect *ppe = [pwpc objectAtIndex: 0];
+
+    //Get lamps
+    lampIDs = ppe.lamps;
+    initialLampsSet = [NSSet setWithArray: ppe1LampIDs];
+    lampsSet = [NSSet setWithArray: lampIDs];
+    isSetsEqual = [initialLampsSet isEqualToSet: lampsSet];
+    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+
+    //Get lamp groups
+    lampGroupIDs = ppe.lampGroups;
+    initialLampGroupsSet = [NSSet setWithArray: ppe1LampGroupIDs];
+    lampGroupsSet = [NSSet setWithArray: lampGroupIDs];
+    isSetsEqual = [initialLampGroupsSet isEqualToSet: lampGroupsSet];
+    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+
+    //Get period
+    newPeriod = ppe.period;
+    XCTAssertTrue(newPeriod == 15, @"Period should be 15");
+
+    //Get duration
+    newDuration = ppe.duration;
+    XCTAssertTrue(newDuration == 60, @"Duration should be 60");
+
+    //Get num pulses
+    newNumPulses = ppe.numPulses;
+    XCTAssertTrue(newNumPulses == 10, @"NumPulses should be 10");
+
+    //Get from preset
+    NSString *fromPresetID = ppe.fromPresetID;
+    XCTAssertTrue([fromPresetID isEqualToString: ppe1FromPresetID], @"From preset IDs should be equal");
+
+    //Get to preset
+    NSString *toPresetID = ppe.toPresetID;
+    XCTAssertTrue([toPresetID isEqualToString: ppe1ToPresetID], @"To preset IDs should be equal");
 }
 
 -(void)testSetGetTransitionToStateComponent

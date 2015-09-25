@@ -78,6 +78,15 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "87D8139618CA483C00903D59"
+            BuildableName = "libLSFObjC.a"
+            BlueprintName = "LSFObjC"
+            ReferencedContainer = "container:LSFObjC.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

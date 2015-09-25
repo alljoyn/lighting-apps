@@ -14,18 +14,8 @@
  *    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  ******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import <internal/LSFControllerServiceManagerCallbackDelegate.h>
+#import <XCTest/XCTest.h>
 
-@interface MockControllerServiceManagerCallbackDelegateHandler : NSObject <LSFControllerServiceManagerCallbackDelegate>
-
--(id)init;
--(NSArray *)getCallbackData;
-
-//Delegate Methods
--(void)getControllerServiceVersionReply: (unsigned int)version;
--(void)lightingResetControllerServiceReplyWithCode: (LSFResponseCode)rc;
--(void)controllerServiceLightingReset;
--(void)controllerServiceNameChangedForControllerID: (NSString *)controllerID andName: (NSString *)controllerName;
+@interface LSFTransitionEffectV2Tests : XCTestCase
 
 @end

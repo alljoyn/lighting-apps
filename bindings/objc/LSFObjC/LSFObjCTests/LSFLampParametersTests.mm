@@ -15,11 +15,11 @@
  ******************************************************************************/
 
 #import "LSFLampParametersTests.h"
-#import "LSFObjC/LSFLampParameters.h"
+#import <LSFSDKLampParameters.h>
 
 @interface LSFLampParametersTests()
 
-@property (nonatomic) LSFLampParameters *lampParams;
+@property (nonatomic) LSFSDKLampParameters *lampParams;
 
 @end
 
@@ -32,7 +32,7 @@
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
     
-    self.lampParams = [[LSFLampParameters alloc] init];
+    self.lampParams = [[LSFSDKLampParameters alloc] init];
 }
 
 -(void)tearDown
@@ -45,14 +45,20 @@
 
 -(void)testEnergyUsageMilliwatts
 {
-    int eum = self.lampParams.energyUsageMilliwatts;
-    XCTAssertTrue((eum == 0), @"Energy Usage Milliwatts should be zero");
+    XCTAssertTrue((self.lampParams.energyUsageMilliwatts == 0), @"Energy Usage Milliwatts should be zero");
+
+    unsigned int eumData = 9;
+    self.lampParams.energyUsageMilliwatts = eumData;
+    XCTAssertTrue((self.lampParams.energyUsageMilliwatts == eumData), @"Energy Usage Milliwatts should be 9");
 }
 
 -(void)testLumens
 {
-    int lumens = self.lampParams.lumens;
-    XCTAssertTrue((lumens == 0), @"Lumens should be zero");
+    XCTAssertTrue((self.lampParams.lumens == 0), @"Lumens should be zero");
+
+    unsigned int lumensData = 300;
+    self.lampParams.lumens = lumensData;
+    XCTAssertTrue((self.lampParams.lumens == lumensData), @"Lumens should be 300");
 }
 
 @end

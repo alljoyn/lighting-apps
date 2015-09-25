@@ -16,7 +16,7 @@
 
 #import "LSFPresetManagerCallbackTests.h"
 #import "MockPresetManagerCallbackDelegateHandler.h"
-#import "LSFObjC/LSFPresetManagerCallback.h"
+#import <internal/LSFPresetManagerCallback.h>
 
 @interface LSFPresetManagerCallbackTests()
 
@@ -101,11 +101,11 @@
     NSString *presetID2 = @"presetID2";
     NSString *presetID3 = @"presetID3";
     NSString *presetID4 = @"presetID4";
-    NSArray *lampIDsArray = [[NSArray alloc] initWithObjects: presetID1, presetID2, presetID3, presetID4, nil];
+    NSArray *presetIDsArray = [[NSArray alloc] initWithObjects: presetID1, presetID2, presetID3, presetID4, nil];
     
     [self.dataArray addObject: responseCode];
     [self.dataArray addObject: functionName];
-    [self.dataArray addObject: lampIDsArray];
+    [self.dataArray addObject: presetIDsArray];
     
     //Call callback method
     LSFStringList presetIDList;
@@ -241,6 +241,35 @@
     std::string pid([presetID UTF8String]);
     self.pmc->CreatePresetReplyCB(code, pid);
     
+    //Test the data using NSSet
+    NSSet *startData = [[NSSet alloc] initWithArray: self.dataArray];
+    NSSet *endData = [[NSSet alloc] initWithArray: [self.pmcdh getCallbackData]];
+    BOOL isSetsEqual = [startData isEqualToSet: endData];
+    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+}
+
+-(void)testCreatePresetWithTracking
+{
+    //Ensure array is empty
+    [self.dataArray removeAllObjects];
+
+    //Populate array with test data
+    LSFResponseCode code = LSF_ERR_INVALID;
+    NSNumber *responseCode = [[NSNumber alloc] initWithInt: code];
+    unsigned int tid = 1234;
+    NSNumber *trackingID = [[NSNumber alloc] initWithUnsignedInt: tid];
+    NSString *presetID = @"presetID1";
+    NSString *functionName = @"createPresetWithTracking";
+
+    [self.dataArray addObject: responseCode];
+    [self.dataArray addObject: functionName];
+    [self.dataArray addObject: presetID];
+    [self.dataArray addObject: trackingID];
+
+    //Call callback method
+    std::string pid([presetID UTF8String]);
+    self.pmc->CreatePresetWithTrackingReplyCB(code, pid, tid);
+
     //Test the data using NSSet
     NSSet *startData = [[NSSet alloc] initWithArray: self.dataArray];
     NSSet *endData = [[NSSet alloc] initWithArray: [self.pmcdh getCallbackData]];

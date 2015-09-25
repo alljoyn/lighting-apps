@@ -53,7 +53,6 @@
     [self.dataArray addObject: groupIDs];
 }
 
-
 -(void)getLampGroupNameReplyWithCode: (LSFResponseCode)rc groupID: (NSString*)groupID language: (NSString *)language andGroupName: (NSString*)name
 {
     [self.dataArray removeAllObjects];
@@ -89,7 +88,17 @@
     [self.dataArray addObject: @"createLampGroup"];
     [self.dataArray addObject: responseCode];
     [self.dataArray addObject: groupID];
+}
 
+-(void)createLampGroupTrackingReplyWithCode: (LSFResponseCode)rc groupID: (NSString *)groupID andTrackingID: (unsigned int)trackingID
+{
+    [self.dataArray removeAllObjects];
+    NSNumber *responseCode = [[NSNumber alloc] initWithInt: rc];
+    NSNumber *tid = [[NSNumber alloc] initWithUnsignedInt: trackingID];
+    [self.dataArray addObject: @"createLampGroupWithTracking"];
+    [self.dataArray addObject: responseCode];
+    [self.dataArray addObject: groupID];
+    [self.dataArray addObject: tid];
 }
 
 -(void)lampGroupsCreated: (NSArray *)groupIDs
@@ -275,6 +284,16 @@
     [self.dataArray addObject: @"transitionLampGroupStateToPreset"];
     [self.dataArray addObject: responseCode];
     [self.dataArray addObject: groupID];
+}
+
+-(void)setLampGroupEffectReplyWithCode: (LSFResponseCode)rc groupID: (NSString *)groupID andEffectID: (NSString *)effectID
+{
+    [self.dataArray removeAllObjects];
+    NSNumber *responseCode = [[NSNumber alloc] initWithInt: rc];
+    [self.dataArray addObject: @"setLampGroupEffect"];
+    [self.dataArray addObject: responseCode];
+    [self.dataArray addObject: groupID];
+    [self.dataArray addObject: effectID];
 }
 
 @end

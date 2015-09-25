@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFObjC/LSFLampManagerCallbackDelegate.h"
+#import <internal/LSFLampManagerCallbackDelegate.h>
 
 @interface MockLampManagerCallbackDelegateHandler : NSObject<LSFLampManagerCallbackDelegate>
 
@@ -27,12 +27,11 @@
 -(void)getLampNameReplyWithCode: (LSFResponseCode)rc lampID: (NSString*)lampID language: (NSString*)language andLampName: (NSString*)name;
 -(void)getLampManufacturerReplyWithCode: (LSFResponseCode)rc lampID: (NSString*)lampID language: (NSString*)language andManufacturer: (NSString*)manufacturer;
 -(void)setLampNameReplyWithCode: (LSFResponseCode)rc lampID: (NSString*)lampID andLanguage: (NSString*)language;
--(void)lampsNameChanged: (NSArray *)lampIDs;
+-(void)lampsNameChangedWithID: (NSString *)lampID andName: (NSString *)name;
 -(void)lampsFound: (NSArray *)lampIDs;
 -(void)lampsLost: (NSArray *)lampIDs;
--(void)pingLampReplyWithCode: (LSFResponseCode)rc andLampID: (NSString *)lampID;
--(void)getLampDetailsReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID andLampDetails: (LSFLampDetails *)details;
--(void)getLampParametersReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID andLampParameters: (LSFLampParameters *)params;
+-(void)getLampDetailsReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID andLampDetails: (LSFSDKLampDetails *)details;
+-(void)getLampParametersReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID andLampParameters: (LSFSDKLampParameters *)params;
 -(void)getLampParametersEnergyUsageMilliwattsFieldReplyWithCode: (LSFResponseCode)rc lampID: (NSString*)lampID andEnergyUsage: (unsigned int)energyUsageMilliwatts;
 -(void)getLampParametersLumensFieldReplyWithCode: (LSFResponseCode)rc lampID: (NSString*)lampID andBrightnessLumens: (unsigned int)brightnessLumens;
 -(void)getLampStateReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID andLampState: (LSFLampState *)state;
@@ -42,7 +41,7 @@
 -(void)getLampStateBrightnessFieldReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID andBrightness: (unsigned int)brightness;
 -(void)getLampStateColorTempFieldReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID andColorTemp: (unsigned int)colorTemp;
 -(void)resetLampStateReplyWithCode: (LSFResponseCode)rc andLampID: (NSString *)lampID;
--(void)lampsStateChanged: (NSArray *)lampIDs;
+-(void)lampsStateChangedWithID: (NSString *)lampID andLampState: (LSFLampState *)state;
 -(void)transitionLampStateReplyWithCode: (LSFResponseCode)rc andLampID: (NSString*)lampID;
 -(void)pulseLampWithStateReplyWithCode: (LSFResponseCode)rc andLampID: (NSString*)lampID;
 -(void)pulseLampWithPresetReplyWithCode: (LSFResponseCode)rc andLampID: (NSString*)lampID;
@@ -61,5 +60,7 @@
 -(void)resetLampStateColorTempFieldReplyWithCode: (LSFResponseCode)rc andLampID: (NSString*)lampID;
 -(void)transitionLampStateToPresetReplyWithCode: (LSFResponseCode)rc andLampID: (NSString*)lampID;
 -(void)getLampSupportedLanguagesReplyWithCode: (LSFResponseCode)rc lampID: (NSString*)lampID andSupportedLanguages: (NSArray*)supportedLanguages;
+-(void)setLampEffectReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID andEffectID: (NSString *)effectID;
+-(void)getConsolidatedLampDataSetReplyWithCode: (LSFResponseCode)rc lampID: (NSString *)lampID language:(NSString *)language lampName: (NSString *)lampName lampDetails:(LSFSDKLampDetails *)lampDetails lampState: (LSFLampState *)lampState andLampParameters: (LSFSDKLampParameters *)lampParameters;
 
 @end

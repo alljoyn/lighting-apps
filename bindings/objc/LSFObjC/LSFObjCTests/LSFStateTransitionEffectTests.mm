@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import "LSFStateTransitionEffectTests.h"
-#import "LSFObjC/LSFStateTransitionEffect.h"
+#import <internal/LSFStateTransitionEffect.h>
 
 @interface LSFStateTransitionEffectTests()
 
@@ -37,6 +37,12 @@
 {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
+}
+
+-(void)testNoArgConstructor
+{
+    self.stateTransitionEffect = [[LSFStateTransitionEffect alloc] init];
+    XCTAssertNotNil(self.stateTransitionEffect, @"State Transition Effect should not be nil");
 }
 
 -(void)testStateTransitionEffectWithoutTransitionPeriod

@@ -16,7 +16,7 @@
 
 #import "LSFMasterSceneManagerCallbackTest.h"
 #import "MockMasterSceneManagerCallbackDelegateHandler.h"
-#import "LSFObjC/LSFMasterSceneManagerCallback.h"
+#import <internal/LSFMasterSceneManagerCallback.h>
 
 @interface LSFMasterSceneManagerCallbackTest()
 
@@ -211,6 +211,35 @@
     XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
 }
 
+-(void)testCreateMasterSceneWithTracking
+{
+    //Ensure array is empty
+    [self.dataArray removeAllObjects];
+
+    //Populate array with test data
+    LSFResponseCode code = LSF_ERR_INVALID;
+    NSNumber *responseCode = [[NSNumber alloc] initWithInt: code];
+    unsigned int tid = 1234;
+    NSNumber *trackingID = [[NSNumber alloc] initWithUnsignedInt: tid];
+    NSString *masterSceneID = @"masterSceneID1";
+    NSString *functionName = @"createMasterSceneWithTracking";
+
+    [self.dataArray addObject: responseCode];
+    [self.dataArray addObject: functionName];
+    [self.dataArray addObject: masterSceneID];
+    [self.dataArray addObject: trackingID];
+
+    //Call callback method
+    std::string msid([masterSceneID UTF8String]);
+    self.msmc->CreateMasterSceneWithTrackingReplyCB(code, msid, tid);
+
+    //Test the data using NSSet
+    NSSet *startData = [[NSSet alloc] initWithArray: self.dataArray];
+    NSSet *endData = [[NSSet alloc] initWithArray: [self.msmcdh getCallbackData]];
+    BOOL isSetsEqual = [startData isEqualToSet: endData];
+    XCTAssertTrue(isSetsEqual, @"Start and end data should be equal");
+}
+
 -(void)testMasterScenesCreated
 {
     //Ensure array is empty
@@ -256,15 +285,15 @@
     NSNumber *responseCode = [[NSNumber alloc] initWithInt: code];
     NSString *masterSceneID = @"masterSceneID1";
     NSString *functionName = @"getMasterScene";
-    NSString *masterSceneID1 = @"masterSceneID1";
-    NSString *masterSceneID2 = @"masterSceneID2";
-    NSString *masterSceneID3 = @"masterSceneID3";
-    NSString *masterSceneID4 = @"masterSceneID4";
-    NSArray *masterSceneIDsArray = [[NSArray alloc] initWithObjects: masterSceneID1, masterSceneID2, masterSceneID3, masterSceneID4, nil];
+    NSString *sceneID1 = @"sceneID1";
+    NSString *sceneID2 = @"sceneID2";
+    NSString *sceneID3 = @"sceneID3";
+    NSString *sceneID4 = @"sceneID4";
+    NSArray *sceneIDsArray = [[NSArray alloc] initWithObjects: sceneID1, sceneID2, sceneID3, sceneID4, nil];
     
-    LSFMasterScene *masterScene = [[LSFMasterScene alloc] initWithSceneIDs: masterSceneIDsArray];
+    LSFMasterScene *masterScene = [[LSFMasterScene alloc] initWithSceneIDs: sceneIDsArray];
     
-    [self.dataArray addObject: masterSceneIDsArray];
+    [self.dataArray addObject: sceneIDsArray];
     [self.dataArray addObject: responseCode];
     [self.dataArray addObject: functionName];
     [self.dataArray addObject: masterSceneID];

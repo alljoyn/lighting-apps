@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "LSFObjC/LSFPresetManagerCallbackDelegate.h"
+#import <internal/LSFPresetManagerCallbackDelegate.h>
 
 @interface MockPresetManagerCallbackDelegateHandler : NSObject <LSFPresetManagerCallbackDelegate>
 
@@ -29,6 +29,7 @@
 -(void)setPresetNameReplyWithCode: (LSFResponseCode)rc presetID: (NSString *)presetID andLanguage: (NSString *)language;
 -(void)presetsNameChanged: (NSArray *)presetIDs;
 -(void)createPresetReplyWithCode: (LSFResponseCode)rc andPresetID: (NSString *)presetID;
+-(void)createPresetTrackingReplyWithCode: (LSFResponseCode)rc presetID: (NSString *)presetID andTrackingID: (unsigned int)trackingID;
 -(void)presetsCreated: (NSArray *)presetIDs;
 -(void)updatePresetReplyWithCode: (LSFResponseCode)rc andPresetID: (NSString *)presetID;
 -(void)presetsUpdated: (NSArray *)presetIDs;
