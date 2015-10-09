@@ -24,7 +24,7 @@
     @protected LSFGroupsFlattener *groupFlattener;
 }
 
--(id)init;
+-(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)lightingSystemManager;
 -(void)addGroupDelegate: (id<LSFSDKGroupDelegate>)groupDelegate;
 -(void)removeGroupDelegate: (id<LSFSDKGroupDelegate>)groupDelegate;
 -(LSFSDKGroup *)addGroupWithID: (NSString *)groupID;

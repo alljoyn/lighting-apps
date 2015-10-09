@@ -19,9 +19,9 @@
 
 @implementation LSFSDKSceneCollectionManagerV2
 
--(id)init
+-(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)lightingSystemManager
 {
-    self = [super init];
+    self = [super initWithLightingSystemManager: lightingSystemManager];
 
     if (self)
     {

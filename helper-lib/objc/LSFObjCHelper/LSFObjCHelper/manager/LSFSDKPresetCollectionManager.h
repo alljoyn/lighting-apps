@@ -20,7 +20,7 @@
 
 @interface LSFSDKPresetCollectionManager : LSFSDKLightingItemCollectionManager
 
--(id)init;
+-(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)lightingSystemManager;
 -(void)addPresetDelegate: (id<LSFSDKPresetDelegate>)presetDelegate;
 -(void)removePresetDelegate: (id<LSFSDKPresetDelegate>)presetDelegate;
 -(LSFSDKPreset *)addPresetWithID: (NSString *)presetID;

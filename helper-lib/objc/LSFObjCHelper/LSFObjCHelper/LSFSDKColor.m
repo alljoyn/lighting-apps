@@ -80,50 +80,22 @@
 
 +(LSFSDKColor *)red
 {
-    static LSFSDKColor *red = nil;
-
-    if (red == nil)
-    {
-        red = [[LSFSDKColor alloc] initWithHue: 0 saturation: 100 brightness: 100 colorTemp: 3500];
-    }
-
-    return red;
+    return [[LSFSDKColor alloc] initWithHue: 0 saturation: 100 brightness: 100 colorTemp: 3500];
 }
 
 +(LSFSDKColor *)green
 {
-    static LSFSDKColor *green = nil;
-
-    if (green == nil)
-    {
-        green = [[LSFSDKColor alloc] initWithHue: 120 saturation: 100 brightness: 50 colorTemp: 3500];
-    }
-
-    return green;
+    return [[LSFSDKColor alloc] initWithHue: 120 saturation: 100 brightness: 50 colorTemp: 3500];
 }
 
 +(LSFSDKColor *)blue
 {
-    static LSFSDKColor *blue = nil;
-
-    if (blue == nil)
-    {
-        blue = [[LSFSDKColor alloc] initWithHue: 240 saturation: 100 brightness: 100 colorTemp: 3500];
-    }
-
-    return blue;
+    return [[LSFSDKColor alloc] initWithHue: 240 saturation: 100 brightness: 100 colorTemp: 3500];
 }
 
 +(LSFSDKColor *)white
 {
-    static LSFSDKColor *white = nil;
-
-    if (white == nil)
-    {
-        white = [[LSFSDKColor alloc] initWithHue: 0 saturation: 0 brightness: 100 colorTemp: 3500];
-    }
-
-    return white;
+    return [[LSFSDKColor alloc] initWithHue: 0 saturation: 0 brightness: 100 colorTemp: 3500];
 }
 
 @end

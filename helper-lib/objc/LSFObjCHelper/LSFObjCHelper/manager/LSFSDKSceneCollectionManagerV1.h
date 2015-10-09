@@ -20,7 +20,7 @@
 
 @interface LSFSDKSceneCollectionManagerV1 : LSFSDKSceneCollectionManager
 
--(id)init;
+-(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)lightingSystemManager;
 -(void)addSceneDelegate: (id<LSFSDKSceneDelegate>)sceneDelegate;
 -(void)removeSceneDelegate: (id<LSFSDKSceneDelegate>)sceneDelegate;
 -(LSFSDKSceneV1 *)addSceneWithID: (NSString *)sceneID;

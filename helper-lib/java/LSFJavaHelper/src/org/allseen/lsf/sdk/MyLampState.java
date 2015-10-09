@@ -22,7 +22,7 @@ import org.allseen.lsf.sdk.model.ColorStateConverter;
  */
 public class MyLampState implements LampState {
 
-    private static final Color DEFAULT_COLOR = Color.WHITE;
+    private static final Color DEFAULT_COLOR = Color.white();
     private static final Power DEFAULT_POWER = Power.ON;
 
     private Power power;

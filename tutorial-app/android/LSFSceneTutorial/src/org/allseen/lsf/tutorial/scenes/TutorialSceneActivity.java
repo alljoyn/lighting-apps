@@ -103,8 +103,8 @@ public class TutorialSceneActivity extends Activity implements NextControllerCon
     @Override
     public void onControllerConnected() {
         // STEP 3: Define all parameters used in creating a Scene.
-        final Color pulseFromColor = Color.GREEN;
-        final Color pulseToColor = Color.BLUE;
+        final Color pulseFromColor = Color.green();
+        final Color pulseToColor = Color.blue();
         final Power pulsePowerState = Power.ON;
         final long period = 1000;
         final long duration = 500;

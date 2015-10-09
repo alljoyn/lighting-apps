@@ -25,30 +25,40 @@ import org.allseen.lsf.sdk.model.ColorStateConverter;
  */
 public class Color {
     /**
-     * Specifies a default color with a hue, saturation, brightness, and color temperature
+     * Returns a default color with a hue, saturation, brightness, and color temperature
      * set to minimum values.
      */
-    public static final Color DEFAULT = new Color(LightingDirector.HUE_MIN, LightingDirector.SATURATION_MIN, LightingDirector.BRIGHTNESS_MIN, LightingDirector.COLORTEMP_MIN);
+    public static Color defaultColor() {
+        return new Color(LightingDirector.HUE_MIN, LightingDirector.SATURATION_MIN, LightingDirector.BRIGHTNESS_MIN, LightingDirector.COLORTEMP_MIN);
+    }
 
     /**
-     * Specifies the color red.
+     * Returns the color red.
      */
-    public static final Color RED = new Color(0, 100, 100, 3500);
+    public static Color red() {
+        return new Color(0, 100, 100, 3500);
+    }
 
     /**
-     * Specifies the color green.
+     * Returns the color green.
      */
-    public static final Color GREEN = new Color(120, 100, 50, 3500);
+    public static Color green() {
+        return new Color(120, 100, 50, 3500);
+    }
 
     /**
-     * Specifies the color blue.
+     * Returns the color blue.
      */
-    public static final Color BLUE = new Color(240, 100, 100, 3500);
+    public static Color blue() {
+        return new Color(240, 100, 100, 3500);
+    }
 
     /**
-     * Specifies the color white.
+     * Returns the color white.
      */
-    public static final Color WHITE = new Color(0,0,100,3500);
+    public static Color white() {
+        return new Color(0,0,100,3500);
+    }
 
     private int hue;
     private int saturation;

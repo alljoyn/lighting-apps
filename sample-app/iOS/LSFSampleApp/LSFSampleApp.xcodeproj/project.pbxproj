@@ -1033,9 +1033,6 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "AllSeen Alliance";
 				TargetAttributes = {
-					87D813EC18CA536700903D59 = {
-						DevelopmentTeam = 9W47496HLT;
-					};
 					87D8140718CA536800903D59 = {
 						TestTargetID = 87D813EC18CA536700903D59;
 					};

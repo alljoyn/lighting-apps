@@ -15,12 +15,13 @@
  ******************************************************************************/
 
 #import "LSFSDKLightingItemCollectionManager.h"
+#import "LSFSDKLightingSystemManager.h"
 
 @implementation LSFSDKLightingItemCollectionManager
 
--(id)init
+-(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)lightingSystemManager;
 {
-    self = [super init];
+    self = [super initWithLightingSystemManager: lightingSystemManager];
 
     if (self)
     {
@@ -166,6 +167,13 @@
     {
         [self sendErrorEvent: delegate errorEvent: errorEvent];
     }
+}
+
+-(void)postSendErrorEvent: (id<LSFSDKLightingDelegate>)delegate errorEvent: (LSFSDKLightingItemErrorEvent *)errorEvent
+{
+    dispatch_async(manager.dispatchQueue, ^{
+        [self sendErrorEvent: delegate errorEvent: errorEvent];
+    });
 }
 
 -(void)sendInitializedEvent: (id<LSFSDKLightingDelegate>)delegate item: (id)item trackingID: (LSFSDKTrackingID *)trackingID

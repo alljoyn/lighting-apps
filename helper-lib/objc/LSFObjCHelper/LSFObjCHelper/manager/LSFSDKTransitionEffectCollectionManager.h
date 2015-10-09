@@ -20,7 +20,7 @@
 
 @interface LSFSDKTransitionEffectCollectionManager : LSFSDKLightingItemCollectionManager
 
--(id)init;
+-(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)lightingSystemManager;
 -(void)addTransitionEffectDelegate: (id<LSFSDKTransitionEffectDelegate>)transitionEffectDelegate;
 -(void)removeTransitionEffectDelegate: (id<LSFSDKTransitionEffectDelegate>)transitionEffectDelegate;
 -(LSFSDKTransitionEffect *)addTransitionEffectWithID: (NSString *)transitionEffectID;

@@ -27,7 +27,7 @@
     @protected NSMutableDictionary *itemAdapters;
 }
 
--(id)init;
+-(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)lightingSystemManager;
 -(BOOL)hasID: (NSString *)itemID;
 -(NSArray *)getIDArray;
 -(unsigned int)size;
@@ -44,6 +44,7 @@
 -(void)sendErrorEvent: (NSString *)errorName statusCode: (lsf::LSFResponseCode)responseCode itemID: (NSString *)itemID;
 -(void)sendErrorEvent: (NSString *)errorName statusCode: (lsf::LSFResponseCode)responseCode itemID: (NSString *)itemID withTrackingID: (LSFSDKTrackingID *)trackingID;
 -(void)sendErrorEvent: (LSFSDKLightingItemErrorEvent *)errorEvent;
+-(void)postSendErrorEvent: (id<LSFSDKLightingDelegate>)delegate errorEvent: (LSFSDKLightingItemErrorEvent *)errorEvent;
 -(void)sendInitializedEvent: (id<LSFSDKLightingDelegate>)delegate item: (id)item trackingID: (LSFSDKTrackingID *)trackingID;
 -(void)sendChangedEvent: (id<LSFSDKLightingDelegate>)delegate item: (id)item;
 -(void)sendRemovedEvent: (id<LSFSDKLightingDelegate>)delegate item: (id)item;

@@ -58,8 +58,8 @@ public class TutorialPulseEffectActivity extends Activity implements NextControl
                 tutorialGroupId = group.getId();
 
                 //Variable parameters
-                Color pulseFromColor = Color.GREEN;
-                Color pulseToColor = Color.BLUE;
+                Color pulseFromColor = Color.green();
+                Color pulseToColor = Color.blue();
                 Power pulsePowerState = Power.ON;
                 long period = 1000;
                 long duration = 500;

@@ -24,7 +24,7 @@
     @protected NSMutableArray *lampIDs;
 }
 
--(id)init;
+-(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)lightingSystemManager;
 -(void)addLampDelegate: (id<LSFSDKLampDelegate>)lampDelegate;
 -(void)removeLampDelegate: (id<LSFSDKLampDelegate>)lampDelegate;
 -(LSFSDKLamp *)addLampWithID: (NSString *)lampID;

@@ -86,7 +86,7 @@ public class TutorialTransitionEffectActivity extends Activity implements NextCo
     @Override
     public void onControllerConnected() {
         // STEP 3: Create a TransitionEffect in the lightingDirector.
-        MyLampState mLS = new MyLampState(Power.ON, Color.RED);
+        MyLampState mLS = new MyLampState(Power.ON, Color.red());
 
         lightingDirector.createTransitionEffect(mLS, 5000, "TutorialTransition");
     }

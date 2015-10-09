@@ -20,7 +20,7 @@
 
 @interface LSFSDKPulseEffectCollectionManager : LSFSDKLightingItemCollectionManager
 
--(id)init;
+-(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)lightingSystemManager;
 -(void)addPulseEffectDelegate: (id<LSFSDKPulseEffectDelegate>)pulseEffectDelegate;
 -(void)removePulseEffectDelegate: (id<LSFSDKPulseEffectDelegate>)pulseEffectDelegate;
 -(LSFSDKPulseEffect *)addPulseEffectWithID: (NSString *)pulseEffectID;

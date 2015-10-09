@@ -19,6 +19,7 @@
 
 @interface LSFSDKSceneCollectionManager : LSFSDKLightingItemCollectionManager
 
+-(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)lightingSystemManager;
 -(LSFSDKScene *)addSceneWithID: (NSString *)sceneID;
 -(LSFSDKScene *)removeSceneWithID: (NSString *)sceneID;
 

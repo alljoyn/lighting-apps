@@ -18,7 +18,7 @@
 
 @implementation LSFSDKLightingItemListenerManager
 
--(id)init
+-(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)lightingSystemManager
 {
     self = [super init];
 
@@ -27,6 +27,7 @@
         delegates = [[NSMutableArray alloc] init];
         delegatesPendingRemoval = [[NSMutableSet alloc] init];
         delegatesPendingAddition = [[NSMutableSet alloc] init];
+        manager = lightingSystemManager;
     }
 
     return self;

@@ -145,15 +145,15 @@
         _sceneManagerCB = [[LSFSDKHelperSceneManagerCallback alloc] initWithLightingSystemManager: self];
         _masterSceneManagerCB = [[LSFSDKHelperMasterSceneManagerCallback alloc] initWithLightingSystemManager: self];
 
-        _lampCollectionManager = [[LSFSDKLampCollectionManager alloc] init];
-        _presetCollectionManager = [[LSFSDKPresetCollectionManager alloc] init];
-        _groupCollectionManager = [[LSFSDKGroupCollectionManager alloc] init];
-        _transitionEffectCollectionManager = [[LSFSDKTransitionEffectCollectionManager alloc] init];
-        _pulseEffectCollectionManager = [[LSFSDKPulseEffectCollectionManager alloc] init];
-        _sceneElementCollectionManager = [[LSFSDKSceneElementCollectionManager alloc] init];
-        _sceneCollectionManagerV1 = [[LSFSDKSceneCollectionManagerV1 alloc] init];
-        _sceneCollectionManager = [[LSFSDKSceneCollectionManagerV2 alloc] init];
-        _masterSceneCollectionManager = [[LSFSDKMasterSceneCollectionManager alloc] init];
+        _lampCollectionManager = [[LSFSDKLampCollectionManager alloc] initWithLightingSystemManager: self];
+        _presetCollectionManager = [[LSFSDKPresetCollectionManager alloc] initWithLightingSystemManager: self];
+        _groupCollectionManager = [[LSFSDKGroupCollectionManager alloc] initWithLightingSystemManager: self];
+        _transitionEffectCollectionManager = [[LSFSDKTransitionEffectCollectionManager alloc] initWithLightingSystemManager: self];
+        _pulseEffectCollectionManager = [[LSFSDKPulseEffectCollectionManager alloc] initWithLightingSystemManager: self];
+        _sceneElementCollectionManager = [[LSFSDKSceneElementCollectionManager alloc] initWithLightingSystemManager: self];
+        _sceneCollectionManagerV1 = [[LSFSDKSceneCollectionManagerV1 alloc] initWithLightingSystemManager: self];
+        _sceneCollectionManager = [[LSFSDKSceneCollectionManagerV2 alloc] initWithLightingSystemManager: self];
+        _masterSceneCollectionManager = [[LSFSDKMasterSceneCollectionManager alloc] initWithLightingSystemManager: self];
 
         _controllerManager = [[LSFControllerManager alloc] init];
         [_controllerManager addDelegate: self];

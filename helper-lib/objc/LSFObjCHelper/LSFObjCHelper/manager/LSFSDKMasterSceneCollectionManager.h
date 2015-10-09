@@ -20,7 +20,7 @@
 
 @interface LSFSDKMasterSceneCollectionManager : LSFSDKLightingItemCollectionManager
 
--(id)init;
+-(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)lightingSystemManager;
 -(void)addMasterSceneDelegate: (id<LSFSDKMasterSceneDelegate>)masterSceneDelegate;
 -(void)removeMasterSceneDelegate: (id<LSFSDKMasterSceneDelegate>)masterSceneDelegate;
 -(LSFSDKMasterScene *)addMasterSceneWithID: (NSString *)masterSceneID;

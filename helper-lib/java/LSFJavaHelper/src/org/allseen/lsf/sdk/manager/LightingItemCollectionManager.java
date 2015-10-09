@@ -189,9 +189,18 @@ public abstract class LightingItemCollectionManager<ADAPTER, LISTENER, MODEL, ER
         LISTENER listener = getNext(i);
 
         while (listener != null) {
-            sendErrorEvent(listener, errorEvent);
+            postSendErrorEvent(listener, errorEvent);
             listener = getNext(i);
         }
+    }
+
+    public void postSendErrorEvent(final LISTENER listener, final ERROR error) {
+        manager.getQueue().post(new Runnable() {
+            @Override
+            public void run() {
+                sendErrorEvent(listener, error);
+            }
+        });
     }
 
     protected abstract void sendInitializedEvent(LISTENER listener, ADAPTER item, TrackingID trackingID);

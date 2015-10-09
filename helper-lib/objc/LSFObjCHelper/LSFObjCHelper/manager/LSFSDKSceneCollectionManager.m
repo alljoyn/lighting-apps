@@ -18,6 +18,18 @@
 
 @implementation LSFSDKSceneCollectionManager
 
+-(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)lightingSystemManager
+{
+    self = [super initWithLightingSystemManager: lightingSystemManager];
+
+    if (self)
+    {
+        //Intentionally left blank
+    }
+
+    return self;
+}
+
 -(LSFSDKScene *)addSceneWithID: (NSString *)sceneID
 {
     @throw [NSException exceptionWithName: NSInternalInconsistencyException reason: [NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)] userInfo: nil];

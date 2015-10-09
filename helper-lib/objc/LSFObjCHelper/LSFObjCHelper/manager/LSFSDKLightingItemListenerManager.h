@@ -17,6 +17,8 @@
 #import <Foundation/Foundation.h>
 #import "../listener/LSFSDKLightingDelegate.h"
 
+@class LSFSDKLightingSystemManager;
+
 /**
  * @warning *Note:* This class is not intended to be used by clients, and its interface may change
  * in subsequent releases of the SDK.
@@ -26,9 +28,10 @@
     @protected NSMutableArray *delegates;
     @protected NSMutableSet *delegatesPendingRemoval;
     @protected NSMutableSet *delegatesPendingAddition;
+    @protected LSFSDKLightingSystemManager *manager;
 }
 
--(id)init;
+-(id)initWithLightingSystemManager: (LSFSDKLightingSystemManager *)lightingSystemManager;
 -(void)addDelegate: (id<LSFSDKLightingDelegate>)delegate;
 -(void)removeDelegate: (id<LSFSDKLightingDelegate>)delegate;
 -(void)processPendingRemovals;

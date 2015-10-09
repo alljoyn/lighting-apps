@@ -34,7 +34,7 @@ public class PendingPresetEffect extends PendingLightingItem {
         init(preset);
 
         // Note the lamp state must have its own instance of a Color object
-        state = preset != null ? preset.getState() : new MyLampState(Power.ON, new Color(Color.DEFAULT));
+        state = preset != null ? preset.getState() : new MyLampState(Power.ON, new Color(Color.defaultColor()));
     }
 
     public PendingPresetEffect(PendingPresetEffect pendingPresetEffect) {
