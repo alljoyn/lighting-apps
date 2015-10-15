@@ -664,8 +664,10 @@ public class SampleAppActivity extends FragmentActivity implements
 
                         item.delete();
 
-                        for (DeletableItem component : components) {
-                            component.delete();
+                        if (components != null) {
+                            for (DeletableItem component : components) {
+                                component.delete();
+                            }
                         }
                     }});
             } else {
