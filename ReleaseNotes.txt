@@ -1,0 +1,78 @@
+AllSeen Lighting Applications 15.04 Release Notes
+=================================================
+
+Platform Support
+----------------
+ 1) Android API level 16 (JellyBean) or greater
+ 2) iOS 8.0 or higher
+
+
+Features added in Version 15.04
+--------------------------------
+ASALIGHT-208    UI inconsistency in the sample app (iOS)
+ASALIGHT-207    UI inconsistency in the sample app (Android)
+ASALIGHT-197    Add support for GetConsolidatedLampDataSet() API
+ASALIGHT-196    Add support AllLamps Group in the Controller Service
+ASALIGHT-184    Implement iOS Lighting SDK Tutorial apps
+ASALIGHT-177    Decouple AllJoyn Obj-C Bindings from Lighting SDK
+ASALIGHT-174    Integrate Lighting Controller Service as part of Lighting iOS SDK and Sample App
+ASALIGHT-169    Add support in Controller Client to enable the tracking of replies to all create API calls
+ASALIGHT-166    Build iOS SDK using Xcode 6 and 64-bit native
+ASALIGHT-165    Build iOS Sample apps using Xcode 6 and 64-bit native
+ASALIGHT-161    Using 15.04 Core lifecycle APIs (iOS App)
+ASALIGHT-160    Using 15.04 Core lifecycle APIs (Android App)
+ASALIGHT-156    Initial support for the Scene APIs that create/update scenes using SceneElements
+ASALIGHT-155    Initial support for the SceneElement APIs
+ASALIGHT-154    Add API support for applying persisted Pulse/Transition effects to Lamps and LampGroups and unit tests to verify the support
+
+
+Issues Addressed in Version 15.04
+----------------------------------
+ASACORE-1342    create/destroy the SCL singletons using explicit app calls to AllJoynInit() / AllJoynShutdown()
+ASACORE-1071    AllJoyn Routing Node caches and forwards messages from a source endpoint even after the source endpoint has been torn down
+ASACORE-1063    Starting February 1, 2015, new iOS apps uploaded to the App Store must include 64-bit support
+ASACORE-936     Support for iOS 8.1
+
+For a complete list of AllJoyn core issues fixed in 15.04:
+https://jira.allseenalliance.org/issues/?jql=project%20%3D%20ASACORE%20AND%20resolution%20%3D%20Fixed%20AND%20fixVersion%20%3D%20%2215.04%22
+
+ASALIGHT-252    Sample App crashes when adding a Scene with Lighting 1.0 CS as leader
+ASALIGHT-244    iOS Sample App (w/ its bundled controller as master) not able to persist Groups/Scenes between lifecycle
+ASALIGHT-237    State synchronization between controller does not function properly with bundled controller on iOS Sample App
+ASALIGHT-209    LSF Android Sample App crash
+ASALIGHT-203    LSF Android Sample App crashes occassionally
+ASALIGHT-192    SceneApplied signalis not being sent when Scenes with only SceneElements are applied
+ASALIGHT-191    Multiple replies sent for ApplySceneWithSceneElements API call
+ASALIGHT-115    Lamp service not always responsive to state change actions from controller service
+
+For a complete list of AllJoyn lighting issues fixed in 15.04:
+https://jira.allseenalliance.org/issues/?jql=project%20%3D%20ASALIGHT%20AND%20resolution%20%3D%20Fixed%20AND%20fixVersion%20%3D%20%2215.04%22
+
+
+Known Issues in Version 15.04
+------------------------------
+ASALIGHT-247    Losing Lamps when switching leader to bundled controller
+ASALIGHT-230    LSF Sample App support for updating, renaming, and deleting effects (iOS)
+ASALIGHT-229    LSF Sample App support for updating, renaming, and deleting effects (Android)
+ASALIGHT-194    Add support to restrict the LSF user traffic in the Controller Client
+ASALIGHT-171    Add onboarding features in Android Sample App
+ASALIGHT-159    Controller Client sometimes enters a sessionless signal retry period of ~15 to 20 mins when it is unable to fetch the announcement from Controller Service
+ASALIGHT-148    Remove the 14.06 About library dependency from LSF builds
+ASALIGHT-128    Add support to restrict the LSF user traffic in the Controller Service
+ASALIGHT-98     Add a manifest file to LSF GIT repository
+ASALIGHT-84     Issue with the ControllerService name defined during the Onboarding process
+ASALIGHT-72     Controller Service State Sync Algorithm corner case
+
+For a complete list of open AllJoyn lighting issues:
+https://jira.allseenalliance.org/issues/?jql=project%20%3D%20ASALIGHT%20AND%20status%20in%20(Open%2C%20%22In%20Progress%22%2C%20Reopened%2C%20New)
+
+
+Compatibility
+-------------
+Backward compatible with previous releases (14.12)
+
+
+Change history
+--------------
+[No items]
+
